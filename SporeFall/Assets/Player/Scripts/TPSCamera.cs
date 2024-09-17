@@ -10,7 +10,7 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private PlayerMovement player;
     [SerializeField] private Transform hRot;
     [SerializeField] private Transform vRot;
-    [SerializeField] private Transform cam;
+    [SerializeField] public Camera myCamera;
     // horizontal rotations
     [SerializeField] private float horSense = 50;
     [SerializeField] private bool invertHorRot = false;
@@ -32,26 +32,6 @@ public class TPSCamera : MonoBehaviour
         transform.localEulerAngles = new Vector3(VerticalRotation(), HorizontalRotation(), 0);
     }
 
-    private void Update()
-    {
-        /*// moves camera set along with Character
-        HolderMovement();
-        // rotates camera based on mouse movement // update this to work with new Input System
-        transform.localEulerAngles = new Vector3(VerticalRotation(), HorizontalRotation(), 0);*/
-
-        // test code for aiming range weapon // update this to work with new Input System
-       /* if (Input.GetMouseButton(1))
-        {
-            cam.transform.localPosition = aimOffset;
-            player.SetAimState();
-        }
-        else if (Input.GetMouseButtonUp(1))
-        {
-            cam.transform.localPosition = defaultOffset;
-            player.SetDefaultState();
-        }*/
-    }
-
     void HolderMovement()
     {
         transform.position = player.transform.position;
@@ -64,7 +44,7 @@ public class TPSCamera : MonoBehaviour
         /*        float xInput = Input.GetAxis("Mouse X") * horSense * invertedHor;
         */
         /// New Input System
-        float xInput = pMan.camRotateAction.ReadValue<Vector2>().x;
+        float xInput = pMan.lookAction.ReadValue<Vector2>().x;
         float horRot = transform.localEulerAngles.y + xInput * horSense * invertedHor * Time.deltaTime;
         return horRot;
     }
@@ -73,18 +53,18 @@ public class TPSCamera : MonoBehaviour
         int invertedVert = invertVertRot ? -1 : 1;
         // update this to work with new Input System
         //vertRot -= Input.GetAxis("Mouse Y") * verSense * invertedVert;
-        vertRot -= pMan.camRotateAction.ReadValue<Vector2>().y * verSense * invertedVert * Time.deltaTime;
+        vertRot -= pMan.lookAction.ReadValue<Vector2>().y * verSense * invertedVert * Time.deltaTime;
         vertRot = Mathf.Clamp(vertRot, minVertRot, maxVertRot);
         return vertRot;
     }
     public void AimSightCall(InputAction.CallbackContext obj)
     {
-        cam.transform.localPosition = aimOffset;
+        myCamera.transform.localPosition = aimOffset;
         player.SetAimState();
     }
     public void DefaultSightCall(InputAction.CallbackContext obj)
     {
-        cam.transform.localPosition = defaultOffset;
+        myCamera.transform.localPosition = defaultOffset;
         player.SetDefaultState();
     }
     public void SetManager(PlayerManager pManager)
