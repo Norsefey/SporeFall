@@ -103,7 +103,8 @@ public class PlayerManager : MonoBehaviour
         else if (context.phase == InputActionPhase.Canceled)
         {
             isFiring = false;
-            pController.SetDefaultState();
+            if(!aimAction.IsPressed())
+                pController.SetDefaultState();
         }
     }
     private void OnReload(InputAction.CallbackContext context)
