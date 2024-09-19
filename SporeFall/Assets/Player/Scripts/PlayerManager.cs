@@ -9,10 +9,12 @@ public class PlayerManager : MonoBehaviour
     public TPSCamera pCamera;
     public PlayerUI pUI;
     public GameObject pVisual;
-    
+    public BuildGun bGun;
     // Input Maps
     private InputActionAsset inputAsset;
-    private InputActionMap player;
+    private InputActionMap playerInputMap;
+    private InputActionMap shootInputMap;
+    private InputActionMap buildInputMap;
     [Header("Input Actions")]
     public InputAction moveAction;
     public InputAction lookAction;
@@ -20,20 +22,26 @@ public class PlayerManager : MonoBehaviour
     public InputAction aimAction;
     public InputAction fireAction;
     public InputAction reloadAction;
-
+    private InputAction buildModeAction;
+    private InputAction changeBuildAction;
+    private InputAction placeBuildAction;
     [Header("Weapons")]
     // Weapons and Shooting
     public Transform weaponHolder; // Where the weapon is equipped
     public Weapon currentWeapon;
-    
+    public Weapon defaultWeapon;
+    public Weapon equippedWeapon;
+
     private bool isFiring = false;
     private bool isCharging = false;
+    private bool isBuilding = false;
     private void Awake()
     {
         // get and assign input Action Map
         inputAsset = this.GetComponent<PlayerInput>().actions;
-        player = inputAsset.FindActionMap("Player");
-
+        playerInputMap = inputAsset.FindActionMap("Player");
+        shootInputMap = inputAsset.FindActionMap("Shoot");
+        buildInputMap = inputAsset.FindActionMap("Build");
         // since we will have multiple players, this manager cannot be a public instance, so we assign it locally
         pController.SetManager(this);
         pCamera.SetManager(this);
@@ -63,24 +71,37 @@ public class PlayerManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        // Find and assign actions
-        moveAction = player.FindAction("Move");
-        lookAction = player.FindAction("Look");
-        jumpAction = player.FindAction("Jump");
-        aimAction = player.FindAction("Aim");
-        fireAction = player.FindAction("Fire");
-        reloadAction = player.FindAction("Reload");
-
+        // Assign actions from action map
+        // player action map
+        moveAction = playerInputMap.FindAction("Move");
+        lookAction = playerInputMap.FindAction("Look");
+        jumpAction = playerInputMap.FindAction("Jump");
+        buildModeAction = playerInputMap.FindAction("Build");
+        aimAction = playerInputMap.FindAction("Aim");
+        fireAction = playerInputMap.FindAction("Fire");
+        // shoot action map
+        reloadAction = shootInputMap.FindAction("Reload");
+        //build Actions
+        changeBuildAction = buildInputMap.FindAction("Change");
+        placeBuildAction = buildInputMap.FindAction("Place");
         // Assign Calls to each action
+        // basic player actions
         jumpAction.started += pController.JumpCall;
         aimAction.started += pCamera.AimSightCall;
         aimAction.canceled += pCamera.DefaultSightCall;
         fireAction.started += OnFireStarted;
         fireAction.canceled += OnFireCanceled;
+        buildModeAction.started += OnBuildMode;
+        // shoot actions
         reloadAction.performed += OnReload;
-      
+        // build mode actions
+        changeBuildAction.started += OnCycleBuildObject;
+        placeBuildAction.started += OnPlaceObject;
+
         // this enables the controls
-        player.Enable();
+        playerInputMap.Enable();
+        shootInputMap.Enable();
+        buildInputMap.Disable();
     }
     private void OnDisable()
     {
@@ -91,9 +112,13 @@ public class PlayerManager : MonoBehaviour
         fireAction.started -= OnFireStarted;
         fireAction.canceled -= OnFireCanceled;
         reloadAction.performed -= OnReload;
+        buildModeAction.started -= OnBuildMode;
+        changeBuildAction.started -= OnCycleBuildObject;
+        placeBuildAction.started -= OnPlaceObject;
 
         // disable Input map
-        player.Disable();
+        playerInputMap.Disable();
+        shootInputMap.Disable();
     }
     // Called when the Fire action is triggered
     private void OnFireStarted(InputAction.CallbackContext context)
@@ -109,15 +134,21 @@ public class PlayerManager : MonoBehaviour
     }
     private void OnFireCanceled(InputAction.CallbackContext context)
     {
-        if (currentWeapon is ChargeGun gun)
+        switch (currentWeapon)
         {
-            isCharging = false; // Fire the charged shot when fire button is released
-            gun.Release();
-            pUI.AmmoDisplay(currentWeapon);
-
-        }else if (currentWeapon is BurstGun burstGun)
-        {
-            burstGun.OnFireReleased(); // Call the release method on the burst weapon
+            case ChargeGun:
+                isCharging = false; // Fire the charged shot when fire button is released
+                ((ChargeGun)currentWeapon).Release();
+                pUI.AmmoDisplay(currentWeapon);
+                break;
+            case BurstGun:
+                ((BurstGun)currentWeapon).OnFireReleased(); // Call the release method on the burst weapon
+                break;
+            case BuildGun:
+                ((BuildGun)currentWeapon).OnFireReleased(); // Call the release method on the burst weapon
+                break;
+            default:
+                break;
         }
         isFiring = false;
     }
@@ -128,7 +159,67 @@ public class PlayerManager : MonoBehaviour
         if (currentWeapon != null)
         {
             currentWeapon.Reload();
-        }        
+        }
+    }
+    // building stuff
+    private void OnBuildMode(InputAction.CallbackContext context)
+    {
+        if (!isBuilding)
+        {
+            currentWeapon.gameObject.SetActive(false);
+            bGun.gameObject.SetActive(true);
+            currentWeapon = bGun;
+            pUI.AmmoDisplay(currentWeapon);
+            buildInputMap.Enable();
+            isBuilding = true;
+        }
+        else
+        {
+            if(equippedWeapon != null)
+                currentWeapon = equippedWeapon;
+            else
+                currentWeapon = defaultWeapon;
+
+            currentWeapon.gameObject.SetActive(true);
+            pUI.AmmoDisplay(currentWeapon);
+            bGun.gameObject.SetActive(false);
+            buildInputMap.Disable();
+            isBuilding = false;
+        }
+    }
+    private void OnCycleBuildObject(InputAction.CallbackContext context)
+    {
+        if (currentWeapon is BuildGun buildGun)
+        {
+            buildGun.CycleBuildObject(); // Cycle through buildable objects
+            pUI.AmmoDisplay(currentWeapon);
+
+        }
+    }
+    private void OnPlaceObject(InputAction.CallbackContext context)
+    {
+        bGun.PlaceObject();
+    }
+    private void OnSelectObject(InputAction.CallbackContext context)
+    {
+        if (currentWeapon is BuildGun buildGun)
+        {
+            buildGun.SelectObject(); // Select a placed object for moving or destroying
+        }
+    }
+    private void OnMoveObject(InputAction.CallbackContext context)
+    {
+        if (currentWeapon is BuildGun buildGun)
+        {
+            buildGun.MoveSelectedObject(); // Move the selected object to a new location
+        }
+    }
+    private void OnDestroyObject(InputAction.CallbackContext context)
+    {
+        if (currentWeapon is BuildGun buildGun)
+        {
+            buildGun.DestroySelectedObject(); // Destroy the selected object
+        }
     }
     // Called when the Reload action is triggered
     public void PickUpWeapon(Weapon newWeapon)
@@ -137,13 +228,18 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(currentWeapon.gameObject); // Drop the current weapon
         }
-
+        
         // Equip the new weapon
         currentWeapon = Instantiate(newWeapon, weaponHolder);
         currentWeapon.player = this;
+        equippedWeapon = currentWeapon;
         // update UI to display new ammo capacities
         pUI.AmmoDisplay(currentWeapon);
-
         Debug.Log("Picked up: " + currentWeapon.weaponName);
     }
+    public void DropWeapon()
+    {
+        PickUpWeapon(defaultWeapon);
+    }
+
 }
