@@ -5,6 +5,8 @@ using UnityEngine;
 public class AutomaticGun : Weapon
 {
     private float nextFireTime = 0f;
+    [Header("Automatic Variables")]
+    public float fireRate; // how fast the bullets come out
 
     public override void Fire()
     {

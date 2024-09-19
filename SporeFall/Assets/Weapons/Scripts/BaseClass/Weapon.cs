@@ -5,28 +5,30 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+    [Header("References")]
     public string weaponName;
     public PlayerManager player;
     public GameObject projectilePrefab;
     public Transform firePoint;
-    [Header("Weapon Stats")]
+    [Header("Base Stats")]
     public float damage;
-    public float fireRate;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
-    public float spread = 2f;
-    public float reloadTime = 2f; // Time to reload
+    public float reloadTime = 2f; // Time it takes to reload
+    [Header("Ammo Variables")]
     public int magazineCount;
     public int magazineSize;
     public int totalAmmo;
     public bool limitedAmmo = false;
-    public bool isReloading = false;
     public bool isHitScan; // Whether the weapon is hitscan or projectile based
+    private bool isReloading;
+    // in order to have a private variable public to other scripts, and not be editable in editor we use Get property
+    // since this is a Get variable it is capitalized
+    public bool IsReloading { get { return isReloading; } }
 
-  
     // Fire method to be implemented by subclasses
     public virtual void Fire()
     {
-        if (magazineCount <= 0 || isReloading) return;
+        if (magazineCount <= 0 || IsReloading) return;
 
         if (isHitScan)
         {
@@ -69,9 +71,8 @@ public abstract class Weapon : MonoBehaviour
             // hit.collider.GetComponent<Health>()?.TakeDamage(damage);
         }
     }
-
     // Method to calculate a bullet spread direction
-    private Vector3 GetSpreadDirection(Vector3 baseDirection)
+    public Vector3 GetSpreadDirection(Vector3 baseDirection)
     {
         // Randomly offset the direction within a cone defined by bulletSpreadAngle
         float spreadX = Random.Range(-bulletSpreadAngle, bulletSpreadAngle);
@@ -81,7 +82,7 @@ public abstract class Weapon : MonoBehaviour
     }
     public virtual void Reload()
     {
-        if (!isReloading && magazineCount < magazineSize)
+        if (!IsReloading && magazineCount < magazineSize)
         {
             StartCoroutine(ReloadCoroutine());
         }
@@ -91,7 +92,7 @@ public abstract class Weapon : MonoBehaviour
         isReloading = true;
         Debug.Log(weaponName + " is reloading...");
 
-        if (totalAmmo <= 0)
+        if (totalAmmo <= 0 && limitedAmmo)
         {
             Debug.Log(weaponName + " has no more Ammo");
             yield return null;
@@ -115,7 +116,7 @@ public abstract class Weapon : MonoBehaviour
             totalAmmo = 0;
         }
         if(player.pUI != null)
-            player.pUI.AmmoDisplay(magazineCount, totalAmmo);
+            player.pUI.AmmoDisplay(this);
         isReloading = false;
         Debug.Log(weaponName + " has reloaded. Total Ammo" + totalAmmo);
     }

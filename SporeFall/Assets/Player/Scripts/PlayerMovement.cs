@@ -48,7 +48,6 @@ public class PlayerMovement : MonoBehaviour
                 DefaultMovement();
                 break;
             case PlayerState.Aiming:
-                Debug.Log("aiming");
                 AimingMovement();
                 break;
         }
@@ -89,16 +88,16 @@ public class PlayerMovement : MonoBehaviour
         visual.position = transform.position;
         visual.forward = transform.forward;
     }
-    public void JumpCall(InputAction.CallbackContext obj)
+    public void JumpCall(InputAction.CallbackContext context)
     {
-        if (isGrounded())
+        if (IsGrounded())
         {
             vertSpeed = JumpSpeed;
         }
     }
     private void GravityHandler(Vector3 movement)
     {
-        if (isGrounded())
+        if (IsGrounded())
             vertSpeed = minFall;
         else
         {
@@ -122,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    private bool isGrounded()
+    private bool IsGrounded()
     {
         bool hitground = false;
         RaycastHit hit;

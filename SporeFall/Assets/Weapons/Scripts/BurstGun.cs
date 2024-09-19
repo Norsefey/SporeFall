@@ -4,32 +4,47 @@ using UnityEngine;
 
 public class BurstGun : Weapon
 {
-    public int burstCount = 3;
-    private float nextFireTime = 0f;
-    private int shotsFired = 0;
+    [Space(6), Header("Burst Variables")]
+    public int burstCount = 3; // Number of shots per burst
+    private bool isFiringBurst = false; // Prevents firing another burst while one is ongoing
+    private bool triggerHeld = false; // Tracks if the player is holding the fire input
 
-    public override void Fire()
+    private void Update()
     {
-        if (shotsFired < burstCount && magazineCount > 0)
+        // This Update function ensures the weapon doesn't fire while the fire button is held
+        if (!triggerHeld && isFiringBurst)
         {
-            if (Time.time >= nextFireTime)
-            {
-                nextFireTime = Time.time + 1f / fireRate;
-                Shoot();
-                shotsFired++;
-            }
-        }
-        else
-        {
-            // Reset burst count after firing all shots
-            shotsFired = 0;
+            // The burst has finished, reset the isFiringBurst flag
+            isFiringBurst = false;
         }
     }
-
-    private void Shoot()
+    public override void Fire()
     {
-        // Shooting logic for burst weapon
-        Debug.Log(weaponName + " fired a burst!");
-        magazineCount--;
+        // Only fire if we aren't in the middle of a burst and the player isn't holding the fire button
+        if (isFiringBurst || triggerHeld || magazineCount <= 0 || IsReloading) return;
+
+        // Start the burst firing coroutine
+        StartCoroutine(FireBurst());
+        triggerHeld = true; // Mark that the player has pressed the fire button
+    }
+
+    // Coroutine to handle burst firing over time
+    private IEnumerator FireBurst()
+    {
+        Debug.Log("Burst Firing");
+        isFiringBurst = true;
+
+        for (int i = 0; i < burstCount && magazineCount > 0; i++)
+        {
+            base.Fire(); // Fire a single shot
+        }
+
+        // Wait for the player to release the fire button
+        yield return new WaitUntil(() => !triggerHeld);
+    }
+    public void OnFireReleased()
+    {
+        // Called when the fire button is released
+        triggerHeld = false;
     }
 }

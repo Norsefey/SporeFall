@@ -4,37 +4,82 @@ using UnityEngine;
 
 public class ChargeGun : Weapon
 {
-    public float chargeTime = 2f;
-    private float chargeTimer = 0f;
+    [Space(6),Header("Charge Variables")]
+    public float maxChargeTime = 2f; // Max time to fully charge
+    public float minChargeMultiplier = 1f; // Minimum power for a shot
+    public float maxChargeMultiplier = 3f; // Maximum power for a fully charged shot
+    public float baseChargeSpeed = 10;
     private bool isCharging = false;
+    private float chargeAmount = 0f;
 
-    public override void Fire()
+    // Called while holding down the fire button to accumulate charge
+    public void Charge()
     {
-        if (isCharging)
-        {
-            chargeTimer += Time.deltaTime;
-            if (chargeTimer >= chargeTime)
-            {
-                Shoot();
-                isCharging = false;
-                chargeTimer = 0f;
-            }
-        }
-        else if (Input.GetButtonDown("Fire"))
-        {
-            StartCharging();
-        }
-    }
+        if (magazineCount <= 0 || IsReloading) return;
 
-    private void StartCharging()
-    {
-        isCharging = true;
-        Debug.Log(weaponName + " is charging...");
+        if (!isCharging)
+        {
+            isCharging = true;
+            chargeAmount = 0f; // Reset charge
+        }
+
+        // Accumulate charge based on how long the fire button is held
+        chargeAmount += Time.deltaTime / maxChargeTime;
+        chargeAmount = Mathf.Clamp01(chargeAmount); // Clamp charge to [0,1]
+        Debug.Log("Charging: " + (chargeAmount * 100).ToString("F0") + "%");
     }
-    private void Shoot()
+    // Called when the fire button is released to fire the charged shot
+    public void Release()
     {
-        // Shooting logic for charged shot
-        Debug.Log(weaponName + " fired a charged shot!");
+        if (!isCharging || magazineCount <= 0) return;
+
+        isCharging = false;
+
+        // Calculate the charge multiplier
+        float chargeMultiplier = Mathf.Lerp(minChargeMultiplier, maxChargeMultiplier, chargeAmount);
+        //Debug.Log("Firing: " + chargeMultiplier + "xDamage");
+        // Fire the shot based on the charge multiplier
+        if (isHitScan)
+        {
+            FireHitscan(chargeMultiplier);
+        }
+        else
+        {
+            FireProjectile(chargeMultiplier);
+        }
+
         magazineCount--;
+    }
+
+    // Fire projectile with charge multiplier affecting its power (damage or speed)
+    private void FireProjectile(float chargeMultiplier)
+    {
+        Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
+        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        projectile.transform.localScale *= chargeMultiplier;
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+        rb.velocity = shootDirection * baseChargeSpeed * chargeMultiplier; // Increase speed based on charge
+
+        Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier);
+    }
+
+    // Fire hitscan with charge multiplier affecting its damage
+    private void FireHitscan(float chargeMultiplier)
+    {
+        Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
+
+        Ray ray = new Ray(player.pCamera.myCamera.transform.position, shootDirection);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 100f))
+        {
+            Debug.Log(weaponName + " fired a charged hit: " + hit.collider.name);
+            Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));
+            // Optionally: Apply more damage based on chargeMultiplier
+            // hit.collider.GetComponent<Health>()?.TakeDamage(damage * chargeMultiplier);
+        }
+
+        Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier);
+
     }
 }

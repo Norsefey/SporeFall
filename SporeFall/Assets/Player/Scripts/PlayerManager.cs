@@ -5,10 +5,10 @@ using UnityEngine.InputSystem;
 public class PlayerManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] public PlayerMovement pController;
-    [SerializeField] public TPSCamera pCamera;
-    [SerializeField] public PlayerUI pUI;
-    [SerializeField] public GameObject pVisual;
+    public PlayerMovement pController;
+    public TPSCamera pCamera;
+    public PlayerUI pUI;
+    public GameObject pVisual;
     
     // Input Maps
     private InputActionAsset inputAsset;
@@ -23,9 +23,11 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Weapons")]
     // Weapons and Shooting
-    public Weapon currentWeapon;
     public Transform weaponHolder; // Where the weapon is equipped
+    public Weapon currentWeapon;
+    
     private bool isFiring = false;
+    private bool isCharging = false;
     private void Awake()
     {
         // get and assign input Action Map
@@ -37,27 +39,28 @@ public class PlayerManager : MonoBehaviour
         pCamera.SetManager(this);
 
     }
-
     private void Start()
     {
         // in order to spawn player at a spawn point, disable movement controls
         pController.gameObject.SetActive(true);
-        pUI.AmmoDisplay(currentWeapon.magazineCount, currentWeapon.totalAmmo);
+        pUI.AmmoDisplay(currentWeapon);
 
     }
-
     private void Update()
     {
         if (currentWeapon != null)
         {
-            if (isFiring && !currentWeapon.isReloading)
+            if (isFiring && !currentWeapon.IsReloading && currentWeapon is not ChargeGun)
             {
                 currentWeapon.Fire();
-                pUI.AmmoDisplay(currentWeapon.magazineCount, currentWeapon.totalAmmo);
+                pUI.AmmoDisplay(currentWeapon);
+            }else if (isCharging && (currentWeapon is ChargeGun gun))
+            {
+                // Charge weapons handle firing when the fire button is held
+                gun.Charge();
             }
         }
     }
-
     private void OnEnable()
     {
         // Find and assign actions
@@ -72,8 +75,8 @@ public class PlayerManager : MonoBehaviour
         jumpAction.started += pController.JumpCall;
         aimAction.started += pCamera.AimSightCall;
         aimAction.canceled += pCamera.DefaultSightCall;
-        fireAction.started += OnFire;
-        fireAction.canceled += OnFire;
+        fireAction.started += OnFireStarted;
+        fireAction.canceled += OnFireCanceled;
         reloadAction.performed += OnReload;
       
         // this enables the controls
@@ -85,27 +88,38 @@ public class PlayerManager : MonoBehaviour
         jumpAction.started -= pController.JumpCall;
         aimAction.started -= pCamera.AimSightCall;
         aimAction.canceled -= pCamera.DefaultSightCall;
-        fireAction.started -= OnFire;
-        fireAction.canceled -= OnFire;
+        fireAction.started -= OnFireStarted;
+        fireAction.canceled -= OnFireCanceled;
         reloadAction.performed -= OnReload;
 
         // disable Input map
         player.Disable();
     }
     // Called when the Fire action is triggered
-    private void OnFire(InputAction.CallbackContext context)
+    private void OnFireStarted(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (currentWeapon is ChargeGun)
+        {
+            isCharging = true;
+        }
+        else
         {
             isFiring = true;
-            pController.SetAimState();
         }
-        else if (context.phase == InputActionPhase.Canceled)
+    }
+    private void OnFireCanceled(InputAction.CallbackContext context)
+    {
+        if (currentWeapon is ChargeGun gun)
         {
-            isFiring = false;
-            if(!aimAction.IsPressed())
-                pController.SetDefaultState();
+            isCharging = false; // Fire the charged shot when fire button is released
+            gun.Release();
+            pUI.AmmoDisplay(currentWeapon);
+
+        }else if (currentWeapon is BurstGun burstGun)
+        {
+            burstGun.OnFireReleased(); // Call the release method on the burst weapon
         }
+        isFiring = false;
     }
     private void OnReload(InputAction.CallbackContext context)
     {
@@ -128,7 +142,7 @@ public class PlayerManager : MonoBehaviour
         currentWeapon = Instantiate(newWeapon, weaponHolder);
         currentWeapon.player = this;
         // update UI to display new ammo capacities
-        pUI.AmmoDisplay(currentWeapon.magazineCount, currentWeapon.totalAmmo);
+        pUI.AmmoDisplay(currentWeapon);
 
         Debug.Log("Picked up: " + currentWeapon.weaponName);
     }
