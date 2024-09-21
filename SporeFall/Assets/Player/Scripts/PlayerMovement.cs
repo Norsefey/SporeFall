@@ -23,15 +23,16 @@ public class PlayerMovement : MonoBehaviour
     private float gravity = -9.81f;
     private float vertSpeed;
     private ControllerColliderHit contact;
- 
 
-    enum PlayerState
+    private bool tempAim = false;
+    private float tempAimTimer = 0;
+    public enum PlayerState
     {// two move states...so far, default and aiming
         Default, // free flow camera
-        Aiming // player character rotates with camera
+        Aiming, // player character rotates with camera
+        TempAim
     }
-
-    PlayerState currentState = PlayerState.Default;
+    public PlayerState currentState = PlayerState.Default;
 
     private void Start()
     {
@@ -50,6 +51,45 @@ public class PlayerMovement : MonoBehaviour
             case PlayerState.Aiming:
                 AimingMovement();
                 break;
+            case PlayerState.TempAim:
+                AimingMovement();
+                tempAimTimer -= Time.deltaTime;
+                if(tempAimTimer <= 0)
+                {
+                    if (currentState == PlayerState.TempAim)
+                        currentState = PlayerState.Default;
+                }
+                break;
+        }
+    }
+
+    public void RotateOnFire(Transform gun, Vector3 shootDir)
+    {
+        
+        // convert player forward to camera forward
+        Quaternion temp = myCamera.localRotation;
+        // we only want the horizontal rotation of camera
+        myCamera.eulerAngles = new Vector3(0, myCamera.eulerAngles.y, 0);
+        // player moves with camera
+        visual.forward = myCamera.forward;
+        transform.forward = myCamera.forward;
+
+        myCamera.localRotation = temp;
+        // rotate the gun in direction of shot
+        gun.forward = shootDir;
+        // if player is moving while in default state
+        if (cc.velocity.magnitude > 0)
+        {
+            // check if we are not already in tempAim state
+            if (currentState != PlayerState.TempAim)
+            {// if not enter temp aim state
+                currentState = PlayerState.TempAim;
+                tempAimTimer = 1.5f;
+            }
+            else if (currentState == PlayerState.TempAim)
+            {// if we in temp state are just reset timer
+                tempAimTimer = 1.5f;
+            }
         }
     }
 
@@ -76,7 +116,6 @@ public class PlayerMovement : MonoBehaviour
             myCamera.localRotation = temp;
             Quaternion direction = Quaternion.LookRotation(movement);
             transform.rotation = Quaternion.Lerp(transform.rotation, direction, rotSpeed * Time.deltaTime);
-
         }
 
         GravityHandler(movement);
@@ -139,9 +178,6 @@ public class PlayerMovement : MonoBehaviour
     void AimingMovement()
     {
         Vector3 movement = Vector3.zero;
-        /// Old Input System
-        /*float horInput = Input.GetAxis("Horizontal");
-        float verInput = Input.GetAxis("Vertical");*/
         /// new Input system
         float horInput = pMan.moveAction.ReadValue<Vector2>().x;
         float verInput = pMan.moveAction.ReadValue<Vector2>().y;

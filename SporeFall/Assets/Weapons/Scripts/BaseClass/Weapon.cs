@@ -50,8 +50,17 @@ public abstract class Weapon : MonoBehaviour
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         rb.velocity = shootDirection * 50f; // Adjust projectile speed as needed
+        if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
+        {
+            Debug.Log("Only Rotating Gun");
+            transform.forward = shootDirection;
 
-        transform.forward = shootDirection;
+        }
+        else
+        {
+            Debug.Log("Rotating on Fire");
+            player.pController.RotateOnFire(this.transform, shootDirection);
+        }
         Debug.Log(weaponName + " fired a projectile.");
     }
 
@@ -59,7 +68,17 @@ public abstract class Weapon : MonoBehaviour
     {
         // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
-        transform.forward = shootDirection;
+        if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
+        {
+            Debug.Log("Only Rotating Gun");
+            transform.forward = shootDirection;
+
+        }
+        else
+        {
+            Debug.Log("Rotating on Fire");
+            player.pController.RotateOnFire(this.transform, shootDirection);
+        }
         Ray ray = new Ray(playerCamera.transform.position, shootDirection);
         RaycastHit hit;
 

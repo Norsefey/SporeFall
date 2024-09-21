@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BuildGun : Weapon
 {
@@ -44,6 +45,18 @@ public class BuildGun : Weapon
             else
             {
                 selectedObject.transform.position = hit.point; // Update position of preview
+
+                if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
+                {
+                    Debug.Log("Only Rotating Gun");
+                    transform.forward = player.pCamera.myCamera.transform.forward;
+
+                }
+                else
+                {
+                    Debug.Log("Rotating Character");
+                    player.pController.RotateOnFire(this.transform, player.pCamera.myCamera.transform.forward);
+                }
             }
         }
     }
@@ -55,6 +68,7 @@ public class BuildGun : Weapon
             selectedObject.GetComponent<Collider>().enabled = true; // Enable collider for the final object
             SetObjectToOpaque(selectedObject); // Make the object opaque
             selectedObject = null; // Clear the selected object
+
         }
     }
     public void CycleBuildObject()

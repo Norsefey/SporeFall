@@ -60,6 +60,9 @@ public class PlayerManager : MonoBehaviour
         pController.gameObject.SetActive(true);
         pUI.AmmoDisplay(currentWeapon);
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
     }
     private void Update()
     {

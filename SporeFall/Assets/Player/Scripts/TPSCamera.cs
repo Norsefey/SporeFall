@@ -24,6 +24,11 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] Vector3 defaultOffset;
     [SerializeField] Vector3 aimOffset; // camera zooms in
 
+    private void Start()
+    {
+        myCamera.transform.localPosition = defaultOffset;
+    }
+
     private void LateUpdate()
     {
         // moves camera set along with Character
@@ -39,10 +44,6 @@ public class TPSCamera : MonoBehaviour
     float HorizontalRotation()
     {
         int invertedHor = invertHorRot ? -1 : 1;
-        // update this to work with new Input System
-        ///Old Input system
-        /*        float xInput = Input.GetAxis("Mouse X") * horSense * invertedHor;
-        */
         /// New Input System
         float xInput = pMan.lookAction.ReadValue<Vector2>().x;
         float horRot = transform.localEulerAngles.y + xInput * horSense * invertedHor * Time.deltaTime;
