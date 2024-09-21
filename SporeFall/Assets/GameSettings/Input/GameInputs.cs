@@ -293,6 +293,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PickUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""9628c5a3-4db6-43cb-a719-326e5da44cf4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -304,6 +313,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""992c4773-f091-4dde-ac5f-36999f98a02c"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""PickUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -420,6 +440,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
         m_Shoot_Reload = m_Shoot.FindAction("Reload", throwIfNotFound: true);
+        m_Shoot_PickUp = m_Shoot.FindAction("PickUp", throwIfNotFound: true);
         // Build
         m_Build = asset.FindActionMap("Build", throwIfNotFound: true);
         m_Build_StrucMenu = m_Build.FindAction("StrucMenu", throwIfNotFound: true);
@@ -581,11 +602,13 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Shoot;
     private List<IShootActions> m_ShootActionsCallbackInterfaces = new List<IShootActions>();
     private readonly InputAction m_Shoot_Reload;
+    private readonly InputAction m_Shoot_PickUp;
     public struct ShootActions
     {
         private @GameInputs m_Wrapper;
         public ShootActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Reload => m_Wrapper.m_Shoot_Reload;
+        public InputAction @PickUp => m_Wrapper.m_Shoot_PickUp;
         public InputActionMap Get() { return m_Wrapper.m_Shoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -598,6 +621,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
+            @PickUp.started += instance.OnPickUp;
+            @PickUp.performed += instance.OnPickUp;
+            @PickUp.canceled += instance.OnPickUp;
         }
 
         private void UnregisterCallbacks(IShootActions instance)
@@ -605,6 +631,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
+            @PickUp.started -= instance.OnPickUp;
+            @PickUp.performed -= instance.OnPickUp;
+            @PickUp.canceled -= instance.OnPickUp;
         }
 
         public void RemoveCallbacks(IShootActions instance)
@@ -715,6 +744,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     public interface IShootActions
     {
         void OnReload(InputAction.CallbackContext context);
+        void OnPickUp(InputAction.CallbackContext context);
     }
     public interface IBuildActions
     {

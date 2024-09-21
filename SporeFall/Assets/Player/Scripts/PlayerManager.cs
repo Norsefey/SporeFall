@@ -10,18 +10,25 @@ public class PlayerManager : MonoBehaviour
     public PlayerUI pUI;
     public GameObject pVisual;
     public BuildGun bGun;
+    /// <summary>
+    ///  Might have to move these inputs to their own script, cause they are growing and needlessly expanding this script
+    /// </summary>
     // Input Maps
     private InputActionAsset inputAsset;
     private InputActionMap playerInputMap;
     private InputActionMap shootInputMap;
     private InputActionMap buildInputMap;
-    [Header("Input Actions")]
+    [Header("Input Actions")]// sorted into their respective action maps
+    // Player Actions
     public InputAction moveAction;
     public InputAction lookAction;
     public InputAction jumpAction;
     public InputAction aimAction;
     public InputAction fireAction;
+    // Shoot Actions
     public InputAction reloadAction;
+    public InputAction pickUpAction;
+    // Build Actions
     private InputAction buildModeAction;
     private InputAction changeBuildAction;
     private InputAction placeBuildAction;
@@ -31,7 +38,7 @@ public class PlayerManager : MonoBehaviour
     public Weapon currentWeapon;
     public Weapon defaultWeapon;
     public Weapon equippedWeapon;
-
+    private GameObject nearByWeapon;
     private bool isFiring = false;
     private bool isCharging = false;
     private bool isBuilding = false;
@@ -81,6 +88,7 @@ public class PlayerManager : MonoBehaviour
         fireAction = playerInputMap.FindAction("Fire");
         // shoot action map
         reloadAction = shootInputMap.FindAction("Reload");
+        pickUpAction = shootInputMap.FindAction("PickUp");
         //build Actions
         changeBuildAction = buildInputMap.FindAction("Change");
         placeBuildAction = buildInputMap.FindAction("Place");
@@ -94,6 +102,7 @@ public class PlayerManager : MonoBehaviour
         buildModeAction.started += OnBuildMode;
         // shoot actions
         reloadAction.performed += OnReload;
+        pickUpAction.performed += OnPickUpWeapon;
         // build mode actions
         changeBuildAction.started += OnCycleBuildObject;
         placeBuildAction.started += OnPlaceObject;
@@ -221,25 +230,59 @@ public class PlayerManager : MonoBehaviour
             buildGun.DestroySelectedObject(); // Destroy the selected object
         }
     }
-    // Called when the Reload action is triggered
-    public void PickUpWeapon(Weapon newWeapon)
+    private void OnPickUpWeapon(InputAction.CallbackContext context)
     {
-        if (currentWeapon != null)
+        if (nearByWeapon != null)
+            PickUpWeapon();
+    }
+    public void EnablePickUpWeapon(GameObject weapon)
+    {
+        nearByWeapon = weapon;
+        pUI.EnablePromptPickUp(weapon);
+    }
+    public void DisablePickUpWeapon() 
+    { 
+        nearByWeapon = null;
+        pUI.DisablePromptPickUp();
+    }
+    // Called when the Reload action is triggered
+    private void PickUpWeapon()
+    {
+         // deactivate the default weapon
+         if (currentWeapon == defaultWeapon || currentWeapon == bGun)
+        {
+            currentWeapon.gameObject.SetActive(false);
+        }else if(equippedWeapon != null)
         {
             Destroy(currentWeapon.gameObject); // Drop the current weapon
         }
-        
         // Equip the new weapon
-        currentWeapon = Instantiate(newWeapon, weaponHolder);
+        currentWeapon = Instantiate(nearByWeapon, weaponHolder).GetComponent<Weapon>();
+        // set the transforms of the new weapon
+        currentWeapon.transform.forward = pController.transform.forward;
+        currentWeapon.transform.localPosition = Vector3.zero;
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
+        // destroy pick up platform
+        Destroy(nearByWeapon.transform.root.gameObject);
+        // disable pick up prompt
+        pUI.DisablePromptPickUp();
         // update UI to display new ammo capacities
         pUI.AmmoDisplay(currentWeapon);
         Debug.Log("Picked up: " + currentWeapon.weaponName);
     }
     public void DropWeapon()
     {
-        PickUpWeapon(defaultWeapon);
+        if (currentWeapon != null)
+        {
+            Destroy(currentWeapon.gameObject); // Drop the current weapon
+        }
+
+        currentWeapon = defaultWeapon;
+        equippedWeapon = null;
+        // reactivate the default weapon
+        currentWeapon.gameObject.SetActive(true);
+        pUI.AmmoDisplay(currentWeapon);
     }
 
 }
