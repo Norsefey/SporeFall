@@ -33,14 +33,12 @@ public class PlayerMovement : MonoBehaviour
         TempAim
     }
     public PlayerState currentState = PlayerState.Default;
-
     private void Start()
     {
         cc = GetComponent<CharacterController>();
         moveSpeed = walkSpeed;
         SetDefaultState();
     }
-
     private void Update()
     {
         switch (currentState)
@@ -62,7 +60,6 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
     }
-
     public void RotateOnFire(Transform gun, Vector3 shootDir)
     {
         
@@ -92,7 +89,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
     void DefaultMovement()
     {
         Vector3 movement = Vector3.zero;

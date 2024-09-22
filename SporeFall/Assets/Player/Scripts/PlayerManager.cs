@@ -56,8 +56,7 @@ public class PlayerManager : MonoBehaviour
                 gun.Charge();
             }
         }
-    }
-   
+    } 
     public void EnablePickUpWeapon(GameObject weapon)
     {
         nearByWeapon = weapon;
@@ -122,6 +121,9 @@ public class PlayerManager : MonoBehaviour
     }
     public void DropWeapon()
     {
+        if(equippedWeapon == null || currentWeapon == bGun)
+            return;
+        Debug.Log("Dropping Weapon");
         if (currentWeapon != null)
         {
             Destroy(currentWeapon.gameObject); // Drop the current weapon

@@ -1418,6 +1418,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 659386811}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &674633969 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3467706073932850416, guid: 7e094f11e477a1b48a4821bdf6076551,
+    type: 3}
+  m_PrefabInstance: {fileID: 1473528919}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &695549956
 GameObject:
   m_ObjectHideFlags: 0
@@ -3687,6 +3693,10 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1282901482}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3467706073932850416, guid: 7e094f11e477a1b48a4821bdf6076551,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1969848075}
     - targetCorrespondingSourceObject: {fileID: 3737038703304136135, guid: 7e094f11e477a1b48a4821bdf6076551,
         type: 3}
       insertIndex: -1
@@ -4536,12 +4546,108 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1473528919}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 674633969}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44aa5e7603d3ed14eaa54d88247be2a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1969848075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674633969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a53b3c6b6234ba4bba5080b30848a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootInputMap:
+    m_Name: Shoot Input Map
+    m_Id: c41d9aa5-8223-48a0-902f-1af87cda6c9f
+    m_Asset: {fileID: 0}
+    m_Actions: []
+    m_Bindings: []
+  buildInputMap:
+    m_Name: Build Input Map
+    m_Id: 61a156d3-065b-411e-91f0-1f3991873707
+    m_Asset: {fileID: 0}
+    m_Actions: []
+    m_Bindings: []
+  moveAction:
+    m_Name: Move
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 8d20e0ae-647f-4cb1-94d7-64b0657fa9e1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  lookAction:
+    m_Name: Look
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ba80e752-cc8a-4230-acee-587645e970c6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 0e00006a-2cfb-4935-ae92-7d86f26bffe9
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  aimAction:
+    m_Name: Aim
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 12b6b023-ff17-4205-a767-820e2c5eb2fa
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  fireAction:
+    m_Name: Fire
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f01d7f8a-4702-4071-85cb-9bd26c016f2e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  reloadAction:
+    m_Name: Reload
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: b659c9f1-d50d-4bb7-a8a6-9e543f6da858
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  pickUpAction:
+    m_Name: Pick Up
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 37a55de6-96a0-45fc-972a-7767b00a94de
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  dropAction:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 26239fb5-25d8-4bd1-b52e-4015a77c44f2
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!1 &1989460208
 GameObject:
   m_ObjectHideFlags: 0

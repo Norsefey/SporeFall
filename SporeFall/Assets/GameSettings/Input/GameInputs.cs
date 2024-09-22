@@ -302,6 +302,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""8e8cd04a-3bad-4314-a439-571f94bfca53"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=1)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -324,6 +333,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""PickUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22f93ad4-3ece-48f4-9c89-234259eb6e29"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -441,6 +461,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
         m_Shoot_Reload = m_Shoot.FindAction("Reload", throwIfNotFound: true);
         m_Shoot_PickUp = m_Shoot.FindAction("PickUp", throwIfNotFound: true);
+        m_Shoot_Drop = m_Shoot.FindAction("Drop", throwIfNotFound: true);
         // Build
         m_Build = asset.FindActionMap("Build", throwIfNotFound: true);
         m_Build_StrucMenu = m_Build.FindAction("StrucMenu", throwIfNotFound: true);
@@ -603,12 +624,14 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private List<IShootActions> m_ShootActionsCallbackInterfaces = new List<IShootActions>();
     private readonly InputAction m_Shoot_Reload;
     private readonly InputAction m_Shoot_PickUp;
+    private readonly InputAction m_Shoot_Drop;
     public struct ShootActions
     {
         private @GameInputs m_Wrapper;
         public ShootActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Reload => m_Wrapper.m_Shoot_Reload;
         public InputAction @PickUp => m_Wrapper.m_Shoot_PickUp;
+        public InputAction @Drop => m_Wrapper.m_Shoot_Drop;
         public InputActionMap Get() { return m_Wrapper.m_Shoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -624,6 +647,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @PickUp.started += instance.OnPickUp;
             @PickUp.performed += instance.OnPickUp;
             @PickUp.canceled += instance.OnPickUp;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
         }
 
         private void UnregisterCallbacks(IShootActions instance)
@@ -634,6 +660,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @PickUp.started -= instance.OnPickUp;
             @PickUp.performed -= instance.OnPickUp;
             @PickUp.canceled -= instance.OnPickUp;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
         }
 
         public void RemoveCallbacks(IShootActions instance)
@@ -745,6 +774,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     {
         void OnReload(InputAction.CallbackContext context);
         void OnPickUp(InputAction.CallbackContext context);
+        void OnDrop(InputAction.CallbackContext context);
     }
     public interface IBuildActions
     {

@@ -22,6 +22,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     // Shoot Actions
     public InputAction reloadAction;
     public InputAction pickUpAction;
+    public InputAction dropAction;
     // Build Actions
     private InputAction buildModeAction;
     private InputAction changeBuildAction;
@@ -50,6 +51,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         // shoot action map
         reloadAction = shootInputMap.FindAction("Reload");
         pickUpAction = shootInputMap.FindAction("PickUp");
+        dropAction = shootInputMap.FindAction("Drop");
         //build Actions
         changeBuildAction = buildInputMap.FindAction("Change");
         placeBuildAction = buildInputMap.FindAction("Place");
@@ -58,26 +60,6 @@ public class PlayerInputOrganizer : MonoBehaviour
         playerInputMap.Enable();
         shootInputMap.Enable();
         buildInputMap.Disable();
-    }
-    private void OnDisable()
-    {
-        // remove calls
-        jumpAction.started -= pMan.pController.JumpCall;
-        aimAction.started -= pMan.pCamera.AimSightCall;
-        aimAction.canceled -= pMan.pCamera.DefaultSightCall;
-        fireAction.started -= OnFireStarted;
-        fireAction.canceled -= OnFireCanceled;
-        buildModeAction.started -= OnBuildMode;
-        //shoot actions
-        reloadAction.performed -= OnReload;
-        pickUpAction.performed -= OnPickUpWeapon;
-        // build Mode actions
-        changeBuildAction.started -= OnCycleBuildObject;
-        placeBuildAction.started -= OnPlaceObject;
-
-        // disable Input map
-        playerInputMap.Disable();
-        shootInputMap.Disable();
     }
     public void AssignAllActions()
     {
@@ -92,9 +74,30 @@ public class PlayerInputOrganizer : MonoBehaviour
         // shoot actions
         reloadAction.performed += OnReload;
         pickUpAction.performed += OnPickUpWeapon;
+        dropAction.performed += OnDropWeapon;
         // build mode actions
         changeBuildAction.started += OnCycleBuildObject;
         placeBuildAction.started += OnPlaceObject;
+    }
+    private void OnDisable()
+    {
+        // remove calls
+        jumpAction.started -= pMan.pController.JumpCall;
+        aimAction.started -= pMan.pCamera.AimSightCall;
+        aimAction.canceled -= pMan.pCamera.DefaultSightCall;
+        fireAction.started -= OnFireStarted;
+        fireAction.canceled -= OnFireCanceled;
+        buildModeAction.started -= OnBuildMode;
+        //shoot actions
+        reloadAction.performed -= OnReload;
+        pickUpAction.performed -= OnPickUpWeapon;
+        dropAction.performed -= OnDropWeapon;
+        // build Mode actions
+        changeBuildAction.started -= OnCycleBuildObject;
+        placeBuildAction.started -= OnPlaceObject;
+        // disable Input map
+        playerInputMap.Disable();
+        shootInputMap.Disable();
     }
     public void SetManager(PlayerManager manger)
     {
@@ -182,5 +185,9 @@ public class PlayerInputOrganizer : MonoBehaviour
     private void OnPickUpWeapon(InputAction.CallbackContext context)
     {
         pMan.PickUpWeapon();
+    }
+    private void OnDropWeapon(InputAction.CallbackContext context)
+    {
+        pMan.DropWeapon();
     }
 }
