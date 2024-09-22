@@ -101,8 +101,8 @@ public class PlayerMovement : MonoBehaviour
         /* float horInput = Input.GetAxis("Horizontal");
          float verInput = Input.GetAxis("Vertical");*/
         // new Input System
-        float horInput = pMan.moveAction.ReadValue<Vector2>().x;
-        float verInput = pMan.moveAction.ReadValue<Vector2>().y;
+        float horInput = pMan.pInput.moveAction.ReadValue<Vector2>().x;
+        float verInput = pMan.pInput.moveAction.ReadValue<Vector2>().y;
 
         if (horInput != 0 || verInput != 0)
         {
@@ -179,8 +179,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 movement = Vector3.zero;
         /// new Input system
-        float horInput = pMan.moveAction.ReadValue<Vector2>().x;
-        float verInput = pMan.moveAction.ReadValue<Vector2>().y;
+        float horInput = pMan.pInput.moveAction.ReadValue<Vector2>().x;
+        float verInput = pMan.pInput.moveAction.ReadValue<Vector2>().y;
         // convert player forward to camera forward
         Quaternion temp = myCamera.localRotation;
         // we only want the horizontal rotation of camera

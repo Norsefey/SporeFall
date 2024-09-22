@@ -45,7 +45,7 @@ public class TPSCamera : MonoBehaviour
     {
         int invertedHor = invertHorRot ? -1 : 1;
         /// New Input System
-        float xInput = pMan.lookAction.ReadValue<Vector2>().x;
+        float xInput = pMan.pInput.lookAction.ReadValue<Vector2>().x;
         float horRot = transform.localEulerAngles.y + xInput * horSense * invertedHor * Time.deltaTime;
         return horRot;
     }
@@ -54,7 +54,7 @@ public class TPSCamera : MonoBehaviour
         int invertedVert = invertVertRot ? -1 : 1;
         // update this to work with new Input System
         //vertRot -= Input.GetAxis("Mouse Y") * verSense * invertedVert;
-        vertRot -= pMan.lookAction.ReadValue<Vector2>().y * verSense * invertedVert * Time.deltaTime;
+        vertRot -= pMan.pInput.lookAction.ReadValue<Vector2>().y * verSense * invertedVert * Time.deltaTime;
         vertRot = Mathf.Clamp(vertRot, minVertRot, maxVertRot);
         return vertRot;
     }
