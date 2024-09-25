@@ -32,12 +32,10 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction selectStructAction;
     // Edit Actions
     private InputAction moveStructAcion;
-    private InputAction rotateStructAction;
+    public InputAction rotateStructAction;
     private InputAction destroyStructAction;
     private InputAction upgradeStructAction;
     private InputAction exitEditAction;
-
-    private bool isEditing;
     private void Awake()
     {
         // get and assign input Action Map
@@ -65,9 +63,9 @@ public class PlayerInputOrganizer : MonoBehaviour
         changeBuildAction = buildInputMap.FindAction("Change");
         placeBuildAction = buildInputMap.FindAction("Place");
         selectStructAction = buildInputMap.FindAction("Select");
+        rotateStructAction = buildInputMap.FindAction("Rotate");
         // Edit Action Maps
         moveStructAcion = editInputMap.FindAction("Move");
-        rotateStructAction = editInputMap.FindAction("Rotate");
         destroyStructAction = editInputMap.FindAction("Destroy");
         upgradeStructAction = editInputMap.FindAction("Upgrade");
         exitEditAction = editInputMap.FindAction("Exit");
@@ -92,12 +90,17 @@ public class PlayerInputOrganizer : MonoBehaviour
         pickUpAction.performed += OnPickUpWeapon;
         dropAction.performed += OnDropWeapon;
         // build actions
-        changeBuildAction.started += OnCycleBuildObject;
-        placeBuildAction.started += OnPlaceObject;
-        selectStructAction.started += OnSelectObject;
+        changeBuildAction.started += OnCycleBuildStrcuture;
+        placeBuildAction.started += OnPlaceStructure;
+        selectStructAction.started += OnSelectStructure;
+        rotateStructAction.started += OnEditRotateStarted;
+        rotateStructAction.canceled += OnEditRotateCancled;
         // Edit Actions
         moveStructAcion.started += OnEditStructureMoveStarted;
         moveStructAcion.canceled += OnEditMoveStructureCancled;
+        exitEditAction.started += OnExitEditStructure;
+        destroyStructAction.performed += OnEditDestroy;
+        upgradeStructAction.started += OnEditUpgrade;
     }
     private void OnDisable()
     {
@@ -113,12 +116,17 @@ public class PlayerInputOrganizer : MonoBehaviour
         pickUpAction.performed -= OnPickUpWeapon;
         dropAction.performed -= OnDropWeapon;
         // build Mode actions
-        changeBuildAction.started -= OnCycleBuildObject;
-        placeBuildAction.started -= OnPlaceObject;
-        selectStructAction.started -= OnSelectObject;
+        changeBuildAction.started -= OnCycleBuildStrcuture;
+        placeBuildAction.started -= OnPlaceStructure;
+        selectStructAction.started -= OnSelectStructure;
         // edit Actions
         moveStructAcion.started -= OnEditStructureMoveStarted;
         moveStructAcion.canceled -= OnEditMoveStructureCancled;
+        exitEditAction.started -= OnExitEditStructure;
+        destroyStructAction.performed -= OnEditDestroy;
+        rotateStructAction.started -= OnEditRotateStarted;
+        rotateStructAction.canceled -= OnEditRotateCancled;
+        upgradeStructAction.started -= OnEditUpgrade;
         // disable Input map
         playerInputMap.Disable();
         shootInputMap.Disable();
@@ -205,7 +213,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         }
 
     }
-    private void OnCycleBuildObject(InputAction.CallbackContext context)
+    private void OnCycleBuildStrcuture(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
@@ -213,30 +221,37 @@ public class PlayerInputOrganizer : MonoBehaviour
             pMan.pUI.AmmoDisplay(pMan.currentWeapon);
         }
     }
-    private void OnPlaceObject(InputAction.CallbackContext context)
+    private void OnPlaceStructure(InputAction.CallbackContext context)
     {
         pMan.bGun.PlaceStructure();
     }
-    private void OnSelectObject(InputAction.CallbackContext context)
+    private void OnSelectStructure(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
             if (buildGun.SelectStructure()) // Select a placed object for moving or destroying
             {
-                if (!isEditing)
-                {
-                    isEditing = true;
+                buildGun.isEditing = true;
+                rotateStructAction = editInputMap.FindAction("Rotate");
+                rotateStructAction.started += OnEditRotateStarted;
+                rotateStructAction.canceled += OnEditRotateCancled;
 
-                    buildInputMap.Disable();
-                    editInputMap.Enable();
-                }
-                else
-                {
-                    isEditing = false;
-                    editInputMap.Disable();
-                    buildInputMap.Enable();
-                }
+                buildInputMap.Disable();
+                editInputMap.Enable();
             }
+        }
+    }
+    private void OnExitEditStructure(InputAction.CallbackContext context)
+    {
+        if (pMan.currentWeapon is BuildGun buildGun)
+        {
+            buildGun.DeSelectStructure();
+            rotateStructAction = buildInputMap.FindAction("Rotate");
+            rotateStructAction.started += OnEditRotateStarted;
+            rotateStructAction.canceled += OnEditRotateCancled;
+
+            editInputMap.Disable();
+            buildInputMap.Enable();
         }
     }
     private void OnEditStructureMoveStarted(InputAction.CallbackContext context)
@@ -255,10 +270,33 @@ public class PlayerInputOrganizer : MonoBehaviour
             buildGun.OnFireReleased();
             pMan.isFiring = false;
             buildGun.isEditing = false;
-
         }
     }
+    private void OnEditDestroy(InputAction.CallbackContext context)
+    {
+        if (pMan.currentWeapon is BuildGun buildGun)
+        {
+            buildGun.DestroySelectedObject();
 
+            editInputMap.Disable();
+            buildInputMap.Enable();
+        }
+    }
+    private void OnEditRotateStarted(InputAction.CallbackContext context)
+    {
+        Debug.Log("CanRotate");
+        pMan.isRotating = true;
+    }
+    private void OnEditRotateCancled(InputAction.CallbackContext context)
+    {
+        Debug.Log("No Rotate");
+
+        pMan.isRotating = false;
+    }
+    private void OnEditUpgrade(InputAction.CallbackContext context)
+    {
+        // put upgrade code here
+    }
     private void OnPickUpWeapon(InputAction.CallbackContext context)
     {
         pMan.PickUpWeapon();

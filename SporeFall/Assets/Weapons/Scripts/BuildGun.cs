@@ -31,16 +31,11 @@ public class BuildGun : Weapon
         // Check if we hit the ground layer
         if (Physics.Raycast(ray, out hit, maxBuildDistance, groundLayer))
         {
+
             // Create or move the preview object to the hit point on the ground
             if (!isEditing && selectedStructure == null)
             {
-                selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity);
-                selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
-                SetStructureToTransparent(selectedStructure); // Make the object transparent to show it's a preview
-            }else if(!isEditing && selectedStructure != buildableStructures[currentBuildIndex])
-            {
-                Destroy(selectedStructure);
-
+                Debug.Log("Creating New Structure");
                 selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity);
                 selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
                 SetStructureToTransparent(selectedStructure); // Make the object transparent to show it's a preview
@@ -48,12 +43,12 @@ public class BuildGun : Weapon
             else
             {
                 selectedStructure.transform.position = hit.point; // Update position of preview
-
+                RotateStructure();
                 if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
                 {
+          
                     Debug.Log("Only Rotating Gun");
                     transform.forward = player.pCamera.myCamera.transform.forward;
-
                 }
                 else
                 {
@@ -63,29 +58,6 @@ public class BuildGun : Weapon
             }
         }
     }
-   /* public void MoveStructure()
-    {
-        Ray ray = new Ray(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
-        RaycastHit hit;
-
-        // Check if we hit the ground layer
-        if (Physics.Raycast(ray, out hit, maxBuildDistance, groundLayer))
-        {
-            selectedStructure.transform.position = hit.point; // Update position of preview
-
-            if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
-            {
-                Debug.Log("Only Rotating Gun");
-                transform.forward = player.pCamera.myCamera.transform.forward;
-
-            }
-            else
-            {
-                Debug.Log("Rotating Character");
-                player.pController.RotateOnFire(this.transform, player.pCamera.myCamera.transform.forward);
-            }
-        }
-    }*/
     public void PlaceStructure()
     {
         if (selectedStructure != null)
@@ -103,8 +75,7 @@ public class BuildGun : Weapon
             currentBuildIndex = 0;
         else if(currentBuildIndex < 0)
             currentBuildIndex = buildableStructures.Length - 1;
- 
-        //selectedObject = buildableObjects[currentBuildIndex];
+        Destroy(selectedStructure);
         player.pUI.AmmoDisplay(this);
     }
     public string ReturnSelectedStructure()
@@ -180,6 +151,7 @@ public class BuildGun : Weapon
             selectedStructure = hit.collider.gameObject; // Select the hit object
             SetStructureToTransparent(selectedStructure);
             Debug.Log("Structure selected: " + selectedStructure.name);
+            player.pUI.DisplayAText(selectedStructure.name);
             return true;
         }
         else
@@ -187,13 +159,26 @@ public class BuildGun : Weapon
             return false;
         }
     }
+    public void DeSelectStructure()
+    {
+        Debug.Log("Deselected:" + selectedStructure);
+        SetStructureToOpaque(selectedStructure); // Make the object opaque
+        selectedStructure = null;
+        isEditing = false;
+    }
     public void DestroySelectedObject()
     {
         if (selectedStructure != null)
         {
             Destroy(selectedStructure); // Destroy the selected object
             selectedStructure = null; // Clear the selection
+            isEditing = false;
             Debug.Log("Object destroyed");
         }
+    }
+    public void RotateStructure()
+    {
+        if (selectedStructure != null)
+            selectedStructure.transform.Rotate(new Vector3(0, player.pInput.rotateStructAction.ReadValue<Vector2>().y * 25 * Time.deltaTime, 0));
     }
 }
