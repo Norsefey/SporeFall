@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController cc;
     [Header("Movement Variables")]
     [SerializeField] private float walkSpeed;
-    [SerializeField] private float sprintSpeed;
     [SerializeField] private float rotSpeed = 15;
     private float moveSpeed;
     [Header("Jump Variables")]
@@ -23,8 +22,6 @@ public class PlayerMovement : MonoBehaviour
     private float gravity = -9.81f;
     private float vertSpeed;
     private ControllerColliderHit contact;
-
-    private bool tempAim = false;
     private float tempAimTimer = 0;
     public enum PlayerState
     {// two move states...so far, default and aiming

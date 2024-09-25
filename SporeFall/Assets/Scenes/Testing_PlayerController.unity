@@ -483,6 +483,8 @@ MonoBehaviour:
   damage: 5
   bulletSpreadAngle: 2
   reloadTime: 2
+  projectileDistance: 50
+  hitScanDistance: 100
   magazineCount: 5
   magazineSize: 5
   totalAmmo: 5
@@ -764,6 +766,8 @@ MonoBehaviour:
   damage: 5
   bulletSpreadAngle: 2
   reloadTime: 2
+  projectileDistance: 50
+  hitScanDistance: 100
   magazineCount: 5
   magazineSize: 5
   totalAmmo: 5
@@ -1153,19 +1157,22 @@ MonoBehaviour:
   damage: 0
   bulletSpreadAngle: 2
   reloadTime: 2
+  projectileDistance: 50
+  hitScanDistance: 100
   magazineCount: 0
   magazineSize: 0
   totalAmmo: 0
   limitedAmmo: 0
   isHitScan: 0
-  buildableObjects:
-  - {fileID: 1204486601294777475, guid: aaef39061974fc146ad9ca99bf7f6ec4, type: 3}
+  buildableStructures:
   - {fileID: 3745370869290195764, guid: d4259689e9922544d931b3b639201847, type: 3}
+  - {fileID: 1204486601294777475, guid: fe603223efaf58340a7cefe1c527d574, type: 3}
+  - {fileID: 1204486601294777475, guid: aaef39061974fc146ad9ca99bf7f6ec4, type: 3}
   maxBuildDistance: 50
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  objectLayer:
+  structureLayer:
     serializedVersion: 2
     m_Bits: 128
   currentBuildIndex: 0
@@ -2086,6 +2093,8 @@ MonoBehaviour:
   damage: 5
   bulletSpreadAngle: 2
   reloadTime: 2
+  projectileDistance: 50
+  hitScanDistance: 100
   magazineCount: 9999
   magazineSize: 9999
   totalAmmo: 9999
@@ -3436,6 +3445,11 @@ PrefabInstance:
       objectReference: {fileID: 536258963}
     - target: {fileID: 894867173832537510, guid: 7e094f11e477a1b48a4821bdf6076551,
         type: 3}
+      propertyPath: pInput
+      value: 
+      objectReference: {fileID: 1969848075}
+    - target: {fileID: 894867173832537510, guid: 7e094f11e477a1b48a4821bdf6076551,
+        type: 3}
       propertyPath: currentWeapon
       value: 
       objectReference: {fileID: 1857296536}
@@ -4236,6 +4250,114 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622535833}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1640085379
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 873137498097141832, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 873137498097141832, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 873137498097141832, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 873137498097141832, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1204486601294777475, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_Name
+      value: Turret
+      objectReference: {fileID: 0}
+    - target: {fileID: 2900302070825450320, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_Height
+      value: 2.3457668
+      objectReference: {fileID: 0}
+    - target: {fileID: 2900302070825450320, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.7795523
+      objectReference: {fileID: 0}
+    - target: {fileID: 2900302070825450320, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.27955228
+      objectReference: {fileID: 0}
+    - target: {fileID: 2900302070825450320, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1.4072541
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.8877597
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.7659079
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889230320244770491, guid: aaef39061974fc146ad9ca99bf7f6ec4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: aaef39061974fc146ad9ca99bf7f6ec4, type: 3}
 --- !u!1 &1728241050
 GameObject:
   m_ObjectHideFlags: 0
@@ -4485,6 +4607,8 @@ MonoBehaviour:
   damage: 5
   bulletSpreadAngle: 2
   reloadTime: 2
+  projectileDistance: 50
+  hitScanDistance: 100
   magazineCount: 20
   magazineSize: 20
   totalAmmo: 100
@@ -4640,7 +4764,7 @@ MonoBehaviour:
     m_SingletonActionBindings: []
     m_Flags: 0
   dropAction:
-    m_Name: 
+    m_Name: Drop
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: 26239fb5-25d8-4bd1-b52e-4015a77c44f2
@@ -5074,6 +5198,8 @@ MonoBehaviour:
   damage: 5
   bulletSpreadAngle: 2
   reloadTime: 2
+  projectileDistance: 50
+  hitScanDistance: 100
   magazineCount: 9999
   magazineSize: 9999
   totalAmmo: 9999
@@ -5091,3 +5217,4 @@ SceneRoots:
   - {fileID: 1473528919}
   - {fileID: 23221637}
   - {fileID: 166210449}
+  - {fileID: 1640085379}

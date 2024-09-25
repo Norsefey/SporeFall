@@ -80,15 +80,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Fire"",
-                    ""type"": ""Button"",
-                    ""id"": ""5fcc1556-6d65-42f8-9c30-4e52bb78d337"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -256,28 +247,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""78690261-4ef8-4b78-956e-605488e9095b"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Fire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""071aef6d-f1d2-49bb-9c44-22a71f7681d7"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Fire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -289,6 +258,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Reload"",
                     ""type"": ""Button"",
                     ""id"": ""c3843fe3-3d94-4ebf-8654-31962fb77963"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""ef1413c8-44ef-4b6a-b3f8-9b379446c1c9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -346,6 +324,28 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d04e4710-6041-47e2-81f5-2f017d50a034"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a77f9c93-a2cd-43d4-ab74-869575899801"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -354,7 +354,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             ""id"": ""fea7be41-75c6-40ce-9a67-55a32b8ad920"",
             ""actions"": [
                 {
-                    ""name"": ""StrucMenu"",
+                    ""name"": ""Preview"",
                     ""type"": ""Button"",
                     ""id"": ""c748489d-fa3c-4262-a9ff-ef86b000325e"",
                     ""expectedControlType"": ""Button"",
@@ -363,7 +363,25 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Change"",
+                    ""name"": ""Place"",
+                    ""type"": ""Button"",
+                    ""id"": ""1b8b4b0b-4f8c-4a59-9a0d-57bd22bd2171"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""9cd2af1f-6ebd-4f03-8e32-9e329517cc57"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Previous"",
                     ""type"": ""Button"",
                     ""id"": ""b136cbdd-00a2-453e-8dcc-c2a527309b05"",
                     ""expectedControlType"": ""Button"",
@@ -372,9 +390,170 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Place"",
+                    ""name"": ""Next"",
                     ""type"": ""Button"",
-                    ""id"": ""b8d30a63-ff3d-48f8-b919-371cd25062de"",
+                    ""id"": ""80877c42-fe41-4daa-b2e4-626d89656373"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Change"",
+                    ""type"": ""Value"",
+                    ""id"": ""215baeba-c78d-4e4f-b130-8c54d92a93c8"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""186e0c97-fe6f-4fa2-93b6-709affb58e0a"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Previous"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77f6d239-0cc4-44a2-9839-276fcbd530f1"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ddc06aa6-5c6d-449a-b9bc-ab1d9072ab1b"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Place"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a71b5871-b021-40b5-bbbb-9c90973de12d"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Place"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""59489172-a554-40ec-908b-861e9f87a44b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ad7bb16a-ad94-46e6-b05c-9bc623262089"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""47326120-feb9-4367-a7ba-a4c0d2765944"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Change"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94a81f96-e723-40af-b666-ae82e3a618f3"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Preview"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""99210a67-7da3-4fd9-913a-83776d42f97b"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Edit"",
+            ""id"": ""d6506db0-7526-4899-b1a1-cfdc75a81bcb"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Button"",
+                    ""id"": ""3404f391-16cb-4d7f-aa8a-37f32aefbd10"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Value"",
+                    ""id"": ""f4a93be6-9d6b-4167-9cbd-3ab551388252"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Destroy"",
+                    ""type"": ""Button"",
+                    ""id"": ""d14f024a-a039-4def-bc88-3a74f3bf19d8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Upgrade"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd74daa1-4c0f-4cc1-a1e1-e2a4dd6af9bd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7cd2881-9089-4bb1-893e-a84df2d5995e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -384,34 +563,56 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""94a81f96-e723-40af-b666-ae82e3a618f3"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""id"": ""6df60cd2-9b29-4950-a39d-860ef5f70a43"",
+                    ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""StrucMenu"",
+                    ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""186e0c97-fe6f-4fa2-93b6-709affb58e0a"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""id"": ""67151feb-8e34-4094-97c7-fe0e546511ce"",
+                    ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Change"",
+                    ""action"": ""Destroy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""cbc94cdc-d8dc-437e-9ce5-3b82e9c44472"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""id"": ""80847b24-7c97-4003-a624-fde39dd1d0fe"",
+                    ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Place"",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e76cd94c-b977-437b-8c28-60eed46e0cfc"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f56095ef-7cdf-4087-b4b2-88e938f9e9bc"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Exit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -456,17 +657,27 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_Join = m_Player.FindAction("Join", throwIfNotFound: true);
         m_Player_Build = m_Player.FindAction("Build", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
         m_Shoot_Reload = m_Shoot.FindAction("Reload", throwIfNotFound: true);
+        m_Shoot_Fire = m_Shoot.FindAction("Fire", throwIfNotFound: true);
         m_Shoot_PickUp = m_Shoot.FindAction("PickUp", throwIfNotFound: true);
         m_Shoot_Drop = m_Shoot.FindAction("Drop", throwIfNotFound: true);
         // Build
         m_Build = asset.FindActionMap("Build", throwIfNotFound: true);
-        m_Build_StrucMenu = m_Build.FindAction("StrucMenu", throwIfNotFound: true);
-        m_Build_Change = m_Build.FindAction("Change", throwIfNotFound: true);
+        m_Build_Preview = m_Build.FindAction("Preview", throwIfNotFound: true);
         m_Build_Place = m_Build.FindAction("Place", throwIfNotFound: true);
+        m_Build_Select = m_Build.FindAction("Select", throwIfNotFound: true);
+        m_Build_Previous = m_Build.FindAction("Previous", throwIfNotFound: true);
+        m_Build_Next = m_Build.FindAction("Next", throwIfNotFound: true);
+        m_Build_Change = m_Build.FindAction("Change", throwIfNotFound: true);
+        // Edit
+        m_Edit = asset.FindActionMap("Edit", throwIfNotFound: true);
+        m_Edit_Move = m_Edit.FindAction("Move", throwIfNotFound: true);
+        m_Edit_Rotate = m_Edit.FindAction("Rotate", throwIfNotFound: true);
+        m_Edit_Destroy = m_Edit.FindAction("Destroy", throwIfNotFound: true);
+        m_Edit_Upgrade = m_Edit.FindAction("Upgrade", throwIfNotFound: true);
+        m_Edit_Exit = m_Edit.FindAction("Exit", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -534,7 +745,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Join;
     private readonly InputAction m_Player_Build;
     private readonly InputAction m_Player_Aim;
-    private readonly InputAction m_Player_Fire;
     public struct PlayerActions
     {
         private @GameInputs m_Wrapper;
@@ -545,7 +755,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Join => m_Wrapper.m_Player_Join;
         public InputAction @Build => m_Wrapper.m_Player_Build;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
-        public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -573,9 +782,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
-            @Fire.started += instance.OnFire;
-            @Fire.performed += instance.OnFire;
-            @Fire.canceled += instance.OnFire;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -598,9 +804,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
-            @Fire.started -= instance.OnFire;
-            @Fire.performed -= instance.OnFire;
-            @Fire.canceled -= instance.OnFire;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -623,6 +826,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Shoot;
     private List<IShootActions> m_ShootActionsCallbackInterfaces = new List<IShootActions>();
     private readonly InputAction m_Shoot_Reload;
+    private readonly InputAction m_Shoot_Fire;
     private readonly InputAction m_Shoot_PickUp;
     private readonly InputAction m_Shoot_Drop;
     public struct ShootActions
@@ -630,6 +834,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         private @GameInputs m_Wrapper;
         public ShootActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Reload => m_Wrapper.m_Shoot_Reload;
+        public InputAction @Fire => m_Wrapper.m_Shoot_Fire;
         public InputAction @PickUp => m_Wrapper.m_Shoot_PickUp;
         public InputAction @Drop => m_Wrapper.m_Shoot_Drop;
         public InputActionMap Get() { return m_Wrapper.m_Shoot; }
@@ -644,6 +849,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
             @PickUp.started += instance.OnPickUp;
             @PickUp.performed += instance.OnPickUp;
             @PickUp.canceled += instance.OnPickUp;
@@ -657,6 +865,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
             @PickUp.started -= instance.OnPickUp;
             @PickUp.performed -= instance.OnPickUp;
             @PickUp.canceled -= instance.OnPickUp;
@@ -684,16 +895,22 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     // Build
     private readonly InputActionMap m_Build;
     private List<IBuildActions> m_BuildActionsCallbackInterfaces = new List<IBuildActions>();
-    private readonly InputAction m_Build_StrucMenu;
-    private readonly InputAction m_Build_Change;
+    private readonly InputAction m_Build_Preview;
     private readonly InputAction m_Build_Place;
+    private readonly InputAction m_Build_Select;
+    private readonly InputAction m_Build_Previous;
+    private readonly InputAction m_Build_Next;
+    private readonly InputAction m_Build_Change;
     public struct BuildActions
     {
         private @GameInputs m_Wrapper;
         public BuildActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
-        public InputAction @StrucMenu => m_Wrapper.m_Build_StrucMenu;
-        public InputAction @Change => m_Wrapper.m_Build_Change;
+        public InputAction @Preview => m_Wrapper.m_Build_Preview;
         public InputAction @Place => m_Wrapper.m_Build_Place;
+        public InputAction @Select => m_Wrapper.m_Build_Select;
+        public InputAction @Previous => m_Wrapper.m_Build_Previous;
+        public InputAction @Next => m_Wrapper.m_Build_Next;
+        public InputAction @Change => m_Wrapper.m_Build_Change;
         public InputActionMap Get() { return m_Wrapper.m_Build; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -703,28 +920,46 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_BuildActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_BuildActionsCallbackInterfaces.Add(instance);
-            @StrucMenu.started += instance.OnStrucMenu;
-            @StrucMenu.performed += instance.OnStrucMenu;
-            @StrucMenu.canceled += instance.OnStrucMenu;
-            @Change.started += instance.OnChange;
-            @Change.performed += instance.OnChange;
-            @Change.canceled += instance.OnChange;
+            @Preview.started += instance.OnPreview;
+            @Preview.performed += instance.OnPreview;
+            @Preview.canceled += instance.OnPreview;
             @Place.started += instance.OnPlace;
             @Place.performed += instance.OnPlace;
             @Place.canceled += instance.OnPlace;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
+            @Previous.started += instance.OnPrevious;
+            @Previous.performed += instance.OnPrevious;
+            @Previous.canceled += instance.OnPrevious;
+            @Next.started += instance.OnNext;
+            @Next.performed += instance.OnNext;
+            @Next.canceled += instance.OnNext;
+            @Change.started += instance.OnChange;
+            @Change.performed += instance.OnChange;
+            @Change.canceled += instance.OnChange;
         }
 
         private void UnregisterCallbacks(IBuildActions instance)
         {
-            @StrucMenu.started -= instance.OnStrucMenu;
-            @StrucMenu.performed -= instance.OnStrucMenu;
-            @StrucMenu.canceled -= instance.OnStrucMenu;
-            @Change.started -= instance.OnChange;
-            @Change.performed -= instance.OnChange;
-            @Change.canceled -= instance.OnChange;
+            @Preview.started -= instance.OnPreview;
+            @Preview.performed -= instance.OnPreview;
+            @Preview.canceled -= instance.OnPreview;
             @Place.started -= instance.OnPlace;
             @Place.performed -= instance.OnPlace;
             @Place.canceled -= instance.OnPlace;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
+            @Previous.started -= instance.OnPrevious;
+            @Previous.performed -= instance.OnPrevious;
+            @Previous.canceled -= instance.OnPrevious;
+            @Next.started -= instance.OnNext;
+            @Next.performed -= instance.OnNext;
+            @Next.canceled -= instance.OnNext;
+            @Change.started -= instance.OnChange;
+            @Change.performed -= instance.OnChange;
+            @Change.canceled -= instance.OnChange;
         }
 
         public void RemoveCallbacks(IBuildActions instance)
@@ -742,6 +977,84 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         }
     }
     public BuildActions @Build => new BuildActions(this);
+
+    // Edit
+    private readonly InputActionMap m_Edit;
+    private List<IEditActions> m_EditActionsCallbackInterfaces = new List<IEditActions>();
+    private readonly InputAction m_Edit_Move;
+    private readonly InputAction m_Edit_Rotate;
+    private readonly InputAction m_Edit_Destroy;
+    private readonly InputAction m_Edit_Upgrade;
+    private readonly InputAction m_Edit_Exit;
+    public struct EditActions
+    {
+        private @GameInputs m_Wrapper;
+        public EditActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Move => m_Wrapper.m_Edit_Move;
+        public InputAction @Rotate => m_Wrapper.m_Edit_Rotate;
+        public InputAction @Destroy => m_Wrapper.m_Edit_Destroy;
+        public InputAction @Upgrade => m_Wrapper.m_Edit_Upgrade;
+        public InputAction @Exit => m_Wrapper.m_Edit_Exit;
+        public InputActionMap Get() { return m_Wrapper.m_Edit; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EditActions set) { return set.Get(); }
+        public void AddCallbacks(IEditActions instance)
+        {
+            if (instance == null || m_Wrapper.m_EditActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_EditActionsCallbackInterfaces.Add(instance);
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
+            @Destroy.started += instance.OnDestroy;
+            @Destroy.performed += instance.OnDestroy;
+            @Destroy.canceled += instance.OnDestroy;
+            @Upgrade.started += instance.OnUpgrade;
+            @Upgrade.performed += instance.OnUpgrade;
+            @Upgrade.canceled += instance.OnUpgrade;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
+        }
+
+        private void UnregisterCallbacks(IEditActions instance)
+        {
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
+            @Destroy.started -= instance.OnDestroy;
+            @Destroy.performed -= instance.OnDestroy;
+            @Destroy.canceled -= instance.OnDestroy;
+            @Upgrade.started -= instance.OnUpgrade;
+            @Upgrade.performed -= instance.OnUpgrade;
+            @Upgrade.canceled -= instance.OnUpgrade;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
+        }
+
+        public void RemoveCallbacks(IEditActions instance)
+        {
+            if (m_Wrapper.m_EditActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IEditActions instance)
+        {
+            foreach (var item in m_Wrapper.m_EditActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_EditActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public EditActions @Edit => new EditActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -768,18 +1081,29 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnJoin(InputAction.CallbackContext context);
         void OnBuild(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
-        void OnFire(InputAction.CallbackContext context);
     }
     public interface IShootActions
     {
         void OnReload(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
         void OnPickUp(InputAction.CallbackContext context);
         void OnDrop(InputAction.CallbackContext context);
     }
     public interface IBuildActions
     {
-        void OnStrucMenu(InputAction.CallbackContext context);
-        void OnChange(InputAction.CallbackContext context);
+        void OnPreview(InputAction.CallbackContext context);
         void OnPlace(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
+        void OnPrevious(InputAction.CallbackContext context);
+        void OnNext(InputAction.CallbackContext context);
+        void OnChange(InputAction.CallbackContext context);
+    }
+    public interface IEditActions
+    {
+        void OnMove(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
+        void OnDestroy(InputAction.CallbackContext context);
+        void OnUpgrade(InputAction.CallbackContext context);
+        void OnExit(InputAction.CallbackContext context);
     }
 }

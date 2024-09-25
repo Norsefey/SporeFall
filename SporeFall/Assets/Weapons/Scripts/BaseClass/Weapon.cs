@@ -14,6 +14,8 @@ public abstract class Weapon : MonoBehaviour
     public float damage;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
     public float reloadTime = 2f; // Time it takes to reload
+    public float projectileDistance = 50;
+    public float hitScanDistance = 100;
     [Header("Ammo Variables")]
     public int magazineCount;
     public int magazineSize;
@@ -49,7 +51,7 @@ public abstract class Weapon : MonoBehaviour
         // Instantiate the projectile and shoot it in the spread direction
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        rb.velocity = shootDirection * 50f; // Adjust projectile speed as needed
+        rb.velocity = shootDirection * projectileDistance; // Adjust projectile speed as needed
         if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
         {
             Debug.Log("Only Rotating Gun");
@@ -63,7 +65,6 @@ public abstract class Weapon : MonoBehaviour
         }
         Debug.Log(weaponName + " fired a projectile.");
     }
-
     private void FireHitscan(Camera playerCamera)
     {
         // Apply bullet spread
@@ -82,7 +83,7 @@ public abstract class Weapon : MonoBehaviour
         Ray ray = new Ray(playerCamera.transform.position, shootDirection);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 100f)) // Range of the hitscan weapon
+        if (Physics.Raycast(ray, out hit, hitScanDistance)) // Range of the hitscan weapon
         {
             Debug.Log(weaponName + " hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));

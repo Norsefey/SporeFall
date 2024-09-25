@@ -11,10 +11,6 @@ public class PlayerManager : MonoBehaviour
     public PlayerUI pUI;
     public GameObject pVisual;
     public BuildGun bGun;
-    /// <summary>
-    ///  Might have to move these inputs to their own script, cause they are growing and needlessly expanding this script
-    /// </summary>
-    
     [Header("Weapons")]
     // Weapons and Shooting
     public Transform weaponHolder; // Where the weapon is equipped
@@ -70,16 +66,15 @@ public class PlayerManager : MonoBehaviour
     public void SetBuildMode()
     {
         if (!isBuilding)
-        {
+        {// Enter Build mode
             currentWeapon.gameObject.SetActive(false);
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
-            pUI.AmmoDisplay(currentWeapon);
-            pInput.buildInputMap.Enable();
+            pUI.DisplayAText("Build Mode");
             isBuilding = true;
         }
         else
-        {
+        {// Exit Build Mode
             if (equippedWeapon != null)
                 currentWeapon = equippedWeapon;
             else
@@ -88,7 +83,6 @@ public class PlayerManager : MonoBehaviour
             currentWeapon.gameObject.SetActive(true);
             pUI.AmmoDisplay(currentWeapon);
             bGun.gameObject.SetActive(false);
-            pInput.buildInputMap.Disable();
             isBuilding = false;
         }
     }
@@ -135,5 +129,4 @@ public class PlayerManager : MonoBehaviour
         currentWeapon.gameObject.SetActive(true);
         pUI.AmmoDisplay(currentWeapon);
     }
-
 }

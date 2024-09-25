@@ -1,33 +1,29 @@
 // Ignore Spelling: buildable
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BuildGun : Weapon
 {
-    public GameObject[] buildableObjects; // Array of objects the player can spawn
+    public GameObject[] buildableStructures; // Array of objects the player can spawn
     public float maxBuildDistance = 100f; // Maximum distance for building
     public LayerMask groundLayer; // LayerMask to identify what is "ground"
-    public LayerMask objectLayer; // LayerMask for detecting objects the player can select
-
+    public LayerMask structureLayer; // LayerMask for detecting objects the player can select
     public int currentBuildIndex = 0; // Current selected object to build
-    private GameObject selectedObject; // The currently selected placed object (for moving or deleting)
+    private GameObject selectedStructure; // The currently selected placed object (for moving or deleting)
+    public bool isEditing = false;
     public override void Fire()
     {
         // Called when player presses fire button
-        PreviewObject();
+        PreviewStructure();
     }
     public void OnFireReleased()
     {
-        // Called when player releases the fire button
-        //PlaceObject();
-        Destroy(selectedObject); // Destroy the current preview
-
+        if (!isEditing)
+        {
+            // Called when player releases the fire button
+            Destroy(selectedStructure); // Destroy the current preview
+        }
     }
-    private void PreviewObject()
+    private void PreviewStructure()
     {
         Ray ray = new Ray(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
         RaycastHit hit;
@@ -36,15 +32,22 @@ public class BuildGun : Weapon
         if (Physics.Raycast(ray, out hit, maxBuildDistance, groundLayer))
         {
             // Create or move the preview object to the hit point on the ground
-            if (selectedObject == null)
+            if (!isEditing && selectedStructure == null)
             {
-                selectedObject = Instantiate(buildableObjects[currentBuildIndex], hit.point, Quaternion.identity);
-                selectedObject.GetComponent<Collider>().enabled = false; // Disable collider for preview
-                SetObjectToTransparent(selectedObject); // Make the object transparent to show it's a preview
+                selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity);
+                selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
+                SetStructureToTransparent(selectedStructure); // Make the object transparent to show it's a preview
+            }else if(!isEditing && selectedStructure != buildableStructures[currentBuildIndex])
+            {
+                Destroy(selectedStructure);
+
+                selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity);
+                selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
+                SetStructureToTransparent(selectedStructure); // Make the object transparent to show it's a preview
             }
             else
             {
-                selectedObject.transform.position = hit.point; // Update position of preview
+                selectedStructure.transform.position = hit.point; // Update position of preview
 
                 if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
                 {
@@ -60,35 +63,55 @@ public class BuildGun : Weapon
             }
         }
     }
-    public void PlaceObject()
+   /* public void MoveStructure()
     {
-        if (selectedObject != null)
-        {
-            // Place the object in the world when the fire button is released
-            selectedObject.GetComponent<Collider>().enabled = true; // Enable collider for the final object
-            SetObjectToOpaque(selectedObject); // Make the object opaque
-            selectedObject = null; // Clear the selected object
+        Ray ray = new Ray(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
+        RaycastHit hit;
 
+        // Check if we hit the ground layer
+        if (Physics.Raycast(ray, out hit, maxBuildDistance, groundLayer))
+        {
+            selectedStructure.transform.position = hit.point; // Update position of preview
+
+            if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
+            {
+                Debug.Log("Only Rotating Gun");
+                transform.forward = player.pCamera.myCamera.transform.forward;
+
+            }
+            else
+            {
+                Debug.Log("Rotating Character");
+                player.pController.RotateOnFire(this.transform, player.pCamera.myCamera.transform.forward);
+            }
+        }
+    }*/
+    public void PlaceStructure()
+    {
+        if (selectedStructure != null)
+        {
+            selectedStructure.GetComponent<Collider>().enabled = true; // Enable collider for the final object
+            SetStructureToOpaque(selectedStructure); // Make the object opaque
+            selectedStructure = null; // Clear the selected object
         }
     }
-    public void CycleBuildObject()
+    public void CycleSelectedStructure(float indexIncrement)
     {
         // Cycle to the next object in the buildableObjects array
-        currentBuildIndex = (currentBuildIndex + 1) % buildableObjects.Length;
-        if (selectedObject != null)
-        {
-            Destroy(selectedObject); // Destroy the current preview
-        }
+        currentBuildIndex = (currentBuildIndex + (int)indexIncrement);
+        if (currentBuildIndex >= buildableStructures.Length)
+            currentBuildIndex = 0;
+        else if(currentBuildIndex < 0)
+            currentBuildIndex = buildableStructures.Length - 1;
+ 
+        //selectedObject = buildableObjects[currentBuildIndex];
         player.pUI.AmmoDisplay(this);
     }
-    public string SelectedStructure()
+    public string ReturnSelectedStructure()
     {
-        if(selectedObject == null)
-            return "Build Mode";
-        else 
-            return selectedObject.name;
+        return buildableStructures[currentBuildIndex].name;
     }
-    private void SetObjectToTransparent(GameObject obj)
+    private void SetStructureToTransparent(GameObject obj)
     {
         // Set the object material to transparent for preview
         Renderer renderer = obj.GetComponentInChildren<Renderer>();
@@ -114,7 +137,7 @@ public class BuildGun : Weapon
             }
         }
     }
-    private void SetObjectToOpaque(GameObject obj)
+    private void SetStructureToOpaque(GameObject obj)
     {
         // Set the object material to opaque for final placement
         Renderer renderer = obj.GetComponentInChildren<Renderer>();
@@ -146,39 +169,30 @@ public class BuildGun : Weapon
             }
         }
     }
-    public void SelectObject()
+    public bool SelectStructure()
     {
         // Use raycast to detect if the player is looking at a placed object to select it for moving or destroying
         Ray ray = new Ray(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, maxBuildDistance, objectLayer))
+        if (Physics.Raycast(ray, out hit, maxBuildDistance, structureLayer))
         {
-            selectedObject = hit.collider.gameObject; // Select the hit object
-            Debug.Log("Object selected: " + selectedObject.name);
+            selectedStructure = hit.collider.gameObject; // Select the hit object
+            SetStructureToTransparent(selectedStructure);
+            Debug.Log("Structure selected: " + selectedStructure.name);
+            return true;
         }
-    }
-    public void MoveSelectedObject()
-    {
-        if (selectedObject != null)
+        else
         {
-            // Raycast again to find new ground position to move the object
-            Ray ray = new Ray(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, maxBuildDistance, groundLayer))
-            {
-                selectedObject.transform.position = hit.point; // Move the selected object to the new location
-                Debug.Log("Object moved to: " + hit.point);
-            }
+            return false;
         }
     }
     public void DestroySelectedObject()
     {
-        if (selectedObject != null)
+        if (selectedStructure != null)
         {
-            Destroy(selectedObject); // Destroy the selected object
-            selectedObject = null; // Clear the selection
+            Destroy(selectedStructure); // Destroy the selected object
+            selectedStructure = null; // Clear the selection
             Debug.Log("Object destroyed");
         }
     }

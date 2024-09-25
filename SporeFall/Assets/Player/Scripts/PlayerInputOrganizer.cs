@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.Windows;
 
 public class PlayerInputOrganizer : MonoBehaviour
 {
@@ -10,8 +11,9 @@ public class PlayerInputOrganizer : MonoBehaviour
     // Input Maps
     private InputActionAsset inputAsset;
     private InputActionMap playerInputMap;
-    public InputActionMap shootInputMap;
-    public InputActionMap buildInputMap;
+    private InputActionMap shootInputMap;
+    private InputActionMap buildInputMap;
+    private InputActionMap editInputMap;
     [Header("Input Actions")]// sorted into their respective action maps
     // Player Actions
     public InputAction moveAction;
@@ -27,9 +29,15 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction buildModeAction;
     private InputAction changeBuildAction;
     private InputAction placeBuildAction;
+    private InputAction selectStructAction;
+    // Edit Actions
+    private InputAction moveStructAcion;
+    private InputAction rotateStructAction;
+    private InputAction destroyStructAction;
+    private InputAction upgradeStructAction;
+    private InputAction exitEditAction;
 
-
-
+    private bool isEditing;
     private void Awake()
     {
         // get and assign input Action Map
@@ -37,6 +45,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         playerInputMap = inputAsset.FindActionMap("Player");
         shootInputMap = inputAsset.FindActionMap("Shoot");
         buildInputMap = inputAsset.FindActionMap("Build");
+        editInputMap = inputAsset.FindActionMap("Edit");
     }
     private void OnEnable()
     {
@@ -47,19 +56,26 @@ public class PlayerInputOrganizer : MonoBehaviour
         jumpAction = playerInputMap.FindAction("Jump");
         buildModeAction = playerInputMap.FindAction("Build");
         aimAction = playerInputMap.FindAction("Aim");
-        fireAction = playerInputMap.FindAction("Fire");
         // shoot action map
         reloadAction = shootInputMap.FindAction("Reload");
         pickUpAction = shootInputMap.FindAction("PickUp");
         dropAction = shootInputMap.FindAction("Drop");
-        //build Actions
+        fireAction = shootInputMap.FindAction("Fire");
+        // build Action Maps
         changeBuildAction = buildInputMap.FindAction("Change");
         placeBuildAction = buildInputMap.FindAction("Place");
-
+        selectStructAction = buildInputMap.FindAction("Select");
+        // Edit Action Maps
+        moveStructAcion = editInputMap.FindAction("Move");
+        rotateStructAction = editInputMap.FindAction("Rotate");
+        destroyStructAction = editInputMap.FindAction("Destroy");
+        upgradeStructAction = editInputMap.FindAction("Upgrade");
+        exitEditAction = editInputMap.FindAction("Exit");
         // this enables the controls
         playerInputMap.Enable();
         shootInputMap.Enable();
         buildInputMap.Disable();
+        editInputMap.Disable();
     }
     public void AssignAllActions()
     {
@@ -75,9 +91,13 @@ public class PlayerInputOrganizer : MonoBehaviour
         reloadAction.performed += OnReload;
         pickUpAction.performed += OnPickUpWeapon;
         dropAction.performed += OnDropWeapon;
-        // build mode actions
+        // build actions
         changeBuildAction.started += OnCycleBuildObject;
         placeBuildAction.started += OnPlaceObject;
+        selectStructAction.started += OnSelectObject;
+        // Edit Actions
+        moveStructAcion.started += OnEditStructureMoveStarted;
+        moveStructAcion.canceled += OnEditMoveStructureCancled;
     }
     private void OnDisable()
     {
@@ -95,9 +115,15 @@ public class PlayerInputOrganizer : MonoBehaviour
         // build Mode actions
         changeBuildAction.started -= OnCycleBuildObject;
         placeBuildAction.started -= OnPlaceObject;
+        selectStructAction.started -= OnSelectObject;
+        // edit Actions
+        moveStructAcion.started -= OnEditStructureMoveStarted;
+        moveStructAcion.canceled -= OnEditMoveStructureCancled;
         // disable Input map
         playerInputMap.Disable();
         shootInputMap.Disable();
+        buildInputMap.Disable();
+        editInputMap.Disable();
     }
     public void SetManager(PlayerManager manger)
     {
@@ -147,41 +173,92 @@ public class PlayerInputOrganizer : MonoBehaviour
     // building stuff
     private void OnBuildMode(InputAction.CallbackContext context)
     {
-        pMan.SetBuildMode();
+        if (!pMan.isBuilding)
+        {
+            Debug.Log(message: "Enabling Build Mode");
+
+            //Change build Actions
+            fireAction = buildInputMap.FindAction("Preview");
+            
+            // Assign build mode actions
+            fireAction.started += OnFireStarted;
+            fireAction.canceled += OnFireCanceled;
+            
+            pMan.SetBuildMode();
+            shootInputMap.Disable();
+            editInputMap.Disable();
+            buildInputMap.Enable();
+        }
+        else
+        {
+            Debug.Log(message: "Disable Build Mode");
+            fireAction = shootInputMap.FindAction("Fire");
+            // Assign build mode actions
+            fireAction.started += OnFireStarted;
+            fireAction.canceled += OnFireCanceled;
+
+            pMan.bGun.DestroySelectedObject();
+            pMan.SetBuildMode();
+            buildInputMap.Disable();
+            editInputMap.Disable();
+            shootInputMap.Enable();
+        }
+
     }
     private void OnCycleBuildObject(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.CycleBuildObject(); // Cycle through build able objects
+            buildGun.CycleSelectedStructure(changeBuildAction.ReadValue<float>()); // Cycle through build able objects
             pMan.pUI.AmmoDisplay(pMan.currentWeapon);
         }
     }
     private void OnPlaceObject(InputAction.CallbackContext context)
     {
-        pMan.bGun.PlaceObject();
+        pMan.bGun.PlaceStructure();
     }
     private void OnSelectObject(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.SelectObject(); // Select a placed object for moving or destroying
+            if (buildGun.SelectStructure()) // Select a placed object for moving or destroying
+            {
+                if (!isEditing)
+                {
+                    isEditing = true;
+
+                    buildInputMap.Disable();
+                    editInputMap.Enable();
+                }
+                else
+                {
+                    isEditing = false;
+                    editInputMap.Disable();
+                    buildInputMap.Enable();
+                }
+            }
         }
     }
-    private void OnMoveObject(InputAction.CallbackContext context)
+    private void OnEditStructureMoveStarted(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.MoveSelectedObject(); // Move the selected object to a new location
+            pMan.isFiring = true;
+            buildGun.isEditing = true;
+            buildGun.Fire();
         }
     }
-    private void OnDestroyObject(InputAction.CallbackContext context)
+    private void OnEditMoveStructureCancled(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.DestroySelectedObject(); // Destroy the selected object
+            buildGun.OnFireReleased();
+            pMan.isFiring = false;
+            buildGun.isEditing = false;
+
         }
     }
+
     private void OnPickUpWeapon(InputAction.CallbackContext context)
     {
         pMan.PickUpWeapon();
