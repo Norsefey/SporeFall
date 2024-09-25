@@ -21,6 +21,7 @@ public class PlayerManager : MonoBehaviour
     public bool isFiring = false;
     public bool isCharging = false;
     public bool isBuilding = false;
+    public bool isRotating = false;
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -42,6 +43,16 @@ public class PlayerManager : MonoBehaviour
     {
         if (currentWeapon != null)
         {
+            
+            if (currentWeapon is BuildGun bGun)
+            {
+                if (bGun.isEditing)
+                {
+                    bGun.RotateStructure();
+                }
+            }
+           
+
             if (isFiring && !currentWeapon.IsReloading && currentWeapon is not ChargeGun)
             {
                 currentWeapon.Fire();

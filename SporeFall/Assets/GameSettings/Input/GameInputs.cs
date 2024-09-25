@@ -317,7 +317,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""22f93ad4-3ece-48f4-9c89-234259eb6e29"",
-                    ""path"": ""<Keyboard>/x"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -363,6 +363,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Value"",
+                    ""id"": ""868bfc97-2189-4247-b292-b769b18a5912"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Place"",
                     ""type"": ""Button"",
                     ""id"": ""1b8b4b0b-4f8c-4a59-9a0d-57bd22bd2171"",
@@ -381,24 +390,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Previous"",
-                    ""type"": ""Button"",
-                    ""id"": ""b136cbdd-00a2-453e-8dcc-c2a527309b05"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Next"",
-                    ""type"": ""Button"",
-                    ""id"": ""80877c42-fe41-4daa-b2e4-626d89656373"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Change"",
                     ""type"": ""Value"",
                     ""id"": ""215baeba-c78d-4e4f-b130-8c54d92a93c8"",
@@ -409,28 +400,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""186e0c97-fe6f-4fa2-93b6-709affb58e0a"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Previous"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""77f6d239-0cc4-44a2-9839-276fcbd530f1"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Next"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""ddc06aa6-5c6d-449a-b9bc-ab1d9072ab1b"",
@@ -507,6 +476,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c2f8a49e-86a8-421d-b743-a89f37dc49b8"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -538,7 +518,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""id"": ""d14f024a-a039-4def-bc88-3a74f3bf19d8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=1)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -597,7 +577,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e76cd94c-b977-437b-8c28-60eed46e0cfc"",
-                    ""path"": ""<Keyboard>/g"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -608,7 +588,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f56095ef-7cdf-4087-b4b2-88e938f9e9bc"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -666,10 +646,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         // Build
         m_Build = asset.FindActionMap("Build", throwIfNotFound: true);
         m_Build_Preview = m_Build.FindAction("Preview", throwIfNotFound: true);
+        m_Build_Rotate = m_Build.FindAction("Rotate", throwIfNotFound: true);
         m_Build_Place = m_Build.FindAction("Place", throwIfNotFound: true);
         m_Build_Select = m_Build.FindAction("Select", throwIfNotFound: true);
-        m_Build_Previous = m_Build.FindAction("Previous", throwIfNotFound: true);
-        m_Build_Next = m_Build.FindAction("Next", throwIfNotFound: true);
         m_Build_Change = m_Build.FindAction("Change", throwIfNotFound: true);
         // Edit
         m_Edit = asset.FindActionMap("Edit", throwIfNotFound: true);
@@ -896,20 +875,18 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Build;
     private List<IBuildActions> m_BuildActionsCallbackInterfaces = new List<IBuildActions>();
     private readonly InputAction m_Build_Preview;
+    private readonly InputAction m_Build_Rotate;
     private readonly InputAction m_Build_Place;
     private readonly InputAction m_Build_Select;
-    private readonly InputAction m_Build_Previous;
-    private readonly InputAction m_Build_Next;
     private readonly InputAction m_Build_Change;
     public struct BuildActions
     {
         private @GameInputs m_Wrapper;
         public BuildActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Preview => m_Wrapper.m_Build_Preview;
+        public InputAction @Rotate => m_Wrapper.m_Build_Rotate;
         public InputAction @Place => m_Wrapper.m_Build_Place;
         public InputAction @Select => m_Wrapper.m_Build_Select;
-        public InputAction @Previous => m_Wrapper.m_Build_Previous;
-        public InputAction @Next => m_Wrapper.m_Build_Next;
         public InputAction @Change => m_Wrapper.m_Build_Change;
         public InputActionMap Get() { return m_Wrapper.m_Build; }
         public void Enable() { Get().Enable(); }
@@ -923,18 +900,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Preview.started += instance.OnPreview;
             @Preview.performed += instance.OnPreview;
             @Preview.canceled += instance.OnPreview;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
             @Place.started += instance.OnPlace;
             @Place.performed += instance.OnPlace;
             @Place.canceled += instance.OnPlace;
             @Select.started += instance.OnSelect;
             @Select.performed += instance.OnSelect;
             @Select.canceled += instance.OnSelect;
-            @Previous.started += instance.OnPrevious;
-            @Previous.performed += instance.OnPrevious;
-            @Previous.canceled += instance.OnPrevious;
-            @Next.started += instance.OnNext;
-            @Next.performed += instance.OnNext;
-            @Next.canceled += instance.OnNext;
             @Change.started += instance.OnChange;
             @Change.performed += instance.OnChange;
             @Change.canceled += instance.OnChange;
@@ -945,18 +919,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Preview.started -= instance.OnPreview;
             @Preview.performed -= instance.OnPreview;
             @Preview.canceled -= instance.OnPreview;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
             @Place.started -= instance.OnPlace;
             @Place.performed -= instance.OnPlace;
             @Place.canceled -= instance.OnPlace;
             @Select.started -= instance.OnSelect;
             @Select.performed -= instance.OnSelect;
             @Select.canceled -= instance.OnSelect;
-            @Previous.started -= instance.OnPrevious;
-            @Previous.performed -= instance.OnPrevious;
-            @Previous.canceled -= instance.OnPrevious;
-            @Next.started -= instance.OnNext;
-            @Next.performed -= instance.OnNext;
-            @Next.canceled -= instance.OnNext;
             @Change.started -= instance.OnChange;
             @Change.performed -= instance.OnChange;
             @Change.canceled -= instance.OnChange;
@@ -1092,10 +1063,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     public interface IBuildActions
     {
         void OnPreview(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
         void OnPlace(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
-        void OnPrevious(InputAction.CallbackContext context);
-        void OnNext(InputAction.CallbackContext context);
         void OnChange(InputAction.CallbackContext context);
     }
     public interface IEditActions

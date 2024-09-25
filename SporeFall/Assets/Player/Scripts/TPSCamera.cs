@@ -52,8 +52,6 @@ public class TPSCamera : MonoBehaviour
     float VerticalRotation()
     {
         int invertedVert = invertVertRot ? -1 : 1;
-        // update this to work with new Input System
-        //vertRot -= Input.GetAxis("Mouse Y") * verSense * invertedVert;
         vertRot -= pMan.pInput.lookAction.ReadValue<Vector2>().y * verSense * invertedVert * Time.deltaTime;
         vertRot = Mathf.Clamp(vertRot, minVertRot, maxVertRot);
         return vertRot;
