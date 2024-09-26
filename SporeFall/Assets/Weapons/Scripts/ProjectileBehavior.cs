@@ -15,7 +15,6 @@ public class ProjectileBehavior : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Instantiate(bulletResidue, transform.position, Quaternion.identity);
-
         Destroy(gameObject);
     }
 }
