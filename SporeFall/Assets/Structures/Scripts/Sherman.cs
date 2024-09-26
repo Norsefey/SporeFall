@@ -15,6 +15,11 @@ public class Sherman : MonoBehaviour
 
     private Vector3 randomDirection;
 
+    public delegate void EnemyDeath();
+    public event EnemyDeath OnEnemyDeath;
+
+    public float hp = 10;
+
     void Start()
     {
         // Pick an initial random direction
@@ -48,4 +53,21 @@ public class Sherman : MonoBehaviour
     {
         randomDirection = GetRandomDirection();
     }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        // Handle taking damage
+        if (hp <= 0)
+        {
+            Die();
+        }
+    }
+    // add this event to enemies, call when they die, which lets this script that that enemy has been killed
+    private void Die()
+    {
+        OnEnemyDeath?.Invoke(); // Notify the wave system that the enemy died
+        Destroy(gameObject);
+    }
+
 }

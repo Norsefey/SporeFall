@@ -35,7 +35,7 @@ public class BuildGun : Weapon
             // Create or move the preview object to the hit point on the ground
             if (!isEditing && selectedStructure == null)
             {
-                Debug.Log("Creating New Structure");
+                //Debug.Log("Creating New Structure");
                 selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity);
                 selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
                 SetStructureToTransparent(selectedStructure); // Make the object transparent to show it's a preview
@@ -47,12 +47,12 @@ public class BuildGun : Weapon
                 if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
                 {
           
-                    Debug.Log("Only Rotating Gun");
+                    //Debug.Log("Only Rotating Gun");
                     transform.forward = player.pCamera.myCamera.transform.forward;
                 }
                 else
                 {
-                    Debug.Log("Rotating Character");
+                    //Debug.Log("Rotating Character");
                     player.pController.RotateOnFire(this.transform, player.pCamera.myCamera.transform.forward);
                 }
             }

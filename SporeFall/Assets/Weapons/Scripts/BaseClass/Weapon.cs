@@ -10,6 +10,7 @@ public abstract class Weapon : MonoBehaviour
     public PlayerManager player;
     public GameObject projectilePrefab;
     public Transform firePoint;
+    public LayerMask hitLayers;
     [Header("Base Stats")]
     public float damage;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
@@ -83,12 +84,13 @@ public abstract class Weapon : MonoBehaviour
         Ray ray = new Ray(playerCamera.transform.position, shootDirection);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, hitScanDistance)) // Range of the hitscan weapon
+        if (Physics.Raycast(ray, out hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
             Debug.Log(weaponName + " hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));
-            // Apply damage to the hit object, if applicable
-            // hit.collider.GetComponent<Health>()?.TakeDamage(damage);
+            // Apply damage to the hit object
+            // Sherman must die for now
+            hit.collider.GetComponent<Sherman>()?.TakeDamage(damage);
         }
     }
     // Method to calculate a bullet spread direction

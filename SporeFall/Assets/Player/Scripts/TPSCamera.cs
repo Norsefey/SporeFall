@@ -20,9 +20,11 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] float minVertRot = -45;
     [SerializeField] float maxVertRot = 45;
     private float vertRot = 0;
-    // aiming
+
+    [Header("Camera Offsets")]
     [SerializeField] Vector3 defaultOffset;
     [SerializeField] Vector3 aimOffset; // camera zooms in
+    [SerializeField] Vector3 buildOffset; // camera zooms in
 
     private void Start()
     {
@@ -58,7 +60,10 @@ public class TPSCamera : MonoBehaviour
     }
     public void AimSightCall(InputAction.CallbackContext obj)
     {
-        myCamera.transform.localPosition = aimOffset;
+        if(pMan.isBuilding)
+            myCamera.transform.localPosition = buildOffset;
+        else
+            myCamera.transform.localPosition = aimOffset;
         player.SetAimState();
     }
     public void DefaultSightCall(InputAction.CallbackContext obj)
