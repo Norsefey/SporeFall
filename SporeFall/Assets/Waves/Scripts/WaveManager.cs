@@ -6,92 +6,96 @@ using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    public List<Wave> waves = new List<Wave>(); // List of waves to configure
-    public Transform[] spawnPoints; // Points where enemies will spawn
-
+    public List<Wave> waves = new(); // List of waves to configure
     private int currentWaveIndex = 0;
+    private Wave currentWave;
     private int enemiesAlive = 0;
     private int enemiesSpawned = 0;
     private bool waveActive = false;
-
+    public PlayerManager player;
     public GameObject bossPrefab; // Boss enemy prefab for the final wave
-    // Event to let other scripts know that the wave has been cleared
-    public delegate void OnWaveCleared();
-    public event OnWaveCleared WaveCleared;
+    public TrainHandler train; // Reference to the player transform for positioning
 
+    public enum WavePhase
+    {
+        NotStarted,
+        Started,
+        Departing,
+        Moving
+    }
+    public WavePhase wavePhase;
+
+    [Header("Moving to Next Wave")]
+    public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
+    public float departTime = 30;
+    private float timer = 0;
+    [Header("UI Stuff")]
     // test Ui
     public TMP_Text waveUI;
     public TMP_Text bossText;
     private void Start()
     {
-        // for testing purpose start wave when game begins
-        StartNextWave();
+        currentWave = waves[currentWaveIndex];
+        StartCoroutine(MoveToWaveLocation());
     }
 
     private void Update()
     {
-        // for testing purposes
-        if (Input.GetKeyDown(KeyCode.P))
+        switch (wavePhase)
         {
-            currentWaveIndex++;
-            StartNextWave();
-        }
-
-        /*// If there are no enemies left, wave is cleared
-        if (enemiesAlive <= 0 && waveActive)
-        {
-            WaveCleared?.Invoke();
-            waveActive = false;
-        }*/
-    }
-    public void StartNextWave()
-    {// will be called by player when they are ready to start the next wave
-        if (currentWaveIndex < waves.Count)
-        {
-            StartCoroutine(StartWave(waves[currentWaveIndex]));
-        }
-        else
-        {
-            Debug.Log("All waves completed!");
+            case WavePhase.NotStarted:
+                waveUI.text = "Push Button to Start: " + currentWave.waveName;
+                break;
+            case WavePhase.Started:
+                waveUI.text = "Enemies Left: " + enemiesAlive.ToString();
+                break;
+            case WavePhase.Departing:
+                timer -= Time.deltaTime;
+                waveUI.text = "Wave Cleared! Departing in: " + (timer).ToString("F0") + "\n Push Button To skip Wait";
+                break;
+            case WavePhase.Moving:
+                waveUI.text = "Moving to next Area";
+                break;
         }
     }
-
-    private IEnumerator StartWave(Wave wave)
+    private IEnumerator StartWave()
     {
-        waveUI.text = wave.waveName +" Started!";
-
+        wavePhase = WavePhase.Started;
         waveActive = true;
         enemiesSpawned = 0;
-        enemiesAlive = wave.totalEnemies;
+        enemiesAlive = currentWave.totalEnemies;
 
-        while (enemiesSpawned < wave.totalEnemies)
+        while (enemiesSpawned < currentWave.totalEnemies)
         {
-            int spawnCount = Random.Range(wave.minIntervalSpawn, wave.maxIntervalSpawn);
+            int spawnCount = Random.Range(currentWave.minIntervalSpawn, currentWave.maxIntervalSpawn);
             for (int i = 0; i < spawnCount; i++)
             {
-                if (enemiesSpawned < wave.totalEnemies)
+                if (enemiesSpawned < currentWave.totalEnemies)
                 {
-                    SpawnEnemy(wave);
+                    SpawnEnemy();
                     enemiesSpawned++;
                 }
             }
-            float spawnInterval = Random.Range(wave.minIntervalTime,wave.maxIntervalTime);
+            float spawnInterval = Random.Range(currentWave.minIntervalTime,currentWave.maxIntervalTime);
             yield return new WaitForSeconds(spawnInterval);   
         }
-        // will do something different for spawning in boss on final Wave
-        if (wave.isFinalWave)
-        {
-            SpawnBoss();
-            // spawn Payload
-        }
     }
-    private void SpawnEnemy(Wave wave)
+    private void StartFinalWave()
+    {
+        waveActive = true;
+
+        // Spawn the payload
+        train.SpawnPayload(currentWave.spawnLocations[0].position);
+        
+        Invoke("SpawnBoss", 2f);
+    }
+    private void SpawnEnemy()
     {
         // choose at random from a curated selection of enemies to spawn in
-        int enemyIndex = Random.Range(0, wave.enemyPrefabs.Length);
-        GameObject enemyToSpawn = wave.enemyPrefabs[enemyIndex];
+        int enemyIndex = Random.Range(0, currentWave.enemyPrefabs.Length);
+        GameObject enemyToSpawn = currentWave.enemyPrefabs[enemyIndex];
 
-        // Pick a random spawn point
+        Transform[] spawnPoints =  currentWave.spawnLocations;
         int spawnPointIndex = Random.Range(0, spawnPoints.Length);
         Transform spawnPoint = spawnPoints[spawnPointIndex];
 
@@ -101,25 +105,94 @@ public class WaveManager : MonoBehaviour
     }
     private void SpawnBoss()
     {
-        int spawnPointIndex = Random.Range(0, spawnPoints.Length);
-        Transform spawnPoint = spawnPoints[spawnPointIndex];
+        Transform spawnPoint = currentWave.spawnLocations[0];
         GameObject boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
+
         enemiesAlive++;
         bossText.text = "<color=red>Boss Has Spawned</color>" + "\n 999999";
         // once we start the Boss script add an OnEnemyDeath Event
         boss.GetComponent<Sherman>().OnEnemyDeath += OnEnemyDeath;
     }
+    private void WaveCleared()
+    {
+        Debug.Log("Wave Cleared!");
+        waveActive = false;
+
+        timer = departTime;
+        wavePhase = WavePhase.Departing;
+        Invoke("Depart", departTime);
+    }
     private void OnEnemyDeath()
     {
         enemiesAlive--;
-        waveUI.text = "Enemies Left: " + enemiesAlive.ToString();
         if (enemiesAlive <= 0 || !waveActive)
         {
-            Debug.Log("Wave Cleared!");
-            waveUI.text = "Wave Cleared!";
-            WaveCleared?.Invoke();
-            waveActive = false;
+           WaveCleared();
         }
+    }
+    private void OnBossDeath()
+    {
+        enemiesAlive--;
+
+        if (enemiesAlive <= 0 && waveActive)
+        {
+            Debug.Log("Boss defeated!");
+            // speed up payload
+        }
+    }
+    private void Depart()
+    {
+        Destroy(currentWave.ShroomPod);
+        currentWaveIndex++;
+        currentWave = waves[currentWaveIndex];
+        StartCoroutine(MoveToWaveLocation());
+    }
+    public void SkipDepartTime()
+    {
+        CancelInvoke("Depart");
+        Depart();
+    }
+    public void OnStartWave()
+    {
+        if (currentWave.isFinalWave)
+        {
+            StartFinalWave();
+            StartCoroutine(StartWave());
+        }
+        else
+        {
+            StartCoroutine(StartWave());
+        }
+    }
+    private IEnumerator MoveToWaveLocation()
+    {
+        wavePhase = WavePhase.Moving;
+        player.DisableControl();
+        train.SetMovingState();
+        Vector3 startPosition = train.transform.position;
+        Vector3 targetPosition = currentWave.trainLocation.position;
+
+       /* Vector3 cameraStartPosition = cameraTransform.position;
+        Vector3 cameraTargetPosition = wave.waveLocation.position + new Vector3(0, 10, -10); // Adjust camera offset
+*/
+        float time = 0f;
+        while (time < 1f)
+        {
+            time += Time.deltaTime * trainMoveSpeed;
+
+            train.transform.position = Vector3.Lerp(startPosition, targetPosition, time);
+            //cameraTransform.position = Vector3.Lerp(cameraStartPosition, cameraTargetPosition, time);
+
+            yield return null;
+        }
+
+        // Ensuring the final position is set precisely after the movement
+        train.transform.position = targetPosition;
+        train.SetParkedState();
+        player.EnableControl();
+        wavePhase = WavePhase.NotStarted;
+
+        //cameraTransform.position = cameraTargetPosition;
     }
 
 }

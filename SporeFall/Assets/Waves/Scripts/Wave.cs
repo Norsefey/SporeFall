@@ -1,16 +1,21 @@
+// Ignore Spelling: Shroom
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Wave")]
 [System.Serializable]
-public class Wave : ScriptableObject
+public class Wave
 {
     public string waveName; // Optional, for easier identification
+    public Transform trainLocation; // The location of train for this wave
+
     [Header("Enemy Settings")]
     public GameObject[] enemyPrefabs; // Different types of enemies that can spawn in this wave
     public int totalEnemies; // Total number of enemies to spawn
-    [Header("Spawn Settings")]
+    public GameObject ShroomPod; // pod blocking path forward
+    [Header("Enemy Spawn Settings")]
+    public Transform[] spawnLocations;// location for enemies to spawn
     public float minIntervalTime; // Time interval between each spawn
     public float maxIntervalTime;
     public int minIntervalSpawn; // Number of enemies to spawn per interval

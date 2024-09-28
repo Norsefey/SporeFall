@@ -64,6 +64,7 @@ public class BuildGun : Weapon
         {
             selectedStructure.GetComponent<Collider>().enabled = true; // Enable collider for the final object
             SetStructureToOpaque(selectedStructure); // Make the object opaque
+            selectedStructure.transform.SetParent(player.train.transform, true);
             selectedStructure = null; // Clear the selected object
         }
     }
@@ -76,11 +77,8 @@ public class BuildGun : Weapon
         else if(currentBuildIndex < 0)
             currentBuildIndex = buildableStructures.Length - 1;
         Destroy(selectedStructure);
-        player.pUI.AmmoDisplay(this);
-    }
-    public string ReturnSelectedStructure()
-    {
-        return buildableStructures[currentBuildIndex].name;
+
+        player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name);
     }
     private void SetStructureToTransparent(GameObject obj)
     {
@@ -151,7 +149,7 @@ public class BuildGun : Weapon
             selectedStructure = hit.collider.gameObject; // Select the hit object
             SetStructureToTransparent(selectedStructure);
             Debug.Log("Structure selected: " + selectedStructure.name);
-            player.pUI.DisplayAText(selectedStructure.name);
+            player.pUI.EnablePrompt(selectedStructure.name);
             return true;
         }
         else
@@ -161,7 +159,6 @@ public class BuildGun : Weapon
     }
     public void DeSelectStructure()
     {
-        Debug.Log("Deselected:" + selectedStructure);
         SetStructureToOpaque(selectedStructure); // Make the object opaque
         selectedStructure = null;
         isEditing = false;
@@ -173,7 +170,6 @@ public class BuildGun : Weapon
             Destroy(selectedStructure); // Destroy the selected object
             selectedStructure = null; // Clear the selection
             isEditing = false;
-            Debug.Log("Object destroyed");
         }
     }
     public void RotateStructure()

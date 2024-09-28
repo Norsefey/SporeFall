@@ -81,7 +81,7 @@ public abstract class Weapon : MonoBehaviour
             Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
-        Ray ray = new Ray(playerCamera.transform.position, shootDirection);
+        Ray ray = new(playerCamera.transform.position, shootDirection);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon

@@ -13,22 +13,18 @@ public class PlayerUI : MonoBehaviour
             ammoIndicator.text = currentWeapon.magazineCount + "/" + currentWeapon.totalAmmo;
         else if(currentWeapon is BuildGun gun)
         {
-            ammoIndicator.text = gun.ReturnSelectedStructure();
+            ammoIndicator.text = "Build Mode";
         }
         else
             ammoIndicator.text = currentWeapon.magazineCount + "/" + "\u221E";
     }
-    public void DisplayAText(string text)
-    {
-        ammoIndicator.text = text;
-    }
 
-    public void EnablePromptPickUp(GameObject weaponName)
+    public void EnablePrompt(string text)
     {
         pickUpPrompt.gameObject.SetActive(true);
-        pickUpPrompt.text = "Press F To Pick Up: " + "\n" + weaponName.name;
+        pickUpPrompt.text = text;
     }
-    public void DisablePromptPickUp()
+    public void DisablePrompt()
     {
         pickUpPrompt.gameObject.SetActive(false);
     }

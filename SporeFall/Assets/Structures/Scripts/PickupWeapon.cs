@@ -24,14 +24,14 @@ public class PickupWeapon : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.transform.root.GetComponent<PlayerManager>().EnablePickUpWeapon(weaponPrefab);
+            other.transform.parent.GetComponent<PlayerManager>().EnablePickUpWeapon(weaponPrefab);
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            other.transform.root.GetComponent<PlayerManager>().DisablePickUpWeapon();
+            other.transform.parent.GetComponent<PlayerManager>().DisablePickUpWeapon();
         }
     }
 

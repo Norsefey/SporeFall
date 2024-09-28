@@ -21,6 +21,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     public InputAction jumpAction;
     public InputAction aimAction;
     public InputAction fireAction;
+    public InputAction interactAction;
     // Shoot Actions
     public InputAction reloadAction;
     public InputAction pickUpAction;
@@ -54,6 +55,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         jumpAction = playerInputMap.FindAction("Jump");
         buildModeAction = playerInputMap.FindAction("Build");
         aimAction = playerInputMap.FindAction("Aim");
+        interactAction = playerInputMap.FindAction("Interact");
         // shoot action map
         reloadAction = shootInputMap.FindAction("Reload");
         pickUpAction = shootInputMap.FindAction("PickUp");
@@ -102,6 +104,14 @@ public class PlayerInputOrganizer : MonoBehaviour
         destroyStructAction.performed += OnEditDestroy;
         upgradeStructAction.started += OnEditUpgrade;
     }
+    public void AssignInteraction()
+    {
+        interactAction.started += OnPushButton;
+    }
+    public void RemoveInteraction()
+    {
+        interactAction.started -= OnPushButton;
+    }
     private void OnDisable()
     {
         // remove calls
@@ -130,6 +140,20 @@ public class PlayerInputOrganizer : MonoBehaviour
         // disable Input map
         playerInputMap.Disable();
         shootInputMap.Disable();
+        buildInputMap.Disable();
+        editInputMap.Disable();
+    }
+    public void DisableAllInputs()
+    {
+        playerInputMap.Disable();
+        shootInputMap.Disable();
+        buildInputMap.Disable();
+        editInputMap.Disable();
+    }
+    public void EnableDefaultInputs()
+    {
+        playerInputMap.Enable();
+        shootInputMap.Enable();
         buildInputMap.Disable();
         editInputMap.Disable();
     }
@@ -177,6 +201,11 @@ public class PlayerInputOrganizer : MonoBehaviour
         {
             pMan.currentWeapon.Reload();
         }
+    }
+    // Interaction
+    private void OnPushButton(InputAction.CallbackContext context)
+    {
+        pMan.OnButtonPush();
     }
     // building stuff
     private void OnBuildMode(InputAction.CallbackContext context)
@@ -297,6 +326,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // put upgrade code here
     }
+    // Weapon Pick up
     private void OnPickUpWeapon(InputAction.CallbackContext context)
     {
         pMan.PickUpWeapon();

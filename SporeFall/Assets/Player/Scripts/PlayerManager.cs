@@ -11,6 +11,8 @@ public class PlayerManager : MonoBehaviour
     public PlayerUI pUI;
     public GameObject pVisual;
     public BuildGun bGun;
+    public TrainHandler train;
+    public WaveManager waveManager;
     [Header("Weapons")]
     // Weapons and Shooting
     public Transform weaponHolder; // Where the weapon is equipped
@@ -33,7 +35,6 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         // in order to spawn player at a spawn point, disable movement controls
-        pController.gameObject.SetActive(true);
         pUI.AmmoDisplay(currentWeapon);
         pInput.AssignAllActions();
         Cursor.lockState = CursorLockMode.Locked;
@@ -67,12 +68,12 @@ public class PlayerManager : MonoBehaviour
     public void EnablePickUpWeapon(GameObject weapon)
     {
         nearByWeapon = weapon;
-        pUI.EnablePromptPickUp(weapon);
+        pUI.EnablePrompt("Press F to Pick up: " + weapon.name);
     }
     public void DisablePickUpWeapon() 
     { 
         nearByWeapon = null;
-        pUI.DisablePromptPickUp();
+        pUI.DisablePrompt();
     }
     public void SetBuildMode()
     {
@@ -81,7 +82,8 @@ public class PlayerManager : MonoBehaviour
             currentWeapon.gameObject.SetActive(false);
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
-            pUI.DisplayAText("Build Mode");
+            pUI.EnablePrompt("Use Q/E to change Structure" + "\n F to Select placed" + "\n Hold Right mouse to Preview");
+            pUI.AmmoDisplay(currentWeapon);
             isBuilding = true;
         }
         else
@@ -93,6 +95,7 @@ public class PlayerManager : MonoBehaviour
 
             currentWeapon.gameObject.SetActive(true);
             pUI.AmmoDisplay(currentWeapon);
+            pUI.DisablePrompt();
             bGun.gameObject.SetActive(false);
             isBuilding = false;
         }
@@ -119,7 +122,7 @@ public class PlayerManager : MonoBehaviour
         // destroy pick up platform
         Destroy(nearByWeapon.transform.root.gameObject);
         // disable pick up prompt
-        pUI.DisablePromptPickUp();
+        pUI.DisablePrompt();
         // update UI to display new ammo capacities
         pUI.AmmoDisplay(currentWeapon);
         Debug.Log("Picked up: " + currentWeapon.weaponName);
@@ -139,5 +142,56 @@ public class PlayerManager : MonoBehaviour
         // reactivate the default weapon
         currentWeapon.gameObject.SetActive(true);
         pUI.AmmoDisplay(currentWeapon);
+    }
+    public void DisableControl()
+    {
+        pController.gameObject.SetActive(false);
+        pCamera.enabled = false;
+        pController.transform.localPosition = Vector3.zero;
+
+        pInput.DisableAllInputs();
+    }
+    public void EnableControl()
+    {
+        pController.gameObject.SetActive(true);
+        pCamera.enabled = true;
+
+        pInput.EnableDefaultInputs();
+    }
+    public void AssignButtonAction()
+    {
+        pInput.AssignInteraction();
+
+        WaveManager.WavePhase currentPhase = waveManager.wavePhase;
+
+        switch (currentPhase)
+        {
+            case WaveManager.WavePhase.NotStarted:
+                pUI.EnablePrompt("Press F to Start Wave");
+                break;
+            case WaveManager.WavePhase.Departing:
+                pUI.EnablePrompt("Press F to go to next Area");
+                break;
+        }
+    }
+    public void RemoveButtonAction()
+    {
+        pInput.RemoveInteraction();
+        pUI.DisablePrompt();
+    }
+    public void OnButtonPush()
+    {
+        WaveManager.WavePhase currentPhase = waveManager.wavePhase;
+        switch (currentPhase)
+        {
+            case WaveManager.WavePhase.NotStarted:
+                waveManager.OnStartWave();
+                pUI.DisablePrompt();
+                break;
+            case WaveManager.WavePhase.Departing:
+                waveManager.SkipDepartTime();
+                pUI.DisablePrompt();
+                break;
+        }
     }
 }
