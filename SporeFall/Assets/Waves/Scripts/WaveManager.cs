@@ -6,16 +6,18 @@ using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    public List<Wave> waves = new(); // List of waves to configure
-    private int currentWaveIndex = 0;
-    private Wave currentWave;
-    private int enemiesAlive = 0;
-    private int enemiesSpawned = 0;
-    private bool waveActive = false;
+    [Header("References")]
     public PlayerManager player;
     public GameObject bossPrefab; // Boss enemy prefab for the final wave
     public TrainHandler train; // Reference to the player transform for positioning
-
+    
+    [Header("Waves")]
+    public List<Wave> waves = new(); // List of waves to configure
+    private Wave currentWave;
+    private int currentWaveIndex = 0;
+    private int enemiesAlive = 0;
+    private int enemiesSpawned = 0;
+    private bool waveActive = false;
     public enum WavePhase
     {
         NotStarted,
