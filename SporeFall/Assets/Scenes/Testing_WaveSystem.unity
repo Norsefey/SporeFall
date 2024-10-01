@@ -618,6 +618,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169784863}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &202609856 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8766654047427145266, guid: 7e094f11e477a1b48a4821bdf6076551,
+    type: 3}
+  m_PrefabInstance: {fileID: 604921203}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &228839112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1807,6 +1819,16 @@ PrefabInstance:
       propertyPath: waveManager
       value: 
       objectReference: {fileID: 1621469488}
+    - target: {fileID: 3205722055168801455, guid: 7e094f11e477a1b48a4821bdf6076551,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3205722055168801455, guid: 7e094f11e477a1b48a4821bdf6076551,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3467706073932850416, guid: 7e094f11e477a1b48a4821bdf6076551,
         type: 3}
       propertyPath: m_Name
@@ -1822,10 +1844,15 @@ PrefabInstance:
       propertyPath: collisionMask.m_Bits
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5405646431928707325, guid: 7e094f11e477a1b48a4821bdf6076551,
+    - target: {fileID: 8733969221055183010, guid: 7e094f11e477a1b48a4821bdf6076551,
         type: 3}
-      propertyPath: sprintSpeed
-      value: 10
+      propertyPath: corruptionBar
+      value: 
+      objectReference: {fileID: 202609856}
+    - target: {fileID: 8766654047427145266, guid: 7e094f11e477a1b48a4821bdf6076551,
+        type: 3}
+      propertyPath: m_Value
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2851,6 +2878,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1330665998}
     m_Modifications:
+    - target: {fileID: 137078129044000040, guid: 2ad68639f268f4c49abc3e472fd399b0,
+        type: 3}
+      propertyPath: isCorrupted
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 137078129044000040, guid: 2ad68639f268f4c49abc3e472fd399b0,
         type: 3}
       propertyPath: projectilePrefab

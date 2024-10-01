@@ -24,6 +24,13 @@ public class PlayerManager : MonoBehaviour
     public bool isCharging = false;
     public bool isBuilding = false;
     public bool isRotating = false;
+
+    // Player Stats
+    public int lives = 3;
+    [Header("Corruption Stuff")]
+    public float corruptionLevel = 0;
+    public float purifyRate = 1;
+    private bool holdingCorrupted = false;
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -44,7 +51,16 @@ public class PlayerManager : MonoBehaviour
     {
         if (currentWeapon != null)
         {
-            
+            if (holdingCorrupted)
+            {
+                corruptionLevel += currentWeapon.corruptionRate * Time.deltaTime;
+                pUI.DisplayCorruption(corruptionLevel);
+            }else if(corruptionLevel > 0)
+            {
+                corruptionLevel -= Time.deltaTime * purifyRate;
+                pUI.DisplayCorruption(corruptionLevel);
+            }
+
             if (currentWeapon is BuildGun bGun)
             {
                 if (bGun.isEditing)
@@ -53,7 +69,6 @@ public class PlayerManager : MonoBehaviour
                 }
             }
            
-
             if (isFiring && !currentWeapon.IsReloading && currentWeapon is not ChargeGun)
             {
                 currentWeapon.Fire();
@@ -126,6 +141,9 @@ public class PlayerManager : MonoBehaviour
         // update UI to display new ammo capacities
         pUI.AmmoDisplay(currentWeapon);
         Debug.Log("Picked up: " + currentWeapon.weaponName);
+
+        if(currentWeapon.isCorrupted)
+            holdingCorrupted = true;
     }
     public void DropWeapon()
     {
@@ -142,10 +160,11 @@ public class PlayerManager : MonoBehaviour
         // reactivate the default weapon
         currentWeapon.gameObject.SetActive(true);
         pUI.AmmoDisplay(currentWeapon);
+        holdingCorrupted = false;
     }
     public void DisableControl()
     {
-        pVisual.gameObject.SetActive(false);
+        pVisual.SetActive(false);
         pController.gameObject.SetActive(false);
         pCamera.gameObject.SetActive(false);
         pController.transform.localPosition = Vector3.zero;
@@ -154,7 +173,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void EnableControl()
     {
-        pVisual.gameObject.SetActive(true);
+        pVisual.SetActive(true);
         pController.gameObject.SetActive(true);
         pCamera.gameObject.SetActive(true);
 

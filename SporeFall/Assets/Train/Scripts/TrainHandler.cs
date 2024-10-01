@@ -15,8 +15,6 @@ public class TrainHandler : MonoBehaviour
     // Interactables
     // structures
     public Transform structureHolder;
-    private bool hidingStructures = false;
-
     public float cannonFireTime = 2f;
     public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
 
@@ -56,6 +54,5 @@ public class TrainHandler : MonoBehaviour
     private void ToggleStructures(bool state)
     {
         structureHolder.gameObject.SetActive(state);
-        hidingStructures = state;
     }
 }

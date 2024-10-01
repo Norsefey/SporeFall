@@ -11,6 +11,10 @@ public abstract class Weapon : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform firePoint;
     public LayerMask hitLayers;
+    [Header("Corruption")]
+    public bool isCorrupted;
+    public float corruptionRate = 1.2f;
+
     [Header("Base Stats")]
     public float damage;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
@@ -82,15 +86,19 @@ public abstract class Weapon : MonoBehaviour
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
         Ray ray = new(playerCamera.transform.position, shootDirection);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
+        if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
             Debug.Log(weaponName + " hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));
             // Apply damage to the hit object
+
             // Sherman must die for now
-            hit.collider.GetComponent<Sherman>()?.TakeDamage(damage);
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                hit.collider.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+            }
+            //hit.collider.GetComponent<Sherman>()?.TakeDamage(damage);
         }
     }
     // Method to calculate a bullet spread direction

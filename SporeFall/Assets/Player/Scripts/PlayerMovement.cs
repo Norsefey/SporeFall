@@ -18,10 +18,10 @@ public class PlayerMovement : MonoBehaviour
     public float playerHeight = 2;
     public float JumpSpeed = 15;
     public float terminalVelocity = -10f;
-    private float minFall = -1.5f;
-    private float gravity = -9.81f;
+    readonly float minFall = -1.5f;
+    readonly float gravity = -9.81f;
     private float vertSpeed;
-    private ControllerColliderHit contact;
+    //private ControllerColliderHit contact;
     private float tempAimTimer = 0;
     public enum PlayerState
     {// two move states...so far, default and aiming
@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, direction, rotSpeed * Time.deltaTime);
         }
 
-        GravityHandler(movement);
+        GravityHandler();
 
         movement.y = vertSpeed;
         movement *= Time.deltaTime;
@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
             vertSpeed = JumpSpeed;
         }
     }
-    private void GravityHandler(Vector3 movement)
+    private void GravityHandler()
     {
         if (IsGrounded())
             vertSpeed = minFall;
@@ -136,8 +136,9 @@ public class PlayerMovement : MonoBehaviour
                 vertSpeed = terminalVelocity;
             }
 
-            if (cc.isGrounded)
+            /*if (cc.isGrounded)
             {
+                // for sliding on ramps
                 if (Vector3.Dot(movement, contact.normal) < 0)
                 {
                     movement = contact.normal * moveSpeed;
@@ -146,16 +147,15 @@ public class PlayerMovement : MonoBehaviour
                 {
                     movement += contact.normal * moveSpeed;
                 }
-            }
+            }*/
         }
     }
     private bool IsGrounded()
     {
         bool hitground = false;
-        RaycastHit hit;
 
         //checks if player is falling
-        if (vertSpeed < 0.1 && Physics.Raycast(transform.position, Vector3.down, out hit))
+        if (vertSpeed < 0.1 && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit))
         {
             //Character height, slight below
             float check = playerHeight;
@@ -191,7 +191,7 @@ public class PlayerMovement : MonoBehaviour
         // restore camera
         myCamera.localRotation = temp;
 
-        GravityHandler(movement);
+        GravityHandler();
 
         movement.y = vertSpeed;
         movement *= Time.deltaTime;
@@ -218,8 +218,8 @@ public class PlayerMovement : MonoBehaviour
         else
             moveSpeed = walkSpeed;
     }
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+  /*  private void OnControllerColliderHit(ControllerColliderHit hit)
     {// detects contact with ground
         contact = hit;
-    }
+    }*/
 }

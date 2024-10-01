@@ -32,7 +32,7 @@ public class Sherman : MonoBehaviour
     void Update()
     {
         // Move in the current random direction
-        transform.Translate(randomDirection * moveSpeed * Time.deltaTime, Space.World);
+        transform.Translate(moveSpeed * Time.deltaTime * randomDirection, Space.World);
 
         // Rotate smoothly towards the desired direction
         Quaternion targetRotation = Quaternion.LookRotation(randomDirection);
@@ -56,6 +56,7 @@ public class Sherman : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        Debug.Log("Received Damage: " + damage);
         hp -= damage;
         // Handle taking damage
         if (hp <= 0)
