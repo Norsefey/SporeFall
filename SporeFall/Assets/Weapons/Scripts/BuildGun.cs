@@ -25,11 +25,10 @@ public class BuildGun : Weapon
     }
     private void PreviewStructure()
     {
-        Ray ray = new Ray(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
-        RaycastHit hit;
+        Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
         // Check if we hit the ground layer
-        if (Physics.Raycast(ray, out hit, maxBuildDistance, groundLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, groundLayer))
         {
 
             // Create or move the preview object to the hit point on the ground
@@ -46,7 +45,7 @@ public class BuildGun : Weapon
                 RotateStructure();
                 if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
                 {
-          
+
                     //Debug.Log("Only Rotating Gun");
                     transform.forward = player.pCamera.myCamera.transform.forward;
                 }
@@ -64,14 +63,15 @@ public class BuildGun : Weapon
         {
             selectedStructure.GetComponent<Collider>().enabled = true; // Enable collider for the final object
             SetStructureToOpaque(selectedStructure); // Make the object opaque
-            selectedStructure.transform.SetParent(player.train.transform, true);
+            if(player.train != null)
+                selectedStructure.transform.SetParent(player.train.structureHolder, true);
             selectedStructure = null; // Clear the selected object
         }
     }
     public void CycleSelectedStructure(float indexIncrement)
     {
         // Cycle to the next object in the buildableObjects array
-        currentBuildIndex = (currentBuildIndex + (int)indexIncrement);
+        currentBuildIndex += (int)indexIncrement;
         if (currentBuildIndex >= buildableStructures.Length)
             currentBuildIndex = 0;
         else if(currentBuildIndex < 0)
@@ -141,10 +141,9 @@ public class BuildGun : Weapon
     public bool SelectStructure()
     {
         // Use raycast to detect if the player is looking at a placed object to select it for moving or destroying
-        Ray ray = new Ray(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
-        RaycastHit hit;
+        Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
-        if (Physics.Raycast(ray, out hit, maxBuildDistance, structureLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer))
         {
             selectedStructure = hit.collider.gameObject; // Select the hit object
             SetStructureToTransparent(selectedStructure);

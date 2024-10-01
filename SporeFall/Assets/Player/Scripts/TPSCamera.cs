@@ -1,17 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-using static UnityEngine.GraphicsBuffer;
 
 public class TPSCamera : MonoBehaviour
 {
     // references
+    public Camera myCamera;
     private PlayerManager pMan;
     [SerializeField] private PlayerMovement player;
-    [SerializeField] public Camera myCamera;
     [SerializeField] private CameraCollision camCollision;
     // horizontal rotations
     [SerializeField] private float horSense = 50;
@@ -21,8 +19,9 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private bool invertVertRot = false;
     [SerializeField] float minVertRot = -45;
     [SerializeField] float maxVertRot = 45;
-    private float vertRot = 0;
+                     private float vertRot = 0;
     [SerializeField] private LayerMask obstructions;
+
     [Header("Camera Offsets")]
     [SerializeField] Vector3 defaultOffset;
     [SerializeField] Vector3 aimOffset; // camera zooms in
@@ -64,12 +63,11 @@ public class TPSCamera : MonoBehaviour
     private void ObstructionCheck()
     {
         // Perform a raycast from the target towards the camera's desired position to check for obstacles
-        RaycastHit hit;
         Vector3 playerOffset = player.transform.position + Vector3.up;
         Vector3 rayDirection = (playerOffset - camCollision.transform.position).normalized;
         float rayDistance = Vector3.Distance(playerOffset, camCollision.transform.position);
 
-        if (Physics.Raycast(camCollision.transform.position, rayDirection, out hit, rayDistance, obstructions))
+        if (Physics.Raycast(camCollision.transform.position, rayDirection, rayDistance, obstructions))
         {
             // If there's a collision, place the camera closer to the hit point to avoid clipping
             CollisionAdjustCamera();
@@ -95,7 +93,7 @@ public class TPSCamera : MonoBehaviour
         camCollision.onEnterCollision -= CollisionAdjustCamera;
         camCollision.onExitCollision -= CollisionDefaultPosition;
     }
-    public void AimSightCall(InputAction.CallbackContext obj)
+    public void AimSight()
     {
         if(pMan.isBuilding)
             myCamera.transform.localPosition = buildOffset;
@@ -105,7 +103,7 @@ public class TPSCamera : MonoBehaviour
         RemoveCollisionDetection();
         player.SetAimState();
     }
-    public void DefaultSightCall(InputAction.CallbackContext obj)
+    public void DefaultSight()
     {
         myCamera.transform.localPosition = defaultOffset;
 
@@ -124,9 +122,5 @@ public class TPSCamera : MonoBehaviour
         Vector3 rayDirection = (playerOffset - camCollision.transform.position).normalized;
         rayDirection *= Vector3.Distance(playerOffset, camCollision.transform.position);
         Gizmos.DrawRay(camCollision.transform.position, rayDirection);
-    }
-    private void OnDrawGizmos()
-    {
-      
     }
 }

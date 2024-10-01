@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.Windows;
+
 
 public class PlayerInputOrganizer : MonoBehaviour
 {
@@ -16,24 +15,25 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputActionMap editInputMap;
     [Header("Input Actions")]// sorted into their respective action maps
     // Player Actions
-    public InputAction moveAction;
-    public InputAction lookAction;
-    public InputAction jumpAction;
-    public InputAction aimAction;
-    public InputAction fireAction;
-    public InputAction interactAction;
+    public  InputAction moveAction;
+    public  InputAction lookAction;
+    private InputAction jumpAction;
+    private InputAction aimAction;
+    private InputAction fireAction;
+    private InputAction sprintAction;
+    private InputAction interactAction;
     // Shoot Actions
-    public InputAction reloadAction;
-    public InputAction pickUpAction;
-    public InputAction dropAction;
+    private InputAction reloadAction;
+    private InputAction pickUpAction;
+    private InputAction dropAction;
     // Build Actions
     private InputAction buildModeAction;
     private InputAction changeBuildAction;
     private InputAction placeBuildAction;
     private InputAction selectStructAction;
     // Edit Actions
+    public  InputAction rotateStructAction;
     private InputAction moveStructAcion;
-    public InputAction rotateStructAction;
     private InputAction destroyStructAction;
     private InputAction upgradeStructAction;
     private InputAction exitEditAction;
@@ -53,6 +53,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         moveAction = playerInputMap.FindAction("Move");
         lookAction = playerInputMap.FindAction("Look");
         jumpAction = playerInputMap.FindAction("Jump");
+        sprintAction = playerInputMap.FindAction("Sprint");
         buildModeAction = playerInputMap.FindAction("Build");
         aimAction = playerInputMap.FindAction("Aim");
         interactAction = playerInputMap.FindAction("Interact");
@@ -81,9 +82,11 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // Assign Calls to each action
         // basic player actions
-        jumpAction.started += pMan.pController.JumpCall;
-        aimAction.started += pMan.pCamera.AimSightCall;
-        aimAction.canceled += pMan.pCamera.DefaultSightCall;
+        jumpAction.started += OnJumpCall;
+        sprintAction.started += OnSprintStarted;
+        sprintAction.canceled += OnSprintCanceled;
+        aimAction.started += OnAimSightCall;
+        aimAction.canceled += OnDefaultSightCall;
         fireAction.started += OnFireStarted;
         fireAction.canceled += OnFireCanceled;
         buildModeAction.started += OnBuildMode;
@@ -104,6 +107,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         destroyStructAction.performed += OnEditDestroy;
         upgradeStructAction.started += OnEditUpgrade;
     }
+    // interaction button will be the same button but do different things
     public void AssignInteraction()
     {
         interactAction.started += OnPushButton;
@@ -115,9 +119,11 @@ public class PlayerInputOrganizer : MonoBehaviour
     private void OnDisable()
     {
         // remove calls
-        jumpAction.started -= pMan.pController.JumpCall;
-        aimAction.started -= pMan.pCamera.AimSightCall;
-        aimAction.canceled -= pMan.pCamera.DefaultSightCall;
+        jumpAction.started -= OnJumpCall;
+        sprintAction.started -= OnSprintStarted;
+        sprintAction.canceled -= OnSprintCanceled;
+        aimAction.started -= OnAimSightCall;
+        aimAction.canceled -= OnDefaultSightCall;
         fireAction.started -= OnFireStarted;
         fireAction.canceled -= OnFireCanceled;
         buildModeAction.started -= OnBuildMode;
@@ -160,6 +166,29 @@ public class PlayerInputOrganizer : MonoBehaviour
     public void SetManager(PlayerManager manger)
     {
         pMan = manger;
+    }
+    private void OnAimSightCall(InputAction.CallbackContext context)
+    {
+        pMan.pCamera.AimSight();
+    }
+    private void OnDefaultSightCall(InputAction.CallbackContext context)
+    {
+        pMan.pCamera.DefaultSight();
+    }
+    private void OnJumpCall(InputAction.CallbackContext context)
+    {
+        if (pMan != null)
+        {
+            pMan.pController.JumpCall();
+        }
+    }
+    private void OnSprintStarted(InputAction.CallbackContext context)
+    {
+        pMan.pController.SetSprintSpeed(true);
+    }
+    private void OnSprintCanceled(InputAction.CallbackContext context)
+    {
+        pMan.pController.SetSprintSpeed(false);
     }
     // Called when the Fire action is triggered
     private void OnFireStarted(InputAction.CallbackContext context)
@@ -254,6 +283,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         pMan.bGun.PlaceStructure();
     }
+    // Editing a Structure
     private void OnSelectStructure(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)

@@ -28,17 +28,18 @@ public class WaveManager : MonoBehaviour
     public WavePhase wavePhase;
 
     [Header("Moving to Next Wave")]
-    public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
     public float departTime = 30;
     private float timer = 0;
     [Header("UI Stuff")]
     // test Ui
     public TMP_Text waveUI;
     public TMP_Text bossText;
+    // Test particles
+    public GameObject explosionPrefab;
     private void Start()
     {
         currentWave = waves[currentWaveIndex];
-        StartCoroutine(MoveToWaveLocation());
+        StartCoroutine(MoveToWaveLocation(0));
     }
 
     private void Update()
@@ -89,7 +90,7 @@ public class WaveManager : MonoBehaviour
         // Spawn the payload
         train.SpawnPayload(currentWave.spawnLocations[0].position);
         
-        Invoke("SpawnBoss", 2f);
+        Invoke(nameof(SpawnBoss), 2f);
     }
     private void SpawnEnemy()
     {
@@ -113,7 +114,7 @@ public class WaveManager : MonoBehaviour
         enemiesAlive++;
         bossText.text = "<color=red>Boss Has Spawned</color>" + "\n 999999";
         // once we start the Boss script add an OnEnemyDeath Event
-        boss.GetComponent<Sherman>().OnEnemyDeath += OnEnemyDeath;
+        boss.GetComponent<Sherman>().OnEnemyDeath += OnBossDeath;
     }
     private void WaveCleared()
     {
@@ -122,7 +123,7 @@ public class WaveManager : MonoBehaviour
 
         timer = departTime;
         wavePhase = WavePhase.Departing;
-        Invoke("Depart", departTime);
+        Invoke(nameof(Depart), departTime);
     }
     private void OnEnemyDeath()
     {
@@ -139,19 +140,25 @@ public class WaveManager : MonoBehaviour
         if (enemiesAlive <= 0 && waveActive)
         {
             Debug.Log("Boss defeated!");
+            WaveCleared();
             // speed up payload
+            train.Payload.IncreaseSpeed();
         }
     }
     private void Depart()
     {
+        StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
+    }
+    private IEnumerator DestroyShroomPod(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        SpawnExplosion(currentWave.ShroomPod.transform.position);
         Destroy(currentWave.ShroomPod);
-        currentWaveIndex++;
-        currentWave = waves[currentWaveIndex];
-        StartCoroutine(MoveToWaveLocation());
     }
     public void SkipDepartTime()
     {
-        CancelInvoke("Depart");
+        // since we are skipping, we no longer need to invoke, prevents repeat
+        CancelInvoke(nameof(Depart));
         Depart();
     }
     public void OnStartWave()
@@ -166,24 +173,34 @@ public class WaveManager : MonoBehaviour
             StartCoroutine(StartWave());
         }
     }
-    private IEnumerator MoveToWaveLocation()
+    private IEnumerator MoveToWaveLocation(float waitTime)
     {
-        wavePhase = WavePhase.Moving;
+        // switch to train camera
         player.DisableControl();
+        train.SetFiringState();
+        // Destroy pod will spawn in an explosion so made it into Coroutine
+        if (waitTime > 0)
+           StartCoroutine(DestroyShroomPod(waitTime));
+
+        yield return new WaitForSeconds(waitTime + .2f);
+        // at the start we have zero wait time, and don't want to go to next index
+        if (waitTime > 0)
+        {
+            currentWaveIndex++;
+            currentWave = waves[currentWaveIndex];
+        }
+        wavePhase = WavePhase.Moving;
         train.SetMovingState();
+
         Vector3 startPosition = train.transform.position;
         Vector3 targetPosition = currentWave.trainLocation.position;
 
-       /* Vector3 cameraStartPosition = cameraTransform.position;
-        Vector3 cameraTargetPosition = wave.waveLocation.position + new Vector3(0, 10, -10); // Adjust camera offset
-*/
         float time = 0f;
         while (time < 1f)
         {
-            time += Time.deltaTime * trainMoveSpeed;
+            time += Time.deltaTime * train.trainMoveSpeed;
 
             train.transform.position = Vector3.Lerp(startPosition, targetPosition, time);
-            //cameraTransform.position = Vector3.Lerp(cameraStartPosition, cameraTargetPosition, time);
 
             yield return null;
         }
@@ -193,8 +210,9 @@ public class WaveManager : MonoBehaviour
         train.SetParkedState();
         player.EnableControl();
         wavePhase = WavePhase.NotStarted;
-
-        //cameraTransform.position = cameraTargetPosition;
     }
-
+    private void SpawnExplosion(Vector3 pos)
+    {
+        Instantiate(explosionPrefab, pos, Quaternion.identity);
+    }
 }

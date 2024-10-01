@@ -145,16 +145,18 @@ public class PlayerManager : MonoBehaviour
     }
     public void DisableControl()
     {
+        pVisual.gameObject.SetActive(false);
         pController.gameObject.SetActive(false);
-        pCamera.enabled = false;
+        pCamera.gameObject.SetActive(false);
         pController.transform.localPosition = Vector3.zero;
 
         pInput.DisableAllInputs();
     }
     public void EnableControl()
     {
+        pVisual.gameObject.SetActive(true);
         pController.gameObject.SetActive(true);
-        pCamera.enabled = true;
+        pCamera.gameObject.SetActive(true);
 
         pInput.EnableDefaultInputs();
     }

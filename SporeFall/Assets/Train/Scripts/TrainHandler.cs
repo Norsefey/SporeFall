@@ -4,36 +4,58 @@ using UnityEngine;
 
 public class TrainHandler : MonoBehaviour
 {
+    // train camera
     public GameObject trainCamera;
+    // train visuals
     [SerializeField] private Transform trainVisual;
+    // payload
     [SerializeField] private GameObject payloadPrefab;
     [SerializeField] private Transform payloadSpawnPos;
-    [SerializeField] private GameObject cannonButton;
+    public Payload Payload { get; private set; }
+    // Interactables
+    // structures
+    public Transform structureHolder;
+    private bool hidingStructures = false;
+
+    public float cannonFireTime = 2f;
+    public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
+
     public enum TrainState
     {
-        parked,
-        moving
+        Parked,
+        Firing,
+        Moving
     }
-
     public TrainState state;
-
     public void SetParkedState()
     {
-        state = TrainState.parked;
+        state = TrainState.Parked;
         trainVisual.rotation = Quaternion.identity;
         trainCamera.SetActive(false);
+        ToggleStructures(true);
+    }
+    public void SetFiringState()
+    {
+        state = TrainState.Firing;
+        trainCamera.SetActive(true);
+
     }
     public void SetMovingState()
     {
-        state = TrainState.moving;
+        state = TrainState.Moving;
         trainVisual.rotation = Quaternion.Euler(0,70,0);
-        trainCamera.SetActive(true);
+        ToggleStructures(false);
     }
     public void SpawnPayload(Vector3 position)
     {
-        Payload payload = Instantiate(payloadPrefab, payloadSpawnPos).GetComponent<Payload>();
+        Payload = Instantiate(payloadPrefab, payloadSpawnPos).GetComponent<Payload>();
 
-        payload.SetDestination(position);
-        payload.StartMoving();
+        Payload.SetDestination(position);
+        Payload.StartMoving();
+    }
+    private void ToggleStructures(bool state)
+    {
+        structureHolder.gameObject.SetActive(state);
+        hidingStructures = state;
     }
 }

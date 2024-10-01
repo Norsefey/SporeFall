@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController cc;
     [Header("Movement Variables")]
     [SerializeField] private float walkSpeed;
+    [SerializeField] private float sprintSpeed;
     [SerializeField] private float rotSpeed = 15;
     private float moveSpeed;
     [Header("Jump Variables")]
@@ -89,10 +89,6 @@ public class PlayerMovement : MonoBehaviour
     void DefaultMovement()
     {
         Vector3 movement = Vector3.zero;
-
-        // old input system
-        /* float horInput = Input.GetAxis("Horizontal");
-         float verInput = Input.GetAxis("Vertical");*/
         // new Input System
         float horInput = pMan.pInput.moveAction.ReadValue<Vector2>().x;
         float verInput = pMan.pInput.moveAction.ReadValue<Vector2>().y;
@@ -120,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
         visual.position = transform.position;
         visual.forward = transform.forward;
     }
-    public void JumpCall(InputAction.CallbackContext context)
+    public void JumpCall()
     {
         if (IsGrounded())
         {
@@ -214,6 +210,13 @@ public class PlayerMovement : MonoBehaviour
     public void SetManager(PlayerManager pManager)
     {
         this.pMan = pManager;
+    }
+    public void SetSprintSpeed(bool isSprinting)
+    {
+        if (isSprinting)
+            moveSpeed = sprintSpeed;
+        else
+            moveSpeed = walkSpeed;
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {// detects contact with ground

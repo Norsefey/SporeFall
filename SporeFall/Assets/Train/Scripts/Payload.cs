@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class Payload : MonoBehaviour
 {
-    public Vector3 destination;  // The target point where the payload is moving towards
-    public float moveSpeed = 2f;   // The speed of the payload's movement
-    public int maxHealth = 100;    // Maximum health of the payload
+    [Header("Movement")]
+    private Vector3 destination;  // The target point where the payload is moving towards
+    [SerializeField] private float defaultMoveSpeed = 2f;   // The speed of the payload's movement
+    [SerializeField] private float topMoveSpeed = 4f; // When boss dies payload moves faster
+    private float moveSpeed;
+    [Header("Stats")]
+    [SerializeField] private int maxHealth = 100;    // Maximum health of the payload
     private int currentHealth;     // Current health of the payload
-
     private bool isMoving = false; // Flag to control payload movement
 
     private void Start()
     {
         currentHealth = maxHealth; // Initialize health
+        moveSpeed = defaultMoveSpeed; // Initialize move speed
     }
-
     private void Update()
     {
         if (isMoving)
@@ -23,7 +26,6 @@ public class Payload : MonoBehaviour
             MoveTowardsDestination();  // Move the payload if it's set to move
         }
     }
-
     // Method to move the payload towards the destination
     private void MoveTowardsDestination()
     {
@@ -47,7 +49,6 @@ public class Payload : MonoBehaviour
     {
         isMoving = true;
     }
-
     // Method to handle damage to the payload
     public void TakeDamage(int damage)
     {
@@ -60,5 +61,9 @@ public class Payload : MonoBehaviour
             Debug.Log("Payload Destroyed");
             Destroy(gameObject);          // Destroy the payload object
         }
+    }
+    public void IncreaseSpeed()
+    {
+        moveSpeed = topMoveSpeed;
     }
 }
