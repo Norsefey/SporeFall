@@ -7,17 +7,18 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour
 {
     [Header("References")]
-    public PlayerManager player;
-    public GameObject bossPrefab; // Boss enemy prefab for the final wave
-    public TrainHandler train; // Reference to the player transform for positioning
+    [SerializeField] private PlayerManager player;
+    [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
+    [SerializeField] private TrainHandler train; // Reference to the player transform for positioning
     
     [Header("Waves")]
-    public List<Wave> waves = new(); // List of waves to configure
+    [SerializeField] private List<Wave> waves = new(); // List of waves to configure
     private Wave currentWave;
     private int currentWaveIndex = 0;
+    [SerializeField] private int maxEnemiesOnField = 300;
+
     private int enemiesAlive = 0;
     private int enemiesSpawned = 0;
-    private bool waveActive = false;
     public enum WavePhase
     {
         NotStarted,
@@ -30,6 +31,8 @@ public class WaveManager : MonoBehaviour
     [Header("Moving to Next Wave")]
     public float departTime = 30;
     private float timer = 0;
+
+    // Move UI To own Script
     [Header("UI Stuff")]
     // test Ui
     public TMP_Text waveUI;
@@ -50,7 +53,7 @@ public class WaveManager : MonoBehaviour
                 waveUI.text = "Push Button to Start: " + currentWave.waveName;
                 break;
             case WavePhase.Started:
-                waveUI.text = "Enemies Left: " + enemiesAlive.ToString();
+                waveUI.text = "Enemies Left: " + (currentWave.totalEnemies - ( enemiesSpawned - enemiesAlive)).ToString();
                 break;
             case WavePhase.Departing:
                 timer -= Time.deltaTime;
@@ -64,29 +67,32 @@ public class WaveManager : MonoBehaviour
     private IEnumerator StartWave()
     {
         wavePhase = WavePhase.Started;
-        waveActive = true;
         enemiesSpawned = 0;
-        enemiesAlive = currentWave.totalEnemies;
+        //enemiesAlive = currentWave.totalEnemies;
 
         while (enemiesSpawned < currentWave.totalEnemies)
         {
-            int spawnCount = Random.Range(currentWave.minIntervalSpawn, currentWave.maxIntervalSpawn);
-            for (int i = 0; i < spawnCount; i++)
+            float spawnInterval = Random.Range(currentWave.minIntervalTime, currentWave.maxIntervalTime);
+            if (enemiesAlive >= maxEnemiesOnField)
             {
-                if (enemiesSpawned < currentWave.totalEnemies)
-                {
-                    SpawnEnemy();
-                    enemiesSpawned++;
-                }
+                yield return new WaitForSeconds(spawnInterval);
             }
-            float spawnInterval = Random.Range(currentWave.minIntervalTime,currentWave.maxIntervalTime);
-            yield return new WaitForSeconds(spawnInterval);   
+            else
+            {
+                int spawnCount = Random.Range(currentWave.minIntervalSpawn, currentWave.maxIntervalSpawn);
+                for (int i = 0; i < spawnCount; i++)
+                {
+                    if (enemiesSpawned < currentWave.totalEnemies && enemiesAlive < maxEnemiesOnField)
+                    {
+                        SpawnEnemy();
+                    }
+                }
+                yield return new WaitForSeconds(spawnInterval);
+            }
         }
     }
     private void StartFinalWave()
     {
-        waveActive = true;
-
         // Spawn the payload
         train.SpawnPayload(currentWave.spawnLocations[0].position);
         
@@ -103,24 +109,26 @@ public class WaveManager : MonoBehaviour
         Transform spawnPoint = spawnPoints[spawnPointIndex];
 
         GameObject enemy = Instantiate(enemyToSpawn, spawnPoint.position, spawnPoint.rotation);
+        enemy.transform.SetParent(transform);
         // once we start the enemy script add an OnEnemyDeath Event
         enemy.GetComponent<Sherman>().OnEnemyDeath += OnEnemyDeath; // Assuming each enemy has an OnEnemyDeath event
+        enemiesAlive++;
+        enemiesSpawned++;
     }
     private void SpawnBoss()
     {
         Transform spawnPoint = currentWave.spawnLocations[0];
         GameObject boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
-
-        enemiesAlive++;
+        boss.transform.SetParent(transform);
         bossText.text = "<color=red>Boss Has Spawned</color>" + "\n 999999";
         // once we start the Boss script add an OnEnemyDeath Event
         boss.GetComponent<Sherman>().OnEnemyDeath += OnBossDeath;
+        enemiesAlive++;
+        enemiesSpawned++;
     }
     private void WaveCleared()
     {
         Debug.Log("Wave Cleared!");
-        waveActive = false;
-
         timer = departTime;
         wavePhase = WavePhase.Departing;
         Invoke(nameof(Depart), departTime);
@@ -128,7 +136,7 @@ public class WaveManager : MonoBehaviour
     private void OnEnemyDeath()
     {
         enemiesAlive--;
-        if (enemiesAlive <= 0 || !waveActive)
+        if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
         {
            WaveCleared();
         }
@@ -136,13 +144,12 @@ public class WaveManager : MonoBehaviour
     private void OnBossDeath()
     {
         enemiesAlive--;
-
-        if (enemiesAlive <= 0 && waveActive)
+        // speed up payload
+        train.Payload.IncreaseSpeed();
+        if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
         {
             Debug.Log("Boss defeated!");
             WaveCleared();
-            // speed up payload
-            train.Payload.IncreaseSpeed();
         }
     }
     private void Depart()
@@ -151,7 +158,7 @@ public class WaveManager : MonoBehaviour
     }
     private IEnumerator DestroyShroomPod(float waitTime)
     {
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime - 2);
         SpawnExplosion(currentWave.ShroomPod.transform.position);
         Destroy(currentWave.ShroomPod);
     }
@@ -182,7 +189,7 @@ public class WaveManager : MonoBehaviour
         if (waitTime > 0)
            StartCoroutine(DestroyShroomPod(waitTime));
 
-        yield return new WaitForSeconds(waitTime + .2f);
+        yield return new WaitForSeconds(waitTime);
         // at the start we have zero wait time, and don't want to go to next index
         if (waitTime > 0)
         {

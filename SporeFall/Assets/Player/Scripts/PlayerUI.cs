@@ -21,7 +21,7 @@ public class PlayerUI : MonoBehaviour
     {
         if(currentWeapon.limitedAmmo)
             ammoIndicator.text = currentWeapon.magazineCount + "/" + currentWeapon.totalAmmo;
-        else if(currentWeapon is BuildGun gun)
+        else if(currentWeapon is BuildGun)
         {
             ammoIndicator.text = "Build Mode";
         }
