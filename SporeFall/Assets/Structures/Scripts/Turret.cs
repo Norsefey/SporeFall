@@ -90,7 +90,7 @@ public class Turret : MonoBehaviour
     void Fire()
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        bullet.GetComponent<Rigidbody>().AddForce(firePoint.forward * 15000);
+        bullet.GetComponent<Rigidbody>().AddForce(firePoint.forward * 9000);
         // You can add a script on the bullet to make it move and damage the enemy
         // Example: bullet.GetComponent<Bullet>().SetTarget(nearestEnemy);
     }
