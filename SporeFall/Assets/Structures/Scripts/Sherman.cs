@@ -54,13 +54,11 @@ public class Sherman : MonoBehaviour
         Vector3 randomDir = new Vector3(randomX, 0, randomZ).normalized; // Make sure the direction is normalized
         return randomDir;
     }
-
     // Change direction at intervals
     private void ChangeDirection()
     {
         randomDirection = GetRandomDirection();
     }
-
     public void TakeDamage(float damage)
     {
         Debug.Log("Received Damage: " + damage);

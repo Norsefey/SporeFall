@@ -61,7 +61,6 @@ public abstract class Weapon : MonoBehaviour
         {
             Debug.Log("Only Rotating Gun");
             transform.forward = shootDirection;
-
         }
         else
         {
@@ -78,7 +77,6 @@ public abstract class Weapon : MonoBehaviour
         {
             Debug.Log("Only Rotating Gun");
             transform.forward = shootDirection;
-
         }
         else
         {
