@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Sherman : MonoBehaviour
@@ -18,10 +19,16 @@ public class Sherman : MonoBehaviour
     public delegate void EnemyDeath();
     public event EnemyDeath OnEnemyDeath;
 
+    private float maxHP;
     public float hp = 10;
-
+    [SerializeField] private TMP_Text hpDisplay;
     void Start()
     {
+        maxHP = hp;
+        if (hpDisplay != null)
+        {
+            hpDisplay.text = hp.ToString() + "/" + maxHP.ToString();     
+        }
         // Pick an initial random direction
         randomDirection = GetRandomDirection();
         
@@ -58,6 +65,8 @@ public class Sherman : MonoBehaviour
     {
         Debug.Log("Received Damage: " + damage);
         hp -= damage;
+        if(hpDisplay != null)
+            hpDisplay.text = hp.ToString() + "/" + maxHP.ToString();
         // Handle taking damage
         if (hp <= 0)
         {

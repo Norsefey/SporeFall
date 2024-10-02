@@ -135,7 +135,7 @@ public class PlayerManager : MonoBehaviour
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
         // destroy pick up platform
-        Destroy(nearByWeapon.transform.root.gameObject);
+        Destroy(nearByWeapon.transform.parent.gameObject);
         // disable pick up prompt
         pUI.DisablePrompt();
         // update UI to display new ammo capacities
