@@ -1,38 +1,47 @@
+// Ignore Spelling: Gamepad
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class TPSCamera : MonoBehaviour
 {
-    // references
+    [Header("references")]
     public Camera myCamera;
-    private PlayerManager pMan;
     [SerializeField] private PlayerMovement player;
     [SerializeField] private CameraCollision camCollision;
-    // horizontal rotations
-    [SerializeField] private float horSense = 50;
-    [SerializeField] private bool invertHorRot = false;
-    // vertical rotations
-    [SerializeField] private float verSense = 50;
-    [SerializeField] private bool invertVertRot = false;
+
+    [Header("Mouse Sensitivity")]
+    [SerializeField] private float mHorSense = 50;
+    [SerializeField] private float mvertSense = 50;
+
+    [Header("Gamepad Sensitivity")]
+    [SerializeField] private float gHorSense = 50;
+    [SerializeField] private float gvertSense = 50;
+
+    [Header("General Settings")]
     [SerializeField] float minVertRot = -45;
     [SerializeField] float maxVertRot = 45;
-                     private float vertRot = 0;
+    [SerializeField] private bool invertVertRot = false;
+    [SerializeField] private bool invertHorRot = false;
     [SerializeField] private LayerMask obstructions;
 
     [Header("Camera Offsets")]
     [SerializeField] Vector3 defaultOffset;
     [SerializeField] Vector3 aimOffset; // camera zooms in
-    [SerializeField] Vector3 buildOffset; // camera zooms in
+    [SerializeField] Vector3 buildOffset; // camera zooms Out
+
+    // local private variables
+    private PlayerManager pMan;
+    private float vertRot = 0;
+    private float horSense = 50;
+    private float verSense = 50;
+
     private void Start()
     {
         myCamera.transform.localPosition = defaultOffset;
         camCollision.transform.localPosition = defaultOffset;
         AssignCollisionDetection();
     }
-
     private void LateUpdate()
     {
         ObstructionCheck();
@@ -114,13 +123,22 @@ public class TPSCamera : MonoBehaviour
     {
         this.pMan = pManager;
     }
-
-    private void OnDrawGizmosSelected()
+    public void SetMouseSettings()
+    {
+        horSense = mHorSense;
+        verSense = mvertSense;
+    }
+    public void SetGamepadSettings()
+    {
+        horSense = gHorSense;
+        verSense = gvertSense;
+    }
+   /* private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Vector3 playerOffset = player.transform.position + Vector3.up;
         Vector3 rayDirection = (playerOffset - camCollision.transform.position).normalized;
         rayDirection *= Vector3.Distance(playerOffset, camCollision.transform.position);
         Gizmos.DrawRay(camCollision.transform.position, rayDirection);
-    }
+    }*/
 }

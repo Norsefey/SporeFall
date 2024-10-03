@@ -1,3 +1,5 @@
+// Ignore Spelling: mycelia
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +29,8 @@ public class PlayerManager : MonoBehaviour
 
     // Player Stats
     public int lives = 3;
+    public float HP = 100;
+    public float mycelia = 30;
     [Header("Corruption Stuff")]
     public float corruptionLevel = 0;
     public float purifyRate = 1;
@@ -38,6 +42,26 @@ public class PlayerManager : MonoBehaviour
         pController.SetManager(this);
         pCamera.SetManager(this);
         pInput.SetManager(this);
+
+        PlayerInput playerInput = GetComponent<PlayerInput>();
+
+        if(playerInput.devices.Count > 0)
+        {
+            var device = playerInput.devices[0];
+
+            if(device is Gamepad)
+            {
+                Debug.Log("I am using a gamepad");
+                pCamera.SetGamepadSettings();
+                bGun.structRotSpeed = 50;
+            }
+            else if (device is Keyboard)
+            {
+                Debug.Log("I am using a keyboard");
+                pCamera.SetMouseSettings();
+                bGun.structRotSpeed = 25;
+            }
+        }
     }
     private void Start()
     {
@@ -63,6 +87,7 @@ public class PlayerManager : MonoBehaviour
 
             if (currentWeapon is BuildGun bGun)
             {
+                pUI.DisplayMycelia(mycelia);
                 if (bGun.isEditing)
                 {
                     bGun.RotateStructure();
@@ -80,13 +105,15 @@ public class PlayerManager : MonoBehaviour
             }
         }
     } 
-    public void EnablePickUpWeapon(GameObject weapon)
+    public void PromptPickUpWeapon(GameObject weapon)
     {
+        pInput.AssignWeaponPickUp();
         nearByWeapon = weapon;
         pUI.EnablePrompt("Press F to Pick up: " + weapon.name);
     }
-    public void DisablePickUpWeapon() 
-    { 
+    public void DisablePickUpWeaponPrompt() 
+    {
+        pInput.RemoveWeaponPickUp();
         nearByWeapon = null;
         pUI.DisablePrompt();
     }
@@ -97,7 +124,7 @@ public class PlayerManager : MonoBehaviour
             currentWeapon.gameObject.SetActive(false);
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
-            pUI.EnablePrompt("Use Q/E to change Structure" + "\n F to Select placed" + "\n Hold Right mouse to Preview");
+            pUI.EnablePrompt("Use Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             pUI.AmmoDisplay(currentWeapon);
             isBuilding = true;
         }
@@ -107,6 +134,10 @@ public class PlayerManager : MonoBehaviour
                 currentWeapon = equippedWeapon;
             else
                 currentWeapon = defaultWeapon;
+            if(bGun.isEditing)
+                bGun.DeSelectStructure();
+            else
+                bGun.DestroySelectedObject();
 
             currentWeapon.gameObject.SetActive(true);
             pUI.AmmoDisplay(currentWeapon);
@@ -181,7 +212,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void AssignButtonAction()
     {
-        pInput.AssignInteraction();
+        pInput.AssignButtonPush();
 
         WaveManager.WavePhase currentPhase = waveManager.wavePhase;
 
@@ -197,7 +228,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void RemoveButtonAction()
     {
-        pInput.RemoveInteraction();
+        pInput.RemoveButtonPush();
         pUI.DisablePrompt();
     }
     public void OnButtonPush()

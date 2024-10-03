@@ -62,7 +62,7 @@ public class Turret : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(direction);
 
         // Smoothly rotate towards the enemy on the y-axis
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+        transform.parent.rotation = Quaternion.Slerp(transform.parent.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
     // Check line of sight using raycasting and fire at the enemy if visible

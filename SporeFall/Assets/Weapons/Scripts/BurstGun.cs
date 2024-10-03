@@ -21,7 +21,7 @@ public class BurstGun : Weapon
     public override void Fire()
     {
         // Only fire if we aren't in the middle of a burst and the player isn't holding the fire button
-        if (isFiringBurst || triggerHeld || magazineCount <= 0 || IsReloading) return;
+        if (isFiringBurst || triggerHeld || bulletCount <= 0 || IsReloading) return;
 
         // Start the burst firing coroutine
         StartCoroutine(FireBurst());
@@ -34,7 +34,7 @@ public class BurstGun : Weapon
         Debug.Log("Burst Firing");
         isFiringBurst = true;
 
-        for (int i = 0; i < burstCount && magazineCount > 0; i++)
+        for (int i = 0; i < burstCount && bulletCount > 0; i++)
         {
             base.Fire(); // Fire a single shot
         }

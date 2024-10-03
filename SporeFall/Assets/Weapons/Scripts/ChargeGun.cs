@@ -15,7 +15,7 @@ public class ChargeGun : Weapon
     // Called while holding down the fire button to accumulate charge
     public void Charge()
     {
-        if (magazineCount <= 0 || IsReloading) return;
+        if (bulletCount <= 0 || IsReloading) return;
 
         if (!isCharging)
         {
@@ -31,7 +31,7 @@ public class ChargeGun : Weapon
     // Called when the fire button is released to fire the charged shot
     public void Release()
     {
-        if (!isCharging || magazineCount <= 0) return;
+        if (!isCharging || bulletCount <= 0) return;
 
         isCharging = false;
 
@@ -48,7 +48,7 @@ public class ChargeGun : Weapon
             FireProjectile(chargeMultiplier);
         }
 
-        magazineCount--;
+        bulletCount--;
     }
 
     // Fire projectile with charge multiplier affecting its power (damage or speed)

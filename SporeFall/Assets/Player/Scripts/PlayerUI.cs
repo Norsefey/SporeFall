@@ -20,13 +20,17 @@ public class PlayerUI : MonoBehaviour
     public void AmmoDisplay(Weapon currentWeapon)
     {
         if(currentWeapon.limitedAmmo)
-            ammoIndicator.text = currentWeapon.magazineCount + "/" + currentWeapon.totalAmmo;
+            ammoIndicator.text = currentWeapon.bulletCount + "/" + currentWeapon.totalAmmo;
         else if(currentWeapon is BuildGun)
         {
             ammoIndicator.text = "Build Mode";
         }
         else
-            ammoIndicator.text = currentWeapon.magazineCount + "/" + "\u221E";
+            ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
+    }
+    public void DisplayMycelia(float value)
+    {
+        ammoIndicator.text = "Mycelia: " + value.ToString();
     }
     public void EnablePrompt(string text)
     {

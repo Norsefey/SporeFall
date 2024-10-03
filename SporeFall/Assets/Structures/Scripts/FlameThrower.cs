@@ -29,7 +29,6 @@ public class FlameThrower : MonoBehaviour
     {
         // Get all colliders within the range
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range, enemyLayer);
-
         foreach (Collider enemy in enemiesInRange)
         {
             // Check if the collider has the enemy tag
@@ -41,7 +40,6 @@ public class FlameThrower : MonoBehaviour
             }
         }
     }
-
     // Optional: Visualize the damage area in the Unity Editor
     private void OnDrawGizmosSelected()
     {

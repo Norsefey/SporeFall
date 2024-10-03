@@ -22,8 +22,8 @@ public abstract class Weapon : MonoBehaviour
     public float projectileDistance = 50;
     public float hitScanDistance = 100;
     [Header("Ammo Variables")]
-    public int magazineCount;
-    public int magazineSize;
+    public int bulletCount;
+    public int bulletCapacity;
     public int totalAmmo;
     public bool limitedAmmo = false;
     public bool isHitScan; // Whether the weapon is hitscan or projectile based
@@ -35,7 +35,7 @@ public abstract class Weapon : MonoBehaviour
     // Fire method to be implemented by subclasses
     public virtual void Fire()
     {
-        if (magazineCount <= 0 || IsReloading) return;
+        if (bulletCount <= 0 || IsReloading) return;
 
         if (isHitScan)
         {
@@ -46,7 +46,7 @@ public abstract class Weapon : MonoBehaviour
             FireProjectile(firePoint, player.pCamera.myCamera);
         }
 
-        magazineCount--;
+        bulletCount--;
     }
     private void FireProjectile(Transform firePoint, Camera playerCamera)
     {
@@ -110,7 +110,7 @@ public abstract class Weapon : MonoBehaviour
     }
     public virtual void Reload()
     {
-        if (!IsReloading && magazineCount < magazineSize)
+        if (!IsReloading && (!limitedAmmo) || bulletCount < bulletCapacity )
         {
             StartCoroutine(ReloadCoroutine());
         }
@@ -120,32 +120,39 @@ public abstract class Weapon : MonoBehaviour
         isReloading = true;
         Debug.Log(weaponName + " is reloading...");
 
-        if (totalAmmo <= 0 && limitedAmmo)
+        if(limitedAmmo)
         {
-            Debug.Log(weaponName + " has no more Ammo");
-            yield return null;
-        }
+            if (totalAmmo <= 0)
+            {
+                Debug.Log(weaponName + " has no more Ammo");
+                yield return null;
+            }
+            // Wait for reload time to complete
+            yield return new WaitForSeconds(reloadTime);
 
-        // Wait for reload time to complete
-        yield return new WaitForSeconds(reloadTime);
-
-        int reloadAmount = magazineSize - magazineCount;
-
-        if(totalAmmo > reloadAmount)
-        {
-            // Complete the reload
-            magazineCount = magazineSize;
-            totalAmmo -= reloadAmount;
+            int reloadAmount = bulletCapacity - bulletCount;
+            if (totalAmmo > reloadAmount)
+            {
+                // Complete the reload
+                bulletCount = bulletCapacity;
+                totalAmmo -= reloadAmount;
+            }
+            else
+            {
+                // take the final bullets from ammo
+                bulletCount = totalAmmo;
+                totalAmmo = 0;
+            }
         }
         else
         {
-            // take the final bullets from ammo
-            magazineCount = totalAmmo;
-            totalAmmo = 0;
+            yield return new WaitForSeconds(reloadTime);
+            bulletCount = bulletCapacity;
         }
-        if(player.pUI != null)
+
+
+        if (player.pUI != null)
             player.pUI.AmmoDisplay(this);
         isReloading = false;
-        Debug.Log(weaponName + " has reloaded. Total Ammo" + totalAmmo);
     }
 }

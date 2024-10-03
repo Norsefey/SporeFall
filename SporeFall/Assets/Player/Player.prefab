@@ -744,12 +744,14 @@ MonoBehaviour:
   myCamera: {fileID: 9212417116264335783}
   player: {fileID: 5405646431928707325}
   camCollision: {fileID: 1834573148610238118}
-  horSense: 45
-  invertHorRot: 0
-  verSense: 45
-  invertVertRot: 0
+  mHorSense: 50
+  mvertSense: 50
+  gHorSense: 150
+  gvertSense: 100
   minVertRot: -35
   maxVertRot: 75
+  invertVertRot: 0
+  invertHorRot: 0
   obstructions:
     serializedVersion: 2
     m_Bits: 192
@@ -1012,9 +1014,9 @@ MonoBehaviour:
   reloadTime: 2
   projectileDistance: 50
   hitScanDistance: 100
-  magazineCount: 9999
-  magazineSize: 9999
-  totalAmmo: 9999
+  bulletCount: 10
+  bulletCapacity: 10
+  totalAmmo: 0
   limitedAmmo: 0
   isHitScan: 1
   fireRate: 5
@@ -1596,6 +1598,8 @@ MonoBehaviour:
   isBuilding: 0
   isRotating: 0
   lives: 3
+  HP: 100
+  mycelia: 200
   corruptionLevel: 0
   purifyRate: 1
 --- !u!114 &4119618120729430109
@@ -1961,16 +1965,15 @@ MonoBehaviour:
   reloadTime: 2
   projectileDistance: 50
   hitScanDistance: 100
-  magazineCount: 0
-  magazineSize: 0
+  bulletCount: 0
+  bulletCapacity: 0
   totalAmmo: 0
   limitedAmmo: 0
   isHitScan: 0
   buildableStructures:
-  - {fileID: 3745370869290195764, guid: d4259689e9922544d931b3b639201847, type: 3}
-  - {fileID: 1204486601294777475, guid: fe603223efaf58340a7cefe1c527d574, type: 3}
   - {fileID: 2143417820075499101, guid: 877219f937a427a4889d673a029d294d, type: 3}
-  - {fileID: 6078534461660591072, guid: 7b6c41d8a07f1fa44a470c157405a3c4, type: 3}
+  - {fileID: 1083017409998067897, guid: 32bb110230eb1c844bbcf862215db098, type: 3}
+  - {fileID: 2143417820075499101, guid: a2eaea70b52309e45afdd2ca77877852, type: 3}
   maxBuildDistance: 50
   groundLayer:
     serializedVersion: 2
@@ -1980,6 +1983,7 @@ MonoBehaviour:
     m_Bits: 128
   currentBuildIndex: 0
   isEditing: 0
+  maxStructures: 10
 --- !u!1 &4265064179955315805
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,8 +8,12 @@ public class BuildGun : Weapon
     public LayerMask groundLayer; // LayerMask to identify what is "ground"
     public LayerMask structureLayer; // LayerMask for detecting objects the player can select
     public int currentBuildIndex = 0; // Current selected object to build
-    private GameObject selectedStructure; // The currently selected placed object (for moving or deleting)
+    private Structure selectedStructure; // The currently selected placed object (for moving or deleting)
     public bool isEditing = false;
+    public float structRotSpeed = 25;
+    // structures
+    public int maxStructures = 10;
+    private int currentStructures = 0;
     public override void Fire()
     {
         // Called when player presses fire button
@@ -20,7 +24,7 @@ public class BuildGun : Weapon
         if (!isEditing)
         {
             // Called when player releases the fire button
-            Destroy(selectedStructure); // Destroy the current preview
+            Destroy(selectedStructure.gameObject); // Destroy the current preview
         }
     }
     private void PreviewStructure()
@@ -35,9 +39,9 @@ public class BuildGun : Weapon
             if (!isEditing && selectedStructure == null)
             {
                 //Debug.Log("Creating New Structure");
-                selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity);
+                selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
                 selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
-                SetStructureToTransparent(selectedStructure); // Make the object transparent to show it's a preview
+                SetStructureToTransparent(selectedStructure.gameObject); // Make the object transparent to show it's a preview
             }
             else
             {
@@ -59,12 +63,15 @@ public class BuildGun : Weapon
     }
     public void PlaceStructure()
     {
-        if (selectedStructure != null)
+        if (selectedStructure != null && currentStructures < maxStructures && selectedStructure.cost[0] <= player.mycelia)
         {
-            selectedStructure.GetComponent<Collider>().enabled = true; // Enable collider for the final object
-            SetStructureToOpaque(selectedStructure); // Make the object opaque
+
+            selectedStructure.PurchaseStructure();
+            SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
             if(player.train != null)
                 selectedStructure.transform.SetParent(player.train.structureHolder, true);
+            currentStructures++;
+            player.mycelia -= selectedStructure.cost[0];
             selectedStructure = null; // Clear the selected object
         }
     }
@@ -76,7 +83,9 @@ public class BuildGun : Weapon
             currentBuildIndex = 0;
         else if(currentBuildIndex < 0)
             currentBuildIndex = buildableStructures.Length - 1;
-        Destroy(selectedStructure);
+
+        if(selectedStructure != null)
+            Destroy(selectedStructure.gameObject);
 
         player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name);
     }
@@ -145,10 +154,11 @@ public class BuildGun : Weapon
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer))
         {
-            selectedStructure = hit.collider.gameObject; // Select the hit object
-            SetStructureToTransparent(selectedStructure);
+            selectedStructure = hit.collider.gameObject.GetComponent<Structure>(); // Select the hit object
+            SetStructureToTransparent(selectedStructure.gameObject);
             Debug.Log("Structure selected: " + selectedStructure.name);
             player.pUI.EnablePrompt(selectedStructure.name);
+            selectedStructure.ToggleStructure(false);
             return true;
         }
         else
@@ -158,7 +168,8 @@ public class BuildGun : Weapon
     }
     public void DeSelectStructure()
     {
-        SetStructureToOpaque(selectedStructure); // Make the object opaque
+        SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
+        selectedStructure.ToggleStructure(true);
         selectedStructure = null;
         isEditing = false;
     }
@@ -166,7 +177,7 @@ public class BuildGun : Weapon
     {
         if (selectedStructure != null)
         {
-            Destroy(selectedStructure); // Destroy the selected object
+            Destroy(selectedStructure.gameObject); // Destroy the selected object
             selectedStructure = null; // Clear the selection
             isEditing = false;
         }
@@ -174,6 +185,30 @@ public class BuildGun : Weapon
     public void RotateStructure()
     {
         if (selectedStructure != null)
-            selectedStructure.transform.Rotate(new Vector3(0, player.pInput.rotateStructAction.ReadValue<Vector2>().y * 25 * Time.deltaTime, 0));
+        {
+            float yRot = player.pInput.rotateStructAction.ReadValue<Vector2>().y * structRotSpeed * Time.deltaTime;
+            selectedStructure.transform.Rotate(new Vector3(0, yRot, 0));
+        }
+    }
+    public void UpgradeStructure()
+    {
+        if (selectedStructure.StructLevel < selectedStructure.visuals.Length && selectedStructure.cost[selectedStructure.StructLevel] <= player.mycelia)
+        {
+            player.mycelia -= selectedStructure.cost[selectedStructure.StructLevel];
+            SetStructureToTransparent(selectedStructure.visuals[selectedStructure.StructLevel]);
+            selectedStructure.UpgradeStructure();
+        }
+        else
+        {
+            if(selectedStructure.StructLevel >= selectedStructure.visuals.Length)
+            {
+                player.pUI.EnablePrompt("MAX LEVEL");
+            }
+            else
+            {
+                Debug.Log("Not Enough Mycelia");
+                player.pUI.EnablePrompt("Not Enough Mycelia");
+            }
+        }
     }
 }

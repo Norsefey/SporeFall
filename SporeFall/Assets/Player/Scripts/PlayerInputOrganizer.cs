@@ -19,17 +19,16 @@ public class PlayerInputOrganizer : MonoBehaviour
     public  InputAction lookAction;
     private InputAction jumpAction;
     private InputAction aimAction;
-    private InputAction fireAction;
     private InputAction sprintAction;
     private InputAction interactAction;
     // Shoot Actions
+    private InputAction fireAction;
     private InputAction reloadAction;
-    private InputAction pickUpAction;
     private InputAction dropAction;
     // Build Actions
     private InputAction buildModeAction;
-    private InputAction changeBuildAction;
-    private InputAction placeBuildAction;
+    private InputAction changeStructAction;
+    private InputAction placeStructAction;
     private InputAction selectStructAction;
     // Edit Actions
     public  InputAction rotateStructAction;
@@ -59,12 +58,11 @@ public class PlayerInputOrganizer : MonoBehaviour
         interactAction = playerInputMap.FindAction("Interact");
         // shoot action map
         reloadAction = shootInputMap.FindAction("Reload");
-        pickUpAction = shootInputMap.FindAction("PickUp");
         dropAction = shootInputMap.FindAction("Drop");
         fireAction = shootInputMap.FindAction("Fire");
         // build Action Maps
-        changeBuildAction = buildInputMap.FindAction("Change");
-        placeBuildAction = buildInputMap.FindAction("Place");
+        changeStructAction = buildInputMap.FindAction("Change");
+        placeStructAction = buildInputMap.FindAction("Place");
         selectStructAction = buildInputMap.FindAction("Select");
         rotateStructAction = buildInputMap.FindAction("Rotate");
         // Edit Action Maps
@@ -75,6 +73,38 @@ public class PlayerInputOrganizer : MonoBehaviour
         // this enables the controls
         playerInputMap.Enable();
         shootInputMap.Enable();
+        buildInputMap.Disable();
+        editInputMap.Disable();
+    }
+    private void OnDisable()
+    {
+        // remove calls
+        jumpAction.started -= OnJumpCall;
+        sprintAction.started -= OnSprintStarted;
+        sprintAction.canceled -= OnSprintCanceled;
+        aimAction.started -= OnAimSightCall;
+        aimAction.canceled -= OnDefaultSightCall;
+        fireAction.started -= OnFireStarted;
+        fireAction.canceled -= OnFireCanceled;
+        buildModeAction.started -= OnBuildMode;
+        //shoot actions
+        reloadAction.performed -= OnReload;
+        dropAction.performed -= OnDropWeapon;
+        // build Mode actions
+        changeStructAction.performed -= OnCycleBuildStrcuture;
+        placeStructAction.performed -= OnPlaceStructure;
+        selectStructAction.started -= OnSelectStructure;
+        // edit Actions
+        moveStructAcion.started -= OnEditStructureMoveStarted;
+        moveStructAcion.canceled -= OnEditMoveStructureCancled;
+        exitEditAction.performed -= OnExitEditStructure;
+        destroyStructAction.performed -= OnEditDestroy;
+        rotateStructAction.started -= OnEditRotateStarted;
+        rotateStructAction.canceled -= OnEditRotateCancled;
+        upgradeStructAction.started -= OnEditUpgrade;
+        // disable Input map
+        playerInputMap.Disable();
+        shootInputMap.Disable();
         buildInputMap.Disable();
         editInputMap.Disable();
     }
@@ -92,63 +122,39 @@ public class PlayerInputOrganizer : MonoBehaviour
         buildModeAction.started += OnBuildMode;
         // shoot actions
         reloadAction.performed += OnReload;
-        pickUpAction.performed += OnPickUpWeapon;
         dropAction.performed += OnDropWeapon;
         // build actions
-        changeBuildAction.started += OnCycleBuildStrcuture;
-        placeBuildAction.started += OnPlaceStructure;
+        changeStructAction.performed += OnCycleBuildStrcuture;
+        placeStructAction.performed += OnPlaceStructure;
         selectStructAction.started += OnSelectStructure;
         rotateStructAction.started += OnEditRotateStarted;
         rotateStructAction.canceled += OnEditRotateCancled;
         // Edit Actions
         moveStructAcion.started += OnEditStructureMoveStarted;
         moveStructAcion.canceled += OnEditMoveStructureCancled;
-        exitEditAction.started += OnExitEditStructure;
+        exitEditAction.performed += OnExitEditStructure;
         destroyStructAction.performed += OnEditDestroy;
         upgradeStructAction.started += OnEditUpgrade;
     }
+    
     // interaction button will be the same button but do different things
-    public void AssignInteraction()
+    public void AssignWeaponPickUp()
+    {
+        interactAction.started += OnPickUpWeapon;
+    }
+    public void RemoveWeaponPickUp()
+    {
+        interactAction.started -= OnPickUpWeapon;
+    }
+    public void AssignButtonPush()
     {
         interactAction.started += OnPushButton;
     }
-    public void RemoveInteraction()
+    public void RemoveButtonPush()
     {
         interactAction.started -= OnPushButton;
     }
-    private void OnDisable()
-    {
-        // remove calls
-        jumpAction.started -= OnJumpCall;
-        sprintAction.started -= OnSprintStarted;
-        sprintAction.canceled -= OnSprintCanceled;
-        aimAction.started -= OnAimSightCall;
-        aimAction.canceled -= OnDefaultSightCall;
-        fireAction.started -= OnFireStarted;
-        fireAction.canceled -= OnFireCanceled;
-        buildModeAction.started -= OnBuildMode;
-        //shoot actions
-        reloadAction.performed -= OnReload;
-        pickUpAction.performed -= OnPickUpWeapon;
-        dropAction.performed -= OnDropWeapon;
-        // build Mode actions
-        changeBuildAction.started -= OnCycleBuildStrcuture;
-        placeBuildAction.started -= OnPlaceStructure;
-        selectStructAction.started -= OnSelectStructure;
-        // edit Actions
-        moveStructAcion.started -= OnEditStructureMoveStarted;
-        moveStructAcion.canceled -= OnEditMoveStructureCancled;
-        exitEditAction.started -= OnExitEditStructure;
-        destroyStructAction.performed -= OnEditDestroy;
-        rotateStructAction.started -= OnEditRotateStarted;
-        rotateStructAction.canceled -= OnEditRotateCancled;
-        upgradeStructAction.started -= OnEditUpgrade;
-        // disable Input map
-        playerInputMap.Disable();
-        shootInputMap.Disable();
-        buildInputMap.Disable();
-        editInputMap.Disable();
-    }
+    // Disabling All Inputs
     public void DisableAllInputs()
     {
         playerInputMap.Disable();
@@ -163,10 +169,13 @@ public class PlayerInputOrganizer : MonoBehaviour
         buildInputMap.Disable();
         editInputMap.Disable();
     }
+    // Setting the player manager
     public void SetManager(PlayerManager manger)
     {
         pMan = manger;
     }
+    
+    #region input Calls
     private void OnAimSightCall(InputAction.CallbackContext context)
     {
         pMan.pCamera.AimSight();
@@ -190,7 +199,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         pMan.pController.SetSprintSpeed(false);
     }
-    // Called when the Fire action is triggered
     private void OnFireStarted(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is ChargeGun)
@@ -263,7 +271,6 @@ public class PlayerInputOrganizer : MonoBehaviour
             fireAction.started += OnFireStarted;
             fireAction.canceled += OnFireCanceled;
 
-            pMan.bGun.DestroySelectedObject();
             pMan.SetBuildMode();
             buildInputMap.Disable();
             editInputMap.Disable();
@@ -275,7 +282,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.CycleSelectedStructure(changeBuildAction.ReadValue<float>()); // Cycle through build able objects
+            buildGun.CycleSelectedStructure(changeStructAction.ReadValue<float>()); // Cycle through build able objects
             pMan.pUI.AmmoDisplay(pMan.currentWeapon);
         }
     }
@@ -291,10 +298,12 @@ public class PlayerInputOrganizer : MonoBehaviour
             if (buildGun.SelectStructure()) // Select a placed object for moving or destroying
             {
                 buildGun.isEditing = true;
+
                 rotateStructAction = editInputMap.FindAction("Rotate");
                 rotateStructAction.started += OnEditRotateStarted;
                 rotateStructAction.canceled += OnEditRotateCancled;
-
+                
+                pMan.pUI.EnablePrompt("RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
                 buildInputMap.Disable();
                 editInputMap.Enable();
             }
@@ -305,10 +314,12 @@ public class PlayerInputOrganizer : MonoBehaviour
         if (pMan.currentWeapon is BuildGun buildGun)
         {
             buildGun.DeSelectStructure();
+            
             rotateStructAction = buildInputMap.FindAction("Rotate");
             rotateStructAction.started += OnEditRotateStarted;
             rotateStructAction.canceled += OnEditRotateCancled;
 
+            pMan.pUI.EnablePrompt("Use Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             editInputMap.Disable();
             buildInputMap.Enable();
         }
@@ -355,14 +366,17 @@ public class PlayerInputOrganizer : MonoBehaviour
     private void OnEditUpgrade(InputAction.CallbackContext context)
     {
         // put upgrade code here
+        pMan.bGun.UpgradeStructure();
     }
     // Weapon Pick up
     private void OnPickUpWeapon(InputAction.CallbackContext context)
     {
+        Debug.Log("Picking up weapon");
         pMan.PickUpWeapon();
     }
     private void OnDropWeapon(InputAction.CallbackContext context)
     {
         pMan.DropWeapon();
     }
+    #endregion
 }
