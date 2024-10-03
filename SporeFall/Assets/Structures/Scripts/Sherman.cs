@@ -41,6 +41,7 @@ public class Sherman : MonoBehaviour
         // Move in the current random direction
         transform.Translate(moveSpeed * Time.deltaTime * randomDirection, Space.World);
 
+
         // Rotate smoothly towards the desired direction
         Quaternion targetRotation = Quaternion.LookRotation(randomDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
