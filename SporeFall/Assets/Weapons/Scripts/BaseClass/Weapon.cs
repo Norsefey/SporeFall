@@ -35,18 +35,22 @@ public abstract class Weapon : MonoBehaviour
     // Fire method to be implemented by subclasses
     public virtual void Fire()
     {
-        if (bulletCount <= 0 || IsReloading) return;
-
-        if (isHitScan)
+        if (bulletCount <= 0 && !IsReloading)
         {
-            FireHitscan(player.pCamera.myCamera);
+            Reload();
         }
         else
         {
-            FireProjectile(firePoint, player.pCamera.myCamera);
+            if (isHitScan)
+            {
+                FireHitscan(player.pCamera.myCamera);
+            }
+            else
+            {
+                FireProjectile(firePoint, player.pCamera.myCamera);
+            }
+            bulletCount--;
         }
-
-        bulletCount--;
     }
     private void FireProjectile(Transform firePoint, Camera playerCamera)
     {

@@ -117,7 +117,7 @@ public class PlayerManager : MonoBehaviour
         nearByWeapon = null;
         pUI.DisablePrompt();
     }
-    public void SetBuildMode()
+    public void ToggleBuildMode()
     {
         if (!isBuilding)
         {// Enter Build mode
@@ -130,14 +130,15 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {// Exit Build Mode
+            if (bGun.isEditing)
+                bGun.DeSelectStructure();
+            else
+                bGun.DestroySelectedObject();
+
             if (equippedWeapon != null)
                 currentWeapon = equippedWeapon;
             else
                 currentWeapon = defaultWeapon;
-            if(bGun.isEditing)
-                bGun.DeSelectStructure();
-            else
-                bGun.DestroySelectedObject();
 
             currentWeapon.gameObject.SetActive(true);
             pUI.AmmoDisplay(currentWeapon);
@@ -233,8 +234,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void OnButtonPush()
     {
-        WaveManager.WavePhase currentPhase = waveManager.wavePhase;
-        switch (currentPhase)
+        switch (waveManager.wavePhase)
         {
             case WaveManager.WavePhase.NotStarted:
                 waveManager.OnStartWave();
@@ -243,6 +243,9 @@ public class PlayerManager : MonoBehaviour
             case WaveManager.WavePhase.Departing:
                 waveManager.SkipDepartTime();
                 pUI.DisablePrompt();
+                break;
+            default:
+                Debug.Log("No Action");
                 break;
         }
     }

@@ -166,6 +166,7 @@ public class WaveManager : MonoBehaviour
     {
         // since we are skipping, we no longer need to invoke, prevents repeat
         CancelInvoke(nameof(Depart));
+        player.RemoveButtonAction();
         Depart();
     }
     public void OnStartWave()

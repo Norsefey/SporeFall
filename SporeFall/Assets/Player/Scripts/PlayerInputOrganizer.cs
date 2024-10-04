@@ -140,19 +140,19 @@ public class PlayerInputOrganizer : MonoBehaviour
     // interaction button will be the same button but do different things
     public void AssignWeaponPickUp()
     {
-        interactAction.started += OnPickUpWeapon;
+        interactAction.performed += OnPickUpWeapon;
     }
     public void RemoveWeaponPickUp()
     {
-        interactAction.started -= OnPickUpWeapon;
+        interactAction.performed -= OnPickUpWeapon;
     }
     public void AssignButtonPush()
     {
-        interactAction.started += OnPushButton;
+        interactAction.performed += OnPushButton;
     }
     public void RemoveButtonPush()
     {
-        interactAction.started -= OnPushButton;
+        interactAction.performed -= OnPushButton;
     }
     // Disabling All Inputs
     public void DisableAllInputs()
@@ -250,7 +250,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         if (!pMan.isBuilding)
         {
             Debug.Log(message: "Enabling Build Mode");
-
+            // if player is holding fire, prevent press from carrying over
+            fireAction.Disable();
             //Change build Actions
             fireAction = buildInputMap.FindAction("Preview");
             
@@ -258,23 +259,30 @@ public class PlayerInputOrganizer : MonoBehaviour
             fireAction.started += OnFireStarted;
             fireAction.canceled += OnFireCanceled;
             
-            pMan.SetBuildMode();
+            pMan.ToggleBuildMode();
             shootInputMap.Disable();
             editInputMap.Disable();
             buildInputMap.Enable();
+            // After Build map is enabled re enable fire action
+            fireAction.Enable();
         }
         else
         {
-            Debug.Log(message: "Disable Build Mode");
+            // if player is holding fire, prevent press from carrying over
+            // Fixes auto shoot bug
+            fireAction.Disable();
+
             fireAction = shootInputMap.FindAction("Fire");
             // Assign build mode actions
             fireAction.started += OnFireStarted;
             fireAction.canceled += OnFireCanceled;
 
-            pMan.SetBuildMode();
-            buildInputMap.Disable();
+            pMan.ToggleBuildMode();
             editInputMap.Disable();
+            buildInputMap.Disable();
             shootInputMap.Enable();
+            // After Shoot map is enabled re enable fire action
+            fireAction.Enable();
         }
 
     }
