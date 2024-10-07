@@ -19,14 +19,14 @@ public abstract class Weapon : MonoBehaviour
     public float damage;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
     public float reloadTime = 2f; // Time it takes to reload
-    public float projectileDistance = 50;
-    public float hitScanDistance = 100;
+
     [Header("Ammo Variables")]
     public int bulletCount;
     public int bulletCapacity;
     public int totalAmmo;
     public bool limitedAmmo = false;
     public bool isHitScan; // Whether the weapon is hitscan or projectile based
+    public float bulletDistance = 50;
     private bool isReloading;
     // in order to have a private variable public to other scripts, and not be editable in editor we use Get property
     // since this is a Get variable it is capitalized
@@ -60,7 +60,7 @@ public abstract class Weapon : MonoBehaviour
         // Instantiate the projectile and shoot it in the spread direction
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        rb.velocity = shootDirection * projectileDistance; // Adjust projectile speed as needed
+        rb.velocity = shootDirection * bulletDistance; // Adjust projectile speed as needed
         if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
         {
             Debug.Log("Only Rotating Gun");
@@ -89,7 +89,7 @@ public abstract class Weapon : MonoBehaviour
         }
         Ray ray = new(playerCamera.transform.position, shootDirection);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
+        if (Physics.Raycast(ray, out RaycastHit hit, bulletDistance, hitLayers)) // Range of the hitscan weapon
         {
             Debug.Log(weaponName + " hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));

@@ -26,7 +26,7 @@ public class PlayerManager : MonoBehaviour
     public bool isCharging = false;
     public bool isBuilding = false;
     public bool isRotating = false;
-
+    [Header("Player Stats")]
     // Player Stats
     public int lives = 3;
     public float HP = 100;
@@ -130,20 +130,29 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {// Exit Build Mode
+
             if (bGun.isEditing)
+            {
                 bGun.DeSelectStructure();
+                Debug.Log("Exiting Edit Mode");
+            }
             else
+            {
+                Debug.Log("Exiting Build Mode");
+
                 bGun.DestroySelectedObject();
+            }
 
             if (equippedWeapon != null)
                 currentWeapon = equippedWeapon;
             else
                 currentWeapon = defaultWeapon;
 
+            bGun.gameObject.SetActive(false);
             currentWeapon.gameObject.SetActive(true);
             pUI.AmmoDisplay(currentWeapon);
             pUI.DisablePrompt();
-            bGun.gameObject.SetActive(false);
+            isFiring = false;
             isBuilding = false;
         }
     }

@@ -154,6 +154,9 @@ public class BuildGun : Weapon
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer))
         {
+            if(selectedStructure != null)
+                Destroy(selectedStructure.gameObject); // Destroy the current preview
+
             selectedStructure = hit.collider.gameObject.GetComponent<Structure>(); // Select the hit object
             SetStructureToTransparent(selectedStructure.gameObject);
             Debug.Log("Structure selected: " + selectedStructure.name);
@@ -169,6 +172,7 @@ public class BuildGun : Weapon
     public void DeSelectStructure()
     {
         SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
+        // Enable Behavior
         selectedStructure.ToggleStructure(true);
         selectedStructure = null;
         isEditing = false;

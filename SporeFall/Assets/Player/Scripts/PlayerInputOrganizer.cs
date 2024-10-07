@@ -223,7 +223,7 @@ public class PlayerInputOrganizer : MonoBehaviour
                 ((BurstGun)pMan.currentWeapon).OnFireReleased(); // Call the release method on the burst weapon
                 break;
             case BuildGun:
-                ((BuildGun)pMan.currentWeapon).OnFireReleased(); // Call the release method on the burst weapon
+                ((BuildGun)pMan.currentWeapon).OnFireReleased(); // Call the release method on the Build weapon
                 break;
             default:
                 break;
@@ -278,6 +278,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             fireAction.canceled += OnFireCanceled;
 
             pMan.ToggleBuildMode();
+
             editInputMap.Disable();
             buildInputMap.Disable();
             shootInputMap.Enable();
