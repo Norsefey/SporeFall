@@ -35,7 +35,7 @@ public class FlameThrower : MonoBehaviour
             if (enemy.CompareTag(enemyTag))
             {
                 // Assuming the enemy has a script with a method to take damage
-                enemy.GetComponent<Sherman>()?.TakeDamage(damagePerSecond * tickRate);
+                enemy.GetComponent<EnemyControls>()?.TakeDamage(damagePerSecond * tickRate);
                 Debug.Log("hit");
             }
         }

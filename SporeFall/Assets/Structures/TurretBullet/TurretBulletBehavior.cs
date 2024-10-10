@@ -19,7 +19,7 @@ public class TurretBulletBehavior : MonoBehaviour
         if (collision.gameObject.CompareTag(enemyTag))
         {
             // Try to get the EnemyHealth script on the object and deal damage
-            Sherman hp = collision.gameObject.GetComponent<Sherman>();
+            EnemyControls hp = collision.gameObject.GetComponent<EnemyControls>();
             if (hp != null)
             {
                 hp.TakeDamage(dmg);  // Apply 8 damage to the enemy

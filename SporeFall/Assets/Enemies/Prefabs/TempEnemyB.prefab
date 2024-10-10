@@ -111,9 +111,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6723776635264665680}
-  - component: {fileID: 4896559248594139914}
   - component: {fileID: 3048219100869306638}
   - component: {fileID: -8288846393660587419}
+  - component: {fileID: 8650767125033728071}
   m_Layer: 8
   m_Name: TempEnemyB
   m_TagString: Enemy
@@ -138,23 +138,6 @@ Transform:
   - {fileID: 3953593364880735137}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4896559248594139914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1657974298613798786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a2ec9eb5ef0d95408d0329c7cb9ff69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  turnSpeed: 1
-  changeDirectionInterval: 2
-  hp: 100
-  hpDisplay: {fileID: 8293907463534621136}
 --- !u!65 &3048219100869306638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -203,6 +186,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &8650767125033728071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657974298613798786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a2ec9eb5ef0d95408d0329c7cb9ff69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  turnSpeed: 1
+  changeDirectionInterval: 2
+  hp: 10
+  hpDisplay: {fileID: 0}
 --- !u!1 &9030144842525589066
 GameObject:
   m_ObjectHideFlags: 0
