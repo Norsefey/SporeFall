@@ -14,6 +14,7 @@ public class PlayerHP : MonoBehaviour
     void Start()
     {
         currentHP = maxHP;
+        pMan.pUI.HPBar.maxValue = maxHP;
     }
 
     public void TakeDamage(float damageAmount)
@@ -31,7 +32,6 @@ public class PlayerHP : MonoBehaviour
             else
             {
                StartCoroutine(pMan.Respawn());
-
             }
         }
     }
@@ -44,7 +44,10 @@ public class PlayerHP : MonoBehaviour
 
         pMan.pUI.UpdateHPDisplay(currentHP);
     }
-
+    public void DepleteLife()
+    {
+        lives--;
+    }
     public void SetManager(PlayerManager player)
     {
         pMan = player;

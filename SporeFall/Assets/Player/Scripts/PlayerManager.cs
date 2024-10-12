@@ -196,16 +196,6 @@ public class PlayerManager : MonoBehaviour
         pUI.AmmoDisplay(currentWeapon);
         holdingCorruption = false;
     }
-/*    public void DisableControl()
-    {
-        pController.gameObject.SetActive(false);
-        pInput.DisableAllInputs();
-    }
-    public void EnableControl()
-    {
-        pController.gameObject.SetActive(true);
-        pInput.EnableDefaultInputs();
-    }*/
     public void TogglePControl(bool toggle)
     {
         pController.gameObject.SetActive(toggle);
@@ -226,7 +216,6 @@ public class PlayerManager : MonoBehaviour
     {
         pController.transform.localPosition = position;
     }
-
     public void AssignButtonAction()
     {
         pInput.AssignButtonPush();
@@ -268,6 +257,11 @@ public class PlayerManager : MonoBehaviour
     public IEnumerator Respawn()
     {
         TogglePControl(false);
+        DropWeapon();
+        if (isBuilding)
+        {
+            ToggleBuildMode();
+        }
 
         yield return new WaitForSeconds(respawnTime);
        

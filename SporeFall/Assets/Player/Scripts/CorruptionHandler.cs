@@ -4,20 +4,26 @@ using UnityEngine;
 
 public class CorruptionHandler : MonoBehaviour
 {
-    PlayerManager pMan;
-
+    private PlayerManager pMan;
+    [SerializeField] private GameObject corruptedRobot;
     [Header("Corruption Variables")]
+    public float maxCorruption = 10;
     public float corruptionLevel = 0;
     public float purifyRate = 1;
     // Start is called before the first frame update
     void Start()
     {
-        
+        pMan.pUI.corruptionBar.maxValue = maxCorruption;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(corruptionLevel >= maxCorruption)
+        {
+            CorruptPlayer();
+        }
+
         if (pMan.holdingCorruption)
         {
             corruptionLevel += pMan.currentWeapon.corruptionRate * Time.deltaTime;
@@ -29,9 +35,18 @@ public class CorruptionHandler : MonoBehaviour
             pMan.pUI.DisplayCorruption(corruptionLevel);
         }
     }
-
     public void SetManager(PlayerManager player)
     {
         pMan = player;
+    }
+    private void CorruptPlayer()
+    {
+        corruptionLevel = 0;
+        pMan.pUI.DisplayCorruption(corruptionLevel);
+        // Spawn a corrupted Player
+        Instantiate(corruptedRobot, pMan.pController.transform.position, Quaternion.identity);
+        // player loses life and respawns
+        pMan.pHP.DepleteLife();
+        StartCoroutine(pMan.Respawn());
     }
 }

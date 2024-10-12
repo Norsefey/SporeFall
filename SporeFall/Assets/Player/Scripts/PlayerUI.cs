@@ -9,8 +9,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TMP_Text ammoIndicator;
     [SerializeField] protected GameObject promptHolder;
     [SerializeField] private TMP_Text textPrompt;
-    [SerializeField] private Slider corruptionBar;
-    [SerializeField] private Slider HPBar;
+    public Slider corruptionBar;
+    public Slider HPBar;
     public void DisplayCorruption(float value)
     {
         if (corruptionBar != null)
