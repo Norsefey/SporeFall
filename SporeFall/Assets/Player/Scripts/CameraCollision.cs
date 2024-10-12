@@ -5,18 +5,18 @@ using UnityEngine;
 public class CameraCollision : MonoBehaviour
 {
     public delegate void OnCameraCollision();
-    public event OnCameraCollision onEnterCollision;
-    public event OnCameraCollision onExitCollision;
+    public event OnCameraCollision OnEnterCollision;
+    public event OnCameraCollision OnExitCollision;
 
     private void OnTriggerEnter(Collider other)
     {
-        onEnterCollision?.Invoke();
+        OnEnterCollision?.Invoke();
     }
 
     private void OnTriggerExit(Collider other)
     {
         //GetComponent<Rigidbody>().velocity = Vector3.zero;
 
-        onExitCollision?.Invoke();
+        OnExitCollision?.Invoke();
     }
 }

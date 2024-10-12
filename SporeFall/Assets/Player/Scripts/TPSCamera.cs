@@ -23,6 +23,7 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] float maxVertRot = 45;
     [SerializeField] private bool invertVertRot = false;
     [SerializeField] private bool invertHorRot = false;
+    [SerializeField] protected bool Lefthand = false;
     [SerializeField] private LayerMask obstructions;
 
     [Header("Camera Offsets")]
@@ -94,13 +95,13 @@ public class TPSCamera : MonoBehaviour
     }
     private void AssignCollisionDetection()
     {
-        camCollision.onEnterCollision += CollisionAdjustCamera;
-        camCollision.onExitCollision += CollisionDefaultPosition;
+        camCollision.OnEnterCollision += CollisionAdjustCamera;
+        camCollision.OnExitCollision += CollisionDefaultPosition;
     }
     private void RemoveCollisionDetection()
     {
-        camCollision.onEnterCollision -= CollisionAdjustCamera;
-        camCollision.onExitCollision -= CollisionDefaultPosition;
+        camCollision.OnEnterCollision -= CollisionAdjustCamera;
+        camCollision.OnExitCollision -= CollisionDefaultPosition;
     }
     public void AimSight()
     {
@@ -132,6 +133,16 @@ public class TPSCamera : MonoBehaviour
     {
         horSense = gHorSense;
         verSense = gvertSense;
+    }
+    public void FlipCameraSide()
+    {
+        Lefthand = !Lefthand;
+        
+        defaultOffset.x *= -1;
+        aimOffset.x *= -1;
+        buildOffset.x *= -1;
+
+        DefaultSight();
     }
    /* private void OnDrawGizmosSelected()
     {

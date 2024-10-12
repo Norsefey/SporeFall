@@ -136,18 +136,7 @@ public class PlayerMovement : MonoBehaviour
                 vertSpeed = terminalVelocity;
             }
 
-            /*if (cc.isGrounded)
-            {
-                // for sliding on ramps
-                if (Vector3.Dot(movement, contact.normal) < 0)
-                {
-                    movement = contact.normal * moveSpeed;
-                }
-                else
-                {
-                    movement += contact.normal * moveSpeed;
-                }
-            }*/
+
         }
     }
     private bool IsGrounded()
@@ -202,6 +191,8 @@ public class PlayerMovement : MonoBehaviour
     public void SetAimState()
     {// called by TPS Camera to switch to aim state
         currentState = PlayerState.Aiming;
+        if (moveSpeed == sprintSpeed)
+            moveSpeed = walkSpeed;
     }
     public void SetDefaultState()
     {// called by TPS Camera to switch to Default state
@@ -213,13 +204,9 @@ public class PlayerMovement : MonoBehaviour
     }
     public void SetSprintSpeed(bool isSprinting)
     {
-        if (isSprinting)
+        if (isSprinting && currentState != PlayerState.Aiming)
             moveSpeed = sprintSpeed;
         else
             moveSpeed = walkSpeed;
     }
-  /*  private void OnControllerColliderHit(ControllerColliderHit hit)
-    {// detects contact with ground
-        contact = hit;
-    }*/
 }

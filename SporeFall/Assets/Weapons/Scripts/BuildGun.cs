@@ -9,8 +9,10 @@ public class BuildGun : Weapon
     public LayerMask structureLayer; // LayerMask for detecting objects the player can select
     private int currentBuildIndex = 0; // Current selected object to build
     private Structure selectedStructure; // The currently selected placed object (for moving or deleting)
-    public bool isEditing = false;
     public float structRotSpeed = 25;
+
+    public bool isEditing = false;
+    private bool movingStructure = false;
     // structures
     public int maxStructures = 10;
     private int currentStructures = 0;
@@ -18,6 +20,8 @@ public class BuildGun : Weapon
     {
         // Called when player presses fire button
         PreviewStructure();
+        if (isEditing)
+            movingStructure = true;
     }
     public void OnFireReleased()
     {
@@ -25,6 +29,10 @@ public class BuildGun : Weapon
         {
             // Called when player releases the fire button
             Destroy(selectedStructure.gameObject); // Destroy the current preview
+        }
+        else
+        {
+            movingStructure = false;
         }
     }
     private void PreviewStructure()
@@ -34,7 +42,6 @@ public class BuildGun : Weapon
         // Check if we hit the ground layer
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, groundLayer))
         {
-
             // Create or move the preview object to the hit point on the ground
             if (!isEditing && selectedStructure == null)
             {
@@ -43,7 +50,7 @@ public class BuildGun : Weapon
                 selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
                 SetStructureToTransparent(selectedStructure.gameObject); // Make the object transparent to show it's a preview
             }
-            else
+            else if(selectedStructure != null)
             {
                 selectedStructure.transform.position = hit.point; // Update position of preview
                 RotateStructure();
@@ -72,6 +79,9 @@ public class BuildGun : Weapon
                 selectedStructure.transform.SetParent(player.train.structureHolder, true);
             currentStructures++;
             selectedStructure = null; // Clear the selected object
+
+            player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+
         }
     }
     public void CycleSelectedStructure(float indexIncrement)
@@ -146,16 +156,25 @@ public class BuildGun : Weapon
             }
         }
     }
+
+    // Edit Mode Functions
+    public void EnterEditMode()
+    {
+        isEditing = true;
+    }
+    public void ExitEditMode()
+    {
+        DeselectStructure();
+        player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+        isEditing = false;
+    }
     public bool SelectStructure()
     {
         // Use raycast to detect if the player is looking at a placed object to select it for moving or destroying
         Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer) && !movingStructure)
         {
-            if(selectedStructure != null)
-                Destroy(selectedStructure.gameObject); // Destroy the current preview
-
             selectedStructure = hit.collider.gameObject.GetComponent<Structure>(); // Select the hit object
             SetStructureToTransparent(selectedStructure.gameObject);
             Debug.Log("Structure selected: " + selectedStructure.name);
@@ -163,18 +182,27 @@ public class BuildGun : Weapon
             selectedStructure.ToggleStructureController(false);
             return true;
         }
-        else
+        else if(movingStructure)
         {
             return false;
         }
+        else
+        {
+            Debug.Log("No Structure");
+            DeselectStructure();
+            player.pUI.EnablePrompt("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
+            return false;
+        }
     }
-    public void DeSelectStructure()
+    protected void DeselectStructure()
     {
-        SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
-        // Enable Behavior
-        selectedStructure.ToggleStructureController(true);
-        selectedStructure = null;
-        isEditing = false;
+        if (selectedStructure != null && !movingStructure)
+        {
+            SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
+            selectedStructure.ToggleStructureController(true);// Enable Behavior
+            selectedStructure = null;
+            player.pUI.DisablePrompt();
+        }
     }
     public void DestroySelectedObject()
     {

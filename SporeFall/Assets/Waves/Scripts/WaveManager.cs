@@ -184,7 +184,10 @@ public class WaveManager : MonoBehaviour
     private IEnumerator MoveToWaveLocation(float waitTime)
     {
         // switch to train camera
-        player.DisableControl();
+        player.TogglePControl(false);
+        player.TogglePCamera(false);
+        player.TogglePVisual(false);
+        player.MovePlayerTo(Vector3.zero);
         train.SetFiringState();
         // Destroy pod will spawn in an explosion so made it into Coroutine
         if (waitTime > 0)
@@ -216,7 +219,9 @@ public class WaveManager : MonoBehaviour
         // Ensuring the final position is set precisely after the movement
         train.transform.position = targetPosition;
         train.SetParkedState();
-        player.EnableControl();
+        player.TogglePControl(true);
+        player.TogglePVisual(true);
+        player.TogglePCamera(true);
         wavePhase = WavePhase.NotStarted;
     }
     private void SpawnExplosion(Vector3 pos)

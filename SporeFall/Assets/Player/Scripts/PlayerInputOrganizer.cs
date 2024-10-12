@@ -23,6 +23,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction interactAction;
     private InputAction exitGame;
     private InputAction toggleFullscreen;
+    private InputAction flipCameraSide;
     // Shoot Actions
     private InputAction fireAction;
     private InputAction reloadAction;
@@ -31,7 +32,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction buildModeAction;
     private InputAction changeStructAction;
     private InputAction placeStructAction;
-    private InputAction selectStructAction;
+    private InputAction enterEditMode;
     // Edit Actions
     public  InputAction rotateStructAction;
     private InputAction moveStructAcion;
@@ -60,6 +61,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         interactAction = playerInputMap.FindAction("Interact");
         exitGame = playerInputMap.FindAction("ExitGame");
         toggleFullscreen = playerInputMap.FindAction("ToggleFullscreen");
+        flipCameraSide = playerInputMap.FindAction("FlipCamera");
         // shoot action map
         reloadAction = shootInputMap.FindAction("Reload");
         dropAction = shootInputMap.FindAction("Drop");
@@ -67,8 +69,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         // build Action Maps
         changeStructAction = buildInputMap.FindAction("Change");
         placeStructAction = buildInputMap.FindAction("Place");
-        selectStructAction = buildInputMap.FindAction("Select");
         rotateStructAction = buildInputMap.FindAction("Rotate");
+        enterEditMode = buildInputMap.FindAction("Edit");
         // Edit Action Maps
         moveStructAcion = editInputMap.FindAction("Move");
         destroyStructAction = editInputMap.FindAction("Destroy");
@@ -95,19 +97,20 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame.started += ReleaseCursor;
         exitGame.performed += ExitGame;
         toggleFullscreen.performed += ToggleFullscreen;
+        flipCameraSide.performed += OnFlipCamera;
         // shoot actions
         reloadAction.performed += OnReload;
         dropAction.performed += OnDropWeapon;
         // build actions
         changeStructAction.performed += OnCycleBuildStrcuture;
         placeStructAction.performed += OnPlaceStructure;
-        selectStructAction.started += OnSelectStructure;
+        enterEditMode.started += OnEnterEditMode;
         rotateStructAction.started += OnEditRotateStarted;
         rotateStructAction.canceled += OnEditRotateCancled;
         // Edit Actions
         moveStructAcion.started += OnEditStructureMoveStarted;
         moveStructAcion.canceled += OnEditMoveStructureCancled;
-        exitEditAction.performed += OnExitEditStructure;
+        exitEditAction.performed += OnExitEditMode;
         destroyStructAction.performed += OnEditDestroy;
         upgradeStructAction.started += OnEditUpgrade;
     }
@@ -125,17 +128,18 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame.started -= ReleaseCursor;
         exitGame.performed -= ExitGame;
         toggleFullscreen.performed -= ToggleFullscreen;
+        flipCameraSide.performed -= OnFlipCamera;
         //shoot actions
         reloadAction.performed -= OnReload;
         dropAction.performed -= OnDropWeapon;
         // build Mode actions
         changeStructAction.performed -= OnCycleBuildStrcuture;
         placeStructAction.performed -= OnPlaceStructure;
-        selectStructAction.started -= OnSelectStructure;
+        enterEditMode.started -= OnEnterEditMode;
         // edit Actions
         moveStructAcion.started -= OnEditStructureMoveStarted;
         moveStructAcion.canceled -= OnEditMoveStructureCancled;
-        exitEditAction.performed -= OnExitEditStructure;
+        exitEditAction.performed -= OnExitEditMode;
         destroyStructAction.performed -= OnEditDestroy;
         rotateStructAction.started -= OnEditRotateStarted;
         rotateStructAction.canceled -= OnEditRotateCancled;
@@ -286,6 +290,10 @@ public class PlayerInputOrganizer : MonoBehaviour
             pMan.currentWeapon.Reload();
         }
     }
+    private void OnFlipCamera(InputAction.CallbackContext context)
+    {
+        pMan.pCamera.FlipCameraSide();
+    }
     // Interaction
     private void OnPushButton(InputAction.CallbackContext context)
     {
@@ -296,7 +304,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         if (!pMan.isBuilding)
         {
-            Debug.Log(message: "Enabling Build Mode");
             // if player is holding fire, prevent press from carrying over
             fireAction.Disable();
             //Change build Actions
@@ -307,6 +314,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             fireAction.canceled += OnFireCanceled;
             
             pMan.ToggleBuildMode();
+
             shootInputMap.Disable();
             editInputMap.Disable();
             buildInputMap.Enable();
@@ -347,35 +355,33 @@ public class PlayerInputOrganizer : MonoBehaviour
         pMan.bGun.PlaceStructure();
     }
     // Editing a Structure
-    private void OnSelectStructure(InputAction.CallbackContext context)
+    private void OnEnterEditMode(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            if (buildGun.SelectStructure()) // Select a placed object for moving or destroying
-            {
-                buildGun.isEditing = true;
 
-                rotateStructAction = editInputMap.FindAction("Rotate");
-                rotateStructAction.started += OnEditRotateStarted;
-                rotateStructAction.canceled += OnEditRotateCancled;
-                
-                pMan.pUI.EnablePrompt("RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
-                buildInputMap.Disable();
-                editInputMap.Enable();
-            }
+            buildGun.EnterEditMode();
+
+            rotateStructAction = editInputMap.FindAction("Rotate");
+            rotateStructAction.started += OnEditRotateStarted;
+            rotateStructAction.canceled += OnEditRotateCancled;
+
+            pMan.pUI.EnablePrompt("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
+            buildInputMap.Disable();
+            editInputMap.Enable();
         }
     }
-    private void OnExitEditStructure(InputAction.CallbackContext context)
+    private void OnExitEditMode(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.DeSelectStructure();
+            buildGun.ExitEditMode();
             
             rotateStructAction = buildInputMap.FindAction("Rotate");
             rotateStructAction.started += OnEditRotateStarted;
             rotateStructAction.canceled += OnEditRotateCancled;
 
-            pMan.pUI.EnablePrompt("Use Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+            pMan.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             editInputMap.Disable();
             buildInputMap.Enable();
         }
@@ -395,7 +401,6 @@ public class PlayerInputOrganizer : MonoBehaviour
         {
             buildGun.OnFireReleased();
             pMan.isFiring = false;
-            buildGun.isEditing = false;
         }
     }
     private void OnEditDestroy(InputAction.CallbackContext context)

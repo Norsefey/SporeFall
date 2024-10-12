@@ -9,10 +9,12 @@ public class PlayerManager : MonoBehaviour
     [Header("References")]
     public PlayerMovement pController;
     public PlayerInputOrganizer pInput;
+    public PlayerHP pHP;
     public TPSCamera pCamera;
     public PlayerUI pUI;
     public GameObject pVisual;
     public BuildGun bGun;
+    public CorruptionHandler pCorruption;
     public TrainHandler train;
     public WaveManager waveManager;
     [Header("Weapons")]
@@ -26,28 +28,27 @@ public class PlayerManager : MonoBehaviour
     public bool isCharging = false;
     public bool isBuilding = false;
     public bool isRotating = false;
-    [Header("Player Stats")]
+    [Header("Currency")]
     // Player Stats
-    public int lives = 3;
-    public float HP = 100;
     public float mycelia = 30;
-    [Header("Corruption Stuff")]
-    public float corruptionLevel = 0;
-    public float purifyRate = 1;
-    private bool holdingCorrupted = false;
+ 
+    [Header("Respawn")]
+    [SerializeField] private Transform respawnPoint;
+    [SerializeField] private float respawnTime;
 
+    public bool holdingCorruption = false;
     public InputDevice myDevice;
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
         // since we will have multiple players, this manager cannot be a public instance, so we assign it locally
+        pInput.SetManager(this);
         pController.SetManager(this);
         pCamera.SetManager(this);
-        pInput.SetManager(this);
-
+        pCorruption.SetManager(this);
+        pHP.SetManager(this);
         PlayerInput playerInput = GetComponent<PlayerInput>();
-
-        if(playerInput.devices.Count > 0)
+        if (playerInput.devices.Count > 0)
         {
             var device = playerInput.devices[0];
             myDevice = device;
@@ -77,43 +78,35 @@ public class PlayerManager : MonoBehaviour
     {
         if (currentWeapon != null)
         {
-            if (holdingCorrupted)
-            {
-                corruptionLevel += currentWeapon.corruptionRate * Time.deltaTime;
-                pUI.DisplayCorruption(corruptionLevel);
-            }else if(corruptionLevel > 0)
-            {
-                corruptionLevel -= Time.deltaTime * purifyRate;
-                pUI.DisplayCorruption(corruptionLevel);
-            }
-
             if (currentWeapon is BuildGun bGun)
             {
                 pUI.DisplayMycelia(mycelia);
                 if (bGun.isEditing)
                 {
-                    bGun.RotateStructure();
+                    if (bGun.SelectStructure())
+                        bGun.RotateStructure();
                 }
             }
-           
+
             if (isFiring && !currentWeapon.IsReloading && currentWeapon is not ChargeGun)
             {
                 currentWeapon.Fire();
                 pUI.AmmoDisplay(currentWeapon);
-            }else if (isCharging && (currentWeapon is ChargeGun gun))
+            }
+            else if (isCharging && (currentWeapon is ChargeGun gun))
             {
                 // Charge weapons handle firing when the fire button is held
                 gun.Charge();
             }
         }
-    } 
+    }
     public void PromptPickUpWeapon(GameObject weapon)
     {
         pInput.AssignWeaponPickUp();
         nearByWeapon = weapon;
         pUI.EnablePrompt("Press F to Pick up: " + weapon.name);
     }
-    public void DisablePickUpWeaponPrompt() 
+    public void DisablePickUpWeaponPrompt()
     {
         pInput.RemoveWeaponPickUp();
         nearByWeapon = null;
@@ -126,7 +119,7 @@ public class PlayerManager : MonoBehaviour
             currentWeapon.gameObject.SetActive(false);
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
-            pUI.EnablePrompt("Use Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+            pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             pUI.AmmoDisplay(currentWeapon);
             isBuilding = true;
         }
@@ -135,13 +128,10 @@ public class PlayerManager : MonoBehaviour
 
             if (bGun.isEditing)
             {
-                bGun.DeSelectStructure();
-                Debug.Log("Exiting Edit Mode");
+                bGun.ExitEditMode();
             }
             else
             {
-                Debug.Log("Exiting Build Mode");
-
                 bGun.DestroySelectedObject();
             }
 
@@ -166,7 +156,8 @@ public class PlayerManager : MonoBehaviour
         if (currentWeapon == defaultWeapon || currentWeapon == bGun)
         {
             currentWeapon.gameObject.SetActive(false);
-        }else if(equippedWeapon != null)
+        }
+        else if (equippedWeapon != null)
         {
             Destroy(currentWeapon.gameObject); // Drop the current weapon
         }
@@ -185,12 +176,12 @@ public class PlayerManager : MonoBehaviour
         pUI.AmmoDisplay(currentWeapon);
         Debug.Log("Picked up: " + currentWeapon.weaponName);
 
-        if(currentWeapon.isCorrupted)
-            holdingCorrupted = true;
+        if (currentWeapon.isCorrupted)
+            holdingCorruption = true;
     }
     public void DropWeapon()
     {
-        if(equippedWeapon == null || currentWeapon == bGun)
+        if (equippedWeapon == null || currentWeapon == bGun)
             return;
         Debug.Log("Dropping Weapon");
         if (currentWeapon != null)
@@ -203,25 +194,39 @@ public class PlayerManager : MonoBehaviour
         // reactivate the default weapon
         currentWeapon.gameObject.SetActive(true);
         pUI.AmmoDisplay(currentWeapon);
-        holdingCorrupted = false;
+        holdingCorruption = false;
     }
-    public void DisableControl()
+/*    public void DisableControl()
     {
-        pVisual.SetActive(false);
         pController.gameObject.SetActive(false);
-        pCamera.gameObject.SetActive(false);
-        pController.transform.localPosition = Vector3.zero;
-
         pInput.DisableAllInputs();
     }
     public void EnableControl()
     {
-        pVisual.SetActive(true);
         pController.gameObject.SetActive(true);
-        pCamera.gameObject.SetActive(true);
-
         pInput.EnableDefaultInputs();
+    }*/
+    public void TogglePControl(bool toggle)
+    {
+        pController.gameObject.SetActive(toggle);
+        if(toggle)
+            pInput.EnableDefaultInputs();
+        else
+            pInput.DisableAllInputs();
     }
+    public void TogglePCamera(bool toggle)
+    {
+        pCamera.gameObject.SetActive(toggle);
+    }
+    public void TogglePVisual(bool toggle)
+    {
+        pVisual.SetActive(toggle);
+    }
+    public void MovePlayerTo(Vector3 position)
+    {
+        pController.transform.localPosition = position;
+    }
+
     public void AssignButtonAction()
     {
         pInput.AssignButtonPush();
@@ -259,5 +264,20 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("No Action");
                 break;
         }
+    }
+    public IEnumerator Respawn()
+    {
+        TogglePControl(false);
+
+        yield return new WaitForSeconds(respawnTime);
+       
+        MovePlayerTo(respawnPoint.position);
+        pHP.RestoreHP(pHP.maxHP);
+        TogglePControl(true);
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("You lose");
     }
 }

@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text ammoIndicator;
-    [SerializeField] private TMP_Text pickUpPrompt;
+    [SerializeField] protected GameObject promptHolder;
+    [SerializeField] private TMP_Text textPrompt;
     [SerializeField] private Slider corruptionBar;
     [SerializeField] private Slider HPBar;
     public void DisplayCorruption(float value)
@@ -28,17 +29,21 @@ public class PlayerUI : MonoBehaviour
         else
             ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
     }
+    public void UpdateHPDisplay(float value)
+    {
+        HPBar.value = value;
+    }
     public void DisplayMycelia(float value)
     {
         ammoIndicator.text = "Mycelia: " + value.ToString();
     }
     public void EnablePrompt(string text)
     {
-        pickUpPrompt.gameObject.SetActive(true);
-        pickUpPrompt.text = text;
+        promptHolder.gameObject.SetActive(true);
+        textPrompt.text = text;
     }
     public void DisablePrompt()
     {
-        pickUpPrompt.gameObject.SetActive(false);
+        promptHolder.gameObject.SetActive(false);
     }
 }

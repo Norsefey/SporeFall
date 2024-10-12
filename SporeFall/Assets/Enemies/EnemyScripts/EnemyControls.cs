@@ -89,6 +89,7 @@ public class EnemyControls : MonoBehaviour
 
         foreach (string tag in targetTags)
         {
+         
             GameObject[] potentialTargets = GameObject.FindGameObjectsWithTag(tag);
 
             foreach (GameObject potentialTarget in potentialTargets)
@@ -112,6 +113,10 @@ public class EnemyControls : MonoBehaviour
     {
         if (Time.time >= lastAttackTime + attackCooldown)
         {
+            // no matter the script this tries to call a method on that script, if it doesn't have it does nothing
+            // added to test player taking damage
+            target.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
+
             // Check if the target has a Damageable component
             var targetDamageable = target.GetComponent<StructureHealth>();
 

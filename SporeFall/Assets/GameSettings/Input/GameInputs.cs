@@ -116,6 +116,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FlipCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""dc1c9841-c252-4128-9548-1503c04dffa4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -382,6 +391,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""ToggleFullscreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e5b244b1-601e-4ff5-886e-b0fe55cda555"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""FlipCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -518,15 +538,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Select"",
-                    ""type"": ""Button"",
-                    ""id"": ""9cd2af1f-6ebd-4f03-8e32-9e329517cc57"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Change"",
                     ""type"": ""Value"",
                     ""id"": ""215baeba-c78d-4e4f-b130-8c54d92a93c8"",
@@ -534,6 +545,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Edit"",
+                    ""type"": ""Button"",
+                    ""id"": ""9cd2af1f-6ebd-4f03-8e32-9e329517cc57"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -649,28 +669,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""99210a67-7da3-4fd9-913a-83776d42f97b"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""52d51ce4-f211-42b3-9eb2-cd638f171f89"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Select"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""c2f8a49e-86a8-421d-b743-a89f37dc49b8"",
                     ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
@@ -688,6 +686,28 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""99210a67-7da3-4fd9-913a-83776d42f97b"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Edit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""52d51ce4-f211-42b3-9eb2-cd638f171f89"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Edit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -899,6 +919,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_ExitGame = m_Player.FindAction("ExitGame", throwIfNotFound: true);
         m_Player_ToggleFullscreen = m_Player.FindAction("ToggleFullscreen", throwIfNotFound: true);
+        m_Player_FlipCamera = m_Player.FindAction("FlipCamera", throwIfNotFound: true);
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
         m_Shoot_Reload = m_Shoot.FindAction("Reload", throwIfNotFound: true);
@@ -909,8 +930,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Build_Preview = m_Build.FindAction("Preview", throwIfNotFound: true);
         m_Build_Rotate = m_Build.FindAction("Rotate", throwIfNotFound: true);
         m_Build_Place = m_Build.FindAction("Place", throwIfNotFound: true);
-        m_Build_Select = m_Build.FindAction("Select", throwIfNotFound: true);
         m_Build_Change = m_Build.FindAction("Change", throwIfNotFound: true);
+        m_Build_Edit = m_Build.FindAction("Edit", throwIfNotFound: true);
         // Edit
         m_Edit = asset.FindActionMap("Edit", throwIfNotFound: true);
         m_Edit_Move = m_Edit.FindAction("Move", throwIfNotFound: true);
@@ -989,6 +1010,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_ExitGame;
     private readonly InputAction m_Player_ToggleFullscreen;
+    private readonly InputAction m_Player_FlipCamera;
     public struct PlayerActions
     {
         private @GameInputs m_Wrapper;
@@ -1003,6 +1025,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @ExitGame => m_Wrapper.m_Player_ExitGame;
         public InputAction @ToggleFullscreen => m_Wrapper.m_Player_ToggleFullscreen;
+        public InputAction @FlipCamera => m_Wrapper.m_Player_FlipCamera;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1042,6 +1065,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @ToggleFullscreen.started += instance.OnToggleFullscreen;
             @ToggleFullscreen.performed += instance.OnToggleFullscreen;
             @ToggleFullscreen.canceled += instance.OnToggleFullscreen;
+            @FlipCamera.started += instance.OnFlipCamera;
+            @FlipCamera.performed += instance.OnFlipCamera;
+            @FlipCamera.canceled += instance.OnFlipCamera;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1076,6 +1102,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @ToggleFullscreen.started -= instance.OnToggleFullscreen;
             @ToggleFullscreen.performed -= instance.OnToggleFullscreen;
             @ToggleFullscreen.canceled -= instance.OnToggleFullscreen;
+            @FlipCamera.started -= instance.OnFlipCamera;
+            @FlipCamera.performed -= instance.OnFlipCamera;
+            @FlipCamera.canceled -= instance.OnFlipCamera;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1162,8 +1191,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Build_Preview;
     private readonly InputAction m_Build_Rotate;
     private readonly InputAction m_Build_Place;
-    private readonly InputAction m_Build_Select;
     private readonly InputAction m_Build_Change;
+    private readonly InputAction m_Build_Edit;
     public struct BuildActions
     {
         private @GameInputs m_Wrapper;
@@ -1171,8 +1200,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Preview => m_Wrapper.m_Build_Preview;
         public InputAction @Rotate => m_Wrapper.m_Build_Rotate;
         public InputAction @Place => m_Wrapper.m_Build_Place;
-        public InputAction @Select => m_Wrapper.m_Build_Select;
         public InputAction @Change => m_Wrapper.m_Build_Change;
+        public InputAction @Edit => m_Wrapper.m_Build_Edit;
         public InputActionMap Get() { return m_Wrapper.m_Build; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1191,12 +1220,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Place.started += instance.OnPlace;
             @Place.performed += instance.OnPlace;
             @Place.canceled += instance.OnPlace;
-            @Select.started += instance.OnSelect;
-            @Select.performed += instance.OnSelect;
-            @Select.canceled += instance.OnSelect;
             @Change.started += instance.OnChange;
             @Change.performed += instance.OnChange;
             @Change.canceled += instance.OnChange;
+            @Edit.started += instance.OnEdit;
+            @Edit.performed += instance.OnEdit;
+            @Edit.canceled += instance.OnEdit;
         }
 
         private void UnregisterCallbacks(IBuildActions instance)
@@ -1210,12 +1239,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Place.started -= instance.OnPlace;
             @Place.performed -= instance.OnPlace;
             @Place.canceled -= instance.OnPlace;
-            @Select.started -= instance.OnSelect;
-            @Select.performed -= instance.OnSelect;
-            @Select.canceled -= instance.OnSelect;
             @Change.started -= instance.OnChange;
             @Change.performed -= instance.OnChange;
             @Change.canceled -= instance.OnChange;
+            @Edit.started -= instance.OnEdit;
+            @Edit.performed -= instance.OnEdit;
+            @Edit.canceled -= instance.OnEdit;
         }
 
         public void RemoveCallbacks(IBuildActions instance)
@@ -1341,6 +1370,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnExitGame(InputAction.CallbackContext context);
         void OnToggleFullscreen(InputAction.CallbackContext context);
+        void OnFlipCamera(InputAction.CallbackContext context);
     }
     public interface IShootActions
     {
@@ -1353,8 +1383,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnPreview(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnPlace(InputAction.CallbackContext context);
-        void OnSelect(InputAction.CallbackContext context);
         void OnChange(InputAction.CallbackContext context);
+        void OnEdit(InputAction.CallbackContext context);
     }
     public interface IEditActions
     {
