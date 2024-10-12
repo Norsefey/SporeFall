@@ -7,7 +7,7 @@ public class BuildGun : Weapon
     public float maxBuildDistance = 100f; // Maximum distance for building
     public LayerMask groundLayer; // LayerMask to identify what is "ground"
     public LayerMask structureLayer; // LayerMask for detecting objects the player can select
-    public int currentBuildIndex = 0; // Current selected object to build
+    private int currentBuildIndex = 0; // Current selected object to build
     private Structure selectedStructure; // The currently selected placed object (for moving or deleting)
     public bool isEditing = false;
     public float structRotSpeed = 25;
@@ -63,15 +63,14 @@ public class BuildGun : Weapon
     }
     public void PlaceStructure()
     {
-        if (selectedStructure != null && currentStructures < maxStructures && selectedStructure.cost[0] <= player.mycelia)
+        if (selectedStructure != null && currentStructures < maxStructures && selectedStructure.GetCost() <= player.mycelia)
         {
-
+            player.mycelia -= selectedStructure.GetCost();
             selectedStructure.PurchaseStructure();
             SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
             if(player.train != null)
                 selectedStructure.transform.SetParent(player.train.structureHolder, true);
             currentStructures++;
-            player.mycelia -= selectedStructure.cost[0];
             selectedStructure = null; // Clear the selected object
         }
     }
@@ -161,7 +160,7 @@ public class BuildGun : Weapon
             SetStructureToTransparent(selectedStructure.gameObject);
             Debug.Log("Structure selected: " + selectedStructure.name);
             player.pUI.EnablePrompt(selectedStructure.name);
-            selectedStructure.ToggleStructure(false);
+            selectedStructure.ToggleStructureController(false);
             return true;
         }
         else
@@ -173,7 +172,7 @@ public class BuildGun : Weapon
     {
         SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
         // Enable Behavior
-        selectedStructure.ToggleStructure(true);
+        selectedStructure.ToggleStructureController(true);
         selectedStructure = null;
         isEditing = false;
     }
@@ -196,15 +195,16 @@ public class BuildGun : Weapon
     }
     public void UpgradeStructure()
     {
-        if (selectedStructure.StructLevel < selectedStructure.visuals.Length && selectedStructure.cost[selectedStructure.StructLevel] <= player.mycelia)
+
+        if (selectedStructure.CanUpgrade(player.mycelia))
         {
-            player.mycelia -= selectedStructure.cost[selectedStructure.StructLevel];
-            SetStructureToTransparent(selectedStructure.visuals[selectedStructure.StructLevel]);
+            player.mycelia -= selectedStructure.GetCost();
             selectedStructure.UpgradeStructure();
+            SetStructureToTransparent(selectedStructure.CurrentVisual());
         }
         else
         {
-            if(selectedStructure.StructLevel >= selectedStructure.visuals.Length)
+            if (selectedStructure.AtMaxLevel())
             {
                 player.pUI.EnablePrompt("MAX LEVEL");
             }

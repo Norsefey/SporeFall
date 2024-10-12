@@ -98,6 +98,24 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CloseGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""35200770-cc92-461b-9aff-0c1c32fa0e4e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleFullscreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""98247147-178f-487c-8dad-99bcf2cda960"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -320,6 +338,50 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c2d5b510-dabd-4556-bcfd-776af623b22b"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CloseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Button With One Modifier"",
+                    ""id"": ""f4f97088-3060-4ce0-ae61-c7a154c75332"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleFullscreen"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Modifier"",
+                    ""id"": ""9a5e6a77-53e7-453f-a668-fc0681f1b9b9"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ToggleFullscreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""10e49455-b83f-4c44-a1a6-6a5c35b04b64"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ToggleFullscreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -835,6 +897,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_CloseGame = m_Player.FindAction("CloseGame", throwIfNotFound: true);
+        m_Player_ToggleFullscreen = m_Player.FindAction("ToggleFullscreen", throwIfNotFound: true);
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
         m_Shoot_Reload = m_Shoot.FindAction("Reload", throwIfNotFound: true);
@@ -923,6 +987,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_CloseGame;
+    private readonly InputAction m_Player_ToggleFullscreen;
     public struct PlayerActions
     {
         private @GameInputs m_Wrapper;
@@ -935,6 +1001,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @CloseGame => m_Wrapper.m_Player_CloseGame;
+        public InputAction @ToggleFullscreen => m_Wrapper.m_Player_ToggleFullscreen;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -968,6 +1036,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @CloseGame.started += instance.OnCloseGame;
+            @CloseGame.performed += instance.OnCloseGame;
+            @CloseGame.canceled += instance.OnCloseGame;
+            @ToggleFullscreen.started += instance.OnToggleFullscreen;
+            @ToggleFullscreen.performed += instance.OnToggleFullscreen;
+            @ToggleFullscreen.canceled += instance.OnToggleFullscreen;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -996,6 +1070,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @CloseGame.started -= instance.OnCloseGame;
+            @CloseGame.performed -= instance.OnCloseGame;
+            @CloseGame.canceled -= instance.OnCloseGame;
+            @ToggleFullscreen.started -= instance.OnToggleFullscreen;
+            @ToggleFullscreen.performed -= instance.OnToggleFullscreen;
+            @ToggleFullscreen.canceled -= instance.OnToggleFullscreen;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1259,6 +1339,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnCloseGame(InputAction.CallbackContext context);
+        void OnToggleFullscreen(InputAction.CallbackContext context);
     }
     public interface IShootActions
     {

@@ -21,6 +21,8 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction aimAction;
     private InputAction sprintAction;
     private InputAction interactAction;
+    private InputAction exitGame;
+    private InputAction toggleFullscreen;
     // Shoot Actions
     private InputAction fireAction;
     private InputAction reloadAction;

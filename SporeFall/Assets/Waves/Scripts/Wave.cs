@@ -11,10 +11,11 @@ public class Wave
     public Transform trainLocation; // The location of train for this wave
 
     [Header("Enemy Settings")]
-    public GameObject[] enemyPrefabs; // Different types of enemies that can spawn in this wave
-    public int totalEnemies; // Total number of enemies to spawn
     public GameObject ShroomPod; // pod blocking path forward
-    [Header("Enemy Spawn Settings")]
+    public int totalEnemies; // Total number of enemies to spawn
+    public GameObject[] enemyPrefabs; // Different types of enemies that can spawn in this wave
+
+    [Header("Spawn Settings")]
     public Transform[] spawnLocations;// location for enemies to spawn
     public float minIntervalTime; // Time interval between each spawn
     public float maxIntervalTime;

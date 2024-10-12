@@ -4,8 +4,8 @@ using TMPro;
 public class StructureHealth : MonoBehaviour
 {
     public float maxHealth = 100;
-    public float currentHealth;
-    public TMP_Text healthDisplay;
+    private float currentHealth;
+    [SerializeField] private TMP_Text healthDisplay;
 
     void Start()
     {

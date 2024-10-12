@@ -1,5 +1,72 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4965777743759059350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 542329026153751428}
+  - component: {fileID: 3513289280543177323}
+  - component: {fileID: 3866756207816488058}
+  m_Layer: 7
+  m_Name: FlameThrowerControls
+  m_TagString: Structure
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &542329026153751428
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4965777743759059350}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5468946874094274748}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3513289280543177323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4965777743759059350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a67a9106e5fe284bbdef6c7285c63c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagePerSecond: 8
+  range: 5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  enemyTag: Enemy
+  tickRate: 0.5
+--- !u!114 &3866756207816488058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4965777743759059350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c48f82a081ac2ce449b1df499f21c905, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  healthDisplay: {fileID: 0}
 --- !u!1001 &2283488520726844474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31,17 +98,17 @@ PrefabInstance:
     - target: {fileID: 6076779226990926982, guid: 82182cb2ec7e1dc4ea1c4f4e0810bd02,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.984377
+      value: -9.18
       objectReference: {fileID: 0}
     - target: {fileID: 6076779226990926982, guid: 82182cb2ec7e1dc4ea1c4f4e0810bd02,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6076779226990926982, guid: 82182cb2ec7e1dc4ea1c4f4e0810bd02,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.4548054
+      value: -5.96
       objectReference: {fileID: 0}
     - target: {fileID: 6076779226990926982, guid: 82182cb2ec7e1dc4ea1c4f4e0810bd02,
         type: 3}
@@ -81,6 +148,16 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5979820645773546575, guid: 82182cb2ec7e1dc4ea1c4f4e0810bd02, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6076779226990926982, guid: 82182cb2ec7e1dc4ea1c4f4e0810bd02,
+        type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 542329026153751428}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82182cb2ec7e1dc4ea1c4f4e0810bd02, type: 3}
+--- !u!4 &5468946874094274748 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6076779226990926982, guid: 82182cb2ec7e1dc4ea1c4f4e0810bd02,
+    type: 3}
+  m_PrefabInstance: {fileID: 2283488520726844474}
+  m_PrefabAsset: {fileID: 0}
