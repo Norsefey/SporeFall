@@ -58,6 +58,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         buildModeAction = playerInputMap.FindAction("Build");
         aimAction = playerInputMap.FindAction("Aim");
         interactAction = playerInputMap.FindAction("Interact");
+        exitGame = playerInputMap.FindAction("ExitGame");
+        toggleFullscreen = playerInputMap.FindAction("ToggleFullscreen");
         // shoot action map
         reloadAction = shootInputMap.FindAction("Reload");
         dropAction = shootInputMap.FindAction("Drop");
@@ -78,6 +80,37 @@ public class PlayerInputOrganizer : MonoBehaviour
         buildInputMap.Disable();
         editInputMap.Disable();
     }
+    public void AssignAllActions()
+    {
+        // Assign Calls to each action
+        // basic player actions
+        jumpAction.started += OnJumpCall;
+        sprintAction.started += OnSprintStarted;
+        sprintAction.canceled += OnSprintCanceled;
+        aimAction.started += OnAimSightCall;
+        aimAction.canceled += OnDefaultSightCall;
+        fireAction.started += OnFireStarted;
+        fireAction.canceled += OnFireCanceled;
+        buildModeAction.started += OnBuildMode;
+        exitGame.started += ReleaseCursor;
+        exitGame.performed += ExitGame;
+        toggleFullscreen.performed += ToggleFullscreen;
+        // shoot actions
+        reloadAction.performed += OnReload;
+        dropAction.performed += OnDropWeapon;
+        // build actions
+        changeStructAction.performed += OnCycleBuildStrcuture;
+        placeStructAction.performed += OnPlaceStructure;
+        selectStructAction.started += OnSelectStructure;
+        rotateStructAction.started += OnEditRotateStarted;
+        rotateStructAction.canceled += OnEditRotateCancled;
+        // Edit Actions
+        moveStructAcion.started += OnEditStructureMoveStarted;
+        moveStructAcion.canceled += OnEditMoveStructureCancled;
+        exitEditAction.performed += OnExitEditStructure;
+        destroyStructAction.performed += OnEditDestroy;
+        upgradeStructAction.started += OnEditUpgrade;
+    }
     private void OnDisable()
     {
         // remove calls
@@ -89,6 +122,9 @@ public class PlayerInputOrganizer : MonoBehaviour
         fireAction.started -= OnFireStarted;
         fireAction.canceled -= OnFireCanceled;
         buildModeAction.started -= OnBuildMode;
+        exitGame.started -= ReleaseCursor;
+        exitGame.performed -= ExitGame;
+        toggleFullscreen.performed -= ToggleFullscreen;
         //shoot actions
         reloadAction.performed -= OnReload;
         dropAction.performed -= OnDropWeapon;
@@ -110,35 +146,9 @@ public class PlayerInputOrganizer : MonoBehaviour
         buildInputMap.Disable();
         editInputMap.Disable();
     }
-    public void AssignAllActions()
-    {
-        // Assign Calls to each action
-        // basic player actions
-        jumpAction.started += OnJumpCall;
-        sprintAction.started += OnSprintStarted;
-        sprintAction.canceled += OnSprintCanceled;
-        aimAction.started += OnAimSightCall;
-        aimAction.canceled += OnDefaultSightCall;
-        fireAction.started += OnFireStarted;
-        fireAction.canceled += OnFireCanceled;
-        buildModeAction.started += OnBuildMode;
-        // shoot actions
-        reloadAction.performed += OnReload;
-        dropAction.performed += OnDropWeapon;
-        // build actions
-        changeStructAction.performed += OnCycleBuildStrcuture;
-        placeStructAction.performed += OnPlaceStructure;
-        selectStructAction.started += OnSelectStructure;
-        rotateStructAction.started += OnEditRotateStarted;
-        rotateStructAction.canceled += OnEditRotateCancled;
-        // Edit Actions
-        moveStructAcion.started += OnEditStructureMoveStarted;
-        moveStructAcion.canceled += OnEditMoveStructureCancled;
-        exitEditAction.performed += OnExitEditStructure;
-        destroyStructAction.performed += OnEditDestroy;
-        upgradeStructAction.started += OnEditUpgrade;
-    }
-    
+   
+
+
     // interaction button will be the same button but do different things
     public void AssignWeaponPickUp()
     {
@@ -176,8 +186,35 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         pMan = manger;
     }
-    
+
     #region input Calls
+    private void ReleaseCursor(InputAction.CallbackContext context)
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+    private void ExitGame(InputAction.CallbackContext context)
+    {
+        Debug.Log("Closing down Game");
+        Application.Quit();
+    }
+    private void ToggleFullscreen(InputAction.CallbackContext context)
+    {
+        Debug.Log("Toggling fullscreen");
+
+        if (Screen.fullScreen)
+        {
+            // turn off fullscreen
+            Screen.SetResolution(960, 540, false);
+        }
+        else
+        {
+            Resolution defaultRes = Screen.currentResolution;
+            // turn On fullscreen
+            Screen.SetResolution(defaultRes.width, defaultRes.height, true);
+        }
+
+    }
     private void OnAimSightCall(InputAction.CallbackContext context)
     {
         pMan.pCamera.AimSight();
@@ -203,6 +240,14 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnFireStarted(InputAction.CallbackContext context)
     {
+        // if cursor is loose lock it back up
+        if((pMan.myDevice is Keyboard) && Cursor.visible)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+
         if (pMan.currentWeapon is ChargeGun)
         {
             pMan.isCharging = true;

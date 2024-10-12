@@ -100,12 +100,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CloseGame"",
+                    ""name"": ""ExitGame"",
                     ""type"": ""Button"",
                     ""id"": ""35200770-cc92-461b-9aff-0c1c32fa0e4e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=0.8)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -346,7 +346,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""CloseGame"",
+                    ""action"": ""ExitGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -897,7 +897,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_CloseGame = m_Player.FindAction("CloseGame", throwIfNotFound: true);
+        m_Player_ExitGame = m_Player.FindAction("ExitGame", throwIfNotFound: true);
         m_Player_ToggleFullscreen = m_Player.FindAction("ToggleFullscreen", throwIfNotFound: true);
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
@@ -987,7 +987,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_CloseGame;
+    private readonly InputAction m_Player_ExitGame;
     private readonly InputAction m_Player_ToggleFullscreen;
     public struct PlayerActions
     {
@@ -1001,7 +1001,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @CloseGame => m_Wrapper.m_Player_CloseGame;
+        public InputAction @ExitGame => m_Wrapper.m_Player_ExitGame;
         public InputAction @ToggleFullscreen => m_Wrapper.m_Player_ToggleFullscreen;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -1036,9 +1036,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @CloseGame.started += instance.OnCloseGame;
-            @CloseGame.performed += instance.OnCloseGame;
-            @CloseGame.canceled += instance.OnCloseGame;
+            @ExitGame.started += instance.OnExitGame;
+            @ExitGame.performed += instance.OnExitGame;
+            @ExitGame.canceled += instance.OnExitGame;
             @ToggleFullscreen.started += instance.OnToggleFullscreen;
             @ToggleFullscreen.performed += instance.OnToggleFullscreen;
             @ToggleFullscreen.canceled += instance.OnToggleFullscreen;
@@ -1070,9 +1070,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @CloseGame.started -= instance.OnCloseGame;
-            @CloseGame.performed -= instance.OnCloseGame;
-            @CloseGame.canceled -= instance.OnCloseGame;
+            @ExitGame.started -= instance.OnExitGame;
+            @ExitGame.performed -= instance.OnExitGame;
+            @ExitGame.canceled -= instance.OnExitGame;
             @ToggleFullscreen.started -= instance.OnToggleFullscreen;
             @ToggleFullscreen.performed -= instance.OnToggleFullscreen;
             @ToggleFullscreen.canceled -= instance.OnToggleFullscreen;
@@ -1339,7 +1339,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnCloseGame(InputAction.CallbackContext context);
+        void OnExitGame(InputAction.CallbackContext context);
         void OnToggleFullscreen(InputAction.CallbackContext context);
     }
     public interface IShootActions

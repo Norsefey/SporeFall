@@ -35,6 +35,8 @@ public class PlayerManager : MonoBehaviour
     public float corruptionLevel = 0;
     public float purifyRate = 1;
     private bool holdingCorrupted = false;
+
+    public InputDevice myDevice;
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -48,8 +50,8 @@ public class PlayerManager : MonoBehaviour
         if(playerInput.devices.Count > 0)
         {
             var device = playerInput.devices[0];
-
-            if(device is Gamepad)
+            myDevice = device;
+            if (device is Gamepad)
             {
                 Debug.Log("I am using a gamepad");
                 pCamera.SetGamepadSettings();
