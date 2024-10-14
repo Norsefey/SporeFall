@@ -756,9 +756,9 @@ MonoBehaviour:
   obstructions:
     serializedVersion: 2
     m_Bits: 192
-  defaultOffset: {x: 0, y: 1, z: -5}
-  aimOffset: {x: 0, y: 0.75, z: -1}
-  buildOffset: {x: 0, y: 2, z: -3}
+  defaultOffset: {x: 0.75, y: 1, z: -5}
+  aimOffset: {x: 0.75, y: 0.75, z: -1}
+  buildOffset: {x: 0.75, y: 2, z: -3}
 --- !u!1 &2105543068427918284
 GameObject:
   m_ObjectHideFlags: 0
@@ -770,6 +770,7 @@ GameObject:
   - component: {fileID: 8241102904794895140}
   - component: {fileID: 7167798407487153652}
   - component: {fileID: 5405646431928707325}
+  - component: {fileID: 740521211972321744}
   m_Layer: 9
   m_Name: Player Controller
   m_TagString: Player
@@ -839,6 +840,20 @@ MonoBehaviour:
   JumpSpeed: 15
   terminalVelocity: -10
   currentState: 0
+--- !u!114 &740521211972321744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105543068427918284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19eaa9ea11b3486419f9abc8889ecda5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lives: 3
+  maxHP: 100
 --- !u!1 &2152102545759247426
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,9 +1360,10 @@ GameObject:
   - component: {fileID: 5450161899717239717}
   - component: {fileID: 894867173832537510}
   - component: {fileID: 4119618120729430109}
+  - component: {fileID: 6864331604824539103}
   m_Layer: 9
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1448,12 +1464,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pController: {fileID: 5405646431928707325}
   pInput: {fileID: 4119618120729430109}
-  pHP: {fileID: 0}
   pCamera: {fileID: 851759072485557606}
+  pHealth: {fileID: 740521211972321744}
   pUI: {fileID: 8733969221055183010}
   pVisual: {fileID: 6428253311945694566}
   bGun: {fileID: 7981850017591976309}
-  pCorruption: {fileID: 0}
+  pCorruption: {fileID: 6864331604824539103}
   train: {fileID: 0}
   waveManager: {fileID: 0}
   weaponHolder: {fileID: 6892831285903471383}
@@ -1467,7 +1483,7 @@ MonoBehaviour:
   isRotating: 0
   mycelia: 200
   respawnPoint: {fileID: 0}
-  respawnTime: 0
+  respawnTime: 1
   holdingCorruption: 0
 --- !u!114 &4119618120729430109
 MonoBehaviour:
@@ -1508,6 +1524,23 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+--- !u!114 &6864331604824539103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3467706073932850416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a55b09b9b2d088744980f75b5867e046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  corruptedRobot: {fileID: 8983214131013415505, guid: 0206d376f1c04cb459a458ce8b872e81,
+    type: 3}
+  maxCorruption: 5
+  corruptionLevel: 0
+  purifyRate: 1
 --- !u!1 &3502188058702583269
 GameObject:
   m_ObjectHideFlags: 0
@@ -2532,9 +2565,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 100
+  m_MaxValue: 10
   m_WholeNumbers: 1
-  m_Value: 100
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2994,7 +3027,7 @@ Transform:
   m_GameObject: {fileID: 8568200192065513471}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.749, y: 1.352, z: -0.662}
+  m_LocalPosition: {x: 0, y: 1.352, z: -0.662}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

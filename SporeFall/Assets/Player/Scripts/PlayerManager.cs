@@ -9,8 +9,8 @@ public class PlayerManager : MonoBehaviour
     [Header("References")]
     public PlayerMovement pController;
     public PlayerInputOrganizer pInput;
-    public PlayerHP pHP;
     public TPSCamera pCamera;
+    public PlayerHP pHealth;
     public PlayerUI pUI;
     public GameObject pVisual;
     public BuildGun bGun;
@@ -46,7 +46,7 @@ public class PlayerManager : MonoBehaviour
         pController.SetManager(this);
         pCamera.SetManager(this);
         pCorruption.SetManager(this);
-        pHP.SetManager(this);
+        pHealth.SetManager(this);
         PlayerInput playerInput = GetComponent<PlayerInput>();
         if (playerInput.devices.Count > 0)
         {
@@ -266,7 +266,7 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(respawnTime);
        
         MovePlayerTo(respawnPoint.position);
-        pHP.RestoreHP(pHP.maxHP);
+        pHealth.RestoreHP(pHealth.maxHP);
         TogglePControl(true);
     }
 

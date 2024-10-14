@@ -46,7 +46,7 @@ public class CorruptionHandler : MonoBehaviour
         // Spawn a corrupted Player
         Instantiate(corruptedRobot, pMan.pController.transform.position, Quaternion.identity);
         // player loses life and respawns
-        pMan.pHP.DepleteLife();
+        pMan.pHealth.DepleteLife();
         StartCoroutine(pMan.Respawn());
     }
 }

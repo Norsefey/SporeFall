@@ -17,7 +17,8 @@ public class TrainHandler : MonoBehaviour
     public Transform structureHolder;
     public float cannonFireTime = 2f;
     public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
-
+    public float maxHP = 100;
+    private float currentHP = 100;
     public enum TrainState
     {
         Parked,
@@ -54,5 +55,9 @@ public class TrainHandler : MonoBehaviour
     private void ToggleStructures(bool state)
     {
         structureHolder.gameObject.SetActive(state);
+    }
+    public void TakeDamage(float damage)
+    {
+        currentHP -= damage;
     }
 }
