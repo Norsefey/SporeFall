@@ -8,7 +8,7 @@ public class TPSCamera : MonoBehaviour
     [Header("references")]
     public Camera myCamera;
     [SerializeField] private PlayerMovement player;
-    [SerializeField] private CameraCollision camCollision;
+    //[SerializeField] private CameraCollision camCollision;
 
     [Header("Mouse Sensitivity")]
     [SerializeField] private float mHorSense = 50;
@@ -23,13 +23,21 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] float maxVertRot = 45;
     [SerializeField] private bool invertVertRot = false;
     [SerializeField] private bool invertHorRot = false;
-    [SerializeField] protected bool Lefthand = false;
-    [SerializeField] private LayerMask obstructions;
+    [SerializeField] protected bool flipSide = false;
 
     [Header("Camera Offsets")]
     [SerializeField] Vector3 defaultOffset;
     [SerializeField] Vector3 aimOffset; // camera zooms in
     [SerializeField] Vector3 buildOffset; // camera zooms Out
+
+    [Header("Collision Detection")]
+    [SerializeField] private LayerMask obstructions;
+    [SerializeField] private float minDistance = 1f; // Minimum distance between camera and player
+    [SerializeField] private float cameraMoveThreshold = 0.05f;  // Small threshold to stop jitter
+    [SerializeField] private float groundOffset = 0.5f;  // Offset to apply when colliding with the ground
+    [SerializeField] private float groundDetectionAngle = 45f; // Angle to define what is considered 'ground'
+    [SerializeField] private float collisionFreeTime = 0.5f;  // Time to wait before moving camera back
+    private float timeSinceCollision = 0f;  // Time since last collision
 
     // local private variables
     private PlayerManager pMan;
@@ -40,16 +48,16 @@ public class TPSCamera : MonoBehaviour
     private void Start()
     {
         myCamera.transform.localPosition = defaultOffset;
-        camCollision.transform.localPosition = defaultOffset;
-        AssignCollisionDetection();
     }
+
     private void LateUpdate()
     {
-        ObstructionCheck();
         // moves camera set along with Character
         HolderMovement();
         // rotates camera based on mouse movement
         transform.localEulerAngles = new Vector3(VerticalRotation(), HorizontalRotation(), 0);
+        if (player.currentState == PlayerMovement.PlayerState.Default)
+            ObstructionCheck();
     }
     private void HolderMovement()
     {
@@ -72,36 +80,55 @@ public class TPSCamera : MonoBehaviour
     }
     private void ObstructionCheck()
     {
-        // Perform a raycast from the target towards the camera's desired position to check for obstacles
-        Vector3 playerOffset = player.transform.position + Vector3.up;
-        Vector3 rayDirection = (playerOffset - camCollision.transform.position).normalized;
-        float rayDistance = Vector3.Distance(playerOffset, camCollision.transform.position);
+        // Player position adjusted for height
+        Vector3 playerPos = player.transform.position + (Vector3.up * 2);
 
-        if (Physics.Raycast(camCollision.transform.position, rayDirection, rayDistance, obstructions))
+        // Desired position with default offset
+        Vector3 desiredCameraPos = playerPos + transform.TransformDirection(defaultOffset);
+        float currentDistance = defaultOffset.magnitude;
+
+        // Check for obstructions using raycast
+        if (Physics.Linecast(playerPos, desiredCameraPos, out RaycastHit hit, obstructions))
         {
-            // If there's a collision, place the camera closer to the hit point to avoid clipping
-            CollisionAdjustCamera();
-            //desiredPosition = hit.point - rayDirection * 0.1f; // Push camera slightly off from the hit point
+            // If hit, reset the collision-free timer
+            timeSinceCollision = 0f;
+
+            // Calculate new camera position closer to the player
+            float hitDistance = Mathf.Clamp(hit.distance, minDistance, currentDistance);
+            Vector3 hitPoint = playerPos + (desiredCameraPos - playerPos).normalized * hitDistance;
+
+            // Check if the hit is considered 'ground' based on the hit normal
+            bool isGround = Vector3.Angle(hit.normal, Vector3.up) <= groundDetectionAngle;
+
+            if (isGround)
+            {
+                // Apply ground offset if the hit object is the ground
+                hitPoint.y += groundOffset;
+            }
+
+            // Move camera smoothly, but only if the difference is greater than the threshold
+            if (Vector3.Distance(myCamera.transform.position, hitPoint) > cameraMoveThreshold)
+            {
+                myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, hitPoint, Time.deltaTime * 10f);
+            }
         }
-    }
-    private void CollisionAdjustCamera()
-    {
-        myCamera.transform.localPosition = aimOffset;
-    }
-    private void CollisionDefaultPosition()
-    {
-        myCamera.transform.localPosition = defaultOffset;
-        camCollision.transform.localPosition = defaultOffset;
-    }
-    private void AssignCollisionDetection()
-    {
-        camCollision.OnEnterCollision += CollisionAdjustCamera;
-        camCollision.OnExitCollision += CollisionDefaultPosition;
-    }
-    private void RemoveCollisionDetection()
-    {
-        camCollision.OnEnterCollision -= CollisionAdjustCamera;
-        camCollision.OnExitCollision -= CollisionDefaultPosition;
+        else
+        {
+            // If no collision, increment the time since last collision
+            timeSinceCollision += Time.deltaTime;
+
+            // Only move camera back to default if it has been free of collisions for some time
+            if (timeSinceCollision >= collisionFreeTime)
+            {
+                // Smoothly move the camera back to the default offset
+                Vector3 targetPosition = playerPos + transform.TransformDirection(defaultOffset);
+                if (Vector3.Distance(myCamera.transform.position, targetPosition) > cameraMoveThreshold)
+                {
+                    myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, targetPosition, Time.deltaTime * 5f);
+                }
+            }
+        }
+
     }
     public void AimSight()
     {
@@ -110,14 +137,14 @@ public class TPSCamera : MonoBehaviour
         else
             myCamera.transform.localPosition = aimOffset;
 
-        RemoveCollisionDetection();
+        //RemoveCollisionDetection();
         player.SetAimState();
     }
     public void DefaultSight()
     {
         myCamera.transform.localPosition = defaultOffset;
 
-        AssignCollisionDetection();
+        //AssignCollisionDetection();
         player.SetDefaultState();
     }
     public void SetManager(PlayerManager pManager)
@@ -136,7 +163,7 @@ public class TPSCamera : MonoBehaviour
     }
     public void FlipCameraSide()
     {
-        Lefthand = !Lefthand;
+        flipSide = !flipSide;
         
         defaultOffset.x *= -1;
         aimOffset.x *= -1;
@@ -144,12 +171,4 @@ public class TPSCamera : MonoBehaviour
 
         DefaultSight();
     }
-   /* private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Vector3 playerOffset = player.transform.position + Vector3.up;
-        Vector3 rayDirection = (playerOffset - camCollision.transform.position).normalized;
-        rayDirection *= Vector3.Distance(playerOffset, camCollision.transform.position);
-        Gizmos.DrawRay(camCollision.transform.position, rayDirection);
-    }*/
 }

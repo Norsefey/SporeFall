@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Transform visual;
-    [SerializeField] private Transform myCamera;
+    private Transform myCamera;
     private PlayerManager pMan;
     private CharacterController cc;
     [Header("Movement Variables")]
@@ -35,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
         cc = GetComponent<CharacterController>();
         moveSpeed = walkSpeed;
         SetDefaultState();
+
+        myCamera = pMan.pCamera.myCamera.transform;
     }
     private void Update()
     {
