@@ -12,6 +12,14 @@ public class FlameThrower : MonoBehaviour
 
     private float tickTimer = 0f;
 
+    // A test of possible SFX
+    private PlayParticles pp;
+
+    private void Start()
+    {
+        pp = GetComponent<PlayParticles>();
+    }
+
     void Update()
     {
         tickTimer += Time.deltaTime;
@@ -37,6 +45,8 @@ public class FlameThrower : MonoBehaviour
                 // Assuming the enemy has a script with a method to take damage
                 enemy.GetComponent<EnemyControls>()?.TakeDamage(damagePerSecond * tickRate);
                 Debug.Log("hit");
+                pp.PlayEffects();
+
             }
         }
     }
