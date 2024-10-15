@@ -111,7 +111,7 @@ public class WaveManager : MonoBehaviour
         GameObject enemy = Instantiate(enemyToSpawn, spawnPoint.position, spawnPoint.rotation);
         enemy.transform.SetParent(transform);
         // once we start the enemy script add an OnEnemyDeath Event
-        enemy.GetComponent<Sherman>().OnEnemyDeath += OnEnemyDeath; // Assuming each enemy has an OnEnemyDeath event
+        enemy.GetComponent<EnemyControls>().OnEnemyDeath += OnEnemyDeath; // Assuming each enemy has an OnEnemyDeath event
         enemiesAlive++;
         enemiesSpawned++;
     }
@@ -166,7 +166,7 @@ public class WaveManager : MonoBehaviour
     {
         // since we are skipping, we no longer need to invoke, prevents repeat
         CancelInvoke(nameof(Depart));
-        player.RemoveButtonAction();
+        //player.RemoveButtonAction();
         Depart();
     }
     public void OnStartWave()

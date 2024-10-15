@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Structure : MonoBehaviour
 {
+    private TrainHandler train;
     [SerializeField] private GameObject structBehavior;
     [SerializeField] private GameObject[] visuals;
     [SerializeField] private float[] cost = new float[] { 25, 30, 50 };
+    [SerializeField] private float[] energyCost = new float[] {5, 10, 15};
     private int structLevel = 0;
     public int StructLevel {  get { return structLevel; } }
     private bool maxLevel = false;
@@ -14,7 +16,6 @@ public class Structure : MonoBehaviour
     {
         structBehavior.SetActive(true);
         GetComponent<Collider>().enabled = true; // Enable collider for the final object
-        structLevel++;
     }
     public void ToggleStructureController(bool toggle)
     {
@@ -22,20 +23,18 @@ public class Structure : MonoBehaviour
     }
     public void UpgradeStructure()
     {
-        visuals[structLevel - 1].SetActive(false);
-        visuals[structLevel].SetActive(true);
+        visuals[structLevel].SetActive(false);
         structLevel++;
-        if (structLevel >= visuals.Length)
+        visuals[structLevel].SetActive(true);
+        if (structLevel >= visuals.Length - 1)
         {
             maxLevel = true;
-            // so we can refer to the last visual
-            structLevel -= 1;
         }
             
     }
     public bool CanUpgrade(float mycelia)
     {
-       if(mycelia >= GetCost() && !maxLevel)
+       if(mycelia >= GetMyceliaCost() && !maxLevel)
         {
             return true;
         }
@@ -44,9 +43,13 @@ public class Structure : MonoBehaviour
             return false; 
         }
     }
-    public float GetCost()
+    public float GetMyceliaCost()
     {
         return cost[structLevel];
+    }
+    public float GetEnergyCost()
+    {
+        return energyCost[structLevel];
     }
     public bool AtMaxLevel()
     {
@@ -55,5 +58,15 @@ public class Structure : MonoBehaviour
     public GameObject CurrentVisual()
     {
         return visuals[structLevel];
+    }
+    public void SetTrainHandler(TrainHandler train)
+    {
+        this.train = train; 
+    }
+
+    private void OnDestroy()
+    {
+        if (train != null)
+            train.RemoveStructure(this);
     }
 }

@@ -1,38 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PickupWeapon : MonoBehaviour
+public class PickUpWeapon : Interactables
 {
-    [SerializeField] private GameObject weaponPrefab;
+    private string promptText;
+    [Space(5), Header("Pick Up")]
+    [SerializeField] private Weapon pickUp;
     [SerializeField] private float rotSpeed = 45;
-    [SerializeField] private float moveSpeed = 5;
-
-    Vector3 startPos = Vector3.zero;
     private void Start()
     {
-        startPos = weaponPrefab.transform.localPosition;
+        promptText = "Pick Up: " + pickUp.weaponName;
     }
     private void LateUpdate()
     {
-        weaponPrefab.transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0));
-        float movement = Mathf.PingPong(Time.time * moveSpeed, .3f);
-        weaponPrefab.transform.localPosition = startPos + new Vector3(0, movement, 0);
+        pickUp.transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0));
     }
-    private void OnTriggerEnter(Collider other)
+    public override void AssignAction()
     {
-        if (other.CompareTag("Player"))
-        {
-            other.transform.parent.GetComponent<PlayerManager>().PromptPickUpWeapon(weaponPrefab);
-        }
+        player.nearByPickUp = pickUp.gameObject;
+        player.pUI.EnablePrompt(promptText);
     }
-    private void OnTriggerExit(Collider other)
+    public override void Interact(InputAction.CallbackContext context)
     {
-        if (other.CompareTag("Player"))
-        {
-            other.transform.parent.GetComponent<PlayerManager>().DisablePickUpWeaponPrompt();
-        }
+        Debug.Log("Picked up weapon: " + pickUp.name);
+        player.PickUpWeapon();
     }
-
+    public override void RemoveAction()
+    {
+        player.nearByPickUp = null;
+        player.pUI.DisablePrompt();
+    }
 }

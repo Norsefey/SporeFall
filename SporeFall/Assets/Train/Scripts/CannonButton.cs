@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CannonButton : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -18,5 +18,5 @@ public class CannonButton : MonoBehaviour
         {
             other.transform.parent.GetComponent<PlayerManager>().RemoveButtonAction();
         }
-    }
+    }*/
 }

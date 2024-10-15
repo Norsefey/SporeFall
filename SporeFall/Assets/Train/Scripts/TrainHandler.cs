@@ -15,6 +15,10 @@ public class TrainHandler : MonoBehaviour
     // Interactables
     // structures
     public Transform structureHolder;
+    private List<Structure> activeStructures = new List<Structure>();
+    public float maxEnergy = 50;
+    private float energyUsed = 0;
+    // train Variables
     public float cannonFireTime = 2f;
     public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
     public float maxHP = 100;
@@ -59,5 +63,29 @@ public class TrainHandler : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHP -= damage;
+    }
+    public void AddStructure(Structure structure)
+    {
+        activeStructures.Add(structure);
+        structure.SetTrainHandler(this);
+        UpdateEnergyUsage();
+    }
+    public void RemoveStructure(Structure structure)
+    {
+        activeStructures.Remove(structure);
+        UpdateEnergyUsage();
+    }
+    public void UpdateEnergyUsage()
+    {
+        energyUsed = 0;
+        foreach (var structure in activeStructures)
+        {
+            energyUsed += structure.GetEnergyCost();
+        }
+    }
+
+    public bool CheckEnergy(float eCost)
+    {
+        return energyUsed + eCost <= maxEnergy;
     }
 }

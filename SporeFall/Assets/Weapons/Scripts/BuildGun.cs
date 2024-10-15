@@ -13,9 +13,7 @@ public class BuildGun : Weapon
 
     public bool isEditing = false;
     private bool movingStructure = false;
-    // structures
-    public int maxStructures = 10;
-    private int currentStructures = 0;
+
     public override void Fire()
     {
         // Called when player presses fire button
@@ -70,18 +68,37 @@ public class BuildGun : Weapon
     }
     public void PlaceStructure()
     {
-        if (selectedStructure != null && currentStructures < maxStructures && selectedStructure.GetCost() <= player.mycelia)
+        // mostly for testing check if we have a train assigned
+        if (player.train != null)
         {
-            player.mycelia -= selectedStructure.GetCost();
-            selectedStructure.PurchaseStructure();
-            SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
-            if(player.train != null)
+            if (selectedStructure != null && player.train.CheckEnergy(selectedStructure.GetEnergyCost()) && selectedStructure.GetMyceliaCost() <= player.mycelia)
+            {
+                player.mycelia -= selectedStructure.GetMyceliaCost();
+                selectedStructure.PurchaseStructure();
+                SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
+
+                player.train.AddStructure(selectedStructure);
                 selectedStructure.transform.SetParent(player.train.structureHolder, true);
-            currentStructures++;
-            selectedStructure = null; // Clear the selected object
 
-            player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+                selectedStructure = null; // Clear the selected object
 
+                player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+
+            }
+        }
+        else
+        {
+            if (selectedStructure != null && selectedStructure.GetMyceliaCost() <= player.mycelia)
+            {
+                player.mycelia -= selectedStructure.GetMyceliaCost();
+                selectedStructure.PurchaseStructure();
+                SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
+
+                selectedStructure = null; // Clear the selected object
+
+                player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+
+            }
         }
     }
     public void CycleSelectedStructure(float indexIncrement)
@@ -160,6 +177,8 @@ public class BuildGun : Weapon
     // Edit Mode Functions
     public void EnterEditMode()
     {
+        if(selectedStructure != null)
+            Destroy(selectedStructure.gameObject); // Destroy the current preview
         isEditing = true;
     }
     public void ExitEditMode()
@@ -182,15 +201,13 @@ public class BuildGun : Weapon
             selectedStructure.ToggleStructureController(false);
             return true;
         }
-        else if(movingStructure)
+        else if(selectedStructure != null)
         {
+            DeselectStructure();
             return false;
         }
         else
         {
-            Debug.Log("No Structure");
-            DeselectStructure();
-            player.pUI.EnablePrompt("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
             return false;
         }
     }
@@ -201,16 +218,7 @@ public class BuildGun : Weapon
             SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
             selectedStructure.ToggleStructureController(true);// Enable Behavior
             selectedStructure = null;
-            player.pUI.DisablePrompt();
-        }
-    }
-    public void DestroySelectedObject()
-    {
-        if (selectedStructure != null)
-        {
-            Destroy(selectedStructure.gameObject); // Destroy the selected object
-            selectedStructure = null; // Clear the selection
-            isEditing = false;
+            player.pUI.EnablePrompt("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
         }
     }
     public void RotateStructure()
@@ -226,9 +234,11 @@ public class BuildGun : Weapon
 
         if (selectedStructure.CanUpgrade(player.mycelia))
         {
-            player.mycelia -= selectedStructure.GetCost();
+            player.mycelia -= selectedStructure.GetMyceliaCost();
             selectedStructure.UpgradeStructure();
             SetStructureToTransparent(selectedStructure.CurrentVisual());
+            if(player.train != null)
+                player.train.UpdateEnergyUsage();
         }
         else
         {
@@ -241,6 +251,20 @@ public class BuildGun : Weapon
                 Debug.Log("Not Enough Mycelia");
                 player.pUI.EnablePrompt("Not Enough Mycelia");
             }
+        }
+    }
+    public void DestroySelectedObject()
+    {
+        if (selectedStructure != null)
+        {
+            if (player.train != null)
+            {
+                player.train.RemoveStructure(selectedStructure);
+            }
+
+            Destroy(selectedStructure.gameObject); // Destroy the selected object
+            selectedStructure = null; // Clear the selection
+            isEditing = false;
         }
     }
 }

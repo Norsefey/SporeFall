@@ -94,7 +94,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         fireAction.started += OnFireStarted;
         fireAction.canceled += OnFireCanceled;
         buildModeAction.started += OnBuildMode;
-        exitGame.started += ReleaseCursor;
+        //exitGame.started += ReleaseCursor;
         exitGame.performed += ExitGame;
         toggleFullscreen.performed += ToggleFullscreen;
         flipCameraSide.performed += OnFlipCamera;
@@ -125,7 +125,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         fireAction.started -= OnFireStarted;
         fireAction.canceled -= OnFireCanceled;
         buildModeAction.started -= OnBuildMode;
-        exitGame.started -= ReleaseCursor;
+        //exitGame.started -= ReleaseCursor;
         exitGame.performed -= ExitGame;
         toggleFullscreen.performed -= ToggleFullscreen;
         flipCameraSide.performed -= OnFlipCamera;
@@ -151,24 +151,19 @@ public class PlayerInputOrganizer : MonoBehaviour
         editInputMap.Disable();
     }
    
-
-
     // interaction button will be the same button but do different things
-    public void AssignWeaponPickUp()
+    public void AssignInteraction(Interactables interaction)
     {
-        interactAction.performed += OnPickUpWeapon;
+        interactAction.performed += interaction.Interact;
     }
-    public void RemoveWeaponPickUp()
+
+    public void RemoveInteraction(Interactables interaction)
     {
-        interactAction.performed -= OnPickUpWeapon;
+        interactAction.performed -= interaction.Interact;
     }
-    public void AssignButtonPush()
+    private void OnDropWeapon(InputAction.CallbackContext context)
     {
-        interactAction.performed += OnPushButton;
-    }
-    public void RemoveButtonPush()
-    {
-        interactAction.performed -= OnPushButton;
+        pMan.DropWeapon();
     }
     // Disabling All Inputs
     public void DisableAllInputs()
@@ -192,11 +187,11 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
 
     #region input Calls
-    private void ReleaseCursor(InputAction.CallbackContext context)
+/*    private void ReleaseCursor(InputAction.CallbackContext context)
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-    }
+    }*/
     private void ExitGame(InputAction.CallbackContext context)
     {
         Debug.Log("Closing down Game");
@@ -221,6 +216,12 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnAimSightCall(InputAction.CallbackContext context)
     {
+        /*// if cursor is loose lock it back up
+        if ((pMan.myDevice is Keyboard) && Cursor.visible)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }*/
         pMan.pCamera.AimSight();
     }
     private void OnDefaultSightCall(InputAction.CallbackContext context)
@@ -244,14 +245,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnFireStarted(InputAction.CallbackContext context)
     {
-        // if cursor is loose lock it back up
-        if((pMan.myDevice is Keyboard) && Cursor.visible)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-
-
         if (pMan.currentWeapon is ChargeGun)
         {
             pMan.isCharging = true;
@@ -293,11 +286,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     private void OnFlipCamera(InputAction.CallbackContext context)
     {
         pMan.pCamera.FlipCameraSide();
-    }
-    // Interaction
-    private void OnPushButton(InputAction.CallbackContext context)
-    {
-        pMan.OnButtonPush();
     }
     // building stuff
     private void OnBuildMode(InputAction.CallbackContext context)
@@ -429,15 +417,6 @@ public class PlayerInputOrganizer : MonoBehaviour
         // put upgrade code here
         pMan.bGun.UpgradeStructure();
     }
-    // Weapon Pick up
-    private void OnPickUpWeapon(InputAction.CallbackContext context)
-    {
-        Debug.Log("Picking up weapon");
-        pMan.PickUpWeapon();
-    }
-    private void OnDropWeapon(InputAction.CallbackContext context)
-    {
-        pMan.DropWeapon();
-    }
+
     #endregion
 }
