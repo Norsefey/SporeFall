@@ -7,10 +7,9 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PlayerManager player;
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
     [SerializeField] private TrainHandler train; // Reference to the player transform for positioning
-    
+    [SerializeField] private Transform[] payloadPath;
     [Header("Waves")]
     [SerializeField] private List<Wave> waves = new(); // List of waves to configure
     private Wave currentWave;
@@ -94,7 +93,7 @@ public class WaveManager : MonoBehaviour
     private void StartFinalWave()
     {
         // Spawn the payload
-        train.SpawnPayload(currentWave.spawnLocations[0].position);
+        train.SpawnPayload(payloadPath);
         
         Invoke(nameof(SpawnBoss), 2f);
     }
@@ -183,11 +182,7 @@ public class WaveManager : MonoBehaviour
     }
     private IEnumerator MoveToWaveLocation(float waitTime)
     {
-        // switch to train camera
-        player.TogglePControl(false);
-        player.TogglePCamera(false);
-        player.TogglePVisual(false);
-        player.MovePlayerTo(Vector3.zero);
+       
         train.SetFiringState();
         // Destroy pod will spawn in an explosion so made it into Coroutine
         if (waitTime > 0)
@@ -219,9 +214,7 @@ public class WaveManager : MonoBehaviour
         // Ensuring the final position is set precisely after the movement
         train.transform.position = targetPosition;
         train.SetParkedState();
-        player.TogglePControl(true);
-        player.TogglePVisual(true);
-        player.TogglePCamera(true);
+        
         wavePhase = WavePhase.NotStarted;
     }
     private void SpawnExplosion(Vector3 pos)

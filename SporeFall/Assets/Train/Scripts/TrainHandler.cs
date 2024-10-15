@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TrainHandler : MonoBehaviour
 {
+    public PlayerManager[] players;
+    [SerializeField] Transform playerSpawnPoint;
     // train camera
     public GameObject trainCamera;
     // train visuals
@@ -34,14 +36,17 @@ public class TrainHandler : MonoBehaviour
     {
         state = TrainState.Parked;
         trainVisual.rotation = Quaternion.identity;
-        trainCamera.SetActive(false);
         ToggleStructures(true);
+        if(players.Length > 0)
+        {
+            DisembarkTrain();
+        }
     }
     public void SetFiringState()
     {
         state = TrainState.Firing;
         trainCamera.SetActive(true);
-
+        BoardTrain();
     }
     public void SetMovingState()
     {
@@ -49,12 +54,10 @@ public class TrainHandler : MonoBehaviour
         trainVisual.rotation = Quaternion.Euler(0,70,0);
         ToggleStructures(false);
     }
-    public void SpawnPayload(Vector3 position)
+    public void SpawnPayload(Transform[] path)
     {
         Payload = Instantiate(payloadPrefab, payloadSpawnPos).GetComponent<Payload>();
-
-        Payload.SetDestination(position);
-        Payload.StartMoving();
+        Payload.StartMoving(path);
     }
     private void ToggleStructures(bool state)
     {
@@ -83,9 +86,30 @@ public class TrainHandler : MonoBehaviour
             energyUsed += structure.GetEnergyCost();
         }
     }
-
     public bool CheckEnergy(float eCost)
     {
         return energyUsed + eCost <= maxEnergy;
+    }
+    private void BoardTrain()
+    {
+        foreach(var player in players)
+        {
+            // switch to train camera
+            player.TogglePControl(false);
+            player.TogglePCamera(false);
+            player.TogglePVisual(false);
+            player.MovePlayerTo(playerSpawnPoint.position);
+        }
+       
+    }
+    private void DisembarkTrain()
+    {
+        trainCamera.SetActive(false);
+        foreach (var player in players)
+        {
+            player.TogglePControl(true);
+            player.TogglePVisual(true);
+            player.TogglePCamera(true);
+        }
     }
 }

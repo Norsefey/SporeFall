@@ -1,4 +1,4 @@
-// Ignore Spelling: mycelia
+// Ignore Spelling: mycelia Interactable
 
 using System.Collections;
 using System.Collections.Generic;
@@ -17,13 +17,16 @@ public class PlayerManager : MonoBehaviour
     public CorruptionHandler pCorruption;
     public TrainHandler train;
     public WaveManager waveManager;
+    private Interactables interactable;
     [Header("Weapons")]
     // Weapons and Shooting
     public Transform weaponHolder; // Where the weapon is equipped
     public Weapon currentWeapon;
     public Weapon defaultWeapon;
     public Weapon equippedWeapon;
-    public GameObject nearByWeapon;
+    // pickables
+    public GameObject nearByPickUp;
+
     public bool isFiring = false;
     public bool isCharging = false;
     public bool isBuilding = false;
@@ -100,18 +103,6 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    public void PromptPickUpWeapon(GameObject weapon)
-    {
-        pInput.AssignWeaponPickUp();
-        nearByWeapon = weapon;
-        pUI.EnablePrompt("Press F to Pick up: " + weapon.name);
-    }
-    public void DisablePickUpWeaponPrompt()
-    {
-        pInput.RemoveWeaponPickUp();
-        nearByWeapon = null;
-        pUI.DisablePrompt();
-    }
     public void ToggleBuildMode()
     {
         if (!isBuilding)
@@ -150,7 +141,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void PickUpWeapon()
     {
-        if (nearByWeapon == null)
+        if (nearByPickUp == null)
             return;
         // deactivate the default weapon
         if (currentWeapon == defaultWeapon || currentWeapon == bGun)
@@ -162,14 +153,14 @@ public class PlayerManager : MonoBehaviour
             Destroy(currentWeapon.gameObject); // Drop the current weapon
         }
         // Equip the new weapon
-        currentWeapon = Instantiate(nearByWeapon, weaponHolder).GetComponent<Weapon>();
+        currentWeapon = Instantiate(nearByPickUp, weaponHolder).GetComponent<Weapon>();
         // set the transforms of the new weapon
         currentWeapon.transform.forward = pController.transform.forward;
         currentWeapon.transform.localPosition = Vector3.zero;
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
         // destroy pick up platform
-        Destroy(nearByWeapon.transform.parent.gameObject);
+        Destroy(nearByPickUp.transform.parent.gameObject);
         // disable pick up prompt
         pUI.DisablePrompt();
         // update UI to display new ammo capacities
@@ -216,44 +207,6 @@ public class PlayerManager : MonoBehaviour
     {
         pController.transform.localPosition = position;
     }
-    public void AssignButtonAction()
-    {
-        pInput.AssignButtonPush();
-
-        WaveManager.WavePhase currentPhase = waveManager.wavePhase;
-
-        switch (currentPhase)
-        {
-            case WaveManager.WavePhase.NotStarted:
-                pUI.EnablePrompt("Press F to Start Wave");
-                break;
-            case WaveManager.WavePhase.Departing:
-                pUI.EnablePrompt("Press F to go to next Area");
-                break;
-        }
-    }
-    public void RemoveButtonAction()
-    {
-        pInput.RemoveButtonPush();
-        pUI.DisablePrompt();
-    }
-    public void OnButtonPush()
-    {
-        switch (waveManager.wavePhase)
-        {
-            case WaveManager.WavePhase.NotStarted:
-                waveManager.OnStartWave();
-                pUI.DisablePrompt();
-                break;
-            case WaveManager.WavePhase.Departing:
-                waveManager.SkipDepartTime();
-                pUI.DisablePrompt();
-                break;
-            default:
-                Debug.Log("No Action");
-                break;
-        }
-    }
     public IEnumerator Respawn()
     {
         TogglePControl(false);
@@ -269,9 +222,22 @@ public class PlayerManager : MonoBehaviour
         pHealth.RestoreHP(pHealth.maxHP);
         TogglePControl(true);
     }
-
     public void GameOver()
     {
         Debug.Log("You lose");
+    }
+    public void AssignInteractable(string promptText, Interactables interactable)
+    {
+        pUI.EnablePrompt(promptText);
+        pInput.AssignInteraction(interactable);
+
+        this.interactable = interactable;
+    }
+    public void RemoveInteractable()
+    {
+        pUI.DisablePrompt();
+        pInput.RemoveInteraction(interactable);
+
+        this.interactable = null;
     }
 }
