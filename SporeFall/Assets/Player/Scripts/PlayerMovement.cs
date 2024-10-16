@@ -137,8 +137,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 vertSpeed = terminalVelocity;
             }
-
-
         }
     }
     private bool IsGrounded()

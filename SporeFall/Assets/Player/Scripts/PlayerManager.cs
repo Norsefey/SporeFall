@@ -208,8 +208,14 @@ public class PlayerManager : MonoBehaviour
     public void MovePlayerTo(Vector3 position)
     {
         pController.transform.localPosition = position;
+        Debug.Log("Moving Player");
     }
-    public IEnumerator Respawn()
+    public void StartRespawn()
+    {
+        StartCoroutine(Respawn());
+    }
+
+    private IEnumerator Respawn()
     {
         TogglePControl(false);
         DropWeapon();
@@ -217,8 +223,9 @@ public class PlayerManager : MonoBehaviour
         {
             ToggleBuildMode();
         }
-
-        yield return new WaitForSeconds(respawnTime);
+        Debug.Log("Death Time");
+        yield return new WaitForSeconds(2);
+        Debug.Log("Respawning");
 
         MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
         pHealth.RestoreHP(pHealth.maxHP);

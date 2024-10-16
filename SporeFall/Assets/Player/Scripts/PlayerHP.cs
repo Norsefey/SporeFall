@@ -30,7 +30,7 @@ public class PlayerHP : MonoBehaviour
             }
             else
             {
-               StartCoroutine(pMan.Respawn());
+                pMan.StartRespawn();
             }
         }
     }
