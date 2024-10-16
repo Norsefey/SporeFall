@@ -22,7 +22,7 @@ public class TurretBulletBehavior : MonoBehaviour
             EnemyControls hp = collision.gameObject.GetComponent<EnemyControls>();
             if (hp != null)
             {
-                hp.TakeDamage(dmg);  // Apply 8 damage to the enemy
+                hp.TakeDamage(dmg);  // Apply 100 damage to the enemy
             }
         }
         Instantiate(bulletResidue, transform.position, Quaternion.identity);

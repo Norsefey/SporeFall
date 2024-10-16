@@ -17,7 +17,10 @@ public class Turret : MonoBehaviour
 
     void Update()
     {
-        FindNearestEnemy();
+        if (nearestEnemy == null || !IsEnemyInRange(nearestEnemy))
+        {
+            FindNearestEnemy();
+        }
         
         if (nearestEnemy != null)
         {
@@ -33,6 +36,7 @@ public class Turret : MonoBehaviour
     void FindNearestEnemy()
     {
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, detectionRange, enemyLayerMask);
+        Debug.Log($"Enemies detected: {enemiesInRange.Length}");
 
         float shortestDistance = Mathf.Infinity;
         Transform closestEnemy = null;
@@ -48,6 +52,12 @@ public class Turret : MonoBehaviour
         }
 
         nearestEnemy = closestEnemy;
+    }
+
+    // Check if the current enemy is within detection range
+    bool IsEnemyInRange(Transform enemy)
+    {
+        return enemy != null && Vector3.Distance(transform.position, enemy.position) <= detectionRange;
     }
 
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
