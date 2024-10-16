@@ -14,7 +14,6 @@ public class PlayerHP : MonoBehaviour
     void Start()
     {
         currentHP = maxHP;
-        pMan.pUI.HPBar.maxValue = maxHP;
     }
 
     public void TakeDamage(float damageAmount)

@@ -10,11 +10,6 @@ public class CorruptionHandler : MonoBehaviour
     public float maxCorruption = 10;
     public float corruptionLevel = 0;
     public float purifyRate = 1;
-    // Start is called before the first frame update
-    void Start()
-    {
-        pMan.pUI.corruptionBar.maxValue = maxCorruption;
-    }
 
     // Update is called once per frame
     void Update()

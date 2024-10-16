@@ -49,6 +49,7 @@ public class PlayerManager : MonoBehaviour
         pCamera.SetManager(this);
         pCorruption.SetManager(this);
         pHealth.SetManager(this);
+        pUI.SetManager(this);
         PlayerInput playerInput = GetComponent<PlayerInput>();
         if (playerInput.devices.Count > 0)
         {
@@ -241,7 +242,6 @@ public class PlayerManager : MonoBehaviour
 
         this.interactable = null;
     }
-
     public int GetPlayerIndex()
     {
         return GetComponent<PlayerInput>().playerIndex;

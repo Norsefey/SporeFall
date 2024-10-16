@@ -6,11 +6,23 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
+    private PlayerManager pMan;
+    [Header("Gameplay UI")]
+    [SerializeField] private GameObject gameplayUI;
+    [Space(5)]
     [SerializeField] private TMP_Text ammoIndicator;
-    [SerializeField] protected GameObject promptHolder;
+    [SerializeField] private GameObject promptHolder;
     [SerializeField] private TMP_Text textPrompt;
-    public Slider corruptionBar;
-    public Slider HPBar;
+    [SerializeField] private Slider corruptionBar;
+    [SerializeField] private Slider HPBar;
+    [Header("Upgrade Menu")]
+    [SerializeField] private GameObject upgradeMenu;
+
+    private void Start()
+    {
+        corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
+        HPBar.maxValue = pMan.pHealth.maxHP;
+    }
     public void DisplayCorruption(float value)
     {
         if (corruptionBar != null)
@@ -39,11 +51,30 @@ public class PlayerUI : MonoBehaviour
     }
     public void EnablePrompt(string text)
     {
-        promptHolder.gameObject.SetActive(true);
+        promptHolder.SetActive(true);
         textPrompt.text = text;
     }
     public void DisablePrompt()
     {
-        promptHolder.gameObject.SetActive(false);
+        promptHolder.SetActive(false);
+    }
+    public void ToggleUpgradeMenu(bool toggle)
+    {
+        gameplayUI.SetActive(!toggle);
+        upgradeMenu.SetActive(toggle);
+        upgradeMenu.GetComponent<UpgradeMenu>().SetupMenu(pMan);
+
+        pMan.TogglePControl(!toggle);
+
+        if(toggle)
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Locked;
+
+        Cursor.visible = toggle;
+    }
+    public void SetManager(PlayerManager player)
+    {
+        pMan = player;
     }
 }

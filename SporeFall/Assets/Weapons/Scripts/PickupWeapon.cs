@@ -17,7 +17,7 @@ public class PickUpWeapon : Interactables
     {
         pickUp.transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0));
     }
-    public override void AssignAction()
+    public override void ItemAction()
     {
         player.nearByPickUp = pickUp.gameObject;
         player.pUI.EnablePrompt(promptText);

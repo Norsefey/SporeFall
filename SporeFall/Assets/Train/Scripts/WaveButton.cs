@@ -6,7 +6,7 @@ using UnityEngine.Windows;
 
 public class WaveButton : Interactables
 {
-    public override void AssignAction()
+    public override void ItemAction()
     {
         switch (WaveManager.Instance.wavePhase)
         {
