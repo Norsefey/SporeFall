@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 public class PlayerInputOrganizer : MonoBehaviour
@@ -150,13 +152,11 @@ public class PlayerInputOrganizer : MonoBehaviour
         buildInputMap.Disable();
         editInputMap.Disable();
     }
-   
     // interaction button will be the same button but do different things
     public void AssignInteraction(Interactables interaction)
     {
         interactAction.performed += interaction.Interact;
     }
-
     public void RemoveInteraction(Interactables interaction)
     {
         interactAction.performed -= interaction.Interact;

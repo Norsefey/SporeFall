@@ -8,9 +8,7 @@ public class WaveButton : Interactables
 {
     public override void AssignAction()
     {
-        WaveManager.WavePhase currentPhase = player.waveManager.wavePhase;
-
-        switch (currentPhase)
+        switch (WaveManager.Instance.wavePhase)
         {
             case WaveManager.WavePhase.NotStarted:
                 player.pUI.EnablePrompt("Press to Start Wave");
@@ -23,14 +21,14 @@ public class WaveButton : Interactables
 
     public override void Interact(InputAction.CallbackContext context)
     {
-        switch (player.waveManager.wavePhase)
+        switch (WaveManager.Instance.wavePhase)
         {
             case WaveManager.WavePhase.NotStarted:
-                player.waveManager.OnStartWave();
+                WaveManager.Instance.OnStartWave();
                 player.pUI.DisablePrompt();
                 break;
             case WaveManager.WavePhase.Departing:
-                player.waveManager.SkipDepartTime();
+                WaveManager.Instance.SkipDepartTime();
                 player.pInput.RemoveInteraction(this);
                 RemoveAction();
                 break;

@@ -6,9 +6,10 @@ using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
+    public static WaveManager Instance;
     [Header("References")]
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
-    [SerializeField] private TrainHandler train; // Reference to the player transform for positioning
+    [SerializeField] public TrainHandler train; // Reference to the player transform for positioning
     [SerializeField] private Transform[] payloadPath;
     [Header("Waves")]
     [SerializeField] private List<Wave> waves = new(); // List of waves to configure
@@ -38,6 +39,10 @@ public class WaveManager : MonoBehaviour
     public TMP_Text bossText;
     // Test particles
     public GameObject explosionPrefab;
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         currentWave = waves[currentWaveIndex];

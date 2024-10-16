@@ -78,8 +78,6 @@ public class BuildGun : Weapon
                 SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
 
                 player.train.AddStructure(selectedStructure);
-                selectedStructure.transform.SetParent(player.train.structureHolder, true);
-
                 selectedStructure = null; // Clear the selected object
 
                 player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");

@@ -16,7 +16,7 @@ public class PlayerManager : MonoBehaviour
     public BuildGun bGun;
     public CorruptionHandler pCorruption;
     public TrainHandler train;
-    public WaveManager waveManager;
+    //public WaveManager waveManager;
     private Interactables interactable;
     [Header("Weapons")]
     // Weapons and Shooting
@@ -36,7 +36,6 @@ public class PlayerManager : MonoBehaviour
     public float mycelia = 30;
  
     [Header("Respawn")]
-    [SerializeField] private Transform respawnPoint;
     [SerializeField] private float respawnTime;
 
     public bool holdingCorruption = false;
@@ -71,6 +70,8 @@ public class PlayerManager : MonoBehaviour
     }
     private void Start()
     {
+        if(WaveManager.Instance != null)
+            WaveManager.Instance.train.AddPlayer(this);
         // in order to spawn player at a spawn point, disable movement controls
         pUI.AmmoDisplay(currentWeapon);
         pInput.AssignAllActions();
@@ -217,8 +218,8 @@ public class PlayerManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(respawnTime);
-       
-        MovePlayerTo(respawnPoint.position);
+
+        MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
         pHealth.RestoreHP(pHealth.maxHP);
         TogglePControl(true);
     }
@@ -239,5 +240,10 @@ public class PlayerManager : MonoBehaviour
         pInput.RemoveInteraction(interactable);
 
         this.interactable = null;
+    }
+
+    public int GetPlayerIndex()
+    {
+        return GetComponent<PlayerInput>().playerIndex;
     }
 }

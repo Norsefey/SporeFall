@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class TrainHandler : MonoBehaviour
 {
-    public PlayerManager[] players;
-    [SerializeField] Transform playerSpawnPoint;
-    // train camera
-    public GameObject trainCamera;
-    // train visuals
+    private List<PlayerManager> players = new List<PlayerManager>();
+    [Header("References")]
+    [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
-    // payload
     [SerializeField] private GameObject payloadPrefab;
     [SerializeField] private Transform payloadSpawnPos;
     public Payload Payload { get; private set; }
-    // Interactables
+    [SerializeField] public Transform[] playerSpawnPoint;
+   
+    [Header("Structures")]
     // structures
-    public Transform structureHolder;
+    [SerializeField] private Transform structureHolder;
     private List<Structure> activeStructures = new List<Structure>();
     public float maxEnergy = 50;
     private float energyUsed = 0;
     // train Variables
+    [Header("Train Movement")]
     public float cannonFireTime = 2f;
     public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
-    public float maxHP = 100;
-    private float currentHP = 100;
     public enum TrainState
     {
         Parked,
@@ -32,12 +30,15 @@ public class TrainHandler : MonoBehaviour
         Moving
     }
     public TrainState state;
+    [Header("Train Stats")]
+    public float maxHP = 100;
+    private float currentHP = 100;
     public void SetParkedState()
     {
         state = TrainState.Parked;
         trainVisual.rotation = Quaternion.identity;
         ToggleStructures(true);
-        if(players.Length > 0)
+        if(players.Count != 0)
         {
             DisembarkTrain();
         }
@@ -69,8 +70,13 @@ public class TrainHandler : MonoBehaviour
     }
     public void AddStructure(Structure structure)
     {
+        // track active structures
         activeStructures.Add(structure);
+        // give the structure a reference to the train, so it can remove itself on when destroyed
         structure.SetTrainHandler(this);
+        // set the parent of the structure to the structure holder, to hide structures when moving
+        structure.transform.SetParent(structureHolder, true);
+        // add energy cost of structure to energy usage
         UpdateEnergyUsage();
     }
     public void RemoveStructure(Structure structure)
@@ -80,6 +86,7 @@ public class TrainHandler : MonoBehaviour
     }
     public void UpdateEnergyUsage()
     {
+        // since structures can be upgrades and that changes energy usage check all for their current usag
         energyUsed = 0;
         foreach (var structure in activeStructures)
         {
@@ -92,18 +99,23 @@ public class TrainHandler : MonoBehaviour
     }
     private void BoardTrain()
     {
+        if (players.Count == 0)
+            return;
+        // hide players to move train
         foreach(var player in players)
         {
             // switch to train camera
             player.TogglePControl(false);
             player.TogglePCamera(false);
             player.TogglePVisual(false);
-            player.MovePlayerTo(playerSpawnPoint.position);
+            player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
+            player.transform.SetParent(this.transform);
         }
        
     }
     private void DisembarkTrain()
     {
+        // show players once train has parked
         trainCamera.SetActive(false);
         foreach (var player in players)
         {
@@ -111,5 +123,38 @@ public class TrainHandler : MonoBehaviour
             player.TogglePVisual(true);
             player.TogglePCamera(true);
         }
+    }
+    public void AddPlayer(PlayerManager player)
+    {
+        // keep track of active players
+        players.Add(player);
+        player.train = this;
+
+        Debug.Log("Player Added");
+
+        if (state == TrainState.Moving)
+            BoardTrain();
+        else
+        {
+            player.TogglePControl(false);
+            player.TogglePCamera(false);
+            player.TogglePVisual(false);
+            player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
+            player.transform.SetParent(this.transform);
+
+            Invoke("DisembarkTrain", .5f);
+        }
+    }
+    public void CheckTrainCamera()
+    {
+        if (trainCamera.activeSelf)
+        {
+            trainCamera.SetActive(false);
+        }
+    }
+    public void RemovePlayer(PlayerManager player)
+    {
+        // remove disconnected players
+        players.Remove(player);
     }
 }
