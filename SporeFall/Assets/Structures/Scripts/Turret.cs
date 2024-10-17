@@ -53,13 +53,11 @@ public class Turret : MonoBehaviour
 
         nearestEnemy = closestEnemy;
     }
-
     // Check if the current enemy is within detection range
     bool IsEnemyInRange(Transform enemy)
     {
         return enemy != null && Vector3.Distance(transform.position, enemy.position) <= detectionRange;
     }
-
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
     void RotateTurretTowardsEnemy()
     {
@@ -74,28 +72,28 @@ public class Turret : MonoBehaviour
         // Smoothly rotate towards the enemy on the y-axis
         transform.parent.rotation = Quaternion.Slerp(transform.parent.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
-
     // Check line of sight using raycasting and fire at the enemy if visible
     void CheckLineOfSightAndFire()
     {
         RaycastHit hit;
-
+        Vector3 enemyPos = (nearestEnemy.position - firePoint.position) + Vector3.up;
         // Perform a raycast towards the enemy
-        if (Physics.Raycast(firePoint.position, (nearestEnemy.position - firePoint.position).normalized, out hit, raycastRange))
+        if (Physics.Raycast(firePoint.position, enemyPos, out hit))
         {
             // Check if the raycast hits the nearest enemy
             if (hit.transform == nearestEnemy)
             {
+                Debug.Log("Firing");
+                Fire();
                 // Line of sight is clear, fire at the enemy
                 if (fireCooldown <= 0f)
                 {
-                    Fire();
+
                     fireCooldown = 1f / fireRate;
                 }
             }
         }
     }
-
     // Fire a bullet towards the enemy
     void Fire()
     {   
@@ -104,7 +102,6 @@ public class Turret : MonoBehaviour
         // You can add a script on the bullet to make it move and damage the enemy
         // Example: bullet.GetComponent<Bullet>().SetTarget(nearestEnemy);
     }
-
     // Visualize detection range in the editor
     private void OnDrawGizmosSelected()
     {

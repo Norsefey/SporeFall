@@ -12,7 +12,6 @@ public class TrainHandler : MonoBehaviour
     [SerializeField] private Transform payloadSpawnPos;
     public Payload Payload { get; private set; }
     [SerializeField] public Transform[] playerSpawnPoint;
-   
     [Header("Structures")]
     // structures
     [SerializeField] private Transform structureHolder;
@@ -31,6 +30,7 @@ public class TrainHandler : MonoBehaviour
     }
     public TrainState state;
     [Header("Train Stats")]
+    [SerializeField] public Transform[] damagePoint;
     public float maxHP = 100;
     private float currentHP = 100;
     public void SetParkedState()
@@ -66,6 +66,7 @@ public class TrainHandler : MonoBehaviour
     }
     public void TakeDamage(float damage)
     {
+        Debug.Log(this.name + " Received Damage: " + damage);
         currentHP -= damage;
     }
     public void AddStructure(Structure structure)

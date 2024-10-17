@@ -116,6 +116,7 @@ public class WaveManager : MonoBehaviour
         enemy.transform.SetParent(transform);
         // once we start the enemy script add an OnEnemyDeath Event
         enemy.GetComponent<EnemyControls>().OnEnemyDeath += OnEnemyDeath; // Assuming each enemy has an OnEnemyDeath event
+        enemy.GetComponent<EnemyControls>().train = train;
         enemiesAlive++;
         enemiesSpawned++;
     }

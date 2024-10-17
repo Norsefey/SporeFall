@@ -23,10 +23,11 @@ public class ShermanControl : MonoBehaviour
     void Start()
     {
         // Pick an initial random direction
-        randomDirection = GetRandomDirection();
-        
+        //randomDirection = GetRandomDirection();
+        // allow sherman to fly out of house
+        randomDirection = transform.forward;
         // Start the direction-changing process
-        InvokeRepeating("ChangeDirection", 0f, changeDirectionInterval);
+        InvokeRepeating("ChangeDirection", 1f, changeDirectionInterval);
     }
 
     void Update()

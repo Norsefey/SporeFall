@@ -221,17 +221,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669902cca14194745abe404b3543acb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
+  maxHP: 10
   hpDisplay: {fileID: 8293907463534621136}
   stoppingDistance: 2
   attackRange: 5
   attackCooldown: 2
   damageAmount: 5
-  targetingRange: 30
-  targetTags:
-  - WallStructure
-  - Player
+  targetingRange: 54
+  priorityTags:
   - Structure
+  - Player
+  - Payload
+  - WallStructure
+  targetsLayerMask:
+    serializedVersion: 2
+    m_Bits: 640
+  train: {fileID: 0}
+  updateTargetInterval: 0.5
+  maxDetectedObjects: 10
 --- !u!1 &9030144842525589066
 GameObject:
   m_ObjectHideFlags: 0
