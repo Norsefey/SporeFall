@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     private PlayerManager pMan;
+    private Weapon weapon;
     [Header("Gameplay UI")]
     [SerializeField] private GameObject gameplayUI;
     [Space(5)]
@@ -17,6 +18,10 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider HPBar;
     [Header("Upgrade Menu")]
     [SerializeField] private GameObject upgradeMenu;
+    //[Header("Weapon Icons")]
+    //[SerializeField] private GameObject puffBoomIcon;
+    //[SerializeField] private GameObject rifleIcon;
+    //[SerializeField] private GameObject shotgunIcon;
 
     private void Start()
     {
@@ -41,6 +46,8 @@ public class PlayerUI : MonoBehaviour
         else
             ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
     }
+
+    
     public void UpdateHPDisplay(float value)
     {
         HPBar.value = value;
