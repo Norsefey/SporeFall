@@ -14,9 +14,9 @@ public class PlayerManager : MonoBehaviour
     public PlayerUI pUI;
     public GameObject pVisual;
     public BuildGun bGun;
+    public PlayerAnimation pAnime;
     public CorruptionHandler pCorruption;
     public TrainHandler train;
-    //public WaveManager waveManager;
     private Interactables interactable;
     [Header("Weapons")]
     // Weapons and Shooting
@@ -50,6 +50,7 @@ public class PlayerManager : MonoBehaviour
         pCorruption.SetManager(this);
         pHealth.SetManager(this);
         pUI.SetManager(this);
+        pAnime.SetManager(this);
         PlayerInput playerInput = GetComponent<PlayerInput>();
         if (playerInput.devices.Count > 0)
         {
@@ -214,7 +215,6 @@ public class PlayerManager : MonoBehaviour
     {
         StartCoroutine(Respawn());
     }
-
     private IEnumerator Respawn()
     {
         TogglePControl(false);

@@ -21,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
     readonly float minFall = -1.5f;
     readonly float gravity = -9.81f;
     private float vertSpeed;
-    //private ControllerColliderHit contact;
     private float tempAimTimer = 0;
     public enum PlayerState
     {// two move states...so far, default and aiming

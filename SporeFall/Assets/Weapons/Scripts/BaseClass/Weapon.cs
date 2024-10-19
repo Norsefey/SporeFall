@@ -63,8 +63,8 @@ public abstract class Weapon : MonoBehaviour
         rb.velocity = shootDirection * bulletDistance; // Adjust projectile speed as needed
         if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
         {
-            Debug.Log("Only Rotating Gun");
-            transform.forward = shootDirection;
+           // Debug.Log("Only Rotating Gun");
+            //transform.forward = shootDirection;
         }
         else
         {
@@ -79,8 +79,8 @@ public abstract class Weapon : MonoBehaviour
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
         if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
         {
-            Debug.Log("Only Rotating Gun");
-            transform.forward = shootDirection;
+            //Debug.Log("Only Rotating Gun");
+            //transform.forward = shootDirection;
         }
         else
         {
@@ -100,7 +100,6 @@ public abstract class Weapon : MonoBehaviour
             {
                 hit.collider.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
             }
-            //hit.collider.GetComponent<Sherman>()?.TakeDamage(damage);
         }
     }
     // Method to calculate a bullet spread direction

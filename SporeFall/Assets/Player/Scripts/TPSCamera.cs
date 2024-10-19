@@ -2,6 +2,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TPSCamera : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private float groundDetectionAngle = 45f; // Angle to define what is considered 'ground'
     [SerializeField] private float collisionFreeTime = 0.5f;  // Time to wait before moving camera back
     private float timeSinceCollision = 0f;  // Time since last collision
+    [SerializeField] private Transform aimTarget;
 
     // local private variables
     private PlayerManager pMan;
@@ -52,8 +54,14 @@ public class TPSCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        // moves camera set along with Character
-        HolderMovement();
+        Ray ray = new(myCamera.transform.position, myCamera.transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            aimTarget.position = hit.point;
+        }
+
+            // moves camera set along with Character
+            HolderMovement();
         // rotates camera based on mouse movement
         transform.localEulerAngles = new Vector3(VerticalRotation(), HorizontalRotation(), 0);
         if (player.currentState == PlayerMovement.PlayerState.Default)

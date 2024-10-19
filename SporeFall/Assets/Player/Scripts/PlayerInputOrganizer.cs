@@ -187,11 +187,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
 
     #region input Calls
-/*    private void ReleaseCursor(InputAction.CallbackContext context)
-    {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-    }*/
     private void ExitGame(InputAction.CallbackContext context)
     {
         Debug.Log("Closing down Game");
@@ -216,16 +211,12 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnAimSightCall(InputAction.CallbackContext context)
     {
-        /*// if cursor is loose lock it back up
-        if ((pMan.myDevice is Keyboard) && Cursor.visible)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }*/
+        pMan.pAnime.ToggleAimAnime(true);
         pMan.pCamera.AimSight();
     }
     private void OnDefaultSightCall(InputAction.CallbackContext context)
     {
+        pMan.pAnime.ToggleAimAnime(false);
         pMan.pCamera.DefaultSight();
     }
     private void OnJumpCall(InputAction.CallbackContext context)
