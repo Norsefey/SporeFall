@@ -70,8 +70,6 @@ public class PlayerMovement : MonoBehaviour
         transform.forward = myCamera.forward;
 
         myCamera.localRotation = temp;
-        // rotate the gun in direction of shot
-        gun.forward = shootDir;
         // if player is moving while in default state
         if (cc.velocity.magnitude > 0)
         {

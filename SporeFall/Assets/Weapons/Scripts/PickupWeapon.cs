@@ -24,7 +24,6 @@ public class PickUpWeapon : Interactables
     }
     public override void Interact(InputAction.CallbackContext context)
     {
-        Debug.Log("Picked up weapon: " + pickUp.name);
         player.PickUpWeapon();
     }
     public override void RemoveAction()

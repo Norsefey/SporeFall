@@ -37,6 +37,7 @@ public class PlayerManager : MonoBehaviour
  
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
+    [SerializeField] private Transform fallbackSpawnPoint;
 
     public bool holdingCorruption = false;
     public InputDevice myDevice;
@@ -115,6 +116,7 @@ public class PlayerManager : MonoBehaviour
             currentWeapon = bGun;
             pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             pUI.AmmoDisplay(currentWeapon);
+            pAnime.ToggleTwoHanded(false);
             isBuilding = true;
         }
         else
@@ -158,8 +160,9 @@ public class PlayerManager : MonoBehaviour
         // Equip the new weapon
         currentWeapon = Instantiate(nearByPickUp, weaponHolder).GetComponent<Weapon>();
         // set the transforms of the new weapon
-        currentWeapon.transform.forward = pController.transform.forward;
         currentWeapon.transform.localPosition = Vector3.zero;
+        currentWeapon.transform.forward = pController.transform.forward;
+
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
         // destroy pick up platform
@@ -168,6 +171,11 @@ public class PlayerManager : MonoBehaviour
         pUI.DisablePrompt();
         // update UI to display new ammo capacities
         pUI.AmmoDisplay(currentWeapon);
+        if(currentWeapon.isTwoHanded)
+            pAnime.ToggleTwoHanded(true);
+        else
+            pAnime.ToggleTwoHanded(false);
+
         Debug.Log("Picked up: " + currentWeapon.weaponName);
 
         if (currentWeapon.isCorrupted)
@@ -187,8 +195,9 @@ public class PlayerManager : MonoBehaviour
         equippedWeapon = null;
         // reactivate the default weapon
         currentWeapon.gameObject.SetActive(true);
-        pUI.AmmoDisplay(currentWeapon);
         holdingCorruption = false;
+        pUI.AmmoDisplay(currentWeapon);
+        pAnime.ToggleTwoHanded(false);
     }
     public void TogglePControl(bool toggle)
     {
@@ -226,8 +235,10 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("Death Time");
         yield return new WaitForSeconds(2);
         Debug.Log("Respawning");
-
-        MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
+        if (train != null)
+            MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
+        else
+            MovePlayerTo(fallbackSpawnPoint.position);
         pHealth.RestoreHP(pHealth.maxHP);
         TogglePControl(true);
     }

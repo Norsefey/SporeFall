@@ -60,6 +60,11 @@ public class ChargeGun : Weapon
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         rb.velocity = shootDirection * baseChargeSpeed * chargeMultiplier; // Increase speed based on charge
 
+        if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
+        {
+            Debug.Log("Rotating on Fire");
+            player.pController.RotateOnFire(this.transform, shootDirection);
+        }
         Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier);
     }
 

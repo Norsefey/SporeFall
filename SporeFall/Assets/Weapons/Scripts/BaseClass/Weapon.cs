@@ -14,7 +14,9 @@ public abstract class Weapon : MonoBehaviour
     [Header("Corruption")]
     public bool isCorrupted;
     public float corruptionRate = 1.2f;
-
+    [Header("Hold Type")]
+    public bool isTwoHanded = false;
+    public Transform secondHandHold;
     [Header("Base Stats")]
     public float damage;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
@@ -56,37 +58,29 @@ public abstract class Weapon : MonoBehaviour
     {
         // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
-
-        // Instantiate the projectile and shoot it in the spread direction
-        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
-        Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        rb.velocity = shootDirection * bulletDistance; // Adjust projectile speed as needed
-        if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
-        {
-           // Debug.Log("Only Rotating Gun");
-            //transform.forward = shootDirection;
-        }
-        else
+        // Rotate player first before shooting
+        if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
+        // Instantiate the projectile and shoot it in the spread direction
+        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+        rb.velocity = shootDirection * bulletDistance; // Adjust projectile speed as needed
+     
         Debug.Log(weaponName + " fired a projectile.");
     }
     private void FireHitscan(Camera playerCamera)
     {
         // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
-        if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
-        {
-            //Debug.Log("Only Rotating Gun");
-            //transform.forward = shootDirection;
-        }
-        else
+        if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
+   
         Ray ray = new(playerCamera.transform.position, shootDirection);
 
         if (Physics.Raycast(ray, out RaycastHit hit, bulletDistance, hitLayers)) // Range of the hitscan weapon
