@@ -171,6 +171,8 @@ public class PlayerManager : MonoBehaviour
         pUI.DisablePrompt();
         // update UI to display new ammo capacities
         pUI.AmmoDisplay(currentWeapon);
+
+        // Animation switch depending on weapon type
         if(currentWeapon.isTwoHanded)
             pAnime.ToggleTwoHanded(true);
         else

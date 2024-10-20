@@ -54,17 +54,21 @@ public class WaveManager : MonoBehaviour
         switch (wavePhase)
         {
             case WavePhase.NotStarted:
-                waveUI.text = "Push Button to Start: " + currentWave.waveName;
+                if(waveUI != null)
+                    waveUI.text = "Push Button to Start: " + currentWave.waveName;
                 break;
             case WavePhase.Started:
-                waveUI.text = "Enemies Left: " + (currentWave.totalEnemies - ( enemiesSpawned - enemiesAlive)).ToString();
+                if (waveUI != null)
+                    waveUI.text = "Enemies Left: " + (currentWave.totalEnemies - ( enemiesSpawned - enemiesAlive)).ToString();
                 break;
             case WavePhase.Departing:
                 timer -= Time.deltaTime;
-                waveUI.text = "Wave Cleared! Departing in: " + (timer).ToString("F0") + "\n Push Button To skip Wait";
+                if (waveUI != null)
+                    waveUI.text = "Wave Cleared! Departing in: " + (timer).ToString("F0") + "\n Push Button To skip Wait";
                 break;
             case WavePhase.Moving:
-                waveUI.text = "Moving to next Area";
+                if (waveUI != null)
+                    waveUI.text = "Moving to next Area";
                 break;
         }
     }
@@ -125,7 +129,8 @@ public class WaveManager : MonoBehaviour
         Transform spawnPoint = currentWave.spawnLocations[0];
         GameObject boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
         boss.transform.SetParent(transform);
-        bossText.text = "<color=red>Boss Has Spawned</color>" + "\n 999999";
+        if (bossText != null)
+            bossText.text = "<color=red>Boss Has Spawned</color>";
         // once we start the Boss script add an OnEnemyDeath Event
         boss.GetComponent<Sherman>().OnEnemyDeath += OnBossDeath;
         enemiesAlive++;

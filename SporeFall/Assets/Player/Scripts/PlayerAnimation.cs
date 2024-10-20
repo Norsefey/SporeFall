@@ -70,6 +70,7 @@ public class PlayerAnimation : MonoBehaviour
         {
             isWalking = true;
             ToggleWalkAnime(true);
+            anime.SetFloat("WalkDirection", pMan.pInput.moveAction.ReadValue<Vector2>().y);
         }
         else if (isWalking && pMan.pInput.moveAction.ReadValue<Vector2>() == Vector2.zero)
         {

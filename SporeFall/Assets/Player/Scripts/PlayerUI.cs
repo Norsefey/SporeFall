@@ -22,7 +22,6 @@ public class PlayerUI : MonoBehaviour
     //[SerializeField] private GameObject puffBoomIcon;
     //[SerializeField] private GameObject rifleIcon;
     //[SerializeField] private GameObject shotgunIcon;
-
     private void Start()
     {
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
@@ -46,8 +45,6 @@ public class PlayerUI : MonoBehaviour
         else
             ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
     }
-
-    
     public void UpdateHPDisplay(float value)
     {
         HPBar.value = value;
