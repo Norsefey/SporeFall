@@ -43,6 +43,7 @@ public class EnemyControls : MonoBehaviour
     [SerializeField] private float dropChance = 20;
 
     private bool isDead = false; // check if already dead
+    private bool isTargetingTrain = false;
     void Start()
     {
         currentHP = maxHP;
@@ -135,8 +136,13 @@ public class EnemyControls : MonoBehaviour
         {
             int index = Random.Range(0, train.damagePoint.Length);
             currentTarget = train.damagePoint[index];
+            isTargetingTrain = true;
         }
-        
+        else
+        {
+            isTargetingTrain = false;
+        }
+
     }
     // Get the priority index of the tag, lower numbers mean higher priority
     int GetPriorityIndex(string tag)
@@ -218,22 +224,16 @@ public class EnemyControls : MonoBehaviour
     {
         if (Time.time >= lastAttackTime + attackCoolDown)
         {
-            // no matter the script this tries to call a method on that script, if it doesn't have it does nothing
-            // added to test player taking damage
-            //target.SendMessage("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
-           
             // since the script with Hp is in a child with no collider, we need to manually get the child
-                // Moved turret controls to be the first child
-            target.GetChild(0).SendMessageUpwards("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
-            /*
-            // Check if the target has a Damageable component
-            var targetDamageable = target.GetComponent<StructureHealth>();
-
-            if (targetDamageable != null)
+            // Moved turret controls to be the first child
+            if (isTargetingTrain)
             {
-                targetDamageable.TakeDamage(damageAmount); // Deal damage to the target
-                Debug.Log("Dealt " + damageAmount + " damage to " + target.name);
-            }*/
+                train.trainHP.TakeDamage(damageAmount);
+            }
+            else 
+            {
+                target.GetChild(0).SendMessageUpwards("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
+            }
 
             lastAttackTime = Time.time; // Reset attack cooldown timer
         }

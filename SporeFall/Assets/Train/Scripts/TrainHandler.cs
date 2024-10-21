@@ -34,7 +34,7 @@ public class TrainHandler : MonoBehaviour
     public Transform[] damagePoint;
 
     public TrainUI tUI;
-    private TrainHP trainHP;
+    public TrainHP trainHP;
 
     private void Awake()
     {
@@ -45,7 +45,6 @@ public class TrainHandler : MonoBehaviour
             tUI.SetMaxHP(trainHP.maxHP);
         }
     }
-
     public void Update()
     {
         //Testing train taking damage
@@ -86,7 +85,6 @@ public class TrainHandler : MonoBehaviour
     {
         structureHolder.gameObject.SetActive(state);
     }
-
     public void AddStructure(Structure structure)
     {
         // track active structures
