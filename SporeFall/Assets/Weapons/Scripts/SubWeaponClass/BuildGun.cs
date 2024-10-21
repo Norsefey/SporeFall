@@ -46,7 +46,7 @@ public class BuildGun : Weapon
                 //Debug.Log("Creating New Structure");
                 selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
                 selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
-                SetStructureToTransparent(selectedStructure.gameObject); // Make the object transparent to show it's a preview
+                SetStructureToTransparent(selectedStructure.CurrentVisual()); // Make the object transparent to show it's a preview
             }
             else if(selectedStructure != null)
             {
@@ -116,58 +116,64 @@ public class BuildGun : Weapon
     private void SetStructureToTransparent(GameObject obj)
     {
         // Set the object material to transparent for preview
-        Renderer renderer = obj.GetComponentInChildren<Renderer>();
-        if (renderer != null)
+        Renderer[] visuals = obj.GetComponentsInChildren<Renderer>();
+        if (visuals != null)
         {
-            foreach (var material in renderer.materials)
+            foreach (Renderer renderer in visuals)
             {
-                material.SetFloat("_Surface", 1); // Set to Transparent
-                material.SetFloat("_Blend", 0);
-                material.SetOverrideTag("RenderType", "Transparent");
-                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                foreach (var material in renderer.materials)
+                {
+                    material.SetFloat("_Surface", 1); // Set to Transparent
+                    material.SetFloat("_Blend", 0);
+                    material.SetOverrideTag("RenderType", "Transparent");
+                    material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
 
-                // Enable alpha clipping if needed (optional for transparency)
-                material.SetFloat("_AlphaClip", 0);
-                material.SetFloat("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                material.SetFloat("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    // Enable alpha clipping if needed (optional for transparency)
+                    material.SetFloat("_AlphaClip", 0);
+                    material.SetFloat("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    material.SetFloat("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
 
-                material.SetFloat("_ZWrite", 0); // Disable ZWrite for transparent objects
+                    material.SetFloat("_ZWrite", 0); // Disable ZWrite for transparent objects
 
-                Color color = material.color;
-                color.a = 0.25f; // Half transparency
-                material.color = color;
+                    Color color = material.color;
+                    color.a = 0.25f; // Half transparency
+                    material.color = color;
+                }
             }
         }
     }
     private void SetStructureToOpaque(GameObject obj)
     {
         // Set the object material to opaque for final placement
-        Renderer renderer = obj.GetComponentInChildren<Renderer>();
-        if (renderer != null)
+        Renderer[] visuals = obj.GetComponentsInChildren<Renderer>();
+        if (visuals != null)
         {
-            foreach (var material in renderer.materials)
+            foreach (Renderer renderer in visuals)
             {
-                material.SetFloat("_Surface", 0); // Set surface type to Opaque
-                material.SetOverrideTag("RenderType", "Opaque");
-                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+                foreach (var material in renderer.materials)
+                {
+                    material.SetFloat("_Surface", 0); // Set surface type to Opaque
+                    material.SetOverrideTag("RenderType", "Opaque");
+                    material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
 
-                // Disable blending for opaque rendering
-                material.SetFloat("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                material.SetFloat("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    // Disable blending for opaque rendering
+                    material.SetFloat("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    material.SetFloat("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
 
-                // Enable ZWrite for opaque objects
-                material.SetFloat("_ZWrite", 1);
+                    // Enable ZWrite for opaque objects
+                    material.SetFloat("_ZWrite", 1);
 
-                // Ensure AlphaClipping is off
-                material.SetFloat("_AlphaClip", 0);
+                    // Ensure AlphaClipping is off
+                    material.SetFloat("_AlphaClip", 0);
 
-                // Set the material's keyword for opaque rendering
-                material.EnableKeyword("_SURFACE_TYPE_OPAQUE");
-                material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
+                    // Set the material's keyword for opaque rendering
+                    material.EnableKeyword("_SURFACE_TYPE_OPAQUE");
+                    material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
 
-                Color color = material.color;
-                color.a = 1f; // Full opacity
-                material.color = color;
+                    Color color = material.color;
+                    color.a = 1f; // Full opacity
+                    material.color = color;
+                }
             }
         }
     }

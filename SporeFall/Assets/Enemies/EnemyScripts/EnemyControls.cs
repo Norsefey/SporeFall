@@ -132,7 +132,7 @@ public class EnemyControls : MonoBehaviour
            .Select(c => c.transform)
            .FirstOrDefault();
 
-        if (currentTarget == null)
+        if (currentTarget == null && train != null)
         {
             int index = Random.Range(0, train.damagePoint.Length);
             currentTarget = train.damagePoint[index];
@@ -261,11 +261,15 @@ public class EnemyControls : MonoBehaviour
         Debug.Log("Enemy died.");
         isDead = true;
         OnEnemyDeath?.Invoke();
-
+        
         var mycelia = Instantiate(myceliaDropPrefab, transform.position, Quaternion.identity).GetComponent<MyceliaPickup>();
         mycelia.Setup(myceliaDropAmount);
-        // so we can remove it if player doesn't pick it up, set as child of drops holder
-        mycelia.transform.SetParent(train.dropsHolder, true);
+       
+        if (train != null)
+        {
+            // so we can remove it if player doesn't pick it up, set as child of drops holder
+            mycelia.transform.SetParent(train.dropsHolder, true);
+        }
 
         if (weaponDropPrefab.Length != 0)
         {
