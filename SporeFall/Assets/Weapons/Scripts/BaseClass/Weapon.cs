@@ -88,8 +88,6 @@ public abstract class Weapon : MonoBehaviour
             Debug.Log(weaponName + " hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));
             // Apply damage to the hit object
-
-            // Sherman must die for now
             if (hit.collider.CompareTag("Enemy"))
             {
                 hit.collider.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
@@ -115,9 +113,10 @@ public abstract class Weapon : MonoBehaviour
     private IEnumerator ReloadCoroutine()
     {
         isReloading = true;
-        Debug.Log(weaponName + " is reloading...");
+        if (player.pUI != null)
+            player.pUI.AmmoDisplay(this);
 
-        if(limitedAmmo)
+        if (limitedAmmo)
         {
             if (totalAmmo <= 0)
             {
@@ -147,9 +146,8 @@ public abstract class Weapon : MonoBehaviour
             bulletCount = bulletCapacity;
         }
 
-
+        isReloading = false;
         if (player.pUI != null)
             player.pUI.AmmoDisplay(this);
-        isReloading = false;
     }
 }

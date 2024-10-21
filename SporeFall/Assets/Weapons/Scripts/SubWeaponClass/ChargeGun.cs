@@ -15,7 +15,12 @@ public class ChargeGun : Weapon
     // Called while holding down the fire button to accumulate charge
     public void Charge()
     {
-        if (bulletCount <= 0 || IsReloading) return;
+        if (bulletCount <= 0 && !IsReloading)
+        {
+            Reload();
+        }
+        else if (bulletCount <= 0 || IsReloading) 
+            return;
 
         if (!isCharging)
         {
@@ -58,7 +63,7 @@ public class ChargeGun : Weapon
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         projectile.transform.localScale *= chargeMultiplier;
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        rb.velocity = shootDirection * baseChargeSpeed * chargeMultiplier; // Increase speed based on charge
+        rb.velocity = baseChargeSpeed * chargeMultiplier * shootDirection; // Increase speed based on charge
 
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
@@ -73,10 +78,9 @@ public class ChargeGun : Weapon
     {
         Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
 
-        Ray ray = new Ray(player.pCamera.myCamera.transform.position, shootDirection);
-        RaycastHit hit;
+        Ray ray = new(player.pCamera.myCamera.transform.position, shootDirection);
 
-        if (Physics.Raycast(ray, out hit, 100f))
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f))
         {
             Debug.Log(weaponName + " fired a charged hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));

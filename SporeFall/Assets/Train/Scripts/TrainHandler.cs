@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class TrainHandler : MonoBehaviour
 {
-    private List<PlayerManager> players = new List<PlayerManager>();
+    private List<PlayerManager> players = new();
     [Header("References")]
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject payloadPrefab;
     [SerializeField] private Transform payloadSpawnPos;
+    public Transform dropsHolder;
     public Payload Payload { get; private set; }
-    [SerializeField] public Transform[] playerSpawnPoint;
+    public Transform[] playerSpawnPoint;
     [Header("Structures")]
     // structures
     [SerializeField] private Transform structureHolder;
-    private List<Structure> activeStructures = new List<Structure>();
+    private List<Structure> activeStructures = new();
     public float maxEnergy = 50;
     private float energyUsed = 0;
     // train Variables
@@ -28,14 +29,14 @@ public class TrainHandler : MonoBehaviour
         Firing,
         Moving
     }
-    public TrainState state;
+    public TrainState trainState;
     [Header("Train Stats")]
-    [SerializeField] public Transform[] damagePoint;
+    public Transform[] damagePoint;
     public float maxHP = 100;
     private float currentHP = 100;
     public void SetParkedState()
     {
-        state = TrainState.Parked;
+        trainState = TrainState.Parked;
         trainVisual.rotation = Quaternion.identity;
         ToggleStructures(true);
         if(players.Count != 0)
@@ -45,19 +46,20 @@ public class TrainHandler : MonoBehaviour
     }
     public void SetFiringState()
     {
-        state = TrainState.Firing;
+        trainState = TrainState.Firing;
         trainCamera.SetActive(true);
+        ClearDrops();
         BoardTrain();
     }
     public void SetMovingState()
     {
-        state = TrainState.Moving;
+        trainState = TrainState.Moving;
         trainVisual.rotation = Quaternion.Euler(0,70,0);
         ToggleStructures(false);
     }
     public void SpawnPayload(Transform[] path)
     {
-        Payload = Instantiate(payloadPrefab, payloadSpawnPos).GetComponent<Payload>();
+        Payload = Instantiate(payloadPrefab, payloadSpawnPos).GetComponentInChildren<Payload>();
         Payload.StartMoving(path);
     }
     private void ToggleStructures(bool state)
@@ -98,19 +100,18 @@ public class TrainHandler : MonoBehaviour
     {
         return energyUsed + eCost <= maxEnergy;
     }
-    private void BoardTrain()
+    public void BoardTrain()
     {
         if (players.Count == 0)
             return;
         // hide players to move train
-        foreach(var player in players)
+        foreach (var player in players)
         {
             // switch to train camera
             player.TogglePControl(false);
             player.TogglePCamera(false);
             player.TogglePVisual(false);
             player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
-            player.transform.SetParent(this.transform);
         }
        
     }
@@ -133,18 +134,14 @@ public class TrainHandler : MonoBehaviour
 
         Debug.Log("Player Added");
 
-        if (state == TrainState.Moving)
-            BoardTrain();
-        else
-        {
-            player.TogglePControl(false);
-            player.TogglePCamera(false);
-            player.TogglePVisual(false);
-            player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
-            player.transform.SetParent(this.transform);
-
-            Invoke("DisembarkTrain", .5f);
-        }
+        player.TogglePControl(false);
+        player.TogglePCamera(false);
+        player.TogglePVisual(false);
+        player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
+        player.transform.SetParent(this.transform);
+        if(trainState != TrainState.Moving)
+            Invoke(nameof(DisembarkTrain), .5f);
+        
     }
     public void CheckTrainCamera()
     {
@@ -157,5 +154,14 @@ public class TrainHandler : MonoBehaviour
     {
         // remove disconnected players
         players.Remove(player);
+    }
+    private void ClearDrops()
+    {
+        // clears all drops from enemies that haven't been collected when train departs
+        foreach (Transform child in dropsHolder.transform)
+        {
+            // Destroy each child object
+            Destroy(child.gameObject);
+        }
     }
 }

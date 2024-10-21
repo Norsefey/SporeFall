@@ -31,13 +31,16 @@ public class EnemyControls : MonoBehaviour
     public LayerMask targetsLayerMask; // So we only detect what we need to
     public TrainHandler train;    // if nothing is in range will move to train
 
-
     private Transform currentTarget; // the current target it is moving to and will attack
     private float nextTargetUpdateTime = 0f; // check for potential targets in intervals
     public float updateTargetInterval = 0.5f;  // Time interval to update the target
     private Collider[] detectedColliders;      // Array to store detected colliders
     public int maxDetectedObjects = 10;        // Max number of objects the enemy can detect at once
-
+    [Header("Drops")]
+    [SerializeField] GameObject myceliaDropPrefab;
+    [SerializeField] private float myceliaDropAmount = 5;
+    [SerializeField] GameObject[] weaponDropPrefab;
+    [SerializeField] private float dropChance = 20;
     void Start()
     {
         currentHP = maxHP;
@@ -50,7 +53,6 @@ public class EnemyControls : MonoBehaviour
         navMeshAgent.stoppingDistance = stoppingDistance;
         lastAttackTime = -attackCoolDown; // Allow immediate attack when starting
     }
-
     void Update()
     {
         // Ensure the agent is on a valid NavMesh
@@ -160,7 +162,6 @@ public class EnemyControls : MonoBehaviour
             navMeshAgent.SetDestination(currentTarget.position); // Set the destination of the NavMeshAgent
         }
     }
-
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -238,10 +239,10 @@ public class EnemyControls : MonoBehaviour
     public void TakeDamage(float damage)
     {
         Debug.Log(this.name + " Received Damage: " + damage);
-        maxHP -= damage;
+        currentHP -= damage;
         UpdateHPDisplay();
 
-        if (maxHP <= 0)
+        if (currentHP <= 0)
         {
             Die();
         }
@@ -250,13 +251,30 @@ public class EnemyControls : MonoBehaviour
     {
         if (hpDisplay != null)
         {
-            hpDisplay.text = maxHP.ToString() + "/" + currentHP.ToString();
+            hpDisplay.text = currentHP.ToString() + "/" + maxHP.ToString();
         }
     }
     void Die()
     {
         Debug.Log("Enemy died.");
         OnEnemyDeath?.Invoke();
+
+        var mycelia = Instantiate(myceliaDropPrefab, transform.position, Quaternion.identity).GetComponent<MyceliaPickup>();
+        mycelia.Setup(myceliaDropAmount);
+        // so we can remove it if player doesn't pick it up, set as child of drops holder
+        mycelia.transform.SetParent(train.dropsHolder, true);
+
+        if (weaponDropPrefab.Length != 0)
+        {
+            float randomChance = Random.Range(0, 100);
+            if (randomChance <= dropChance)
+            {
+                int dropIndex = Random.Range(0, weaponDropPrefab.Length);
+                var weapon = Instantiate(weaponDropPrefab[dropIndex], transform.position, Quaternion.identity);
+                // so we can remove it if player doesn't pick it up, set as child of drops holder
+                weapon.transform.SetParent(train.dropsHolder, true);
+            }
+        }
         Destroy(gameObject);
     }
 }

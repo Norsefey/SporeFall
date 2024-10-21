@@ -9,7 +9,7 @@ public class WaveManager : MonoBehaviour
     public static WaveManager Instance;
     [Header("References")]
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
-    [SerializeField] public TrainHandler train; // Reference to the player transform for positioning
+    public TrainHandler train; // Reference to the player transform for positioning
     [SerializeField] private Transform[] payloadPath;
     [Header("Waves")]
     [SerializeField] private List<Wave> waves = new(); // List of waves to configure
@@ -63,8 +63,10 @@ public class WaveManager : MonoBehaviour
                 break;
             case WavePhase.Departing:
                 timer -= Time.deltaTime;
-                if (waveUI != null)
+                if (waveUI != null && timer > 0)
                     waveUI.text = "Wave Cleared! Departing in: " + (timer).ToString("F0") + "\n Push Button To skip Wait";
+                else if(waveUI != null)
+                    waveUI.text = "Firing Cannon!!";
                 break;
             case WavePhase.Moving:
                 if (waveUI != null)
@@ -132,7 +134,9 @@ public class WaveManager : MonoBehaviour
         if (bossText != null)
             bossText.text = "<color=red>Boss Has Spawned</color>";
         // once we start the Boss script add an OnEnemyDeath Event
-        boss.GetComponent<Sherman>().OnEnemyDeath += OnBossDeath;
+        boss.GetComponent<EnemyControls>().OnEnemyDeath += OnBossDeath;
+        boss.GetComponent<EnemyControls>().train = train;
+
         enemiesAlive++;
         enemiesSpawned++;
     }

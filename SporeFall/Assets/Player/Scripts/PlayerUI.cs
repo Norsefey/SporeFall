@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     private PlayerManager pMan;
-    private Weapon weapon;
     [Header("Gameplay UI")]
     [SerializeField] private GameObject gameplayUI;
     [Space(5)]
@@ -36,12 +35,12 @@ public class PlayerUI : MonoBehaviour
     }
     public void AmmoDisplay(Weapon currentWeapon)
     {
-        if(currentWeapon.limitedAmmo)
+        if (currentWeapon.IsReloading)
+            ammoIndicator.text = "Reloading";    
+        else if (currentWeapon.limitedAmmo)
             ammoIndicator.text = currentWeapon.bulletCount + "/" + currentWeapon.totalAmmo;
         else if(currentWeapon is BuildGun)
-        {
             ammoIndicator.text = "Build Mode";
-        }
         else
             ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
     }

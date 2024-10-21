@@ -1414,13 +1414,16 @@ MonoBehaviour:
   buildOffset: {x: 0.75, y: 4, z: -3}
   obstructions:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 448
   minDistance: 1
   cameraMoveThreshold: 0.05
   groundOffset: 1.1
   groundDetectionAngle: 45
   collisionFreeTime: 0.5
   aimTarget: {fileID: 5920701559751099239}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 320
 --- !u!1 &2105543068427918284
 GameObject:
   m_ObjectHideFlags: 0
@@ -2861,7 +2864,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!114 &1760189315157886611
 MonoBehaviour:

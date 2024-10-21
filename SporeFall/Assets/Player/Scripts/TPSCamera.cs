@@ -40,7 +40,7 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private float collisionFreeTime = 0.5f;  // Time to wait before moving camera back
     private float timeSinceCollision = 0f;  // Time since last collision
     [SerializeField] private Transform aimTarget;
-
+    [SerializeField] private LayerMask targetMask;
     // local private variables
     private PlayerManager pMan;
     private float vertRot = 0;
@@ -55,7 +55,7 @@ public class TPSCamera : MonoBehaviour
     private void LateUpdate()
     {
         Ray ray = new(myCamera.transform.position, myCamera.transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, targetMask))
         {
             aimTarget.position = hit.point;
         }

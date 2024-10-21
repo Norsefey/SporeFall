@@ -158,7 +158,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.75, y: 1.88, z: 1}
+  m_Size: {x: 1.15, y: 1.88, z: 1.32}
   m_Center: {x: 0, y: 1.15, z: 0}
 --- !u!54 &-8288846393660587419
 Rigidbody:
@@ -225,20 +225,27 @@ MonoBehaviour:
   hpDisplay: {fileID: 8293907463534621136}
   stoppingDistance: 2
   attackRange: 5
-  attackCooldown: 2
+  attackCoolDown: 2
   damageAmount: 5
   targetingRange: 54
   priorityTags:
-  - Structure
-  - Player
   - Payload
   - WallStructure
+  - Structure
+  - Player
   targetsLayerMask:
     serializedVersion: 2
     m_Bits: 640
   train: {fileID: 0}
   updateTargetInterval: 0.5
   maxDetectedObjects: 10
+  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
+    type: 3}
+  myceliaDropAmount: 5
+  weaponDropPrefab:
+  - {fileID: 7980376292701781228, guid: d1265d45f28525a4dbe6c66028d75875, type: 3}
+  - {fileID: 9060537162651975904, guid: 913ccd0c1fb98f046b9540bbdc94922d, type: 3}
+  dropChance: 20
 --- !u!1 &9030144842525589066
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +311,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100/100
+  m_text: 0/10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

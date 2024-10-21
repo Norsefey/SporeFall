@@ -561,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 7049294014668380276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.002, y: 0.125, z: 0.422}
+  m_LocalPosition: {x: 0.002, y: 0.125, z: 0.867}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -650,6 +650,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8561447678203382180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6609920283423879002}
+  m_Layer: 0
+  m_Name: HoldSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6609920283423879002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8561447678203382180}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.002, y: -0.179, z: 0.453}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6066297183735287309}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8897310449536476557
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,6 +713,7 @@ Transform:
   m_Children:
   - {fileID: 2683177734496551928}
   - {fileID: 3414182955216283542}
+  - {fileID: 6609920283423879002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6157835609149182898
@@ -706,14 +738,15 @@ MonoBehaviour:
     m_Bits: 320
   isCorrupted: 1
   corruptionRate: 1.2
+  isTwoHanded: 1
+  secondHandHold: {fileID: 6609920283423879002}
   damage: 100
   bulletSpreadAngle: 2
   reloadTime: 1
-  projectileDistance: 50
-  hitScanDistance: 100
   bulletCount: 25
   bulletCapacity: 25
   totalAmmo: 300
   limitedAmmo: 1
   isHitScan: 1
+  bulletDistance: 50
   fireRate: 10

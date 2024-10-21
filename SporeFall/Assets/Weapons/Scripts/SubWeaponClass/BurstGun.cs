@@ -20,8 +20,10 @@ public class BurstGun : Weapon
     }
     public override void Fire()
     {
-        // Only fire if we aren't in the middle of a burst and the player isn't holding the fire button
-        if (isFiringBurst || triggerHeld || bulletCount <= 0 || IsReloading) return;
+        if (bulletCount <= 0 && !IsReloading)
+        {// reload is player tries firing with 0 magazine
+            Reload();
+        }else if (isFiringBurst || triggerHeld || bulletCount <= 0 || IsReloading) return; // Only fire if we aren't in the middle of a burst and the player isn't holding the fire button
 
         // Start the burst firing coroutine
         StartCoroutine(FireBurst());

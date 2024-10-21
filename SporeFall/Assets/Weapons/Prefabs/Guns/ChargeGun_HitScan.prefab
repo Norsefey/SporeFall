@@ -395,6 +395,7 @@ Transform:
   m_Children:
   - {fileID: 4520870452059994520}
   - {fileID: 7438464926374611751}
+  - {fileID: 4195105729088270168}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5209579835173016818
@@ -419,20 +420,52 @@ MonoBehaviour:
     m_Bits: 320
   isCorrupted: 0
   corruptionRate: 1.2
+  isTwoHanded: 1
+  secondHandHold: {fileID: 4195105729088270168}
   damage: 10
   bulletSpreadAngle: 2
   reloadTime: 2
-  projectileDistance: 50
-  hitScanDistance: 100
   bulletCount: 10
   bulletCapacity: 10
   totalAmmo: 5
   limitedAmmo: 0
   isHitScan: 1
+  bulletDistance: 50
   maxChargeTime: 2
   minChargeMultiplier: 1
   maxChargeMultiplier: 3
   baseChargeSpeed: 10
+--- !u!1 &4640549648078511087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4195105729088270168}
+  m_Layer: 0
+  m_Name: HoldSpot
+  m_TagString: Untagged
+  m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4195105729088270168
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4640549648078511087}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.036, z: 0.52}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7535877633408592906}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5075178960696800970
 GameObject:
   m_ObjectHideFlags: 0

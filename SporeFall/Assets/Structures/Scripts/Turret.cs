@@ -36,7 +36,7 @@ public class Turret : MonoBehaviour
     void FindNearestEnemy()
     {
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, detectionRange, enemyLayerMask);
-        Debug.Log($"Enemies detected: {enemiesInRange.Length}");
+        //Debug.Log($"Enemies detected: {enemiesInRange.Length}");
 
         float shortestDistance = Mathf.Infinity;
         Transform closestEnemy = null;
@@ -84,11 +84,10 @@ public class Turret : MonoBehaviour
             if (hit.transform == nearestEnemy)
             {
                 Debug.Log("Firing");
-                Fire();
                 // Line of sight is clear, fire at the enemy
                 if (fireCooldown <= 0f)
                 {
-
+                    Fire();
                     fireCooldown = 1f / fireRate;
                 }
             }

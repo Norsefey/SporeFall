@@ -142,6 +142,11 @@ public class PlayerManager : MonoBehaviour
             pUI.DisablePrompt();
             isFiring = false;
             isBuilding = false;
+
+            if (currentWeapon.isTwoHanded)
+                pAnime.ToggleTwoHanded(true);
+            else
+                pAnime.ToggleTwoHanded(false);
         }
     }
     public void PickUpWeapon()
@@ -159,10 +164,10 @@ public class PlayerManager : MonoBehaviour
         }
         // Equip the new weapon
         currentWeapon = Instantiate(nearByPickUp, weaponHolder).GetComponent<Weapon>();
-        // set the transforms of the new weapon
-        currentWeapon.transform.localPosition = Vector3.zero;
-        currentWeapon.transform.forward = pController.transform.forward;
 
+        // set the transforms of the new weapon
+        currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        // set References
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
         // destroy pick up platform
@@ -179,7 +184,7 @@ public class PlayerManager : MonoBehaviour
             pAnime.ToggleTwoHanded(false);
 
         Debug.Log("Picked up: " + currentWeapon.weaponName);
-
+        // if weapon is corrupted start corruption increase
         if (currentWeapon.isCorrupted)
             holdingCorruption = true;
     }
@@ -219,7 +224,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void MovePlayerTo(Vector3 position)
     {
-        pController.transform.localPosition = position;
+        pController.transform.position = position;
         Debug.Log("Moving Player");
     }
     public void StartRespawn()

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class ShermanStructureControls : MonoBehaviour
 {
-    public GameObject prefab;        // The prefab to spawn
+    public GameObject shermanPrefab;        // The prefab to spawn
     public Transform spawnPoint;     // Where to spawn the prefab
     private GameObject currentSpawn; // Holds reference to the current spawned object
     public float respawnDelay = 2f;  // Delay time in seconds before respawning
@@ -68,9 +68,9 @@ public class ShermanStructureControls : MonoBehaviour
     // Method to spawn the prefab at the spawn point
     private void SpawnPrefab()
     {
-        if (prefab != null && spawnPoint != null)
+        if (shermanPrefab != null && spawnPoint != null)
         {
-            currentSpawn = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
+            currentSpawn = Instantiate(shermanPrefab, spawnPoint);
         }
     }
 }

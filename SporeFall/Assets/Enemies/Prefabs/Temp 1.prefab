@@ -159,7 +159,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.75, y: 1.88, z: 1}
+  m_Size: {x: 1.08, y: 1.78, z: 1.28}
   m_Center: {x: 0, y: 1.15, z: 0}
 --- !u!54 &-8288846393660587419
 Rigidbody:
@@ -227,13 +227,13 @@ MonoBehaviour:
     type: 3}
   stoppingDistance: 2
   attackRange: 5
-  attackCooldown: 2
+  attackCoolDown: 2
   damageAmount: 5
   targetingRange: 54
   priorityTags:
-  - Structure
   - Player
   - Payload
+  - Structure
   - WallStructure
   targetsLayerMask:
     serializedVersion: 2
@@ -241,6 +241,13 @@ MonoBehaviour:
   train: {fileID: 0}
   updateTargetInterval: 0.5
   maxDetectedObjects: 10
+  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
+    type: 3}
+  myceliaDropAmount: 5
+  weaponDropPrefab:
+  - {fileID: 7980376292701781228, guid: d1265d45f28525a4dbe6c66028d75875, type: 3}
+  - {fileID: 9060537162651975904, guid: 913ccd0c1fb98f046b9540bbdc94922d, type: 3}
+  dropChance: 20
 --- !u!1 &6639751490313288718
 GameObject:
   m_ObjectHideFlags: 0
