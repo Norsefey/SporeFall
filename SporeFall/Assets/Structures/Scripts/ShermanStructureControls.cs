@@ -7,7 +7,7 @@ public class ShermanStructureControls : MonoBehaviour
 {
     public GameObject shermanPrefab;        // The prefab to spawn
     public Transform spawnPoint;     // Where to spawn the prefab
-    private GameObject currentSpawn; // Holds reference to the current spawned object
+    private GameObject currentSherman; // Holds reference to the current spawned object
     public float respawnDelay = 2f;  // Delay time in seconds before respawning
 
     private bool isSpawning = false; // To prevent multiple coroutines
@@ -22,7 +22,7 @@ public class ShermanStructureControls : MonoBehaviour
     void Update()
     {
         // If there is no active prefab and we're not already spawning one
-        if (currentSpawn == null && !isSpawning)
+        if (currentSherman == null && !isSpawning)
         {
             StartCoroutine(SpawnAfterDelay());
         }
@@ -70,7 +70,8 @@ public class ShermanStructureControls : MonoBehaviour
     {
         if (shermanPrefab != null && spawnPoint != null)
         {
-            currentSpawn = Instantiate(shermanPrefab, spawnPoint);
+            currentSherman = Instantiate(shermanPrefab, spawnPoint);
+            currentSherman.transform.position = spawnPoint.position;
         }
     }
 }

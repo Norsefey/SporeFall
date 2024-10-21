@@ -6,21 +6,12 @@ using TMPro;
 
 public class TrainUI : MonoBehaviour
 {
-    private TrainHandler tHandler;
     [SerializeField] private Slider HPBar;
 
-    void Start()
+    public void SetMaxHP(float max)
     {
-        HPBar.maxValue = tHandler.maxHP;
-        Debug.Log("Train HP bar set to 100");
+        HPBar.maxValue = max;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void UpdateHPDisplay(float value)
     {
         HPBar.value = value;

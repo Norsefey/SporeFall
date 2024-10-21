@@ -41,6 +41,8 @@ public class EnemyControls : MonoBehaviour
     [SerializeField] private float myceliaDropAmount = 5;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
+
+    private bool isDead = false; // check if already dead
     void Start()
     {
         currentHP = maxHP;
@@ -242,7 +244,7 @@ public class EnemyControls : MonoBehaviour
         currentHP -= damage;
         UpdateHPDisplay();
 
-        if (currentHP <= 0)
+        if (currentHP <= 0 && !isDead)
         {
             Die();
         }
@@ -257,6 +259,7 @@ public class EnemyControls : MonoBehaviour
     void Die()
     {
         Debug.Log("Enemy died.");
+        isDead = true;
         OnEnemyDeath?.Invoke();
 
         var mycelia = Instantiate(myceliaDropPrefab, transform.position, Quaternion.identity).GetComponent<MyceliaPickup>();

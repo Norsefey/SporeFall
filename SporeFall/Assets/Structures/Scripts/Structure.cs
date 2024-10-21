@@ -63,7 +63,6 @@ public class Structure : MonoBehaviour
     {
         this.train = train; 
     }
-
     private void OnDestroy()
     {
         if (train != null)

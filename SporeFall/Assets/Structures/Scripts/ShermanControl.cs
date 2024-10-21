@@ -60,10 +60,10 @@ public class ShermanControl : MonoBehaviour
         if (collision.gameObject.CompareTag(enemyTag))
         {
             // Try to get the EnemyHealth script on the object and deal damage
-            EnemyControls hp = collision.gameObject.GetComponent<EnemyControls>();
-            if (hp != null)
+            EnemyControls enemy = collision.gameObject.GetComponent<EnemyControls>();
+            if (enemy != null)
             {
-                hp.TakeDamage(damageAmount);  // Apply 100 damage to the enemy
+                enemy.TakeDamage(damageAmount);  // Apply 100 damage to the enemy
                 Destroy(gameObject);
             }
         }

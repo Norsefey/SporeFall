@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     private PlayerManager pMan;
-    private Weapon weaponScript;
     [Header("Gameplay UI")]
     [SerializeField] private GameObject gameplayUI;
     public Image weaponIcon;
@@ -27,7 +26,6 @@ public class PlayerUI : MonoBehaviour
     {
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
         HPBar.maxValue = pMan.pHealth.maxHP;
-        weaponIcon = weaponScript.weaponImage;
     }
     public void DisplayCorruption(float value)
     {
@@ -48,7 +46,10 @@ public class PlayerUI : MonoBehaviour
             ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
     }
 
-
+    public void SwitchWeaponIcon()
+    {
+        weaponIcon.sprite = pMan.currentWeapon.weaponSprite;
+    }
     public void UpdateHPDisplay(float value)
     {
         HPBar.value = value;

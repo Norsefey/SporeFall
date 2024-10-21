@@ -10,7 +10,6 @@ public class TrainHandler : MonoBehaviour
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject payloadPrefab;
     [SerializeField] private Transform payloadSpawnPos;
-    private TrainUI tUI;
     public Transform dropsHolder;
     public Payload Payload { get; private set; }
     public Transform[] playerSpawnPoint;
@@ -24,8 +23,6 @@ public class TrainHandler : MonoBehaviour
     [Header("Train Movement")]
     public float cannonFireTime = 2f;
     public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
-
-
     public enum TrainState
     {
         Parked,
@@ -35,15 +32,26 @@ public class TrainHandler : MonoBehaviour
     public TrainState trainState;
     [Header("Train Stats")]
     public Transform[] damagePoint;
-    public float maxHP = 100;
-    [SerializeField] private float currentHP = 100;
+
+    public TrainUI tUI;
+    private TrainHP trainHP;
+
+    private void Awake()
+    {
+        trainHP = transform.GetChild(0).GetComponent<TrainHP>();
+        if (trainHP != null)
+        {
+            trainHP.train = this;
+            tUI.SetMaxHP(trainHP.maxHP);
+        }
+    }
 
     public void Update()
     {
         //Testing train taking damage
         if (Input.GetKeyDown(KeyCode.K))
         {
-            TakeDamage(50);
+            trainHP.TakeDamage(50);
         }
     }
     public void SetParkedState()
@@ -78,12 +86,7 @@ public class TrainHandler : MonoBehaviour
     {
         structureHolder.gameObject.SetActive(state);
     }
-    public void TakeDamage(float damage)
-    {
-        Debug.Log(this.name + " Received Damage: " + damage);
-        currentHP -= damage;
-        tUI.UpdateHPDisplay(currentHP);
-    }
+
     public void AddStructure(Structure structure)
     {
         // track active structures

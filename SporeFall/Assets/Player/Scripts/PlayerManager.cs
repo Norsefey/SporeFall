@@ -118,6 +118,7 @@ public class PlayerManager : MonoBehaviour
             currentWeapon = bGun;
             pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             pUI.AmmoDisplay(currentWeapon);
+            pUI.SwitchWeaponIcon();
             pAnime.ToggleTwoHanded(false);
             isBuilding = true;
         }
@@ -142,6 +143,7 @@ public class PlayerManager : MonoBehaviour
             currentWeapon.gameObject.SetActive(true);
             pUI.AmmoDisplay(currentWeapon);
             pUI.DisablePrompt();
+            pUI.SwitchWeaponIcon();
             isFiring = false;
             isBuilding = false;
 
@@ -178,6 +180,8 @@ public class PlayerManager : MonoBehaviour
         pUI.DisablePrompt();
         // update UI to display new ammo capacities
         pUI.AmmoDisplay(currentWeapon);
+        // update weapon icon
+        pUI.SwitchWeaponIcon();
 
         // Animation switch depending on weapon type
         if(currentWeapon.isTwoHanded)
@@ -206,6 +210,7 @@ public class PlayerManager : MonoBehaviour
         currentWeapon.gameObject.SetActive(true);
         holdingCorruption = false;
         pUI.AmmoDisplay(currentWeapon);
+        pUI.SwitchWeaponIcon();
         pAnime.ToggleTwoHanded(false);
     }
     public void TogglePControl(bool toggle)
