@@ -438,6 +438,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 668179531}
   m_CullTransparentMesh: 1
+--- !u!224 &992129340 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1267474664450606302, guid: d1fb8981ab68ef048974fb980a89ec93,
+    type: 3}
+  m_PrefabInstance: {fileID: 769921792815249045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1133773335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1133773336}
+  - component: {fileID: 1133773338}
+  - component: {fileID: 1133773337}
+  m_Layer: 9
+  m_Name: IconImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1133773336
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133773335}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 992129340}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 50, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1133773337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133773335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1133773338
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133773335}
+  m_CullTransparentMesh: 1
 --- !u!1 &1225772575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,10 +1237,20 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 345
       objectReference: {fileID: 0}
+    - target: {fileID: 1267474664450606302, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 343
+      objectReference: {fileID: 0}
     - target: {fileID: 1931026470281637711, guid: d1fb8981ab68ef048974fb980a89ec93,
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2752908831668816441, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: m_Name
+      value: BaseGunImage
       objectReference: {fileID: 0}
     - target: {fileID: 2903950091513974437, guid: d1fb8981ab68ef048974fb980a89ec93,
         type: 3}
@@ -1185,6 +1276,29 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6160206821391302760, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: weaponIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 5e38ad4ae6483964f92f57ac8fc1baee,
+        type: 3}
+    - target: {fileID: 6160206821391302760, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: weaponImage
+      value: 
+      objectReference: {fileID: 5570855110319405861, guid: 21d2eb3e319b7434985dd694c12f51dc,
+        type: 3}
+    - target: {fileID: 6160206821391302760, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: weaponSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5e38ad4ae6483964f92f57ac8fc1baee,
+        type: 3}
+    - target: {fileID: 7036611626713146894, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: m_Name
+      value: BaseGunUI
       objectReference: {fileID: 0}
     - target: {fileID: 7880254060635017423, guid: d1fb8981ab68ef048974fb980a89ec93,
         type: 3}
@@ -1217,9 +1331,30 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 4e281acc22b603d40a1e392524333aac,
         type: 3}
+    - target: {fileID: 9008517272510106792, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: weaponIcon
+      value: 
+      objectReference: {fileID: 1133773337}
+    - target: {fileID: 9008517272510106792, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: weaponSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5e38ad4ae6483964f92f57ac8fc1baee,
+        type: 3}
+    - target: {fileID: 9044921062634609584, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      propertyPath: m_Name
+      value: BuildGunUI
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2752908831668816441, guid: d1fb8981ab68ef048974fb980a89ec93, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1267474664450606302, guid: d1fb8981ab68ef048974fb980a89ec93,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1133773336}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1fb8981ab68ef048974fb980a89ec93, type: 3}
 --- !u!1001 &1822926356506392355
