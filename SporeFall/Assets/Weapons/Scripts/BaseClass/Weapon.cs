@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public abstract class Weapon : MonoBehaviour
 {
     [Header("References")]
     public string weaponName;
+    public Image weaponImage;
+    //public Sprite weaponSprite;
     public PlayerManager player;
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -33,6 +36,11 @@ public abstract class Weapon : MonoBehaviour
     // in order to have a private variable public to other scripts, and not be editable in editor we use Get property
     // since this is a Get variable it is capitalized
     public bool IsReloading { get { return isReloading; } }
+
+    public void Start()
+    {
+        weaponImage = GetComponent<Image>();
+    }
 
     // Fire method to be implemented by subclasses
     public virtual void Fire()

@@ -7,8 +7,11 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     private PlayerManager pMan;
+    private Weapon weaponScript;
     [Header("Gameplay UI")]
     [SerializeField] private GameObject gameplayUI;
+    public Image weaponIcon;
+    //public Sprite weaponSprite;
     [Space(5)]
     [SerializeField] private TMP_Text ammoIndicator;
     [SerializeField] private GameObject promptHolder;
@@ -17,14 +20,12 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider HPBar;
     [Header("Upgrade Menu")]
     [SerializeField] private GameObject upgradeMenu;
-    //[Header("Weapon Icons")]
-    //[SerializeField] private GameObject puffBoomIcon;
-    //[SerializeField] private GameObject rifleIcon;
-    //[SerializeField] private GameObject shotgunIcon;
+
     private void Start()
     {
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
         HPBar.maxValue = pMan.pHealth.maxHP;
+        weaponIcon = weaponScript.weaponImage;
     }
     public void DisplayCorruption(float value)
     {
@@ -44,6 +45,8 @@ public class PlayerUI : MonoBehaviour
         else
             ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
     }
+
+
     public void UpdateHPDisplay(float value)
     {
         HPBar.value = value;
