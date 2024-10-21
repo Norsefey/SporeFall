@@ -36,7 +36,7 @@ public class TrainHandler : MonoBehaviour
     [Header("Train Stats")]
     public Transform[] damagePoint;
     public float maxHP = 100;
-    private float currentHP = 100;
+    [SerializeField] private float currentHP = 100;
 
     public void Update()
     {
