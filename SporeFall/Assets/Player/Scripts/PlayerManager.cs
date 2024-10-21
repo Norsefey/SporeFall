@@ -106,6 +106,8 @@ public class PlayerManager : MonoBehaviour
                 gun.Charge();
             }
         }
+
+        
     }
     public void ToggleBuildMode()
     {
@@ -248,6 +250,14 @@ public class PlayerManager : MonoBehaviour
             MovePlayerTo(fallbackSpawnPoint.position);
         pHealth.RestoreHP(pHealth.maxHP);
         TogglePControl(true);
+        if (pHealth.lives == 2)
+        {
+            pUI.life2.SetActive(false);
+        }
+        if (pHealth.lives == 1)
+        {
+            pUI.life1.SetActive(false);
+        }
     }
     public void GameOver()
     {

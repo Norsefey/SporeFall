@@ -8,7 +8,7 @@ public class PlayerHP : MonoBehaviour
 
     public int lives = 3;
     public float maxHP = 100;
-    private float currentHP = 100;
+    [SerializeField] private float currentHP = 100;
 
     // Start is called before the first frame update
     void Start()
@@ -16,8 +16,19 @@ public class PlayerHP : MonoBehaviour
         currentHP = maxHP;
     }
 
+    private void Update()
+    {
+        //Testing respawning
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            TakeDamage(100);
+            Debug.Log("Taking damage");
+        }
+    }
+
     public void TakeDamage(float damageAmount)
     {
+
         Debug.Log("Player Taking Damage: " + damageAmount);
         currentHP -= damageAmount;
         pMan.pUI.UpdateHPDisplay(currentHP);

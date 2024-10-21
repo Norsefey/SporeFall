@@ -18,6 +18,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TMP_Text textPrompt;
     [SerializeField] private Slider corruptionBar;
     [SerializeField] private Slider HPBar;
+    public GameObject life1;
+    public GameObject life2;
     [Header("Upgrade Menu")]
     [SerializeField] private GameObject upgradeMenu;
 
