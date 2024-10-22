@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class WaveUI : MonoBehaviour
 {
     //This script is supposed to make the bars at the top fill out as you kill enemies, showing your progression through the wave
-    private WaveManager waveManager;
+    [SerializeField] private WaveManager waveManager;
     
     //Split up into separate bars because each wave has a different number of enemies
     [SerializeField] private Slider wave1Bar;
