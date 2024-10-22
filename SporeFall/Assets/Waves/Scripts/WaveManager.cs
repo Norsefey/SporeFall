@@ -7,6 +7,7 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour
 {
     public static WaveManager Instance;
+    [SerializeField] private WaveUI wUI;
     [Header("References")]
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
     public TrainHandler train; // Reference to the player transform for positioning
@@ -19,6 +20,7 @@ public class WaveManager : MonoBehaviour
 
     private int enemiesAlive = 0;
     private int enemiesSpawned = 0;
+    public int deadEnemies = 0;
     public enum WavePhase
     {
         NotStarted,
@@ -143,6 +145,7 @@ public class WaveManager : MonoBehaviour
     private void WaveCleared()
     {
         Debug.Log("Wave Cleared!");
+        deadEnemies = 0;
         timer = departTime;
         wavePhase = WavePhase.Departing;
         Invoke(nameof(Depart), departTime);
@@ -150,6 +153,8 @@ public class WaveManager : MonoBehaviour
     private void OnEnemyDeath()
     {
         enemiesAlive--;
+        deadEnemies++;
+        wUI.DisplayWaveProgress(deadEnemies);
         if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
         {
            WaveCleared();
