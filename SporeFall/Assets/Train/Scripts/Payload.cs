@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Payload : MonoBehaviour
 {
+    //[SerializeField] private WaveUI wUI;
+    
     [Header("Movement")]
     [SerializeField] private float defaultMoveSpeed = 2f;   // The speed of the payload's movement
     [SerializeField] private float topMoveSpeed = 4f; // When boss dies payload moves faster
@@ -17,6 +19,7 @@ public class Payload : MonoBehaviour
     [SerializeField] private int maxHealth = 100;    // Maximum health of the payload
     private int currentHealth;     // Current health of the payload
     private bool isMoving = false; // Flag to control payload movement
+    //public int payloadProgress = 0;
 
     [SerializeField] private TMP_Text HpDisplay;
     private void Start()
@@ -51,6 +54,8 @@ public class Payload : MonoBehaviour
         }
         else if(pathIndex < path.Length)
         {
+            //payloadProgress++;
+            WaveUI.Instance.DisplayWaveProgress(pathIndex);
             SetDestination();
         }
         else

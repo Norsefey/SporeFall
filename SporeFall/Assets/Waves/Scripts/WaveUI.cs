@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class WaveUI : MonoBehaviour
 {
-
+    public static WaveUI Instance;
     //This script is supposed to make the bars at the top fill out as you kill enemies, showing your progression through the wave
 
     [SerializeField] private WaveManager waveManager;
@@ -15,12 +15,15 @@ public class WaveUI : MonoBehaviour
     [SerializeField] private Slider wave2Bar;
     [SerializeField] private Slider wave3Bar;
     //I'll deal with the final wave once the others are sorted out
-    //[SerializeField] private Slider finalWaveBar;
+    [SerializeField] private Slider finalWaveBar;
 
     //Used for testing purposes
     //public int deadEnemies = 0;
 
-
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -28,7 +31,7 @@ public class WaveUI : MonoBehaviour
         wave1Bar.maxValue = waveManager.waves[0].totalEnemies;
         wave2Bar.maxValue = waveManager.waves[1].totalEnemies;
         wave3Bar.maxValue = waveManager.waves[2].totalEnemies;
-        //finalWaveBar.maxValue = waveManager.waves[3].totalEnemies;
+        finalWaveBar.maxValue = waveManager.payloadPath.Length;
     }
 
     
@@ -60,6 +63,12 @@ public class WaveUI : MonoBehaviour
         {
             wave3Bar.value = value;
             Debug.Log("Updating wave 3 bar");
+        }
+
+        if (waveManager.currentWaveIndex == 3)
+        {
+            finalWaveBar.value = value;
+            Debug.Log("Updating final wave bar");
         }
 
 

@@ -11,7 +11,7 @@ public class WaveManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
     public TrainHandler train; // Reference to the player transform for positioning
-    [SerializeField] private Transform[] payloadPath;
+    [SerializeField] public Transform[] payloadPath;
     [Header("Waves")]
     [SerializeField] public List<Wave> waves = new(); // List of waves to configure
     public Wave currentWave;
