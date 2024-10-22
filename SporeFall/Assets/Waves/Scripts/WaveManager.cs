@@ -12,9 +12,9 @@ public class WaveManager : MonoBehaviour
     public TrainHandler train; // Reference to the player transform for positioning
     [SerializeField] private Transform[] payloadPath;
     [Header("Waves")]
-    [SerializeField] private List<Wave> waves = new(); // List of waves to configure
-    private Wave currentWave;
-    private int currentWaveIndex = 0;
+    [SerializeField] public List<Wave> waves = new(); // List of waves to configure
+    public Wave currentWave;
+    public int currentWaveIndex = 0;
     [SerializeField] private int maxEnemiesOnField = 300;
 
     private int enemiesAlive = 0;

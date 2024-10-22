@@ -13,5 +13,6 @@ public class TrainHP : MonoBehaviour
         Debug.Log(this.name + " Received Damage: " + damage);
         currentHP -= damage;
         train.tUI.UpdateHPDisplay(currentHP);
+        train.tUI.UpdateHPTextDisplay(currentHP);
     }
 }
