@@ -154,7 +154,11 @@ public class WaveManager : MonoBehaviour
     {
         enemiesAlive--;
         deadEnemies++;
-        wUI.DisplayWaveProgress(deadEnemies);
+        if (currentWave.isFinalWave == false)
+        {
+            wUI.DisplayWaveProgress(deadEnemies);
+        }
+        
         if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
         {
            WaveCleared();

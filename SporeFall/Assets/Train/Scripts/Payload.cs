@@ -60,6 +60,7 @@ public class Payload : MonoBehaviour
         }
         else
         {
+            WaveUI.Instance.DisplayWaveProgress(pathIndex);
             isMoving = false;
             Debug.Log("ReachDestination");
         }
