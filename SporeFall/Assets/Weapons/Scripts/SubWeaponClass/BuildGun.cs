@@ -3,17 +3,22 @@ using UnityEngine;
 
 public class BuildGun : Weapon
 {
+    [SerializeField] private StructuresUI sUI;
     public GameObject[] buildableStructures; // Array of objects the player can spawn
     public float maxBuildDistance = 100f; // Maximum distance for building
     public LayerMask groundLayer; // LayerMask to identify what is "ground"
     public LayerMask structureLayer; // LayerMask for detecting objects the player can select
-    private int currentBuildIndex = 0; // Current selected object to build
-    private Structure selectedStructure; // The currently selected placed object (for moving or deleting)
+    public int currentBuildIndex = 0; // Current selected object to build
+    public Structure selectedStructure; // The currently selected placed object (for moving or deleting)
     public float structRotSpeed = 25;
 
     public bool isEditing = false;
     private bool movingStructure = false;
 
+    public void Start()
+    {
+        sUI.SwitchStructureIcon();
+    }
     public override void Fire()
     {
         // Called when player presses fire button
@@ -80,7 +85,7 @@ public class BuildGun : Weapon
                 player.train.AddStructure(selectedStructure);
                 selectedStructure = null; // Clear the selected object
 
-                player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+                player.pUI.EnablePrompt("<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview");
 
             }
         }
@@ -112,6 +117,7 @@ public class BuildGun : Weapon
             Destroy(selectedStructure.gameObject);
 
         player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name);
+        sUI.SwitchStructureIcon();
     }
     private void SetStructureToTransparent(GameObject obj)
     {

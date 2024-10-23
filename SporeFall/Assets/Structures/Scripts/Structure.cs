@@ -7,6 +7,7 @@ public class Structure : MonoBehaviour
     private TrainHandler train;
     [SerializeField] private GameObject structBehavior;
     [SerializeField] private GameObject[] visuals;
+    //public Sprite structureSprite;
     [SerializeField] private float[] cost = new float[] { 25, 30, 50 };
     [SerializeField] private float[] energyCost = new float[] {5, 10, 15};
     private int structLevel = 0;
