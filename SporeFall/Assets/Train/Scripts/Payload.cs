@@ -14,20 +14,14 @@ public class Payload : MonoBehaviour
     private Transform papa;
     private int pathIndex = 0;
     private Vector3 destination;  // The target point where the payload is moving towards
-    private float moveSpeed;
-    [Header("Stats")]
-    [SerializeField] private int maxHealth = 100;    // Maximum health of the payload
-    private int currentHealth;     // Current health of the payload
+    private float moveSpeed;  
     private bool isMoving = false; // Flag to control payload movement
-    //public int payloadProgress = 0;
-
-    [SerializeField] private TMP_Text HpDisplay;
+    private PayloadHP hp;
     private void Start()
     {
-        currentHealth = maxHealth; // Initialize health
+        hp = GetComponent<PayloadHP>();
+        hp.SetManager(this);
         moveSpeed = defaultMoveSpeed; // Initialize move speed
-        HpDisplay.text = currentHealth.ToString() + "/" + maxHealth.ToString();
-
         papa = transform.parent;
     }
     private void Update()
@@ -77,21 +71,15 @@ public class Payload : MonoBehaviour
         SetDestination();
         isMoving = true;
     }
-    // Method to handle damage to the payload
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-        HpDisplay.text = currentHealth.ToString() + ":" + maxHealth.ToString();
-        // Check if health drops to or below zero
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-            Debug.Log("Payload Destroyed");
-            Destroy(gameObject);          // Destroy the payload object
-        }
-    }
     public void IncreaseSpeed()
     {
         moveSpeed = topMoveSpeed;
+    }
+
+    public void DestroyPayload()
+    {
+        // load death screen
+        // destroy self for now
+        Destroy(gameObject);
     }
 }

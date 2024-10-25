@@ -19,7 +19,7 @@ public class TurretBulletBehavior : MonoBehaviour
         if (collision.gameObject.CompareTag(enemyTag))
         {
             // Try to get the EnemyHealth script on the object and deal damage
-            if (collision.gameObject.TryGetComponent<EnemyControls>(out var hp))
+            if (collision.gameObject.TryGetComponent<Damageable>(out var hp))
             {
                 hp.TakeDamage(dmg);  // Apply 100 damage to the enemy
             }

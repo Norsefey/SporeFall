@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrainHP : MonoBehaviour
+public class TrainHP : Damageable
 {
     public TrainHandler train;
-    public float maxHP = 100;
-    [SerializeField] private float currentHP = 100;
-
-    public void TakeDamage(float damage)
+    private void Start()
     {
-        Debug.Log(this.name + " Received Damage: " + damage);
-        currentHP -= damage;
+        currentHP = maxHP;
+        UpdateUI();
+    }
+    protected override void Die()
+    {
+        // put other death behavior here
+        train.DestroyTrain();
+    }
+
+    protected override void UpdateUI()
+    {
         train.tUI.UpdateHPDisplay(currentHP);
-        train.tUI.UpdateHPTextDisplay(currentHP);
     }
 }

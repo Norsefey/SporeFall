@@ -157,6 +157,11 @@ public class TrainHandler : MonoBehaviour
             Invoke(nameof(DisembarkTrain), .5f);
         
     }
+    public void DestroyTrain()
+    {
+        // Load Lose Scene
+        Debug.Log("Train Destroyed");
+    }
     public void CheckTrainCamera()
     {
         if (trainCamera.activeSelf)

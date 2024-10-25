@@ -45,7 +45,6 @@ public class PlayerUI : MonoBehaviour
         else
             ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
     }
-
     public void SwitchWeaponIcon()
     {
         weaponIcon.sprite = pMan.currentWeapon.weaponSprite;

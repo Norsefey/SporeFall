@@ -18,14 +18,10 @@ public class TrainUI : MonoBehaviour
     {
         HPBar.maxValue = max;
     }
-
-    public void UpdateHPTextDisplay(float value)
-    {
-        HPText.text = "Train HP: " + value + "%";
-    }
     public void UpdateHPDisplay(float value)
     {
         HPBar.value = value;
+        HPText.text = "Train HP: " + value + "%";
         Debug.Log("Updating train HP bar");
     }
 }

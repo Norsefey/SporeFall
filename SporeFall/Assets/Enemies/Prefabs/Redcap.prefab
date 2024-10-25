@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: -8288846393660587419}
   - component: {fileID: 6700846432238513998}
   - component: {fileID: 1501903265170726969}
+  - component: {fileID: -8097500174115082002}
   m_Layer: 8
   m_Name: Redcap
   m_TagString: Enemy
@@ -221,8 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669902cca14194745abe404b3543acb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 10
-  hpDisplay: {fileID: 8293907463534621136}
   stoppingDistance: 2.5
   attackRange: 5
   attackCoolDown: 2
@@ -246,6 +245,20 @@ MonoBehaviour:
   - {fileID: 7980376292701781228, guid: d1265d45f28525a4dbe6c66028d75875, type: 3}
   - {fileID: 9060537162651975904, guid: 913ccd0c1fb98f046b9540bbdc94922d, type: 3}
   dropChance: 20
+--- !u!114 &-8097500174115082002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657974298613798786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6edf8b238b198524fb1ecb35917fd7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 10
+  hpDisplay: {fileID: 8293907463534621136}
 --- !u!1 &9030144842525589066
 GameObject:
   m_ObjectHideFlags: 0

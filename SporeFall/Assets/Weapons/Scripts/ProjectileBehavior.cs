@@ -2,21 +2,88 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Projectile data structure
+public struct ProjectileData
+{
+    public Vector3 Direction;
+    public float Speed;
+    public float Damage;
+    public float Lifetime;
+    public bool UseGravity;
+    public float ArcHeight;
+    public bool CanBounce;
+    public int MaxBounces;
+    public float BounceDamageMultiplier;
+}
 public class ProjectileBehavior : MonoBehaviour
 {
-    public float deathTime = 2;
-    public float damage = 10;
-    [SerializeField] GameObject bulletResidue;
+    private ProjectileData data;
+    private Rigidbody rb;
+    private int bounceCount;
+    private float currentDamage;
 
-    private void Update()
+    private void Awake()
     {
-        Destroy(gameObject, deathTime);
+        rb = GetComponent<Rigidbody>();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void Initialize(ProjectileData projectileData)
     {
-        collision.transform.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
-        Instantiate(bulletResidue, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        data = projectileData;
+        currentDamage = data.Damage;
+
+        if (rb != null)
+        {
+            rb.useGravity = data.UseGravity;
+
+            if (data.UseGravity && data.ArcHeight > 0)
+            {
+                // Calculate velocity for arcing projectile
+                Vector3 velocity = data.Direction * data.Speed;
+                velocity.y += data.ArcHeight;
+                rb.velocity = velocity;
+            }
+            else
+            {
+                rb.velocity = data.Direction * data.Speed;
+            }
+        }
+
+        Destroy(gameObject, data.Lifetime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<Damageable>(out var damageable))
+        {
+            damageable.TakeDamage(currentDamage);
+
+            if (!data.CanBounce || bounceCount >= data.MaxBounces)
+            {
+                Destroy(gameObject);
+                return;
+            }
+        }
+
+        if (data.CanBounce && bounceCount < data.MaxBounces)
+        {
+            Bounce(other);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Bounce(Collider surface)
+    {
+        if (rb != null)
+        {
+            Vector3 reflection = Vector3.Reflect(rb.velocity, surface.transform.up);
+            rb.velocity = reflection;
+            currentDamage *= data.BounceDamageMultiplier;
+            bounceCount++;
+        }
     }
 }

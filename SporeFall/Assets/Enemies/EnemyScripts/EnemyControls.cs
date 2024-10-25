@@ -7,12 +7,7 @@ public class EnemyControls : MonoBehaviour
 {
     public delegate void EnemyDeath();
     public event EnemyDeath OnEnemyDeath;
-
-    // Health properties
-    public float maxHP = 10;
-    private float currentHP;
-    [SerializeField] private TMP_Text hpDisplay;
-
+    EnemyHP hp;
     // NavMeshAgent component
     private NavMeshAgent navMeshAgent;
 
@@ -41,14 +36,10 @@ public class EnemyControls : MonoBehaviour
     [SerializeField] private float myceliaDropAmount = 5;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
-
-    private bool isDead = false; // check if already dead
     private bool isTargetingTrain = false;
     void Start()
     {
-        currentHP = maxHP;
-        UpdateHPDisplay();
-
+        hp = GetComponent<EnemyHP>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         detectedColliders = new Collider[maxDetectedObjects]; // Pre-allocate the array for detected objects
 
@@ -232,34 +223,18 @@ public class EnemyControls : MonoBehaviour
             }
             else 
             {
-                target.GetChild(0).SendMessageUpwards("TakeDamage", damageAmount, SendMessageOptions.DontRequireReceiver);
+                if (target.gameObject.TryGetComponent<Damageable>(out var hp))
+                {
+                    hp.TakeDamage(damageAmount);  // Apply 100 damage to the enemy
+                }
             }
 
             lastAttackTime = Time.time; // Reset attack cooldown timer
         }
     }
-    public void TakeDamage(float damage)
-    {
-        Debug.Log(this.name + " Received Damage: " + damage);
-        currentHP -= damage;
-        UpdateHPDisplay();
 
-        if (currentHP <= 0 && !isDead)
-        {
-            Die();
-        }
-    }
-    void UpdateHPDisplay()
-    {
-        if (hpDisplay != null)
-        {
-            hpDisplay.text = currentHP.ToString() + "/" + maxHP.ToString();
-        }
-    }
     void Die()
     {
-        Debug.Log("Enemy died.");
-        isDead = true;
         OnEnemyDeath?.Invoke();
         
         var mycelia = Instantiate(myceliaDropPrefab, transform.position, Quaternion.identity).GetComponent<MyceliaPickup>();
