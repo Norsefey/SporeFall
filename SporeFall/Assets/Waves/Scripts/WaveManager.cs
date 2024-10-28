@@ -11,9 +11,9 @@ public class WaveManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
     public TrainHandler train; // Reference to the player transform for positioning
-    [SerializeField] public Transform[] payloadPath;
+    public Transform[] payloadPath;
     [Header("Waves")]
-    [SerializeField] public List<Wave> waves = new(); // List of waves to configure
+    public List<Wave> waves = new(); // List of waves to configure
     public Wave currentWave;
     public int currentWaveIndex = 0;
     [SerializeField] private int maxEnemiesOnField = 300;
@@ -120,24 +120,28 @@ public class WaveManager : MonoBehaviour
         int spawnPointIndex = Random.Range(0, spawnPoints.Length);
         Transform spawnPoint = spawnPoints[spawnPointIndex];
 
-        GameObject enemy = Instantiate(enemyToSpawn, spawnPoint.position, spawnPoint.rotation);
+        BaseEnemy enemy = Instantiate(enemyToSpawn, spawnPoint.position, spawnPoint.rotation).GetComponent<BaseEnemy>();
         enemy.transform.SetParent(transform);
         // once we start the enemy script add an OnEnemyDeath Event
-        enemy.GetComponent<EnemyControls>().OnEnemyDeath += OnEnemyDeath; // Assuming each enemy has an OnEnemyDeath event
-        enemy.GetComponent<EnemyControls>().train = train;
+        enemy.OnEnemyDeath += OnEnemyDeath; // Assuming each enemy has an OnEnemyDeath event
+        enemy.AssignDefaultTarget(train, train.transform);
+
         enemiesAlive++;
         enemiesSpawned++;
     }
     private void SpawnBoss()
     {
+        Debug.Log("Add Functionality");
         Transform spawnPoint = currentWave.spawnLocations[0];
-        GameObject boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation);
+        BaseEnemy boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<BaseEnemy>();
+        
         boss.transform.SetParent(transform);
+       
         if (bossText != null)
             bossText.text = "<color=red>Boss Has Spawned</color>";
         // once we start the Boss script add an OnEnemyDeath Event
-        boss.GetComponent<EnemyControls>().OnEnemyDeath += OnBossDeath;
-        boss.GetComponent<EnemyControls>().train = train;
+        boss.OnEnemyDeath += OnBossDeath;
+        boss.AssignDefaultTarget(train, train.Payload.transform);
 
         enemiesAlive++;
         enemiesSpawned++;

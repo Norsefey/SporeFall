@@ -9,7 +9,6 @@ public class TPSCamera : MonoBehaviour
     [Header("references")]
     public Camera myCamera;
     [SerializeField] private PlayerMovement player;
-    //[SerializeField] private CameraCollision camCollision;
 
     [Header("Mouse Sensitivity")]
     [SerializeField] private float mHorSense = 50;
@@ -55,9 +54,14 @@ public class TPSCamera : MonoBehaviour
     private void LateUpdate()
     {
         Ray ray = new(myCamera.transform.position, myCamera.transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, targetMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, targetMask))
         {
+            pMan.pAnime.ToggleIKAim(true);
             aimTarget.position = hit.point;
+        }
+        else
+        {
+            pMan.pAnime.ToggleIKAim(false);
         }
 
             // moves camera set along with Character
@@ -145,14 +149,12 @@ public class TPSCamera : MonoBehaviour
         else
             myCamera.transform.localPosition = aimOffset;
 
-        //RemoveCollisionDetection();
         player.SetAimState();
     }
     public void DefaultSight()
     {
         myCamera.transform.localPosition = defaultOffset;
 
-        //AssignCollisionDetection();
         player.SetDefaultState();
     }
     public void SetManager(PlayerManager pManager)

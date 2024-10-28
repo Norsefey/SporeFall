@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5351257305492758862}
   - component: {fileID: 3167851630122363092}
   - component: {fileID: 6622094105597623267}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Capsule (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 6864355412620404654}
   - component: {fileID: 2528841105485956072}
   - component: {fileID: 1069156458202240961}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Capsule (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 1728533719089001909}
   - component: {fileID: 5292543594367382943}
   - component: {fileID: 6081992139835096196}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: HP_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,9 +310,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2702883304621319643}
   - component: {fileID: 1999943435495373527}
-  m_Layer: 0
+  - component: {fileID: 6204043997066796379}
+  - component: {fileID: 4899571317474799090}
+  m_Layer: 11
   m_Name: ControlScript
-  m_TagString: Untagged
+  m_TagString: Payload
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -346,8 +348,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMoveSpeed: 2
   topMoveSpeed: 4
-  maxHealth: 100
-  HpDisplay: {fileID: 6081992139835096196}
+--- !u!114 &6204043997066796379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3058634654957584835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7e65cc817f72946881419531237e0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 100
+  healthDisplay: {fileID: 6081992139835096196}
+--- !u!136 &4899571317474799090
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3058634654957584835}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.15
+  m_Height: 8.21
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: -4.0663223}
 --- !u!1 &3376255972308909904
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,7 +396,7 @@ GameObject:
   - component: {fileID: 1384075129785509546}
   - component: {fileID: 3243936903024247906}
   - component: {fileID: 2324619425098556312}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Capsule (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -440,7 +477,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7920096180295851305}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Payload
   m_TagString: Payload
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -476,7 +513,7 @@ GameObject:
   - component: {fileID: 989371029561106492}
   - component: {fileID: 5711011801544218855}
   - component: {fileID: 8207301705388372970}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Capsule (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +597,7 @@ GameObject:
   - component: {fileID: 2168078840927992065}
   - component: {fileID: 708323953559808843}
   - component: {fileID: 3416240460380118468}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -667,7 +704,7 @@ GameObject:
   - component: {fileID: 2147310796194183535}
   - component: {fileID: 1421010139292580507}
   - component: {fileID: 2687052619663317337}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +803,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8796041709309676000}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -804,7 +841,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7049845436020896238}
   - component: {fileID: 1575468796634326172}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

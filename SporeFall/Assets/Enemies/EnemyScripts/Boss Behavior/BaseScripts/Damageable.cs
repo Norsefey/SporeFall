@@ -8,7 +8,7 @@ public abstract class Damageable : MonoBehaviour
     protected abstract void Die();
     protected abstract void UpdateUI();
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         currentHP -= damage;
         UpdateUI();

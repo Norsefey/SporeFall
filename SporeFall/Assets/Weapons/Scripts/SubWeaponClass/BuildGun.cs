@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class BuildGun : Weapon
 {
+    [Header("Build Gun Settings")]
     [SerializeField] private StructuresUI sUI;
     public GameObject[] buildableStructures; // Array of objects the player can spawn
     public float maxBuildDistance = 100f; // Maximum distance for building
@@ -50,7 +51,6 @@ public class BuildGun : Weapon
             {
                 //Debug.Log("Creating New Structure");
                 selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
-                selectedStructure.GetComponent<Collider>().enabled = false; // Disable collider for preview
                 SetStructureToTransparent(selectedStructure.CurrentVisual()); // Make the object transparent to show it's a preview
             }
             else if(selectedStructure != null)
@@ -193,7 +193,12 @@ public class BuildGun : Weapon
     }
     public void ExitEditMode()
     {
-        DeselectStructure();
+        if(selectedStructure != null)
+        {
+            SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
+            selectedStructure.ToggleStructureController(true);// Enable Behavior
+        }
+        selectedStructure = null;
         player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
         isEditing = false;
     }
@@ -204,7 +209,7 @@ public class BuildGun : Weapon
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer) && !movingStructure)
         {
-            selectedStructure = hit.collider.gameObject.GetComponent<Structure>(); // Select the hit object
+            selectedStructure = hit.collider.transform.parent.GetComponent<Structure>(); // Select the hit object
             SetStructureToTransparent(selectedStructure.gameObject);
             Debug.Log("Structure selected: " + selectedStructure.name);
             player.pUI.EnablePrompt(selectedStructure.name);

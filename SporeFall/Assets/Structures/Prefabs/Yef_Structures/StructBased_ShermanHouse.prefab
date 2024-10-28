@@ -31,6 +31,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 486190185445929729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &795503593085061794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3601192681765489144}
+  - component: {fileID: 3895042530933602892}
+  m_Layer: 7
+  m_Name: Controlscirpt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3601192681765489144
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795503593085061794}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4875674513707954885}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3895042530933602892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795503593085061794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88687d2368a7e3418ab21617efe4862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shermanPrefab: {fileID: 2588137888749594261, guid: 7b6c41d8a07f1fa44a470c157405a3c4,
+    type: 3}
+  spawnPoint: {fileID: 3603894046513239344}
+  respawnDelay: 2
+  sHouse: {fileID: 1949457979283779014}
 --- !u!1 &1260562837911600462
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,7 +256,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4875674513707954885}
   - component: {fileID: 8933941658098722499}
-  - component: {fileID: 1381943152522631043}
+  - component: {fileID: 7771958113601973338}
   m_Layer: 7
   m_Name: ShermanStructureControl
   m_TagString: Untagged
@@ -227,7 +276,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3601192681765489144}
   m_Father: {fileID: 486190185445929729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8933941658098722499
@@ -242,25 +292,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c48f82a081ac2ce449b1df499f21c905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHP: 100
   healthDisplay: {fileID: 9221098303091386716}
---- !u!114 &1381943152522631043
-MonoBehaviour:
+--- !u!136 &7771958113601973338
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3927428180562508789}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88687d2368a7e3418ab21617efe4862, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shermanPrefab: {fileID: 2588137888749594261, guid: 7b6c41d8a07f1fa44a470c157405a3c4,
-    type: 3}
-  spawnPoint: {fileID: 3603894046513239344}
-  respawnDelay: 2
-  sHouse: {fileID: 1949457979283779014}
+  serializedVersion: 2
+  m_Radius: 0.95
+  m_Height: 2.460105
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &4162946711287125051
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +428,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 486190185445929729}
-  - component: {fileID: 2583371483461552458}
   - component: {fileID: 6160126734740821747}
   m_Layer: 7
   m_Name: StructBased_ShermanHouse
@@ -400,29 +455,6 @@ Transform:
   - {fileID: 428461200006071308}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &2583371483461552458
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5415324038918524610}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.95
-  m_Height: 2.460105
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!114 &6160126734740821747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,7 +470,6 @@ MonoBehaviour:
   structBehavior: {fileID: 3927428180562508789}
   visuals:
   - {fileID: 6755757473945553029}
-  structureSprite: {fileID: 21300000, guid: 5e38ad4ae6483964f92f57ac8fc1baee, type: 3}
   cost:
   - 25
   - 30

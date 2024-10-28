@@ -54,8 +54,6 @@ public class PlayerAnimation : MonoBehaviour
     {
         weaponSlot.position = rightHandBone.position;
 
-       /* if (!twoHanded)
-        {*/
         Vector3 handForward = rightHandBone.up;
         weaponSlot.rotation = Quaternion.LookRotation(handForward);
 
@@ -122,6 +120,32 @@ public class PlayerAnimation : MonoBehaviour
             twoHanded = false;
         }
        
+    }
+    public void ToggleIKAim(bool toggle)
+    {
+        if (!toggle)
+        {
+            if (twoHanded)
+            {
+                twoHandedRig.weight = 0;
+            }
+            else
+            {
+                oneHandedRig.weight = 0;
+            }
+        }
+        else
+        {
+            if (twoHanded)
+            {
+                twoHandedRig.weight = 1;
+            }
+            else
+            {
+                oneHandedRig.weight = 1;
+            }
+        }
+    
     }
     public void SetManager(PlayerManager player)
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PayloadHP : Damageable
 {
-    [SerializeField] private TMP_Text HpDisplay;
+    [SerializeField] private TMP_Text healthDisplay;
     private Payload payload;
 
     // Start is called before the first frame update
@@ -22,7 +22,8 @@ public class PayloadHP : Damageable
 
     protected override void UpdateUI()
     {
-        HpDisplay.text = currentHP.ToString() + ":" + maxHP.ToString();
+        if(healthDisplay != null)
+            healthDisplay.text = currentHP.ToString() + ":" + maxHP.ToString();
     }
     public void SetManager(Payload payload)
     {

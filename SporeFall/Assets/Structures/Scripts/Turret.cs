@@ -14,7 +14,7 @@ public class Turret : MonoBehaviour
 
     private Transform nearestEnemy;          // The nearest enemy detected
     private float fireCooldown = 0f;
-
+    [SerializeField] Transform papa;
     void Update()
     {
         if (nearestEnemy == null || !IsEnemyInRange(nearestEnemy))
@@ -70,7 +70,7 @@ public class Turret : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(direction);
 
         // Smoothly rotate towards the enemy on the y-axis
-        transform.parent.rotation = Quaternion.Slerp(transform.parent.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+        papa.rotation = Quaternion.Slerp(papa.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
     // Check line of sight using raycasting and fire at the enemy if visible
     void CheckLineOfSightAndFire()

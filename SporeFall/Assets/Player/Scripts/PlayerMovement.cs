@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
         movement *= Time.deltaTime;
         cc.Move(movement);
         // Visual moves along with controller as separate object
-        visual.position = transform.position;
+        visual.position = transform.position - Vector3.up;
         visual.forward = transform.forward;
     }
     public void JumpCall()
@@ -182,8 +182,8 @@ public class PlayerMovement : MonoBehaviour
         movement.y = vertSpeed;
         movement *= Time.deltaTime;
         cc.Move(movement);
-        // visual moves with Character controller
-        visual.position = transform.position;
+        // visual moves with Character controller // since orgin point on controller is at center, move position down one
+        visual.position = transform.position - Vector3.up;
     }
     public void SetAimState()
     {// called by TPS Camera to switch to aim state

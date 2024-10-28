@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrainHandler : MonoBehaviour
 {
-    private List<PlayerManager> players = new();
+    public List<PlayerManager> players = new();
     [Header("References")]
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
@@ -38,8 +38,7 @@ public class TrainHandler : MonoBehaviour
 
     private void Awake()
     {
-        trainHP = transform.GetChild(0).GetComponent<TrainHP>();
-        if (trainHP != null)
+        if (transform.GetChild(0).TryGetComponent<TrainHP>(out trainHP))
         {
             trainHP.train = this;
             tUI.SetMaxHP(trainHP.maxHP);
@@ -173,6 +172,12 @@ public class TrainHandler : MonoBehaviour
     {
         // remove disconnected players
         players.Remove(player);
+    }
+    public Transform GetDamagePoint()
+    {
+        int index = Random.Range(0, damagePoint.Length);
+
+        return damagePoint[index];
     }
     private void ClearDrops()
     {

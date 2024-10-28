@@ -7,7 +7,6 @@ public class EnemyControls : MonoBehaviour
 {
     public delegate void EnemyDeath();
     public event EnemyDeath OnEnemyDeath;
-    EnemyHP hp;
     // NavMeshAgent component
     private NavMeshAgent navMeshAgent;
 
@@ -30,7 +29,7 @@ public class EnemyControls : MonoBehaviour
     private float nextTargetUpdateTime = 0f; // check for potential targets in intervals
     public float updateTargetInterval = 0.5f;  // Time interval to update the target
     private Collider[] detectedColliders;      // Array to store detected colliders
-    public int maxDetectedObjects = 10;        // Max number of objects the enemy can detect at once
+    private int maxDetectedObjects = 10;        // Max number of objects the enemy can detect at once
     [Header("Drops")]
     [SerializeField] GameObject myceliaDropPrefab;
     [SerializeField] private float myceliaDropAmount = 5;
@@ -39,7 +38,6 @@ public class EnemyControls : MonoBehaviour
     private bool isTargetingTrain = false;
     void Start()
     {
-        hp = GetComponent<EnemyHP>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         detectedColliders = new Collider[maxDetectedObjects]; // Pre-allocate the array for detected objects
 
@@ -49,13 +47,6 @@ public class EnemyControls : MonoBehaviour
     }
     void Update()
     {
-        // Ensure the agent is on a valid NavMesh
-        /*  if (navMeshAgent == null || !navMeshAgent.isOnNavMesh)
-          {
-              Debug.LogError("NavMeshAgent is not on a valid NavMesh.");
-              return;
-          }*/
-
         // Update the target at intervals, but only if the current target is empty or out of range
         if (Time.time >= nextTargetUpdateTime && (currentTarget == null || !IsTargetInRange(currentTarget)))
         {

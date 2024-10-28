@@ -38,10 +38,19 @@ public class CorruptionHandler : MonoBehaviour
     {
         corruptionLevel = 0;
         pMan.pUI.DisplayCorruption(corruptionLevel);
-        // Spawn a corrupted Player
-        Instantiate(corruptedRobot, pMan.pController.transform.position, Quaternion.identity);
+        // add a delay to coruppted robot spawning
+        Invoke(nameof(SpawnCorruptedRobot), 1);
         // player loses life and respawns
         pMan.pHealth.DepleteLife();
         pMan.StartRespawn();
+    }
+
+    private void SpawnCorruptedRobot()
+    {
+        // Spawn a corrupted Player
+        CorruptedPlayer robert = Instantiate(corruptedRobot, pMan.pController.transform.position, Quaternion.identity).GetComponent<CorruptedPlayer>();
+        // corrupted player will prioritize attacking the player
+        robert.myPlayer = pMan;
+        robert.AssignDefaultTarget(pMan.train, pMan.pController.transform);
     }
 }

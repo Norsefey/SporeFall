@@ -124,7 +124,6 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {// Exit Build Mode
-
             if (bGun.isEditing)
             {
                 bGun.ExitEditMode();
@@ -138,14 +137,18 @@ public class PlayerManager : MonoBehaviour
                 currentWeapon = equippedWeapon;
             else
                 currentWeapon = defaultWeapon;
-
+            isBuilding = false;
+            if (isFiring)
+                pCamera.AimSight();
+            else
+                pCamera.DefaultSight();
+            // if player is holding fire button when exiting, prevents auto shooting bug
+            isFiring = false;
             bGun.gameObject.SetActive(false);
             currentWeapon.gameObject.SetActive(true);
             pUI.AmmoDisplay(currentWeapon);
             pUI.DisablePrompt();
             pUI.SwitchWeaponIcon();
-            isFiring = false;
-            isBuilding = false;
 
             if (currentWeapon.isTwoHanded)
                 pAnime.ToggleTwoHanded(true);

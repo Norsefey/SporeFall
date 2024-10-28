@@ -53,9 +53,9 @@ public class ProjectileBehavior : MonoBehaviour
         Destroy(gameObject, data.Lifetime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.TryGetComponent<Damageable>(out var damageable))
+        if (collision.collider.TryGetComponent<Damageable>(out var damageable))
         {
             damageable.TakeDamage(currentDamage);
 
@@ -68,7 +68,7 @@ public class ProjectileBehavior : MonoBehaviour
 
         if (data.CanBounce && bounceCount < data.MaxBounces)
         {
-            Bounce(other);
+            Bounce(collision.collider);
         }
         else
         {

@@ -22,7 +22,6 @@ public class Payload : MonoBehaviour
         hp = GetComponent<PayloadHP>();
         hp.SetManager(this);
         moveSpeed = defaultMoveSpeed; // Initialize move speed
-        papa = transform.parent;
     }
     private void Update()
     {
@@ -68,6 +67,7 @@ public class Payload : MonoBehaviour
     public void StartMoving(Transform[] payloadPath)
     {
         path = payloadPath;
+        papa = transform.parent;
         SetDestination();
         isMoving = true;
     }
@@ -75,7 +75,6 @@ public class Payload : MonoBehaviour
     {
         moveSpeed = topMoveSpeed;
     }
-
     public void DestroyPayload()
     {
         // load death screen

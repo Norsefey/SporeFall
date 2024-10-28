@@ -16,16 +16,18 @@ public class PlayerHP : Damageable
     {
         lives--;
     }
+    public void IncreaseLife()
+    {
+        lives++;
+    }
     public void SetManager(PlayerManager player)
     {
         pMan = player;
     }
-
     protected override void Die()
     {
         pMan.StartRespawn();
     }
-
     protected override void UpdateUI()
     {
         pMan.pUI.UpdateHPDisplay(currentHP);

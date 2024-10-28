@@ -83,7 +83,7 @@ public abstract class Weapon : MonoBehaviour
 
         if (projectileComp != null)
         {
-            ProjectileData data = new ProjectileData
+            ProjectileData data = new()
             {
                 Direction = shootDirection,
                 Speed = projectileSpeed,
@@ -95,7 +95,7 @@ public abstract class Weapon : MonoBehaviour
                 MaxBounces = maxBounces,
                 BounceDamageMultiplier = bounceDamageMultiplier
             };
-
+            projectileComp.Initialize(data);
             Debug.Log(weaponName + " fired a projectile.");
         }
     }
@@ -118,7 +118,10 @@ public abstract class Weapon : MonoBehaviour
             // Apply damage to the hit object
             if (hit.collider.CompareTag("Enemy"))
             {
-                hit.collider.SendMessage("TakeDamage", damage, SendMessageOptions.DontRequireReceiver);
+                if (hit.transform.TryGetComponent<Damageable>(out var damageable))
+                {
+                    damageable.TakeDamage(damage);
+                }
             }
         }
     }

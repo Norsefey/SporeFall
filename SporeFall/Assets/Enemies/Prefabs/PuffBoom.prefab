@@ -114,8 +114,8 @@ GameObject:
   - component: {fileID: 3048219100869306638}
   - component: {fileID: -8288846393660587419}
   - component: {fileID: 6700846432238513998}
-  - component: {fileID: 1501903265170726969}
   - component: {fileID: 3915186376133362917}
+  - component: {fileID: 313471775743458934}
   m_Layer: 8
   m_Name: PuffBoom
   m_TagString: Enemy
@@ -138,6 +138,7 @@ Transform:
   m_Children:
   - {fileID: 273776873350924231}
   - {fileID: 2040770244743584137}
+  - {fileID: 649384524154093143}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &3048219100869306638
@@ -210,41 +211,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1501903265170726969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1657974298613798786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 669902cca14194745abe404b3543acb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stoppingDistance: 4
-  attackRange: 6
-  attackCoolDown: 2
-  damageAmount: 7
-  targetingRange: 54
-  priorityTags:
-  - Player
-  - WallStructure
-  - Structure
-  - Payload
-  targetsLayerMask:
-    serializedVersion: 2
-    m_Bits: 640
-  train: {fileID: 0}
-  updateTargetInterval: 0.5
-  maxDetectedObjects: 10
-  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
-    type: 3}
-  myceliaDropAmount: 5
-  weaponDropPrefab:
-  - {fileID: 6532063568776282634, guid: ff0048dd2ef887a44bc159c3cde6d637, type: 3}
-  - {fileID: 9060537162651975904, guid: 913ccd0c1fb98f046b9540bbdc94922d, type: 3}
-  dropChance: 50
 --- !u!114 &3915186376133362917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +225,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 10
   hpDisplay: {fileID: 8293907463534621136}
+  manager: {fileID: 313471775743458934}
+--- !u!114 &313471775743458934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657974298613798786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a729adb8c97a9a44eb55d8ed721012e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacks:
+  - {fileID: 11400000, guid: 8fd94c99272d2cd4f9a71750a641e3fe, type: 2}
+  - {fileID: 11400000, guid: bd0f54f78ab21f047a1dbcf3c3307695, type: 2}
+  firePoint: {fileID: 649384524154093143}
+  strafeRadius: 10
+  retreatDistance: 15
+  strafeSpeed: 5
+  chasePriorityDistance: 25
+  damagePriorityThreshold: 20
+  damageTrackingDuration: 3
+  stoppingDistance: 5
+  minAttackInterval: 5
+  maxAttackInterval: 8
+  aggressionFactor: 0.6
+  train: {fileID: 0}
+  currentTarget: {fileID: 0}
+  priorityTags:
+  - WallStructure
+  - Structure
+  - Player
+  - Payload
+  detectionRange: 30
+  targetsLayerMask:
+    serializedVersion: 2
+    m_Bits: 2688
+  targetSwitchThreshold: 100
+  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
+    type: 3}
+  myceliaDropAmount: 5
+  weaponDropPrefab:
+  - {fileID: 8069998965320504491, guid: 007325650587395469b3590ca65ec4d1, type: 3}
+  dropChance: 20
+--- !u!1 &8548387528039298855
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 649384524154093143}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &649384524154093143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8548387528039298855}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3427758, y: 3.2539456, z: 2.3964446}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6723776635264665680}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9030144842525589066
 GameObject:
   m_ObjectHideFlags: 0

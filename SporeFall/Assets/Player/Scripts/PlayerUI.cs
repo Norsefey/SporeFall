@@ -51,7 +51,8 @@ public class PlayerUI : MonoBehaviour
     }
     public void UpdateHPDisplay(float value)
     {
-        HPBar.value = value;
+        if(HPBar != null)
+            HPBar.value = value;
     }
     public void DisplayMycelia(float value)
     {

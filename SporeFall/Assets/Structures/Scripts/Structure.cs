@@ -16,11 +16,10 @@ public class Structure : MonoBehaviour
     public void PurchaseStructure()
     {
         structBehavior.SetActive(true);
-        GetComponent<Collider>().enabled = true; // Enable collider for the final object
     }
     public void ToggleStructureController(bool toggle)
     {
-        structBehavior.SetActive(toggle);
+        structBehavior.transform.GetChild(0).gameObject.SetActive(toggle);
     }
     public void UpgradeStructure()
     {

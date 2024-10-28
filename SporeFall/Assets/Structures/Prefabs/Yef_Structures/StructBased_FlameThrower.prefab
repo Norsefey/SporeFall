@@ -111,7 +111,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7272318713880728193}
-  - component: {fileID: 4003530658016817002}
   - component: {fileID: 641155708943757042}
   m_Layer: 7
   m_Name: StructBased_FlameThrower
@@ -138,29 +137,6 @@ Transform:
   - {fileID: 534529393099504063}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &4003530658016817002
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1083017409998067897}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.91
-  m_Height: 2.97
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.21, z: 0.41}
 --- !u!114 &641155708943757042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,7 +154,6 @@ MonoBehaviour:
   - {fileID: 8662785540506598523}
   - {fileID: 3983246947478363156}
   - {fileID: 5327881533985267803}
-  structureSprite: {fileID: 21300000, guid: b872c10ce3b25ba428eff443c8423464, type: 3}
   cost:
   - 25
   - 30
@@ -187,6 +162,75 @@ MonoBehaviour:
   - 5
   - 10
   - 15
+--- !u!1 &1288926531420532643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6109047843914163578}
+  - component: {fileID: 3181485927873890141}
+  - component: {fileID: 8502205711763563241}
+  m_Layer: 7
+  m_Name: controlScript
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6109047843914163578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288926531420532643}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4954534039210829641}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3181485927873890141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288926531420532643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a67a9106e5fe284bbdef6c7285c63c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagePerSecond: 8
+  range: 5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  enemyTag: Enemy
+  tickRate: 0.5
+--- !u!114 &8502205711763563241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288926531420532643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc69d0532acefab489b190a72accd459, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleEffects:
+  - {fileID: 3489789645933903004}
+  - {fileID: 3966029774224264475}
+  - {fileID: 847075702457188365}
+  - {fileID: 6063287242929213565}
 --- !u!1 &1709389267598573454
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,9 +240,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4954534039210829641}
-  - component: {fileID: 762646854365812246}
   - component: {fileID: 3408726495628215423}
-  - component: {fileID: 5421660001166731550}
+  - component: {fileID: 7566235442186277489}
   m_Layer: 7
   m_Name: FlameThrowerControls
   m_TagString: Structure
@@ -218,28 +261,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6109047843914163578}
   m_Father: {fileID: 7272318713880728193}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &762646854365812246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1709389267598573454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a67a9106e5fe284bbdef6c7285c63c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damagePerSecond: 8
-  range: 5
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  enemyTag: Enemy
-  tickRate: 0.5
 --- !u!114 &3408726495628215423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,25 +277,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c48f82a081ac2ce449b1df499f21c905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHP: 100
   healthDisplay: {fileID: 3621151890908538666}
---- !u!114 &5421660001166731550
-MonoBehaviour:
+--- !u!136 &7566235442186277489
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1709389267598573454}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc69d0532acefab489b190a72accd459, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particleEffects:
-  - {fileID: 3489789645933903004}
-  - {fileID: 3966029774224264475}
-  - {fileID: 847075702457188365}
-  - {fileID: 6063287242929213565}
+  serializedVersion: 2
+  m_Radius: 0.91
+  m_Height: 2.97
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.21, z: 0.41}
 --- !u!1 &3621635466963396617
 GameObject:
   m_ObjectHideFlags: 0
