@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     private PlayerManager pMan;
+    [SerializeField] private BuildGun bGun;
     [Header("Gameplay UI")]
     [SerializeField] private GameObject gameplayUI;
     public Image weaponIcon;
@@ -21,6 +22,15 @@ public class PlayerUI : MonoBehaviour
     public GameObject life2;
     [Header("Upgrade Menu")]
     [SerializeField] private GameObject upgradeMenu;
+    [Header("Build/Structures UI")]
+    public GameObject buildUI;
+    [SerializeField] private Image selectedStructureIcon;
+    [SerializeField] private Image rightStructureIcon;
+    [SerializeField] private Image leftStructureIcon;
+    [SerializeField] private Sprite turretSprite;
+    [SerializeField] private Sprite flamethrowerSprite;
+    [SerializeField] private Sprite wallSprite;
+    [SerializeField] private Sprite shermanSprite;
 
     private void Start()
     {
@@ -37,10 +47,10 @@ public class PlayerUI : MonoBehaviour
     public void AmmoDisplay(Weapon currentWeapon)
     {
         if (currentWeapon.IsReloading)
-            ammoIndicator.text = "Reloading";    
+            ammoIndicator.text = "Reloading";
         else if (currentWeapon.limitedAmmo)
             ammoIndicator.text = currentWeapon.bulletCount + "/" + currentWeapon.totalAmmo;
-        else if(currentWeapon is BuildGun)
+        else if (currentWeapon is BuildGun)
             ammoIndicator.text = "Build Mode";
         else
             ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
@@ -51,7 +61,7 @@ public class PlayerUI : MonoBehaviour
     }
     public void UpdateHPDisplay(float value)
     {
-        if(HPBar != null)
+        if (HPBar != null)
             HPBar.value = value;
     }
     public void DisplayMycelia(float value)
@@ -75,7 +85,7 @@ public class PlayerUI : MonoBehaviour
 
         pMan.TogglePControl(!toggle);
 
-        if(toggle)
+        if (toggle)
             Cursor.lockState = CursorLockMode.None;
         else
             Cursor.lockState = CursorLockMode.Locked;
@@ -85,5 +95,37 @@ public class PlayerUI : MonoBehaviour
     public void SetManager(PlayerManager player)
     {
         pMan = player;
+    }
+
+    public void SwitchStructureIcon()
+    {
+        //selectedStructureIcon.sprite = bGun.selectedStructure.structureSprite;
+        if (bGun.currentBuildIndex == 0)
+        {
+            selectedStructureIcon.sprite = turretSprite;
+            leftStructureIcon.sprite = shermanSprite;
+            rightStructureIcon.sprite = flamethrowerSprite;
+        }
+
+        if (bGun.currentBuildIndex == 1)
+        {
+            selectedStructureIcon.sprite = flamethrowerSprite;
+            leftStructureIcon.sprite = turretSprite;
+            rightStructureIcon.sprite = wallSprite;
+        }
+
+        if (bGun.currentBuildIndex == 2)
+        {
+            selectedStructureIcon.sprite = wallSprite;
+            leftStructureIcon.sprite = flamethrowerSprite;
+            rightStructureIcon.sprite = shermanSprite;
+        }
+
+        if (bGun.currentBuildIndex == 3)
+        {
+            selectedStructureIcon.sprite = shermanSprite;
+            leftStructureIcon.sprite = wallSprite;
+            rightStructureIcon.sprite = turretSprite;
+        }
     }
 }

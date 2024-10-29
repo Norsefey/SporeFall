@@ -4,7 +4,7 @@ using UnityEngine;
 public class BuildGun : Weapon
 {
     [Header("Build Gun Settings")]
-    [SerializeField] private StructuresUI sUI;
+    //[SerializeField] private StructuresUI sUI;
     public GameObject[] buildableStructures; // Array of objects the player can spawn
     public float maxBuildDistance = 100f; // Maximum distance for building
     public LayerMask groundLayer; // LayerMask to identify what is "ground"
@@ -18,7 +18,7 @@ public class BuildGun : Weapon
 
     public void Start()
     {
-        sUI.SwitchStructureIcon();
+        player.pUI.SwitchStructureIcon();
     }
     public override void Fire()
     {
@@ -117,7 +117,7 @@ public class BuildGun : Weapon
             Destroy(selectedStructure.gameObject);
 
         player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name);
-        sUI.SwitchStructureIcon();
+        player.pUI.SwitchStructureIcon();
     }
     private void SetStructureToTransparent(GameObject obj)
     {

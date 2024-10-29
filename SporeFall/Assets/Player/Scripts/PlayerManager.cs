@@ -116,6 +116,7 @@ public class PlayerManager : MonoBehaviour
             currentWeapon.gameObject.SetActive(false);
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
+            pUI.buildUI.SetActive(true);
             pUI.EnablePrompt("<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview");
             pUI.AmmoDisplay(currentWeapon);
             pUI.SwitchWeaponIcon();
@@ -146,6 +147,7 @@ public class PlayerManager : MonoBehaviour
             isFiring = false;
             bGun.gameObject.SetActive(false);
             currentWeapon.gameObject.SetActive(true);
+            pUI.buildUI.SetActive(false);
             pUI.AmmoDisplay(currentWeapon);
             pUI.DisablePrompt();
             pUI.SwitchWeaponIcon();
