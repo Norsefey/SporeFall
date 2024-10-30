@@ -6,7 +6,7 @@ public class TurretBulletBehavior : MonoBehaviour
 {
     public float deathTime = 2;
     [SerializeField] GameObject bulletResidue;
-    float dmg = 15f;
+    public float dmg = 20f;
     public string enemyTag = "Enemy";
 
     private void Update()

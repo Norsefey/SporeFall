@@ -10,7 +10,7 @@ public class Payload : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float defaultMoveSpeed = 2f;   // The speed of the payload's movement
     [SerializeField] private float topMoveSpeed = 4f; // When boss dies payload moves faster
-    private Transform[] path;
+    [SerializeField] private Transform[] path;
     private Transform papa;
     private int pathIndex = 0;
     private Vector3 destination;  // The target point where the payload is moving towards

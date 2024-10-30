@@ -422,7 +422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6edf8b238b198524fb1ecb35917fd7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 1100
+  maxHP: 500
   hpDisplay: {fileID: 2281902712954260759}
   manager: {fileID: 3874359856786588803}
 --- !u!114 &3874359856786588803
@@ -453,7 +453,7 @@ MonoBehaviour:
   minAttackInterval: 2
   maxAttackInterval: 4
   aggressionFactor: 0.9
-  defaultTarget: {fileID: 0}
+  train: {fileID: 0}
   currentTarget: {fileID: 0}
   priorityTags:
   - Player
@@ -465,6 +465,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2688
   targetSwitchThreshold: 10
+  myPlayer: {fileID: 0}
 --- !u!1001 &3361188645947950905
 PrefabInstance:
   m_ObjectHideFlags: 0
