@@ -10,6 +10,17 @@ public class TrainHP : Damageable
         currentHP = maxHP;
         UpdateUI();
     }
+
+    private void Update()
+    {
+        //Testing
+        if (Input.GetKeyUp(KeyCode.P))
+        {
+            currentHP = currentHP - 40;
+            UpdateUI();
+            Debug.Log("taking 40 damage");
+        }
+    }
     protected override void Die()
     {
         // put other death behavior here
