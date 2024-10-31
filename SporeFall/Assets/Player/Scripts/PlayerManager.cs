@@ -45,6 +45,28 @@ public class PlayerManager : MonoBehaviour
     {
         pInput = GetComponent<PlayerInputOrganizer>();
         // since we will have multiple players, this manager cannot be a public instance, so we assign it locally
+        SetManager();
+        SetDeviceSettings();
+    }
+    private void Start()
+    {
+        if(WaveManager.Instance != null)
+            WaveManager.Instance.train.AddPlayer(this);
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        pUI.AmmoDisplay(currentWeapon);
+        pInput.AssignAllActions();
+        
+    }
+    private void Update()
+    {
+        WeaponBehavior();
+
+    }
+    private void SetManager()
+    {
         pInput.SetManager(this);
         pController.SetManager(this);
         pCamera.SetManager(this);
@@ -52,6 +74,9 @@ public class PlayerManager : MonoBehaviour
         pHealth.SetManager(this);
         pUI.SetManager(this);
         pAnime.SetManager(this);
+    }
+    private void SetDeviceSettings()
+    {
         PlayerInput playerInput = GetComponent<PlayerInput>();
         if (playerInput.devices.Count > 0)
         {
@@ -71,17 +96,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    private void Start()
-    {
-        if(WaveManager.Instance != null)
-            WaveManager.Instance.train.AddPlayer(this);
-        // in order to spawn player at a spawn point, disable movement controls
-        pUI.AmmoDisplay(currentWeapon);
-        pInput.AssignAllActions();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-    private void Update()
+    private void WeaponBehavior()
     {
         if (currentWeapon != null)
         {
@@ -105,57 +120,6 @@ public class PlayerManager : MonoBehaviour
                 // Charge weapons handle firing when the fire button is held
                 gun.Charge();
             }
-        }
-
-        
-    }
-    public void ToggleBuildMode()
-    {
-        if (!isBuilding)
-        {// Enter Build mode
-            currentWeapon.gameObject.SetActive(false);
-            bGun.gameObject.SetActive(true);
-            currentWeapon = bGun;
-            pUI.buildUI.SetActive(true);
-            pUI.EnablePrompt("<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview");
-            pUI.AmmoDisplay(currentWeapon);
-            pUI.SwitchWeaponIcon();
-            pAnime.ToggleTwoHanded(false);
-            isBuilding = true;
-        }
-        else
-        {// Exit Build Mode
-            if (bGun.isEditing)
-            {
-                bGun.ExitEditMode();
-            }
-            else
-            {
-                bGun.DestroySelectedObject();
-            }
-
-            if (equippedWeapon != null)
-                currentWeapon = equippedWeapon;
-            else
-                currentWeapon = defaultWeapon;
-            isBuilding = false;
-            if (isFiring)
-                pCamera.AimSight();
-            else
-                pCamera.DefaultSight();
-            // if player is holding fire button when exiting, prevents auto shooting bug
-            isFiring = false;
-            bGun.gameObject.SetActive(false);
-            currentWeapon.gameObject.SetActive(true);
-            pUI.buildUI.SetActive(false);
-            pUI.AmmoDisplay(currentWeapon);
-            pUI.DisablePrompt();
-            pUI.SwitchWeaponIcon();
-
-            if (currentWeapon.isTwoHanded)
-                pAnime.ToggleTwoHanded(true);
-            else
-                pAnime.ToggleTwoHanded(false);
         }
     }
     public void PickUpWeapon()
@@ -218,6 +182,56 @@ public class PlayerManager : MonoBehaviour
         pUI.SwitchWeaponIcon();
         pAnime.ToggleTwoHanded(false);
     }
+    #region Toggle Switches
+    public void ToggleBuildMode()
+    {
+        if (!isBuilding)
+        {// Enter Build mode
+            currentWeapon.gameObject.SetActive(false);
+            bGun.gameObject.SetActive(true);
+            currentWeapon = bGun;
+            pUI.buildUI.SetActive(true);
+            pUI.EnablePrompt("<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview");
+            pUI.AmmoDisplay(currentWeapon);
+            pUI.SwitchWeaponIcon();
+            pAnime.ToggleTwoHanded(false);
+            isBuilding = true;
+        }
+        else
+        {// Exit Build Mode
+            if (bGun.isEditing)
+            {
+                bGun.ExitEditMode();
+            }
+            else
+            {
+                bGun.DestroySelectedObject();
+            }
+
+            if (equippedWeapon != null)
+                currentWeapon = equippedWeapon;
+            else
+                currentWeapon = defaultWeapon;
+            isBuilding = false;
+            if (isFiring)
+                pCamera.AimSight();
+            else
+                pCamera.DefaultSight();
+            // if player is holding fire button when exiting, prevents auto shooting bug
+            isFiring = false;
+            bGun.gameObject.SetActive(false);
+            currentWeapon.gameObject.SetActive(true);
+            pUI.buildUI.SetActive(false);
+            pUI.AmmoDisplay(currentWeapon);
+            pUI.DisablePrompt();
+            pUI.SwitchWeaponIcon();
+
+            if (currentWeapon.isTwoHanded)
+                pAnime.ToggleTwoHanded(true);
+            else
+                pAnime.ToggleTwoHanded(false);
+        }
+    }
     public void TogglePControl(bool toggle)
     {
         pController.gameObject.SetActive(toggle);
@@ -234,6 +248,11 @@ public class PlayerManager : MonoBehaviour
     {
         pVisual.SetActive(toggle);
     }
+    public void TogglePCorruption(bool toggle)
+    {
+        pCorruption.gameObject.SetActive(toggle);
+    }
+    #endregion
     public void MovePlayerTo(Vector3 position)
     {
         pController.transform.position = position;

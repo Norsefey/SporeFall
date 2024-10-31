@@ -29,7 +29,7 @@ public abstract class BaseEnemy : MonoBehaviour
     protected Damageable health;
     public Transform firePoint;
 
-    [Header("State Behavior")]
+    [Header("Strafe Behavior")]
     [SerializeField] protected float strafeRadius = 10f;
     [SerializeField] protected float retreatDistance = 15f;
     [SerializeField] protected float strafeSpeed = 5f;
@@ -86,7 +86,6 @@ public abstract class BaseEnemy : MonoBehaviour
     private int maxDetectedObjects = 10; // Max number of objects the enemy can detect at once
     public Animator Animator => animator;
     public AudioSource AudioSource => audioSource;
-
     protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();

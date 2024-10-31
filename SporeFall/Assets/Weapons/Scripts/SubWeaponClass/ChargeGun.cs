@@ -17,7 +17,7 @@ public class ChargeGun : Weapon
     {
         if (bulletCount <= 0 && !IsReloading)
         {
-            Reload();
+            StartReload();
         }
         else if (bulletCount <= 0 || IsReloading) 
             return;
@@ -59,36 +59,63 @@ public class ChargeGun : Weapon
     // Fire projectile with charge multiplier affecting its power (damage or speed)
     private void FireProjectile(float chargeMultiplier)
     {
+        // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
-        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
-        projectile.transform.localScale *= chargeMultiplier;
-        Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        rb.velocity = baseChargeSpeed * chargeMultiplier * shootDirection; // Increase speed based on charge
-
+        // Rotate player first before shooting
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
-        Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier);
+        // Instantiate the projectile and shoot it in the spread direction
+        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
+        projectile.transform.localScale *= Mathf.Clamp(chargeMultiplier, 0, 3);
+
+        ProjectileBehavior projectileComp = projectile.GetComponent<ProjectileBehavior>();
+        if (projectileComp != null)
+        {
+            ProjectileData data = new()
+            {
+                Direction = shootDirection,
+                Speed = projectileSpeed * chargeMultiplier,// Bullet moves faster the higher the charge
+                Damage = damage * chargeMultiplier,
+                Lifetime = projectileLifetime,
+                UseGravity = useGravity,
+                ArcHeight = projectileArcHeight,
+                CanBounce = canBounce,
+                MaxBounces = maxBounces,
+                BounceDamageMultiplier = bounceDamageMultiplier
+            };
+            projectileComp.Initialize(data);
+            Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier + " For " + damage * chargeMultiplier + " Damage");
+        }
     }
 
     // Fire hitscan with charge multiplier affecting its damage
     private void FireHitscan(float chargeMultiplier)
     {
+        // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
+        if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
+        {
+            Debug.Log("Rotating on Fire");
+            player.pController.RotateOnFire(this.transform, shootDirection);
+        }
 
         Ray ray = new(player.pCamera.myCamera.transform.position, shootDirection);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+        if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
-            Debug.Log(weaponName + " fired a charged hit: " + hit.collider.name);
+            Debug.Log(weaponName + " hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));
-            // Optionally: Apply more damage based on chargeMultiplier
-            // hit.collider.GetComponent<Health>()?.TakeDamage(damage * chargeMultiplier);
+            // Apply damage to the hit object
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                if (hit.transform.TryGetComponent<Damageable>(out var damageable))
+                {
+                    damageable.TakeDamage(damage * chargeMultiplier);
+                }
+            }
         }
-
-        Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier);
-
     }
 }

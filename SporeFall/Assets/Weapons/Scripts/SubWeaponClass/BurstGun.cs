@@ -22,7 +22,7 @@ public class BurstGun : Weapon
     {
         if (bulletCount <= 0 && !IsReloading)
         {// reload is player tries firing with 0 magazine
-            Reload();
+            StartReload();
         }else if (isFiringBurst || triggerHeld || bulletCount <= 0 || IsReloading) return; // Only fire if we aren't in the middle of a burst and the player isn't holding the fire button
 
         // Start the burst firing coroutine
@@ -38,12 +38,28 @@ public class BurstGun : Weapon
 
         for (int i = 0; i < burstCount && bulletCount > 0; i++)
         {
-            base.Fire(); // Fire a single shot
+            if (bulletCount <= 0 && !IsReloading)
+            {
+                StartReload();
+            }
+            else
+            {
+                 if (isHitScan)
+                 {
+                     FireHitscan(player.pCamera.myCamera);
+                 }
+                 else
+                 {
+                     FireProjectile(firePoint, player.pCamera.myCamera);
+                 }
+            }
         }
 
+        bulletCount--;
         // Wait for the player to release the fire button
         yield return new WaitUntil(() => !triggerHeld);
     }
+
     public void OnFireReleased()
     {
         // Called when the fire button is released

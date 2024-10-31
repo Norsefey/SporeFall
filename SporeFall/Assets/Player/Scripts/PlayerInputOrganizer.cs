@@ -267,7 +267,7 @@ public class PlayerInputOrganizer : MonoBehaviour
 
         if (pMan.currentWeapon != null)
         {
-            pMan.currentWeapon.Reload();
+            pMan.currentWeapon.StartReload();
         }
     }
     private void OnFlipCamera(InputAction.CallbackContext context)

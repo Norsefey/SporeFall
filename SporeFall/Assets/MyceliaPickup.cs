@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MyceliaPickup : MonoBehaviour
 {
-    public float mycelia;
+    public float myceliaAmount;
 
     public void Setup(float myceliaAmount)
     {
-        mycelia = myceliaAmount;
+        this.myceliaAmount = myceliaAmount;
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
     }
@@ -16,7 +16,7 @@ public class MyceliaPickup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.transform.parent.GetComponent<PlayerManager>().mycelia += mycelia;
+            other.transform.parent.GetComponent<PlayerManager>().mycelia += myceliaAmount;
 
             Destroy(gameObject);
         }

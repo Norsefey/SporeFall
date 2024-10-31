@@ -38,8 +38,9 @@ public class TrainHandler : MonoBehaviour
 
     private void Awake()
     {
+        // make sure HP is always the first child of train
         if (transform.GetChild(0).TryGetComponent<TrainHP>(out trainHP))
-        {
+        {// get and assign train HP
             trainHP.train = this;
             tUI.SetMaxHP(trainHP.maxHP);
         }
@@ -120,10 +121,15 @@ public class TrainHandler : MonoBehaviour
         // hide players to move train
         foreach (var player in players)
         {
+            // Fixes bug where player gun is stuck in reloading state...hopefully
+            if(player.currentWeapon.IsReloading)
+                player.currentWeapon.ForceFinishReload();
+
             // switch to train camera
             player.TogglePControl(false);
             player.TogglePCamera(false);
             player.TogglePVisual(false);
+            player.TogglePCorruption(false);
             player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
         }
        
@@ -137,6 +143,8 @@ public class TrainHandler : MonoBehaviour
             player.TogglePControl(true);
             player.TogglePVisual(true);
             player.TogglePCamera(true);
+            player.TogglePCorruption(true);
+
         }
     }
     public void AddPlayer(PlayerManager player)
@@ -156,6 +164,11 @@ public class TrainHandler : MonoBehaviour
             Invoke(nameof(DisembarkTrain), .5f);
         
     }
+    public void RemovePlayer(PlayerManager player)
+    {
+        // remove disconnected players
+        players.Remove(player);
+    }
     public void DestroyTrain()
     {
         // Load Lose Scene
@@ -167,11 +180,6 @@ public class TrainHandler : MonoBehaviour
         {
             trainCamera.SetActive(false);
         }
-    }
-    public void RemovePlayer(PlayerManager player)
-    {
-        // remove disconnected players
-        players.Remove(player);
     }
     public Transform GetDamagePoint()
     {

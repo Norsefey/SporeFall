@@ -49,12 +49,12 @@ public class ExplosiveAttack : Attack
                 damageable.TakeDamage(damage * damageMultiplier);
             }
 
-            // Add explosion force to rigidbodies
+          /*  // Add explosion force to rigidbodies
             Rigidbody rb = hit.GetComponent<Rigidbody>();
             if (rb != null)
             {
                 rb.AddExplosionForce(explosionForce, enemy.transform.position, explosionRadius, upwardsModifier);
-            }
+            }*/
         }
 
         // Wait for recovery time

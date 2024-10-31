@@ -23,13 +23,14 @@ public class EnemyHP : Damageable
     protected override void Die()
     {
         // call death on enemy
+        Debug.Log("Dieing");
         manager.Die();
     }
     protected override void UpdateUI()
     {
         if (hpDisplay != null)
         {
-            hpDisplay.text = currentHP.ToString() + "/" + maxHP.ToString();
+            hpDisplay.text = currentHP.ToString("F0") + "/" + maxHP.ToString();
         }
     }
 }

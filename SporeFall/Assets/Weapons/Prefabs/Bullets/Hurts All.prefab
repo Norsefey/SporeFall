@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7109103952239701843}
   - component: {fileID: 3935625754366789270}
   - component: {fileID: 3964446810561925850}
-  - component: {fileID: 7320284939718547340}
   m_Layer: 10
   m_Name: Sphere
   m_TagString: Untagged
@@ -84,27 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7320284939718547340
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785750278361388710}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7441200720383325235
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,9 +93,10 @@ GameObject:
   m_Component:
   - component: {fileID: 245749814222732102}
   - component: {fileID: 2952297644193773456}
+  - component: {fileID: 1427754023516810167}
   - component: {fileID: 3306381464641036855}
   m_Layer: 10
-  m_Name: Projectile
+  m_Name: Hurts All
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,6 +145,27 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!135 &1427754023516810167
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3306381464641036855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,3 +178,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1755e229306f9a944b473b5aef203d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
+  hitTag: 
+  explosionEffectPrefab: {fileID: 1150934714579380, guid: 779aa8c25fbd0e1488637639c9fff976,
+    type: 3}
+  explosionRadius: 15
+  damageFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: -1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  createsDOTZone: 0
+  dotZonePrefab: {fileID: 0}
+  dOTDuration: 0
+  dOTTickRate: 0
+  dOTDamagePerTick: 0
+  dOTRadius: 0
