@@ -181,37 +181,10 @@ public abstract class Weapon : MonoBehaviour
         if (player.pUI != null)
             player.pUI.AmmoDisplay(this);
     }
-    public void ForceFinishReload()
+    public void CancelReload()
     {
         StopCoroutine(ReloadCoroutine());
 
-        if (limitedAmmo)
-        {
-            if (totalAmmo <= 0)
-            {
-                Debug.Log(weaponName + " has no more Ammo");
-                return;
-            }
-            int reloadAmount = bulletCapacity - bulletCount;
-            if (totalAmmo > reloadAmount)
-            {
-                // Complete the reload
-                bulletCount = bulletCapacity;
-                totalAmmo -= reloadAmount;
-            }
-            else
-            {
-                // take the final bullets from ammo
-                bulletCount = totalAmmo;
-                totalAmmo = 0;
-            }
-        }
-        else
-        {
-            bulletCount = bulletCapacity;
-        }
-
-        bulletCount = bulletCapacity;
         isReloading = false;
         if (player.pUI != null)
             player.pUI.AmmoDisplay(this);

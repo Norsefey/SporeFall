@@ -134,10 +134,10 @@ public abstract class BaseEnemy : MonoBehaviour
             foreach (var stateWeight in stateWeights)
             {
                 currentSum += stateWeight.weight;
-                Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
+                //Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
                 if (randomValue <= currentSum)
                 {
-                    Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
+                    //Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
                     SetState(stateWeight.state);
                     return;
                 }
@@ -255,7 +255,7 @@ public abstract class BaseEnemy : MonoBehaviour
     protected virtual void UpdateCurrentState()
     {
         // for when current target is destroyed find a new target
-        if(currentTarget == null)
+        if (currentTarget == null)
             DetectTargets();
         // alot of behavior relies on distance to current target
         float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
@@ -263,7 +263,7 @@ public abstract class BaseEnemy : MonoBehaviour
         switch (currentState)
         {
             case EnemyState.Idle:
-               // Debug.Log("Idling");
+                // Debug.Log("Idling");
                 UpdateIdleState();
                 break;
             case EnemyState.Chase:
@@ -319,11 +319,11 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             // so that it doesnt go through all attacks, added a random chance to not attack and do something else instead
             int index = Random.Range(0, 100);
-            Debug.Log(distanceToTarget);
+            //Debug.Log(distanceToTarget);
             Attack bestAttack = ChooseBestAttack(distanceToTarget);
             if (bestAttack != null && index < 70)
             {
-                Debug.Log("Attacking With: " + bestAttack.name);
+                //Debug.Log("Attacking With: " + bestAttack.name);
                 StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
                 return;
             }
@@ -332,7 +332,7 @@ public abstract class BaseEnemy : MonoBehaviour
                 SetRandomState(); // Choose new state if we can't attack
             }
         }
-           
+
         intervalCooldown -= Time.deltaTime;
     }
     protected virtual void UpdateRetreatState()
@@ -422,7 +422,7 @@ public abstract class BaseEnemy : MonoBehaviour
             }
             else
             {
-                Debug.Log("Cannot Use Attack: " + attack.name);
+                //Debug.Log("Cannot Use Attack: " + attack.name);
             }
         }
         return bestAttack;
@@ -462,7 +462,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
         if (currentTarget == null && train != null)
         {
-            if(train.Payload != null)
+            if (train.Payload != null)
                 currentTarget = train.Payload.transform;
             else
                 currentTarget = train.GetDamagePoint();

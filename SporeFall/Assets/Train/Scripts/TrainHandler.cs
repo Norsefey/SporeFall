@@ -121,10 +121,6 @@ public class TrainHandler : MonoBehaviour
         // hide players to move train
         foreach (var player in players)
         {
-            // Fixes bug where player gun is stuck in reloading state...hopefully
-            if(player.currentWeapon.IsReloading)
-                player.currentWeapon.ForceFinishReload();
-
             // switch to train camera
             player.TogglePControl(false);
             player.TogglePCamera(false);

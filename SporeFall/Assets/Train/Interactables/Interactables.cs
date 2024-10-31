@@ -9,6 +9,12 @@ public abstract class Interactables : MonoBehaviour
     public abstract void Interact(InputAction.CallbackContext context);
     public abstract void ItemAction();
     public abstract void RemoveAction();
+    public void DestroyIntractable()
+    {
+        player.pInput.RemoveInteraction(this);
+        RemoveAction();
+        Destroy(gameObject);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

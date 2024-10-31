@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour
     public Weapon defaultWeapon;
     public Weapon equippedWeapon;
     // pickables
-    public GameObject nearByPickUp;
+    public GameObject nearByWeapon;
 
     public bool isFiring = false;
     public bool isCharging = false;
@@ -124,8 +124,12 @@ public class PlayerManager : MonoBehaviour
     }
     public void PickUpWeapon()
     {
-        if (nearByPickUp == null)
+        if (nearByWeapon == null)
             return;
+        // Avoid getting Stuck in reload
+        if(currentWeapon.IsReloading)
+            currentWeapon.CancelReload();
+
         // deactivate the default weapon
         if (currentWeapon == defaultWeapon || currentWeapon == bGun)
         {
@@ -134,17 +138,16 @@ public class PlayerManager : MonoBehaviour
         else if (equippedWeapon != null)
         {
             Destroy(currentWeapon.gameObject); // Drop the current weapon
+            equippedWeapon = null;
         }
         // Equip the new weapon
-        currentWeapon = Instantiate(nearByPickUp, weaponHolder).GetComponent<Weapon>();
-
+        currentWeapon = Instantiate(nearByWeapon, weaponHolder).GetComponent<Weapon>();
         // set the transforms of the new weapon
         currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         // set References
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
         // destroy pick up platform
-        Destroy(nearByPickUp.transform.parent.gameObject);
         // disable pick up prompt
         pUI.DisablePrompt();
         // update UI to display new ammo capacities
@@ -170,6 +173,8 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("Dropping Weapon");
         if (currentWeapon != null)
         {
+            if(currentWeapon.IsReloading)
+                currentWeapon.CancelReload();
             Destroy(currentWeapon.gameObject); // Drop the current weapon
         }
 
@@ -187,6 +192,9 @@ public class PlayerManager : MonoBehaviour
     {
         if (!isBuilding)
         {// Enter Build mode
+         // Avoid getting Stuck in reload
+            if (currentWeapon.IsReloading)
+                currentWeapon.CancelReload();
             currentWeapon.gameObject.SetActive(false);
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
@@ -246,6 +254,10 @@ public class PlayerManager : MonoBehaviour
     }
     public void TogglePVisual(bool toggle)
     {
+        // Fixes bug where player gun is stuck in reloading state...hopefully
+        // since weapon is child of visual put in visual to activate whenever visual is disabled or enabled
+        if (currentWeapon.IsReloading)
+            currentWeapon.CancelReload();
         pVisual.SetActive(toggle);
     }
     public void TogglePCorruption(bool toggle)
