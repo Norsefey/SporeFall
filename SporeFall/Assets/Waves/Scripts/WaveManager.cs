@@ -1,26 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+
 
 public class WaveManager : MonoBehaviour
 {
     public static WaveManager Instance;
     [SerializeField] private WaveUI wUI;
+    
     [Header("References")]
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
     public TrainHandler train; // Reference to the player transform for positioning
     public Transform[] payloadPath;
+    
     [Header("Waves")]
     public List<Wave> waves = new(); // List of waves to configure
-    public Wave currentWave;
+    private Wave currentWave;
     public int currentWaveIndex = 0;
     [SerializeField] private int maxEnemiesOnField = 300;
 
-    private int enemiesAlive = 0;
-    private int enemiesSpawned = 0;
-    public int deadEnemies = 0;
+    private int enemiesAlive = 0; // how many active enemies
+    private int enemiesSpawned = 0;// total amount of enemies spawned so far
+    public int deadEnemies = 0; // enemies killed
     public enum WavePhase
     {
         NotStarted,
@@ -80,7 +84,12 @@ public class WaveManager : MonoBehaviour
     {
         wavePhase = WavePhase.Started;
         enemiesSpawned = 0;
-        //enemiesAlive = currentWave.totalEnemies;
+
+        // Reset spawn counts for new wave
+        foreach (var spawnData in currentWave.enemySpawnData)
+        {
+            spawnData.SpawnedCount = 0;
+        }
 
         while (enemiesSpawned < currentWave.totalEnemies)
         {
@@ -88,19 +97,18 @@ public class WaveManager : MonoBehaviour
             if (enemiesAlive >= maxEnemiesOnField)
             {
                 yield return new WaitForSeconds(spawnInterval);
+                continue;
             }
-            else
+
+            int spawnCount = Random.Range(currentWave.minIntervalSpawn, currentWave.maxIntervalSpawn);
+            for (int i = 0; i < spawnCount; i++)
             {
-                int spawnCount = Random.Range(currentWave.minIntervalSpawn, currentWave.maxIntervalSpawn);
-                for (int i = 0; i < spawnCount; i++)
+                if (enemiesSpawned < currentWave.totalEnemies && enemiesAlive < maxEnemiesOnField)
                 {
-                    if (enemiesSpawned < currentWave.totalEnemies && enemiesAlive < maxEnemiesOnField)
-                    {
-                        SpawnEnemy();
-                    }
+                    Spawner();
                 }
-                yield return new WaitForSeconds(spawnInterval);
             }
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
     private void StartFinalWave()
@@ -110,20 +118,49 @@ public class WaveManager : MonoBehaviour
         
         Invoke(nameof(SpawnBoss), 2f);
     }
-    private void SpawnEnemy()
+    private void Spawner()
     {
-        // choose at random from a curated selection of enemies to spawn in
-        int enemyIndex = Random.Range(0, currentWave.enemyPrefabs.Length);
-        GameObject enemyToSpawn = currentWave.enemyPrefabs[enemyIndex];
+        // Find an enemy type that hasn't reached its spawn limit
+        var availableEnemies = currentWave.enemySpawnData
+            .Where(data => data.SpawnedCount < data.totalToSpawn)
+            .ToList();
+        // if none found done spawning
+        if (!availableEnemies.Any())
+            return;
+         // Randomly select from available enemies
+    int enemyIndex = Random.Range(0, availableEnemies.Count);
+    var selectedEnemy = availableEnemies[enemyIndex];
 
-        Transform[] spawnPoints =  currentWave.spawnLocations;
-        int spawnPointIndex = Random.Range(0, spawnPoints.Length);
-        Transform spawnPoint = spawnPoints[spawnPointIndex];
+    Transform[] spawnPoints = currentWave.spawnLocations;
+    int spawnPointIndex = Random.Range(0, spawnPoints.Length);
+    Transform spawnPoint = spawnPoints[spawnPointIndex];
 
-        BaseEnemy enemy = Instantiate(enemyToSpawn, spawnPoint.position, spawnPoint.rotation).GetComponent<BaseEnemy>();
+        if (selectedEnemy.spawnAsGroup)
+        {
+            // Spawn as a group
+            for (int i = 0; i < selectedEnemy.groupSize; i++)
+            {
+                if (selectedEnemy.SpawnedCount < selectedEnemy.totalToSpawn)
+                {
+                    SpawnEnemy(selectedEnemy.enemyPrefab, spawnPoint);
+                    selectedEnemy.SpawnedCount++;
+                }
+            }
+        }
+        else
+        {
+            // Spawn single enemy
+            SpawnEnemy(selectedEnemy.enemyPrefab, spawnPoint);
+            selectedEnemy.SpawnedCount++;
+        }
+    }
+    // Helper method to spawn a single enemy
+    private void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint)
+    {
+        BaseEnemy enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation)
+            .GetComponent<BaseEnemy>();
         enemy.transform.SetParent(transform);
-        // once we start the enemy script add an OnEnemyDeath Event
-        enemy.OnEnemyDeath += OnEnemyDeath; // Assuming each enemy has an OnEnemyDeath event
+        enemy.OnEnemyDeath += OnEnemyDeath;
         enemy.AssignDefaultTarget(train, train.transform);
 
         enemiesAlive++;

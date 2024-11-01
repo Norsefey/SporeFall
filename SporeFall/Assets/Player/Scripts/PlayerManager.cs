@@ -262,7 +262,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void TogglePCorruption(bool toggle)
     {
-        pCorruption.gameObject.SetActive(toggle);
+        pCorruption.enabled  = toggle;
     }
     #endregion
     public void MovePlayerTo(Vector3 position)
