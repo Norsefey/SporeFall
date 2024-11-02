@@ -19,7 +19,6 @@ public abstract class Interactables : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log(other.name);
             player = other.transform.parent.GetComponent<PlayerManager>();
             player.pInput.AssignInteraction(this);
             ItemAction();

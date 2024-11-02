@@ -111,6 +111,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitEditAction.performed += OnExitEditMode;
         destroyStructAction.performed += OnEditDestroy;
         upgradeStructAction.started += OnEditUpgrade;
+
     }
     private void OnDisable()
     {
@@ -403,6 +404,13 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // put upgrade code here
         pMan.bGun.UpgradeStructure();
+    }
+
+    public string GetInteractionKey()
+    {
+        string key = interactAction.GetBindingDisplayString();
+
+        return key;
     }
 
     #endregion
