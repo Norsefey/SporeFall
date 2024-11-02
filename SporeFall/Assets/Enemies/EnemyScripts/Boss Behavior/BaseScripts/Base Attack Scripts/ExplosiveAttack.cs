@@ -11,9 +11,9 @@ public class ExplosiveAttack : Attack
     [SerializeField] private AnimationCurve damageFalloff = AnimationCurve.Linear(0f, 1f, 1f, 0f);
     [SerializeField] private bool destroyEnemyOnExplode = true;
 
-    [Header("Additional Effects")]
+    /*[Header("Additional Effects")]
     [SerializeField] private float explosionForce = 1000f;
-    [SerializeField] private float upwardsModifier = 3f;
+    [SerializeField] private float upwardsModifier = 3f;*/
 
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
     {
