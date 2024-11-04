@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 
 public enum EnemyState
@@ -323,6 +324,14 @@ public abstract class BaseEnemy : MonoBehaviour
             Attack bestAttack = ChooseBestAttack(distanceToTarget);
             if (bestAttack != null && index < 70)
             {
+                // Get the direction to the target
+                Vector3 direction = (currentTarget.position - transform.position).normalized;
+                // Calculate the rotation needed to face the target
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                // Smoothly rotate towards the target
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
+                // Optional: prevent NavMeshAgent from controlling rotation
+                //agent.updateRotation = false;
                 //Debug.Log("Attacking With: " + bestAttack.name);
                 StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
                 return;
@@ -396,7 +405,6 @@ public abstract class BaseEnemy : MonoBehaviour
         isAttacking = attacking;
         if (attacking)
         {
-            agent.SetDestination(currentTarget.position);
             agent.isStopped = true;
         }
         else

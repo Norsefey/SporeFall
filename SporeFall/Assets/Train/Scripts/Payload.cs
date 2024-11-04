@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Payload : MonoBehaviour
 {
@@ -78,7 +79,8 @@ public class Payload : MonoBehaviour
     public void DestroyPayload()
     {
         // load death screen
-        // destroy self for now
-        Destroy(gameObject);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene(0);
     }
 }

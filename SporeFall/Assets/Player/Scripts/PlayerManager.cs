@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour
 {
     [Header("References")]
@@ -268,7 +269,7 @@ public class PlayerManager : MonoBehaviour
     public void MovePlayerTo(Vector3 position)
     {
         pController.transform.position = position;
-        Debug.Log("Moving Player");
+        
     }
     public void StartRespawn()
     {
@@ -282,9 +283,7 @@ public class PlayerManager : MonoBehaviour
         {
             ToggleBuildMode();
         }
-        Debug.Log("Death Time");
         yield return new WaitForSeconds(2);
-        Debug.Log("Respawning");
         if (train != null)
             MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
         else
@@ -302,6 +301,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void GameOver()
     {
+        SceneManager.LoadScene(0);
         Debug.Log("You lose");
     }
     public void AssignInteractable(string promptText, Interactables interactable)

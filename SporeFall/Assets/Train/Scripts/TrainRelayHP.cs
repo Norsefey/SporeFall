@@ -8,6 +8,7 @@ public class TrainRelayHP : Damageable
     public override void TakeDamage(float damage)
     {
         mainHp.TakeDamage(damage);
+        Debug.Log($"Train Took: {damage} Damage");
     }
 
     protected override void Die()

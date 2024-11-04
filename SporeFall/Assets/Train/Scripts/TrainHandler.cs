@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TrainHandler : MonoBehaviour
 {
@@ -73,7 +74,7 @@ public class TrainHandler : MonoBehaviour
     public void SetMovingState()
     {
         trainState = TrainState.Moving;
-        trainVisual.rotation = Quaternion.Euler(0,70,0);
+        trainVisual.rotation = Quaternion.Euler(0,-70,0);
         ToggleStructures(false);
     }
     public void SpawnPayload(Transform[] path)
@@ -169,6 +170,7 @@ public class TrainHandler : MonoBehaviour
     {
         // Load Lose Scene
         Debug.Log("Train Destroyed");
+        SceneManager.LoadScene(0);
     }
     public void CheckTrainCamera()
     {

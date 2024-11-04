@@ -24,6 +24,8 @@ public class TrainHP : Damageable
     protected override void Die()
     {
         // put other death behavior here
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         train.DestroyTrain();
     }
 

@@ -15,6 +15,13 @@ public class PlayerHP : Damageable
     public void DepleteLife()
     {
         lives--;
+        if(lives <= 0)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            pMan.GameOver();
+
+        }
     }
     public void IncreaseLife()
     {
