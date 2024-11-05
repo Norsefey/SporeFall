@@ -48,7 +48,6 @@ public class Payload : MonoBehaviour
         }
         else if(pathIndex < path.Length)
         {
-            //payloadProgress++;
             WaveUI.Instance.DisplayWaveProgress(pathIndex);
             SetDestination();
         }
@@ -56,7 +55,7 @@ public class Payload : MonoBehaviour
         {
             WaveUI.Instance.DisplayWaveProgress(pathIndex);
             isMoving = false;
-            Debug.Log("ReachDestination");
+            StartCoroutine(WinLevel());
         }
     }
     public void SetDestination()
@@ -81,6 +80,12 @@ public class Payload : MonoBehaviour
         // load death screen
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        SceneManager.LoadScene(0);
+        SceneTransitioner.Instance.LoadLoseScene();
+    }
+    private IEnumerator WinLevel()
+    {
+        StartCoroutine(WaveManager.Instance.DestroyShroomPod(waitTime: 4f));
+        yield return new WaitForSeconds(4f);
+        SceneTransitioner.Instance.LoadWinScene();
     }
 }

@@ -113,6 +113,8 @@ public class TrainHandler : MonoBehaviour
     {
         activeStructures.Remove(structure);
         UpdateEnergyUsage();
+        structure.gameObject.SetActive(false);
+        Destroy(structure.gameObject);
     }
     public void UpdateEnergyUsage()
     {

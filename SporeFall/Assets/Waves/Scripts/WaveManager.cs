@@ -220,7 +220,7 @@ public class WaveManager : MonoBehaviour
     {
         StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
     }
-    private IEnumerator DestroyShroomPod(float waitTime)
+    public IEnumerator DestroyShroomPod(float waitTime)
     {
         yield return new WaitForSeconds(waitTime - 1);
         SpawnExplosion(currentWave.ShroomPod.transform.position);

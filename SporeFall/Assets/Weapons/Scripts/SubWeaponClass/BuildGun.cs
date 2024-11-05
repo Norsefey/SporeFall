@@ -88,12 +88,12 @@ public class BuildGun : Weapon
                 player.pUI.EnablePrompt("<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview");
             }else
             {
-                if(selectedStructure.GetMyceliaCost() <= player.mycelia)
+                if(selectedStructure.GetMyceliaCost() > player.mycelia)
                 {
-                    player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>w");
-                }else if (player.train.CheckEnergy(selectedStructure.GetEnergyCost()))
+                    player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
+                }else if (!player.train.CheckEnergy(selectedStructure.GetEnergyCost()))
                 {
-                    player.pUI.EnablePrompt("<color=red>Too many Active Structures</color>w");
+                    player.pUI.EnablePrompt("<color=red>Too many Active Structures</color>");
                 }
             }
         }
@@ -217,11 +217,14 @@ public class BuildGun : Weapon
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer) && !movingStructure)
         {
-            selectedStructure = hit.collider.transform.parent.GetComponent<Structure>(); // Select the hit object
-            SetStructureToTransparent(selectedStructure.gameObject);
-            Debug.Log("Structure selected: " + selectedStructure.name);
-            player.pUI.EnablePrompt(selectedStructure.name);
-            selectedStructure.ToggleStructureController(false);
+            if(selectedStructure == null)
+            {
+                selectedStructure = hit.collider.transform.parent.GetComponent<Structure>(); // Select the hit object
+                SetStructureToTransparent(selectedStructure.gameObject);
+                Debug.Log("Structure selected: " + selectedStructure.name);
+                player.pUI.EnablePrompt(selectedStructure.name);
+                selectedStructure.ToggleStructureController(false);
+            }
             return true;
         }
         else if(selectedStructure != null)
@@ -276,18 +279,26 @@ public class BuildGun : Weapon
             }
         }
     }
-    public void DestroySelectedObject()
+    public void DestroyStructure()
     {
         if (selectedStructure != null)
         {
+            Structure toDelet = selectedStructure;
+            selectedStructure = null;
             if (player.train != null)
             {
-                player.train.RemoveStructure(selectedStructure);
+                player.train.RemoveStructure(toDelet);
             }
-
+            Debug.Log("Structure Deleted");
+            player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+        }
+    }
+    public void DestroyPreview()
+    {
+        if (selectedStructure != null)
+        {
             Destroy(selectedStructure.gameObject); // Destroy the selected object
             selectedStructure = null; // Clear the selection
-            isEditing = false;
         }
     }
 }

@@ -383,7 +383,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.DestroySelectedObject();
+            buildGun.DestroyStructure();
 
             editInputMap.Disable();
             buildInputMap.Enable();
@@ -391,13 +391,10 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnEditRotateStarted(InputAction.CallbackContext context)
     {
-        Debug.Log("CanRotate");
         pMan.isRotating = true;
     }
     private void OnEditRotateCancled(InputAction.CallbackContext context)
     {
-        Debug.Log("No Rotate");
-
         pMan.isRotating = false;
     }
     private void OnEditUpgrade(InputAction.CallbackContext context)
