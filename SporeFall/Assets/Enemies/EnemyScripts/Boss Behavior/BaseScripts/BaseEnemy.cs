@@ -198,7 +198,7 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     protected virtual float CalculateStrafeWeight(float recentDamage, float distanceToTarget)
     {
-        float weight = 0.5f; // Base weight for strafing
+        float weight = 0.2f; // Base weight for strafing
 
         if (recentDamage > damagePriorityThreshold * 0.5f)
             weight += 1.5f;

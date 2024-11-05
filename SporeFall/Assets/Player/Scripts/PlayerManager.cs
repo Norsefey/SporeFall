@@ -214,7 +214,7 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
-                bGun.DestroySelectedObject();
+                bGun.DestroyPreview();
             }
 
             if (equippedWeapon != null)
@@ -301,8 +301,8 @@ public class PlayerManager : MonoBehaviour
     }
     public void GameOver()
     {
-        SceneManager.LoadScene(0);
-        Debug.Log("You lose");
+        Debug.Log("No Life No Game");
+        SceneTransitioner.Instance.LoadLoseScene();
     }
     public void AssignInteractable(string promptText, Interactables interactable)
     {

@@ -26,7 +26,7 @@ public class TrainHP : Damageable
         // put other death behavior here
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        train.DestroyTrain();
+        StartCoroutine(train.DestroyTrain());
     }
 
     protected override void UpdateUI()

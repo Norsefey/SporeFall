@@ -11,6 +11,7 @@ public class TrainHandler : MonoBehaviour
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject payloadPrefab;
     [SerializeField] private Transform payloadSpawnPos;
+    [SerializeField] private AudioListener listener;
     public Transform dropsHolder;
     public Payload Payload { get; private set; }
     public Transform[] playerSpawnPoint;
@@ -54,14 +55,6 @@ public class TrainHandler : MonoBehaviour
         }
 
         trainState = TrainState.Moving;
-    }
-    public void Update()
-    {
-        //Testing train taking damage
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            trainHP.TakeDamage(50);
-        }
     }
     public void SetParkedState()
     {
@@ -120,6 +113,8 @@ public class TrainHandler : MonoBehaviour
     {
         activeStructures.Remove(structure);
         UpdateEnergyUsage();
+        structure.gameObject.SetActive(false);
+        Destroy(structure.gameObject);
     }
     public void UpdateEnergyUsage()
     {
@@ -148,7 +143,6 @@ public class TrainHandler : MonoBehaviour
             player.TogglePCorruption(false);
             player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
         }
-       
     }
     private void DisembarkTrain()
     {
@@ -160,7 +154,6 @@ public class TrainHandler : MonoBehaviour
             player.TogglePVisual(true);
             player.TogglePCamera(true);
             player.TogglePCorruption(true);
-
         }
     }
     public void AddPlayer(PlayerManager player)
@@ -181,6 +174,7 @@ public class TrainHandler : MonoBehaviour
             Invoke(nameof(DisembarkTrain), .5f);
             Debug.Log("Not Moving Disembarking");
         }
+        listener.enabled = false;
 
     }
     public void RemovePlayer(PlayerManager player)
@@ -188,11 +182,21 @@ public class TrainHandler : MonoBehaviour
         // remove disconnected players
         players.Remove(player);
     }
-    public void DestroyTrain()
+    public IEnumerator DestroyTrain()
     {
         // Load Lose Scene
         Debug.Log("Train Destroyed");
-        SceneManager.LoadScene(0);
+        BoardTrain();
+        trainCamera.SetActive(true);
+        BlowUpTrain();
+
+        yield return new WaitForSeconds(2);
+
+        SceneTransitioner.Instance.LoadLoseScene();
+    }
+    private void BlowUpTrain()
+    {
+        WaveManager.Instance.SpawnExplosion(transform.position);
     }
     public void CheckTrainCamera()
     {

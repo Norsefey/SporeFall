@@ -41,6 +41,6 @@ public class TurretBulletBehavior : MonoBehaviour
         Destroy(audioPlayer, bulletSound.length);
 
         // Destroy the bullet object
-        Destroy(gameObject);
+        Destroy(gameObject, 0.5f);
     }
 }
