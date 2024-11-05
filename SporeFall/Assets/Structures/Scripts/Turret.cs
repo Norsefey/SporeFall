@@ -15,6 +15,17 @@ public class Turret : MonoBehaviour
     private Transform nearestEnemy;          // The nearest enemy detected
     private float fireCooldown = 0f;
     [SerializeField] Transform papa;
+
+    [Header("Firing Sound")]
+    public AudioClip firingSound;            // Assign the firing sound clip in the Inspector
+    private AudioSource audioSource;         // To play the firing sound
+
+    void Start()
+    {
+        // Initialize the AudioSource component
+        audioSource = GetComponent<AudioSource>();
+    }
+
     void Update()
     {
         if (nearestEnemy == null || !IsEnemyInRange(nearestEnemy))
@@ -36,7 +47,6 @@ public class Turret : MonoBehaviour
     void FindNearestEnemy()
     {
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, detectionRange, enemyLayerMask);
-        //Debug.Log($"Enemies detected: {enemiesInRange.Length}");
 
         float shortestDistance = Mathf.Infinity;
         Transform closestEnemy = null;
@@ -53,38 +63,35 @@ public class Turret : MonoBehaviour
 
         nearestEnemy = closestEnemy;
     }
+
     // Check if the current enemy is within detection range
     bool IsEnemyInRange(Transform enemy)
     {
         return enemy != null && Vector3.Distance(transform.position, enemy.position) <= detectionRange;
     }
+
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
     void RotateTurretTowardsEnemy()
     {
         Vector3 direction = nearestEnemy.position - transform.position;
-
-        // Flatten the direction on the y-axis by setting y to 0
         direction.y = 0;
 
-        // Calculate the desired rotation towards the enemy
         Quaternion lookRotation = Quaternion.LookRotation(direction);
-
-        // Smoothly rotate towards the enemy on the y-axis
         papa.rotation = Quaternion.Slerp(papa.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
+
     // Check line of sight using raycasting and fire at the enemy if visible
     void CheckLineOfSightAndFire()
     {
         RaycastHit hit;
         Vector3 enemyPos = (nearestEnemy.position - firePoint.position) + Vector3.up;
-        // Perform a raycast towards the enemy
+        
         if (Physics.Raycast(firePoint.position, enemyPos, out hit))
         {
-            // Check if the raycast hits the nearest enemy
             if (hit.transform == nearestEnemy)
             {
                 Debug.Log("Firing");
-                // Line of sight is clear, fire at the enemy
+
                 if (fireCooldown <= 0f)
                 {
                     Fire();
@@ -93,14 +100,20 @@ public class Turret : MonoBehaviour
             }
         }
     }
-    // Fire a bullet towards the enemy
+
+    // Fire a bullet towards the enemy and play the firing sound
     void Fire()
     {   
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         bullet.GetComponent<Rigidbody>().AddForce(firePoint.forward * 15000);
-        // You can add a script on the bullet to make it move and damage the enemy
-        // Example: bullet.GetComponent<Bullet>().SetTarget(nearestEnemy);
+
+        // Play firing sound
+        if (audioSource != null && firingSound != null)
+        {
+            audioSource.PlayOneShot(firingSound);
+        }
     }
+
     // Visualize detection range in the editor
     private void OnDrawGizmosSelected()
     {
