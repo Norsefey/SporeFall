@@ -15,10 +15,25 @@ public class PlayerHP : Damageable
     public void DepleteLife()
     {
         lives--;
+        if(lives <= 0)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            pMan.GameOver();
+
+        }
     }
     public void IncreaseLife()
     {
         lives++;
+        if (lives == 2)
+        {
+            pMan.pUI.life1.SetActive(true);
+        }
+        if (lives == 3)
+        {
+            pMan.pUI.life2.SetActive(true);
+        }
     }
     public void SetManager(PlayerManager player)
     {
@@ -26,6 +41,7 @@ public class PlayerHP : Damageable
     }
     protected override void Die()
     {
+        DepleteLife();
         pMan.StartRespawn();
     }
     protected override void UpdateUI()

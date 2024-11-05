@@ -35,13 +35,13 @@ public abstract class Weapon : MonoBehaviour
     public bool isHitScan; // Whether the weapon is hitscan or projectile based
     public float hitScanDistance = 50;
     [Header("Projectile Settings"), Tooltip("If Bullet is not a Hitscan")]
-    [SerializeField] private float projectileSpeed = 20f;
-    [SerializeField] private float projectileLifetime = 5f;
-    [SerializeField] private bool useGravity = false;
-    [SerializeField] private float projectileArcHeight = 0f; // For arcing projectiles
-    [SerializeField] private bool canBounce = false;
-    [SerializeField] private int maxBounces = 3;
-    [SerializeField] private float bounceDamageMultiplier = 0.7f; // Reduce damage with each bounce
+    [SerializeField] protected float projectileSpeed = 20f;
+    [SerializeField] protected float projectileLifetime = 5f;
+    [SerializeField] protected bool useGravity = false;
+    [SerializeField] protected float projectileArcHeight = 0f; // For arcing projectiles
+    [SerializeField] protected bool canBounce = false;
+    [SerializeField] protected int maxBounces = 3;
+    [SerializeField] protected float bounceDamageMultiplier = 0.7f; // Reduce damage with each bounce
 
 
     private bool isReloading;
@@ -52,7 +52,7 @@ public abstract class Weapon : MonoBehaviour
     {
         if (bulletCount <= 0 && !IsReloading)
         {
-            Reload();
+            StartReload();
         }
         else
         {
@@ -67,7 +67,7 @@ public abstract class Weapon : MonoBehaviour
             bulletCount--;
         }
     }
-    private void FireProjectile(Transform firePoint, Camera playerCamera)
+    protected void FireProjectile(Transform firePoint, Camera playerCamera)
     {
         // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
@@ -99,7 +99,7 @@ public abstract class Weapon : MonoBehaviour
             Debug.Log(weaponName + " fired a projectile.");
         }
     }
-    private void FireHitscan(Camera playerCamera)
+    protected void FireHitscan(Camera playerCamera)
     {
         // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
@@ -134,7 +134,7 @@ public abstract class Weapon : MonoBehaviour
         Quaternion spreadRotation = Quaternion.Euler(spreadX, spreadY, 0);
         return spreadRotation * baseDirection;
     }
-    public virtual void Reload()
+    public virtual void StartReload()
     {
         if (!IsReloading && (!limitedAmmo) || bulletCount < bulletCapacity )
         {
@@ -176,6 +176,14 @@ public abstract class Weapon : MonoBehaviour
             yield return new WaitForSeconds(reloadTime);
             bulletCount = bulletCapacity;
         }
+
+        isReloading = false;
+        if (player.pUI != null)
+            player.pUI.AmmoDisplay(this);
+    }
+    public void CancelReload()
+    {
+        StopCoroutine(ReloadCoroutine());
 
         isReloading = false;
         if (player.pUI != null)

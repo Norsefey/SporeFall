@@ -86,7 +86,15 @@ public class BuildGun : Weapon
                 selectedStructure = null; // Clear the selected object
 
                 player.pUI.EnablePrompt("<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview");
-
+            }else
+            {
+                if(selectedStructure.GetMyceliaCost() <= player.mycelia)
+                {
+                    player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>w");
+                }else if (player.train.CheckEnergy(selectedStructure.GetEnergyCost()))
+                {
+                    player.pUI.EnablePrompt("<color=red>Too many Active Structures</color>w");
+                }
             }
         }
         else

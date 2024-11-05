@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TrainHandler : MonoBehaviour
 {
@@ -23,6 +24,12 @@ public class TrainHandler : MonoBehaviour
     [Header("Train Movement")]
     public float cannonFireTime = 2f;
     public float trainMoveSpeed = 5f; // Speed of the smooth movement to wave location
+
+    [Header("Train Audio")]
+    [SerializeField] private AudioClip movingAudio;
+    [SerializeField] private AudioClip fireCannonAudio;
+    private AudioSource audioPlayer;
+
     public enum TrainState
     {
         Parked,
@@ -38,11 +45,15 @@ public class TrainHandler : MonoBehaviour
 
     private void Awake()
     {
+        audioPlayer = GetComponent<AudioSource>();
+        // make sure HP is always the first child of train
         if (transform.GetChild(0).TryGetComponent<TrainHP>(out trainHP))
-        {
+        {// get and assign train HP
             trainHP.train = this;
             tUI.SetMaxHP(trainHP.maxHP);
         }
+
+        trainState = TrainState.Moving;
     }
     public void Update()
     {
@@ -61,6 +72,7 @@ public class TrainHandler : MonoBehaviour
         {
             DisembarkTrain();
         }
+        audioPlayer.Stop();
     }
     public void SetFiringState()
     {
@@ -68,12 +80,21 @@ public class TrainHandler : MonoBehaviour
         trainCamera.SetActive(true);
         ClearDrops();
         BoardTrain();
+
+        Invoke(nameof(PlayCannonFireAudio), cannonFireTime - 1);
+    }
+    public void PlayCannonFireAudio()
+    {
+        audioPlayer.PlayOneShot(fireCannonAudio);
     }
     public void SetMovingState()
     {
         trainState = TrainState.Moving;
-        trainVisual.rotation = Quaternion.Euler(0,70,0);
+        trainVisual.rotation = Quaternion.Euler(0,-70,0);
         ToggleStructures(false);
+
+        audioPlayer.clip = movingAudio;
+        audioPlayer.Play();
     }
     public void SpawnPayload(Transform[] path)
     {
@@ -124,6 +145,7 @@ public class TrainHandler : MonoBehaviour
             player.TogglePControl(false);
             player.TogglePCamera(false);
             player.TogglePVisual(false);
+            player.TogglePCorruption(false);
             player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
         }
        
@@ -137,6 +159,8 @@ public class TrainHandler : MonoBehaviour
             player.TogglePControl(true);
             player.TogglePVisual(true);
             player.TogglePCamera(true);
+            player.TogglePCorruption(true);
+
         }
     }
     public void AddPlayer(PlayerManager player)
@@ -152,14 +176,23 @@ public class TrainHandler : MonoBehaviour
         player.TogglePVisual(false);
         player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
         player.transform.SetParent(this.transform);
-        if(trainState != TrainState.Moving)
+        if(trainState == TrainState.Parked)
+        {
             Invoke(nameof(DisembarkTrain), .5f);
-        
+            Debug.Log("Not Moving Disembarking");
+        }
+
+    }
+    public void RemovePlayer(PlayerManager player)
+    {
+        // remove disconnected players
+        players.Remove(player);
     }
     public void DestroyTrain()
     {
         // Load Lose Scene
         Debug.Log("Train Destroyed");
+        SceneManager.LoadScene(0);
     }
     public void CheckTrainCamera()
     {
@@ -167,11 +200,6 @@ public class TrainHandler : MonoBehaviour
         {
             trainCamera.SetActive(false);
         }
-    }
-    public void RemovePlayer(PlayerManager player)
-    {
-        // remove disconnected players
-        players.Remove(player);
     }
     public Transform GetDamagePoint()
     {

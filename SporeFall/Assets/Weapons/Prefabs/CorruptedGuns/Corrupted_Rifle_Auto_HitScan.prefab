@@ -440,7 +440,7 @@ Transform:
   m_GameObject: {fileID: 5664051673568522692}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.111, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -561,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 7049294014668380276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.002, y: 0.125, z: 0.867}
+  m_LocalPosition: {x: 0.002, y: 0.23600006, z: 0.867}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -660,7 +660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6609920283423879002}
   m_Layer: 0
-  m_Name: HoldSpot
+  m_Name: LHoldSpot
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -675,7 +675,7 @@ Transform:
   m_GameObject: {fileID: 8561447678203382180}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.002, y: -0.179, z: 0.453}
+  m_LocalPosition: {x: 0.002, y: -0.067999944, z: 0.453}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -706,7 +706,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8897310449536476557}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -738,16 +738,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 320
   isCorrupted: 1
-  corruptionRate: 1.2
+  corruptionRate: 1.3
   isTwoHanded: 1
   secondHandHold: {fileID: 6609920283423879002}
-  damage: 100
-  bulletSpreadAngle: 2
-  reloadTime: 1
-  bulletCount: 25
-  bulletCapacity: 25
-  totalAmmo: 300
-  limitedAmmo: 1
+  damage: 7
+  bulletSpreadAngle: 3
+  reloadTime: 2
+  bulletCount: 30
+  bulletCapacity: 30
+  totalAmmo: 0
+  limitedAmmo: 0
   isHitScan: 1
-  bulletDistance: 50
-  fireRate: 10
+  hitScanDistance: 50
+  projectileSpeed: 20
+  projectileLifetime: 5
+  useGravity: 0
+  projectileArcHeight: 0
+  canBounce: 0
+  maxBounces: 3
+  bounceDamageMultiplier: 0.7
+  fireRate: 8
+  fireSound: {fileID: 8300000, guid: 132cef9f90dc76e44a42b4b8322ba94f, type: 3}
+  fireSoundVolume: 0.4

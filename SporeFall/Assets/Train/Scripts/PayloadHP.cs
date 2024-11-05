@@ -23,7 +23,7 @@ public class PayloadHP : Damageable
     protected override void UpdateUI()
     {
         if(healthDisplay != null)
-            healthDisplay.text = currentHP.ToString() + ":" + maxHP.ToString();
+            healthDisplay.text = currentHP.ToString() + "/" + maxHP.ToString();
     }
     public void SetManager(Payload payload)
     {

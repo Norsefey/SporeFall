@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 159851504839427296}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.002, y: 0.031, z: 0.423}
+  m_LocalPosition: {x: 0.002, y: 0.031, z: 0.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -92,7 +92,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: a86d8ca889a0d5342a348976b66261e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,7 +140,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5657, y: 1.5657, z: 1.5657}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8638257972648497925}
@@ -508,7 +508,7 @@ Transform:
   m_GameObject: {fileID: 7587025428009020144}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.002, y: 0.125, z: 0.564}
+  m_LocalPosition: {x: 0.002, y: 0.194, z: 0.929}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -539,7 +539,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7636098534929797581}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -562,27 +562,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: ChuckChuckBoom
+  weaponSprite: {fileID: 0}
   player: {fileID: 0}
-  projectilePrefab: {fileID: 7441200720383325235, guid: c2ab42aaf722d1442acd4e87d90ccdca,
+  projectilePrefab: {fileID: 7441200720383325235, guid: 35cba0e5575e9644fb484cfe9a1347db,
     type: 3}
   firePoint: {fileID: 5071807426709845856}
   hitLayers:
     serializedVersion: 2
     m_Bits: 320
-  isCorrupted: 0
-  corruptionRate: 1.2
+  isCorrupted: 1
+  corruptionRate: 1.3
   isTwoHanded: 1
   secondHandHold: {fileID: 8972171860424414647}
-  damage: 5
-  bulletSpreadAngle: 2
+  damage: 7
+  bulletSpreadAngle: 8
   reloadTime: 2
-  bulletCount: 8
-  bulletCapacity: 8
+  bulletCount: 22
+  bulletCapacity: 22
   totalAmmo: 100
   limitedAmmo: 0
-  isHitScan: 1
-  bulletDistance: 50
-  burstCount: 3
+  isHitScan: 0
+  hitScanDistance: 17
+  projectileSpeed: 20
+  projectileLifetime: 5
+  useGravity: 0
+  projectileArcHeight: 0
+  canBounce: 0
+  maxBounces: 3
+  bounceDamageMultiplier: 0.7
+  burstCount: 11
 --- !u!1 &8182080749866182214
 GameObject:
   m_ObjectHideFlags: 0

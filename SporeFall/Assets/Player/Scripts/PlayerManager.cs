@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour
 {
     [Header("References")]
@@ -25,7 +26,7 @@ public class PlayerManager : MonoBehaviour
     public Weapon defaultWeapon;
     public Weapon equippedWeapon;
     // pickables
-    public GameObject nearByPickUp;
+    public GameObject nearByWeapon;
 
     public bool isFiring = false;
     public bool isCharging = false;
@@ -45,6 +46,28 @@ public class PlayerManager : MonoBehaviour
     {
         pInput = GetComponent<PlayerInputOrganizer>();
         // since we will have multiple players, this manager cannot be a public instance, so we assign it locally
+        SetManager();
+        SetDeviceSettings();
+    }
+    private void Start()
+    {
+        if(WaveManager.Instance != null)
+            WaveManager.Instance.train.AddPlayer(this);
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        pUI.AmmoDisplay(currentWeapon);
+        pInput.AssignAllActions();
+        
+    }
+    private void Update()
+    {
+        WeaponBehavior();
+
+    }
+    private void SetManager()
+    {
         pInput.SetManager(this);
         pController.SetManager(this);
         pCamera.SetManager(this);
@@ -52,6 +75,9 @@ public class PlayerManager : MonoBehaviour
         pHealth.SetManager(this);
         pUI.SetManager(this);
         pAnime.SetManager(this);
+    }
+    private void SetDeviceSettings()
+    {
         PlayerInput playerInput = GetComponent<PlayerInput>();
         if (playerInput.devices.Count > 0)
         {
@@ -71,17 +97,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    private void Start()
-    {
-        if(WaveManager.Instance != null)
-            WaveManager.Instance.train.AddPlayer(this);
-        // in order to spawn player at a spawn point, disable movement controls
-        pUI.AmmoDisplay(currentWeapon);
-        pInput.AssignAllActions();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-    private void Update()
+    private void WeaponBehavior()
     {
         if (currentWeapon != null)
         {
@@ -106,13 +122,80 @@ public class PlayerManager : MonoBehaviour
                 gun.Charge();
             }
         }
-
-        
     }
+    public void PickUpWeapon()
+    {
+        if (nearByWeapon == null)
+            return;
+        // Avoid getting Stuck in reload
+        if(currentWeapon.IsReloading)
+            currentWeapon.CancelReload();
+
+        // deactivate the default weapon
+        if (currentWeapon == defaultWeapon || currentWeapon == bGun)
+        {
+            currentWeapon.gameObject.SetActive(false);
+        }
+        else if (equippedWeapon != null)
+        {
+            Destroy(currentWeapon.gameObject); // Drop the current weapon
+            equippedWeapon = null;
+        }
+        // Equip the new weapon
+        currentWeapon = Instantiate(nearByWeapon, weaponHolder).GetComponent<Weapon>();
+        // set the transforms of the new weapon
+        currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        // set References
+        currentWeapon.player = this;
+        equippedWeapon = currentWeapon;
+        // destroy pick up platform
+        // disable pick up prompt
+        pUI.DisablePrompt();
+        // update UI to display new ammo capacities
+        pUI.AmmoDisplay(currentWeapon);
+        // update weapon icon
+        pUI.SwitchWeaponIcon();
+
+        // Animation switch depending on weapon type
+        if(currentWeapon.isTwoHanded)
+            pAnime.ToggleTwoHanded(true);
+        else
+            pAnime.ToggleTwoHanded(false);
+
+        Debug.Log("Picked up: " + currentWeapon.weaponName);
+        // if weapon is corrupted start corruption increase
+        if (currentWeapon.isCorrupted)
+            holdingCorruption = true;
+    }
+    public void DropWeapon()
+    {
+        if (equippedWeapon == null || currentWeapon == bGun)
+            return;
+        Debug.Log("Dropping Weapon");
+        if (currentWeapon != null)
+        {
+            if(currentWeapon.IsReloading)
+                currentWeapon.CancelReload();
+            Destroy(currentWeapon.gameObject); // Drop the current weapon
+        }
+
+        currentWeapon = defaultWeapon;
+        equippedWeapon = null;
+        // reactivate the default weapon
+        currentWeapon.gameObject.SetActive(true);
+        holdingCorruption = false;
+        pUI.AmmoDisplay(currentWeapon);
+        pUI.SwitchWeaponIcon();
+        pAnime.ToggleTwoHanded(false);
+    }
+    #region Toggle Switches
     public void ToggleBuildMode()
     {
         if (!isBuilding)
         {// Enter Build mode
+         // Avoid getting Stuck in reload
+            if (currentWeapon.IsReloading)
+                currentWeapon.CancelReload();
             currentWeapon.gameObject.SetActive(false);
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
@@ -158,66 +241,6 @@ public class PlayerManager : MonoBehaviour
                 pAnime.ToggleTwoHanded(false);
         }
     }
-    public void PickUpWeapon()
-    {
-        if (nearByPickUp == null)
-            return;
-        // deactivate the default weapon
-        if (currentWeapon == defaultWeapon || currentWeapon == bGun)
-        {
-            currentWeapon.gameObject.SetActive(false);
-        }
-        else if (equippedWeapon != null)
-        {
-            Destroy(currentWeapon.gameObject); // Drop the current weapon
-        }
-        // Equip the new weapon
-        currentWeapon = Instantiate(nearByPickUp, weaponHolder).GetComponent<Weapon>();
-
-        // set the transforms of the new weapon
-        currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-        // set References
-        currentWeapon.player = this;
-        equippedWeapon = currentWeapon;
-        // destroy pick up platform
-        Destroy(nearByPickUp.transform.parent.gameObject);
-        // disable pick up prompt
-        pUI.DisablePrompt();
-        // update UI to display new ammo capacities
-        pUI.AmmoDisplay(currentWeapon);
-        // update weapon icon
-        pUI.SwitchWeaponIcon();
-
-        // Animation switch depending on weapon type
-        if(currentWeapon.isTwoHanded)
-            pAnime.ToggleTwoHanded(true);
-        else
-            pAnime.ToggleTwoHanded(false);
-
-        Debug.Log("Picked up: " + currentWeapon.weaponName);
-        // if weapon is corrupted start corruption increase
-        if (currentWeapon.isCorrupted)
-            holdingCorruption = true;
-    }
-    public void DropWeapon()
-    {
-        if (equippedWeapon == null || currentWeapon == bGun)
-            return;
-        Debug.Log("Dropping Weapon");
-        if (currentWeapon != null)
-        {
-            Destroy(currentWeapon.gameObject); // Drop the current weapon
-        }
-
-        currentWeapon = defaultWeapon;
-        equippedWeapon = null;
-        // reactivate the default weapon
-        currentWeapon.gameObject.SetActive(true);
-        holdingCorruption = false;
-        pUI.AmmoDisplay(currentWeapon);
-        pUI.SwitchWeaponIcon();
-        pAnime.ToggleTwoHanded(false);
-    }
     public void TogglePControl(bool toggle)
     {
         pController.gameObject.SetActive(toggle);
@@ -232,12 +255,21 @@ public class PlayerManager : MonoBehaviour
     }
     public void TogglePVisual(bool toggle)
     {
+        // Fixes bug where player gun is stuck in reloading state...hopefully
+        // since weapon is child of visual put in visual to activate whenever visual is disabled or enabled
+        if (currentWeapon.IsReloading)
+            currentWeapon.CancelReload();
         pVisual.SetActive(toggle);
     }
+    public void TogglePCorruption(bool toggle)
+    {
+        pCorruption.enabled  = toggle;
+    }
+    #endregion
     public void MovePlayerTo(Vector3 position)
     {
         pController.transform.position = position;
-        Debug.Log("Moving Player");
+        
     }
     public void StartRespawn()
     {
@@ -251,9 +283,7 @@ public class PlayerManager : MonoBehaviour
         {
             ToggleBuildMode();
         }
-        Debug.Log("Death Time");
         yield return new WaitForSeconds(2);
-        Debug.Log("Respawning");
         if (train != null)
             MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
         else
@@ -271,6 +301,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void GameOver()
     {
+        SceneManager.LoadScene(0);
         Debug.Log("You lose");
     }
     public void AssignInteractable(string promptText, Interactables interactable)

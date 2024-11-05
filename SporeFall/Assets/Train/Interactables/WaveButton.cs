@@ -11,10 +11,10 @@ public class WaveButton : Interactables
         switch (WaveManager.Instance.wavePhase)
         {
             case WaveManager.WavePhase.NotStarted:
-                player.pUI.EnablePrompt("Press to Start Wave");
+                player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()}  to Start Wave");
                 break;
             case WaveManager.WavePhase.Departing:
-                player.pUI.EnablePrompt("Press to go to next Area");
+                player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to go to next Area");
                 break;
         }
     }

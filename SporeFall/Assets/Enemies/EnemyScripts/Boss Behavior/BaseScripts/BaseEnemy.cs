@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 
 public enum EnemyState
@@ -29,7 +30,7 @@ public abstract class BaseEnemy : MonoBehaviour
     protected Damageable health;
     public Transform firePoint;
 
-    [Header("State Behavior")]
+    [Header("Strafe Behavior")]
     [SerializeField] protected float strafeRadius = 10f;
     [SerializeField] protected float retreatDistance = 15f;
     [SerializeField] protected float strafeSpeed = 5f;
@@ -86,7 +87,6 @@ public abstract class BaseEnemy : MonoBehaviour
     private int maxDetectedObjects = 10; // Max number of objects the enemy can detect at once
     public Animator Animator => animator;
     public AudioSource AudioSource => audioSource;
-
     protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -135,10 +135,10 @@ public abstract class BaseEnemy : MonoBehaviour
             foreach (var stateWeight in stateWeights)
             {
                 currentSum += stateWeight.weight;
-                Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
+                //Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
                 if (randomValue <= currentSum)
                 {
-                    Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
+                    //Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
                     SetState(stateWeight.state);
                     return;
                 }
@@ -256,7 +256,7 @@ public abstract class BaseEnemy : MonoBehaviour
     protected virtual void UpdateCurrentState()
     {
         // for when current target is destroyed find a new target
-        if(currentTarget == null)
+        if (currentTarget == null)
             DetectTargets();
         // alot of behavior relies on distance to current target
         float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
@@ -264,7 +264,7 @@ public abstract class BaseEnemy : MonoBehaviour
         switch (currentState)
         {
             case EnemyState.Idle:
-               // Debug.Log("Idling");
+                // Debug.Log("Idling");
                 UpdateIdleState();
                 break;
             case EnemyState.Chase:
@@ -320,11 +320,19 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             // so that it doesnt go through all attacks, added a random chance to not attack and do something else instead
             int index = Random.Range(0, 100);
-            Debug.Log(distanceToTarget);
+            //Debug.Log(distanceToTarget);
             Attack bestAttack = ChooseBestAttack(distanceToTarget);
             if (bestAttack != null && index < 70)
             {
-                Debug.Log("Attacking With: " + bestAttack.name);
+                // Get the direction to the target
+                Vector3 direction = (currentTarget.position - transform.position).normalized;
+                // Calculate the rotation needed to face the target
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                // Smoothly rotate towards the target
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
+                // Optional: prevent NavMeshAgent from controlling rotation
+                //agent.updateRotation = false;
+                //Debug.Log("Attacking With: " + bestAttack.name);
                 StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
                 return;
             }
@@ -333,7 +341,7 @@ public abstract class BaseEnemy : MonoBehaviour
                 SetRandomState(); // Choose new state if we can't attack
             }
         }
-           
+
         intervalCooldown -= Time.deltaTime;
     }
     protected virtual void UpdateRetreatState()
@@ -397,7 +405,6 @@ public abstract class BaseEnemy : MonoBehaviour
         isAttacking = attacking;
         if (attacking)
         {
-            agent.SetDestination(currentTarget.position);
             agent.isStopped = true;
         }
         else
@@ -423,7 +430,7 @@ public abstract class BaseEnemy : MonoBehaviour
             }
             else
             {
-                Debug.Log("Cannot Use Attack: " + attack.name);
+                //Debug.Log("Cannot Use Attack: " + attack.name);
             }
         }
         return bestAttack;
@@ -463,7 +470,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
         if (currentTarget == null && train != null)
         {
-            if(train.Payload != null)
+            if (train.Payload != null)
                 currentTarget = train.Payload.transform;
             else
                 currentTarget = train.GetDamagePoint();

@@ -10,10 +10,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 606641442741715092, guid: faded2fd68d8dce4aaf411f0606ad441,
         type: 3}
-      propertyPath: projectilePrefab
-      value: 
-      objectReference: {fileID: 6113365771505888124, guid: d4b841cb38a3ca54fac7521132760247,
+      propertyPath: bulletCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 606641442741715092, guid: faded2fd68d8dce4aaf411f0606ad441,
         type: 3}
+      propertyPath: bulletCapacity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 606641442741715092, guid: faded2fd68d8dce4aaf411f0606ad441,
+        type: 3}
+      propertyPath: projectileLifetime
+      value: 4.72
+      objectReference: {fileID: 0}
     - target: {fileID: 4700722439192421218, guid: faded2fd68d8dce4aaf411f0606ad441,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -64,40 +73,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5071807426709845856, guid: faded2fd68d8dce4aaf411f0606ad441,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.194
-      objectReference: {fileID: 0}
-    - target: {fileID: 5071807426709845856, guid: faded2fd68d8dce4aaf411f0606ad441,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.929
-      objectReference: {fileID: 0}
     - target: {fileID: 7636098534929797581, guid: faded2fd68d8dce4aaf411f0606ad441,
         type: 3}
       propertyPath: m_Name
       value: ShotGun_Burst_HitScan
-      objectReference: {fileID: 0}
-    - target: {fileID: 7822693981410379167, guid: faded2fd68d8dce4aaf411f0606ad441,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5657
-      objectReference: {fileID: 0}
-    - target: {fileID: 7822693981410379167, guid: faded2fd68d8dce4aaf411f0606ad441,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5657
-      objectReference: {fileID: 0}
-    - target: {fileID: 7822693981410379167, guid: faded2fd68d8dce4aaf411f0606ad441,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5657
-      objectReference: {fileID: 0}
-    - target: {fileID: 8972171860424414647, guid: faded2fd68d8dce4aaf411f0606ad441,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.59
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -193,6 +172,11 @@ PrefabInstance:
     - target: {fileID: 6170126708384446244, guid: 9febffb89aefa2a4c92d52b3db632ec7,
         type: 3}
       propertyPath: pickUp
+      value: 
+      objectReference: {fileID: 6360678828243786146}
+    - target: {fileID: 6170126708384446244, guid: 9febffb89aefa2a4c92d52b3db632ec7,
+        type: 3}
+      propertyPath: weapon
       value: 
       objectReference: {fileID: 6360678828243786146}
     m_RemovedComponents: []
