@@ -209,7 +209,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296139077031149020}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -444,7 +444,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1830775554552248108}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1223,7 +1223,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2960033746464666496}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1507,6 +1507,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8637291711541781846}
   - component: {fileID: 59439585031014860}
+  - component: {fileID: 4962759463062351610}
   m_Layer: 0
   m_Name: WaveManager
   m_TagString: Untagged
@@ -1558,84 +1559,102 @@ MonoBehaviour:
   - {fileID: 1416248867867703900}
   waves:
   - waveName: First Wave
+    isFinalWave: 0
     trainLocation: {fileID: 0}
     ShroomPod: {fileID: 0}
-    totalEnemies: 10
-    enemyPrefabs:
-    - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
-    - {fileID: 1657974298613798786, guid: 83db4b36ff5d0e94ab653cfca6a6cad0, type: 3}
     spawnLocations:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+    enemySpawnData:
+    - enemyPrefab: {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01,
+        type: 3}
+      totalToSpawn: 10
+      spawnAsGroup: 0
+      groupSize: 0
     minIntervalTime: 1
     maxIntervalTime: 3
     minIntervalSpawn: 10
     maxIntervalSpawn: 20
-    isFinalWave: 0
   - waveName: Second Wave
+    isFinalWave: 0
     trainLocation: {fileID: 0}
     ShroomPod: {fileID: 0}
-    totalEnemies: 25
-    enemyPrefabs:
-    - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
-    - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
-    - {fileID: 1657974298613798786, guid: 83db4b36ff5d0e94ab653cfca6a6cad0, type: 3}
     spawnLocations:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+    enemySpawnData:
+    - enemyPrefab: {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01,
+        type: 3}
+      totalToSpawn: 15
+      spawnAsGroup: 0
+      groupSize: 0
+    - enemyPrefab: {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd,
+        type: 3}
+      totalToSpawn: 18
+      spawnAsGroup: 1
+      groupSize: 3
     minIntervalTime: 1
     maxIntervalTime: 2
     minIntervalSpawn: 1
     maxIntervalSpawn: 2
-    isFinalWave: 0
   - waveName: Third Wave
+    isFinalWave: 0
     trainLocation: {fileID: 0}
     ShroomPod: {fileID: 0}
-    totalEnemies: 35
-    enemyPrefabs:
-    - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
-    - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
-    - {fileID: 1657974298613798786, guid: 83db4b36ff5d0e94ab653cfca6a6cad0, type: 3}
     spawnLocations:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+    enemySpawnData:
+    - enemyPrefab: {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01,
+        type: 3}
+      totalToSpawn: 20
+      spawnAsGroup: 0
+      groupSize: 0
+    - enemyPrefab: {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf,
+        type: 3}
+      totalToSpawn: 10
+      spawnAsGroup: 0
+      groupSize: 0
+    - enemyPrefab: {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd,
+        type: 3}
+      totalToSpawn: 20
+      spawnAsGroup: 1
+      groupSize: 3
     minIntervalTime: 1
     maxIntervalTime: 2
     minIntervalSpawn: 1
     maxIntervalSpawn: 2
-    isFinalWave: 0
   - waveName: Final Wave
+    isFinalWave: 1
     trainLocation: {fileID: 0}
     ShroomPod: {fileID: 0}
-    totalEnemies: 35
-    enemyPrefabs:
-    - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
-    - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
-    - {fileID: 1657974298613798786, guid: 83db4b36ff5d0e94ab653cfca6a6cad0, type: 3}
     spawnLocations:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+    enemySpawnData:
+    - enemyPrefab: {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01,
+        type: 3}
+      totalToSpawn: 100
+      spawnAsGroup: 0
+      groupSize: 0
+    - enemyPrefab: {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd,
+        type: 3}
+      totalToSpawn: 100
+      spawnAsGroup: 1
+      groupSize: 3
+    - enemyPrefab: {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf,
+        type: 3}
+      totalToSpawn: 5
+      spawnAsGroup: 1
+      groupSize: 5
     minIntervalTime: 1
     maxIntervalTime: 2
     minIntervalSpawn: 1
     maxIntervalSpawn: 2
-    isFinalWave: 1
-  currentWave:
-    waveName: 
-    trainLocation: {fileID: 0}
-    ShroomPod: {fileID: 0}
-    totalEnemies: 0
-    enemyPrefabs: []
-    spawnLocations: []
-    minIntervalTime: 0
-    maxIntervalTime: 0
-    minIntervalSpawn: 0
-    maxIntervalSpawn: 0
-    isFinalWave: 0
   currentWaveIndex: 0
   maxEnemiesOnField: 100
   deadEnemies: 0
@@ -1645,6 +1664,22 @@ MonoBehaviour:
   bossText: {fileID: 0}
   explosionPrefab: {fileID: 4393267779352202006, guid: b0de2be7093171f439ca9cfa7964dbfe,
     type: 3}
+--- !u!114 &4962759463062351610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3793568963529160706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2215986fbf0ff3d45b053dfcb36d3832, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainSceneIndex: 0
+  gameSceneIndex: 1
+  winSceneIndex: 2
+  loseSceneIndex: 3
 --- !u!1 &3809419720393654685
 GameObject:
   m_ObjectHideFlags: 0
@@ -1892,7 +1927,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4580420613245481021}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2161,7 +2196,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5422466445889474679}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2244,7 +2279,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5500918957120149732}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2304,7 +2339,7 @@ Transform:
   m_GameObject: {fileID: 5657125417435646987}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 9.1, z: 874.4}
+  m_LocalPosition: {x: 0, y: 5.73, z: 874.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2402,7 +2437,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5809749059188856709}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2522,7 +2557,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6012358778382002088}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

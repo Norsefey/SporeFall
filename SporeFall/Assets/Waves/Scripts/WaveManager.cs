@@ -284,7 +284,7 @@ public class WaveManager : MonoBehaviour
         
         wavePhase = WavePhase.NotStarted;
     }
-    private void SpawnExplosion(Vector3 pos)
+    public void SpawnExplosion(Vector3 pos)
     {
         Instantiate(explosionPrefab, pos, Quaternion.identity);
     }
