@@ -39,15 +39,15 @@ public class PickUpWeapon : Interactables
     public override void Interact(InputAction.CallbackContext context)
     {
         player.PickUpWeapon();
-
+        RemoveAction();
         // Play the pickup sound effect
         if (pickupSound != null && audioSource != null)
         {
             audioSource.Play();
         }
-
         // Hide the weapon's visuals immediately
         weapon.gameObject.SetActive(false);
+        transform.GetChild(0).gameObject.SetActive(false);
 
         // Delay the destruction of the GameObject to allow the sound to finish
         Invoke("DestroyIntractable", pickupSound.length);

@@ -12,7 +12,6 @@ public abstract class Interactables : MonoBehaviour
     public void DestroyIntractable()
     {
         player.pInput.RemoveInteraction(this);
-        RemoveAction();
         Destroy(gameObject);
     }
     private void OnTriggerEnter(Collider other)

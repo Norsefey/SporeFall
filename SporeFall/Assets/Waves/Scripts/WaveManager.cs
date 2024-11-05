@@ -222,7 +222,7 @@ public class WaveManager : MonoBehaviour
     }
     private IEnumerator DestroyShroomPod(float waitTime)
     {
-        yield return new WaitForSeconds(waitTime - 2);
+        yield return new WaitForSeconds(waitTime - 1);
         SpawnExplosion(currentWave.ShroomPod.transform.position);
         Destroy(currentWave.ShroomPod);
     }
@@ -248,10 +248,12 @@ public class WaveManager : MonoBehaviour
     private IEnumerator MoveToWaveLocation(float waitTime)
     {
        
-        train.SetFiringState();
-        // Destroy pod will spawn in an explosion so made it into Coroutine
         if (waitTime > 0)
-           StartCoroutine(DestroyShroomPod(waitTime));
+        {// At start wait time will be zero, and we dont want to do this stuff at start
+            train.SetFiringState();
+            // Destroy pod will spawn in an explosion so made it into Coroutine
+            StartCoroutine(DestroyShroomPod(waitTime));
+        }
 
         yield return new WaitForSeconds(waitTime);
         // at the start we have zero wait time, and don't want to go to next index
