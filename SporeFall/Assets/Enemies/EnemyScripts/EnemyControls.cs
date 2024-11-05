@@ -36,11 +36,18 @@ public class EnemyControls : MonoBehaviour
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
     private bool isTargetingTrain = false;
+
+    // Movement sound variables
+    [Header("Movement Sound")]
+    public AudioClip movementSound; // Assign the movement sound clip in the inspector
+    private AudioSource audioSource; // To play the sound
+    private bool isMoving; // Track if the enemy is moving
+
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         detectedColliders = new Collider[maxDetectedObjects]; // Pre-allocate the array for detected objects
-
+        audioSource = GetComponent<AudioSource>(); // Get the AudioSource component
 
         navMeshAgent.stoppingDistance = stoppingDistance;
         lastAttackTime = -attackCoolDown; // Allow immediate attack when starting
@@ -150,6 +157,27 @@ public class EnemyControls : MonoBehaviour
         if (currentTarget != null && navMeshAgent.isActiveAndEnabled)
         {
             navMeshAgent.SetDestination(currentTarget.position); // Set the destination of the NavMeshAgent
+
+            // Check if the enemy is moving
+            if (navMeshAgent.velocity.magnitude > 0)
+            {
+                if (!isMoving)
+                {
+                    isMoving = true;
+                    PlayMovementSound();
+                }
+            }
+            else
+            {
+                isMoving = false; // Reset the moving state when not moving
+            }
+        }
+    }
+    void PlayMovementSound()
+    {
+        if (audioSource != null && movementSound != null)
+        {
+            audioSource.PlayOneShot(movementSound); // Play the movement sound
         }
     }
     void OnDrawGizmosSelected()

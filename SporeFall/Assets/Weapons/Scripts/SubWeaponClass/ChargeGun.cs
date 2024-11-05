@@ -4,13 +4,30 @@ using UnityEngine;
 
 public class ChargeGun : Weapon
 {
-    [Space(6),Header("Charge Variables")]
+    [Space(6), Header("Charge Variables")]
     public float maxChargeTime = 2f; // Max time to fully charge
     public float minChargeMultiplier = 1f; // Minimum power for a shot
     public float maxChargeMultiplier = 3f; // Maximum power for a fully charged shot
     public float baseChargeSpeed = 10;
     private bool isCharging = false;
     private float chargeAmount = 0f;
+
+    [Header("Audio Settings")]
+    public AudioClip chargeSound; // Charging sound clip
+    public AudioClip fireSound; // Firing sound clip
+    [Range(0f, 1f)] public float chargeSoundVolume = 0.5f; // Volume for charging sound
+    [Range(0f, 1f)] public float fireSoundVolume = 0.5f; // Volume for firing sound
+
+    private AudioSource chargeAudioSource;
+
+    private void Start()
+    {
+        // Set up an AudioSource for continuous charging sound
+        chargeAudioSource = gameObject.AddComponent<AudioSource>();
+        chargeAudioSource.clip = chargeSound;
+        chargeAudioSource.volume = chargeSoundVolume;
+        chargeAudioSource.loop = true;
+    }
 
     // Called while holding down the fire button to accumulate charge
     public void Charge()
@@ -19,13 +36,21 @@ public class ChargeGun : Weapon
         {
             StartReload();
         }
-        else if (bulletCount <= 0 || IsReloading) 
+        else if (bulletCount <= 0 || IsReloading)
+        {
             return;
+        }
 
         if (!isCharging)
         {
             isCharging = true;
             chargeAmount = 0f; // Reset charge
+
+            // Play the charging sound
+            if (chargeSound != null && !chargeAudioSource.isPlaying)
+            {
+                chargeAudioSource.Play();
+            }
         }
 
         // Accumulate charge based on how long the fire button is held
@@ -33,6 +58,7 @@ public class ChargeGun : Weapon
         chargeAmount = Mathf.Clamp01(chargeAmount); // Clamp charge to [0,1]
         Debug.Log("Charging: " + (chargeAmount * 100).ToString("F0") + "%");
     }
+
     // Called when the fire button is released to fire the charged shot
     public void Release()
     {
@@ -40,9 +66,27 @@ public class ChargeGun : Weapon
 
         isCharging = false;
 
+        // Stop the charging sound
+        if (chargeAudioSource.isPlaying)
+        {
+            chargeAudioSource.Stop();
+        }
+
         // Calculate the charge multiplier
         float chargeMultiplier = Mathf.Lerp(minChargeMultiplier, maxChargeMultiplier, chargeAmount);
-        //Debug.Log("Firing: " + chargeMultiplier + "xDamage");
+
+        // Play the firing sound
+        if (fireSound != null)
+        {
+            GameObject audioPlayer = new GameObject("ChargeGunFireSound");
+            AudioSource fireAudioSource = audioPlayer.AddComponent<AudioSource>();
+            fireAudioSource.clip = fireSound;
+            fireAudioSource.volume = fireSoundVolume;
+            fireAudioSource.Play();
+
+            Destroy(audioPlayer, fireSound.length);
+        }
+
         // Fire the shot based on the charge multiplier
         if (isHitScan)
         {
@@ -59,15 +103,14 @@ public class ChargeGun : Weapon
     // Fire projectile with charge multiplier affecting its power (damage or speed)
     private void FireProjectile(float chargeMultiplier)
     {
-        // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
-        // Rotate player first before shooting
+
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
-        // Instantiate the projectile and shoot it in the spread direction
+
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
         projectile.transform.localScale *= Mathf.Clamp(chargeMultiplier, 0, 3);
 
@@ -77,7 +120,7 @@ public class ChargeGun : Weapon
             ProjectileData data = new()
             {
                 Direction = shootDirection,
-                Speed = projectileSpeed * chargeMultiplier,// Bullet moves faster the higher the charge
+                Speed = projectileSpeed * chargeMultiplier,
                 Damage = damage * chargeMultiplier,
                 Lifetime = projectileLifetime,
                 UseGravity = useGravity,
@@ -94,7 +137,6 @@ public class ChargeGun : Weapon
     // Fire hitscan with charge multiplier affecting its damage
     private void FireHitscan(float chargeMultiplier)
     {
-        // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
@@ -104,11 +146,11 @@ public class ChargeGun : Weapon
 
         Ray ray = new(player.pCamera.myCamera.transform.position, shootDirection);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
+        if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers))
         {
             Debug.Log(weaponName + " hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));
-            // Apply damage to the hit object
+
             if (hit.collider.CompareTag("Enemy"))
             {
                 if (hit.transform.TryGetComponent<Damageable>(out var damageable))
