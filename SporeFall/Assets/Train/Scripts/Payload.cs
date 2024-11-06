@@ -84,7 +84,7 @@ public class Payload : MonoBehaviour
     }
     private IEnumerator WinLevel()
     {
-        StartCoroutine(WaveManager.Instance.DestroyShroomPod(waitTime: 4f));
+        StartCoroutine(GameManager.Instance.WaveManager.DestroyShroomPod(waitTime: 4f));
         yield return new WaitForSeconds(4f);
         SceneTransitioner.Instance.LoadWinScene();
     }

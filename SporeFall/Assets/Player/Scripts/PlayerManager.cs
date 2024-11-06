@@ -51,8 +51,7 @@ public class PlayerManager : MonoBehaviour
     }
     private void Start()
     {
-        if(WaveManager.Instance != null)
-            WaveManager.Instance.train.AddPlayer(this);
+        GameManager.Instance.TrainHandler.AddPlayer(this);
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -64,7 +63,6 @@ public class PlayerManager : MonoBehaviour
     private void Update()
     {
         WeaponBehavior();
-
     }
     private void SetManager()
     {

@@ -7,6 +7,7 @@ public class TrainHandler : MonoBehaviour
 {
     public List<PlayerManager> players = new();
     [Header("References")]
+    public WaveManager waveManager;
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject payloadPrefab;
@@ -196,7 +197,7 @@ public class TrainHandler : MonoBehaviour
     }
     private void BlowUpTrain()
     {
-        WaveManager.Instance.SpawnExplosion(transform.position);
+        GameManager.Instance.WaveManager.SpawnExplosion(transform.position);
     }
     public void CheckTrainCamera()
     {

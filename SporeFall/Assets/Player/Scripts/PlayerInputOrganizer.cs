@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerInputOrganizer : MonoBehaviour
@@ -7,6 +8,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     private PlayerManager pMan;
     // Input Maps
     private InputActionAsset inputAsset;
+    private InputActionMap gameInputMap;
     private InputActionMap playerInputMap;
     private InputActionMap shootInputMap;
     private InputActionMap buildInputMap;
@@ -20,6 +22,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction sprintAction;
     private InputAction interactAction;
     private InputAction exitGame;
+    private InputAction pauseGame;
     private InputAction toggleFullscreen;
     private InputAction flipCameraSide;
     // Shoot Actions
@@ -41,6 +44,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // get and assign input Action Map
         inputAsset = this.GetComponent<PlayerInput>().actions;
+        gameInputMap = inputAsset.FindActionMap("Game");
         playerInputMap = inputAsset.FindActionMap("Player");
         shootInputMap = inputAsset.FindActionMap("Shoot");
         buildInputMap = inputAsset.FindActionMap("Build");
@@ -49,6 +53,10 @@ public class PlayerInputOrganizer : MonoBehaviour
     private void OnEnable()
     {
         // Assign actions from action map
+        //Game Action Map
+        exitGame = gameInputMap.FindAction("ExitGame");
+        pauseGame = gameInputMap.FindAction("Pause");
+        toggleFullscreen = gameInputMap.FindAction("ToggleFullscreen");
         // player action map
         moveAction = playerInputMap.FindAction("Move");
         lookAction = playerInputMap.FindAction("Look");
@@ -57,8 +65,6 @@ public class PlayerInputOrganizer : MonoBehaviour
         buildModeAction = playerInputMap.FindAction("Build");
         aimAction = playerInputMap.FindAction("Aim");
         interactAction = playerInputMap.FindAction("Interact");
-        exitGame = playerInputMap.FindAction("ExitGame");
-        toggleFullscreen = playerInputMap.FindAction("ToggleFullscreen");
         flipCameraSide = playerInputMap.FindAction("FlipCamera");
         // shoot action map
         reloadAction = shootInputMap.FindAction("Reload");
@@ -75,6 +81,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         upgradeStructAction = editInputMap.FindAction("Upgrade");
         exitEditAction = editInputMap.FindAction("Exit");
         // this enables the controls
+        gameInputMap.Enable();
         playerInputMap.Enable();
         shootInputMap.Enable();
         buildInputMap.Disable();
@@ -92,8 +99,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         fireAction.started += OnFireStarted;
         fireAction.canceled += OnFireCanceled;
         buildModeAction.started += OnBuildMode;
-        //exitGame.started += ReleaseCursor;
-        exitGame.performed += ExitGame;
+        pauseGame.performed += OnPause;
+        exitGame.performed += OnExitGame;
         toggleFullscreen.performed += ToggleFullscreen;
         flipCameraSide.performed += OnFlipCamera;
         // shoot actions
@@ -124,8 +131,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         fireAction.started -= OnFireStarted;
         fireAction.canceled -= OnFireCanceled;
         buildModeAction.started -= OnBuildMode;
-        //exitGame.started -= ReleaseCursor;
-        exitGame.performed -= ExitGame;
+        pauseGame.performed -= OnPause;
+        exitGame.performed -= OnExitGame;
         toggleFullscreen.performed -= ToggleFullscreen;
         flipCameraSide.performed -= OnFlipCamera;
         //shoot actions
@@ -184,7 +191,53 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
 
     #region input Calls
-    private void ExitGame(InputAction.CallbackContext context)
+    private void OnPause(InputAction.CallbackContext context)
+    {
+        if (!GameManager.Instance.WaveManager.paused)
+        {
+            if (pMan.isBuilding)
+            {
+                // if player is holding fire, prevent press from carrying over
+                // Fixes auto shoot bug
+                fireAction.Disable();
+
+                fireAction = shootInputMap.FindAction("Fire");
+                // Assign build mode actions
+                fireAction.started += OnFireStarted;
+                fireAction.canceled += OnFireCanceled;
+
+                pMan.ToggleBuildMode();
+
+                editInputMap.Disable();
+                buildInputMap.Disable();
+                shootInputMap.Enable();
+                // After Shoot map is enabled re enable fire action
+                fireAction.Enable();
+            }
+
+            playerInputMap.Disable();
+            shootInputMap.Disable();
+
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            GameManager.Instance.WaveManager.pauseMenu.OpenPauseMenu();
+            GameManager.Instance.WaveManager.paused = true;
+        }
+        else
+        {
+            playerInputMap.Enable();
+            shootInputMap.Enable();
+
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            GameManager.Instance.WaveManager.pauseMenu.ClosePauseMenu();
+            GameManager.Instance.WaveManager.paused = false;
+        }
+   
+    }
+    private void OnExitGame(InputAction.CallbackContext context)
     {
         Debug.Log("Closing down Game");
         Application.Quit();
@@ -354,8 +407,8 @@ public class PlayerInputOrganizer : MonoBehaviour
             buildGun.ExitEditMode();
             
             rotateStructAction = buildInputMap.FindAction("Rotate");
-            rotateStructAction.started += OnEditRotateStarted;
-            rotateStructAction.canceled += OnEditRotateCancled;
+            rotateStructAction.started -= OnEditRotateStarted;
+            rotateStructAction.canceled -= OnEditRotateCancled;
 
             pMan.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             editInputMap.Disable();

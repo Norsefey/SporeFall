@@ -436,11 +436,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: []
+  waveManager: {fileID: 0}
   trainCamera: {fileID: 3230082538665209485}
   trainVisual: {fileID: 809636181957467718}
   payloadPrefab: {fileID: 3430796085313992877, guid: d76e3ead3ef3a0f458982003f10af226,
     type: 3}
   payloadSpawnPos: {fileID: 8406617399931434325}
+  listener: {fileID: 372143460267822459}
   dropsHolder: {fileID: 8571002027677523031}
   playerSpawnPoint:
   - {fileID: 8406617399931434325}
@@ -450,7 +452,7 @@ MonoBehaviour:
   structureHolder: {fileID: 3281471488283460951}
   maxEnergy: 25
   cannonFireTime: 2
-  trainMoveSpeed: 0.2
+  trainMoveSpeed: 0.5
   movingAudio: {fileID: 8300000, guid: 00b4063aaea77ba4391549cd40c20f2f, type: 3}
   fireCannonAudio: {fileID: 8300000, guid: 809392533b4c9874fa3ac7256b1ae6e6, type: 3}
   trainState: 2
@@ -3079,6 +3081,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5636325420925511529}
     m_Modifications:
+    - target: {fileID: 426969379638365793, guid: 83c42d6c0e5ea714ead8bd52904834b4,
+        type: 3}
+      propertyPath: m_SplitScreen
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 426969379638365793, guid: 83c42d6c0e5ea714ead8bd52904834b4,
+        type: 3}
+      propertyPath: m_JoinAction.m_Reference
+      value: 
+      objectReference: {fileID: 2196864088761799203, guid: cab2f8adda998824e8d805fa74793e71,
+        type: 3}
     - target: {fileID: 6222226789331002929, guid: 83c42d6c0e5ea714ead8bd52904834b4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3252,6 +3265,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AABB.m_Extent.z
       value: 8.759552
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: be396a5272cb66547abf574b2ef12b39,
+        type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: be396a5272cb66547abf574b2ef12b39,
+        type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: be396a5272cb66547abf574b2ef12b39,
+        type: 3}
+      propertyPath: m_SkinnedMotionVectors
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -3887185075125053422, guid: be396a5272cb66547abf574b2ef12b39,
         type: 3}

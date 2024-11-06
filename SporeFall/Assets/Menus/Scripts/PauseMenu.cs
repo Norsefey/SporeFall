@@ -16,8 +16,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] GameObject quitConfirmScreen;
     [SerializeField] string level1Name;
 
-    // Start is called before the first frame update
-    void Start()
+
+    public void OpenPauseMenu()
     {
         defaultScreen.SetActive(true);
         controlsScreen.SetActive(false);
@@ -25,7 +25,14 @@ public class PauseMenu : MonoBehaviour
         retryConfirmScreen.SetActive(false);
         quitConfirmScreen.SetActive(false);
     }
-
+    public void ClosePauseMenu()
+    {
+        defaultScreen.SetActive(false);
+        controlsScreen.SetActive(false);
+        mainConfirmScreen.SetActive(false);
+        retryConfirmScreen.SetActive(false);
+        quitConfirmScreen.SetActive(false);
+    }
 
     public void OpenControlsMenu()
     {
@@ -53,7 +60,7 @@ public class PauseMenu : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneTransitioner.Instance.LoadMainMenuScene();
     }
 
     public void RetryConfirmScreen()
@@ -70,7 +77,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Retry()
     {
-        SceneManager.LoadScene(level1Name);
+        SceneTransitioner.Instance.LoadGameScene();
     }
 
     public void QuitConfirmScreen()

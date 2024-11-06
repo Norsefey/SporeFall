@@ -24,6 +24,127 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     ""name"": ""GameInputs"",
     ""maps"": [
         {
+            ""name"": ""Game"",
+            ""id"": ""93e5e775-8c0d-435e-bda4-6f4d9f4160f1"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""28d1eacf-5832-4482-8e95-3fea71963f18"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleFullscreen"",
+                    ""type"": ""Button"",
+                    ""id"": ""bdcd5fe2-2f17-4590-bea6-3298b360fa64"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ExitGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""32dd80c1-df1d-4c27-87c7-c6fc5719982b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.8)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Join"",
+                    ""type"": ""Button"",
+                    ""id"": ""80f5823f-7781-4bb0-93bd-d47c93c7f9ca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""561d4774-fc3b-4ace-bd1b-0cb9cd9962c3"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Button With One Modifier"",
+                    ""id"": ""c392fff2-7e71-4c61-a723-219a53266ab2"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleFullscreen"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Modifier"",
+                    ""id"": ""636328dc-ef18-4a89-ab00-66e9310d2444"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ToggleFullscreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""adc17a8a-2696-4535-88c6-a413ef9c4998"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ToggleFullscreen"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c092409b-f559-4591-bcbf-54b216357ad9"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExitGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04622143-0b73-4f43-abc8-46e4dc305578"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b204969-f55c-47ca-abe8-3363bcae4b4a"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Player"",
             ""id"": ""df502b0f-4285-4d86-8c0f-9968cc95f713"",
             ""actions"": [
@@ -49,15 +170,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""b993748b-c29f-4ad4-83b9-d8ba1b5693c8"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Join"",
-                    ""type"": ""Button"",
-                    ""id"": ""53692260-1aed-4930-a8ac-798b9a2e30ee"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -94,24 +206,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Sprint"",
                     ""type"": ""Button"",
                     ""id"": ""5db205c8-b7d1-41e0-bccd-4bd6e316a516"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ExitGame"",
-                    ""type"": ""Button"",
-                    ""id"": ""35200770-cc92-461b-9aff-0c1c32fa0e4e"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold(duration=0.8)"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ToggleFullscreen"",
-                    ""type"": ""Button"",
-                    ""id"": ""98247147-178f-487c-8dad-99bcf2cda960"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -240,28 +334,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""dd64c6c5-b320-416e-93b1-39ca15a4750f"",
-                    ""path"": ""<Keyboard>/anyKey"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Join"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6204e859-279a-4900-820e-e3aad84e3abf"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Join"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""ae351aab-e4f7-4f30-84bb-97bf5e59052d"",
                     ""path"": ""<Keyboard>/b"",
                     ""interactions"": """",
@@ -347,50 +419,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c2d5b510-dabd-4556-bcfd-776af623b22b"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ExitGame"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Button With One Modifier"",
-                    ""id"": ""f4f97088-3060-4ce0-ae61-c7a154c75332"",
-                    ""path"": ""ButtonWithOneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ToggleFullscreen"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Modifier"",
-                    ""id"": ""9a5e6a77-53e7-453f-a668-fc0681f1b9b9"",
-                    ""path"": ""<Keyboard>/leftCtrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""ToggleFullscreen"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Button"",
-                    ""id"": ""10e49455-b83f-4c44-a1a6-6a5c35b04b64"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""ToggleFullscreen"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -907,18 +935,21 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         }
     ]
 }");
+        // Game
+        m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
+        m_Game_Pause = m_Game.FindAction("Pause", throwIfNotFound: true);
+        m_Game_ToggleFullscreen = m_Game.FindAction("ToggleFullscreen", throwIfNotFound: true);
+        m_Game_ExitGame = m_Game.FindAction("ExitGame", throwIfNotFound: true);
+        m_Game_Join = m_Game.FindAction("Join", throwIfNotFound: true);
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Join = m_Player.FindAction("Join", throwIfNotFound: true);
         m_Player_Build = m_Player.FindAction("Build", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_ExitGame = m_Player.FindAction("ExitGame", throwIfNotFound: true);
-        m_Player_ToggleFullscreen = m_Player.FindAction("ToggleFullscreen", throwIfNotFound: true);
         m_Player_FlipCamera = m_Player.FindAction("FlipCamera", throwIfNotFound: true);
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
@@ -997,19 +1028,86 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
+    // Game
+    private readonly InputActionMap m_Game;
+    private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
+    private readonly InputAction m_Game_Pause;
+    private readonly InputAction m_Game_ToggleFullscreen;
+    private readonly InputAction m_Game_ExitGame;
+    private readonly InputAction m_Game_Join;
+    public struct GameActions
+    {
+        private @GameInputs m_Wrapper;
+        public GameActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Pause => m_Wrapper.m_Game_Pause;
+        public InputAction @ToggleFullscreen => m_Wrapper.m_Game_ToggleFullscreen;
+        public InputAction @ExitGame => m_Wrapper.m_Game_ExitGame;
+        public InputAction @Join => m_Wrapper.m_Game_Join;
+        public InputActionMap Get() { return m_Wrapper.m_Game; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GameActions set) { return set.Get(); }
+        public void AddCallbacks(IGameActions instance)
+        {
+            if (instance == null || m_Wrapper.m_GameActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_GameActionsCallbackInterfaces.Add(instance);
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+            @ToggleFullscreen.started += instance.OnToggleFullscreen;
+            @ToggleFullscreen.performed += instance.OnToggleFullscreen;
+            @ToggleFullscreen.canceled += instance.OnToggleFullscreen;
+            @ExitGame.started += instance.OnExitGame;
+            @ExitGame.performed += instance.OnExitGame;
+            @ExitGame.canceled += instance.OnExitGame;
+            @Join.started += instance.OnJoin;
+            @Join.performed += instance.OnJoin;
+            @Join.canceled += instance.OnJoin;
+        }
+
+        private void UnregisterCallbacks(IGameActions instance)
+        {
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+            @ToggleFullscreen.started -= instance.OnToggleFullscreen;
+            @ToggleFullscreen.performed -= instance.OnToggleFullscreen;
+            @ToggleFullscreen.canceled -= instance.OnToggleFullscreen;
+            @ExitGame.started -= instance.OnExitGame;
+            @ExitGame.performed -= instance.OnExitGame;
+            @ExitGame.canceled -= instance.OnExitGame;
+            @Join.started -= instance.OnJoin;
+            @Join.performed -= instance.OnJoin;
+            @Join.canceled -= instance.OnJoin;
+        }
+
+        public void RemoveCallbacks(IGameActions instance)
+        {
+            if (m_Wrapper.m_GameActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IGameActions instance)
+        {
+            foreach (var item in m_Wrapper.m_GameActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_GameActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public GameActions @Game => new GameActions(this);
+
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Join;
     private readonly InputAction m_Player_Build;
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_ExitGame;
-    private readonly InputAction m_Player_ToggleFullscreen;
     private readonly InputAction m_Player_FlipCamera;
     public struct PlayerActions
     {
@@ -1018,13 +1116,10 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Join => m_Wrapper.m_Player_Join;
         public InputAction @Build => m_Wrapper.m_Player_Build;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @ExitGame => m_Wrapper.m_Player_ExitGame;
-        public InputAction @ToggleFullscreen => m_Wrapper.m_Player_ToggleFullscreen;
         public InputAction @FlipCamera => m_Wrapper.m_Player_FlipCamera;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -1044,9 +1139,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @Join.started += instance.OnJoin;
-            @Join.performed += instance.OnJoin;
-            @Join.canceled += instance.OnJoin;
             @Build.started += instance.OnBuild;
             @Build.performed += instance.OnBuild;
             @Build.canceled += instance.OnBuild;
@@ -1059,12 +1151,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @ExitGame.started += instance.OnExitGame;
-            @ExitGame.performed += instance.OnExitGame;
-            @ExitGame.canceled += instance.OnExitGame;
-            @ToggleFullscreen.started += instance.OnToggleFullscreen;
-            @ToggleFullscreen.performed += instance.OnToggleFullscreen;
-            @ToggleFullscreen.canceled += instance.OnToggleFullscreen;
             @FlipCamera.started += instance.OnFlipCamera;
             @FlipCamera.performed += instance.OnFlipCamera;
             @FlipCamera.canceled += instance.OnFlipCamera;
@@ -1081,9 +1167,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @Join.started -= instance.OnJoin;
-            @Join.performed -= instance.OnJoin;
-            @Join.canceled -= instance.OnJoin;
             @Build.started -= instance.OnBuild;
             @Build.performed -= instance.OnBuild;
             @Build.canceled -= instance.OnBuild;
@@ -1096,12 +1179,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @ExitGame.started -= instance.OnExitGame;
-            @ExitGame.performed -= instance.OnExitGame;
-            @ExitGame.canceled -= instance.OnExitGame;
-            @ToggleFullscreen.started -= instance.OnToggleFullscreen;
-            @ToggleFullscreen.performed -= instance.OnToggleFullscreen;
-            @ToggleFullscreen.canceled -= instance.OnToggleFullscreen;
             @FlipCamera.started -= instance.OnFlipCamera;
             @FlipCamera.performed -= instance.OnFlipCamera;
             @FlipCamera.canceled -= instance.OnFlipCamera;
@@ -1358,18 +1435,22 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_GamepadSchemeIndex];
         }
     }
+    public interface IGameActions
+    {
+        void OnPause(InputAction.CallbackContext context);
+        void OnToggleFullscreen(InputAction.CallbackContext context);
+        void OnExitGame(InputAction.CallbackContext context);
+        void OnJoin(InputAction.CallbackContext context);
+    }
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnJoin(InputAction.CallbackContext context);
         void OnBuild(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnExitGame(InputAction.CallbackContext context);
-        void OnToggleFullscreen(InputAction.CallbackContext context);
         void OnFlipCamera(InputAction.CallbackContext context);
     }
     public interface IShootActions

@@ -16,6 +16,8 @@ public class SceneTransitioner : MonoBehaviour
     }
     public void LoadMainMenuScene()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         SceneManager.LoadScene(mainSceneIndex);
     }
     public void LoadGameScene()
@@ -24,10 +26,14 @@ public class SceneTransitioner : MonoBehaviour
     }
     public void LoadWinScene()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         SceneManager.LoadScene(winSceneIndex);
     }
     public void LoadLoseScene()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         SceneManager.LoadScene(loseSceneIndex);
     }
 }
