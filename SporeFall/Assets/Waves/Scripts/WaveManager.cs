@@ -49,6 +49,10 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("WaveMan Is awake");
+
+        currentWaveIndex = 0;
+
         currentWave = waves[currentWaveIndex];
         StartCoroutine(MoveToWaveLocation(0));
     }
@@ -245,7 +249,6 @@ public class WaveManager : MonoBehaviour
     }
     private IEnumerator MoveToWaveLocation(float waitTime)
     {
-       
         if (waitTime > 0)
         {// At start wait time will be zero, and we dont want to do this stuff at start
             train.SetFiringState();
@@ -254,6 +257,8 @@ public class WaveManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(waitTime);
+        Debug.Log("Moving Train");
+
         // at the start we have zero wait time, and don't want to go to next index
         if (waitTime > 0)
         {

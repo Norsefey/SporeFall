@@ -525,6 +525,7 @@ GameObject:
   - component: {fileID: 5005035763962033028}
   - component: {fileID: 7830201162772373882}
   - component: {fileID: 7374389533688488258}
+  - component: {fileID: 1358068904718605843}
   m_Layer: 7
   m_Name: TurretControls
   m_TagString: Structure
@@ -581,10 +582,26 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.95
-  m_Height: 2.23
+  m_Radius: 1.52
+  m_Height: 3.71
   m_Direction: 1
-  m_Center: {x: 0, y: 0.94, z: 0}
+  m_Center: {x: 0, y: 0.94, z: 0.45}
+--- !u!208 &1358068904718605843
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8824594066713120071}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.83, y: 1.21, z: 0.875}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.04, z: 0.22}
+  m_TimeToStationary: 0.5
 --- !u!1001 &65313449072613992
 PrefabInstance:
   m_ObjectHideFlags: 0

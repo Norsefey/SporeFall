@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 431582301856150188}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0001690387, y: 1, z: 0.256}
+  m_LocalPosition: {x: -0.0001690387, y: 1.09, z: 0.256}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 4875674513707954885}
   - component: {fileID: 8933941658098722499}
   - component: {fileID: 7771958113601973338}
+  - component: {fileID: 6817881184614119944}
   m_Layer: 7
   m_Name: ShermanStructureControl
   m_TagString: Untagged
@@ -313,10 +314,26 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.95
-  m_Height: 2.460105
+  m_Radius: 1.51
+  m_Height: 3.84
   m_Direction: 1
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!208 &6817881184614119944
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3927428180562508789}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.83, y: 1.09, z: 0.875}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.4, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &4162946711287125051
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,7 +370,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2.67}
+  m_AnchoredPosition: {x: 0, y: 2.797}
   m_SizeDelta: {x: 5.44, y: 1.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7907055045228074667

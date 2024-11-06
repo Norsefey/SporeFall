@@ -8,6 +8,7 @@ public class TrainHandler : MonoBehaviour
     public List<PlayerManager> players = new();
     [Header("References")]
     public WaveManager waveManager;
+    [SerializeField] private TrainUI UI;
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject payloadPrefab;
@@ -54,7 +55,7 @@ public class TrainHandler : MonoBehaviour
             trainHP.train = this;
             tUI.SetMaxHP(trainHP.maxHP);
         }
-
+        Debug.Log("Train Is awake");
         trainState = TrainState.Moving;
     }
     public void SetParkedState()
@@ -93,6 +94,7 @@ public class TrainHandler : MonoBehaviour
     public void SpawnPayload(Transform[] path)
     {
         Payload = Instantiate(payloadPrefab, payloadSpawnPos).GetComponentInChildren<Payload>();
+        UI.gameObject.SetActive(false);
         Payload.StartMoving(path);
     }
     private void ToggleStructures(bool state)

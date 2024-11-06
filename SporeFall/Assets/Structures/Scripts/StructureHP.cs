@@ -33,7 +33,7 @@ public class StructureHP : Damageable
     {
         if (healthDisplay != null)
         {
-            healthDisplay.text = currentHP + "/" + maxHP;
+            healthDisplay.text = currentHP.ToString("F0") + "/" + maxHP;
         }
     }
 }
