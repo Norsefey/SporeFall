@@ -138,7 +138,7 @@ public abstract class BaseEnemy : MonoBehaviour
                 //Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
                 if (randomValue <= currentSum)
                 {
-                    //Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
+                    Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
                     SetState(stateWeight.state);
                     return;
                 }
@@ -166,7 +166,7 @@ public abstract class BaseEnemy : MonoBehaviour
         weights.Add(new StateWeight(EnemyState.Strafe, strafeWeight));
 
         // Idle is lowest priority
-        weights.Add(new StateWeight(EnemyState.Idle, 0.1f));
+        weights.Add(new StateWeight(EnemyState.Idle, 0.01f));
 
         return weights;
     }
@@ -183,7 +183,7 @@ public abstract class BaseEnemy : MonoBehaviour
         Attack bestAttack = ChooseBestAttack(distanceToTarget);
         if (bestAttack != null)
             return 2.5f;
-        return 0f;
+        return 0.5f;
     }
     protected virtual float CalculateRetreatWeight(float recentDamage, float distanceToTarget)
     {
@@ -217,7 +217,6 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             recentDamage.Dequeue();
         }
-
         return recentDamage.Sum(d => d.amount);
     }
     protected virtual void SetState(EnemyState newState)
@@ -238,7 +237,7 @@ public abstract class BaseEnemy : MonoBehaviour
                 stateTimer = Random.Range(1f, 3f);
                 break;
             case EnemyState.Attack:
-                intervalCooldown = Random.Range(minAttackInterval, maxAttackInterval);
+                //intervalCooldown = Random.Range(minAttackInterval, maxAttackInterval);
                 stateTimer = Random.Range(5f, 8f);
                 break;
             case EnemyState.Chase:
@@ -307,7 +306,9 @@ public abstract class BaseEnemy : MonoBehaviour
             // agent stopping distance changes based on different behaviors
             agent.stoppingDistance = stoppingDistance;
             agent.isStopped = false;
-            agent.SetDestination(currentTarget.position);
+            Vector3 pos = currentTarget.GetComponent<Collider>().ClosestPoint(transform.position);
+            pos.y = transform.position.y;
+            agent.SetDestination(pos);
         }
         else
         {
@@ -316,8 +317,8 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     protected virtual void UpdateAttackState(float distanceToTarget)
     {
-        if (intervalCooldown <= 0)
-        {
+        /*if (intervalCooldown <= 0)
+        {*/
             // so that it doesnt go through all attacks, added a random chance to not attack and do something else instead
             int index = Random.Range(0, 100);
             //Debug.Log(distanceToTarget);
@@ -330,8 +331,11 @@ public abstract class BaseEnemy : MonoBehaviour
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
                 // Smoothly rotate towards the target
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
-                // Optional: prevent NavMeshAgent from controlling rotation
-                //agent.updateRotation = false;
+               
+                Vector3 lookDirection = (currentTarget.position - transform.position).normalized;
+                lookDirection.y = 0;
+                transform.rotation = Quaternion.Lerp(transform.rotation,
+                    Quaternion.LookRotation(lookDirection), Time.deltaTime * 2f);
                 //Debug.Log("Attacking With: " + bestAttack.name);
                 StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
                 return;
@@ -340,9 +344,9 @@ public abstract class BaseEnemy : MonoBehaviour
             {
                 SetRandomState(); // Choose new state if we can't attack
             }
-        }
+        
 
-        intervalCooldown -= Time.deltaTime;
+        //intervalCooldown -= Time.deltaTime;
     }
     protected virtual void UpdateRetreatState()
     {
@@ -430,7 +434,7 @@ public abstract class BaseEnemy : MonoBehaviour
             }
             else
             {
-                //Debug.Log("Cannot Use Attack: " + attack.name);
+                Debug.Log("Cannot Use Attack: " + attack.name);
             }
         }
         return bestAttack;
