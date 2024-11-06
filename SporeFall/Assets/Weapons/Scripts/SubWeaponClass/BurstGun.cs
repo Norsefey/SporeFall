@@ -62,26 +62,21 @@ public class BurstGun : Weapon
                 {
                     FireProjectile(firePoint, player.pCamera.myCamera);
                 }
-
-                // Play the firing sound
-                if (fireSound != null)
-                {
-                    // Create a temporary GameObject to play the sound
-                    GameObject audioPlayer = new GameObject("BurstGunFireSound");
-                    AudioSource audioSource = audioPlayer.AddComponent<AudioSource>();
-                    audioSource.clip = fireSound;
-                    audioSource.volume = fireSoundVolume; // Set the volume
-                    audioSource.Play();
-
-                    // Destroy the audio player object after the sound finishes
-                    Destroy(audioPlayer, fireSound.length);
-                }
-
-                // Optional delay between shots in the burst (e.g., 0.1 seconds)
-                yield return new WaitForSeconds(0.1f);
             }
         }
+        // Play the firing sound
+        if (fireSound != null)
+        {
+            // Create a temporary GameObject to play the sound
+            GameObject audioPlayer = new GameObject("BurstGunFireSound");
+            AudioSource audioSource = audioPlayer.AddComponent<AudioSource>();
+            audioSource.clip = fireSound;
+            audioSource.volume = fireSoundVolume; // Set the volume
+            audioSource.Play();
 
+            // Destroy the audio player object after the sound finishes
+            Destroy(audioPlayer, fireSound.length);
+        }
         bulletCount--; // Decrease the bullet count
         // Wait for the player to release the fire button
         yield return new WaitUntil(() => !triggerHeld);

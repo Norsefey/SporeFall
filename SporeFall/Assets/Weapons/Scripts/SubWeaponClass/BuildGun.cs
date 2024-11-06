@@ -191,7 +191,6 @@ public class BuildGun : Weapon
             }
         }
     }
-
     // Edit Mode Functions
     public void EnterEditMode()
     {

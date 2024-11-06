@@ -74,7 +74,6 @@ public abstract class Weapon : MonoBehaviour
         // Rotate player first before shooting
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
-            Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
         // Instantiate the projectile and shoot it in the spread direction
