@@ -21,6 +21,8 @@ public class Tutorial : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         tutorialPopup.SetActive(true);
+        tutorialText.text = "Left click to lock cursor" + "\n Press any key to start";
+        yield return new WaitForSeconds(4);
         tutorialText.text = "WASD to move" + "\n Shift to sprint" + "\n Space to jump";
         yield return new WaitForSeconds(5);
         tutorialText.text = "Right click to aim" + "\n Left click to shoot" + "\n R to reload";
