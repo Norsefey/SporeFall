@@ -9,7 +9,7 @@ public class PlayerHP : Damageable
     // Start is called before the first frame update
     private void Start()
     {
-        currentHP = maxHP / 2;
+        currentHP = maxHP;
         UpdateUI();
     }
     public void DepleteLife()
