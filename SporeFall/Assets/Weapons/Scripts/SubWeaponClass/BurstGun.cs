@@ -8,10 +8,7 @@ public class BurstGun : Weapon
     public int burstCount = 3; // Number of shots per burst
     private bool isFiringBurst = false; // Prevents firing another burst while one is ongoing
     private bool triggerHeld = false; // Tracks if the player is holding the fire input
-    [SerializeField] private float betweenShotInterval = 0.2f;
-    [Header("Audio Settings")]
-    public AudioClip fireSound; // Assign the burst firing sound in the Inspector
-    [Range(0f, 1f)] public float fireSoundVolume = 0.5f; // Volume control for the burst firing sound
+    [SerializeField] private float betweenShotInterval = 0.2f; // add delay to firing next shot to avoid spam firing
 
     private void Update()
     {
@@ -65,12 +62,12 @@ public class BurstGun : Weapon
                 }
             }
         }
-        // Play the firing sound
+    /*    // Play the firing sound
         if (fireSound != null)
         {
             player.pController.audioSource.PlayOneShot(fireSound);
 
-           /* // Create a temporary GameObject to play the sound
+           *//* // Create a temporary GameObject to play the sound
             GameObject audioPlayer = new GameObject("BurstGunFireSound");
             AudioSource audioSource = audioPlayer.AddComponent<AudioSource>();
             audioSource.clip = fireSound;
@@ -78,8 +75,8 @@ public class BurstGun : Weapon
             audioSource.Play();
 
             // Destroy the audio player object after the sound finishes
-            Destroy(audioPlayer, fireSound.length);*/
-        }
+            Destroy(audioPlayer, fireSound.length);*//*
+        }*/
         bulletCount--; // Decrease the bullet count
 
         // Wait for the player to release the fire button

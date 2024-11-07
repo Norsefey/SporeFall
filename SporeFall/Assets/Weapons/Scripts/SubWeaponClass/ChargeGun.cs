@@ -12,22 +12,9 @@ public class ChargeGun : Weapon
     private bool isCharging = false;
     private float chargeAmount = 0f;
 
-    [Header("Audio Settings")]
+    [Header("Charge Audio Settings")]
     public AudioClip chargeSound; // Charging sound clip
-    public AudioClip fireSound; // Firing sound clip
     [Range(0f, 1f)] public float chargeSoundVolume = 0.5f; // Volume for charging sound
-    [Range(0f, 1f)] public float fireSoundVolume = 0.5f; // Volume for firing sound
-
-    private AudioSource chargeAudioSource;
-
-    private void Start()
-    {
-        // Set up an AudioSource for continuous charging sound
-        chargeAudioSource = gameObject.AddComponent<AudioSource>();
-        chargeAudioSource.clip = chargeSound;
-        chargeAudioSource.volume = chargeSoundVolume;
-        chargeAudioSource.loop = true;
-    }
 
     // Called while holding down the fire button to accumulate charge
     public void Charge()
@@ -47,9 +34,9 @@ public class ChargeGun : Weapon
             chargeAmount = 0f; // Reset charge
 
             // Play the charging sound
-            if (chargeSound != null && !chargeAudioSource.isPlaying)
+            if (chargeSound != null && !player.pController.audioSource.isPlaying)
             {
-                chargeAudioSource.Play();
+                PlaySFX(chargeSound, true);
             }
         }
 
@@ -67,25 +54,16 @@ public class ChargeGun : Weapon
         isCharging = false;
 
         // Stop the charging sound
-        if (chargeAudioSource.isPlaying)
+        if (player.pController.audioSource.isPlaying)
         {
-            chargeAudioSource.Stop();
+            player.pController.audioSource.Stop();
         }
 
         // Calculate the charge multiplier
         float chargeMultiplier = Mathf.Lerp(minChargeMultiplier, maxChargeMultiplier, chargeAmount);
 
         // Play the firing sound
-        if (fireSound != null)
-        {
-            GameObject audioPlayer = new GameObject("ChargeGunFireSound");
-            AudioSource fireAudioSource = audioPlayer.AddComponent<AudioSource>();
-            fireAudioSource.clip = fireSound;
-            fireAudioSource.volume = fireSoundVolume;
-            fireAudioSource.Play();
-
-            Destroy(audioPlayer, fireSound.length);
-        }
+        PlaySFX(fireSound, false);
 
         // Fire the shot based on the charge multiplier
         if (isHitScan)

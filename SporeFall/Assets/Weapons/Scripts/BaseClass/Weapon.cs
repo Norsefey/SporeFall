@@ -8,20 +8,28 @@ public abstract class Weapon : MonoBehaviour
 {
     [Header("References")]
     public string weaponName;
-    //public Image weaponImage;
     public Sprite weaponSprite;
     public PlayerManager player;
     public GameObject projectilePrefab;
     public Transform firePoint;
     public LayerMask hitLayers;
+
+    [Header("Audio Clips")]
+    [SerializeField, Range(0f, 1f)] protected float fireSoundVolume = 0.5f; // Volume control for the firing sound
+    [SerializeField] protected AudioClip fireSound; // Assign the gun's firing sound in the Inspector
+    [SerializeField] protected AudioClip reloadSound; // Assign the gun's Reload sound in the Inspector
+    
     [Header("Corruption")]
     public bool isCorrupted;
     public float corruptionRate = 1.2f;
+  
     [Header("Hold Type")]
     public bool isTwoHanded = false;
     public Transform secondHandHold;
+  
     [Header("Base Stats")]
     public float damage;
+    public bool useSpread = true;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
     public float reloadTime = 2f; // Time it takes to reload
 
@@ -43,15 +51,14 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected int maxBounces = 3;
     [SerializeField] protected float bounceDamageMultiplier = 0.7f; // Reduce damage with each bounce
 
-
     private bool isReloading;
     public bool IsReloading { get { return isReloading; } }
-
     // Fire method to be implemented by subclasses
     public virtual void Fire()
     {
         if (bulletCount <= 0 && !IsReloading)
         {
+            PlaySFX(reloadSound, false);
             StartReload();
         }
         else
@@ -69,6 +76,7 @@ public abstract class Weapon : MonoBehaviour
     }
     protected void FireProjectile(Transform firePoint, Camera playerCamera)
     {
+        PlaySFX(fireSound, false);
         // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
         // Rotate player first before shooting
@@ -99,6 +107,7 @@ public abstract class Weapon : MonoBehaviour
     }
     protected void FireHitscan(Camera playerCamera)
     {
+        PlaySFX(fireSound, false);
         // Apply bullet spread
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
@@ -111,7 +120,6 @@ public abstract class Weapon : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
-            Debug.Log(weaponName + " hit: " + hit.collider.name);
             Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));
             // Apply damage to the hit object
             if (hit.collider.CompareTag("Enemy"))
@@ -126,11 +134,19 @@ public abstract class Weapon : MonoBehaviour
     // Method to calculate a bullet spread direction
     public Vector3 GetSpreadDirection(Vector3 baseDirection)
     {
-        // Randomly offset the direction within a cone defined by bulletSpreadAngle
-        float spreadX = Random.Range(-bulletSpreadAngle, bulletSpreadAngle);
-        float spreadY = Random.Range(-bulletSpreadAngle, bulletSpreadAngle);
-        Quaternion spreadRotation = Quaternion.Euler(spreadX, spreadY, 0);
-        return spreadRotation * baseDirection;
+        if (useSpread)
+        {
+            // Randomly offset the direction within a cone defined by bulletSpreadAngle
+            float spreadX = Random.Range(-bulletSpreadAngle, bulletSpreadAngle);
+            float spreadY = Random.Range(-bulletSpreadAngle, bulletSpreadAngle);
+            Quaternion spreadRotation = Quaternion.Euler(spreadX, spreadY, 0);
+            return spreadRotation * baseDirection;
+        }
+        else
+        {
+            return baseDirection;
+        }
+    
     }
     public virtual void StartReload()
     {
@@ -186,5 +202,16 @@ public abstract class Weapon : MonoBehaviour
         isReloading = false;
         if (player.pUI != null)
             player.pUI.AmmoDisplay(this);
+    }
+    protected virtual void PlaySFX(AudioClip soundFX, bool loop)
+    {
+        if (soundFX == null)
+            return;
+        player.pController.audioSource.volume = fireSoundVolume;
+        // Set if looping or not
+        player.pController.audioSource.loop = loop;
+        // Play the firing sound on the player audio source
+        player.pController.audioSource.PlayOneShot(soundFX);
+
     }
 }
