@@ -23,11 +23,14 @@ public class CorruptionHandler : MonoBehaviour
         {
             corruptionLevel += pMan.currentWeapon.corruptionRate * Time.deltaTime;
             pMan.pUI.DisplayCorruption(corruptionLevel);
+            pMan.pUI.DisplayCorruptedVision(corruptionLevel);
+            Debug.Log("Corruption is at: " + corruptionLevel);
         }
         else if (corruptionLevel > 0)
         {
             corruptionLevel -= Time.deltaTime * purifyRate;
             pMan.pUI.DisplayCorruption(corruptionLevel);
+            pMan.pUI.DisplayCorruptedVision(corruptionLevel);
         }
     }
     public void SetManager(PlayerManager player)
@@ -38,6 +41,7 @@ public class CorruptionHandler : MonoBehaviour
     {
         corruptionLevel = 0;
         pMan.pUI.DisplayCorruption(corruptionLevel);
+        pMan.pUI.DisplayCorruptedVision(corruptionLevel);
         // add a delay to coruppted robot spawning
         Invoke(nameof(SpawnCorruptedRobot), 1);
         // player loses life and respawns

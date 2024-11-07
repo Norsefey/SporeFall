@@ -16,10 +16,16 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TMP_Text ammoIndicator;
     [SerializeField] private GameObject promptHolder;
     [SerializeField] private TMP_Text textPrompt;
-    [SerializeField] private Slider corruptionBar;
     [SerializeField] private Slider HPBar;
     public GameObject life1;
     public GameObject life2;
+    [Header("Corruption UI")]
+    [SerializeField] private Slider corruptionBar;
+    [SerializeField] private GameObject corruptedVisionHolder;
+    [SerializeField] private Image corruptedVisionImage;
+    [SerializeField] private Sprite corruptionSpread1;
+    [SerializeField] private Sprite corruptionSpread2;
+    [SerializeField] private Sprite corruptionSpread3;
     [Header("Upgrade Menu")]
     [SerializeField] private GameObject upgradeMenu;
     [Header("Build/Structures UI")]
@@ -33,11 +39,13 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Sprite shermanSprite;
     [SerializeField] private Sprite repairTowerSprite;
     //[SerializeField] private Sprite lilySprite;
+    
 
     private void Start()
     {
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
         HPBar.maxValue = pMan.pHealth.maxHP;
+        corruptedVisionHolder.SetActive(false);
     }
     public void DisplayCorruption(float value)
     {
@@ -45,6 +53,31 @@ public class PlayerUI : MonoBehaviour
         {
             corruptionBar.value = value;
         }
+    }
+
+    public void DisplayCorruptedVision(float value)
+    {
+        if (value < 30)
+        {
+            corruptedVisionHolder.SetActive(false);
+        }
+
+        if (value >= 30 && value < 60)
+        {
+            corruptedVisionHolder.SetActive(true);
+            corruptedVisionImage.sprite = corruptionSpread1;
+        }
+
+        if (value >= 60 && value < 85)
+        {
+            corruptedVisionImage.sprite = corruptionSpread2;
+        }
+
+        if (value >= 85)
+        {
+            corruptedVisionImage.sprite = corruptionSpread3;
+        }
+
     }
     public void AmmoDisplay(Weapon currentWeapon)
     {
