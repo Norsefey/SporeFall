@@ -9,7 +9,7 @@ public class PlayerHP : Damageable
     // Start is called before the first frame update
     private void Start()
     {
-        currentHP = maxHP;
+        currentHP = maxHP / 2;
         UpdateUI();
     }
     public void DepleteLife()
@@ -48,9 +48,9 @@ public class PlayerHP : Damageable
     {
         pMan.pUI.UpdateHPDisplay(currentHP);
     }
-    public void Heal(float amount)
+/*    public void Heal(float amount)
     {
         currentHP = Mathf.Min(currentHP + amount, maxHP);
         Debug.Log("Player healed. Current Health: " + currentHP);
-    }
+    }*/
 }

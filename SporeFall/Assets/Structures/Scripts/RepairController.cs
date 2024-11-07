@@ -19,7 +19,7 @@ public class RepairController : MonoBehaviour
             PlayerHP currentHP = other.GetComponent<PlayerHP>();
             if (currentHP != null && Time.time >= HealTime)
             {
-                currentHP.Heal(HealAmount);
+                currentHP.RestoreHP(HealAmount);
                 HealTime = Time.time + HealRate;
             }
         }

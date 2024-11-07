@@ -278,7 +278,8 @@ public class BuildGun : Weapon
     private void SetStructureToTransparent(GameObject obj)
     {
         // Set the object material to transparent for preview
-        Renderer[] visuals = obj.GetComponentsInChildren<Renderer>();
+        GameObject visual = selectedStructure.CurrentVisual();
+        Renderer[] visuals = visual.GetComponentsInChildren<Renderer>();
         if (visuals != null)
         {
             foreach (Renderer renderer in visuals)
@@ -307,7 +308,8 @@ public class BuildGun : Weapon
     private void SetStructureToOpaque(GameObject obj)
     {
         // Set the object material to opaque for final placement
-        Renderer[] visuals = obj.GetComponentsInChildren<Renderer>();
+        GameObject visual = selectedStructure.CurrentVisual();
+        Renderer[] visuals = visual.GetComponentsInChildren<Renderer>();
         if (visuals != null)
         {
             foreach (Renderer renderer in visuals)

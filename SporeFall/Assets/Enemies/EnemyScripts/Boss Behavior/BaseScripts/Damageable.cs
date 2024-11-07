@@ -21,17 +21,11 @@ public abstract class Damageable : MonoBehaviour
     }
     public void RestoreHP(float value)
     {
-        currentHP += value;
+        currentHP = Mathf.Min(currentHP + value, maxHP);
 
         if(currentHP > maxHP)
             currentHP = maxHP;
 
         UpdateUI();
     }
-    public void Heal(float amount)
-    {
-        currentHP = Mathf.Min(currentHP + amount, maxHP);
-        Debug.Log("Player healed. Current Health: " + currentHP);
-    }
-
 }
