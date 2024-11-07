@@ -68,7 +68,9 @@ public class BurstGun : Weapon
         // Play the firing sound
         if (fireSound != null)
         {
-            // Create a temporary GameObject to play the sound
+            player.pController.audioSource.PlayOneShot(fireSound);
+
+           /* // Create a temporary GameObject to play the sound
             GameObject audioPlayer = new GameObject("BurstGunFireSound");
             AudioSource audioSource = audioPlayer.AddComponent<AudioSource>();
             audioSource.clip = fireSound;
@@ -76,7 +78,7 @@ public class BurstGun : Weapon
             audioSource.Play();
 
             // Destroy the audio player object after the sound finishes
-            Destroy(audioPlayer, fireSound.length);
+            Destroy(audioPlayer, fireSound.length);*/
         }
         bulletCount--; // Decrease the bullet count
 

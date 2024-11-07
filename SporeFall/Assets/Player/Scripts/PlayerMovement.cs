@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Audio Settings")]
     public AudioClip footstepSound; // Footstep sound clip
     [Range(0f, 1f)] public float footstepVolume = 0.5f; // Volume of footstep sound
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
     private void Start()
     {
