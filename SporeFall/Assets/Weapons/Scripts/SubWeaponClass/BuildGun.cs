@@ -16,6 +16,20 @@ public class BuildGun : Weapon
     public bool isEditing = false;
     private bool movingStructure = false;
 
+    [Header("Placement Validation")]
+    public LayerMask structureOverlapMask; // Layer mask for checking structure overlaps
+    public Color validPlacementColor = new Color(0, 1, 0, 0.25f); // Green tint for valid placement
+    public Color invalidPlacementColor = new Color(1, 0, 0, 0.25f); // Red tint for invalid placement
+    private bool isValidPlacement = true;
+
+    // Store original colors
+    private class MaterialData
+    {
+        public Material Material;
+        public Color OriginalColor;
+    }
+    private MaterialData[] originalMaterials;
+
     public void Start()
     {
         player.pUI.SwitchStructureIcon();
@@ -43,55 +57,160 @@ public class BuildGun : Weapon
     {
         Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
-        // Check if we hit the ground layer
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, groundLayer))
         {
-            // Create or move the preview object to the hit point on the ground
             if (!isEditing && selectedStructure == null)
             {
-                //Debug.Log("Creating New Structure");
                 selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
-                SetStructureToTransparent(selectedStructure.CurrentVisual()); // Make the object transparent to show it's a preview
+                StoreOriginalColors(selectedStructure.CurrentVisual());
+                SetStructureToTransparent(selectedStructure.CurrentVisual());
             }
-            else if(selectedStructure != null)
+            else if (selectedStructure != null)
             {
-                selectedStructure.transform.position = hit.point; // Update position of preview
+                selectedStructure.transform.position = hit.point;
                 RotateStructure();
+
+                CheckStructureOverlap();
+
                 if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
                 {
-
-                    //Debug.Log("Only Rotating Gun");
                     transform.forward = player.pCamera.myCamera.transform.forward;
                 }
                 else
                 {
-                    //Debug.Log("Rotating Character");
                     player.pController.RotateOnFire(this.transform, player.pCamera.myCamera.transform.forward);
                 }
             }
         }
     }
+
+    private void StoreOriginalColors(GameObject obj)
+    {
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+        originalMaterials = new MaterialData[0];
+
+        foreach (Renderer renderer in renderers)
+        {
+            MaterialData[] newData = new MaterialData[originalMaterials.Length + renderer.materials.Length];
+            originalMaterials.CopyTo(newData, 0);
+
+            for (int i = 0; i < renderer.materials.Length; i++)
+            {
+                newData[originalMaterials.Length + i] = new MaterialData
+                {
+                    Material = renderer.materials[i],
+                    OriginalColor = renderer.materials[i].color
+                };
+            }
+
+            originalMaterials = newData;
+        }
+    }
+
+    private void RestoreOriginalColors()
+    {
+        if (originalMaterials != null)
+        {
+            foreach (var materialData in originalMaterials)
+            {
+                if (materialData.Material != null)
+                {
+                    materialData.Material.color = materialData.OriginalColor;
+                }
+            }
+        }
+    }
+
+    private void CheckStructureOverlap()
+    {
+        if (selectedStructure == null) return;
+
+        Collider[] structureColliders = selectedStructure.GetComponentsInChildren<Collider>();
+        bool hasOverlap = false;
+
+        foreach (Collider structureCollider in structureColliders)
+        {
+            bool wasIsTrigger = structureCollider.isTrigger;
+            structureCollider.isTrigger = true;
+
+            Bounds bounds = structureCollider.bounds;
+
+            Collider[] overlaps = Physics.OverlapBox(
+                bounds.center,
+                bounds.extents,
+                selectedStructure.transform.rotation,
+                structureOverlapMask
+            );
+
+            structureCollider.isTrigger = wasIsTrigger;
+
+            foreach (Collider overlap in overlaps)
+            {
+                if (!overlap.transform.IsChildOf(selectedStructure.transform))
+                {
+                    hasOverlap = true;
+                    break;
+                }
+            }
+
+            if (hasOverlap) break;
+        }
+
+        isValidPlacement = !hasOverlap;
+        UpdatePreviewColor(isValidPlacement);
+    }
+
+    private void UpdatePreviewColor(bool isValid)
+    {
+        GameObject visual = selectedStructure.CurrentVisual();
+        Renderer[] visuals = visual.GetComponentsInChildren<Renderer>();
+
+        Color previewColor = isValid ? validPlacementColor : invalidPlacementColor;
+
+        foreach (Renderer renderer in visuals)
+        {
+            foreach (var material in renderer.materials)
+            {
+                Color color = material.color;
+                color.r = previewColor.r;
+                color.g = previewColor.g;
+                color.b = previewColor.b;
+                color.a = previewColor.a;
+                material.color = color;
+            }
+        }
+    }
+
     public void PlaceStructure()
     {
-        // mostly for testing check if we have a train assigned
+        if (!isValidPlacement)
+        {
+            player.pUI.EnablePrompt("<color=red>Invalid Placement - Structures Overlapping</color>");
+            return;
+        }
+
         if (player.train != null)
         {
             if (selectedStructure != null && player.train.CheckEnergy(selectedStructure.GetEnergyCost()) && selectedStructure.GetMyceliaCost() <= player.mycelia)
             {
                 player.mycelia -= selectedStructure.GetMyceliaCost();
                 selectedStructure.PurchaseStructure();
-                SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
+                SetStructureToOpaque(selectedStructure.gameObject);
+                RestoreOriginalColors(); // Restore original colors when placing
 
                 player.train.AddStructure(selectedStructure);
-                selectedStructure = null; // Clear the selected object
+                selectedStructure = null;
+                originalMaterials = null; // Clear stored colors
 
                 player.pUI.EnablePrompt("<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview");
-            }else
+            }
+            else
             {
-                if(selectedStructure.GetMyceliaCost() > player.mycelia)
+                if (selectedStructure.GetMyceliaCost() > player.mycelia)
                 {
                     player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
-                }else if (!player.train.CheckEnergy(selectedStructure.GetEnergyCost()))
+                }
+                else if (!player.train.CheckEnergy(selectedStructure.GetEnergyCost()))
                 {
                     player.pUI.EnablePrompt("<color=red>Too many Active Structures</color>");
                 }
@@ -103,13 +222,25 @@ public class BuildGun : Weapon
             {
                 player.mycelia -= selectedStructure.GetMyceliaCost();
                 selectedStructure.PurchaseStructure();
-                SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
+                SetStructureToOpaque(selectedStructure.gameObject);
+                RestoreOriginalColors(); // Restore original colors when placing
 
-                selectedStructure = null; // Clear the selected object
+                selectedStructure = null;
+                originalMaterials = null; // Clear stored colors
 
                 player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
-
             }
+        }
+    }
+
+    // Update DestroyPreview to clean up stored colors
+    public void DestroyPreview()
+    {
+        if (selectedStructure != null)
+        {
+            Destroy(selectedStructure.gameObject);
+            selectedStructure = null;
+            originalMaterials = null; // Clear stored colors
         }
     }
     public void CycleSelectedStructure(float indexIncrement)
@@ -290,14 +421,6 @@ public class BuildGun : Weapon
             }
             Debug.Log("Structure Deleted");
             player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
-        }
-    }
-    public void DestroyPreview()
-    {
-        if (selectedStructure != null)
-        {
-            Destroy(selectedStructure.gameObject); // Destroy the selected object
-            selectedStructure = null; // Clear the selection
         }
     }
 }

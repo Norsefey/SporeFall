@@ -146,6 +146,7 @@ public class TrainHandler : MonoBehaviour
             player.TogglePCorruption(false);
             player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
         }
+        listener.enabled = true;
     }
     private void DisembarkTrain()
     {
@@ -158,6 +159,7 @@ public class TrainHandler : MonoBehaviour
             player.TogglePCamera(true);
             player.TogglePCorruption(true);
         }
+        listener.enabled = false;
     }
     public void AddPlayer(PlayerManager player)
     {
@@ -177,8 +179,6 @@ public class TrainHandler : MonoBehaviour
             Invoke(nameof(DisembarkTrain), .5f);
             Debug.Log("Not Moving Disembarking");
         }
-        listener.enabled = false;
-
     }
     public void RemovePlayer(PlayerManager player)
     {
