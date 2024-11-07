@@ -82,7 +82,6 @@ public class BurstGun : Weapon
 
         // Wait for the player to release the fire button
         yield return new WaitUntil(() => !triggerHeld);
-
         yield return new WaitForSeconds(betweenShotInterval);
     }
 

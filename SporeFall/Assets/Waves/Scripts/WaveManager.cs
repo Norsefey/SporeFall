@@ -82,6 +82,19 @@ public class WaveManager : MonoBehaviour
                 break;
         }
     }
+    #region Wave State Transitions
+    public void OnStartWave()
+    {
+        if (currentWave.isFinalWave)
+        {
+            StartFinalWave();
+            StartCoroutine(StartWave());
+        }
+        else
+        {
+            StartCoroutine(StartWave());
+        }
+    }
     private IEnumerator StartWave()
     {
         wavePhase = WavePhase.Started;
@@ -120,108 +133,24 @@ public class WaveManager : MonoBehaviour
         
         Invoke(nameof(SpawnBoss), 2f);
     }
-    private void Spawner()
-    {
-        // Find an enemy type that hasn't reached its spawn limit
-        var availableEnemies = currentWave.enemySpawnData
-            .Where(data => data.SpawnedCount < data.totalToSpawn)
-            .ToList();
-        // if none found done spawning
-        if (!availableEnemies.Any())
-            return;
-         // Randomly select from available enemies
-    int enemyIndex = Random.Range(0, availableEnemies.Count);
-    var selectedEnemy = availableEnemies[enemyIndex];
-
-    Transform[] spawnPoints = currentWave.spawnLocations;
-    int spawnPointIndex = Random.Range(0, spawnPoints.Length);
-    Transform spawnPoint = spawnPoints[spawnPointIndex];
-
-        if (selectedEnemy.spawnAsGroup)
-        {
-            // Spawn as a group
-            for (int i = 0; i < selectedEnemy.groupSize; i++)
-            {
-                if (selectedEnemy.SpawnedCount < selectedEnemy.totalToSpawn)
-                {
-                    SpawnEnemy(selectedEnemy.enemyPrefab, spawnPoint);
-                    selectedEnemy.SpawnedCount++;
-                }
-            }
-        }
-        else
-        {
-            // Spawn single enemy
-            SpawnEnemy(selectedEnemy.enemyPrefab, spawnPoint);
-            selectedEnemy.SpawnedCount++;
-        }
-    }
-    // Helper method to spawn a single enemy
-    private void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint)
-    {
-        BaseEnemy enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation)
-            .GetComponent<BaseEnemy>();
-        enemy.transform.SetParent(transform);
-        enemy.OnEnemyDeath += OnEnemyDeath;
-        enemy.AssignDefaultTarget(train, train.transform);
-
-        enemiesAlive++;
-        enemiesSpawned++;
-    }
-    private void SpawnBoss()
-    {
-        Debug.Log("Add Functionality");
-        Transform spawnPoint = currentWave.spawnLocations[0];
-        BaseEnemy boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<BaseEnemy>();
-        
-        boss.transform.SetParent(transform);
-       
-        if (bossText != null)
-            bossText.text = "<color=red>Boss Has Spawned</color>";
-        // once we start the Boss script add an OnEnemyDeath Event
-        boss.OnEnemyDeath += OnBossDeath;
-        boss.AssignDefaultTarget(train, train.Payload.transform);
-
-        enemiesAlive++;
-        enemiesSpawned++;
-    }
     private void WaveCleared()
     {
-        Debug.Log("Wave Cleared!");
+        if (waveUI != null)
+            waveUI.gameObject.SetActive(true);
+       
         deadEnemies = 0;
         timer = departTime;
         wavePhase = WavePhase.Departing;
         Invoke(nameof(Depart), departTime);
     }
-    private void OnEnemyDeath()
-    {
-        enemiesAlive--;
-        deadEnemies++;
-        if (currentWave.isFinalWave == false)
-        {
-            wUI.DisplayWaveProgress(deadEnemies);
-        }
-        
-        if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
-        {
-           WaveCleared();
-        }
-    }
-    private void OnBossDeath()
-    {
-        enemiesAlive--;
-        // speed up payload
-        train.Payload.IncreaseSpeed();
-        if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
-        {
-            Debug.Log("Boss defeated!");
-            WaveCleared();
-        }
-    }
     private void Depart()
     {
+        if(waveUI != null)
+            waveUI.gameObject.SetActive(false);
+
         StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
     }
+    #endregion
     public IEnumerator DestroyShroomPod(float waitTime)
     {
         yield return new WaitForSeconds(waitTime - 1);
@@ -234,18 +163,6 @@ public class WaveManager : MonoBehaviour
         CancelInvoke(nameof(Depart));
         //player.RemoveButtonAction();
         Depart();
-    }
-    public void OnStartWave()
-    {
-        if (currentWave.isFinalWave)
-        {
-            StartFinalWave();
-            StartCoroutine(StartWave());
-        }
-        else
-        {
-            StartCoroutine(StartWave());
-        }
     }
     private IEnumerator MoveToWaveLocation(float waitTime)
     {
@@ -291,4 +208,96 @@ public class WaveManager : MonoBehaviour
     {
         Instantiate(explosionPrefab, pos, Quaternion.identity);
     }
+    #region Enemy Spawning
+    private void Spawner()
+    {
+        // Find an enemy type that hasn't reached its spawn limit
+        var availableEnemies = currentWave.enemySpawnData
+            .Where(data => data.SpawnedCount < data.totalToSpawn)
+            .ToList();
+        // if none found done spawning
+        if (!availableEnemies.Any())
+            return;
+        // Randomly select from available enemies
+        int enemyIndex = Random.Range(0, availableEnemies.Count);
+        var selectedEnemy = availableEnemies[enemyIndex];
+
+        Transform[] spawnPoints = currentWave.spawnLocations;
+        int spawnPointIndex = Random.Range(0, spawnPoints.Length);
+        Transform spawnPoint = spawnPoints[spawnPointIndex];
+
+        if (selectedEnemy.spawnAsGroup)
+        {
+            // Spawn as a group
+            for (int i = 0; i < selectedEnemy.groupSize; i++)
+            {
+                if (selectedEnemy.SpawnedCount < selectedEnemy.totalToSpawn)
+                {
+                    SpawnEnemy(selectedEnemy.enemyPrefab, spawnPoint);
+                    selectedEnemy.SpawnedCount++;
+                }
+            }
+        }
+        else
+        {
+            // Spawn single enemy
+            SpawnEnemy(selectedEnemy.enemyPrefab, spawnPoint);
+            selectedEnemy.SpawnedCount++;
+        }
+    }
+    // Helper method to spawn a single enemy
+    private void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint)
+    {
+        BaseEnemy enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation)
+            .GetComponent<BaseEnemy>();
+        enemy.transform.SetParent(transform);
+        enemy.OnEnemyDeath += OnEnemyDeath;
+        enemy.AssignDefaultTarget(train, train.transform);
+
+        enemiesAlive++;
+        enemiesSpawned++;
+    }
+    private void SpawnBoss()
+    {
+        Debug.Log("Add Functionality");
+        Transform spawnPoint = currentWave.spawnLocations[0];
+        BaseEnemy boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<BaseEnemy>();
+
+        boss.transform.SetParent(transform);
+
+        if (bossText != null)
+            bossText.text = "<color=red>Boss Has Spawned</color>";
+        // once we start the Boss script add an OnEnemyDeath Event
+        boss.OnEnemyDeath += OnBossDeath;
+        boss.AssignDefaultTarget(train, train.Payload.transform);
+
+        enemiesAlive++;
+        enemiesSpawned++;
+    }
+    private void OnEnemyDeath()
+    {
+        enemiesAlive--;
+        deadEnemies++;
+        if (currentWave.isFinalWave == false)
+        {
+            wUI.DisplayWaveProgress(deadEnemies);
+        }
+
+        if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
+        {
+            WaveCleared();
+        }
+    }
+    private void OnBossDeath()
+    {
+        enemiesAlive--;
+        // speed up payload
+        train.Payload.IncreaseSpeed();
+        if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
+        {
+            Debug.Log("Boss defeated!");
+            WaveCleared();
+        }
+    }
+    #endregion
 }

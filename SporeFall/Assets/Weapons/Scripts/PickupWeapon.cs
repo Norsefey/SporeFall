@@ -51,6 +51,7 @@ public class PickUpWeapon : Interactables
 
         // Delay the destruction of the GameObject to allow the sound to finish
         Invoke("DestroyIntractable", pickupSound.length);
+        Debug.Log("Picked up: " + weapon.name);
     }
 
 

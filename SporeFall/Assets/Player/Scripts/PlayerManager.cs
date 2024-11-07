@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerAnimation pAnime;
     public CorruptionHandler pCorruption;
     public TrainHandler train;
-    private Interactables interactable;
+    public Interactables interactable;
     [Header("Weapons")]
     // Weapons and Shooting
     public Transform weaponHolder; // Where the weapon is equipped
@@ -160,7 +160,6 @@ public class PlayerManager : MonoBehaviour
         else
             pAnime.ToggleTwoHanded(false);
 
-        Debug.Log("Picked up: " + currentWeapon.weaponName);
         // if weapon is corrupted start corruption increase
         if (currentWeapon.isCorrupted)
             holdingCorruption = true;
@@ -304,20 +303,6 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("No Life No Game");
         SceneTransitioner.Instance.LoadLoseScene();
-    }
-    public void AssignInteractable(string promptText, Interactables interactable)
-    {
-        pUI.EnablePrompt(promptText);
-        pInput.AssignInteraction(interactable);
-
-        this.interactable = interactable;
-    }
-    public void RemoveInteractable()
-    {
-        pUI.DisablePrompt();
-        pInput.RemoveInteraction(interactable);
-
-        this.interactable = null;
     }
     public int GetPlayerIndex()
     {

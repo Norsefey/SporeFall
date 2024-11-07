@@ -159,11 +159,18 @@ public class PlayerInputOrganizer : MonoBehaviour
     // interaction button will be the same button but do different things
     public void AssignInteraction(Interactables interaction)
     {
+        if(pMan.interactable != null)
+        {
+            interactAction.performed -= pMan.interactable.Interact;
+        }
+
         interactAction.performed += interaction.Interact;
+        pMan.interactable = interaction;
     }
     public void RemoveInteraction(Interactables interaction)
     {
         interactAction.performed -= interaction.Interact;
+        pMan.interactable = null;
     }
     private void OnDropWeapon(InputAction.CallbackContext context)
     {

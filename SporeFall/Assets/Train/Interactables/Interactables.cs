@@ -27,9 +27,13 @@ public abstract class Interactables : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            player.pInput.RemoveInteraction(this);
-            RemoveAction();
-            //player = null;
+            RemoveIntractable();
         }
+    }
+
+    public void RemoveIntractable()
+    {
+        player.pInput.RemoveInteraction(this);
+        RemoveAction();
     }
 }

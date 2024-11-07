@@ -21,6 +21,9 @@ public class BuildGun : Weapon
     public Color validPlacementColor = new Color(0, 1, 0, 0.25f); // Green tint for valid placement
     public Color invalidPlacementColor = new Color(1, 0, 0, 0.25f); // Red tint for invalid placement
     private bool isValidPlacement = true;
+    private Vector3 originalPosition; // Store original position for edit mode
+    private Quaternion originalRotation; // Store original rotation for edit mode
+
 
     // Store original colors
     private class MaterialData
@@ -45,12 +48,27 @@ public class BuildGun : Weapon
     {
         if (!isEditing)
         {
-            // Called when player releases the fire button
-            Destroy(selectedStructure.gameObject); // Destroy the current preview
+            Destroy(selectedStructure.gameObject);
         }
-        else
+        else if (movingStructure)
         {
             movingStructure = false;
+
+            // If placement is invalid, return to original position
+            if (!isValidPlacement)
+            {
+                selectedStructure.transform.position = originalPosition;
+                selectedStructure.transform.rotation = originalRotation;
+                isValidPlacement = true;
+                UpdatePreviewColor(true);
+                player.pUI.EnablePrompt("<color=red>Invalid Placement</color> - Returned to original position");
+            }
+            else
+            {
+                // If placement is valid, restore original colors
+                RestoreOriginalColors();
+                SetStructureToOpaque(selectedStructure.gameObject);
+            }
         }
     }
     private void PreviewStructure()
@@ -70,7 +88,11 @@ public class BuildGun : Weapon
                 selectedStructure.transform.position = hit.point;
                 RotateStructure();
 
-                CheckStructureOverlap();
+                // Only check for overlaps if we're in edit mode and moving, or in build mode
+                if (isEditing && movingStructure || !isEditing)
+                {
+                    CheckStructureOverlap();
+                }
 
                 if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
                 {
@@ -83,7 +105,6 @@ public class BuildGun : Weapon
             }
         }
     }
-
     private void StoreOriginalColors(GameObject obj)
     {
         Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
@@ -106,7 +127,6 @@ public class BuildGun : Weapon
             originalMaterials = newData;
         }
     }
-
     private void RestoreOriginalColors()
     {
         if (originalMaterials != null)
@@ -120,7 +140,6 @@ public class BuildGun : Weapon
             }
         }
     }
-
     private void CheckStructureOverlap()
     {
         if (selectedStructure == null) return;
@@ -146,6 +165,7 @@ public class BuildGun : Weapon
 
             foreach (Collider overlap in overlaps)
             {
+                // Ignore collisions with the structure itself
                 if (!overlap.transform.IsChildOf(selectedStructure.transform))
                 {
                     hasOverlap = true;
@@ -159,7 +179,6 @@ public class BuildGun : Weapon
         isValidPlacement = !hasOverlap;
         UpdatePreviewColor(isValidPlacement);
     }
-
     private void UpdatePreviewColor(bool isValid)
     {
         GameObject visual = selectedStructure.CurrentVisual();
@@ -180,7 +199,6 @@ public class BuildGun : Weapon
             }
         }
     }
-
     public void PlaceStructure()
     {
         if (!isValidPlacement)
@@ -232,7 +250,6 @@ public class BuildGun : Weapon
             }
         }
     }
-
     // Update DestroyPreview to clean up stored colors
     public void DestroyPreview()
     {
@@ -331,34 +348,42 @@ public class BuildGun : Weapon
     }
     public void ExitEditMode()
     {
-        if(selectedStructure != null)
+        if (selectedStructure != null)
         {
-            SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
-            selectedStructure.ToggleStructureController(true);// Enable Behavior
+            SetStructureToOpaque(selectedStructure.gameObject);
+            RestoreOriginalColors();
+            selectedStructure.ToggleStructureController(true);
         }
         selectedStructure = null;
+        originalMaterials = null;
         player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
         isEditing = false;
     }
     public bool SelectStructure()
     {
-        // Use raycast to detect if the player is looking at a placed object to select it for moving or destroying
         Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer) && !movingStructure)
         {
-            if(selectedStructure == null)
+            if (selectedStructure == null)
             {
-                selectedStructure = hit.collider.transform.parent.GetComponent<Structure>(); // Select the hit object
+                selectedStructure = hit.collider.transform.parent.GetComponent<Structure>();
+                StoreOriginalColors(selectedStructure.CurrentVisual());
                 SetStructureToTransparent(selectedStructure.gameObject);
+                // Store original position and rotation
+                originalPosition = selectedStructure.transform.position;
+                originalRotation = selectedStructure.transform.rotation;
                 Debug.Log("Structure selected: " + selectedStructure.name);
                 player.pUI.EnablePrompt(selectedStructure.name);
                 selectedStructure.ToggleStructureController(false);
+
+                UpdatePreviewColor(true);
             }
             return true;
         }
-        else if(selectedStructure != null)
+        else if (selectedStructure != null)
         {
+            RestoreOriginalColors();
             DeselectStructure();
             return false;
         }
@@ -367,13 +392,15 @@ public class BuildGun : Weapon
             return false;
         }
     }
-    protected void DeselectStructure()
+    private void DeselectStructure()
     {
         if (selectedStructure != null && !movingStructure)
         {
-            SetStructureToOpaque(selectedStructure.gameObject); // Make the object opaque
-            selectedStructure.ToggleStructureController(true);// Enable Behavior
+            SetStructureToOpaque(selectedStructure.gameObject);
+            RestoreOriginalColors();
+            selectedStructure.ToggleStructureController(true);
             selectedStructure = null;
+            originalMaterials = null;
             player.pUI.EnablePrompt("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
         }
     }
