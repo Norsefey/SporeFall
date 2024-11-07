@@ -437,9 +437,6 @@ public class PlayerInputOrganizer : MonoBehaviour
         if (pMan.currentWeapon is BuildGun buildGun)
         {
             buildGun.DestroyStructure();
-
-            editInputMap.Disable();
-            buildInputMap.Enable();
         }
     }
     private void OnEditRotateStarted(InputAction.CallbackContext context)

@@ -23,7 +23,8 @@ public class TrainUI : MonoBehaviour
     public void UpdateHPDisplay(float value)
     {
         HPBar.value = value;
-        HPText.text = "Train HP: " + ((value / trainHP.maxHP) * 100) + "%";
+        float hpPercantage = ((value / trainHP.maxHP) * 100);
+        HPText.text = "Train HP: " + hpPercantage.ToString("F0") + "%";
         Debug.Log("Updating train HP bar");
     }
 }

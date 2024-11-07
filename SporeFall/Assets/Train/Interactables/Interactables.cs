@@ -29,7 +29,7 @@ public abstract class Interactables : MonoBehaviour
         {
             player.pInput.RemoveInteraction(this);
             RemoveAction();
-            player = null;
+            //player = null;
         }
     }
 }

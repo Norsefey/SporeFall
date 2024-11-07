@@ -95,7 +95,6 @@ public abstract class Weapon : MonoBehaviour
                 BounceDamageMultiplier = bounceDamageMultiplier
             };
             projectileComp.Initialize(data);
-            Debug.Log(weaponName + " fired a projectile.");
         }
     }
     protected void FireHitscan(Camera playerCamera)

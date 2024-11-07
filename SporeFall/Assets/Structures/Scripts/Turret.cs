@@ -90,8 +90,6 @@ public class Turret : MonoBehaviour
         {
             if (hit.transform == nearestEnemy)
             {
-                Debug.Log("Firing");
-
                 if (fireCooldown <= 0f)
                 {
                     Fire();

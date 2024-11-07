@@ -8,17 +8,17 @@ public class WinLoseMenus : MonoBehaviour
 {
     //Script that controls win and lose scenes
 
-    [SerializeField] string level1Name;
-
+    //[SerializeField] string level1Name;
+    [SerializeField] int gameSceneIndex;
 
     public void RetryLevel()
     {
-        SceneManager.LoadScene(level1Name);
+        SceneManager.LoadScene(gameSceneIndex);
     }
 
     public void QuitToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(0);
     }
 
     public void QuitGame()

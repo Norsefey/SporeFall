@@ -42,7 +42,7 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected float chasePriorityDistance = 25f; // Distance above which chase becomes high priority
     [SerializeField] protected float damagePriorityThreshold = 20f; // Amount of damage that triggers defensive priorities
     [SerializeField] protected float damageTrackingDuration = 3f; // How long to track damage for
-
+    private bool targetingStructure = false;
     public Queue<DamageInstance> recentDamage = new Queue<DamageInstance>();
     public struct DamageInstance
     {
@@ -306,9 +306,17 @@ public abstract class BaseEnemy : MonoBehaviour
             // agent stopping distance changes based on different behaviors
             agent.stoppingDistance = stoppingDistance;
             agent.isStopped = false;
-            Vector3 pos = currentTarget.GetComponent<Collider>().ClosestPoint(transform.position);
-            pos.y = transform.position.y;
-            agent.SetDestination(pos);
+            if (!targetingStructure)
+            {
+                Vector3 pos = currentTarget.GetComponent<Collider>().ClosestPoint(transform.position);
+                pos.y = transform.position.y;
+                agent.SetDestination(pos);
+            }
+            else
+            {
+                agent.SetDestination(currentTarget.position);
+            }
+           
         }
         else
         {
@@ -471,9 +479,11 @@ public abstract class BaseEnemy : MonoBehaviour
            .ThenBy(c => Vector3.Distance(transform.position, c.transform.position)) // If same tag, choose closest
            .Select(c => c.transform)
            .FirstOrDefault();
+        targetingStructure = true;
 
         if (currentTarget == null && train != null)
         {
+            targetingStructure = false;
             if (train.Payload != null)
                 currentTarget = train.Payload.transform;
             else

@@ -8,7 +8,7 @@ public class BurstGun : Weapon
     public int burstCount = 3; // Number of shots per burst
     private bool isFiringBurst = false; // Prevents firing another burst while one is ongoing
     private bool triggerHeld = false; // Tracks if the player is holding the fire input
-
+    [SerializeField] private float betweenShotInterval = 0.2f;
     [Header("Audio Settings")]
     public AudioClip fireSound; // Assign the burst firing sound in the Inspector
     [Range(0f, 1f)] public float fireSoundVolume = 0.5f; // Volume control for the burst firing sound
@@ -30,7 +30,8 @@ public class BurstGun : Weapon
             // Reload if the player tries firing with 0 magazine
             StartReload();
         }
-        else if (isFiringBurst || triggerHeld || bulletCount <= 0 || IsReloading)
+        
+        if (isFiringBurst || triggerHeld || bulletCount <= 0 || IsReloading)
         {
             return; // Only fire if we aren't in the middle of a burst and the player isn't holding the fire button
         }
@@ -78,13 +79,23 @@ public class BurstGun : Weapon
             Destroy(audioPlayer, fireSound.length);
         }
         bulletCount--; // Decrease the bullet count
+
         // Wait for the player to release the fire button
         yield return new WaitUntil(() => !triggerHeld);
+
+        yield return new WaitForSeconds(betweenShotInterval);
     }
 
     public void OnFireReleased()
     {
         // Called when the fire button is released
+        StartCoroutine(BetweenShotDelay());
+    }
+
+    private IEnumerator BetweenShotDelay()
+    {
+        // Add a delay between shots to avoid spamming
+        yield return new WaitForSeconds(betweenShotInterval);
         triggerHeld = false;
     }
 }
