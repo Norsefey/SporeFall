@@ -31,6 +31,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Sprite flamethrowerSprite;
     [SerializeField] private Sprite wallSprite;
     [SerializeField] private Sprite shermanSprite;
+    [SerializeField] private Sprite repairTowerSprite;
+    //[SerializeField] private Sprite lilySprite;
 
     private void Start()
     {
@@ -103,7 +105,7 @@ public class PlayerUI : MonoBehaviour
         if (bGun.currentBuildIndex == 0)
         {
             selectedStructureIcon.sprite = turretSprite;
-            leftStructureIcon.sprite = shermanSprite;
+            leftStructureIcon.sprite = repairTowerSprite;
             rightStructureIcon.sprite = flamethrowerSprite;
         }
 
@@ -125,6 +127,13 @@ public class PlayerUI : MonoBehaviour
         {
             selectedStructureIcon.sprite = shermanSprite;
             leftStructureIcon.sprite = wallSprite;
+            rightStructureIcon.sprite = repairTowerSprite;
+        }
+
+        if (bGun.currentBuildIndex == 4)
+        {
+            selectedStructureIcon.sprite = repairTowerSprite;
+            leftStructureIcon.sprite = shermanSprite;
             rightStructureIcon.sprite = turretSprite;
         }
     }
