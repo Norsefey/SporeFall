@@ -241,6 +241,9 @@ public class PlayerManager : MonoBehaviour
     }
     public void TogglePControl(bool toggle)
     {
+        if (isBuilding)
+            ToggleBuildMode();
+
         pController.gameObject.SetActive(toggle);
         if(toggle)
             pInput.EnableDefaultInputs();
