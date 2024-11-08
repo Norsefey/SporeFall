@@ -300,9 +300,12 @@ public class WaveManager : MonoBehaviour
     }
     private void SpawnBoss()
     {
+
+
         Debug.Log("Add Functionality");
         Transform spawnPoint = currentWave.spawnLocations[0];
-        BaseEnemy boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<BaseEnemy>();
+        BaseEnemy boss = bossPool.Get(spawnPoint.position, spawnPoint.rotation);
+        //BaseEnemy boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<BaseEnemy>();
 
         boss.transform.SetParent(transform);
 

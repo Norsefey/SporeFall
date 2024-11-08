@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyceliaPickup : MonoBehaviour
+public class MyceliaPickup : DropsPoolBehavior
 {
     public float myceliaAmount;
 
@@ -17,8 +17,15 @@ public class MyceliaPickup : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.transform.parent.GetComponent<PlayerManager>().mycelia += myceliaAmount;
-
-            Destroy(gameObject);
+            if (pool != null)
+            {
+                pool.Return(this);
+            }
+            else
+            {
+                Debug.Log("No Pool Destroying");
+                Destroy(gameObject);
+            }
         }
     }
 }

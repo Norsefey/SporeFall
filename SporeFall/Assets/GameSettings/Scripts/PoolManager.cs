@@ -8,15 +8,22 @@ public class PoolManager : MonoBehaviour
 
     public Dictionary<GameObject, ProjectilePool> projectilePool = new();
     public Dictionary<GameObject, VFXPool> vfxPool = new();
-    public Dictionary<GameObject, VFXPool> dropsPool = new();
+    public Dictionary<GameObject, DropsPool> dropsPool = new();
 
 
     [Header("Projectiles")]
     [SerializeField] private List<GameObject> projectiles;
     [Header("VFX")]
     [SerializeField] private List<GameObject> VisualEffects;
+    [Header("Drops")]
+    [SerializeField] private List<GameObject> Drops;
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
     }
     private void Start()
@@ -41,9 +48,14 @@ public class PoolManager : MonoBehaviour
 
             }
         }
-        /*GameObject dropsParent = new GameObject($"Pool_Drops");
-        dropsParent.transform.SetParent(transform);*/
-
+        GameObject dropsParent = new GameObject($"Pool_Drops");
+        dropsParent.transform.SetParent(transform);
+        foreach (var drop in Drops)
+        {
+            if (!dropsPool.ContainsKey(drop))
+            {
+                dropsPool.Add(drop, new DropsPool(drop, dropsParent.transform, 10));
+            }
+        }
     }
-
 }

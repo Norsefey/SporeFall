@@ -8,6 +8,7 @@ public class VFXPoolingBehavior : MonoBehaviour
 
     public void Initialize(VFXPool pool)
     {
+        Debug.Log(gameObject.name + ": Initialized");
         this.pool = pool;
     }
     public void OnParticleSystemStopped()

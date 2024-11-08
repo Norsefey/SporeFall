@@ -157,12 +157,14 @@ public class ProjectileBehavior : MonoBehaviour
 
         if (vfxPrefab != null)
         {// if you have a VFX assigned, play it on collision
+            // Get VFX from pool
             if (!PoolManager.Instance.vfxPool.TryGetValue(vfxPrefab, out VFXPool pool))
             {
                 Debug.LogError($"No pool found for enemy prefab: {vfxPrefab.name}");
                 return;
             }
             VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
+            vfx.Initialize(pool);
         }
         if (data.CanBounce && bounceCount < data.MaxBounces)
         {

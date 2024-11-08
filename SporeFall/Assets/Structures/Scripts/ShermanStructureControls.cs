@@ -45,7 +45,8 @@ public class ShermanStructureControls : MonoBehaviour
     // Coroutine to handle the delay before spawning
     public IEnumerator ResetAfterDelay()
     {
-        currentSherman.DeactivateSherman();
+        if(currentSherman != null)
+            currentSherman.DeactivateSherman();
         yield return new WaitForSeconds(respawnDelay); // Wait for the delay
         ResetSherman();
     }

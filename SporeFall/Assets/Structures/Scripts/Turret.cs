@@ -112,7 +112,6 @@ public class Turret : MonoBehaviour
             Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
             return;
         }
-
         // Get projectile from pool
         ProjectileBehavior projectile = pool.Get(
         firePoint.position,

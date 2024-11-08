@@ -29,14 +29,23 @@ public class MobEnemy : BaseEnemy
 
     private void SpawnDrop()
     {
-        var mycelia = Instantiate(myceliaDropPrefab, transform.position, Quaternion.identity).GetComponent<MyceliaPickup>();
+        // Get Drop from pool
+        if (!PoolManager.Instance.dropsPool.TryGetValue(myceliaDropPrefab, out DropsPool pool))
+        {
+            Debug.LogError($"No pool found for enemy prefab: {myceliaDropPrefab.name}");
+            return;
+        }
+        DropsPoolBehavior myceliaDrop = pool.Get(transform.position, transform.rotation);
+        myceliaDrop.Initialize(pool);
+
+        var mycelia = myceliaDrop.GetComponent<MyceliaPickup>();
         mycelia.Setup(myceliaDropAmount);
 
-        if (train != null)
+       /* if (train != null)
         {
             // so we can remove it if player doesn't pick it up, set as child of drops holder
             mycelia.transform.SetParent(train.dropsHolder, true);
-        }
+        }*/
 
         if (weaponDropPrefab.Length != 0)
         {
@@ -44,9 +53,18 @@ public class MobEnemy : BaseEnemy
             if (randomChance <= dropChance)
             {
                 int dropIndex = Random.Range(0, weaponDropPrefab.Length);
-                var weapon = Instantiate(weaponDropPrefab[dropIndex], transform.position, Quaternion.identity);
+                // Get Drop from pool
+                if (!PoolManager.Instance.dropsPool.TryGetValue(weaponDropPrefab[dropIndex], out DropsPool WeaponPool))
+                {
+                    Debug.LogError($"No pool found for enemy prefab: {weaponDropPrefab[dropIndex].name}");
+                    return;
+                }
+                DropsPoolBehavior weaponDrop = WeaponPool.Get(transform.position, transform.rotation);
+                weaponDrop.Initialize(pool);
+
+                //var weapon = Instantiate(weaponDropPrefab[dropIndex], transform.position, Quaternion.identity);
                 // so we can remove it if player doesn't pick it up, set as child of drops holder
-                weapon.transform.SetParent(train.dropsHolder, true);
+                //weapon.transform.SetParent(train.dropsHolder, true);
             }
         }
     }

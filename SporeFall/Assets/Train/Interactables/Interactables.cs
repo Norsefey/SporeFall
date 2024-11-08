@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class Interactables : MonoBehaviour
+public abstract class Interactables : DropsPoolBehavior
 {
     protected PlayerManager player;
     public abstract void Interact(InputAction.CallbackContext context);
@@ -12,7 +12,18 @@ public abstract class Interactables : MonoBehaviour
     public void DestroyIntractable()
     {
         player.pInput.RemoveInteraction(this);
-        Destroy(gameObject);
+        if (pool != null)
+        {
+            pool.Return(this);
+        }
+        else
+        {
+            Debug.Log("No Pool Destroying");
+            if(pool != null)
+                pool.Return(this);
+            else
+                Destroy(gameObject);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
