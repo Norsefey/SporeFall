@@ -32,10 +32,6 @@ public abstract class Weapon : MonoBehaviour
     public bool useSpread = true;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
     public float reloadTime = 2f; // Time it takes to reload
-    [Header("Pool Settings")]
-    [SerializeField] protected int initialPoolSize = 20;
-    protected ProjectilePool projectilePool;
-    protected GeneralItemsPool vfxPool;
     [Header("Ammo Variables")]
     public int bulletCount;
     public int bulletCapacity;
@@ -56,25 +52,6 @@ public abstract class Weapon : MonoBehaviour
     private bool isReloading;
     public bool IsReloading { get { return isReloading; } }
 
-    protected virtual void Awake()
-    {
-        // Initialize the projectile pool
-        if (bulletPrefab != null)
-        {// Create a parent object for the pool
-            GameObject poolParent = new GameObject($"Pool_{bulletPrefab.name}");
-            Debug.Log("Made Pool: " + weaponName);
-            poolParent.transform.SetParent(transform.root);
-
-            if (isHitScan)
-            {
-                vfxPool = new GeneralItemsPool(bulletPrefab, poolParent.transform, initialPoolSize);
-            }
-            else
-            {
-                projectilePool = new ProjectilePool(bulletPrefab, poolParent.transform, initialPoolSize);
-            }
-        }
-    }
 
     // Fire method to be implemented by subclasses
     public virtual void Fire()
@@ -107,8 +84,14 @@ public abstract class Weapon : MonoBehaviour
         {
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
+        
+        if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
+        {
+            Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+            return;
+        }
         // Get projectile from pool
-        ProjectileBehavior projectile = projectilePool.Get(
+        ProjectileBehavior projectile = pool.Get(
             firePoint.position,
             Quaternion.LookRotation(shootDirection));
 
@@ -126,7 +109,7 @@ public abstract class Weapon : MonoBehaviour
                 MaxBounces = maxBounces,
                 BounceDamageMultiplier = bounceDamageMultiplier
             };
-            projectile.Initialize(data, projectilePool);
+            projectile.Initialize(data, pool);
         }
     }
     protected void FireHitscan(Camera playerCamera)
@@ -144,8 +127,14 @@ public abstract class Weapon : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
-            // Get projectile from pool
-            GameObject bullet = vfxPool.Get(hit.point,Quaternion.LookRotation(shootDirection));
+            // Get VFX from pool
+            if (!PoolManager.Instance.vfxPool.TryGetValue(bulletPrefab, out VFXPool pool))
+            {
+                Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+                return;
+            }
+            VFXPoolingBehavior vfx = pool.Get(hit.point, transform.rotation);
+            vfx.Initialize(pool);
 
             // Apply damage to the hit object
             if (hit.collider.CompareTag("Enemy"))

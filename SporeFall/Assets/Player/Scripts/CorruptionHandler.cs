@@ -22,15 +22,17 @@ public class CorruptionHandler : MonoBehaviour
         if (pMan.holdingCorruption)
         {
             corruptionLevel += pMan.currentWeapon.corruptionRate * Time.deltaTime;
-            pMan.pUI.DisplayCorruption(corruptionLevel);
+ /*           pMan.pUI.DisplayCorruption(corruptionLevel);
             pMan.pUI.DisplayCorruptedVision(corruptionLevel);
-            Debug.Log("Corruption is at: " + corruptionLevel);
+            Debug.Log("Corruption is at: " + corruptionLevel);*/
         }
         else if (corruptionLevel > 0)
         {
             corruptionLevel -= Time.deltaTime * purifyRate;
             pMan.pUI.DisplayCorruption(corruptionLevel);
             pMan.pUI.DisplayCorruptedVision(corruptionLevel);
+
+            Debug.Log("Corruption is at: " + corruptionLevel);
         }
     }
     public void SetManager(PlayerManager player)

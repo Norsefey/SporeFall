@@ -88,8 +88,13 @@ public class ChargeGun : Weapon
             Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
+        if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
+        {
+            Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+            return;
+        }
         // Get projectile from pool
-        ProjectileBehavior projectile = projectilePool.Get(
+        ProjectileBehavior projectile = pool.Get(
             firePoint.position,
             Quaternion.LookRotation(shootDirection));
 
@@ -107,7 +112,7 @@ public class ChargeGun : Weapon
                 MaxBounces = maxBounces,
                 BounceDamageMultiplier = bounceDamageMultiplier
             };
-            projectile.Initialize(data, projectilePool);
+            projectile.Initialize(data, pool);
             Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier + " For " + damage * chargeMultiplier + " Damage");
         }
     }
@@ -127,7 +132,13 @@ public class ChargeGun : Weapon
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers))
         {
             Debug.Log(weaponName + " hit: " + hit.collider.name);
-            GameObject bullet = vfxPool.Get(hit.point, Quaternion.LookRotation(shootDirection));
+            if (!PoolManager.Instance.vfxPool.TryGetValue(bulletPrefab, out VFXPool pool))
+            {
+                Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+                return;
+            }
+            VFXPoolingBehavior vfx = pool.Get(hit.point, transform.rotation);
+            vfx.Initialize(pool);
 
             if (hit.collider.CompareTag("Enemy"))
             {

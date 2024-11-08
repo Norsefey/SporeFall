@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Turret : MonoBehaviour
 {
@@ -14,12 +15,11 @@ public class Turret : MonoBehaviour
 
     private Transform nearestEnemy;          // The nearest enemy detected
     private float fireCooldown = 0f;
-    [SerializeField] Transform papa;
+    [SerializeField] Transform turretGuns;
 
     [Header("Firing Sound")]
     public AudioClip firingSound;            // Assign the firing sound clip in the Inspector
     private AudioSource audioSource;         // To play the firing sound
-
     void Start()
     {
         // Initialize the AudioSource component
@@ -77,7 +77,7 @@ public class Turret : MonoBehaviour
         direction.y = 0;
 
         Quaternion lookRotation = Quaternion.LookRotation(direction);
-        papa.rotation = Quaternion.Slerp(papa.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+        turretGuns.rotation = Quaternion.Slerp(turretGuns.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
     // Check line of sight using raycasting and fire at the enemy if visible
@@ -101,15 +101,43 @@ public class Turret : MonoBehaviour
 
     // Fire a bullet towards the enemy and play the firing sound
     void Fire()
-    {   
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        bullet.GetComponent<Rigidbody>().AddForce(firePoint.forward * 15000);
-
+    {
         // Play firing sound
         if (audioSource != null && firingSound != null)
         {
             audioSource.PlayOneShot(firingSound);
         }
+        if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
+        {
+            Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+            return;
+        }
+
+        // Get projectile from pool
+        ProjectileBehavior projectile = pool.Get(
+        firePoint.position,
+            Quaternion.LookRotation(firePoint.forward));
+
+        if (projectile != null)
+        {
+            ProjectileData data = new()
+            {
+                Direction = firePoint.forward,
+                Speed = 25,
+                Damage = 20,
+                Lifetime = .5f,
+                UseGravity = false,
+                ArcHeight = 0,
+                CanBounce = false,
+                MaxBounces = 0,
+                BounceDamageMultiplier = 0
+            };
+            projectile.Initialize(data, pool);
+        }
+/*        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        bullet.GetComponent<Rigidbody>().AddForce(firePoint.forward * 15000);*/
+
+      
     }
 
     // Visualize detection range in the editor

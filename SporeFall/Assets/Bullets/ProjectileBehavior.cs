@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 // Projectile data structure
@@ -34,6 +35,12 @@ public class ProjectileBehavior : MonoBehaviour
     [Header("General Settings")]
     [SerializeField] private ProjectileType type;
     [SerializeField] private string hitTag;
+    [SerializeField] private GameObject vfxPrefab;
+
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource audioPlayer;
+    public AudioClip bulletSound; // Assign the bullet sound clip in the inspector
+    [Range(0f, 1f)] public float bulletSoundVolume = 0.5f; // Set the default volume in the inspector
 
     [Header("Explosion Settings")]
     [SerializeField] private GameObject explosionEffectPrefab;
@@ -51,6 +58,8 @@ public class ProjectileBehavior : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        if(audioPlayer != null)
+            audioPlayer.volume = bulletSoundVolume;
     }
 
     public void Initialize(ProjectileData projectileData, ProjectilePool pool)
@@ -143,6 +152,18 @@ public class ProjectileBehavior : MonoBehaviour
     }
     protected void HandleCollision(Collision collision)
     {
+        if (audioPlayer != null)
+            audioPlayer.PlayOneShot(bulletSound);
+
+        if (vfxPrefab != null)
+        {// if you have a VFX assigned, play it on collision
+            if (!PoolManager.Instance.vfxPool.TryGetValue(vfxPrefab, out VFXPool pool))
+            {
+                Debug.LogError($"No pool found for enemy prefab: {vfxPrefab.name}");
+                return;
+            }
+            VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
+        }
         if (data.CanBounce && bounceCount < data.MaxBounces)
         {
             Bounce(collision.collider);
@@ -174,8 +195,13 @@ public class ProjectileBehavior : MonoBehaviour
         // Create explosion effect if prefab is assigned
         if (explosionEffectPrefab != null)
         {
-            GameObject vfx = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(vfx, 2f); // In case it doesn't auto destroy
+            if (!PoolManager.Instance.vfxPool.TryGetValue(explosionEffectPrefab, out VFXPool pool))
+            {
+                Debug.LogError($"No pool found for enemy prefab: {explosionEffectPrefab.name}");
+                return;
+            }
+            VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
+            vfx.Initialize(pool);
         }
 
         // Damage all targets in explosion radius

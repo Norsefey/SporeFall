@@ -49,8 +49,17 @@ public abstract class Attack : ScriptableObject
     {
         if (attackVFXPrefab != null)
         {
-            GameObject vfx = Instantiate(attackVFXPrefab, position, rotation);
-            Destroy(vfx, 2f); // Incase it doesnt auto destroy
+            // Get VFX from pool
+            if (!PoolManager.Instance.vfxPool.TryGetValue(attackVFXPrefab, out VFXPool pool))
+            {
+                Debug.LogError($"No pool found for enemy prefab: {attackVFXPrefab.name}");
+                return;
+            }
+            VFXPoolingBehavior vfx = pool.Get(position, rotation);
+            vfx.Initialize(pool);
+
+            /*GameObject vfx = Instantiate(attackVFXPrefab, position, rotation);
+            Destroy(vfx, 2f); // Incase it doesnt auto destroy*/
         }
     }
     protected virtual void PlaySFX(AudioSource audioSource)

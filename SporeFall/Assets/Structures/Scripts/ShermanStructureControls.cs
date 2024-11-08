@@ -34,7 +34,14 @@ public class ShermanStructureControls : MonoBehaviour
             OpenHatch();
         }*/
     }
-
+    private void OnDisable()
+    {
+        currentSherman.DeactivateSherman();
+    }
+    private void OnEnable()
+    {
+        StartCoroutine(ResetAfterDelay());
+    }
     // Coroutine to handle the delay before spawning
     public IEnumerator ResetAfterDelay()
     {

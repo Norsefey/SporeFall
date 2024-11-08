@@ -2,48 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneralItemsPool
+public class VFXPool
 {
     private GameObject prefab;
     private Transform parent;
-    private Queue<GameObject> pool;
+    private Queue<VFXPoolingBehavior> pool;
     private int initialSize;
 
-    public GeneralItemsPool(GameObject prefab, Transform parent, int initialSize)
+    public VFXPool(GameObject prefab, Transform parent, int initialSize)
     {
         this.prefab = prefab;
         this.parent = parent;
         this.initialSize = initialSize;
-        pool = new Queue<GameObject>();
+        pool = new Queue<VFXPoolingBehavior>();
         InitializePool();
     }
     private void InitializePool()
     {
         for (int i = 0; i < initialSize; i++)
         {
-            CreateNewObject();
+            CreateNewVFX();
         }
     }
-    private void CreateNewObject()
+    private void CreateNewVFX()
     {
         GameObject obj = GameObject.Instantiate(prefab, parent);
+        VFXPoolingBehavior effect = obj.GetComponent<VFXPoolingBehavior>();
         obj.SetActive(false);
-        pool.Enqueue(obj);
+        pool.Enqueue(effect);
     }
-    public GameObject Get(Vector3 position, Quaternion rotation)
+    public VFXPoolingBehavior Get(Vector3 position, Quaternion rotation)
     {
         if (pool.Count == 0)
         {
-            CreateNewObject();
+            CreateNewVFX();
         }
 
-        GameObject obj = pool.Dequeue();
+        VFXPoolingBehavior obj = pool.Dequeue();
         obj.transform.position = position;
         obj.transform.rotation = rotation;
         obj.gameObject.SetActive(true);
         return obj;
     }
-    public void Return(GameObject obj)
+    public void Return(VFXPoolingBehavior obj)
     {
         obj.gameObject.SetActive(false);
         pool.Enqueue(obj);
