@@ -57,23 +57,23 @@ public class PlayerUI : MonoBehaviour
 
     public void DisplayCorruptedVision(float value)
     {
-        if (value < 30)
+        if (value < 60)
         {
             corruptedVisionHolder.SetActive(false);
         }
 
-        if (value >= 30 && value < 60)
+        if (value >= 60 && value < 75)
         {
             corruptedVisionHolder.SetActive(true);
             corruptedVisionImage.sprite = corruptionSpread1;
         }
 
-        if (value >= 60 && value < 85)
+        if (value >= 75 && value < 90)
         {
             corruptedVisionImage.sprite = corruptionSpread2;
         }
 
-        if (value >= 85)
+        if (value >= 90)
         {
             corruptedVisionImage.sprite = corruptionSpread3;
         }
