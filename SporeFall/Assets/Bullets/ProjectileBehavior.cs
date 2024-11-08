@@ -25,6 +25,8 @@ public enum ProjectileType
 public class ProjectileBehavior : MonoBehaviour
 {
     private ProjectileData data;
+    private ProjectilePool pool;
+    private float elapsedTime;
     private Rigidbody rb;
     private int bounceCount;
     private float damage;
@@ -51,10 +53,12 @@ public class ProjectileBehavior : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void Initialize(ProjectileData projectileData)
+    public void Initialize(ProjectileData projectileData, ProjectilePool pool)
     {
         data = projectileData;
         damage = data.Damage;
+        this.pool = pool;
+        elapsedTime = 0f;
 
         if (rb != null)
         {
@@ -73,9 +77,29 @@ public class ProjectileBehavior : MonoBehaviour
             }
         }
 
-        Destroy(gameObject, data.Lifetime);
+        StartCoroutine(LifetimeCounter());
     }
-
+    private IEnumerator LifetimeCounter()
+    {
+        while (elapsedTime < data.Lifetime)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        ReturnToPool();
+    }
+    private void ReturnToPool()
+    {
+        StopAllCoroutines();
+        if (pool != null)
+        {
+            pool.Return(this);
+        }
+    }
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
     private void OnCollisionEnter(Collision collision)
     { 
         if(string.IsNullOrEmpty(hitTag))
@@ -125,7 +149,7 @@ public class ProjectileBehavior : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            ReturnToPool();
         }
     }
     protected void Bounce(Collider surface)
@@ -173,7 +197,7 @@ public class ProjectileBehavior : MonoBehaviour
             }
         }
 
-        Destroy(gameObject);
+        ReturnToPool();
     }
     private void HandleDOTAttack()
     {
@@ -187,7 +211,7 @@ public class ProjectileBehavior : MonoBehaviour
             }
         }
 
-        Destroy(gameObject);
+        ReturnToPool();
     }
 
 }

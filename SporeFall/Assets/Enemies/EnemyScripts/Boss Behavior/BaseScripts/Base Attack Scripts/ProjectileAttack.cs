@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [CreateAssetMenu(fileName = "New Projectile Attack", menuName = "Enemy/Attacks/Projectile Attack")]
 public class ProjectileAttack : RangedAttack
@@ -18,6 +19,12 @@ public class ProjectileAttack : RangedAttack
     [Header("Multiple Projectile Settings")]
     [SerializeField] private int projectileCount = 1;
     [SerializeField] private float spreadAngle = 0f;
+
+    [Header("Pool Settings")]
+    [SerializeField] protected int initialPoolSize = 20;
+    protected ProjectilePool projectilePool;
+
+
 
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
     {
@@ -45,8 +52,22 @@ public class ProjectileAttack : RangedAttack
                     direction = Quaternion.Euler(0, currentAngle, 0) * direction;
                 }
 
-                GameObject projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction));
-                
+                if(projectilePool == null)
+                {
+                    // Create a parent object for the pool
+                    GameObject poolParent = new GameObject($"Pool_{projectilePrefab.name}");
+                    poolParent.transform.SetParent(enemy.transform);
+
+                    // Initialize the projectile pool
+                    if (projectilePrefab != null)
+                    {
+                        projectilePool = new ProjectilePool(projectilePrefab, poolParent.transform, initialPoolSize);
+                    }
+                }
+                // Get projectile from pool
+                ProjectileBehavior projectile = projectilePool.Get(
+                spawnPosition,
+                    Quaternion.LookRotation(direction));                
                 if (projectile.TryGetComponent<ProjectileBehavior>(out var projectileComp))
                 {
                     ProjectileData data = new()
@@ -62,7 +83,7 @@ public class ProjectileAttack : RangedAttack
                         BounceDamageMultiplier = bounceDamageMultiplier
                     };
 
-                    projectileComp.Initialize(data);
+                    projectileComp.Initialize(data, projectilePool);
                 }
             }
         }

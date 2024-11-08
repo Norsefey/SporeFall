@@ -10,9 +10,9 @@ public class CorruptedPlayer : BaseEnemy
     [SerializeField] private float myceliaDropAmount = 5;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
         transform.SetParent(train.dropsHolder, true);
     }
     protected override float EvaluateAttackPriority(Attack attack, float distanceToTarget)

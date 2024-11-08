@@ -112,21 +112,6 @@ public class PlayerUI : MonoBehaviour
     {
         promptHolder.SetActive(false);
     }
-    public void ToggleUpgradeMenu(bool toggle)
-    {
-        gameplayUI.SetActive(!toggle);
-        upgradeMenu.SetActive(toggle);
-        upgradeMenu.GetComponent<UpgradeMenu>().SetupMenu(pMan);
-
-        pMan.TogglePControl(!toggle);
-
-        if (toggle)
-            Cursor.lockState = CursorLockMode.None;
-        else
-            Cursor.lockState = CursorLockMode.Locked;
-
-        Cursor.visible = toggle;
-    }
     public void SetManager(PlayerManager player)
     {
         pMan = player;

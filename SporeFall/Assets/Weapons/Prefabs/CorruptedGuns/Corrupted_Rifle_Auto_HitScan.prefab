@@ -731,19 +731,24 @@ MonoBehaviour:
   weaponName: PewPew
   weaponSprite: {fileID: 21300000, guid: 4e281acc22b603d40a1e392524333aac, type: 3}
   player: {fileID: 0}
-  projectilePrefab: {fileID: 6113365771505888124, guid: d4b841cb38a3ca54fac7521132760247,
+  bulletPrefab: {fileID: 6113365771505888124, guid: d4b841cb38a3ca54fac7521132760247,
     type: 3}
   firePoint: {fileID: 3414182955216283542}
   hitLayers:
     serializedVersion: 2
     m_Bits: 320
+  fireSoundVolume: 0.4
+  fireSound: {fileID: 8300000, guid: 132cef9f90dc76e44a42b4b8322ba94f, type: 3}
+  reloadSound: {fileID: 0}
   isCorrupted: 1
   corruptionRate: 1.3
   isTwoHanded: 1
   secondHandHold: {fileID: 6609920283423879002}
   damage: 7
+  useSpread: 1
   bulletSpreadAngle: 3
   reloadTime: 2
+  initialPoolSize: 20
   bulletCount: 30
   bulletCapacity: 30
   totalAmmo: 0
@@ -758,5 +763,3 @@ MonoBehaviour:
   maxBounces: 3
   bounceDamageMultiplier: 0.7
   fireRate: 8
-  fireSound: {fileID: 8300000, guid: 132cef9f90dc76e44a42b4b8322ba94f, type: 3}
-  fireSoundVolume: 0.4

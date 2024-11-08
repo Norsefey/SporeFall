@@ -4,22 +4,17 @@ using UnityEngine;
 
 public class ShermanControl : MonoBehaviour
 {
-    // Movement speed
+    private ShermanStructureControls parentStructure;
     public float moveSpeed = 2f;
-    // How fast the object changes direction
-    public float turnSpeed = 1f;
-    // How often to change direction
-    public float changeDirectionInterval = 2f;
-    // Damage dealt to enemies on contact
-    public int damage = 100;
-    // Detection radius for nearby enemies
-    public float detectionRadius = 10f;
-    // Weight for enemy influence on direction (higher = more attracted to enemies)
-    public float enemyInfluenceWeight = 2f;
-    // Weight for random movement (higher = more random movement)
-    public float randomMovementWeight = 1f;
+    public float turnSpeed = 1f;    // How fast the object changes direction
+    public float changeDirectionInterval = 2f;    // How often to change direction
+    public int damage = 100;    // Damage dealt to enemies on contact
+    public float detectionRadius = 10f;    // Detection radius for nearby enemies
+    public float enemyInfluenceWeight = 2f;    // Weight for enemy influence on direction (higher = more attracted to enemies)
+    public float randomMovementWeight = 1f;    // Weight for random movement (higher = more random movement)
     public string enemyTag = "Enemy";
     private Vector3 currentDirection;
+    private bool active = true;
     [Header("Explosion Settings")]
     [SerializeField] private LayerMask damageableLayers;
     [SerializeField] private float explosionRadius = 10f;
@@ -29,6 +24,7 @@ public class ShermanControl : MonoBehaviour
     private AudioSource audioPlayer;
     void Start()
     {
+        active = true;
         audioPlayer = GetComponent<AudioSource>();
         // allow sherman to fly out of house
         // Set initial direction to forward
@@ -39,17 +35,18 @@ public class ShermanControl : MonoBehaviour
         // Get the layer that enemies are on
         damageableLayers = LayerMask.GetMask("Enemy");
     }
-
     void Update()
     {
-        // Move in the current direction
-        transform.Translate(currentDirection * moveSpeed * Time.deltaTime, Space.World);
+        if (active)
+        {
+            // Move in the current direction
+            transform.Translate(currentDirection * moveSpeed * Time.deltaTime, Space.World);
 
-        // Smooth rotation towards movement direction
-        Quaternion targetRotation = Quaternion.LookRotation(currentDirection);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            // Smooth rotation towards movement direction
+            Quaternion targetRotation = Quaternion.LookRotation(currentDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+        }
     }
-
     // This function generates a random direction
     private Vector3 GetRandomDirection()
     {
@@ -57,7 +54,6 @@ public class ShermanControl : MonoBehaviour
         float randomZ = Random.Range(-1f, 1f);
         return new Vector3(randomX, 0, randomZ).normalized;
     }
-
     private Vector3 GetEnemyInfluenceDirection()
     {
         Vector3 enemyInfluence = Vector3.zero;
@@ -79,7 +75,6 @@ public class ShermanControl : MonoBehaviour
 
         return enemyInfluence.normalized;
     }
-
     private void UpdateDirection()
     {
         Vector3 enemyDirection = GetEnemyInfluenceDirection();
@@ -88,11 +83,11 @@ public class ShermanControl : MonoBehaviour
         // Combine random and enemy-influenced directions using weights
         currentDirection = (enemyDirection * enemyInfluenceWeight + randomDirection * randomMovementWeight).normalized;
     }
-
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag(enemyTag))
+        if (collision.gameObject.CompareTag(enemyTag) && active)
         {
+
             // Play effects
             PlaySFX();
             SpawnVFX(transform.position, Quaternion.identity);
@@ -112,16 +107,9 @@ public class ShermanControl : MonoBehaviour
                 {
                     damageable.TakeDamage(damage * damageMultiplier);
                 }
-                // play audio before destroying
-                /*Damageable enemy = collision.gameObject.GetComponent<Damageable>();
-                if (enemy != null)
-                {
-                    enemy.TakeDamage(damageAmount);
-                    Destroy(gameObject);
-                }*/
             }
-
-            Destroy(gameObject, explosionSF.length);
+            //Destroy(gameObject, explosionSF.length);
+            StartCoroutine(parentStructure.ResetAfterDelay());
         }
     }
     protected virtual void SpawnVFX(Vector3 position, Quaternion rotation)
@@ -138,6 +126,22 @@ public class ShermanControl : MonoBehaviour
         {
             audioPlayer.PlayOneShot(explosionSF);
         }
+    }
+
+    public void DeactivateSherman()
+    {
+        active = false;
+        transform.GetChild(0).gameObject.SetActive(false);
+
+    }
+    public void ActivateSherman()
+    {
+        active = true;
+        transform.GetChild(0).gameObject.SetActive(true);
+    }
+    public void SetParent(ShermanStructureControls structure)
+    {
+        parentStructure = structure;
     }
     // Optional: Visualize the detection radius in the editor
     private void OnDrawGizmosSelected()

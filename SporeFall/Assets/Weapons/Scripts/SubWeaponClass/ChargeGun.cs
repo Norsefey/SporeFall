@@ -88,12 +88,12 @@ public class ChargeGun : Weapon
             Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
+        // Get projectile from pool
+        ProjectileBehavior projectile = projectilePool.Get(
+            firePoint.position,
+            Quaternion.LookRotation(shootDirection));
 
-        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.LookRotation(shootDirection));
-        projectile.transform.localScale *= Mathf.Clamp(chargeMultiplier, 0, 3);
-
-        ProjectileBehavior projectileComp = projectile.GetComponent<ProjectileBehavior>();
-        if (projectileComp != null)
+        if (projectile != null)
         {
             ProjectileData data = new()
             {
@@ -107,7 +107,7 @@ public class ChargeGun : Weapon
                 MaxBounces = maxBounces,
                 BounceDamageMultiplier = bounceDamageMultiplier
             };
-            projectileComp.Initialize(data);
+            projectile.Initialize(data, projectilePool);
             Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier + " For " + damage * chargeMultiplier + " Damage");
         }
     }
@@ -127,7 +127,7 @@ public class ChargeGun : Weapon
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers))
         {
             Debug.Log(weaponName + " hit: " + hit.collider.name);
-            Instantiate(projectilePrefab, hit.point, Quaternion.LookRotation(hit.normal));
+            GameObject bullet = vfxPool.Get(hit.point, Quaternion.LookRotation(shootDirection));
 
             if (hit.collider.CompareTag("Enemy"))
             {

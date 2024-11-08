@@ -7,49 +7,43 @@ public class ShermanStructureControls : MonoBehaviour
 {
     public GameObject shermanPrefab;        // The prefab to spawn
     public Transform spawnPoint;     // Where to spawn the prefab
-    private GameObject currentSherman; // Holds reference to the current spawned object
+    private ShermanControl currentSherman; // Holds reference to the current spawned object
     public float respawnDelay = 2f;  // Delay time in seconds before respawning
 
-    private bool isSpawning = false; // To prevent multiple coroutines
     [SerializeField] private SkinnedMeshRenderer sHouse;
-    private float elapsedTime = 0f;
-    float blendShapeValue = 0;
+    //float blendShapeValue = 0;
     void Start()
     {
-        StartCoroutine(SpawnAfterDelay());
+        currentSherman = Instantiate(shermanPrefab, spawnPoint).GetComponent<ShermanControl>();
+        currentSherman.SetParent(this);
     }
 
     void Update()
     {
-        // If there is no active prefab and we're not already spawning one
+      /*  // If there is no active prefab and we're not already spawning one
         if (currentSherman == null && !isSpawning)
         {
             StartCoroutine(SpawnAfterDelay());
-        }
-        else if (!isSpawning && blendShapeValue > 0)
+        }*/
+        /*else if (!isSpawning && blendShapeValue > 0)
         {
             CloseHatch();
         }
         else if (isSpawning)
         {
             OpenHatch();
-        }
+        }*/
     }
 
     // Coroutine to handle the delay before spawning
-    private IEnumerator SpawnAfterDelay()
+    public IEnumerator ResetAfterDelay()
     {
-        elapsedTime = 0;
-        isSpawning = true; // Prevent additional coroutines from starting
-                       
+        currentSherman.DeactivateSherman();
         yield return new WaitForSeconds(respawnDelay); // Wait for the delay
-        SpawnPrefab();
-
-        elapsedTime = 0f;
-        isSpawning = false; // Allow spawning again
+        ResetSherman();
     }
 
-    private void OpenHatch()
+    /*private void OpenHatch()
     {
         elapsedTime += Time.deltaTime;  // Accumulate elapsed time
                                         // Lerp between the start and target blend shape value
@@ -63,14 +57,14 @@ public class ShermanStructureControls : MonoBehaviour
         blendShapeValue = Mathf.Lerp(100, 0, elapsedTime / respawnDelay);
         // Apply the blend shape value
         sHouse.SetBlendShapeWeight(0, blendShapeValue);
-    }
+    }*/
 
     // Method to spawn the prefab at the spawn point
-    private void SpawnPrefab()
+    private void ResetSherman()
     {
         if (shermanPrefab != null && spawnPoint != null)
         {
-            currentSherman = Instantiate(shermanPrefab, spawnPoint);
+            currentSherman.ActivateSherman();
             currentSherman.transform.position = spawnPoint.position;
         }
     }

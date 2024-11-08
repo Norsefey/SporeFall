@@ -1,5 +1,7 @@
 // Interface for objects that can take damage
 using UnityEngine;
+// Add this interface to Damageable class
+
 public abstract class Damageable : MonoBehaviour
 {
     public float maxHP;
@@ -8,7 +10,10 @@ public abstract class Damageable : MonoBehaviour
     private bool isDead = false;
     protected abstract void Die();
     protected abstract void UpdateUI();
-
+    private void Awake()
+    {
+        ResetHealth();
+    }
     public virtual void TakeDamage(float damage)
     {
         currentHP -= damage;
@@ -18,6 +23,10 @@ public abstract class Damageable : MonoBehaviour
             isDead = true;
             Die();
         }
+    }
+    public void ResetHealth()
+    {
+        currentHP = maxHP;
     }
     public void RestoreHP(float value)
     {

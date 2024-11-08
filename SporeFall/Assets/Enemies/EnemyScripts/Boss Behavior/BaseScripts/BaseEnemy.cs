@@ -19,8 +19,9 @@ public enum EnemyState
 public abstract class BaseEnemy : MonoBehaviour
 {
     // Public events
-    public delegate void EnemyDeath();
+    public delegate void EnemyDeath(BaseEnemy enemy); // Modified to pass the enemy instance
     public event EnemyDeath OnEnemyDeath;
+
 
     [Header("Base Components")]
     [SerializeField] protected Attack[] attacks;
@@ -86,23 +87,81 @@ public abstract class BaseEnemy : MonoBehaviour
     private int maxDetectedObjects = 10; // Max number of objects the enemy can detect at once
     public Animator Animator => animator;
     public AudioSource AudioSource => audioSource;
-    protected virtual void Start()
+
+    private bool isInitialized = false;
+
+    protected virtual void Awake()
     {
+        // Get component references once
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         health = GetComponent<Damageable>();
+        detectedColliders = new Collider[maxDetectedObjects];
+    }
 
+    protected virtual void OnEnable()
+    {
+        if (!isInitialized)
+        {
+            Initialize();
+            isInitialized = true;
+        }
+
+        ResetState();
+    }
+
+    protected virtual void Initialize()
+    {
+        // One-time initialization code
+        agent.stoppingDistance = stoppingDistance;
+    }
+
+    protected virtual void ResetState()
+    {
+        // Reset all state when object is reused from pool
         foreach (var att in attacks)
-        {// scriptable objects are funky, need to manually reset last use time on all attacks, otherwise it stores time from previous plays
+        {
             att.ResetCooldown();
         }
-        agent.stoppingDistance = stoppingDistance;
-        detectedColliders = new Collider[maxDetectedObjects]; // Pre-allocate the array for detected objects
+
+        // Reset variables
+        currentState = EnemyState.Idle;
+        isAttacking = false;
+        passedThreshold = false;
+        targetingStructure = false;
+        strafeDirectionRight = true;
+        stateTimer = 0f;
+
+        // Reset queues and collections
+        recentDamage.Clear();
+
+        // Reset health
+        if (health != null)
+        {
+            health.ResetHealth();
+        }
+
+        // Reset NavMeshAgent
+        if (agent != null)
+        {
+            agent.ResetPath();
+            agent.isStopped = false;
+            agent.velocity = Vector3.zero;
+        }
+
+        // Reset animation
+        if (animator != null)
+        {
+            animator.Rebind();
+            animator.Update(0f);
+        }
+
+        // Start behavior
         DetectTargets();
-        CheckDamageThreshold(health.maxHP - health.CurrentHP);
         SetRandomState();
     }
+
     protected virtual void Update()
     {
         UpdateStateTimer();
@@ -137,7 +196,7 @@ public abstract class BaseEnemy : MonoBehaviour
                 //Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
                 if (randomValue <= currentSum)
                 {
-                    Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
+                    //Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
                     SetState(stateWeight.state);
                     return;
                 }
@@ -414,6 +473,8 @@ public abstract class BaseEnemy : MonoBehaviour
     public void SetIsAttacking(bool attacking)
     {
         isAttacking = attacking;
+        if (!agent.isActiveAndEnabled)
+            return;
         if (attacking)
         {
             agent.isStopped = true;
@@ -503,16 +564,36 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     public virtual void Die()
     {
-        OnEnemyDeath?.Invoke();
-        Destroy(gameObject);
+        OnEnemyDeath?.Invoke(this); // Pass 'this' to the event
+        gameObject.SetActive(false); // Deactivate instead of destroy
     }
-    public void CheckDamageThreshold(float damageTaken)
-    {
-        passedThreshold = damageTaken >= targetSwitchThreshold;
-    }
+
     public void AssignDefaultTarget(TrainHandler train, Transform target)
     {
         this.train = train;
         currentTarget = target;
+    }
+
+    // Optional: Add method to clean up any persistent effects or coroutines when returned to pool
+    protected virtual void OnDisable()
+    {
+        StopAllCoroutines();
+
+        // Clean up any references
+        currentTarget = null;
+        train = null;
+
+        // Reset any ongoing effects or states
+        SetIsAttacking(false);
+
+        if (agent.isActiveAndEnabled)
+        {
+            agent.ResetPath();
+            agent.isStopped = true;
+        }
+    }
+    public void CheckDamageThreshold(float damageTaken)
+    {
+        passedThreshold = damageTaken >= targetSwitchThreshold;
     }
 }

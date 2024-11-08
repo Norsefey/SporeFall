@@ -39,6 +39,11 @@ public class WaveManager : MonoBehaviour
     public float departTime = 30;
     private float timer = 0;
 
+    [Header("Object Pooling")]
+    [SerializeField] private int initialPoolSize = 50;
+    private Dictionary<GameObject, EnemyObjectPool> enemyPools;
+    private EnemyObjectPool bossPool;
+
     // Move UI To own Script
     [Header("UI Stuff")]
     // test Ui
@@ -50,16 +55,16 @@ public class WaveManager : MonoBehaviour
     private void Start()
     {
         Debug.Log("WaveMan Is awake");
+        InitializePools();
 
         currentWaveIndex = 0;
-
         currentWave = waves[currentWaveIndex];
         StartCoroutine(MoveToWaveLocation(0));
     }
 
     private void Update()
     {
-        switch (wavePhase)
+        /*switch (wavePhase)
         {
             case WavePhase.NotStarted:
                 if(waveUI != null)
@@ -80,7 +85,7 @@ public class WaveManager : MonoBehaviour
                 if (waveUI != null)
                     waveUI.text = "Moving to next Area";
                 break;
-        }
+        }*/
     }
     #region Wave State Transitions
     public void OnStartWave()
@@ -233,7 +238,7 @@ public class WaveManager : MonoBehaviour
             {
                 if (selectedEnemy.SpawnedCount < selectedEnemy.totalToSpawn)
                 {
-                    SpawnEnemy(selectedEnemy.enemyPrefab, spawnPoint);
+                    SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint);
                     selectedEnemy.SpawnedCount++;
                 }
             }
@@ -241,16 +246,52 @@ public class WaveManager : MonoBehaviour
         else
         {
             // Spawn single enemy
-            SpawnEnemy(selectedEnemy.enemyPrefab, spawnPoint);
+            SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint);
             selectedEnemy.SpawnedCount++;
         }
     }
-    // Helper method to spawn a single enemy
+    private void InitializePools()
+    {
+        enemyPools = new Dictionary<GameObject, EnemyObjectPool>();
+        GameObject poolParent = new GameObject($"Pool_Enemies");
+        poolParent.transform.SetParent(transform);
+
+        // Initialize pools for all enemy types across all waves
+        foreach (Wave wave in waves)
+        {
+            foreach (var spawnData in wave.enemySpawnData)
+            {
+
+                foreach(var enemy in spawnData.enemyVariants)
+                {
+                    if (!enemyPools.ContainsKey(enemy))
+                    {
+                        enemyPools.Add(
+                            enemy,
+                            new EnemyObjectPool(enemy, poolParent.transform, initialPoolSize)
+                        );
+                    }
+                }
+            }
+        }
+
+        // Initialize boss pool if boss prefab exists
+        if (bossPrefab != null)
+        {
+            bossPool = new EnemyObjectPool(bossPrefab, poolParent.transform, 1); // Usually only need one boss
+        }
+    }
+
+    // Modified SpawnEnemy method to use object pooling
     private void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint)
     {
-        BaseEnemy enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation)
-            .GetComponent<BaseEnemy>();
-        enemy.transform.SetParent(transform);
+        if (!enemyPools.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
+        {
+            Debug.LogError($"No pool found for enemy prefab: {enemyPrefab.name}");
+            return;
+        }
+
+        BaseEnemy enemy = pool.Get(spawnPoint.position, spawnPoint.rotation);
         enemy.OnEnemyDeath += OnEnemyDeath;
         enemy.AssignDefaultTarget(train, train.transform);
 
@@ -274,13 +315,21 @@ public class WaveManager : MonoBehaviour
         enemiesAlive++;
         enemiesSpawned++;
     }
-    private void OnEnemyDeath()
+    // Modified death handlers to return enemies to pool
+    private void OnEnemyDeath(BaseEnemy enemy)
     {
         enemiesAlive--;
         deadEnemies++;
+
         if (currentWave.isFinalWave == false)
         {
             wUI.DisplayWaveProgress(deadEnemies);
+        }
+
+        // Return enemy to its pool
+        if (enemyPools.TryGetValue(enemy.gameObject, out EnemyObjectPool pool))
+        {
+            pool.Return(enemy);
         }
 
         if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
@@ -288,11 +337,14 @@ public class WaveManager : MonoBehaviour
             WaveCleared();
         }
     }
-    private void OnBossDeath()
+    private void OnBossDeath(BaseEnemy boss)
     {
         enemiesAlive--;
-        // speed up payload
         train.Payload.IncreaseSpeed();
+
+        // Return boss to pool
+        bossPool.Return(boss);
+
         if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
         {
             Debug.Log("Boss defeated!");

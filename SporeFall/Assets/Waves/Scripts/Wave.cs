@@ -8,11 +8,15 @@ using UnityEngine;
 [System.Serializable]
 public class EnemySpawnData
 {
-    public GameObject enemyPrefab;
+    public GameObject[] enemyVariants;
     public int totalToSpawn;     // Total number of this enemy type to spawn
     public bool spawnAsGroup;    // Whether to spawn as a group
     public int groupSize;        // How many enemies per group (if spawning as group)
     private int spawnedCount;
+    public GameObject EnemyToSpawn
+    {
+        get { return enemyVariants[Random.Range(0, enemyVariants.Length)]; }
+    }
     public int SpawnedCount   // Track how many we've spawned
     {
         get { return spawnedCount; }
