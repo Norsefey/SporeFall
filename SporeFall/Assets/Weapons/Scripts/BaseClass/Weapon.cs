@@ -122,20 +122,19 @@ public abstract class Weapon : MonoBehaviour
             Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
-   
-        Ray ray = new(playerCamera.transform.position, shootDirection);
+        transform.forward = playerCamera.transform.forward;
+        // Get VFX from pool
+        if (!PoolManager.Instance.vfxPool.TryGetValue(bulletPrefab, out VFXPool pool))
+        {
+            Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+            return;
+        }
+        VFXPoolingBehavior vfx = pool.Get(firePoint.position, transform.rotation);
+        vfx.Initialize(pool);
 
+        Ray ray = new(playerCamera.transform.position, shootDirection);
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
-            // Get VFX from pool
-            if (!PoolManager.Instance.vfxPool.TryGetValue(bulletPrefab, out VFXPool pool))
-            {
-                Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
-                return;
-            }
-            VFXPoolingBehavior vfx = pool.Get(hit.point, transform.rotation);
-            vfx.Initialize(pool);
-
             // Apply damage to the hit object
             if (hit.collider.CompareTag("Enemy"))
             {
@@ -144,6 +143,12 @@ public abstract class Weapon : MonoBehaviour
                     damageable.TakeDamage(damage);
                 }
             }
+            Debug.Log("Moving FX to hit point");
+            vfx.MoveToLocation(hit.point, 50);
+        }
+        else
+        {
+            vfx.MoveForward();
         }
     }
     // Method to calculate a bullet spread direction
