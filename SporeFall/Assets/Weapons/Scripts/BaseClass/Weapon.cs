@@ -123,6 +123,7 @@ public abstract class Weapon : MonoBehaviour
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
         transform.forward = playerCamera.transform.forward;
+        
         // Get VFX from pool
         if (!PoolManager.Instance.vfxPool.TryGetValue(bulletPrefab, out VFXPool pool))
         {
@@ -170,7 +171,7 @@ public abstract class Weapon : MonoBehaviour
     }
     public virtual void StartReload()
     {
-        if (!IsReloading && (!limitedAmmo) || bulletCount < bulletCapacity )
+        if (!IsReloading && bulletCount < bulletCapacity )
         {
             StartCoroutine(ReloadCoroutine());
         }
