@@ -60,13 +60,13 @@ public class PlayerInputOrganizer : MonoBehaviour
         // player action map
         moveAction = playerInputMap.FindAction("Move");
         lookAction = playerInputMap.FindAction("Look");
-        jumpAction = playerInputMap.FindAction("Jump");
         sprintAction = playerInputMap.FindAction("Sprint");
         buildModeAction = playerInputMap.FindAction("Build");
         aimAction = playerInputMap.FindAction("Aim");
         interactAction = playerInputMap.FindAction("Interact");
         flipCameraSide = playerInputMap.FindAction("FlipCamera");
         // shoot action map
+        jumpAction = shootInputMap.FindAction("Jump");
         reloadAction = shootInputMap.FindAction("Reload");
         dropAction = shootInputMap.FindAction("Drop");
         fireAction = shootInputMap.FindAction("Fire");
@@ -443,7 +443,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.DestroyStructure();
+            buildGun.SellStructure();
         }
     }
     private void OnEditRotateStarted(InputAction.CallbackContext context)

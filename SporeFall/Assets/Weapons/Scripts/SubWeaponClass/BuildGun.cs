@@ -40,15 +40,19 @@ public class BuildGun : Weapon
     public override void Fire()
     {
         // Called when player presses fire button
-        PreviewStructure();
         if (isEditing)
             movingStructure = true;
+    }
+    private void Update()
+    {
+        if (!isEditing)
+            PreviewStructure();
     }
     public void OnFireReleased()
     {
         if (!isEditing)
         {
-            Destroy(selectedStructure.gameObject);
+            //Destroy(selectedStructure.gameObject);
         }
         else if (movingStructure)
         {
@@ -410,7 +414,7 @@ public class BuildGun : Weapon
     {
         if (selectedStructure != null)
         {
-            float yRot = player.pInput.rotateStructAction.ReadValue<Vector2>().y * structRotSpeed * Time.deltaTime;
+            float yRot = player.pInput.rotateStructAction.ReadValue<Vector2>().x * structRotSpeed * Time.deltaTime;
             selectedStructure.transform.Rotate(new Vector3(0, yRot, 0));
         }
     }
@@ -438,11 +442,12 @@ public class BuildGun : Weapon
             }
         }
     }
-    public void DestroyStructure()
+    public void SellStructure()
     {
         if (selectedStructure != null)
         {
             Structure toDelet = selectedStructure;
+            //player.mycelia += toDelet.GetMyceliaCost();
             selectedStructure = null;
             if (player.train != null)
             {
