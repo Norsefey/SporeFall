@@ -159,7 +159,8 @@ public class ProjectileBehavior : MonoBehaviour
         }
         else
         {
-            ToggleVFX(false);
+            if (vfxPrefab != null)
+                ToggleVFX(false);
             ReturnToPool();
         }
     }
