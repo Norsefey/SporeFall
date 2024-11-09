@@ -94,7 +94,9 @@ public class PlayerDisconnection : MonoBehaviour
             {
                 // In single player, switch the existing player to the gamepad
                 players[0].SwitchCurrentControlScheme("Gamepad", gamepad);
+                UpdateSensitivity();
                 Debug.Log($"Single player switched to gamepad: {gamepad.displayName}");
+                
             }
             else if (!singlePlayer && inputManager.joiningEnabled)
             {
@@ -103,6 +105,10 @@ public class PlayerDisconnection : MonoBehaviour
                 Debug.Log($"Multiplayer: Ready for new player to join with gamepad: {gamepad.displayName}");
             }
         }
+    }
+    private void UpdateSensitivity()
+    {
+        players[0].GetComponent<PlayerManager>().SetDeviceSettings();
     }
     private void HandleDeviceDisconnected(InputDevice device)
     {
@@ -116,6 +122,7 @@ public class PlayerDisconnection : MonoBehaviour
                     // Create an array of both keyboard and mouse devices
                     InputDevice[] keyboardMouseDevices = new InputDevice[] { keyboardDevice, mouseDevice };
                     players[0].SwitchCurrentControlScheme("Keyboard&Mouse", keyboardMouseDevices);
+                    UpdateSensitivity();
                     Debug.Log("Single player switched to Keyboard&Mouse");
                 }
                 else

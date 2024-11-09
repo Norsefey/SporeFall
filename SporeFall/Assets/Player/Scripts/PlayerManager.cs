@@ -74,7 +74,7 @@ public class PlayerManager : MonoBehaviour
         pUI.SetManager(this);
         pAnime.SetManager(this);
     }
-    private void SetDeviceSettings()
+    public void SetDeviceSettings()
     {
         PlayerInput playerInput = GetComponent<PlayerInput>();
         if (playerInput.devices.Count > 0)
@@ -87,7 +87,7 @@ public class PlayerManager : MonoBehaviour
                 pCamera.SetGamepadSettings();
                 bGun.structRotSpeed = 50;
             }
-            else if (device is Keyboard)
+            else if (device is Keyboard || device is Mouse)
             {
                 Debug.Log("I am using a keyboard");
                 pCamera.SetMouseSettings();

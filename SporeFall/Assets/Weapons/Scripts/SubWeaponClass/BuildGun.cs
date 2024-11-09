@@ -1,5 +1,6 @@
 // Ignore Spelling: buildable
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BuildGun : Weapon
 {
@@ -414,7 +415,18 @@ public class BuildGun : Weapon
     {
         if (selectedStructure != null)
         {
-            float yRot = player.pInput.rotateStructAction.ReadValue<Vector2>().x * structRotSpeed * Time.deltaTime;
+            float yRot = 0;
+            if (player.myDevice is Gamepad)
+            {
+                // left and right on d-Pad on controller
+                 yRot = player.pInput.rotateStructAction.ReadValue<Vector2>().x * structRotSpeed * Time.deltaTime;
+            }
+            else
+            {
+                // mouse scroll wheel uses Y
+                 yRot = player.pInput.rotateStructAction.ReadValue<Vector2>().y * structRotSpeed * Time.deltaTime;
+            }
+
             selectedStructure.transform.Rotate(new Vector3(0, yRot, 0));
         }
     }
