@@ -216,11 +216,6 @@ public class TrainHandler : MonoBehaviour
     }
     private void ClearDrops()
     {
-        // clears all drops from enemies that haven't been collected when train departs
-        foreach (Transform child in dropsHolder.transform)
-        {
-            // Destroy each child object
-            Destroy(child.gameObject);
-        }
+        PoolManager.Instance.ReturnALlDrops();
     }
 }

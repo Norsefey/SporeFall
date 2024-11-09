@@ -23,11 +23,12 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider corruptionBar;
     [SerializeField] private GameObject corruptedVisionHolder;
     [SerializeField] private Image corruptedVisionImage;
+    [SerializeField] private Button purifyButton; // Button to purchase corruption reduction
+    [SerializeField] private Sprite[] corruptionSprites; // Array of corruption vision sprites
+/*
     [SerializeField] private Sprite corruptionSpread1;
     [SerializeField] private Sprite corruptionSpread2;
-    [SerializeField] private Sprite corruptionSpread3;
-    [Header("Upgrade Menu")]
-    [SerializeField] private GameObject upgradeMenu;
+    [SerializeField] private Sprite corruptionSpread3;*/
     [Header("Build/Structures UI")]
     public GameObject buildUI;
     [SerializeField] private Image selectedStructureIcon;
@@ -47,7 +48,7 @@ public class PlayerUI : MonoBehaviour
         HPBar.maxValue = pMan.pHealth.maxHP;
         corruptedVisionHolder.SetActive(false);
     }
-    public void DisplayCorruption(float value)
+    public void UpdateCorruptionDisplay(float value)
     {
         if (corruptionBar != null)
         {
@@ -55,30 +56,74 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
-    public void DisplayCorruptedVision(float value)
+    public void UpdateCorruptedVision(int corruptionStage)
     {
-        if (value < 60)
+        if (corruptionStage == 0)
         {
             corruptedVisionHolder.SetActive(false);
+            return;
         }
 
-        if (value >= 60 && value < 75)
-        {
-            corruptedVisionHolder.SetActive(true);
-            corruptedVisionImage.sprite = corruptionSpread1;
-        }
+        corruptedVisionHolder.SetActive(true);
 
-        if (value >= 75 && value < 90)
-        {
-            corruptedVisionImage.sprite = corruptionSpread2;
-        }
+        // Ensure the stage index is within bounds
+        int spriteIndex = Mathf.Clamp(corruptionStage - 1, 0, corruptionSprites.Length - 1);
+        corruptedVisionImage.sprite = corruptionSprites[spriteIndex];
 
-        if (value >= 90)
-        {
-            corruptedVisionImage.sprite = corruptionSpread3;
-        }
-
+        // Optional: Adjust opacity based on corruption level
+        float alpha = Mathf.Lerp(0.3f, 1f, (float)corruptionStage / 3f);
+        Color imageColor = corruptedVisionImage.color;
+        imageColor.a = alpha;
+        corruptedVisionImage.color = imageColor;
     }
+
+    public IEnumerator ShowInsufficientFundsWarning(string text)
+    {
+        // Show warning text
+        if (textPrompt != null)
+        {
+            bool isActive; // store wether or not prompt is was active before calling this
+            if (textPrompt.gameObject.activeSelf)
+            {
+                isActive = true;
+            }
+            else
+            {
+                textPrompt.gameObject.SetActive(true);
+                isActive = false;
+            }
+            string originalText = textPrompt.text;
+            textPrompt.color = Color.red;
+            textPrompt.text = text;
+            yield return new WaitForSeconds(1.5f);
+            textPrompt.color = Color.white;
+            textPrompt.text = originalText;
+
+            textPrompt.gameObject.SetActive(isActive);
+        }
+    }
+
+    /* public void DisplayCorruptedVision(float value)
+     {
+         if (value < 60)
+         {
+             corruptedVisionHolder.SetActive(false);
+         }
+         else if (value >= 60 && value < 75)
+         {
+             corruptedVisionHolder.SetActive(true);
+             corruptedVisionImage.sprite = corruptionSpread1;
+         }
+         else if (value >= 75 && value < 90)
+         {
+             corruptedVisionImage.sprite = corruptionSpread2;
+         }
+         else if (value >= 90)
+         {
+             corruptedVisionImage.sprite = corruptionSpread3;
+         }
+
+     }*/
     public void AmmoDisplay(Weapon currentWeapon)
     {
         if (currentWeapon.IsReloading)

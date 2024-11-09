@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class DropsPoolBehavior : MonoBehaviour
 {
-    protected DropsPool pool;
+    public DropsPool pool;
 
     public void Initialize(DropsPool pool)
     {
         this.pool = pool;
+    }
+
+    public void ReturnObject()
+    {
+        pool.Return(this);
     }
 }

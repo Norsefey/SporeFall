@@ -20,12 +20,6 @@ public class ProjectileAttack : RangedAttack
     [SerializeField] private int projectileCount = 1;
     [SerializeField] private float spreadAngle = 0f;
 
-    [Header("Pool Settings")]
-    [SerializeField] protected int initialPoolSize = 20;
-    protected ProjectilePool projectilePool;
-
-
-
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
     {
         enemy.SetIsAttacking(true);
@@ -52,23 +46,19 @@ public class ProjectileAttack : RangedAttack
                     direction = Quaternion.Euler(0, currentAngle, 0) * direction;
                 }
 
-                if(projectilePool == null)
+              
+                if(!PoolManager.Instance.projectilePool.TryGetValue(projectilePrefab, out ProjectilePool pool))
                 {
-                    // Create a parent object for the pool
-                    GameObject poolParent = new GameObject($"Pool_{projectilePrefab.name}");
-                    poolParent.transform.SetParent(enemy.transform);
+                    Debug.LogError($"No pool found for enemy prefab: {projectilePrefab.name}");
 
-                    // Initialize the projectile pool
-                    if (projectilePrefab != null)
-                    {
-                        projectilePool = new ProjectilePool(projectilePrefab, poolParent.transform, initialPoolSize);
-                    }
+                    yield return null;
                 }
-                // Get projectile from pool
-                ProjectileBehavior projectile = projectilePool.Get(
-                spawnPosition,
-                    Quaternion.LookRotation(direction));                
-                if (projectile.TryGetComponent<ProjectileBehavior>(out var projectileComp))
+                ProjectileBehavior projectile = pool.Get(spawnPosition, Quaternion.LookRotation(direction));
+                /* // Get projectile from pool
+                 ProjectileBehavior projectile = projectilePool.Get(
+                 spawnPosition,
+                     Quaternion.LookRotation(direction));  */
+                if (projectile)
                 {
                     ProjectileData data = new()
                     {
@@ -83,7 +73,7 @@ public class ProjectileAttack : RangedAttack
                         BounceDamageMultiplier = bounceDamageMultiplier
                     };
 
-                    projectileComp.Initialize(data, projectilePool);
+                    projectile.Initialize(data, pool);
                 }
             }
         }

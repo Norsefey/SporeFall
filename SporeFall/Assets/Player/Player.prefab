@@ -1020,7 +1020,7 @@ MonoBehaviour:
   buildOffset: {x: 0.75, y: 4, z: -3}
   obstructions:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 4548
   minDistance: 1
   cameraMoveThreshold: 0.05
   groundOffset: 1.1
@@ -1324,7 +1324,6 @@ MonoBehaviour:
   useSpread: 1
   bulletSpreadAngle: 2
   reloadTime: 2
-  initialPoolSize: 20
   bulletCount: 10
   bulletCapacity: 10
   totalAmmo: 0
@@ -1817,7 +1816,12 @@ MonoBehaviour:
     type: 3}
   maxCorruption: 100
   corruptionLevel: 0
-  purifyRate: 1
+  corruptionReductionAmount: 25
+  corruptionReductionCost: 100
+  corruptionThresholds:
+  - 30
+  - 60
+  - 90
 --- !u!1 &3502188058702583269
 GameObject:
   m_ObjectHideFlags: 0
@@ -2020,10 +2024,11 @@ MonoBehaviour:
   corruptionBar: {fileID: 8766654047427145266}
   corruptedVisionHolder: {fileID: 6561783858093722924}
   corruptedVisionImage: {fileID: 2289475726698845273}
-  corruptionSpread1: {fileID: 21300000, guid: 6d1958a6436dc2e43b69eb17d317cf5a, type: 3}
-  corruptionSpread2: {fileID: 21300000, guid: a3d2080a5f339194fb685b1061bfd045, type: 3}
-  corruptionSpread3: {fileID: 21300000, guid: 9f4c700c66ba1434f9356b3a1820bc3c, type: 3}
-  upgradeMenu: {fileID: 0}
+  purifyButton: {fileID: 0}
+  corruptionSprites:
+  - {fileID: 21300000, guid: 6d1958a6436dc2e43b69eb17d317cf5a, type: 3}
+  - {fileID: 21300000, guid: a3d2080a5f339194fb685b1061bfd045, type: 3}
+  - {fileID: 21300000, guid: 9f4c700c66ba1434f9356b3a1820bc3c, type: 3}
   buildUI: {fileID: 1568846300907569559}
   selectedStructureIcon: {fileID: 6736773623658987197}
   rightStructureIcon: {fileID: 4460067757157157523}
@@ -2162,7 +2167,6 @@ MonoBehaviour:
   useSpread: 1
   bulletSpreadAngle: 2
   reloadTime: 2
-  initialPoolSize: 20
   bulletCount: 0
   bulletCapacity: 0
   totalAmmo: 0
@@ -2195,7 +2199,7 @@ MonoBehaviour:
   isEditing: 0
   structureOverlapMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 4224
   validPlacementColor: {r: 0, g: 1, b: 0, a: 0.25}
   invalidPlacementColor: {r: 1, g: 0, b: 0, a: 0.25}
 --- !u!1 &4265064179955315805

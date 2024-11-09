@@ -19,7 +19,7 @@ public class MyceliaPickup : DropsPoolBehavior
             other.transform.parent.GetComponent<PlayerManager>().mycelia += myceliaAmount;
             if (pool != null)
             {
-                pool.Return(this);
+                ReturnObject();
             }
             else
             {

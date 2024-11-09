@@ -38,14 +38,13 @@ public class MobEnemy : BaseEnemy
         DropsPoolBehavior myceliaDrop = pool.Get(transform.position, transform.rotation);
         myceliaDrop.Initialize(pool);
 
-        var mycelia = myceliaDrop.GetComponent<MyceliaPickup>();
-        mycelia.Setup(myceliaDropAmount);
 
-       /* if (train != null)
+        /*myceliaDrop.TryGetComponent<MyceliaPickup, out mycelia>();
+        mycelia.Setup(myceliaDropAmount);*/
+        if(myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
-            // so we can remove it if player doesn't pick it up, set as child of drops holder
-            mycelia.transform.SetParent(train.dropsHolder, true);
-        }*/
+            mycelia.Setup(myceliaDropAmount);
+        }
 
         if (weaponDropPrefab.Length != 0)
         {

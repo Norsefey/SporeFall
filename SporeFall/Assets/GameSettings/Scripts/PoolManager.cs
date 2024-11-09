@@ -10,13 +10,17 @@ public class PoolManager : MonoBehaviour
     public Dictionary<GameObject, VFXPool> vfxPool = new();
     public Dictionary<GameObject, DropsPool> dropsPool = new();
 
-
     [Header("Projectiles")]
     [SerializeField] private List<GameObject> projectiles;
+    public Transform projectileParent;
     [Header("VFX")]
     [SerializeField] private List<GameObject> VisualEffects;
+    public Transform VFXParent;
     [Header("Drops")]
     [SerializeField] private List<GameObject> Drops;
+    public Transform dropsParent;
+
+    [SerializeField] private int initialSize;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,34 +32,51 @@ public class PoolManager : MonoBehaviour
     }
     private void Start()
     {
-        GameObject projectileParent = new GameObject($"Pool_Projectiles");
-        projectileParent.transform.SetParent(transform);
         foreach (var bullet in projectiles) 
         {
             if (!projectilePool.ContainsKey(bullet))
             {
-                projectilePool.Add(bullet, new ProjectilePool(bullet, projectileParent.transform, 10));
-
+                projectilePool.Add(bullet, new ProjectilePool(bullet, projectileParent, initialSize));
             }
         }
-        GameObject VFXParent = new GameObject($"Pool_VFX");
-        VFXParent.transform.SetParent(transform);
         foreach (var VFX in VisualEffects)
         {
             if (!vfxPool.ContainsKey(VFX))
             {
-                vfxPool.Add(VFX, new VFXPool(VFX, VFXParent.transform, 10));
+                vfxPool.Add(VFX, new VFXPool(VFX, VFXParent, initialSize));
 
             }
         }
-        GameObject dropsParent = new GameObject($"Pool_Drops");
-        dropsParent.transform.SetParent(transform);
         foreach (var drop in Drops)
         {
             if (!dropsPool.ContainsKey(drop))
             {
-                dropsPool.Add(drop, new DropsPool(drop, dropsParent.transform, 10));
+                dropsPool.Add(drop, new DropsPool(drop, dropsParent, initialSize));
             }
         }
+    }
+
+    public void ReturnALlDrops()
+    {
+
+        foreach(Transform drop in dropsParent)
+        {
+            if (drop.gameObject.activeSelf)
+            {
+                drop.GetComponent<DropsPoolBehavior>().ReturnObject();
+            }
+        }
+
+        /*foreach(Transform drop in dropsParent)
+        {
+            
+            
+            *//*if (drop.gameObject.activeSelf)
+            {
+                DropsPoolBehavior dropsPool = drop.GetComponent<DropsPoolBehavior>();
+                dropsPool.pool.Return(dropsPool);
+            }*//*
+                
+        }*/
     }
 }

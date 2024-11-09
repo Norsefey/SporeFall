@@ -85,8 +85,8 @@ public class ProjectileBehavior : MonoBehaviour
                 rb.velocity = data.Direction * data.Speed;
             }
         }
-
-        StartCoroutine(LifetimeCounter());
+        if(gameObject.activeSelf)
+            StartCoroutine(LifetimeCounter());
     }
     private IEnumerator LifetimeCounter()
     {
