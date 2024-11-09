@@ -34,7 +34,7 @@ public class ProjectileBehavior : MonoBehaviour
 
     [Header("General Settings")]
     [SerializeField] private ProjectileType type;
-    [SerializeField] private string hitTag;
+    [SerializeField] protected LayerMask hitLayers;
     [SerializeField] private GameObject vfxPrefab;
 
     [Header("Audio Settings")]
@@ -99,6 +99,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void ReturnToPool()
     {
+        Debug.Log($"Returning to pool {name}");
         StopAllCoroutines();
         if (pool != null)
         {
@@ -110,8 +111,9 @@ public class ProjectileBehavior : MonoBehaviour
         StopAllCoroutines();
     }
     private void OnCollisionEnter(Collision collision)
-    { 
-        if(string.IsNullOrEmpty(hitTag))
+    {
+        // Check if the collision object's layer is in our hitLayers mask
+        if (hitLayers == (hitLayers | (1 << collision.gameObject.layer)))
         {
             switch (type)
             {
@@ -125,26 +127,9 @@ public class ProjectileBehavior : MonoBehaviour
                     HandleDOTAttack();
                     break;
             }
-            HandleCollision(collision);
         }
-        else
-        {
-            switch (type)
-            {
-                case ProjectileType.Standard:
-                    if (collision.collider.CompareTag(hitTag))
-                        HandleStandardAttack(collision);
-                    break;
-                case ProjectileType.Explosive:
-                    HandleExplosiveAttack();
-                    break;
-                case ProjectileType.DOT:
-                    HandleDOTAttack();
-                    break;
-            }
-            HandleCollision(collision);
-        }
-       
+        HandleCollision(collision);
+
     }
     protected void ApplyDamage(Damageable target)
     {
@@ -157,14 +142,16 @@ public class ProjectileBehavior : MonoBehaviour
 
         if (vfxPrefab != null)
         {// if you have a VFX assigned, play it on collision
-            // Get VFX from pool
+
+            vfxPrefab.SetActive(true);
+            /*// Get VFX from pool
             if (!PoolManager.Instance.vfxPool.TryGetValue(vfxPrefab, out VFXPool pool))
             {
                 Debug.LogError($"No pool found for enemy prefab: {vfxPrefab.name}");
                 return;
             }
             VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
-            vfx.Initialize(pool);
+            vfx.Initialize(pool);*/
         }
         if (data.CanBounce && bounceCount < data.MaxBounces)
         {
@@ -172,7 +159,15 @@ public class ProjectileBehavior : MonoBehaviour
         }
         else
         {
+            ToggleVFX(false);
             ReturnToPool();
+        }
+    }
+    protected void ToggleVFX(bool toggle)
+    {
+        if (vfxPrefab != null)
+        {
+            vfxPrefab.SetActive(toggle);
         }
     }
     protected void Bounce(Collider surface)
@@ -202,28 +197,23 @@ public class ProjectileBehavior : MonoBehaviour
                 Debug.LogError($"No pool found for enemy prefab: {explosionEffectPrefab.name}");
                 return;
             }
-            VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
-            vfx.Initialize(pool);
+            VFXPoolingBehavior explosiveVfx = pool.Get(transform.position, transform.rotation);
+            explosiveVfx.Initialize(pool);
         }
 
-        // Damage all targets in explosion radius
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        // Use OverlapSphere with the layer mask
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius, hitLayers);
         foreach (var hit in hitColliders)
         {
-            // Calculate distance for damage falloff
             float distance = Vector3.Distance(transform.position, hit.transform.position);
             float damageMultiplier = damageFalloff.Evaluate(distance / explosionRadius);
 
-            // Apply damage if object has IDamageable interface
-            Damageable damageable = hit.GetComponent<Damageable>();
-            if (damageable != null)
+            if (hit.TryGetComponent<Damageable>(out var damageable))
             {
-                if(string.IsNullOrEmpty(hitTag))// If theres no tag damage all in range
-                    damageable.TakeDamage(damage * damageMultiplier);
-                else if (damageable.CompareTag(hitTag))// if there is a tag only damage if tag matches
-                    damageable.TakeDamage(damage * damageMultiplier);
+                damageable.TakeDamage(damage * damageMultiplier);
             }
         }
+
 
         ReturnToPool();
     }
@@ -235,7 +225,8 @@ public class ProjectileBehavior : MonoBehaviour
 
             if (zoneObject.TryGetComponent<DamageOverTimeZone>(out var dotZone))
             {
-                dotZone.Initialize(dOTDuration, dOTTickRate, dOTDamagePerTick, dOTRadius, hitTag);
+                // Pass the hitLayers instead of hitTag
+                dotZone.Initialize(dOTDuration, dOTTickRate, dOTDamagePerTick, dOTRadius, hitLayers);
             }
         }
 

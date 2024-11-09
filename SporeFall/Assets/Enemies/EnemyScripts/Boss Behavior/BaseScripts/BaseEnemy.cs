@@ -25,8 +25,8 @@ public abstract class BaseEnemy : MonoBehaviour
 
     [Header("Base Components")]
     [SerializeField] protected Attack[] attacks;
+    [SerializeField] protected Animator animator;
     protected NavMeshAgent agent;
-    protected Animator animator;
     protected AudioSource audioSource;
     protected Damageable health;
     public Transform firePoint;
@@ -94,7 +94,6 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         // Get component references once
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         health = GetComponent<Damageable>();
         detectedColliders = new Collider[maxDetectedObjects];
@@ -499,10 +498,6 @@ public abstract class BaseEnemy : MonoBehaviour
                     bestPriority = priority;
                     bestAttack = attack;
                 }
-            }
-            else
-            {
-                Debug.Log("Cannot Use Attack: " + attack.name);
             }
         }
         return bestAttack;
