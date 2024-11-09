@@ -103,6 +103,7 @@ public class WaveManager : MonoBehaviour
     private IEnumerator StartWave()
     {
         wavePhase = WavePhase.Started;
+        wUI.DisplayWaveStart();
         enemiesSpawned = 0;
 
         // Reset spawn counts for new wave
@@ -337,6 +338,8 @@ public class WaveManager : MonoBehaviour
 
         if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
         {
+            wUI.DisplayWaveFlags();
+            wUI.DisplayWaveClear();
             WaveCleared();
         }
     }

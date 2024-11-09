@@ -54,6 +54,7 @@ public class Payload : MonoBehaviour
         else
         {
             WaveUI.Instance.DisplayWaveProgress(pathIndex);
+            WaveUI.Instance.DisplayWaveFlags();
             isMoving = false;
             StartCoroutine(WinLevel());
         }
