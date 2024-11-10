@@ -25,6 +25,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction pauseGame;
     private InputAction toggleFullscreen;
     private InputAction flipCameraSide;
+    private InputAction showStructureRadius;
     // Shoot Actions
     private InputAction fireAction;
     private InputAction reloadAction;
@@ -65,6 +66,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         aimAction = playerInputMap.FindAction("Aim");
         interactAction = playerInputMap.FindAction("Interact");
         flipCameraSide = playerInputMap.FindAction("FlipCamera");
+        showStructureRadius = playerInputMap.FindAction("ToggleRadius");
         // shoot action map
         jumpAction = shootInputMap.FindAction("Jump");
         reloadAction = shootInputMap.FindAction("Reload");
@@ -103,6 +105,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame.performed += OnExitGame;
         toggleFullscreen.performed += ToggleFullscreen;
         flipCameraSide.performed += OnFlipCamera;
+        showStructureRadius.performed += OnToggleShowRadius;
         // shoot actions
         reloadAction.performed += OnReload;
         dropAction.performed += OnDropWeapon;
@@ -117,7 +120,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         moveStructAcion.canceled += OnEditMoveStructureCancled;
         exitEditAction.performed += OnExitEditMode;
         destroyStructAction.performed += OnEditDestroy;
-        upgradeStructAction.started += OnEditUpgrade;
+        //upgradeStructAction.started += OnEditUpgrade;
 
     }
     private void OnDisable()
@@ -135,6 +138,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame.performed -= OnExitGame;
         toggleFullscreen.performed -= ToggleFullscreen;
         flipCameraSide.performed -= OnFlipCamera;
+        showStructureRadius.performed -= OnToggleShowRadius;
         //shoot actions
         reloadAction.performed -= OnReload;
         dropAction.performed -= OnDropWeapon;
@@ -149,7 +153,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         destroyStructAction.performed -= OnEditDestroy;
         rotateStructAction.started -= OnEditRotateStarted;
         rotateStructAction.canceled -= OnEditRotateCancled;
-        upgradeStructAction.started -= OnEditUpgrade;
+        //upgradeStructAction.started -= OnEditUpgrade;
         // disable Input map
         playerInputMap.Disable();
         shootInputMap.Disable();
@@ -265,6 +269,10 @@ public class PlayerInputOrganizer : MonoBehaviour
             Screen.SetResolution(defaultRes.width, defaultRes.height, true);
         }
 
+    }
+    private void OnToggleShowRadius(InputAction.CallbackContext context)
+    {
+        pMan.bGun.ToggleShowRadius();
     }
     private void OnAimSightCall(InputAction.CallbackContext context)
     {
@@ -454,12 +462,12 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         pMan.isRotating = false;
     }
-    private void OnEditUpgrade(InputAction.CallbackContext context)
+/*    private void OnEditUpgrade(InputAction.CallbackContext context)
     {
         // put upgrade code here
         pMan.bGun.UpgradeStructure();
     }
-
+*/
     public string GetInteractionKey()
     {
         string key = interactAction.GetBindingDisplayString();

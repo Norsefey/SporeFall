@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class FlameThrower : MonoBehaviour
 {
-    public float damagePerSecond = 8f;      // Damage per second dealt to enemies
-    public float range = 5f;                // Radius of the flamethrower effect
+    [HideInInspector]
+    public float damagePerSecond, range, tickRate;      // Damage per second dealt to enemies
     public LayerMask enemyLayer;            // The layer that enemies are on
-    public string enemyTag = "Enemy";       // Tag for enemies
-    public float tickRate = 0.5f;           // How often damage is applied (in seconds)
 
     private float tickTimer = 0f;
-
     [Header("Audio Settings")]
     public AudioClip flameSound;            // Sound for the flamethrower
     [Range(0f, 1f)] public float flameVolume = 0.5f; // Volume control for the flame sound
@@ -61,16 +58,13 @@ public class FlameThrower : MonoBehaviour
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range, enemyLayer);
         foreach (Collider enemy in enemiesInRange)
         {
-            // Check if the collider has the enemy tag
-            if (enemy.CompareTag(enemyTag))
-            {
-                hasHitEnemies = true;
+            hasHitEnemies = true;
 
-                // Assuming the enemy has a script with a method to take damage
-                enemy.GetComponent<Damageable>()?.TakeDamage(damagePerSecond * tickRate);
-                Debug.Log("hit");
-                pp.PlayEffects();
-            }
+            // Assuming the enemy has a script with a method to take damage
+            enemy.GetComponent<Damageable>()?.TakeDamage(damagePerSecond * tickRate);
+            Debug.Log("hit");
+            pp.PlayEffects();
+            
         }
 
         return hasHitEnemies;

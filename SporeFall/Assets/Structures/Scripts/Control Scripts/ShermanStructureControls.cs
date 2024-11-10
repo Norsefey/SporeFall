@@ -5,17 +5,15 @@ using UnityEngine.InputSystem;
 
 public class ShermanStructureControls : MonoBehaviour
 {
-    public GameObject shermanPrefab;        // The prefab to spawn
     public Transform spawnPoint;     // Where to spawn the prefab
-    private ShermanControl currentSherman; // Holds reference to the current spawned object
+    public ShermanControl currentSherman; // Holds reference to the current spawned object
     public float respawnDelay = 2f;  // Delay time in seconds before respawning
 
-    [SerializeField] private SkinnedMeshRenderer sHouse;
+    //[SerializeField] private SkinnedMeshRenderer sHouse;
     //float blendShapeValue = 0;
     void Start()
     {
-        currentSherman = Instantiate(shermanPrefab, spawnPoint).GetComponent<ShermanControl>();
-        currentSherman.SetParent(this);
+        StartCoroutine(ResetAfterDelay());
     }
 
     void Update()
@@ -70,7 +68,7 @@ public class ShermanStructureControls : MonoBehaviour
     // Method to spawn the prefab at the spawn point
     private void ResetSherman()
     {
-        if (shermanPrefab != null && spawnPoint != null)
+        if (currentSherman != null && spawnPoint != null)
         {
             currentSherman.ActivateSherman();
             currentSherman.transform.position = spawnPoint.position;

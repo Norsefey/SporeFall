@@ -7,6 +7,7 @@ public abstract class Damageable : MonoBehaviour
     public float maxHP;
     protected float currentHP;
     public bool canHoldCorruption;
+    public bool canTakeDamage = true;
     public float CurrentHP {  get { return currentHP; } }
     private bool isDead = false;
     protected abstract void Die();
@@ -21,6 +22,11 @@ public abstract class Damageable : MonoBehaviour
     }
     public virtual void TakeDamage(float damage)
     {
+        if(!canTakeDamage)    
+        { 
+            return; 
+        }
+
         currentHP -= damage;
         UpdateUI();
         if(currentHP <= 0 && !isDead)
@@ -41,5 +47,10 @@ public abstract class Damageable : MonoBehaviour
             currentHP = maxHP;
 
         UpdateUI();
+    }
+    public void SetMaxHP(float value)
+    {
+        maxHP = value;
+        ResetHealth();
     }
 }

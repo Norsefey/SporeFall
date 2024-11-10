@@ -265,6 +265,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleRadius"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d8b5fce-15df-4422-a7c0-aa34844ba4e7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -463,6 +472,28 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""FlipCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14b3f02e-493c-41d2-813d-0ca7b240de12"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ToggleRadius"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd928b95-d8fe-4c8a-b804-1a1ee5a29f79"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ToggleRadius"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -927,7 +958,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e76cd94c-b977-437b-8c28-60eed46e0cfc"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -1016,6 +1047,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_FlipCamera = m_Player.FindAction("FlipCamera", throwIfNotFound: true);
+        m_Player_ToggleRadius = m_Player.FindAction("ToggleRadius", throwIfNotFound: true);
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
         m_Shoot_Reload = m_Shoot.FindAction("Reload", throwIfNotFound: true);
@@ -1174,6 +1206,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_FlipCamera;
+    private readonly InputAction m_Player_ToggleRadius;
     public struct PlayerActions
     {
         private @GameInputs m_Wrapper;
@@ -1185,6 +1218,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @FlipCamera => m_Wrapper.m_Player_FlipCamera;
+        public InputAction @ToggleRadius => m_Wrapper.m_Player_ToggleRadius;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1215,6 +1249,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @FlipCamera.started += instance.OnFlipCamera;
             @FlipCamera.performed += instance.OnFlipCamera;
             @FlipCamera.canceled += instance.OnFlipCamera;
+            @ToggleRadius.started += instance.OnToggleRadius;
+            @ToggleRadius.performed += instance.OnToggleRadius;
+            @ToggleRadius.canceled += instance.OnToggleRadius;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1240,6 +1277,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @FlipCamera.started -= instance.OnFlipCamera;
             @FlipCamera.performed -= instance.OnFlipCamera;
             @FlipCamera.canceled -= instance.OnFlipCamera;
+            @ToggleRadius.started -= instance.OnToggleRadius;
+            @ToggleRadius.performed -= instance.OnToggleRadius;
+            @ToggleRadius.canceled -= instance.OnToggleRadius;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1517,6 +1557,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnFlipCamera(InputAction.CallbackContext context);
+        void OnToggleRadius(InputAction.CallbackContext context);
     }
     public interface IShootActions
     {

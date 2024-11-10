@@ -62,31 +62,6 @@ public class WaveManager : MonoBehaviour
         StartCoroutine(MoveToWaveLocation(0));
     }
 
-    private void Update()
-    {
-        /*switch (wavePhase)
-        {
-            case WavePhase.NotStarted:
-                if(waveUI != null)
-                    waveUI.text = "Push Button to Start: " + currentWave.waveName;
-                break;
-            case WavePhase.Started:
-                if (waveUI != null)
-                    waveUI.text = "Enemies Left: " + (currentWave.totalEnemies - ( enemiesSpawned - enemiesAlive)).ToString();
-                break;
-            case WavePhase.Departing:
-                timer -= Time.deltaTime;
-                if (waveUI != null && timer > 0)
-                    waveUI.text = "Wave Cleared! Departing in: " + (timer).ToString("F0") + "\n Push Button To skip Wait";
-                else if(waveUI != null)
-                    waveUI.text = "Firing Cannon!!";
-                break;
-            case WavePhase.Moving:
-                if (waveUI != null)
-                    waveUI.text = "Moving to next Area";
-                break;
-        }*/
-    }
     #region Wave State Transitions
     public void OnStartWave()
     {

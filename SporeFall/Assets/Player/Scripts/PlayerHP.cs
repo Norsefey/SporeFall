@@ -15,11 +15,6 @@ public class PlayerHP : Damageable
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
-
-        if(canHoldCorruption)
-        {
-
-        }
     }
 
     public void DepleteLife()
@@ -63,9 +58,4 @@ public class PlayerHP : Damageable
     {
         pMan.pCorruption.IncreaseCorruption(amount);
     }
-    /*    public void Heal(float amount)
-   {
-       currentHP = Mathf.Min(currentHP + amount, maxHP);
-       Debug.Log("Player healed. Current Health: " + currentHP);
-   }*/
 }

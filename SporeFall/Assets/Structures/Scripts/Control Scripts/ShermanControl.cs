@@ -4,24 +4,28 @@ using UnityEngine;
 
 public class ShermanControl : MonoBehaviour
 {
-    private ShermanStructureControls parentStructure;
-    public float moveSpeed = 2f;
-    public float turnSpeed = 1f;    // How fast the object changes direction
-    public float changeDirectionInterval = 2f;    // How often to change direction
-    public int damage = 100;    // Damage dealt to enemies on contact
-    public float detectionRadius = 10f;    // Detection radius for nearby enemies
-    public float enemyInfluenceWeight = 2f;    // Weight for enemy influence on direction (higher = more attracted to enemies)
-    public float randomMovementWeight = 1f;    // Weight for random movement (higher = more random movement)
-    public string enemyTag = "Enemy";
-    private Vector3 currentDirection;
-    private bool active = true;
+    [HideInInspector]
+    public float
+        moveSpeed, 
+        turnSpeed, 
+        changeDirectionInterval, 
+        damage, 
+        detectionRadius,
+        enemyInfluenceWeight,
+        randomMovementWeight, 
+        explosionRadius;
+    [HideInInspector]
+    public AnimationCurve damageFalloff;
+
+    [SerializeField] private ShermanStructureControls parentStructure;
     [Header("Explosion Settings")]
     [SerializeField] private LayerMask damageableLayers;
-    [SerializeField] private float explosionRadius = 10f;
-    [SerializeField] private AnimationCurve damageFalloff = AnimationCurve.Linear(0f, 1f, 1f, 0f);
     [SerializeField] private AudioClip explosionSF;
     [SerializeField] private GameObject explosionVF;
     private AudioSource audioPlayer;
+    private Vector3 currentDirection;
+    private string enemyTag = "Enemy";
+    private bool active = true;
     void Start()
     {
         active = true;
@@ -139,10 +143,10 @@ public class ShermanControl : MonoBehaviour
         active = true;
         transform.GetChild(0).gameObject.SetActive(true);
     }
-    public void SetParent(ShermanStructureControls structure)
+   /* public void SetParent(ShermanStructureControls structure)
     {
         parentStructure = structure;
-    }
+    }*/
     // Optional: Visualize the detection radius in the editor
     private void OnDrawGizmosSelected()
     {

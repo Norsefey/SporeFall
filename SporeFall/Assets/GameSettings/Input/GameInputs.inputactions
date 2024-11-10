@@ -243,6 +243,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleRadius",
+                    "type": "Button",
+                    "id": "9d8b5fce-15df-4422-a7c0-aa34844ba4e7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -441,6 +450,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "FlipCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "14b3f02e-493c-41d2-813d-0ca7b240de12",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ToggleRadius",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bd928b95-d8fe-4c8a-b804-1a1ee5a29f79",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "ToggleRadius",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -905,7 +936,7 @@
                 {
                     "name": "",
                     "id": "e76cd94c-b977-437b-8c28-60eed46e0cfc",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",

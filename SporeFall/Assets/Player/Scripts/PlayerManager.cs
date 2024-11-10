@@ -62,6 +62,11 @@ public class PlayerManager : MonoBehaviour
     }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            pHealth.TakeDamage(20);
+        }
+
         WeaponBehavior();
     }
     private void SetManager()

@@ -47,7 +47,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3601192681765489144
 Transform:
   m_ObjectHideFlags: 0
@@ -60,7 +60,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3260608869192328482}
   m_Father: {fileID: 4875674513707954885}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3895042530933602892
@@ -75,11 +76,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c88687d2368a7e3418ab21617efe4862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shermanPrefab: {fileID: 2588137888749594261, guid: ac4d833fce99bdf4cbbbf7b128249300,
-    type: 3}
   spawnPoint: {fileID: 3603894046513239344}
+  currentSherman: {fileID: 3558202522786940098}
   respawnDelay: 2
-  sHouse: {fileID: 1949457979283779014}
 --- !u!1 &1260562837911600462
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4129738175944824664}
   - component: {fileID: 2682952239649668205}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,7 +285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4875674513707954885
 Transform:
   m_ObjectHideFlags: 0
@@ -316,6 +315,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 100
+  canHoldCorruption: 0
+  canTakeDamage: 1
   healthDisplay: {fileID: 9221098303091386716}
 --- !u!136 &7771958113601973338
 CapsuleCollider:
@@ -468,6 +469,7 @@ GameObject:
   m_Component:
   - component: {fileID: 486190185445929729}
   - component: {fileID: 6160126734740821747}
+  - component: {fileID: 2256723778526685127}
   m_Layer: 7
   m_Name: StructBased_ShermanHouse
   m_TagString: Structure
@@ -506,17 +508,121 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05bdcf93f2ddb5f42a063314ea8289ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structBehavior: {fileID: 3927428180562508789}
-  visuals:
+  controlScriptObject: {fileID: 795503593085061794}
+  levelVisuals:
   - {fileID: 6755757473945553029}
-  cost:
-  - 25
-  - 30
-  - 50
-  energyCost:
-  - 5
-  - 10
-  - 15
+  levels: {fileID: 11400000, guid: cb3a6b735dd2cfe43a8dbb995bd898eb, type: 2}
+  radiusIndicator: {fileID: 0}
+  healthComponent: {fileID: 8933941658098722499}
+--- !u!114 &2256723778526685127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5415324038918524610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2402380c6e994c4b90265881d189fd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sherman: {fileID: 3558202522786940098}
+--- !u!1001 &3127742029315791310
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3601192681765489144}
+    m_Modifications:
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875395865627073804, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: parentStructure
+      value: 
+      objectReference: {fileID: 3895042530933602892}
+    - target: {fileID: 2588137888749594261, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_Name
+      value: Sherman 2.0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2588137888749594261, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ac4d833fce99bdf4cbbbf7b128249300, type: 3}
+--- !u!4 &3260608869192328482 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 443598723916709100, guid: ac4d833fce99bdf4cbbbf7b128249300,
+    type: 3}
+  m_PrefabInstance: {fileID: 3127742029315791310}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3558202522786940098 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1875395865627073804, guid: ac4d833fce99bdf4cbbbf7b128249300,
+    type: 3}
+  m_PrefabInstance: {fileID: 3127742029315791310}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fe4c735c32553f4a87b230c0ed4aa4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5836713980432365012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -625,17 +731,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sherman's House FBX
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e9012cb93b1b594c978a79e2327fc29, type: 3}
---- !u!137 &1949457979283779014 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
-    type: 3}
-  m_PrefabInstance: {fileID: 5836713980432365012}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6235960519757877823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,

@@ -127,7 +127,7 @@ public class TrainHandler : MonoBehaviour
         energyUsed = 0;
         foreach (var structure in activeStructures)
         {
-            energyUsed += structure.GetEnergyCost();
+            energyUsed += structure.GetCurrentEnergyCost();
         }
     }
     public bool CheckEnergy(float eCost)

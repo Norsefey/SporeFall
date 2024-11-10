@@ -1128,6 +1128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 100
   canHoldCorruption: 1
+  canTakeDamage: 1
   lives: 3
 --- !u!82 &5224858030605110896
 AudioSource:
@@ -2187,8 +2188,8 @@ MonoBehaviour:
   - {fileID: 2143417820075499101, guid: 877219f937a427a4889d673a029d294d, type: 3}
   - {fileID: 1083017409998067897, guid: 32bb110230eb1c844bbcf862215db098, type: 3}
   - {fileID: 3745370869290195764, guid: 49278954c29530a47a63cd420176d3be, type: 3}
-  - {fileID: 5415324038918524610, guid: fac6cdfab8399ee429dd9aa3546761f8, type: 3}
   - {fileID: 7608820938799165632, guid: 13b46ee8777608c41b49e3ddd2b65309, type: 3}
+  - {fileID: 5415324038918524610, guid: fac6cdfab8399ee429dd9aa3546761f8, type: 3}
   selectedStructure: {fileID: 0}
   groundLayer:
     serializedVersion: 2
@@ -2206,6 +2207,10 @@ MonoBehaviour:
     m_Bits: 4224
   validPlacementColor: {r: 0, g: 1, b: 0, a: 0.25}
   invalidPlacementColor: {r: 1, g: 0, b: 0, a: 0.25}
+  buildModeText: "<color=red>Build Mode</color> \n F to Select Placed Structure\n
+    Hold Right mouse to Preview"
+  editModeText: "<color=green>Edit Mode</color> \n LC to Move \n Hold X to Destroy
+    \n F to return"
 --- !u!1 &4265064179955315805
 GameObject:
   m_ObjectHideFlags: 0
