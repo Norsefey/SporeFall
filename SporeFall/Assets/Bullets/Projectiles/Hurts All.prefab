@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8dfb1474cba773a4fba84bcd49ec6abb, type: 2}
+  - {fileID: 2100000, guid: 7efe656e6c7b97a43a48055744795c7a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 1427754023516810167}
   - component: {fileID: 3306381464641036855}
   m_Layer: 10
-  m_Name: DOT Projectile
+  m_Name: Hurts All
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,7 +137,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1664
+    m_Bits: 1024
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -178,10 +178,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1755e229306f9a944b473b5aef203d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
-  hitTag: Enemy
-  explosionEffectPrefab: {fileID: 0}
-  explosionRadius: 0
+  type: 1
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 3008
+  vfxPrefab: {fileID: 0}
+  audioPlayer: {fileID: 0}
+  bulletSound: {fileID: 0}
+  bulletSoundVolume: 0.5
+  explosionEffectPrefab: {fileID: 1150934714579380, guid: 779aa8c25fbd0e1488637639c9fff976,
+    type: 3}
+  explosionRadius: 15
   damageFalloff:
     serializedVersion: 2
     m_Curve:
@@ -206,10 +213,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  createsDOTZone: 1
-  dotZonePrefab: {fileID: 5036783195561497440, guid: 102afbd0b320e4d488a801a9386aa794,
-    type: 3}
-  dOTDuration: 5
-  dOTTickRate: 1
-  dOTDamagePerTick: 1
-  dOTRadius: 5
+  createsDOTZone: 0
+  dotZonePrefab: {fileID: 0}
+  dOTDuration: 0
+  dOTTickRate: 0
+  dOTDamagePerTick: 0
+  dOTRadius: 0
+  corruptionAmount: 0

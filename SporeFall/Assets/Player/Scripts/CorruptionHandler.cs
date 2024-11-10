@@ -9,9 +9,15 @@ public class CorruptionHandler : MonoBehaviour
     [Header("Corruption Variables")]
     public float maxCorruption = 100;
     public float corruptionLevel = 0;
+
+    [Header("Large Reduction Purchase")]
     public float corruptionReductionAmount = 25f; // Amount reduced per purchase
     public int corruptionReductionCost = 100; // Cost to reduce corruption
+    public float timer = 0;
 
+    [Header("Corruption Recovery")]
+    [SerializeField] private float corruptionRecoveryDelay = 3f; // Time to wait before corruption starts decreasing
+    [SerializeField] private float corruptionDecreaseRate = 5f; // Units per second
 
     [Header("Corruption Stages")]
     [SerializeField] private float[] corruptionThresholds = new float[] { 30f, 60f, 90f }; // Thresholds for different vision effects
@@ -32,11 +38,31 @@ public class CorruptionHandler : MonoBehaviour
 
         if (pMan.holdingCorruption)
         {
+            // Reset timer when holding corruption
+            timer = corruptionRecoveryDelay;
             corruptionLevel = Mathf.Min(corruptionLevel + pMan.currentWeapon.corruptionRate * Time.deltaTime, maxCorruption);
             UpdateCorruptionVision();
             pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
         }
+        else if (corruptionLevel > 0 && timer <= 0)
+        {
+            // Decrease corruption level over time
+            corruptionLevel = Mathf.Max(0, corruptionLevel - corruptionDecreaseRate * Time.deltaTime);
+            UpdateCorruptionVision();
+            pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
+        }
+        else if(corruptionLevel > 0)
+        {
+            timer -= Time.deltaTime;
+        }
 
+    }
+    public void IncreaseCorruption(float value)
+    {
+        // Reset timer when corrupted
+        timer = corruptionRecoveryDelay;
+        corruptionLevel += value;
+        pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
     }
     private void UpdateCorruptionVision()
     {
@@ -60,14 +86,14 @@ public class CorruptionHandler : MonoBehaviour
     public bool TryPurchaseCorruptionReduction()
     {
         // Check if player has enough currency (you'll need to implement this check)
-        if (pMan.mycelia >= corruptionReductionCost)
+        if (pMan.Mycelia >= corruptionReductionCost)
         {
             if(corruptionLevel > 0)
             {
                 return false;
             }
             // Deduct currency
-            pMan.mycelia -= corruptionReductionCost;
+            pMan.DecreaseMycelia(corruptionReductionCost);
 
             // Reduce corruption
             corruptionLevel = Mathf.Max(0, corruptionLevel - corruptionReductionAmount);

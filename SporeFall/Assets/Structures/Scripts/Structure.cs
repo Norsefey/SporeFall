@@ -59,6 +59,10 @@ public class Structure : MonoBehaviour
     {
         return visuals[structLevel];
     }
+    public StructureHP GetStructureHP()
+    {
+        return transform.GetChild(0).GetComponent<StructureHP>();
+    }
     public void SetTrainHandler(TrainHandler train)
     {
         this.train = train; 

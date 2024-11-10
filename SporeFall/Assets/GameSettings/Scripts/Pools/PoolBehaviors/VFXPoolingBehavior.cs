@@ -21,7 +21,19 @@ public class VFXPoolingBehavior : MonoBehaviour
             {
                 if(Vector3.Distance(transform.position, targetPos) < .5f)
                 {
-                    ToggleHitEffect(true);
+                    // Get VFX from pool
+                    if (!PoolManager.Instance.vfxPool.TryGetValue(hitEffect, out VFXPool pool))
+                    {
+                        Debug.LogError($"No pool found for enemy prefab: {hitEffect.name}");
+                        //return;
+                    }
+                    else
+                    {
+                        VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
+                        vfx.Initialize(pool);
+                    }
+                    ReturnBullet();
+
                 }
                 transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed * Time.deltaTime);
             }
@@ -34,22 +46,11 @@ public class VFXPoolingBehavior : MonoBehaviour
         moveSpeed = speed;
 
         shouldMove = true;
-        Invoke(nameof(ReturnBullet), 1f);
-    }
-    private void ToggleHitEffect(bool toggle)
-    {
-        if (hitEffect != null) 
-        {
-            hitEffect.SetActive(toggle);
-        }
     }
     private void ReturnBullet()
     {
-        ToggleHitEffect(false);
         targetPos = Vector3.zero;
         shouldMove = false;
-
-
         Debug.Log("Returning to pool");
         pool.Return(this);
     }
@@ -58,16 +59,15 @@ public class VFXPoolingBehavior : MonoBehaviour
         moveSpeed = 50;
         shouldMove = true;
         Invoke(nameof(ReturnBullet), 1f);
-
     }
     public void Initialize(VFXPool pool)
     {
         Debug.Log(gameObject.name + ": Initialized");
         this.pool = pool;
     }
-  /*  public void OnParticleSystemStopped()
+
+    private void OnParticleSystemStopped()
     {
-        Debug.Log("Returning to pool");
         pool.Return(this);
-    }*/
+    }
 }

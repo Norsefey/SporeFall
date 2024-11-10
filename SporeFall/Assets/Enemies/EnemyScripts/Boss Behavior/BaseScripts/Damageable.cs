@@ -6,10 +6,15 @@ public abstract class Damageable : MonoBehaviour
 {
     public float maxHP;
     protected float currentHP;
+    public bool canHoldCorruption;
     public float CurrentHP {  get { return currentHP; } }
     private bool isDead = false;
     protected abstract void Die();
     protected abstract void UpdateUI();
+    public virtual void IncreaseCorruption(float amount)
+    {
+
+    }
     private void Awake()
     {
         ResetHealth();

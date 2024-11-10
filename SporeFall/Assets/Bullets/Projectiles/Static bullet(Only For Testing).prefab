@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7efe656e6c7b97a43a48055744795c7a, type: 2}
+  - {fileID: 2100000, guid: a86d8ca889a0d5342a348976b66261e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 1427754023516810167}
   - component: {fileID: 3306381464641036855}
   m_Layer: 10
-  m_Name: Hurts All
+  m_Name: Static bullet(Only For Testing)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,7 +141,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
@@ -178,11 +178,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1755e229306f9a944b473b5aef203d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  hitTag: 
-  explosionEffectPrefab: {fileID: 1150934714579380, guid: 779aa8c25fbd0e1488637639c9fff976,
-    type: 3}
-  explosionRadius: 15
+  type: 0
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 6592
+  vfxPrefab: {fileID: 0}
+  audioPlayer: {fileID: 0}
+  bulletSound: {fileID: 0}
+  bulletSoundVolume: 0.5
+  explosionEffectPrefab: {fileID: 0}
+  explosionRadius: 0
   damageFalloff:
     serializedVersion: 2
     m_Curve:
@@ -213,3 +218,4 @@ MonoBehaviour:
   dOTTickRate: 0
   dOTDamagePerTick: 0
   dOTRadius: 0
+  corruptionAmount: 0

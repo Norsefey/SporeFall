@@ -12,6 +12,16 @@ public class PlayerHP : Damageable
         currentHP = maxHP;
         UpdateUI();
     }
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+
+        if(canHoldCorruption)
+        {
+
+        }
+    }
+
     public void DepleteLife()
     {
         lives--;
@@ -48,9 +58,14 @@ public class PlayerHP : Damageable
     {
         pMan.pUI.UpdateHPDisplay(currentHP);
     }
-/*    public void Heal(float amount)
+
+    public override void IncreaseCorruption(float amount)
     {
-        currentHP = Mathf.Min(currentHP + amount, maxHP);
-        Debug.Log("Player healed. Current Health: " + currentHP);
-    }*/
+        pMan.pCorruption.IncreaseCorruption(amount);
+    }
+    /*    public void Heal(float amount)
+   {
+       currentHP = Mathf.Min(currentHP + amount, maxHP);
+       Debug.Log("Player healed. Current Health: " + currentHP);
+   }*/
 }

@@ -34,8 +34,8 @@ public class PlayerManager : MonoBehaviour
     public bool isRotating = false;
     [Header("Currency")]
     // Player Stats
-    public float mycelia = 30;
- 
+    private float mycelia = 125;
+    public float Mycelia { get { return mycelia; } }
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
     [SerializeField] private Transform fallbackSpawnPoint;
@@ -303,6 +303,14 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("No Life No Game");
         SceneTransitioner.Instance.LoadLoseScene();
+    }
+    public void IncreaseMycelia(float amount)
+    {
+        mycelia += amount;
+    }
+    public void DecreaseMycelia(float amount)
+    {
+        mycelia -= amount;
     }
     public int GetPlayerIndex()
     {

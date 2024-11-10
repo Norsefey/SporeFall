@@ -11,6 +11,7 @@ public class TrainHandler : MonoBehaviour
     [SerializeField] private TrainUI UI;
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
+    [SerializeField] private GameObject forceField;
     [SerializeField] private GameObject payloadPrefab;
     [SerializeField] private Transform payloadSpawnPos;
     [SerializeField] private AudioListener listener;
@@ -97,9 +98,10 @@ public class TrainHandler : MonoBehaviour
         UI.gameObject.SetActive(false);
         Payload.StartMoving(path);
     }
-    private void ToggleStructures(bool state)
+    private void ToggleStructures(bool toggle)
     {
-        structureHolder.gameObject.SetActive(state);
+        structureHolder.gameObject.SetActive(toggle);
+        forceField.SetActive(toggle);
     }
     public void AddStructure(Structure structure)
     {
@@ -213,6 +215,13 @@ public class TrainHandler : MonoBehaviour
         int index = Random.Range(0, damagePoint.Length);
 
         return damagePoint[index];
+    }
+    public void GivePlayersMycelia(float amount)
+    {
+        foreach(PlayerManager player in players)
+        {
+            player.IncreaseMycelia(amount);
+        }
     }
     private void ClearDrops()
     {

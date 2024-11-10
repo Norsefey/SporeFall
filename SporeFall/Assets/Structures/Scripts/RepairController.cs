@@ -6,10 +6,13 @@ public class RepairController : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    [SerializeField] private float HealAmount = 3f;        // Amount of health to restore each tick
-    [SerializeField] private float HealRate = 1f;
-
+    [SerializeField] private float healAmount = 3f;        // Amount of health to restore each tick
+    [SerializeField] private float healRate = 1f;
     private float HealTime;
+
+    [Header("Heal Area")]
+    [SerializeField] private float healRadius = 10;
+    [SerializeField] private SphereCollider healZone;
 
     // Update is called once per frame
     private void OnTriggerStay(Collider other)
@@ -19,8 +22,8 @@ public class RepairController : MonoBehaviour
             PlayerHP currentHP = other.GetComponent<PlayerHP>();
             if (currentHP != null && Time.time >= HealTime)
             {
-                currentHP.RestoreHP(HealAmount);
-                HealTime = Time.time + HealRate;
+                currentHP.RestoreHP(healAmount);
+                HealTime = Time.time + healRate;
             }
         }
     }

@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7efe656e6c7b97a43a48055744795c7a, type: 2}
+  - {fileID: 2100000, guid: 96403b97980761d43b9b5752f4e23e18, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 1427754023516810167}
   - component: {fileID: 3306381464641036855}
   m_Layer: 10
-  m_Name: Base Projectile
+  m_Name: Corrupted Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,8 +112,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.385, y: 1.115421, z: -0.274}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7109103952239701843}
   m_Father: {fileID: 0}
@@ -137,14 +137,14 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1664
+    m_Bits: 1280
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 0
 --- !u!135 &1427754023516810167
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -178,8 +178,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1755e229306f9a944b473b5aef203d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  hitTag: Enemy
+  type: 3
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 2688
+  vfxPrefab: {fileID: 0}
+  audioPlayer: {fileID: 0}
   bulletSound: {fileID: 0}
   bulletSoundVolume: 0.5
   explosionEffectPrefab: {fileID: 0}
@@ -214,3 +218,4 @@ MonoBehaviour:
   dOTTickRate: 0
   dOTDamagePerTick: 0
   dOTRadius: 0
+  corruptionAmount: 5

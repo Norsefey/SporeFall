@@ -14,11 +14,14 @@ public class PoolManager : MonoBehaviour
     [SerializeField] private List<GameObject> projectiles;
     public Transform projectileParent;
     [Header("VFX")]
-    [SerializeField] private List<GameObject> VisualEffects;
+    [SerializeField] private List<GameObject> visualEffects;
     public Transform VFXParent;
-    [Header("Drops")]
-    [SerializeField] private List<GameObject> Drops;
-    public Transform dropsParent;
+    [Header("Weapon Drops")]
+    [SerializeField] private List<GameObject> weaponDrops;
+    public Transform weaponDropsParent;
+    [Header("Mycelia Drops")]
+    [SerializeField] private List<GameObject> myceliaDrops;
+    public Transform myceliaDropsParent;
 
     [SerializeField] private int initialSize;
     private void Awake()
@@ -39,7 +42,7 @@ public class PoolManager : MonoBehaviour
                 projectilePool.Add(bullet, new ProjectilePool(bullet, projectileParent, initialSize));
             }
         }
-        foreach (var VFX in VisualEffects)
+        foreach (var VFX in visualEffects)
         {
             if (!vfxPool.ContainsKey(VFX))
             {
@@ -47,11 +50,19 @@ public class PoolManager : MonoBehaviour
 
             }
         }
-        foreach (var drop in Drops)
+        foreach (var weapon in weaponDrops)
         {
-            if (!dropsPool.ContainsKey(drop))
+            if (!dropsPool.ContainsKey(weapon))
             {
-                dropsPool.Add(drop, new DropsPool(drop, dropsParent, initialSize));
+                dropsPool.Add(weapon, new DropsPool(weapon, weaponDropsParent, initialSize));
+            }
+        }
+
+        foreach (var mycelia in myceliaDrops)
+        {
+            if (!dropsPool.ContainsKey(mycelia))
+            {
+                dropsPool.Add(mycelia, new DropsPool(mycelia, myceliaDropsParent, initialSize));
             }
         }
     }
@@ -59,24 +70,21 @@ public class PoolManager : MonoBehaviour
     public void ReturnALlDrops()
     {
 
-        foreach(Transform drop in dropsParent)
+        foreach(Transform weapon in weaponDropsParent)
         {
-            if (drop.gameObject.activeSelf)
+            if (weapon.gameObject.activeSelf)
             {
-                drop.GetComponent<DropsPoolBehavior>().ReturnObject();
+                weapon.GetComponent<DropsPoolBehavior>().ReturnObject();
             }
         }
 
-        /*foreach(Transform drop in dropsParent)
+        foreach(Transform mycelia in myceliaDropsParent)
         {
-            
-            
-            *//*if (drop.gameObject.activeSelf)
+            if (mycelia.gameObject.activeSelf)
             {
-                DropsPoolBehavior dropsPool = drop.GetComponent<DropsPoolBehavior>();
-                dropsPool.pool.Return(dropsPool);
-            }*//*
-                
-        }*/
+                GameManager.Instance.TrainHandler.GivePlayersMycelia(mycelia.GetComponent<MyceliaPickup>().myceliaAmount);
+                mycelia.GetComponent<DropsPoolBehavior>().ReturnObject();
+            }
+        }
     }
 }

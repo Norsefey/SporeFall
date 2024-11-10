@@ -179,7 +179,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  hitTag: Enemy
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  vfxPrefab: {fileID: 0}
+  audioPlayer: {fileID: 0}
+  bulletSound: {fileID: 0}
+  bulletSoundVolume: 0.5
   explosionEffectPrefab: {fileID: 1150934714579380, guid: 779aa8c25fbd0e1488637639c9fff976,
     type: 3}
   explosionRadius: 15
@@ -213,3 +219,4 @@ MonoBehaviour:
   dOTTickRate: 0
   dOTDamagePerTick: 0
   dOTRadius: 0
+  corruptionAmount: 0

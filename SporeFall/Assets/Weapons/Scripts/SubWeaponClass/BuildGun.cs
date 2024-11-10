@@ -7,12 +7,15 @@ public class BuildGun : Weapon
     [Header("Build Gun Settings")]
     //[SerializeField] private StructuresUI sUI;
     public GameObject[] buildableStructures; // Array of objects the player can spawn
-    public float maxBuildDistance = 100f; // Maximum distance for building
+    public Structure selectedStructure; // The currently selected placed object (for moving or deleting)
     public LayerMask groundLayer; // LayerMask to identify what is "ground"
     public LayerMask structureLayer; // LayerMask for detecting objects the player can select
     public int currentBuildIndex = 0; // Current selected object to build
-    public Structure selectedStructure; // The currently selected placed object (for moving or deleting)
+    public float maxBuildDistance = 100f; // Maximum distance for building
     public float structRotSpeed = 25;
+    [Tooltip("Minimum percentage of the original cost that will be refunded (0-1)")]
+    [Range(0, 1)]
+    public float minimumRefundPercent = 0.5f;
 
     public bool isEditing = false;
     private bool movingStructure = false;
@@ -214,9 +217,9 @@ public class BuildGun : Weapon
 
         if (player.train != null)
         {
-            if (selectedStructure != null && player.train.CheckEnergy(selectedStructure.GetEnergyCost()) && selectedStructure.GetMyceliaCost() <= player.mycelia)
+            if (selectedStructure != null && player.train.CheckEnergy(selectedStructure.GetEnergyCost()) && selectedStructure.GetMyceliaCost() <= player.Mycelia)
             {
-                player.mycelia -= selectedStructure.GetMyceliaCost();
+                player.DecreaseMycelia(selectedStructure.GetMyceliaCost());
                 selectedStructure.PurchaseStructure();
                 SetStructureToOpaque(selectedStructure.gameObject);
                 RestoreOriginalColors(); // Restore original colors when placing
@@ -229,7 +232,7 @@ public class BuildGun : Weapon
             }
             else
             {
-                if (selectedStructure.GetMyceliaCost() > player.mycelia)
+                if (selectedStructure.GetMyceliaCost() > player.Mycelia)
                 {
                     player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
                 }
@@ -241,9 +244,9 @@ public class BuildGun : Weapon
         }
         else
         {
-            if (selectedStructure != null && selectedStructure.GetMyceliaCost() <= player.mycelia)
+            if (selectedStructure != null && selectedStructure.GetMyceliaCost() <= player.Mycelia)
             {
-                player.mycelia -= selectedStructure.GetMyceliaCost();
+                player.DecreaseMycelia(selectedStructure.GetMyceliaCost());
                 selectedStructure.PurchaseStructure();
                 SetStructureToOpaque(selectedStructure.gameObject);
                 RestoreOriginalColors(); // Restore original colors when placing
@@ -433,9 +436,9 @@ public class BuildGun : Weapon
     public void UpgradeStructure()
     {
 
-        if (selectedStructure.CanUpgrade(player.mycelia))
+        if (selectedStructure.CanUpgrade(player.Mycelia))
         {
-            player.mycelia -= selectedStructure.GetMyceliaCost();
+            player.DecreaseMycelia(selectedStructure.GetMyceliaCost());
             selectedStructure.UpgradeStructure();
             SetStructureToTransparent(selectedStructure.CurrentVisual());
             if(player.train != null)
@@ -463,10 +466,25 @@ public class BuildGun : Weapon
             selectedStructure = null;
             if (player.train != null)
             {
+                player.IncreaseMycelia(CalculateStructureRefund(toDelet));
                 player.train.RemoveStructure(toDelet);
             }
             Debug.Log("Structure Deleted");
             player.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
         }
+    }
+
+    private float CalculateStructureRefund(Structure structure)
+    {
+        StructureHP structureHP = structure.GetStructureHP();
+
+        // Calculate HP percentage (clamped between 0 and 1)
+        float healthPercentage = Mathf.Clamp01(structureHP.CurrentHP / structureHP.maxHP);
+        // Calculate refund percentage, scaled between minimumRefundPercent and 1
+        float refundPercentage = Mathf.Lerp(minimumRefundPercent, 1f, healthPercentage);
+        // Calculate final refund amount and round to nearest integer
+        int refundAmount = Mathf.RoundToInt(structure.GetMyceliaCost() * refundPercentage);
+
+        return refundAmount;
     }
 }

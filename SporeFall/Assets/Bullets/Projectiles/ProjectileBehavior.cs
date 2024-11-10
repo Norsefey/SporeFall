@@ -21,7 +21,8 @@ public enum ProjectileType
 {
     Standard,
     Explosive,
-    DOT
+    DOT, 
+    Corrupted
 }
 public class ProjectileBehavior : MonoBehaviour
 {
@@ -54,6 +55,9 @@ public class ProjectileBehavior : MonoBehaviour
     [SerializeField] private float dOTTickRate;
     [SerializeField] private float dOTDamagePerTick;
     [SerializeField] private float dOTRadius;
+
+    [Header("Corruption Settings")]
+    [SerializeField] private float corruptionAmount;
 
     private void Awake()
     {
@@ -126,8 +130,13 @@ public class ProjectileBehavior : MonoBehaviour
                 case ProjectileType.DOT:
                     HandleDOTAttack();
                     break;
+                case ProjectileType.Corrupted:
+                    HandleCorruptionAttack(collision);
+                    break;
             }
         }
+        Debug.Log("Projectile Hit" + collision.gameObject.name);
+
         HandleCollision(collision);
 
     }
@@ -139,19 +148,20 @@ public class ProjectileBehavior : MonoBehaviour
     {
         if (audioPlayer != null)
             audioPlayer.PlayOneShot(bulletSound);
-
         if (vfxPrefab != null)
         {// if you have a VFX assigned, play it on collision
 
-            vfxPrefab.SetActive(true);
-            /*// Get VFX from pool
+            // Get VFX from pool
             if (!PoolManager.Instance.vfxPool.TryGetValue(vfxPrefab, out VFXPool pool))
             {
                 Debug.LogError($"No pool found for enemy prefab: {vfxPrefab.name}");
-                return;
+                //return;
             }
-            VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
-            vfx.Initialize(pool);*/
+            else
+            {
+                VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
+                vfx.Initialize(pool);
+            }
         }
         if (data.CanBounce && bounceCount < data.MaxBounces)
         {
@@ -159,16 +169,7 @@ public class ProjectileBehavior : MonoBehaviour
         }
         else
         {
-            if (vfxPrefab != null)
-                ToggleVFX(false);
             ReturnToPool();
-        }
-    }
-    protected void ToggleVFX(bool toggle)
-    {
-        if (vfxPrefab != null)
-        {
-            vfxPrefab.SetActive(toggle);
         }
     }
     protected void Bounce(Collider surface)
@@ -233,5 +234,15 @@ public class ProjectileBehavior : MonoBehaviour
 
         ReturnToPool();
     }
-
+    private void HandleCorruptionAttack(Collision collision)
+    {
+        if (collision.transform.TryGetComponent<Damageable>(out var damageable))
+        {
+            if (damageable.canHoldCorruption)
+            {
+                damageable.IncreaseCorruption(corruptionAmount);
+            }
+            damageable.TakeDamage(damage);
+        }
+    }
 }

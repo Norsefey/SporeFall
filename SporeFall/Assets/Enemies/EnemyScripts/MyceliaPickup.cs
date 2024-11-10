@@ -16,16 +16,16 @@ public class MyceliaPickup : DropsPoolBehavior
     {
         if (other.CompareTag("Player"))
         {
-            other.transform.parent.GetComponent<PlayerManager>().mycelia += myceliaAmount;
             if (pool != null)
             {
-                ReturnObject();
-            }
-            else
-            {
-                Debug.Log("No Pool Destroying");
-                Destroy(gameObject);
+                RewardPlayer(other.transform.parent.GetComponent<PlayerManager>());
             }
         }
+    }
+
+    public void RewardPlayer(PlayerManager player)
+    {
+        player.IncreaseMycelia(myceliaAmount);
+        ReturnObject();
     }
 }

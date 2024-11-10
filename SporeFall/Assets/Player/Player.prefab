@@ -1127,6 +1127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 100
+  canHoldCorruption: 1
   lives: 3
 --- !u!82 &5224858030605110896
 AudioSource:
@@ -1757,7 +1758,6 @@ MonoBehaviour:
   isCharging: 0
   isBuilding: 0
   isRotating: 0
-  mycelia: 100
   respawnTime: 1
   fallbackSpawnPoint: {fileID: 0}
   holdingCorruption: 0
@@ -1817,7 +1817,10 @@ MonoBehaviour:
   maxCorruption: 100
   corruptionLevel: 0
   corruptionReductionAmount: 25
-  corruptionReductionCost: 100
+  corruptionReductionCost: 25
+  timer: 0
+  corruptionRecoveryDelay: 3
+  corruptionDecreaseRate: 1.2
   corruptionThresholds:
   - 60
   - 75
@@ -2186,7 +2189,7 @@ MonoBehaviour:
   - {fileID: 3745370869290195764, guid: 49278954c29530a47a63cd420176d3be, type: 3}
   - {fileID: 5415324038918524610, guid: fac6cdfab8399ee429dd9aa3546761f8, type: 3}
   - {fileID: 7608820938799165632, guid: 13b46ee8777608c41b49e3ddd2b65309, type: 3}
-  maxBuildDistance: 50
+  selectedStructure: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -2194,8 +2197,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   currentBuildIndex: 0
-  selectedStructure: {fileID: 0}
+  maxBuildDistance: 50
   structRotSpeed: 25
+  minimumRefundPercent: 0.5
   isEditing: 0
   structureOverlapMask:
     serializedVersion: 2
