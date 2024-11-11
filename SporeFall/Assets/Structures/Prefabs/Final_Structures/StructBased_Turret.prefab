@@ -125,7 +125,8 @@ GameObject:
   - component: {fileID: 6415721498675188532}
   - component: {fileID: 1254851843377508662}
   - component: {fileID: 7767964235748362511}
-  m_Layer: 7
+  - component: {fileID: 3693245510787740320}
+  m_Layer: 2
   m_Name: ControlScript
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,6 +281,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!136 &3693245510787740320
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839142699126292899}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.19
+  m_Height: 3.71
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.94, z: 0.45}
 --- !u!1 &2143417820075499101
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +356,7 @@ MonoBehaviour:
   controlScriptObject: {fileID: 1839142699126292899}
   levelVisuals:
   - {fileID: 3435691037590750909}
-  levels: {fileID: 11400000, guid: 673d0f0af418b3c4d860933819d7d166, type: 2}
+  levels: {fileID: 11400000, guid: c89d5bf33b4e730409765b089932db32, type: 2}
   radiusIndicator: {fileID: 213781681891352501}
   healthComponent: {fileID: 7830201162772373882}
 --- !u!114 &9026370326105403355
@@ -719,7 +743,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
