@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
+    [Header("UI")]
     [SerializeField] private WaveUI wUI;
     public PauseMenu pauseMenu;
     public bool paused = false;
@@ -18,14 +19,19 @@ public class WaveManager : MonoBehaviour
     public Transform[] payloadPath;
     
     [Header("Waves")]
-    public List<Wave> waves = new(); // List of waves to configure
+    public List<Wave> waves = new();
     private Wave currentWave;
+    public Wave CurrentWave {  get { return currentWave; } }
+    private FinalWaveSettings finalWave; // Reference for when we're in the final wave
     public int currentWaveIndex = 0;
     [SerializeField] private int maxEnemiesOnField = 300;
 
-    private int enemiesAlive = 0; // how many active enemies
-    private int enemiesSpawned = 0;// total amount of enemies spawned so far
-    public int deadEnemies = 0; // enemies killed
+    [Header("Wave State")]
+    private bool isBossDefeated = false;
+    private bool isHordeSpawned = false;
+    private int enemiesAlive = 0;
+    private int enemiesSpawned = 0;
+    public int deadEnemies = 0;
     public enum WavePhase
     {
         NotStarted,
@@ -44,12 +50,7 @@ public class WaveManager : MonoBehaviour
     private Dictionary<GameObject, EnemyObjectPool> enemyPools;
     private EnemyObjectPool bossPool;
 
-    // Move UI To own Script
-    [Header("UI Stuff")]
-    // test Ui
-    public TMP_Text waveUI;
-    public TMP_Text bossText;
-    // Test particles
+
     public GameObject explosionPrefab;
 
     private void Start()
@@ -68,7 +69,6 @@ public class WaveManager : MonoBehaviour
         if (currentWave.isFinalWave)
         {
             StartFinalWave();
-            StartCoroutine(StartWave());
         }
         else
         {
@@ -109,16 +109,15 @@ public class WaveManager : MonoBehaviour
     }
     private void StartFinalWave()
     {
-        // Spawn the payload
-        train.SpawnPayload(payloadPath);
-        
-        Invoke(nameof(SpawnBoss), 2f);
+        wUI.DisplayWaveStart();
+
+        // Spawn boss and initial squad instead of payload
+        isBossDefeated = false;
+        isHordeSpawned = false;
+        SpawnBossAndSquad();
     }
     private void WaveCleared()
-    {
-        if (waveUI != null)
-            waveUI.gameObject.SetActive(true);
-       
+    {  
         deadEnemies = 0;
         timer = departTime;
         wavePhase = WavePhase.Departing;
@@ -126,9 +125,6 @@ public class WaveManager : MonoBehaviour
     }
     private void Depart()
     {
-        if(waveUI != null)
-            waveUI.gameObject.SetActive(false);
-
         StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
     }
     #endregion
@@ -274,63 +270,133 @@ public class WaveManager : MonoBehaviour
         enemiesAlive++;
         enemiesSpawned++;
     }
-    private void SpawnBoss()
+    private void SpawnBossAndSquad()
     {
-
-
-        Debug.Log("Add Functionality");
+        // Spawn the boss
         Transform spawnPoint = currentWave.spawnLocations[0];
         BaseEnemy boss = bossPool.Get(spawnPoint.position, spawnPoint.rotation);
-        //BaseEnemy boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<BaseEnemy>();
-
+        boss.AssignDefaultTarget(train, train.transform);
         boss.transform.SetParent(transform);
 
-        if (bossText != null)
-            bossText.text = "<color=red>Boss Has Spawned</color>";
-        // once we start the Boss script add an OnEnemyDeath Event
         boss.OnEnemyDeath += OnBossDeath;
-        boss.AssignDefaultTarget(train, train.Payload.transform);
+        boss.AssignDefaultTarget(train, train.transform);
 
         enemiesAlive++;
         enemiesSpawned++;
+
+        // Spawn the specific squad composition
+        StartCoroutine(SpawnSquadSequence());
     }
-    // Modified death handlers to return enemies to pool
+    private IEnumerator SpawnSquadSequence()
+    {
+        var finalSettings = currentWave.finalWaveSettings;
+
+        for (int typeIndex = 0; typeIndex < finalSettings.bossSquadComposition.Length; typeIndex++)
+        {
+            EnemySpawnData squadType = finalSettings.bossSquadComposition[typeIndex];
+            int countToSpawn = finalSettings.bossSquadComposition[typeIndex].totalToSpawn;
+
+            for (int i = 0; i < countToSpawn; i++)
+            {
+                int randomSpawnPoint = Random.Range(0, currentWave.spawnLocations.Length);
+                Transform squadSpawnPoint = currentWave.spawnLocations[randomSpawnPoint];
+
+                SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint);
+
+                yield return new WaitForSeconds(0.1f); // Prevent overlap
+            }
+        }
+    }
+    private IEnumerator SpawnPostBossHorde()
+    {
+        isHordeSpawned = true;
+        var finalSettings = currentWave.finalWaveSettings;
+        int hordeSpawned = 0;
+
+        while (hordeSpawned < finalSettings.postBossHordeSize)
+        {
+            float spawnInterval = Random.Range(currentWave.minIntervalTime, currentWave.maxIntervalTime);
+            if (enemiesAlive >= maxEnemiesOnField)
+            {
+                yield return new WaitForSeconds(spawnInterval);
+                continue;
+            }
+
+            // Pick a random enemy type from the horde configuration
+            var randomEnemyData = finalSettings.hordeEnemyTypes[
+                Random.Range(0, finalSettings.hordeEnemyTypes.Count)];
+
+            int randomSpawnPoint = Random.Range(0, currentWave.spawnLocations.Length);
+            Transform spawnPoint = currentWave.spawnLocations[randomSpawnPoint];
+
+            if (randomEnemyData.spawnAsGroup)
+            {
+                // Spawn as a group
+                for (int i = 0; i < randomEnemyData.groupSize; i++)
+                {
+                    if (randomEnemyData.SpawnedCount < randomEnemyData.totalToSpawn)
+                    {
+                        SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint);
+                    }
+                }
+            }
+            else
+            {
+                // Spawn single enemy
+                SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint);
+            }
+            // horde is endless
+            //hordeSpawned++;
+
+            yield return new WaitForSeconds(spawnInterval);
+        }
+    }
+    private void OnBossDeath(BaseEnemy boss)
+    {
+        enemiesAlive--;
+        isBossDefeated = true;
+
+        bossPool.Return(boss);
+
+        // Spawn payload after boss death
+        train.SpawnPayload(payloadPath);
+        //train.Payload.IncreaseSpeed();
+
+        StartCoroutine(SpawnPostBossHorde());
+    }
+
     private void OnEnemyDeath(BaseEnemy enemy)
     {
         enemiesAlive--;
         deadEnemies++;
 
-        if (currentWave.isFinalWave == false)
+        if (!(currentWave.isFinalWave))
         {
             wUI.DisplayWaveProgress(deadEnemies);
         }
 
-        // Return enemy to its pool
         if (enemyPools.TryGetValue(enemy.gameObject, out EnemyObjectPool pool))
         {
             pool.Return(enemy);
         }
 
-        if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
+        // Check wave completion
+        if (currentWave.isFinalWave)
+        {
+            if (isBossDefeated && isHordeSpawned && enemiesAlive <= 0)
+            {
+                wUI.DisplayWaveFlags();
+                wUI.DisplayWaveClear();
+                WaveCleared();
+            }
+        }
+        else if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
         {
             wUI.DisplayWaveFlags();
             wUI.DisplayWaveClear();
             WaveCleared();
         }
     }
-    private void OnBossDeath(BaseEnemy boss)
-    {
-        enemiesAlive--;
-        train.Payload.IncreaseSpeed();
 
-        // Return boss to pool
-        bossPool.Return(boss);
-
-        if (enemiesSpawned == currentWave.totalEnemies && enemiesAlive <= 0)
-        {
-            Debug.Log("Boss defeated!");
-            WaveCleared();
-        }
-    }
     #endregion
 }

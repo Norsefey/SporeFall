@@ -6,7 +6,8 @@ public class MobEnemy : BaseEnemy
 {
     [Header("Drops")]
     [SerializeField] GameObject myceliaDropPrefab;
-    [SerializeField] private float myceliaDropAmount = 5;
+    [SerializeField] private float minMyceliaWorth = 5;
+    [SerializeField] private float maxMyceliaWorth = 10;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
     public override void Die()
@@ -43,7 +44,9 @@ public class MobEnemy : BaseEnemy
         mycelia.Setup(myceliaDropAmount);*/
         if(myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
-            mycelia.Setup(myceliaDropAmount);
+            // Assign random amount to mycelia drop
+            float worth = Mathf.Round(Random.Range(minMyceliaWorth, maxMyceliaWorth));
+            mycelia.Setup(minMyceliaWorth);
         }
 
         if (weaponDropPrefab.Length != 0)

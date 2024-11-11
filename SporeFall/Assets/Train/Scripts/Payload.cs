@@ -9,8 +9,7 @@ public class Payload : MonoBehaviour
     //[SerializeField] private WaveUI wUI;
     
     [Header("Movement")]
-    [SerializeField] private float defaultMoveSpeed = 2f;   // The speed of the payload's movement
-    [SerializeField] private float topMoveSpeed = 4f; // When boss dies payload moves faster
+    [SerializeField] private float defaultMoveSpeed = 8f;   // The speed of the payload's movement
     [SerializeField] private Transform[] path;
     private Transform papa;
     private int pathIndex = 0;
@@ -71,10 +70,6 @@ public class Payload : MonoBehaviour
         papa = transform.parent;
         SetDestination();
         isMoving = true;
-    }
-    public void IncreaseSpeed()
-    {
-        moveSpeed = topMoveSpeed;
     }
     public void DestroyPayload()
     {

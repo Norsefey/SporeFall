@@ -61,6 +61,27 @@ public class WaveUI : MonoBehaviour
 
     public void DisplayWaveProgress(int value)
     {
+        /// I would recommend using if else here, same with the Displayflags
+        /// if you just use ifs, it checks through all of them, whereas with if else, it stops at the first true statement
+        /// and in here you can stop at the first true
+        ///If you want to go a little more advance with it I would recommend using a switch statement, something like this:
+        
+      /*  switch (waveManager.currentWaveIndex)
+        {
+            case 0:
+                wave1Bar.value = value;
+                break;
+            case 1:
+                wave2Bar.value = value;
+                break; // We break meaning leave the switch statement
+            // then all the others
+            
+            // a default can be put in as a catch all in case something goes wrong
+            default:
+                break;
+        }*/
+
+
         if (waveManager.currentWaveIndex == 0)
         {
             wave1Bar.value = value;
@@ -114,6 +135,14 @@ public class WaveUI : MonoBehaviour
     public void DisplayWaveStart()
     {
         waveTextHolder.SetActive(true);
+        /// I took a peek and realized i never made Current wave public, so I made it public
+        /// Each wave has a give name that can be called by .waveName, you can see it in the wave manager
+        /// They also have a public .IsFinalWave bool
+        /// I commented it out, but this could make things easier for you, as you would not need to check the wave index or if it is final wave
+        /// Neat thing i found recently if you put a $ in at the start before the "", you don't have to use + symbols, just put none text things in {}
+        
+        //waveText.text = $"{waveManager.CurrentWave.waveName} Start";
+
         if (waveManager.currentWaveIndex <= 2)
         {
             waveText.text = "Wave " + (waveManager.currentWaveIndex + 1) + " Start";

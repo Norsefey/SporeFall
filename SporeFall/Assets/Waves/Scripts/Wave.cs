@@ -8,6 +8,7 @@ using UnityEngine;
 [System.Serializable]
 public class EnemySpawnData
 {
+    public string name;
     public GameObject[] enemyVariants;
     public int totalToSpawn;     // Total number of this enemy type to spawn
     public bool spawnAsGroup;    // Whether to spawn as a group
@@ -26,35 +27,46 @@ public class EnemySpawnData
 [System.Serializable]
 public class Wave
 {
-    public string waveName; // Optional, for easier identification
-    [Header("Is Final Wave")]
-    public bool isFinalWave = false; // Flag to identify if this is a boss wave
+    public string waveName;
+    [Header("Wave Type")]
+    public bool isFinalWave = false;
+
     [Header("Train Park Location")]
-    public Transform trainLocation; // The location of train for this wave
+    public Transform trainLocation;
 
     [Header("Enemy Settings")]
-    public GameObject ShroomPod; // pod blocking path forward
+    public GameObject ShroomPod;
     public Transform[] spawnLocations;
 
+    [Header("Regular Wave Enemies")]
     public List<EnemySpawnData> enemySpawnData = new();
 
     [Header("Spawn Settings")]
-    public float minIntervalTime; // Time interval between each spawn
+    public float minIntervalTime;
     public float maxIntervalTime;
-    public int minIntervalSpawn; // Number of enemies to spawn per interval
+    public int minIntervalSpawn;
     public int maxIntervalSpawn;
 
-    // Calculate total enemies for the wave
+    [Header("Final Wave Settings")]
+    [Tooltip("Only configure if this is the final wave")]
+    public FinalWaveSettings finalWaveSettings;
     public int totalEnemies
     {
         get
         {
-            int total = 0;
-            foreach (var spawnData in enemySpawnData)
+            if (!isFinalWave)
             {
-                total += spawnData.totalToSpawn;
+                int total = 0;
+                foreach (var spawnData in enemySpawnData)
+                {
+                    total += spawnData.totalToSpawn;
+                }
+                return total;
             }
-            return total;
+            else
+            {
+                return finalWaveSettings.GetTotalEnemies();
+            }
         }
     }
 }
