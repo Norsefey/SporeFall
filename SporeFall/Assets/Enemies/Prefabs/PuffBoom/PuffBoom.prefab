@@ -200,7 +200,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1.53
-  m_Speed: 3
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -225,6 +225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 150
+  canHoldCorruption: 0
+  canTakeDamage: 1
   hpDisplay: {fileID: 8293907463534621136}
   manager: {fileID: 313471775743458934}
 --- !u!114 &313471775743458934
@@ -242,6 +244,7 @@ MonoBehaviour:
   attacks:
   - {fileID: 11400000, guid: 8fd94c99272d2cd4f9a71750a641e3fe, type: 2}
   - {fileID: 11400000, guid: dab24aec2cb66ae4fbbe37405c697640, type: 2}
+  animator: {fileID: 0}
   firePoint: {fileID: 649384524154093143}
   strafeRadius: 10
   retreatDistance: 15
@@ -268,7 +271,8 @@ MonoBehaviour:
   targetSwitchThreshold: 100
   myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
     type: 3}
-  myceliaDropAmount: 15
+  minMyceliaWorth: 5
+  maxMyceliaWorth: 10
   weaponDropPrefab:
   - {fileID: 6532063568776282634, guid: ff0048dd2ef887a44bc159c3cde6d637, type: 3}
   dropChance: 20
