@@ -16,12 +16,17 @@ public class WaveUI : MonoBehaviour
     [SerializeField] private Slider wave1Bar;
     [SerializeField] private Slider wave2Bar;
     [SerializeField] private Slider wave3Bar;
+    [SerializeField] private Slider bossBar;
     [SerializeField] private Slider finalWaveBar;
     [Header("Flags")]
-    [SerializeField] private GameObject wave1Flag;
-    [SerializeField] private GameObject wave2Flag;
-    [SerializeField] private GameObject wave3Flag;
-    [SerializeField] private GameObject finalWaveFlag;
+    [SerializeField] private Image wave1Flag;
+    [SerializeField] private Image wave2Flag;
+    [SerializeField] private Image wave3Flag;
+    [SerializeField] private Image bossFlag;
+    [SerializeField] private Image finalWaveFlag;
+    [Header("Sprites")]
+    [SerializeField] private Sprite podFlagSprite;
+    [SerializeField] private Sprite bossFlagSprite;
     [Header("Other")]
     [SerializeField] private GameObject waveTextHolder;
     [SerializeField] private TMP_Text waveText;
@@ -41,10 +46,6 @@ public class WaveUI : MonoBehaviour
         wave2Bar.maxValue = waveManager.waves[1].totalEnemies;
         wave3Bar.maxValue = waveManager.waves[2].totalEnemies;
         finalWaveBar.maxValue = waveManager.payloadPath.Length;
-        wave1Flag.SetActive(false);
-        wave2Flag.SetActive(false);
-        wave3Flag.SetActive(false);
-        finalWaveFlag.SetActive(false);
         waveTextHolder.SetActive(false);
     }
 
@@ -105,31 +106,39 @@ public class WaveUI : MonoBehaviour
             finalWaveBar.value = value;
             Debug.Log("Updating final wave bar");
         }
+    }
 
-
+    public void DisplayBossProgress()
+    {
+        bossBar.value = bossBar.maxValue;
     }
 
     public void DisplayWaveFlags()
     {
         if (waveManager.currentWaveIndex == 0)
         {
-            wave1Flag.SetActive(true);
+            wave1Flag.sprite = podFlagSprite;
         }
 
         if (waveManager.currentWaveIndex == 1)
         {
-            wave2Flag.SetActive(true);
+            wave2Flag.sprite = podFlagSprite;
         }
 
         if (waveManager.currentWaveIndex == 2)
         {
-            wave3Flag.SetActive(true);
+            wave3Flag.sprite = podFlagSprite;
         }
 
         if (waveManager.currentWaveIndex == 3)
         {
-            finalWaveFlag.SetActive(true);
+            finalWaveFlag.sprite = podFlagSprite;
         }
+    }
+
+    public void DisplayBossFlag()
+    {
+        bossFlag.sprite = bossFlagSprite;
     }
 
     public void DisplayWaveStart()

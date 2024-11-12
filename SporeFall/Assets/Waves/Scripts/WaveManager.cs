@@ -361,7 +361,8 @@ public class WaveManager : MonoBehaviour
         // Spawn payload after boss death
         train.SpawnPayload(payloadPath);
         //train.Payload.IncreaseSpeed();
-
+        wUI.DisplayBossProgress();
+        wUI.DisplayBossFlag();
         StartCoroutine(SpawnPostBossHorde());
     }
 
