@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public class Turret : MonoBehaviour
 {
     // These public variables are set by TurretBehavior
-    [HideInInspector]
+    //[HideInInspector]
     public float 
         damage, 
         detectionRange, 
@@ -14,7 +14,8 @@ public class Turret : MonoBehaviour
         fireRate, 
         fireRange, 
         fireCooldown;
-    [HideInInspector] public ProjectileData bulletData;
+    //[HideInInspector]
+    public ProjectileData bulletData;
 
     [Header("References")]
     [SerializeField] private Transform turretGuns;
