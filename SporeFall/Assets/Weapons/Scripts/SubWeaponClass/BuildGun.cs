@@ -287,7 +287,7 @@ public class BuildGun : Weapon
         if(selectedStructure != null)
             Destroy(selectedStructure.gameObject);
 
-        player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name);
+        player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name + "\n Cost: 25 Mycelia");
         player.pUI.SwitchStructureIcon();
     }
     private void SetStructureToTransparent(GameObject obj)
