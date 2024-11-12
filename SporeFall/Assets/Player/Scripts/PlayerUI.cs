@@ -14,6 +14,7 @@ public class PlayerUI : MonoBehaviour
     //public Sprite weaponSprite;
     [Space(5)]
     [SerializeField] private TMP_Text ammoIndicator;
+    [SerializeField] private TMP_Text myceliaIndicator;
     [SerializeField] private GameObject promptHolder;
     [SerializeField] private TMP_Text textPrompt;
     [SerializeField] private Slider HPBar;
@@ -47,6 +48,7 @@ public class PlayerUI : MonoBehaviour
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
         HPBar.maxValue = pMan.pHealth.maxHP;
         corruptedVisionHolder.SetActive(false);
+        DisplayMycelia(pMan.Mycelia);
     }
     public void UpdateCorruptionDisplay(float value)
     {
@@ -146,7 +148,7 @@ public class PlayerUI : MonoBehaviour
     }
     public void DisplayMycelia(float value)
     {
-        ammoIndicator.text = "Mycelia: " + value.ToString();
+        myceliaIndicator.text = "Mycelia: " + value.ToString();
     }
     public void EnablePrompt(string text)
     {
@@ -188,15 +190,15 @@ public class PlayerUI : MonoBehaviour
 
         if (bGun.currentBuildIndex == 3)
         {
-            selectedStructureIcon.sprite = shermanSprite;
+            selectedStructureIcon.sprite = repairTowerSprite;
             leftStructureIcon.sprite = wallSprite;
-            rightStructureIcon.sprite = repairTowerSprite;
+            rightStructureIcon.sprite = shermanSprite;
         }
 
         if (bGun.currentBuildIndex == 4)
         {
-            selectedStructureIcon.sprite = repairTowerSprite;
-            leftStructureIcon.sprite = shermanSprite;
+            selectedStructureIcon.sprite = shermanSprite;
+            leftStructureIcon.sprite = repairTowerSprite;
             rightStructureIcon.sprite = turretSprite;
         }
     }

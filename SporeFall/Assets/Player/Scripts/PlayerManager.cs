@@ -312,10 +312,12 @@ public class PlayerManager : MonoBehaviour
     public void IncreaseMycelia(float amount)
     {
         mycelia += amount;
+        pUI.DisplayMycelia(mycelia);
     }
     public void DecreaseMycelia(float amount)
     {
         mycelia -= amount;
+        pUI.DisplayMycelia(mycelia);
     }
     public int GetPlayerIndex()
     {
