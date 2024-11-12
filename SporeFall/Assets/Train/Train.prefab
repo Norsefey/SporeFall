@@ -450,6 +450,7 @@ GameObject:
   - component: {fileID: 1475112357263329050}
   - component: {fileID: 5036477755243684852}
   - component: {fileID: 5903061854186585803}
+  - component: {fileID: 3140584800689371656}
   m_Layer: 11
   m_Name: Point D
   m_TagString: Train
@@ -465,13 +466,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2413867552257396235}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.020675063, z: -0, w: 0.99978626}
-  m_LocalPosition: {x: -21.84413, y: 0, z: 19.628323}
+  m_LocalRotation: {x: -0, y: -0.06929591, z: -0, w: 0.9975962}
+  m_LocalPosition: {x: -21.84413, y: 0, z: 24.79}
   m_LocalScale: {x: 0.18470865, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6503495723065891397}
-  m_LocalEulerAnglesHint: {x: 0, y: -2.369, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -7.947, z: 0}
 --- !u!65 &5036477755243684852
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -509,6 +510,22 @@ MonoBehaviour:
   canHoldCorruption: 0
   canTakeDamage: 1
   mainHp: {fileID: 5717295274072091989}
+--- !u!208 &3140584800689371656
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2413867552257396235}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 66.92, y: 16.01, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 5.4, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &2577559169716898619
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,14 +722,13 @@ GameObject:
   - component: {fileID: 5254808180486364347}
   - component: {fileID: 706421987693874909}
   - component: {fileID: 4064434253929158616}
-  - component: {fileID: 752427543376919912}
   m_Layer: 11
   m_Name: ForceFeild
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5254808180486364347
 Transform:
   m_ObjectHideFlags: 0
@@ -722,8 +738,8 @@ Transform:
   m_GameObject: {fileID: 3146403526341856836}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.020675063, z: -0, w: 0.99978626}
-  m_LocalPosition: {x: -1, y: 7.200001, z: 22}
-  m_LocalScale: {x: 114.29064, y: 23.8735, z: 0.80278856}
+  m_LocalPosition: {x: -1, y: 7.200001, z: 5.9}
+  m_LocalScale: {x: 127.3312, y: 23.8735, z: 47.47}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6503495723065891397}
@@ -735,7 +751,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3146403526341856836}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &4064434253929158616
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -778,22 +794,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!208 &752427543376919912
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3146403526341856836}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.545, y: 0.5, z: 4.335}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0.03, y: 0, z: -5.38}
-  m_TimeToStationary: 0.5
 --- !u!1 &3166547386235096315
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,6 +1169,7 @@ GameObject:
   - component: {fileID: 6159191582122715110}
   - component: {fileID: 420635583829406546}
   - component: {fileID: 2425440427296610803}
+  - component: {fileID: 2055567094087718082}
   m_Layer: 11
   m_Name: Point B
   m_TagString: Train
@@ -1184,13 +1185,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4357703060115236312}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.020675063, z: -0, w: 0.99978626}
-  m_LocalPosition: {x: 23.255869, y: 0, z: 21.528316}
+  m_LocalRotation: {x: -0, y: 0.055413708, z: -0, w: 0.9984635}
+  m_LocalPosition: {x: 23.88, y: 0, z: 26.92}
   m_LocalScale: {x: 0.18470865, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6503495723065891397}
-  m_LocalEulerAnglesHint: {x: 0, y: -2.369, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 6.353, z: 0}
 --- !u!65 &420635583829406546
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1228,6 +1229,22 @@ MonoBehaviour:
   canHoldCorruption: 0
   canTakeDamage: 1
   mainHp: {fileID: 5717295274072091989}
+--- !u!208 &2055567094087718082
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4357703060115236312}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 66.92, y: 16.01, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 5.4, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &4530189071031913864
 GameObject:
   m_ObjectHideFlags: 0
@@ -2080,6 +2097,7 @@ GameObject:
   - component: {fileID: 7868426829204108695}
   - component: {fileID: 3082680225381346319}
   - component: {fileID: 8255282215175804199}
+  - component: {fileID: 126204622573562802}
   m_Layer: 11
   m_Name: Point C
   m_TagString: Train
@@ -2096,7 +2114,7 @@ Transform:
   m_GameObject: {fileID: 7074300105843906947}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.020675063, z: -0, w: 0.99978626}
-  m_LocalPosition: {x: 0.655869, y: 0, z: 20.528316}
+  m_LocalPosition: {x: 0.655869, y: 0, z: 26.99}
   m_LocalScale: {x: 0.18470865, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2139,6 +2157,22 @@ MonoBehaviour:
   canHoldCorruption: 0
   canTakeDamage: 1
   mainHp: {fileID: 5717295274072091989}
+--- !u!208 &126204622573562802
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7074300105843906947}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 66.92, y: 16.01, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 5.4, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7205474988927204299
 GameObject:
   m_ObjectHideFlags: 0
@@ -2150,6 +2184,7 @@ GameObject:
   - component: {fileID: 5914258771676601457}
   - component: {fileID: 5578537187167866125}
   - component: {fileID: 2241509315536591595}
+  - component: {fileID: 1391808367092987778}
   m_Layer: 11
   m_Name: Point A
   m_TagString: Train
@@ -2165,13 +2200,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7205474988927204299}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.020675063, z: -0, w: 0.99978626}
-  m_LocalPosition: {x: 45.755867, y: 0, z: 22.428318}
+  m_LocalRotation: {x: -0, y: 0.20160048, z: -0, w: 0.97946787}
+  m_LocalPosition: {x: 45.755867, y: 0, z: 22.428314}
   m_LocalScale: {x: 0.18470865, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6503495723065891397}
-  m_LocalEulerAnglesHint: {x: 0, y: -2.369, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 23.261, z: 0}
 --- !u!65 &5578537187167866125
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2209,6 +2244,22 @@ MonoBehaviour:
   canHoldCorruption: 0
   canTakeDamage: 1
   mainHp: {fileID: 5717295274072091989}
+--- !u!208 &1391808367092987778
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7205474988927204299}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 66.92, y: 16.01, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 5.4, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7292477478968766896
 GameObject:
   m_ObjectHideFlags: 0
@@ -2220,6 +2271,7 @@ GameObject:
   - component: {fileID: 5514361699606698114}
   - component: {fileID: 1823684880731029652}
   - component: {fileID: 7012467899453802822}
+  - component: {fileID: 1991923933467220862}
   m_Layer: 11
   m_Name: Point E
   m_TagString: Train
@@ -2235,13 +2287,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7292477478968766896}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.020675063, z: -0, w: 0.99978626}
-  m_LocalPosition: {x: -44.314133, y: 0, z: 18.708317}
+  m_LocalRotation: {x: -0, y: -0.15123269, z: -0, w: 0.9884982}
+  m_LocalPosition: {x: -44.314133, y: 0, z: 19.7}
   m_LocalScale: {x: 0.18470865, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6503495723065891397}
-  m_LocalEulerAnglesHint: {x: 0, y: -2.369, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -17.397, z: 0}
 --- !u!65 &1823684880731029652
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2279,6 +2331,22 @@ MonoBehaviour:
   canHoldCorruption: 0
   canTakeDamage: 1
   mainHp: {fileID: 5717295274072091989}
+--- !u!208 &1991923933467220862
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7292477478968766896}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 66.92, y: 16.01, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 5.4, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7860677741773267201
 GameObject:
   m_ObjectHideFlags: 0
