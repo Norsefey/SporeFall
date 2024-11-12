@@ -15,7 +15,8 @@ public class StructuresUI : MonoBehaviour
     [SerializeField] private Sprite flamethrowerSprite;
     [SerializeField] private Sprite wallSprite;
     [SerializeField] private Sprite shermanSprite;
-    
+    [SerializeField] private Sprite repairTowerSprite;
+
 
 
     // Start is called before the first frame update
@@ -56,8 +57,15 @@ public class StructuresUI : MonoBehaviour
 
         if (bGun.currentBuildIndex == 3)
         {
-            selectedStructureIcon.sprite = shermanSprite;
+            selectedStructureIcon.sprite = repairTowerSprite;
             leftStructureIcon.sprite = wallSprite;
+            rightStructureIcon.sprite = shermanSprite;
+        }
+
+        if (bGun.currentBuildIndex == 4)
+        {
+            selectedStructureIcon.sprite = shermanSprite;
+            leftStructureIcon.sprite = repairTowerSprite;
             rightStructureIcon.sprite = turretSprite;
         }
     }
