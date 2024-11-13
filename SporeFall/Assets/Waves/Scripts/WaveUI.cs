@@ -92,19 +92,19 @@ public class WaveUI : MonoBehaviour
             Debug.Log("Updating wave 1 bar");
         }
 
-        if (waveManager.currentWaveIndex == 1)
+        else if(waveManager.currentWaveIndex == 1)
         {
             wave2Bar.value = value;
             Debug.Log("Updating wave 2 bar");
         }
 
-        if (waveManager.currentWaveIndex == 2)
+        else if(waveManager.currentWaveIndex == 2)
         {
             wave3Bar.value = value;
             Debug.Log("Updating wave 3 bar");
         }
 
-        if (waveManager.currentWaveIndex == 3)
+        else if(waveManager.currentWaveIndex == 3)
         {
             finalWaveBar.value = value;
             Debug.Log("Updating final wave bar");
@@ -123,17 +123,17 @@ public class WaveUI : MonoBehaviour
             wave1Flag.sprite = podFlagSprite;
         }
 
-        if (waveManager.currentWaveIndex == 1)
+        else if(waveManager.currentWaveIndex == 1)
         {
             wave2Flag.sprite = podFlagSprite;
         }
 
-        if (waveManager.currentWaveIndex == 2)
+        else if(waveManager.currentWaveIndex == 2)
         {
             wave3Flag.sprite = podFlagSprite;
         }
 
-        if (waveManager.currentWaveIndex == 3)
+        else if(waveManager.currentWaveIndex == 3)
         {
             finalWaveFlag.sprite = podFlagSprite;
         }

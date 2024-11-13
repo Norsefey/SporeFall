@@ -358,6 +358,15 @@ public abstract class BaseEnemy : MonoBehaviour
         if (passedThreshold)
             DetectTargets();
 
+        Vector3 pos = Vector3.zero;
+        if (!targetingStructure)
+        {
+            pos = currentTarget.GetComponent<Collider>().ClosestPoint(transform.position);
+            pos.y = transform.position.y;
+
+            distanceToTarget = Vector3.Distance(transform.position, pos);
+        }
+
         if (distanceToTarget > stoppingDistance)
         {
             // agent stopping distance changes based on different behaviors
@@ -365,8 +374,6 @@ public abstract class BaseEnemy : MonoBehaviour
             agent.isStopped = false;
             if (!targetingStructure)
             {
-                Vector3 pos = currentTarget.GetComponent<Collider>().ClosestPoint(transform.position);
-                pos.y = transform.position.y;
                 agent.SetDestination(pos);
             }
             else
@@ -527,13 +534,13 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         int detectedCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRange, detectedColliders, targetsLayerMask);
 
-        // Sort by priority target based on tag, and then by closest distance
         currentTarget = detectedColliders
-           .Where(c => c != null && priorityTags.Contains(c.tag))    // Filter by priority tags
-           .OrderBy(c => GetPriorityIndex(c.tag))                    // Prioritize by tag order
-           .ThenBy(c => Vector3.Distance(transform.position, c.transform.position)) // If same tag, choose closest
-           .Select(c => c.transform)
-           .FirstOrDefault();
+        .Where(c => c != null && priorityTags.Contains(c.tag))    // Filter by priority tags
+        .Where(c => IsTargetAccessible(c.transform))              // Filter by NavMesh accessibility
+        .OrderBy(c => GetPriorityIndex(c.tag))                   // Prioritize by tag order
+        .ThenBy(c => Vector3.Distance(transform.position, c.transform.position)) // If same tag, choose closest
+        .Select(c => c.transform)
+        .FirstOrDefault();
         targetingStructure = true;
 
         if (currentTarget == null && train != null)
@@ -544,6 +551,39 @@ public abstract class BaseEnemy : MonoBehaviour
             else
                 currentTarget = train.GetDamagePoint();
         }
+    }
+    // Add this helper method to check if a target position is accessible via NavMesh
+    private bool IsTargetAccessible(Transform target)
+    {
+        if (target == null) return false;
+
+        // Get the nearest valid position on NavMesh to the target
+        NavMeshHit hit;
+        Vector3 targetPosition = target.position;
+
+        // First check if the target is directly on a NavMesh
+        if (NavMesh.SamplePosition(targetPosition, out hit, 1.0f, NavMesh.AllAreas))
+        {
+            // Calculate path to target
+            NavMeshPath path = new NavMeshPath();
+            if (agent.CalculatePath(hit.position, path))
+            {
+                // Check if the path is complete and valid
+                return path.status == NavMeshPathStatus.PathComplete;
+            }
+        }
+
+        // If target isn't directly on NavMesh, try to find the nearest valid position
+        if (NavMesh.SamplePosition(targetPosition, out hit, 2.0f, NavMesh.AllAreas))
+        {
+            NavMeshPath path = new NavMeshPath();
+            if (agent.CalculatePath(hit.position, path))
+            {
+                return path.status == NavMeshPathStatus.PathComplete;
+            }
+        }
+
+        return false;
     }
     // Get the priority index of the tag, lower numbers mean higher priority
     int GetPriorityIndex(string tag)

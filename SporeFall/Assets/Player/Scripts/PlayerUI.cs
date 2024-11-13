@@ -174,28 +174,28 @@ public class PlayerUI : MonoBehaviour
             rightStructureIcon.sprite = flamethrowerSprite;
         }
 
-        if (bGun.currentBuildIndex == 1)
+       else if (bGun.currentBuildIndex == 1)
         {
             selectedStructureIcon.sprite = flamethrowerSprite;
             leftStructureIcon.sprite = turretSprite;
             rightStructureIcon.sprite = wallSprite;
         }
 
-        if (bGun.currentBuildIndex == 2)
+        else if (bGun.currentBuildIndex == 2)
         {
             selectedStructureIcon.sprite = wallSprite;
             leftStructureIcon.sprite = flamethrowerSprite;
             rightStructureIcon.sprite = repairTowerSprite;
         }
 
-        if (bGun.currentBuildIndex == 3)
+        else if(bGun.currentBuildIndex == 3)
         {
             selectedStructureIcon.sprite = repairTowerSprite;
             leftStructureIcon.sprite = wallSprite;
             rightStructureIcon.sprite = shermanSprite;
         }
 
-        if (bGun.currentBuildIndex == 4)
+        else if (bGun.currentBuildIndex == 4)
         {
             selectedStructureIcon.sprite = shermanSprite;
             leftStructureIcon.sprite = repairTowerSprite;

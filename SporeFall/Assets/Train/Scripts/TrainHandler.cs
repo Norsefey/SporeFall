@@ -111,7 +111,9 @@ public class TrainHandler : MonoBehaviour
     }
     private void CheckStructureObstructions()
     {
-        foreach(Structure structure in activeStructures)
+        List<Structure> structuresToRemove = new();
+
+        foreach (Structure structure in activeStructures)
         {
             Collider[] overlappingObjects = Physics.OverlapBox(
                    structure.transform.position,
@@ -126,10 +128,17 @@ public class TrainHandler : MonoBehaviour
                 {
                     player.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
                 }
-                RemoveStructure(structure);
+                Debug.Log($"{structure.name} Refunded Due to Overlap");
+                structuresToRemove.Add(structure);
+                //emoveStructure(structure);
             }
-
         }
+        // Remove all the marked structures
+        for (int i = 0; i < structuresToRemove.Count; i++)
+        {
+            RemoveStructure(structuresToRemove[i]);
+        }
+        structuresToRemove.Clear();
     }
     public void AddStructure(Structure structure)
     {

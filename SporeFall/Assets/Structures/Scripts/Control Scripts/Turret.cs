@@ -8,7 +8,6 @@ public class Turret : MonoBehaviour
     // These public variables are set by TurretBehavior
     //[HideInInspector]
     public float 
-        damage, 
         detectionRange, 
         rotationSpeed, 
         fireRate, 
@@ -16,12 +15,16 @@ public class Turret : MonoBehaviour
         fireCooldown;
     //[HideInInspector]
     public ProjectileData bulletData;
+    [Header("Turret Settings")]
+    [SerializeField] private float minimumFireRange = 1f; // Minimum distance to target
 
     [Header("References")]
     [SerializeField] private Transform turretGuns;
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private LayerMask enemyLayerMask;
+    [SerializeField] private LayerMask obstructionMask;
+
 
     [Header("Audio")]
     [SerializeField] private AudioClip firingSound;
@@ -62,7 +65,6 @@ public class Turret : MonoBehaviour
     // Find the closest enemy within range
     private void FindTarget()
     {
-        // Find all enemies in range
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, detectionRange, enemyLayerMask);
 
         float closestDistance = float.MaxValue;
@@ -71,7 +73,8 @@ public class Turret : MonoBehaviour
         foreach (Collider enemyCollider in enemiesInRange)
         {
             float distance = Vector3.Distance(transform.position, enemyCollider.transform.position);
-            if (distance < closestDistance)
+            // Check if enemy is within valid firing range (not too close and not too far)
+            if (distance >= minimumFireRange && distance <= fireRange && distance < closestDistance)
             {
                 closestDistance = distance;
                 closestEnemy = enemyCollider.transform;
@@ -88,12 +91,18 @@ public class Turret : MonoBehaviour
         if (targetEnemy == null) return false;
 
         float distance = Vector3.Distance(transform.position, targetEnemy.position);
-        return distance <= detectionRange;
+        // Check both minimum and maximum range
+        return distance >= minimumFireRange && distance <= detectionRange;
     }
 
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
     private void TrackTarget()
     {
+        if (targetEnemy == null)
+        {
+            hasTarget = false;
+            return;
+        }
         Vector3 targetDirection = targetEnemy.position - transform.position;
         targetDirection.y = 0; // Keep rotation only on Y axis
 
@@ -111,11 +120,21 @@ public class Turret : MonoBehaviour
     // Check line of sight using raycasting and fire at the enemy if visible
     private void TryShoot()
     {
+        if (targetEnemy == null)
+        {
+            hasTarget = false;
+            return; 
+        }
         if (Time.time < nextFireTime) return;
+
+        float distanceToTarget = Vector3.Distance(transform.position, targetEnemy.position);
+        // Check if target is within valid firing range
+        if (distanceToTarget < minimumFireRange || distanceToTarget > fireRange) return;
 
         // Check if we have clear line of sight
         Vector3 directionToTarget = (targetEnemy.position - firePoint.position).normalized;
-        if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit))
+        float distanceToCheck = Vector3.Distance(firePoint.position, targetEnemy.position);
+        if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit, distanceToCheck, obstructionMask))
         {
             if (hit.transform != targetEnemy) return; // Something is blocking our shot
         }
@@ -155,7 +174,14 @@ public class Turret : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        // Draw detection range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        // Draw minimum and maximum fire ranges
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, minimumFireRange);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, fireRange);
     }
 }
