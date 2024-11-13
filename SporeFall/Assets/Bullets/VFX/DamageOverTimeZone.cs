@@ -11,6 +11,7 @@ public class DamageOverTimeZone : MonoBehaviour
     private float nextTickTime;
     private float endTime;
     protected LayerMask hitTarget;
+    public LayerMask targetToDamage;
     public virtual void Initialize(float duration, float tickRate, float damagePerTick, float radius, LayerMask hitTarget)
     {
         this.duration = duration;
@@ -48,7 +49,7 @@ public class DamageOverTimeZone : MonoBehaviour
 
     protected virtual void ApplyDamageToTargetsInRange()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, targetToDamage);
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.TryGetComponent<Damageable>(out var damageable))
