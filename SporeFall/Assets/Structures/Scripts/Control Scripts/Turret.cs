@@ -25,6 +25,10 @@ public class Turret : MonoBehaviour
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private LayerMask obstructionMask;
 
+    [Header("Debug")]
+    [SerializeField] private bool showDebug = true;
+    private bool canShoot = false;
+    private string debugStatus = "";
 
     [Header("Audio")]
     [SerializeField] private AudioClip firingSound;
@@ -33,9 +37,9 @@ public class Turret : MonoBehaviour
 
     // Private variables
     private Transform targetEnemy;
-    private float nextFireTime;
     private AudioSource audioSource;
     private bool hasTarget;
+    private float lastFireTime; // Track the last time we fired
 
     void Start()
     {
@@ -46,19 +50,34 @@ public class Turret : MonoBehaviour
         }
         audioSource.clip = firingSound;
         audioSource.volume = flameVolume;
+
+        // Validate settings
+        if (fireRange <= minimumFireRange)
+        {
+            Debug.LogWarning($"[Turret] Fire range ({fireRange}) should be greater than minimum fire range ({minimumFireRange})");
+        }
     }
 
     void Update()
     {
+        debugStatus = "Status: ";
+
         if (!hasTarget || !IsTargetValid())
         {
+            debugStatus += "Searching for target... ";
             FindTarget();
         }
 
         if (hasTarget)
         {
+            debugStatus += "Has target... ";
             TrackTarget();
             TryShoot();
+        }
+        else
+        {
+            debugStatus += "No valid target found.";
+            canShoot = false;
         }
     }
 
@@ -72,13 +91,19 @@ public class Turret : MonoBehaviour
 
         foreach (Collider enemyCollider in enemiesInRange)
         {
+            if (enemyCollider == null || enemyCollider.transform == null) continue;
+
             float distance = Vector3.Distance(transform.position, enemyCollider.transform.position);
-            // Check if enemy is within valid firing range (not too close and not too far)
             if (distance >= minimumFireRange && distance <= fireRange && distance < closestDistance)
             {
                 closestDistance = distance;
                 closestEnemy = enemyCollider.transform;
             }
+        }
+
+        if (targetEnemy != closestEnemy)
+        {
+            debugStatus += $"New target found at distance {closestDistance:F1}... ";
         }
 
         targetEnemy = closestEnemy;
@@ -88,11 +113,22 @@ public class Turret : MonoBehaviour
     // Check if the current enemy is within detection range
     private bool IsTargetValid()
     {
-        if (targetEnemy == null || !targetEnemy.gameObject.activeSelf) return false;
+
+        if (targetEnemy == null || !targetEnemy.gameObject.activeSelf)
+        {
+            debugStatus += "Target is null... ";
+            return false;
+        }
 
         float distance = Vector3.Distance(transform.position, targetEnemy.position);
-        // Check both minimum and maximum range
-        return distance >= minimumFireRange && distance <= detectionRange;
+        bool isInRange = distance >= minimumFireRange && distance <= fireRange;
+
+        if (!isInRange)
+        {
+            debugStatus += $"Target out of range (distance: {distance:F1})... ";
+        }
+
+        return isInRange;
     }
 
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
@@ -120,39 +156,63 @@ public class Turret : MonoBehaviour
     // Check line of sight using raycasting and fire at the enemy if visible
     private void TryShoot()
     {
-        if (!targetEnemy.gameObject.activeSelf)
+        canShoot = false;
+
+        if (targetEnemy == null)
         {
-            hasTarget = false;
-            return; 
+            debugStatus += "Can't shoot: No target... ";
+            return;
         }
-        if (Time.time < nextFireTime) return;
+
+        float currentTime = Time.unscaledTime;
+        float timeSinceLastFire = currentTime - lastFireTime;
+
+        if (timeSinceLastFire < (1f / fireRate))
+        {
+            debugStatus += $"Cooling down ({timeSinceLastFire:F1}s)... ";
+            return;
+        }
 
         float distanceToTarget = Vector3.Distance(transform.position, targetEnemy.position);
-        // Check if target is within valid firing range
-        if (distanceToTarget < minimumFireRange || distanceToTarget > fireRange) return;
-
-        // Check if we have clear line of sight
-        Vector3 directionToTarget = (targetEnemy.position - firePoint.position).normalized;
-        float distanceToCheck = Vector3.Distance(firePoint.position, targetEnemy.position);
-        if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit, distanceToCheck, obstructionMask))
+        if (distanceToTarget < minimumFireRange || distanceToTarget > fireRange)
         {
-            if (hit.transform != targetEnemy) return; // Something is blocking our shot
+            debugStatus += $"Can't shoot: Target distance ({distanceToTarget:F1}) out of range... ";
+            return;
+        }
+        Vector3 directionToTarget = (targetEnemy.position - firePoint.position).normalized;
+        // Visualize the raycast in debug mode
+        if (showDebug)
+        {
+            Debug.DrawRay(firePoint.position, directionToTarget * distanceToTarget, Color.red, 0.1f);
         }
 
-        Shoot();
-        nextFireTime = Time.time + (1f / fireRate);
+        if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit, distanceToTarget, enemyLayerMask))
+        {
+            if (hit.transform != targetEnemy)
+            {
+                debugStatus += "Can't shoot: Line of sight blocked... ";
+                return;
+            }
+
+            canShoot = true;
+            debugStatus += "Shooting! ";
+            Shoot();
+            lastFireTime = currentTime;
+        }
+        else
+        {
+            debugStatus += "Can't shoot: Raycast missed... ";
+        }
     }
 
     // Fire a bullet towards the enemy and play the firing sound
     private void Shoot()
     {
-        // Play sound effect
         if (audioSource != null && firingSound != null)
         {
             audioSource.PlayOneShot(firingSound);
         }
 
-        // Get projectile from pool
         if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
         {
             Debug.LogError($"No pool found for projectile prefab: {bulletPrefab.name}");
@@ -166,12 +226,21 @@ public class Turret : MonoBehaviour
 
         if (projectile != null)
         {
-            // since it rotate we set the direction here
             bulletData.Direction = firePoint.forward;
             projectile.Initialize(bulletData, pool);
         }
     }
+    private void OnGUI()
+    {
+        if (!showDebug) return;
 
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = canShoot ? Color.green : Color.red;
+        style.fontSize = 14;
+        style.padding = new RectOffset(10, 10, 10, 10);
+
+        GUI.Label(new Rect(10, 10, Screen.width - 20, 30), debugStatus, style);
+    }
     private void OnDrawGizmosSelected()
     {
         // Draw detection range
@@ -183,5 +252,12 @@ public class Turret : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, minimumFireRange);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, fireRange);
+
+        if (showDebug && hasTarget && targetEnemy != null)
+        {
+            // Draw line to target
+            Gizmos.color = canShoot ? Color.green : Color.red;
+            Gizmos.DrawLine(firePoint.position, targetEnemy.position);
+        }
     }
 }
