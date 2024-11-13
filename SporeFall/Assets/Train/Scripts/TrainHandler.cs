@@ -47,6 +47,9 @@ public class TrainHandler : MonoBehaviour
     public TrainUI tUI;
     public TrainHP trainHP;
 
+    [SerializeField] private LayerMask obstructionLayer;
+    [SerializeField] private Vector3 structureCheckSize = Vector3.one; // Size of the overlap check box
+
     private void Awake()
     {
         audioPlayer = GetComponent<AudioSource>();
@@ -102,6 +105,31 @@ public class TrainHandler : MonoBehaviour
     {
         structureHolder.gameObject.SetActive(toggle);
         forceField.SetActive(toggle);
+
+        if(toggle)
+            CheckStructureObstructions();
+    }
+    private void CheckStructureObstructions()
+    {
+        foreach(Structure structure in activeStructures)
+        {
+            Collider[] overlappingObjects = Physics.OverlapBox(
+                   structure.transform.position,
+                   structureCheckSize / 2f, // Half extents
+                   structure.transform.rotation,
+                   obstructionLayer
+               );
+
+            if (overlappingObjects.Length > 0)
+            {
+                foreach (PlayerManager player in players)
+                {
+                    player.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
+                }
+                RemoveStructure(structure);
+            }
+
+        }
     }
     public void AddStructure(Structure structure)
     {

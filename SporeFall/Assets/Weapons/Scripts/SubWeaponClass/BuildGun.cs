@@ -485,7 +485,7 @@ public class BuildGun : Weapon
             selectedStructure = null;
             if (player.train != null)
             {
-                player.IncreaseMycelia(CalculateStructureRefund(toDelet));
+                player.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));
                 player.train.RemoveStructure(toDelet);
             }
             Debug.Log("Structure Deleted");
@@ -500,17 +500,5 @@ public class BuildGun : Weapon
             selectedStructure.ShowRadius(showRadius);
         }
     }
-    private float CalculateStructureRefund(Structure structure)
-    {
-        StructureHP structureHP = structure.GetStructureHP();
 
-        // Calculate HP percentage (clamped between 0 and 1)
-        float healthPercentage = Mathf.Clamp01(structureHP.CurrentHP / structureHP.maxHP);
-        // Calculate refund percentage, scaled between minimumRefundPercent and 1
-        float refundPercentage = Mathf.Lerp(minimumRefundPercent, 1f, healthPercentage);
-        // Calculate final refund amount and round to nearest integer
-        int refundAmount = Mathf.RoundToInt(structure.GetCurrentMyceliaCost() * refundPercentage);
-
-        return refundAmount;
-    }
 }

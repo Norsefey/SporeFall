@@ -116,6 +116,19 @@ public class Structure : MonoBehaviour
     {
         this.train = train; 
     }
+    public float CalculateStructureRefund(float minimumRefundPercent)
+    {
+        StructureHP structureHP = GetStructureHP();
+
+        // Calculate HP percentage (clamped between 0 and 1)
+        float healthPercentage = Mathf.Clamp01(structureHP.CurrentHP / structureHP.maxHP);
+        // Calculate refund percentage, scaled between minimumRefundPercent and 1
+        float refundPercentage = Mathf.Lerp(minimumRefundPercent, 1f, healthPercentage);
+        // Calculate final refund amount and round to nearest integer
+        int refundAmount = Mathf.RoundToInt(GetCurrentMyceliaCost() * refundPercentage);
+
+        return refundAmount;
+    }
     private void OnDestroy()
     {
         if (train != null)
