@@ -39,6 +39,8 @@ public class PlayerManager : MonoBehaviour
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
     [SerializeField] private Transform fallbackSpawnPoint;
+    private bool usingKeyboard = false;
+    private bool usingGamepad = false;
 
     public bool holdingCorruption = false;
     public InputDevice myDevice;
@@ -62,10 +64,24 @@ public class PlayerManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (usingGamepad == true)
         {
-            pHealth.TakeDamage(20);
+            if (Tutorial.Instance.tutorialStarted == true)
+            {
+                Tutorial.Instance.StartGamepadTutorial();
+                usingGamepad = false;
+            }
         }
+
+        if (usingKeyboard == true)
+        {
+            if (Tutorial.Instance.tutorialStarted == true)
+            {
+                Tutorial.Instance.StartKeyboardTutorial();
+                usingKeyboard = false;
+            }
+        }
+
 
         WeaponBehavior();
     }
@@ -91,14 +107,16 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("I am using a gamepad");
                 pCamera.SetGamepadSettings();
                 bGun.structRotSpeed = 50;
-                Tutorial.Instance.StartGamepadTutorial();
+                usingGamepad = true;
+                
             }
             else if (device is Keyboard || device is Mouse)
             {
                 Debug.Log("I am using a keyboard");
                 pCamera.SetMouseSettings();
                 bGun.structRotSpeed = 25;
-                Tutorial.Instance.StartKeyboardTutorial();
+                usingKeyboard = true;
+                
             }
         }
     }

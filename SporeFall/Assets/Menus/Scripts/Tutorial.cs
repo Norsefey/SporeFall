@@ -10,15 +10,21 @@ public class Tutorial : MonoBehaviour
     public static Tutorial Instance;
 
     [SerializeField] GameObject tutorialPopup;
+    [SerializeField] GameObject bgImage;
     [SerializeField] TMP_Text tutorialText;
     [SerializeField] TMP_Text continueText;
     private bool keyboardTutorial = false;
+    public bool tutorialStarted = false;
     //private bool gamepadTutorial = false;
     private int tutorialPrompt = 0;
 
     private void Awake()
     {
         Instance = this;
+        tutorialPopup.SetActive(true);
+        bgImage.SetActive(false);
+        tutorialText.text = " ";
+        continueText.text = " ";
     }
     // Start is called before the first frame update
     void Start()
@@ -99,9 +105,10 @@ public class Tutorial : MonoBehaviour
     IEnumerator FirstTutorialPopup()
     {
         yield return new WaitForSeconds(2);
-        tutorialPopup.SetActive(true);
+        bgImage.SetActive(true);
         tutorialText.text = "Left click/Start Button to lock cursor" + "\n and start the game";
         continueText.text = " ";
+        tutorialStarted = true;
     }
     IEnumerator Cooldown()
     {
