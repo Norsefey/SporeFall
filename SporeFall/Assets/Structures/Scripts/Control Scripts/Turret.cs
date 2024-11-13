@@ -88,7 +88,7 @@ public class Turret : MonoBehaviour
     // Check if the current enemy is within detection range
     private bool IsTargetValid()
     {
-        if (targetEnemy == null) return false;
+        if (targetEnemy == null || !targetEnemy.gameObject.activeSelf) return false;
 
         float distance = Vector3.Distance(transform.position, targetEnemy.position);
         // Check both minimum and maximum range
@@ -98,7 +98,7 @@ public class Turret : MonoBehaviour
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
     private void TrackTarget()
     {
-        if (targetEnemy == null)
+        if (!targetEnemy.gameObject.activeSelf)
         {
             hasTarget = false;
             return;
@@ -120,7 +120,7 @@ public class Turret : MonoBehaviour
     // Check line of sight using raycasting and fire at the enemy if visible
     private void TryShoot()
     {
-        if (targetEnemy == null)
+        if (!targetEnemy.gameObject.activeSelf)
         {
             hasTarget = false;
             return; 
