@@ -68,6 +68,9 @@ public class VFXPoolingBehavior : MonoBehaviour
 
     private void OnParticleSystemStopped()
     {
-        pool.Return(this);
+        if(pool != null)
+            pool.Return(this);
+        else
+            Destroy(gameObject);
     }
 }
