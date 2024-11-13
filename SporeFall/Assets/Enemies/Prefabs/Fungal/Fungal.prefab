@@ -226,6 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 30
   canHoldCorruption: 0
+  canTakeDamage: 1
   hpDisplay: {fileID: 8293907463534621136}
   manager: {fileID: 9009785512476672233}
 --- !u!114 &9009785512476672233
@@ -270,7 +271,8 @@ MonoBehaviour:
   targetSwitchThreshold: 0
   myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
     type: 3}
-  myceliaDropAmount: 5
+  minMyceliaWorth: 5
+  maxMyceliaWorth: 10
   weaponDropPrefab:
   - {fileID: 9060537162651975904, guid: 913ccd0c1fb98f046b9540bbdc94922d, type: 3}
   dropChance: 25

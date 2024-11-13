@@ -125,6 +125,8 @@ public class CorruptionHandler : MonoBehaviour
         // corrupted player will prioritize attacking the player
         robert.myPlayer = pMan;
         robert.AssignDefaultTarget(pMan.train, pMan.pController.transform);
+        robert.transform.SetParent(pMan.train.dropsHolder, true);
+
     }
     public void SetManager(PlayerManager player)
     {
