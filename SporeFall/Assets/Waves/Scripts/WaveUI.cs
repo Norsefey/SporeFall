@@ -27,9 +27,11 @@ public class WaveUI : MonoBehaviour
     [Header("Sprites")]
     [SerializeField] private Sprite podFlagSprite;
     [SerializeField] private Sprite bossFlagSprite;
-    [Header("Other")]
+    [Header("Text")]
     [SerializeField] private GameObject waveTextHolder;
     [SerializeField] private TMP_Text waveText;
+    [SerializeField] private GameObject waveCountdownTextHolder;
+    [SerializeField] private TMP_Text waveCountdownText;
 
     //Used for testing purposes
     //public int deadEnemies = 0;
@@ -47,6 +49,7 @@ public class WaveUI : MonoBehaviour
         wave3Bar.maxValue = waveManager.waves[2].totalEnemies;
         finalWaveBar.maxValue = waveManager.payloadPath.Length;
         waveTextHolder.SetActive(false);
+        waveCountdownTextHolder.SetActive(false);
     }
 
     

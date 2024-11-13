@@ -185,7 +185,7 @@ public class PlayerUI : MonoBehaviour
         {
             selectedStructureIcon.sprite = wallSprite;
             leftStructureIcon.sprite = flamethrowerSprite;
-            rightStructureIcon.sprite = shermanSprite;
+            rightStructureIcon.sprite = repairTowerSprite;
         }
 
         if (bGun.currentBuildIndex == 3)
