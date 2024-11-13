@@ -91,12 +91,14 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("I am using a gamepad");
                 pCamera.SetGamepadSettings();
                 bGun.structRotSpeed = 50;
+                Tutorial.Instance.StartGamepadTutorial();
             }
             else if (device is Keyboard || device is Mouse)
             {
                 Debug.Log("I am using a keyboard");
                 pCamera.SetMouseSettings();
                 bGun.structRotSpeed = 25;
+                Tutorial.Instance.StartKeyboardTutorial();
             }
         }
     }
