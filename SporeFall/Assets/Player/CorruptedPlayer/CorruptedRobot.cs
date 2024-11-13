@@ -13,7 +13,6 @@ public class CorruptedPlayer : BaseEnemy
     protected override void Awake()
     {
         base.Awake();
-        transform.SetParent(train.dropsHolder, true);
     }
     protected override float EvaluateAttackPriority(Attack attack, float distanceToTarget)
     {
