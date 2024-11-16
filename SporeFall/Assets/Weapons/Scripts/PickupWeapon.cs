@@ -22,6 +22,8 @@ public class PickUpWeapon : Interactables
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = pickupSound;
         audioSource.volume = pickupVolume;
+        // auto Despawn
+        Invoke(nameof(DestroyIntractable), 10);
     }
 
     private void LateUpdate()
@@ -50,7 +52,7 @@ public class PickUpWeapon : Interactables
         transform.GetChild(0).gameObject.SetActive(false);
 
         // Delay the destruction of the GameObject to allow the sound to finish
-        Invoke("DestroyIntractable", pickupSound.length);
+        Invoke(nameof(DestroyIntractable), pickupSound.length);
         Debug.Log("Picked up: " + weapon.name);
     }
 

@@ -173,6 +173,9 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     public void RemoveInteraction(Interactables interaction)
     {
+        if(pMan.interactable == null)
+            return;
+
         interactAction.performed -= interaction.Interact;
         pMan.interactable = null;
     }
