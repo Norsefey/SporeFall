@@ -13,13 +13,13 @@ public class TrainHP : Damageable
 
     private void Update()
     {
-        //Testing
+        /*//Testing
         if (Input.GetKeyUp(KeyCode.P))
         {
             currentHP = currentHP - 40;
             UpdateUI();
             Debug.Log("taking 40 damage");
-        }
+        }*/
     }
     protected override void Die()
     {

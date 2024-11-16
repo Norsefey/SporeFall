@@ -49,11 +49,16 @@ public class PlayerHP : Damageable
         DepleteLife();
         pMan.StartRespawn();
     }
+    
     protected override void UpdateUI()
     {
         pMan.pUI.UpdateHPDisplay(currentHP);
     }
-
+    public override void ResetHealth()
+    {
+        base.ResetHealth();
+        UpdateUI();
+    }
     public override void IncreaseCorruption(float amount)
     {
         pMan.pCorruption.IncreaseCorruption(amount);

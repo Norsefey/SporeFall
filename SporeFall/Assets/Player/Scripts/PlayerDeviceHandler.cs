@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.XInput;
 
-public class PlayerDisconnection : MonoBehaviour
+public class PlayerDeviceHandler : MonoBehaviour
 {
     private List<PlayerInput> players = new List<PlayerInput>();
     private PlayerInputManager inputManager;
@@ -89,6 +91,18 @@ public class PlayerDisconnection : MonoBehaviour
     {
         if (device is Gamepad gamepad)
         {
+            if (device is XInputController)
+            {
+                Debug.Log($"Single player switched to Xbox Controller: {gamepad.displayName}");
+
+            }
+            else if (device is DualShockGamepad)
+            {
+                Debug.Log($"Single player switched to PS Controller: {gamepad.displayName}");
+
+            }
+
+
             if (singlePlayer && players.Count > 0)
             {
                 // In single player, switch the existing player to the gamepad

@@ -35,8 +35,9 @@ public abstract class Damageable : MonoBehaviour
             Die();
         }
     }
-    public void ResetHealth()
+    public virtual void ResetHealth()
     {
+        isDead = false;
         currentHP = maxHP;
     }
     public void RestoreHP(float value)

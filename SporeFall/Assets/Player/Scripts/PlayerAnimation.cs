@@ -37,14 +37,14 @@ public class PlayerAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // temp code to adjust animation speeds
+      /*  // temp code to adjust animation speeds
         if (Input.GetKeyDown(KeyCode.P))
         {
             Time.timeScale = .1f;
         }
         // return time scale to normal
         if (Input.GetKeyDown(KeyCode.M))
-            Time.timeScale = 1;
+            Time.timeScale = 1;*/
         // keep weapon to hand position
         WeaponPosition();
         // check if we are walking or idle, will add sprint later

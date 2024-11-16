@@ -60,10 +60,7 @@ public class PlayerManager : MonoBehaviour
 
         pUI.AmmoDisplay(currentWeapon);
         pInput.AssignAllActions();
-        
-    }
-    private void Update()
-    {
+
         if (usingGamepad == true)
         {
             if (Tutorial.Instance.tutorialStarted == true)
@@ -82,7 +79,9 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-
+    }
+    private void Update()
+    {
         WeaponBehavior();
     }
     private void SetManager()
@@ -313,7 +312,7 @@ public class PlayerManager : MonoBehaviour
             MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
         else
             MovePlayerTo(fallbackSpawnPoint.position);
-        pHealth.RestoreHP(pHealth.maxHP);
+        pHealth.ResetHealth();
         TogglePControl(true);
         if (pHealth.lives == 2)
         {
