@@ -11,7 +11,8 @@ public abstract class Interactables : DropsPoolBehavior
     public abstract void RemoveAction();
     public void DestroyIntractable()
     {
-        player.pInput.RemoveInteraction(this);
+        if(player != null)
+            player.pInput.RemoveInteraction(this);
         if (pool != null)
         {
             pool.Return(this);

@@ -23,7 +23,8 @@ public class PickUpWeapon : Interactables
         audioSource.clip = pickupSound;
         audioSource.volume = pickupVolume;
         // auto Despawn
-        Invoke(nameof(DestroyIntractable), 10);
+        if (pool != null)
+            Invoke(nameof(ReturnObject), 10);
     }
 
     private void LateUpdate()
