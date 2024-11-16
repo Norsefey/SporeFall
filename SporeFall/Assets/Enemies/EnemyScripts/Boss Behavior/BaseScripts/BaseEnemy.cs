@@ -543,7 +543,7 @@ public abstract class BaseEnemy : MonoBehaviour
         .FirstOrDefault();
         targetingStructure = true;
 
-        if (currentTarget == null && train != null)
+        if (train != null && (currentTarget == null || currentTarget.CompareTag("Train")))
         {
             targetingStructure = false;
             if (train.Payload != null)
@@ -602,7 +602,6 @@ public abstract class BaseEnemy : MonoBehaviour
         OnEnemyDeath?.Invoke(this); // Pass 'this' to the event
         gameObject.SetActive(false); // Deactivate instead of destroy
     }
-
     public void AssignDefaultTarget(TrainHandler train, Transform target)
     {
         this.train = train;

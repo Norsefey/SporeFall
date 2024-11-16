@@ -55,10 +55,6 @@ MonoBehaviour:
   detectionRadius: 10
   enemyInfluenceWeight: 2
   randomMovementWeight: 1
-  enemyTag: Enemy
-  damageableLayers:
-    serializedVersion: 2
-    m_Bits: 256
   explosionRadius: 10
   damageFalloff:
     serializedVersion: 2
@@ -84,6 +80,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  parentStructure: {fileID: 0}
+  wallAvoidanceDistance: 5
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  wallAvoidanceWeight: 2
+  damageableLayers:
+    serializedVersion: 2
+    m_Bits: 256
   explosionSF: {fileID: 8300000, guid: 37b8b1ba5ec8d2043a3a047ec14db3b5, type: 3}
   explosionVF: {fileID: 1150934714579380, guid: 779aa8c25fbd0e1488637639c9fff976,
     type: 3}
@@ -131,9 +136,9 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 122
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!82 &-1315669565884968817
 AudioSource:
