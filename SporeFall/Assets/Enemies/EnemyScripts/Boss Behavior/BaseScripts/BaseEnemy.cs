@@ -69,8 +69,8 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     [Header("Attack Stats")]
     [SerializeField] protected float stoppingDistance = 20f;
-    [SerializeField] protected float minAttackInterval = 5;
-    [SerializeField] protected float maxAttackInterval = 8;
+/*    [SerializeField] protected float minAttackInterval = 5;
+    [SerializeField] protected float maxAttackInterval = 8;*/
     [SerializeField] protected float aggressionFactor = 0.6f; // Chance to choose aggressive actions
     protected bool isAttacking;
 

@@ -138,9 +138,11 @@ public class ShermanControl : MonoBehaviour
 
         return enemyInfluence.normalized;
     }
-    private void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag(enemyTag) && active)
+
+        if (other.gameObject.CompareTag(enemyTag) && active)
         {
 
             // Play effects
