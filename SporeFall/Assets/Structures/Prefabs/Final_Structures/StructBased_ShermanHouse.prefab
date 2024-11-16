@@ -41,7 +41,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3601192681765489144}
   - component: {fileID: 3895042530933602892}
-  m_Layer: 7
+  - component: {fileID: 3794377394842339549}
+  m_Layer: 2
   m_Name: Controlscirpt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,6 +80,29 @@ MonoBehaviour:
   spawnPoint: {fileID: 3603894046513239344}
   currentSherman: {fileID: 3558202522786940098}
   respawnDelay: 2
+--- !u!136 &3794377394842339549
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795503593085061794}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.65
+  m_Height: 3.24
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.21, z: 0}
 --- !u!1 &1260562837911600462
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +355,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -597,8 +621,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588137888749594261, guid: ac4d833fce99bdf4cbbbf7b128249300,
         type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2588137888749594261, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3991209753368682062, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027642367429550200, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169997755307460049, guid: ac4d833fce99bdf4cbbbf7b128249300,
+        type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
