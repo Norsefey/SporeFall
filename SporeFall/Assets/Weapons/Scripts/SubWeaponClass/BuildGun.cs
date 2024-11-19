@@ -288,7 +288,7 @@ public class BuildGun : Weapon
             Destroy(selectedStructure.gameObject);
 
         PreviewStructure();
-        player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name + selectedStructure.GetCurrentMyceliaCost());
+        player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name + "\n Cost: "+ selectedStructure.GetCurrentMyceliaCost());
         player.pUI.SwitchStructureIcon();
     }
     private void SetStructureToTransparent(GameObject obj)
@@ -399,8 +399,9 @@ public class BuildGun : Weapon
                 // Store original position and rotation
                 originalPosition = selectedStructure.transform.position;
                 originalRotation = selectedStructure.transform.rotation;
-                Debug.Log("Structure selected: " + selectedStructure.name);
-                player.pUI.EnablePrompt(selectedStructure.name);
+
+                 player.pUI.EnablePrompt(selectedStructure.GetStructureName());
+
                 selectedStructure.ToggleStructureBehavior(false);
                 selectedStructure.ShowRadius(showRadius);
 
