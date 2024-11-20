@@ -165,6 +165,11 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(TempGamepadTutorial());
     }
 
+    public void StartFinalWaveTutorial()
+    {
+        StartCoroutine(FinalWaveTutorial());
+    }
+
     IEnumerator FirstTutorialPopup()
     {
         Debug.Log("Showing first prompt");
@@ -224,6 +229,17 @@ public class Tutorial : MonoBehaviour
         tutorialText.text = "...but raise your corruption meter," + "\n beneath your HP bar," + "\n over time";
         yield return new WaitForSeconds(7);
         tutorialText.text = "You can drop corrupted weapons" + "\n at any time" + "\n by holding Q";
+        yield return new WaitForSeconds(7);
+        tutorialPopup.SetActive(false);
+    }
+
+    IEnumerator FinalWaveTutorial()
+    {
+        tutorialPopup.SetActive(true);
+        tutorialText.text = "This is the final wave!" + "\n Defeat the boss, and a payload will spawn";
+        continueText.text = " ";
+        yield return new WaitForSeconds(7);
+        tutorialText.text = "Don't worry about the train, protect the payload and escort it to its destination";
         yield return new WaitForSeconds(7);
         tutorialPopup.SetActive(false);
     }

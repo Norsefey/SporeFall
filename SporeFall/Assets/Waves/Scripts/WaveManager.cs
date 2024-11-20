@@ -69,6 +69,7 @@ public class WaveManager : MonoBehaviour
         if (currentWave.isFinalWave)
         {
             StartFinalWave();
+            
         }
         else
         {
@@ -110,6 +111,7 @@ public class WaveManager : MonoBehaviour
     private void StartFinalWave()
     {
         wUI.DisplayWaveStart();
+        Tutorial.Instance.StartFinalWaveTutorial();
 
         // Spawn boss and initial squad instead of payload
         isBossDefeated = false;
