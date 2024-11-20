@@ -15,27 +15,12 @@ public class PickUpWeapon : Interactables
     [Range(0f, 1f)] [SerializeField] private float pickupVolume = 0.5f; // Volume of pickup sound
 
     private AudioSource audioSource;
-    private float timer = 10;
-
     private void Start()
     {
         // Add an AudioSource component to play the pickup sound
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = pickupSound;
         audioSource.volume = pickupVolume;
-
-        timer = 9;
-    }
-    private void Update()
-    {
-        timer -= Time.deltaTime;
-        // auto Despawn
-        if (timer <= 0)
-        {
-            if (player != null)
-                RemoveAction();
-            DestroyIntractable();
-        }
     }
     private void LateUpdate()
     {
@@ -70,7 +55,6 @@ public class PickUpWeapon : Interactables
 
     public override void RemoveAction()
     {
-        timer = 5;
         player.nearByWeapon = null;
         player.pUI.DisablePrompt();
     }

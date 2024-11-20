@@ -216,9 +216,16 @@ public class PlayerMovement : MonoBehaviour
     public void SetSprintSpeed(bool isSprinting)
     {
         if (isSprinting && currentState != PlayerState.Aiming)
+        {
             moveSpeed = sprintSpeed;
+            pMan.pAnime.ToggleSprint(true);
+        }
         else
+        {
             moveSpeed = walkSpeed;
+            pMan.pAnime.ToggleSprint(false);
+
+        }
     }
 
     private void PlayFootstepSound()

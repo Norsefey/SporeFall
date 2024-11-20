@@ -251,9 +251,9 @@ public class TrainHandler : MonoBehaviour
     {
         int index = Random.Range(0, damagePoint.Length);
 
-        if (Payload != null)
+       /* if (Payload != null)
             return Payload.transform;
-        else
+        else*/
             return damagePoint[index];
     }
     public void GivePlayersMycelia(float amount)

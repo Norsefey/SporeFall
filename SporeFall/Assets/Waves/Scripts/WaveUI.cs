@@ -89,25 +89,25 @@ public class WaveUI : MonoBehaviour
         if (waveManager.currentWaveIndex == 0)
         {
             wave1Bar.value = value;
-            Debug.Log("Updating wave 1 bar");
+            //Debug.Log("Updating wave 1 bar");
         }
 
         else if(waveManager.currentWaveIndex == 1)
         {
             wave2Bar.value = value;
-            Debug.Log("Updating wave 2 bar");
+            //Debug.Log("Updating wave 2 bar");
         }
 
         else if(waveManager.currentWaveIndex == 2)
         {
             wave3Bar.value = value;
-            Debug.Log("Updating wave 3 bar");
+            //Debug.Log("Updating wave 3 bar");
         }
 
         else if(waveManager.currentWaveIndex == 3)
         {
             finalWaveBar.value = value;
-            Debug.Log("Updating final wave bar");
+            //Debug.Log("Updating final wave bar");
         }
     }
 

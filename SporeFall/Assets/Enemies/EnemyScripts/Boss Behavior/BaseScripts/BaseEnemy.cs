@@ -76,6 +76,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
     [Header("Targeting")]
     public TrainHandler train; // if nothing is in range will move to Payload or train
+    private Transform trainWall;
     public Transform currentTarget;
     // Array to hold multiple valid target tags
     public string[] priorityTags; // e.g., "Player", "Ally"
@@ -255,13 +256,12 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     protected virtual float CalculateStrafeWeight(float recentDamage, float distanceToTarget)
     {
-        float weight = 0.2f; // Base weight for strafing
+        float weight = 0.01f; // Base weight for strafing
 
         if (recentDamage > damagePriorityThreshold * 0.5f)
             weight += 1.5f;
-
-        if (distanceToTarget <= stoppingDistance * 1.5f)
-            weight -= 0.3f;
+        else if (recentDamage <= 0)
+            return 0;
 
         return weight;
     }
@@ -294,7 +294,6 @@ public abstract class BaseEnemy : MonoBehaviour
                 stateTimer = Random.Range(1f, 3f);
                 break;
             case EnemyState.Attack:
-                //intervalCooldown = Random.Range(minAttackInterval, maxAttackInterval);
                 stateTimer = Random.Range(5f, 8f);
                 break;
             case EnemyState.Chase:
@@ -358,67 +357,73 @@ public abstract class BaseEnemy : MonoBehaviour
         if (passedThreshold)
             DetectTargets();
 
-        Vector3 pos = Vector3.zero;
+        Vector3 targetPosition;
+
         if (!targetingStructure)
         {
-            pos = currentTarget.GetComponent<Collider>().ClosestPoint(transform.position);
-            pos.y = transform.position.y;
+            // Get closest point on the target's collider
+            targetPosition = currentTarget.GetComponent<Collider>().ClosestPoint(transform.position);
+            targetPosition.y = transform.position.y;
 
-            distanceToTarget = Vector3.Distance(transform.position, pos);
-        }
-
-        if (distanceToTarget > stoppingDistance)
-        {
-            // agent stopping distance changes based on different behaviors
-            agent.stoppingDistance = stoppingDistance;
-            agent.isStopped = false;
-            if (!targetingStructure)
-            {
-                agent.SetDestination(pos);
-            }
-            else
-            {
-                agent.SetDestination(currentTarget.position);
-            }
-           
+            // Update distance calculation using the closest point
+            distanceToTarget = Vector3.Distance(transform.position, targetPosition);
         }
         else
         {
-            currentState = EnemyState.Attack;
+            // For structures, use the actual position
+            targetPosition = currentTarget.position;
+        }
+
+        // Check if we're outside the stopping distance
+        if (distanceToTarget > stoppingDistance)
+        {
+            // Set up agent for movement
+            agent.stoppingDistance = stoppingDistance;
+            agent.isStopped = false;
+            agent.SetDestination(targetPosition);
+        }
+        else
+        {
+            // We're within attack range, transition to attack state
+            agent.isStopped = true;
+            SetState(EnemyState.Attack);
         }
     }
     protected virtual void UpdateAttackState(float distanceToTarget)
     {
-        /*if (intervalCooldown <= 0)
-        {*/
-            // so that it doesnt go through all attacks, added a random chance to not attack and do something else instead
-            int index = Random.Range(0, 100);
-            //Debug.Log(distanceToTarget);
-            Attack bestAttack = ChooseBestAttack(distanceToTarget);
-            if (bestAttack != null && index < 70)
-            {
-                // Get the direction to the target
-                Vector3 direction = (currentTarget.position - transform.position).normalized;
-                // Calculate the rotation needed to face the target
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                // Smoothly rotate towards the target
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
-               
-                Vector3 lookDirection = (currentTarget.position - transform.position).normalized;
-                lookDirection.y = 0;
-                transform.rotation = Quaternion.Lerp(transform.rotation,
-                    Quaternion.LookRotation(lookDirection), Time.deltaTime * 2f);
-                //Debug.Log("Attacking With: " + bestAttack.name);
-                StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
-                return;
-            }
-            else
-            {
-                SetRandomState(); // Choose new state if we can't attack
-            }
-        
+        Vector3 targetPosition;
 
-        //intervalCooldown -= Time.deltaTime;
+        if (!targetingStructure)
+        {
+            // Get closest point on the target's collider for consistent distance calculation
+            targetPosition = currentTarget.GetComponent<Collider>().ClosestPoint(transform.position);
+            targetPosition.y = transform.position.y;
+            distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+        }
+        else
+        {
+            targetPosition = currentTarget.position;
+        }
+
+        Attack bestAttack = ChooseBestAttack(distanceToTarget);
+        if (bestAttack != null)
+        {
+            // Calculate direction to the actual target position for rotation
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            direction.y = 0; // Keep the enemy level
+
+            // Smoothly rotate towards the target
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
+
+            StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
+            return;
+        }
+        else
+        {
+            Debug.Log("Cannot Attack");
+            SetRandomState(); // Choose new state if we can't attack
+        }
     }
     protected virtual void UpdateRetreatState()
     {
@@ -549,7 +554,14 @@ public abstract class BaseEnemy : MonoBehaviour
             if (train.Payload != null)
                 currentTarget = train.Payload.transform;
             else
-                currentTarget = train.GetDamagePoint();
+                currentTarget = trainWall;
+        }
+    }
+    private void SetDefaultTarget()
+    {
+        if(train != null)
+        {
+            trainWall = train.GetDamagePoint();
         }
     }
     // Add this helper method to check if a target position is accessible via NavMesh
@@ -606,8 +618,16 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         this.train = train;
         currentTarget = target;
-    }
 
+        ChooseTrainWall();
+    }
+    private void ChooseTrainWall()
+    {
+        if (train != null)
+        {
+            trainWall = train.GetDamagePoint();
+        }
+    }
     // Optional: Add method to clean up any persistent effects or coroutines when returned to pool
     protected virtual void OnDisable()
     {

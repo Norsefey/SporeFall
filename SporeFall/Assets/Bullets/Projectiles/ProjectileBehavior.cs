@@ -105,7 +105,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void ReturnToPool()
     {
-        Debug.Log($"Returning to pool {name}");
+        //Debug.Log($"Returning to pool {name}");
         StopAllCoroutines();
         if (pool != null)
         {
@@ -137,7 +137,7 @@ public class ProjectileBehavior : MonoBehaviour
                     break;
             }
         }
-        Debug.Log("Projectile Hit" + collision.gameObject.name);
+        //Debug.Log("Projectile Hit" + collision.gameObject.name);
 
         HandleCollision(collision);
 

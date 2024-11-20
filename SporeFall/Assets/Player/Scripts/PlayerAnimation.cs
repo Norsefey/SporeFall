@@ -80,6 +80,10 @@ public class PlayerAnimation : MonoBehaviour
     {
         anime.SetBool("IsWalking", toggle);
     }
+    public void ToggleSprint(bool toggle)
+    {
+        anime.SetBool("IsSprinting", toggle);
+    }
     public void ToggleAimAnime(bool toggle)
     {
         if (toggle)
