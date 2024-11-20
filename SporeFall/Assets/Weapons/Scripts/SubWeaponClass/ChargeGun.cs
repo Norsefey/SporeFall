@@ -9,8 +9,12 @@ public class ChargeGun : Weapon
     public float minChargeMultiplier = 1f; // Minimum power for a shot
     public float maxChargeMultiplier = 3f; // Maximum power for a fully charged shot
     public float baseChargeSpeed = 10;
+    [HideInInspector]
+    public float chargeAmount = 0f;
     private bool isCharging = false;
-    private float chargeAmount = 0f;
+    [Header("Multiple Projectile Settings")]
+    [SerializeField] private int maxProjectileCount = 5; // Maximum number of projectiles
+    [SerializeField] private float spreadAngle = 15f; // Spread angle for multiple projectiles
 
     [Header("Charge Audio Settings")]
     public AudioClip chargeSound; // Charging sound clip
@@ -81,41 +85,56 @@ public class ChargeGun : Weapon
     // Fire projectile with charge multiplier affecting its power (damage or speed)
     private void FireProjectile(float chargeMultiplier)
     {
-        Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
+        // Precise calculation of projectile count
+        int currentProjectileCount = Mathf.Max(1, Mathf.RoundToInt(chargeAmount * (maxProjectileCount - 1) + 1));
+
+        Vector3 baseDirection = player.pCamera.myCamera.transform.forward;
 
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
-            Debug.Log("Rotating on Fire");
-            player.pController.RotateOnFire(this.transform, shootDirection);
+            player.pController.RotateOnFire(this.transform, baseDirection);
         }
+
         if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
         {
-            Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+            Debug.LogError($"No pool found for Bullet prefab: {bulletPrefab.name}");
             return;
         }
-        // Get projectile from pool
-        ProjectileBehavior projectile = pool.Get(
-            firePoint.position,
-            Quaternion.LookRotation(shootDirection));
 
-        if (projectile != null)
+        // Fire multiple projectiles with spread
+        for (int i = 0; i < currentProjectileCount; i++)
         {
-            ProjectileData data = new()
+            Vector3 shootDirection = GetSpreadDirection(baseDirection, currentProjectileCount, i);
+
+            // Get projectile from pool
+            ProjectileBehavior projectile = pool.Get(
+                firePoint.position,
+                Quaternion.LookRotation(shootDirection));
+
+            if (projectile != null)
             {
-                Direction = shootDirection,
-                Speed = projectileSpeed * chargeMultiplier,
-                Damage = damage * chargeMultiplier,
-                Lifetime = projectileLifetime,
-                UseGravity = useGravity,
-                ArcHeight = projectileArcHeight,
-                CanBounce = canBounce,
-                MaxBounces = maxBounces,
-                BounceDamageMultiplier = bounceDamageMultiplier
-            };
-            projectile.Initialize(data, pool);
-            Debug.Log(weaponName + " fired a charged projectile with power: " + chargeMultiplier + " For " + damage * chargeMultiplier + " Damage");
+                ProjectileData data = new()
+                {
+                    Direction = shootDirection,
+                    Speed = projectileSpeed * chargeMultiplier,
+                    Damage = damage * chargeMultiplier / currentProjectileCount, // Spread damage across projectiles
+                    Lifetime = projectileLifetime,
+                    UseGravity = useGravity,
+                    ArcHeight = projectileArcHeight,
+                    CanBounce = canBounce,
+                    MaxBounces = maxBounces,
+                    BounceDamageMultiplier = bounceDamageMultiplier
+                };
+                projectile.Initialize(data, pool);
+                Debug.Log($"{weaponName} fired a charged projectile with power: {chargeMultiplier}, Projectile: {i + 1}/{currentProjectileCount}");
+            }
+            else
+            {
+                Debug.Log("No Projectile");
+            }
         }
     }
+
 
     // Fire hitscan with charge multiplier affecting its damage
     private void FireHitscan(float chargeMultiplier)
@@ -148,5 +167,22 @@ public class ChargeGun : Weapon
                 }
             }
         }
+    }
+
+    private Vector3 GetSpreadDirection(Vector3 baseDirection, int projectileCount, int projectileIndex)
+    {
+        if (projectileCount <= 1)
+            return baseDirection;
+
+        // Calculate dynamic spread angle based on charge amount
+        float dynamicSpreadAngle = spreadAngle * chargeAmount;
+
+        // Calculate spread
+        float spreadStep = dynamicSpreadAngle / (projectileCount - 1);
+        float offsetAngle = -dynamicSpreadAngle / 2f + spreadStep * projectileIndex;
+
+        // Rotate the base direction
+        Quaternion spreadRotation = Quaternion.AngleAxis(offsetAngle, Vector3.up);
+        return spreadRotation * baseDirection;
     }
 }

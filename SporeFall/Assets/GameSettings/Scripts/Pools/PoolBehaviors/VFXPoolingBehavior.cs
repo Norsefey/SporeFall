@@ -55,7 +55,7 @@ public class VFXPoolingBehavior : MonoBehaviour
     }
     public void MoveForward()
     {
-        moveSpeed = 50;
+        moveSpeed = 80;
         shouldMove = true;
         Invoke(nameof(ReturnBullet), 1f);
     }

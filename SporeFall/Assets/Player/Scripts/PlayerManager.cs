@@ -125,6 +125,8 @@ public class PlayerManager : MonoBehaviour
             {
                 // Charge weapons handle firing when the fire button is held
                 gun.Charge();
+
+                pUI.UpdateChargeGunSlider(gun.chargeAmount);
             }
         }
     }
@@ -161,6 +163,11 @@ public class PlayerManager : MonoBehaviour
         // update weapon icon
         pUI.SwitchWeaponIcon();
 
+        if(currentWeapon is ChargeGun cGun)
+        {
+            pUI.ToggleChargeGunSlider(true);
+        }
+
         // Animation switch depending on weapon type
         if(currentWeapon.isTwoHanded)
             pAnime.ToggleTwoHanded(true);
@@ -185,6 +192,11 @@ public class PlayerManager : MonoBehaviour
         {
             if(currentWeapon.IsReloading)
                 currentWeapon.CancelReload();
+
+            if(currentWeapon is ChargeGun cGun)
+            {
+                pUI.ToggleChargeGunSlider(false);
+            }
             Destroy(currentWeapon.gameObject); // Drop the current weapon
         }
 

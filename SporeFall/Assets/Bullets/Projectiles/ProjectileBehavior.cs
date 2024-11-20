@@ -70,6 +70,8 @@ public class ProjectileBehavior : MonoBehaviour
 
     public void Initialize(ProjectileData projectileData, ProjectilePool pool)
     {
+        Debug.Log("Projectile Active");
+
         data = projectileData;
         damage = data.Damage;
         this.pool = pool;
@@ -105,7 +107,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void ReturnToPool()
     {
-        //Debug.Log($"Returning to pool {name}");
+        Debug.Log($"Returning to pool {name}");
         StopAllCoroutines();
         if (pool != null)
         {
@@ -118,6 +120,8 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Projectile Hit" + collision.gameObject.name);
+
         // Check if the collision object's layer is in our hitLayers mask
         if (hitLayers == (hitLayers | (1 << collision.gameObject.layer)))
         {
@@ -137,7 +141,6 @@ public class ProjectileBehavior : MonoBehaviour
                     break;
             }
         }
-        //Debug.Log("Projectile Hit" + collision.gameObject.name);
 
         HandleCollision(collision);
 
@@ -217,9 +220,6 @@ public class ProjectileBehavior : MonoBehaviour
                 damageable.TakeDamage(damage * damageMultiplier);
             }
         }
-
-
-        ReturnToPool();
     }
     private void HandleDOTAttack()
     {
