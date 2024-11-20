@@ -11,6 +11,7 @@ public class PlayerUI : MonoBehaviour
     [Header("Gameplay UI")]
     [SerializeField] private GameObject gameplayUI;
     public Image weaponIcon;
+    public Slider chargeGunSlider;
     //public Sprite weaponSprite;
     [Space(5)]
     [SerializeField] private TMP_Text ammoIndicator;
@@ -209,5 +210,14 @@ public class PlayerUI : MonoBehaviour
             leftStructureIcon.sprite = repairTowerSprite;
             rightStructureIcon.sprite = turretSprite;
         }
+    }
+
+    public void ToggleChargeGunSlider(bool enable)
+    {
+        chargeGunSlider.gameObject.SetActive(enable);
+    }
+    public void UpdateChargeGunSlider(float value)
+    {
+        chargeGunSlider.value = value;
     }
 }

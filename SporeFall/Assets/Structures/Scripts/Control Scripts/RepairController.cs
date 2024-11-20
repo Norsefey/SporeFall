@@ -16,6 +16,7 @@ public class RepairController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Debug.Log("Healing Player");
             PlayerHP currentHP = other.GetComponent<PlayerHP>();
             if (currentHP != null && Time.time >= HealTime)
             {
