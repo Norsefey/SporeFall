@@ -209,7 +209,8 @@ public class PlayerManager : MonoBehaviour
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
             pUI.buildUI.SetActive(true);
-            pUI.EnablePrompt("<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview");
+            
+            pUI.EnableControls("<color=red>Build Mode</color> \n Q/E to change Structure \n Hold Right mouse to Preview" + "\n F to Select Placed Structure");
             pUI.AmmoDisplay(currentWeapon);
             pUI.SwitchWeaponIcon();
             pAnime.ToggleTwoHanded(false);

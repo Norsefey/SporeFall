@@ -16,7 +16,9 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TMP_Text ammoIndicator;
     [SerializeField] private TMP_Text myceliaIndicator;
     [SerializeField] private GameObject promptHolder;
-    [SerializeField] private TMP_Text textPrompt;
+    [SerializeField] public GameObject controlsHolder;
+    [SerializeField] public TMP_Text textPrompt;
+    [SerializeField] private TMP_Text textControls;
     [SerializeField] private Slider HPBar;
     public GameObject life1;
     public GameObject life2;
@@ -155,9 +157,15 @@ public class PlayerUI : MonoBehaviour
         promptHolder.SetActive(true);
         textPrompt.text = text;
     }
+    public void EnableControls(string text)
+    {
+        controlsHolder.SetActive(true);
+        textControls.text = text;
+    }
     public void DisablePrompt()
     {
         promptHolder.SetActive(false);
+        controlsHolder.SetActive(false);
     }
     public void SetManager(PlayerManager player)
     {

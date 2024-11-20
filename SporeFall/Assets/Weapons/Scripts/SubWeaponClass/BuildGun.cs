@@ -29,8 +29,8 @@ public class BuildGun : Weapon
     private Quaternion originalRotation; // Store original rotation for edit mode
     private bool showRadius = true;
     [Header("Prompt Text")]
-    [SerializeField] private string buildModeText = "<color=red>Build Mode</color> \n F to Select Placed Structure" + "\n Hold Right mouse to Preview";
-    [SerializeField] private string editModeText = "<color=green>Edit Mode</color> \n LC to Move \n Hold X to Destroy \n F to return";
+    [SerializeField] private string buildModeText = "<color=red>Build Mode</color> Q/E to change Structure \n Hold Right mouse to Preview" + "\n F to Select Placed Structure";
+    [SerializeField] private string editModeText = "<color=green>Edit Mode</color> \n Left mouse to Move \n Hold X to Destroy \n F to return";
 
 
     // Store original colors
@@ -120,6 +120,7 @@ public class BuildGun : Weapon
             DestroyPreview();
         }
     }
+
     private void StoreOriginalColors(GameObject obj)
     {
         Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
@@ -237,7 +238,7 @@ public class BuildGun : Weapon
                 selectedStructure = null;
                 originalMaterials = null; // Clear stored colors
 
-                player.pUI.EnablePrompt(buildModeText);
+                player.pUI.EnableControls(buildModeText);
             }
             else
             {
@@ -263,7 +264,7 @@ public class BuildGun : Weapon
                 selectedStructure = null;
                 originalMaterials = null; // Clear stored colors
 
-                player.pUI.EnablePrompt(buildModeText);
+                player.pUI.EnableControls(buildModeText);
             }
         }
     }
@@ -384,7 +385,7 @@ public class BuildGun : Weapon
         }
         selectedStructure = null;
         originalMaterials = null;
-        player.pUI.EnablePrompt(buildModeText);
+        player.pUI.EnableControls(buildModeText);
         isEditing = false;
     }
     public bool SelectStructure()
@@ -433,7 +434,7 @@ public class BuildGun : Weapon
 
             selectedStructure = null;
             originalMaterials = null;
-            player.pUI.EnablePrompt(editModeText);
+            player.pUI.EnableControls(editModeText);
         }
     }
     public void RotateStructure()
@@ -492,7 +493,7 @@ public class BuildGun : Weapon
                 player.train.RemoveStructure(toDelet);
             }
             Debug.Log("Structure Deleted");
-            player.pUI.EnablePrompt(editModeText);
+            player.pUI.EnableControls(editModeText);
         }
     }
     public void ToggleShowRadius()
