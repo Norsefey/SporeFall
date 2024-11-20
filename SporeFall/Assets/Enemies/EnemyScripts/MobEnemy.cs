@@ -15,7 +15,11 @@ public class MobEnemy : BaseEnemy
         SpawnDrop();
         base.Die();
     }
-
+    private void SpawnDrop()
+    {
+        SpawnMyceliaDrop();
+        TrySpawnWeaponDrop();
+    }
     protected override float EvaluateAttackPriority(Attack attack, float distanceToTarget)
     {
         float priority = 1f;
@@ -28,40 +32,49 @@ public class MobEnemy : BaseEnemy
         return priority;
     }
 
-    private void SpawnDrop()
+    private void SpawnMyceliaDrop()
     {
-        // Get Drop from pool
-        if (!PoolManager.Instance.dropsPool.TryGetValue(myceliaDropPrefab, out DropsPool pool))
+        // Get mycelia drop from pool
+        if (!PoolManager.Instance.dropsPool.TryGetValue(myceliaDropPrefab, out DropsPool myceliaPool))
         {
-            Debug.LogError($"No pool found for enemy prefab: {myceliaDropPrefab.name}");
+            Debug.LogError($"No pool found for mycelia prefab: {myceliaDropPrefab.name}");
             return;
         }
-        DropsPoolBehavior myceliaDrop = pool.Get(transform.position, transform.rotation);
-        myceliaDrop.Initialize(pool);
 
-        if(myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
+        DropsPoolBehavior myceliaDrop = myceliaPool.Get(transform.position, transform.rotation);
+        myceliaDrop.Initialize(myceliaPool);
+
+        if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
-            // Assign random amount to mycelia drop
             float worth = Mathf.Round(Random.Range(minMyceliaWorth, maxMyceliaWorth));
-            mycelia.Setup(minMyceliaWorth);
+            mycelia.Setup(worth);  // Fixed to use the calculated worth instead of minMyceliaWorth
+        }
+    }
+
+    private void TrySpawnWeaponDrop()
+    {
+        // Check if we have any weapons to drop and if we pass the random chance check
+        if (weaponDropPrefab.Length == 0 || Random.Range(0f, 100f) > dropChance)
+        {
+            return;
         }
 
-        if (weaponDropPrefab.Length != 0)
+        // Select a random weapon from the array
+        int dropIndex = Random.Range(0, weaponDropPrefab.Length);
+        GameObject selectedWeaponPrefab = weaponDropPrefab[dropIndex];
+
+        // Get the appropriate pool for this weapon
+        if (!PoolManager.Instance.dropsPool.TryGetValue(selectedWeaponPrefab, out DropsPool weaponPool))
         {
-            float randomChance = Random.Range(0, 100);
-            if (randomChance <= dropChance)
-            {
-                //int dropIndex = Random.Range(0, weaponDropPrefab.Length);
-                // Get Drop from pool
-                if (!PoolManager.Instance.dropsPool.TryGetValue(weaponDropPrefab[0], out DropsPool WeaponPool))
-                {
-                    Debug.LogError($"No pool found for enemy prefab: {weaponDropPrefab[0].name}");
-                    return;
-                }
-                DropsPoolBehavior weaponDrop = WeaponPool.Get(transform.position, transform.rotation);
-                weaponDrop.Initialize(pool);
-                Debug.Log($"{gameObject.name} Spawning {weaponDrop.name}");
-            }
+            Debug.LogError($"No pool found for weapon prefab: {selectedWeaponPrefab.name}");
+            return;
         }
+
+        // Spawn the weapon drop slightly above the enemy position to prevent clipping
+        Vector3 dropPosition = transform.position + Vector3.up * 0.5f;
+        DropsPoolBehavior weaponDrop = weaponPool.Get(dropPosition, transform.rotation);
+        weaponDrop.Initialize(weaponPool);  // Initialize with the correct weapon pool
+
+        Debug.Log($"{gameObject.name} spawned weapon: {selectedWeaponPrefab.name}");
     }
 }
