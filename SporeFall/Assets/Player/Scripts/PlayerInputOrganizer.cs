@@ -413,7 +413,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             rotateStructAction.started += OnEditRotateStarted;
             rotateStructAction.canceled += OnEditRotateCancled;
 
-            pMan.pUI.EnablePrompt("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
+            pMan.pUI.EnableControls("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
             buildInputMap.Disable();
             editInputMap.Enable();
         }
@@ -428,7 +428,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             rotateStructAction.started -= OnEditRotateStarted;
             rotateStructAction.canceled -= OnEditRotateCancled;
 
-            pMan.pUI.EnablePrompt("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+            pMan.pUI.EnableControls("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             editInputMap.Disable();
             buildInputMap.Enable();
         }
