@@ -71,7 +71,7 @@ public class MobEnemy : BaseEnemy
         }
 
         // Spawn the weapon drop slightly above the enemy position to prevent clipping
-        Vector3 dropPosition = transform.position + Vector3.up * 0.5f;
+        Vector3 dropPosition = transform.position;
         DropsPoolBehavior weaponDrop = weaponPool.Get(dropPosition, transform.rotation);
         weaponDrop.Initialize(weaponPool);  // Initialize with the correct weapon pool
 

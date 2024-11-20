@@ -17,6 +17,8 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
     public TrainHandler train; // Reference to the player transform for positioning
     public Transform[] payloadPath;
+    [HideInInspector]
+    public List<GameObject> roberts = new();
     
     [Header("Waves")]
     public List<Wave> waves = new();
@@ -29,6 +31,7 @@ public class WaveManager : MonoBehaviour
     [Header("Wave State")]
     private bool isBossDefeated = false;
     private bool isHordeSpawned = false;
+    public bool isRobertSpawned = false;
     private int enemiesAlive = 0;
     private int enemiesSpawned = 0;
     public int deadEnemies = 0;
@@ -55,7 +58,6 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("WaveMan Is awake");
         InitializePools();
 
         currentWaveIndex = 0;
@@ -129,6 +131,9 @@ public class WaveManager : MonoBehaviour
     }
     private void Depart()
     {
+        if(isRobertSpawned)
+            return;
+
         StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
     }
     #endregion
@@ -140,6 +145,8 @@ public class WaveManager : MonoBehaviour
     }
     public void SkipDepartTime()
     {
+        if(isRobertSpawned)
+            RemoveAllRoberts();
         // since we are skipping, we no longer need to invoke, prevents repeat
         CancelInvoke(nameof(Depart));
         //player.RemoveButtonAction();
@@ -402,6 +409,33 @@ public class WaveManager : MonoBehaviour
             WaveCleared();
         }
     }
+    public void AddRobert(GameObject robert)
+    {
+        roberts.Add(robert);
+        isRobertSpawned = true;
+    }
+    public void RemoveRobert(GameObject robert)
+    {
+        roberts.Remove(robert);
 
+        if(roberts.Count <= 0)
+        {
+            isRobertSpawned = false;
+        }
+    }
+
+    private void RemoveAllRoberts()
+    {
+        int x = roberts.Count;
+        for(int i = 0; i < x; i++)
+        {
+            Destroy(roberts[i]);
+        }
+
+        roberts.Clear();
+        isRobertSpawned = false;
+    }
     #endregion
+
+
 }
