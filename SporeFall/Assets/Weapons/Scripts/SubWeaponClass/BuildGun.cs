@@ -92,6 +92,8 @@ public class BuildGun : Weapon
                 selectedStructure.ShowRadius(showRadius);
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
                 SetStructureToTransparent(selectedStructure.GetCurrentVisual());
+                player.pUI.EnablePrompt(selectedStructure.GetStructureName() + "\n Cost: " + selectedStructure.GetCurrentMyceliaCost() + "\n" + selectedStructure.GetStructureDescription());
+
             }
             else if (selectedStructure != null)
             {
@@ -289,7 +291,6 @@ public class BuildGun : Weapon
 
         PreviewStructure();
 
-        player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name + "\n Cost: "+ selectedStructure.GetCurrentMyceliaCost() + "\n" + selectedStructure.GetStructureDescription());
         player.pUI.SwitchStructureIcon();
     }
     private void SetStructureToTransparent(GameObject obj)

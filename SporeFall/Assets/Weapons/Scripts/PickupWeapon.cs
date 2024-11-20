@@ -24,7 +24,9 @@ public class PickUpWeapon : Interactables
         audioSource.volume = pickupVolume;
         // auto Despawn
         if (pool != null)
+        {
             Invoke(nameof(ReturnObject), 10);
+        }
     }
 
     private void LateUpdate()
