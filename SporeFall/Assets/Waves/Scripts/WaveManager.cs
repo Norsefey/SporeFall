@@ -286,7 +286,7 @@ public class WaveManager : MonoBehaviour
         // Spawn the boss
         Transform spawnPoint = currentWave.spawnLocations[0];
         BaseEnemy boss = bossPool.Get(spawnPoint.position, spawnPoint.rotation);
-        boss.AssignDefaultTarget(train, train.transform);
+        boss.AssignDefaultTarget(train, train.players[0].transform);
         boss.transform.SetParent(transform);
 
         boss.OnEnemyDeath += OnBossDeath;

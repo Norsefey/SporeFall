@@ -28573,6 +28573,7 @@ MonoBehaviour:
   - {fileID: 184292, guid: 7b8f8a4d0ee5ffb4aaa6b54181380640, type: 3}
   - {fileID: 1714681308540598, guid: 7a1bd877bf9433a4fa93705efe54dd43, type: 3}
   - {fileID: 7889514328668069788, guid: eddc8639d2dbda5498b8e20ecc2c5cc3, type: 3}
+  - {fileID: 1570927096764274, guid: 9e08e200508d63740b1172b94e0c4c00, type: 3}
   VFXParent: {fileID: 787656100}
   weaponDrops:
   - {fileID: 6532063568776282634, guid: ff0048dd2ef887a44bc159c3cde6d637, type: 3}
@@ -28591,8 +28592,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1148716694}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.0277805, y: -20.639715, z: -108.1193}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -28600,7 +28601,7 @@ Transform:
   - {fileID: 657742426}
   - {fileID: 787656100}
   - {fileID: 409930005}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2064158915}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1149913919
 PrefabInstance:
@@ -34713,17 +34714,17 @@ PrefabInstance:
     - target: {fileID: 59439585031014860, guid: 22e8035e3407b0b45a07ac31e13dc205,
         type: 3}
       propertyPath: waves.Array.data[0].finalWaveSettings.bossSquadComposition.Array.data[0].totalToSpawn
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 59439585031014860, guid: 22e8035e3407b0b45a07ac31e13dc205,
         type: 3}
       propertyPath: waves.Array.data[0].finalWaveSettings.bossSquadComposition.Array.data[1].totalToSpawn
-      value: 4
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 59439585031014860, guid: 22e8035e3407b0b45a07ac31e13dc205,
         type: 3}
       propertyPath: waves.Array.data[0].finalWaveSettings.bossSquadComposition.Array.data[2].totalToSpawn
-      value: 3
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 59439585031014860, guid: 22e8035e3407b0b45a07ac31e13dc205,
         type: 3}
@@ -51715,6 +51716,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2063576209}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2064158915 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3050353983465275147, guid: c59b930a631fa554385fe8dab48c3a00,
+    type: 3}
+  m_PrefabInstance: {fileID: 7154162724139960119}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2064926893 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 322841761071777453, guid: fdc926a78f277614cafc0f9621ce8e8a,
@@ -54763,7 +54770,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3050353983465275147, guid: c59b930a631fa554385fe8dab48c3a00,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1148716696}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c59b930a631fa554385fe8dab48c3a00, type: 3}
 --- !u!1001 &7276235675586040343
@@ -54921,4 +54932,3 @@ SceneRoots:
   - {fileID: 1943391607}
   - {fileID: 1338114214}
   - {fileID: 7154162724139960119}
-  - {fileID: 1148716696}
