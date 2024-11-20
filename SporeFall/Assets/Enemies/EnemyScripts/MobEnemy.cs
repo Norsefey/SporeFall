@@ -39,9 +39,6 @@ public class MobEnemy : BaseEnemy
         DropsPoolBehavior myceliaDrop = pool.Get(transform.position, transform.rotation);
         myceliaDrop.Initialize(pool);
 
-
-        /*myceliaDrop.TryGetComponent<MyceliaPickup, out mycelia>();
-        mycelia.Setup(myceliaDropAmount);*/
         if(myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
             // Assign random amount to mycelia drop
@@ -63,6 +60,7 @@ public class MobEnemy : BaseEnemy
                 }
                 DropsPoolBehavior weaponDrop = WeaponPool.Get(transform.position, transform.rotation);
                 weaponDrop.Initialize(pool);
+                Debug.Log($"{gameObject.name} Spawning {weaponDrop.name}");
             }
         }
     }
