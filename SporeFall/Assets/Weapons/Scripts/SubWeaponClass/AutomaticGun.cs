@@ -26,9 +26,6 @@ public class AutomaticGun : Weapon
             // First shot in a sequence is accurate, subsequent shots use spread
             useSpread = isInBurst;
 
-            Debug.Log($"Time since last fire: {timeSinceLastFire}, In Burst: {isInBurst}, Using Spread: {useSpread}");
-
-
             base.Fire(); // Call the base fire logic
 
             isInBurst = true;  // Mark that we're now in a burst

@@ -23,7 +23,6 @@ public class EnemyHP : Damageable
     protected override void Die()
     {
         // call death on enemy
-        Debug.Log("Dieing");
         manager.Die();
     }
     protected override void UpdateUI()

@@ -69,7 +69,6 @@ public class WaveManager : MonoBehaviour
         if (currentWave.isFinalWave)
         {
             StartFinalWave();
-            
         }
         else
         {
@@ -110,6 +109,9 @@ public class WaveManager : MonoBehaviour
     }
     private void StartFinalWave()
     {
+        wavePhase = WavePhase.Started;
+
+
         wUI.DisplayWaveStart();
         Tutorial.Instance.StartFinalWaveTutorial();
 

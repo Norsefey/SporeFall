@@ -119,7 +119,6 @@ public abstract class Weapon : MonoBehaviour
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
-            Debug.Log("Rotating on Fire");
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
         transform.forward = playerCamera.transform.forward;
@@ -144,7 +143,6 @@ public abstract class Weapon : MonoBehaviour
                     damageable.TakeDamage(damage);
                 }
             }
-            Debug.Log("Moving FX to hit point");
             vfx.MoveToLocation(hit.point, 50);
         }
         else
@@ -186,7 +184,6 @@ public abstract class Weapon : MonoBehaviour
         {
             if (totalAmmo <= 0)
             {
-                Debug.Log(weaponName + " has no more Ammo");
                 yield return null;
             }
             // Wait for reload time to complete
