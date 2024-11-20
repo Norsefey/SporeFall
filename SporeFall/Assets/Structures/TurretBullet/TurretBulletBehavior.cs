@@ -6,7 +6,7 @@ public class TurretBulletBehavior : MonoBehaviour
 {
     public float deathTime = 2;
     [SerializeField] GameObject bulletResidue;
-    public float dmg = 20f;
+    public float dmg = 53f;
     public string enemyTag = "Enemy";
     public AudioClip bulletSound; // Assign the bullet sound clip in the inspector
     [Range(0f, 1f)] public float bulletSoundVolume = 0.5f; // Set the default volume in the inspector
