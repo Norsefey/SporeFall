@@ -15,6 +15,10 @@ public class PlayerDeviceHandler : MonoBehaviour
     private InputDevice keyboardDevice;
     private InputDevice mouseDevice;
 
+    private bool usingKeyboard = false;
+    private bool usingGamepad = false;
+
+
     private void Awake()
     {
         inputManager = GetComponent<PlayerInputManager>();
@@ -24,18 +28,40 @@ public class PlayerDeviceHandler : MonoBehaviour
             if (device is Keyboard)
             {
                 keyboardDevice = device;
+                usingKeyboard = true;
+                Debug.Log("Keyboard detected");
             }
             else if (device is Mouse)
             {
                 mouseDevice = device;
+                usingKeyboard = true;
+                Debug.Log("mouse detected");
             }
 
             if (keyboardDevice != null && mouseDevice != null)
             {
                 break;
             }
+
         }
     }
+
+    private void Start()
+    {
+        if (usingKeyboard == true)
+        {
+            Debug.Log("Telling Tutorial script keyboard = true");
+            Tutorial.Instance.usingKeyboard = true;
+            usingKeyboard = false;
+        }
+
+        if (usingGamepad == true)
+        {
+            Tutorial.Instance.usingGamepad = true;
+            usingGamepad = false;
+        }
+    }
+
     private void OnEnable()
     {
         // Subscribe to player joined and player left events
@@ -91,6 +117,8 @@ public class PlayerDeviceHandler : MonoBehaviour
     {
         if (device is Gamepad gamepad)
         {
+            usingGamepad = true;
+
             if (device is XInputController)
             {
                 Debug.Log($"Single player switched to Xbox Controller: {gamepad.displayName}");

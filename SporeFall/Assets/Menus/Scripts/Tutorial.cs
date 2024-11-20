@@ -15,7 +15,11 @@ public class Tutorial : MonoBehaviour
     [SerializeField] TMP_Text continueText;
     private bool keyboardTutorial = false;
     public bool tutorialStarted = false;
+    public bool firstCorruptionPickup = false;
+    public bool playerActive = false;
     //private bool gamepadTutorial = false;
+    public bool usingKeyboard = false;
+    public bool usingGamepad = false;
     private int tutorialPrompt = 0;
 
     private void Awake()
@@ -29,11 +33,34 @@ public class Tutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         StartCoroutine(FirstTutorialPopup());
+        
     }
 
     private void Update()
     {
+        
+        if (playerActive == true && tutorialStarted == true)
+        {
+            Debug.Log("Player is active and tutorial has started");
+            
+            if (usingGamepad == true)
+            {
+                Debug.Log("Starting gamepad tutorial");
+                StartGamepadTutorial();
+                tutorialStarted = false;
+            }
+
+            if (usingKeyboard == true)
+            {
+                Debug.Log("Starting keyboard tutorial");
+                StartKeyboardTutorial();
+                tutorialStarted = false;
+            }
+
+        }
+        
         if (keyboardTutorial == true)
         {
             if (Input.GetKeyDown(KeyCode.C))
@@ -47,33 +74,61 @@ public class Tutorial : MonoBehaviour
 
                 if (tutorialPrompt == 2)
                 {
-                    tutorialText.text = "B to toggle Build Mode" + "\n Right click to preview" + "\n Left click to place";
+                    tutorialText.text = "HP and extra lives are in bottom left" + "\n  Current gun and ammo are in bottom right";
                     Debug.Log("Progressing tutorial");
                     StartCoroutine(Cooldown());
                 }
 
                 if (tutorialPrompt == 3)
                 {
-                    tutorialText.text = "F to interact" + "\n Hold Q to drop weapon" + "\n (excluding default guns)";
+                    tutorialText.text = "B to toggle Build Mode" + "\n Right click to preview" + "\n Left click to place";
                     Debug.Log("Progressing tutorial");
                     StartCoroutine(Cooldown());
                 }
 
                 if (tutorialPrompt == 4)
                 {
-                    tutorialText.text = "Esc to pause" + "\n Controls can be reviewed any time" + "\n in pause menu";
+                    tutorialText.text = "Q/E to change structure" + "\n Structures cost Mycelia," + "\n which is dropped by enemies";
                     Debug.Log("Progressing tutorial");
                     StartCoroutine(Cooldown());
                 }
 
                 if (tutorialPrompt == 5)
                 {
-                    tutorialText.text = "Find the button" + "\n in the middle of the train" + "\n  and press it" + "\n to start the next wave";
+                    tutorialText.text = "F to toggle Edit Mode" + "\n and look at the structure you want to edit";
+                    Debug.Log("Progressing tutorial");
+                    StartCoroutine(Cooldown());
+                }
+
+                if (tutorialPrompt == 6)
+                {
+                    tutorialText.text = "Left click to move the structure" + "\n X to destroy the structure" + "\n for a partial refund";
+                    Debug.Log("Progressing tutorial");
+                    StartCoroutine(Cooldown());
+                }
+
+                if (tutorialPrompt == 7)
+                {
+                    tutorialText.text = "When not in Build Mode," + "\n  F to press buttons and pick up weapons dropped by enemies";
+                    Debug.Log("Progressing tutorial");
+                    StartCoroutine(Cooldown());
+                }
+
+                if (tutorialPrompt == 8)
+                {
+                    tutorialText.text = "When you are ready to start the next wave," + "\n find and press the button in the middle of the train";
+                    Debug.Log("Progressing tutorial");
+                    StartCoroutine(Cooldown());
+                }
+
+                if (tutorialPrompt == 9)
+                {
+                    tutorialText.text = "Esc to pause" + "\n Controls can be reviewed any time in pause menu";
                     Debug.Log("Progressing tutorial");
                     StartCoroutine(Cooldown());
                 }
                 
-                if (tutorialPrompt == 6)
+                if (tutorialPrompt == 10)
                 {
                     StartCoroutine(FinalPrompts());
                 }
@@ -81,15 +136,23 @@ public class Tutorial : MonoBehaviour
             }
         }
 
+        if (firstCorruptionPickup == true)
+        {
+            firstCorruptionPickup = false;
+            StartCoroutine(CorruptionTutorial());
+        }
+
         
     }
 
     public void StartKeyboardTutorial()
     {
+        Debug.Log("Keyboard tutorial has started");
         tutorialText.text = "WASD to move" + "\n Shift to sprint" + "\n Space to jump";
         continueText.text = "(Press C to continue)";
         keyboardTutorial = true;
         tutorialPrompt++;
+        
     }
 
     public void StartGamepadTutorial()
@@ -104,6 +167,7 @@ public class Tutorial : MonoBehaviour
 
     IEnumerator FirstTutorialPopup()
     {
+        Debug.Log("Showing first prompt");
         yield return new WaitForSeconds(2);
         bgImage.SetActive(true);
         tutorialText.text = "Left click/Start Button to lock cursor" + "\n and start the game";
@@ -112,7 +176,7 @@ public class Tutorial : MonoBehaviour
     }
     IEnumerator Cooldown()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(.2f);
         tutorialPrompt++;
     }
 
@@ -148,6 +212,19 @@ public class Tutorial : MonoBehaviour
         yield return new WaitForSeconds(2);
         tutorialText.text = "Good luck!";
         yield return new WaitForSeconds(2);
+        tutorialPopup.SetActive(false);
+    }
+
+    IEnumerator CorruptionTutorial()
+    {
+        tutorialPopup.SetActive(true);
+        tutorialText.text = "You just picked up a corrupted weapon!" + "\n These weapons are powerful...";
+        continueText.text = " ";
+        yield return new WaitForSeconds(7);
+        tutorialText.text = "...but raise your corruption meter," + "\n beneath your HP bar," + "\n over time";
+        yield return new WaitForSeconds(7);
+        tutorialText.text = "You can drop corrupted weapons" + "\n at any time" + "\n by holding Q";
+        yield return new WaitForSeconds(7);
         tutorialPopup.SetActive(false);
     }
 }

@@ -39,10 +39,9 @@ public class PlayerManager : MonoBehaviour
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
     [SerializeField] private Transform fallbackSpawnPoint;
-    private bool usingKeyboard = false;
-    private bool usingGamepad = false;
 
     public bool holdingCorruption = false;
+    private int corruptionPickupCount = 0;
     public InputDevice myDevice;
     private void Awake()
     {
@@ -50,6 +49,8 @@ public class PlayerManager : MonoBehaviour
         // since we will have multiple players, this manager cannot be a public instance, so we assign it locally
         SetManager();
         SetDeviceSettings();
+        Tutorial.Instance.playerActive = true;
+        Debug.Log("Player is awake");
     }
     private void Start()
     {
@@ -61,23 +62,7 @@ public class PlayerManager : MonoBehaviour
         pUI.AmmoDisplay(currentWeapon);
         pInput.AssignAllActions();
 
-        if (usingGamepad == true)
-        {
-            if (Tutorial.Instance.tutorialStarted == true)
-            {
-                Tutorial.Instance.StartGamepadTutorial();
-                usingGamepad = false;
-            }
-        }
-
-        if (usingKeyboard == true)
-        {
-            if (Tutorial.Instance.tutorialStarted == true)
-            {
-                Tutorial.Instance.StartKeyboardTutorial();
-                usingKeyboard = false;
-            }
-        }
+        
 
     }
     private void Update()
@@ -106,7 +91,6 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("I am using a gamepad");
                 pCamera.SetGamepadSettings();
                 bGun.structRotSpeed = 50;
-                usingGamepad = true;
                 
             }
             else if (device is Keyboard || device is Mouse)
@@ -114,7 +98,6 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("I am using a keyboard");
                 pCamera.SetMouseSettings();
                 bGun.structRotSpeed = 25;
-                usingKeyboard = true;
                 
             }
         }
@@ -187,6 +170,11 @@ public class PlayerManager : MonoBehaviour
         // if weapon is corrupted start corruption increase
         if (currentWeapon.isCorrupted)
             holdingCorruption = true;
+            corruptionPickupCount++;
+            if (corruptionPickupCount == 1)
+            {
+                 Tutorial.Instance.firstCorruptionPickup = true;
+            }
     }
     public void DropWeapon()
     {
