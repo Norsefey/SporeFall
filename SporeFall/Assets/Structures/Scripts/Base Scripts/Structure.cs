@@ -112,7 +112,8 @@ public class Structure : MonoBehaviour
     public StructureLevels GetLevels() => levels;
     public StructureHP GetStructureHP() => healthComponent;
     public GameObject GetCurrentVisual() => levelVisuals[currentLevel];
-    public string GetStructureName() => levelVisuals[currentLevel].name;
+    public string GetStructureName() => levels.GetLevel(currentLevel).name;
+    public string GetStructureDescription() => levels.description;
     public void SetTrainHandler(TrainHandler train)
     {
         this.train = train; 

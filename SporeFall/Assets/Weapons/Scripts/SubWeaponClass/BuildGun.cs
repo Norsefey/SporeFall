@@ -288,7 +288,9 @@ public class BuildGun : Weapon
             Destroy(selectedStructure.gameObject);
 
         PreviewStructure();
-        player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name + "\n Cost: "+ selectedStructure.GetCurrentMyceliaCost());
+
+        player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name + "\n Cost: "+ selectedStructure.GetCurrentMyceliaCost() + "\n" + selectedStructure.GetStructureDescription());
+
         player.pUI.SwitchStructureIcon();
     }
     private void SetStructureToTransparent(GameObject obj)

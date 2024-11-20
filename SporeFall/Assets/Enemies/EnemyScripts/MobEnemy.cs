@@ -54,19 +54,15 @@ public class MobEnemy : BaseEnemy
             float randomChance = Random.Range(0, 100);
             if (randomChance <= dropChance)
             {
-                int dropIndex = Random.Range(0, weaponDropPrefab.Length);
+                //int dropIndex = Random.Range(0, weaponDropPrefab.Length);
                 // Get Drop from pool
-                if (!PoolManager.Instance.dropsPool.TryGetValue(weaponDropPrefab[dropIndex], out DropsPool WeaponPool))
+                if (!PoolManager.Instance.dropsPool.TryGetValue(weaponDropPrefab[0], out DropsPool WeaponPool))
                 {
-                    Debug.LogError($"No pool found for enemy prefab: {weaponDropPrefab[dropIndex].name}");
+                    Debug.LogError($"No pool found for enemy prefab: {weaponDropPrefab[0].name}");
                     return;
                 }
                 DropsPoolBehavior weaponDrop = WeaponPool.Get(transform.position, transform.rotation);
                 weaponDrop.Initialize(pool);
-
-                //var weapon = Instantiate(weaponDropPrefab[dropIndex], transform.position, Quaternion.identity);
-                // so we can remove it if player doesn't pick it up, set as child of drops holder
-                //weapon.transform.SetParent(train.dropsHolder, true);
             }
         }
     }
