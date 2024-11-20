@@ -37,7 +37,7 @@ public class ShermanControl : MonoBehaviour
         audioPlayer = GetComponent<AudioSource>();
         // allow sherman to fly out of house
         // Set initial direction to forward
-        currentDirection = transform.forward;
+        currentDirection = Vector3.forward;
         // Start the direction-changing process
         InvokeRepeating("UpdateDirection", 1f, changeDirectionInterval);
 
