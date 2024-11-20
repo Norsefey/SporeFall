@@ -290,7 +290,6 @@ public class BuildGun : Weapon
         PreviewStructure();
 
         player.pUI.EnablePrompt(buildableStructures[currentBuildIndex].name + "\n Cost: "+ selectedStructure.GetCurrentMyceliaCost() + "\n" + selectedStructure.GetStructureDescription());
-
         player.pUI.SwitchStructureIcon();
     }
     private void SetStructureToTransparent(GameObject obj)
