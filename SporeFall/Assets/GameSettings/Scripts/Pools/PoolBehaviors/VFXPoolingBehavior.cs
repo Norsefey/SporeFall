@@ -51,7 +51,6 @@ public class VFXPoolingBehavior : MonoBehaviour
     {
         targetPos = Vector3.zero;
         shouldMove = false;
-        Debug.Log("Returning to pool");
         pool.Return(this);
     }
     public void MoveForward()
@@ -62,7 +61,6 @@ public class VFXPoolingBehavior : MonoBehaviour
     }
     public void Initialize(VFXPool pool)
     {
-        Debug.Log(gameObject.name + ": Initialized");
         this.pool = pool;
     }
 

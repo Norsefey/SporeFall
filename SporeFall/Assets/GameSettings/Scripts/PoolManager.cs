@@ -74,7 +74,7 @@ public class PoolManager : MonoBehaviour
         {
             if (weapon.gameObject.activeSelf)
             {
-                weapon.GetComponent<DropsPoolBehavior>().ReturnObject();
+                weapon.GetComponent<PickUpWeapon>().DestroyIntractable();
             }
         }
 

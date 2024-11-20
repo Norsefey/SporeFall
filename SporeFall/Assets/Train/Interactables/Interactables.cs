@@ -20,10 +20,7 @@ public abstract class Interactables : DropsPoolBehavior
         else
         {
             Debug.Log("No Pool Destroying");
-            if(pool != null)
-                pool.Return(this);
-            else
-                Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
     private void OnTriggerEnter(Collider other)
