@@ -243,7 +243,6 @@ GameObject:
   - component: {fileID: 6428921831157723179}
   - component: {fileID: 7300807785941786313}
   - component: {fileID: 5969084568931314440}
-  - component: {fileID: 1970047077064279180}
   m_Layer: 7
   m_Name: CollsionHP
   m_TagString: Structure
@@ -306,22 +305,6 @@ CapsuleCollider:
   m_Height: 4.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.88, z: 0.075199686}
---- !u!208 &1970047077064279180
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5594753733160082619}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 1.205, y: 1.835, z: 1.09}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.32, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &5837766681830340640
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,6 +315,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1577915519118226102}
   - component: {fileID: 8781940720897702951}
+  - component: {fileID: 3091199253554794599}
   m_Layer: 2
   m_Name: PlayerCollsion
   m_TagString: Untagged
@@ -378,6 +362,22 @@ CapsuleCollider:
   m_Height: 4.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.88, z: 0.075199686}
+--- !u!208 &3091199253554794599
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5837766681830340640}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.205, y: 1.835, z: 1.09}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.32, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7208940773850634306
 GameObject:
   m_ObjectHideFlags: 0

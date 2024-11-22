@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 8502205711763563241}
   - component: {fileID: 2651432847900009802}
   - component: {fileID: 6901930896250778897}
+  - component: {fileID: 4826226579195248152}
   m_Layer: 2
   m_Name: controlScript
   m_TagString: Untagged
@@ -360,6 +361,22 @@ CapsuleCollider:
   m_Height: 3.24
   m_Direction: 1
   m_Center: {x: 0, y: 1.21, z: 0}
+--- !u!208 &4826226579195248152
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288926531420532643}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.83, y: 1.21, z: 0.875}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.04, z: 0.29}
+  m_TimeToStationary: 0.5
 --- !u!1 &1709389267598573454
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +388,6 @@ GameObject:
   - component: {fileID: 4954534039210829641}
   - component: {fileID: 3408726495628215423}
   - component: {fileID: 7566235442186277489}
-  - component: {fileID: 1219630091165071028}
   m_Layer: 7
   m_Name: FlameThrowerControls
   m_TagString: Structure
@@ -434,22 +450,6 @@ CapsuleCollider:
   m_Height: 3.24
   m_Direction: 1
   m_Center: {x: 0, y: 1.21, z: 0}
---- !u!208 &1219630091165071028
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1709389267598573454}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.83, y: 1.21, z: 0.875}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.04, z: 0.29}
-  m_TimeToStationary: 0.5
 --- !u!1 &3621635466963396617
 GameObject:
   m_ObjectHideFlags: 0

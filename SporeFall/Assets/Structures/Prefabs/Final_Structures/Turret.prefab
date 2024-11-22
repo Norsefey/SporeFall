@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 1254851843377508662}
   - component: {fileID: 7767964235748362511}
   - component: {fileID: 3693245510787740320}
+  - component: {fileID: 7014250500450864251}
   m_Layer: 2
   m_Name: ControlScript
   m_TagString: Untagged
@@ -307,6 +308,22 @@ CapsuleCollider:
   m_Height: 3.71
   m_Direction: 1
   m_Center: {x: 0, y: 0.94, z: 0.45}
+--- !u!208 &7014250500450864251
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839142699126292899}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.83, y: 1.21, z: 0.875}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.04, z: 0.22}
+  m_TimeToStationary: 0.5
 --- !u!1 &2143417820075499101
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,7 +706,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5005035763962033028}
   - component: {fileID: 7830201162772373882}
-  - component: {fileID: 1358068904718605843}
   - component: {fileID: 3039057548810710203}
   m_Layer: 7
   m_Name: TurretControl
@@ -730,22 +746,6 @@ MonoBehaviour:
   canHoldCorruption: 0
   canTakeDamage: 1
   healthDisplay: {fileID: 5613075914831394884}
---- !u!208 &1358068904718605843
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8824594066713120071}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.83, y: 1.21, z: 0.875}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.04, z: 0.22}
-  m_TimeToStationary: 0.5
 --- !u!136 &3039057548810710203
 CapsuleCollider:
   m_ObjectHideFlags: 0
