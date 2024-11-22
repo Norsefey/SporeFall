@@ -104,10 +104,12 @@ public class TrainHandler : MonoBehaviour
     private void ToggleStructures(bool toggle)
     {
         structureHolder.gameObject.SetActive(toggle);
-        forceField.SetActive(toggle);
-
         if(toggle)
             CheckStructureObstructions();
+    }
+    public void ToggleForceField(bool toggle)
+    {
+        forceField.SetActive(toggle);
     }
     private void CheckStructureObstructions()
     {

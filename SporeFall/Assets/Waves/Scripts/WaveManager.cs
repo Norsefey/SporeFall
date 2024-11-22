@@ -80,6 +80,7 @@ public class WaveManager : MonoBehaviour
     private IEnumerator StartWave()
     {
         wavePhase = WavePhase.Started;
+        train.ToggleForceField(true);
         wUI.DisplayWaveStart();
         enemiesSpawned = 0;
 
@@ -112,7 +113,7 @@ public class WaveManager : MonoBehaviour
     private void StartFinalWave()
     {
         wavePhase = WavePhase.Started;
-
+        train.ToggleForceField(true);
 
         wUI.DisplayWaveStart();
         Tutorial.Instance.StartFinalWaveTutorial();
@@ -133,7 +134,7 @@ public class WaveManager : MonoBehaviour
     {
         if(isRobertSpawned)
             return;
-
+        train.ToggleForceField(false);
         StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
     }
     #endregion
