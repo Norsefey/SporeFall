@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour
     public bool isRotating = false;
     [Header("Currency")]
     // Player Stats
-    private float mycelia = 125;
+    private float mycelia = 200;
     public float Mycelia { get { return mycelia; } }
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
@@ -49,7 +49,8 @@ public class PlayerManager : MonoBehaviour
         // since we will have multiple players, this manager cannot be a public instance, so we assign it locally
         SetManager();
         SetDeviceSettings();
-        Tutorial.Instance.playerActive = true;
+        if(Tutorial.Instance != null)
+            Tutorial.Instance.playerActive = true;
         Debug.Log("Player is awake");
     }
     private void Start()

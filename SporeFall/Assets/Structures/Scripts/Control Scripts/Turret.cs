@@ -50,12 +50,6 @@ public class Turret : MonoBehaviour
         }
         audioSource.clip = firingSound;
         audioSource.volume = flameVolume;
-
-     /*   // Validate settings
-        if (fireRange <= minimumFireRange)
-        {
-            Debug.LogWarning($"[Turret] Fire range ({fireRange}) should be greater than minimum fire range ({minimumFireRange})");
-        }*/
     }
 
     void Update()
@@ -145,8 +139,8 @@ public class Turret : MonoBehaviour
         if (targetDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            turretGuns.rotation = Quaternion.Slerp(
-                turretGuns.rotation,
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
                 targetRotation,
                 rotationSpeed * Time.deltaTime
             );

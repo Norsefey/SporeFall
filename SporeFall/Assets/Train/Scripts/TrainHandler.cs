@@ -107,6 +107,13 @@ public class TrainHandler : MonoBehaviour
         if(toggle)
             CheckStructureObstructions();
     }
+    public void ApplyUpgradeToStructures()
+    {
+        foreach(Transform structure in structureHolder)
+        {
+            structure.GetComponent<Structure>().Upgrade();
+        }
+    }
     public void ToggleForceField(bool toggle)
     {
         forceField.SetActive(toggle);
@@ -157,8 +164,6 @@ public class TrainHandler : MonoBehaviour
     {
         activeStructures.Remove(structure);
         UpdateEnergyUsage();
-        structure.gameObject.SetActive(false);
-        Destroy(structure.gameObject);
     }
     public void UpdateEnergyUsage()
     {

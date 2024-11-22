@@ -24,7 +24,7 @@ public class ShermanStatUpdater : MonoBehaviour, IStructureStats
     private void UpdateShermanStats(ShermanLevels levels, int level)
     {
         var levelData = levels.levels[level];
-
+        sherman.UpdateVisual(level);
         sherman.moveSpeed = levelData.moveSpeed;
         sherman.turnSpeed = levelData.turnSpeed;
         sherman.changeDirectionInterval = levelData.changeDirectionInterval;

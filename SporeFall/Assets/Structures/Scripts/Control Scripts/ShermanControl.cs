@@ -16,7 +16,7 @@ public class ShermanControl : MonoBehaviour
         explosionRadius;
     [HideInInspector]
     public AnimationCurve damageFalloff;
-
+    [SerializeField] GameObject[] shermanVisuals;
     [SerializeField] private ShermanStructureControls parentStructure;
     [Header("Boundary Settings")]
     [SerializeField] private float wallAvoidanceDistance = 5f; // Distance to start avoiding walls
@@ -196,11 +196,12 @@ public class ShermanControl : MonoBehaviour
         active = true;
         transform.GetChild(0).gameObject.SetActive(true);
     }
-   /* public void SetParent(ShermanStructureControls structure)
+    public void UpdateVisual(int index)
     {
-        parentStructure = structure;
-    }*/
-    // Optional: Visualize the detection radius in the editor
+        shermanVisuals[index].SetActive(true);
+        if(index > 0)
+            shermanVisuals[index - 1].SetActive(false);
+    }
     private void OnDrawGizmosSelected()
     {
         // Show enemy detection radius

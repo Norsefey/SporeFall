@@ -51,7 +51,8 @@ public class PlayerDeviceHandler : MonoBehaviour
         if (usingKeyboard == true)
         {
             Debug.Log("Telling Tutorial script keyboard = true");
-            Tutorial.Instance.usingKeyboard = true;
+            if(Tutorial.Instance != null)
+                Tutorial.Instance.usingKeyboard = true;
             usingKeyboard = false;
         }
 

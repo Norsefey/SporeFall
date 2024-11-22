@@ -1,6 +1,7 @@
 // Ignore Spelling: buildable
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class BuildGun : Weapon
 {
@@ -88,7 +89,16 @@ public class BuildGun : Weapon
         {
             if (!isEditing && selectedStructure == null)
             {
-                selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
+                //selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
+
+                if (!PoolManager.Instance.structurePool.TryGetValue(buildableStructures[currentBuildIndex], out StructurePool pool))
+                {
+                    Debug.LogError($"No pool found for Structure prefab: {buildableStructures[currentBuildIndex].name}");
+                    return;
+                }
+                selectedStructure = pool.Get(firePoint.position, Quaternion.identity).GetComponent<Structure>();
+                selectedStructure.poolBehavior.Initialize(pool);
+
                 selectedStructure.ShowRadius(showRadius);
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
                 SetStructureToTransparent(selectedStructure.GetCurrentVisual());
@@ -273,7 +283,8 @@ public class BuildGun : Weapon
     {
         if (selectedStructure != null)
         {
-            Destroy(selectedStructure.gameObject);
+            //Destroy(selectedStructure.gameObject);
+            selectedStructure.poolBehavior.ReturnObject();
             selectedStructure = null;
             originalMaterials = null; // Clear stored colors
         }
@@ -288,7 +299,9 @@ public class BuildGun : Weapon
             currentBuildIndex = buildableStructures.Length - 1;
 
         if(selectedStructure != null)
-            Destroy(selectedStructure.gameObject);
+            selectedStructure.poolBehavior.ReturnObject();
+
+        selectedStructure = null;
 
         PreviewStructure();
 
@@ -456,36 +469,12 @@ public class BuildGun : Weapon
             selectedStructure.transform.Rotate(new Vector3(0, yRot, 0));
         }
     }
-  /*  public void UpgradeStructure()
-    {
-
-        if (selectedStructure.CanUpgrade(player.Mycelia))
-        {
-            player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
-            selectedStructure.Upgrade();
-            SetStructureToTransparent(selectedStructure.GetCurrentVisual());
-            if(player.train != null)
-                player.train.UpdateEnergyUsage();
-        }
-        else
-        {
-            if (selectedStructure.IsMaxLevel())
-            {
-                player.pUI.EnablePrompt("MAX LEVEL");
-            }
-            else
-            {
-                Debug.Log("Not Enough Mycelia");
-                player.pUI.EnablePrompt("Not Enough Mycelia");
-            }
-        }
-    }*/
     public void SellStructure()
     {
         if (selectedStructure != null)
         {
             Structure toDelet = selectedStructure;
-            //player.mycelia += toDelet.GetMyceliaCost();
+            selectedStructure.poolBehavior.ReturnObject();
             selectedStructure = null;
             if (player.train != null)
             {

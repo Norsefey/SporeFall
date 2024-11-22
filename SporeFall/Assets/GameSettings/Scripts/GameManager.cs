@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour
 
     public WaveManager WaveManager;
     public TrainHandler TrainHandler;
-
+    public UpgradeManager UpgradeManager;
+    public GameUIManager GameUIManager;
 
     private void Awake()
     {

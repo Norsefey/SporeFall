@@ -9,21 +9,30 @@ public class PoolManager : MonoBehaviour
     public Dictionary<GameObject, ProjectilePool> projectilePool = new();
     public Dictionary<GameObject, VFXPool> vfxPool = new();
     public Dictionary<GameObject, DropsPool> dropsPool = new();
+    public Dictionary<GameObject, StructurePool> structurePool = new();
 
     [Header("Projectiles")]
+    [SerializeField] private int projectileInitialSize;
     [SerializeField] private List<GameObject> projectiles;
     public Transform projectileParent;
     [Header("VFX")]
+    [SerializeField] private int VFXInitialSize;
     [SerializeField] private List<GameObject> visualEffects;
     public Transform VFXParent;
     [Header("Weapon Drops")]
+    [SerializeField] private int weaponInitialSize;
     [SerializeField] private List<GameObject> weaponDrops;
     public Transform weaponDropsParent;
     [Header("Mycelia Drops")]
+    [SerializeField] private int myceliaInitialSize;
     [SerializeField] private List<GameObject> myceliaDrops;
     public Transform myceliaDropsParent;
+    [Header("Structures")]
+    [SerializeField] private int structureInitialSize;
+    [SerializeField] private List<GameObject> structures;
+    public Transform structuresParent;
 
-    [SerializeField] private int initialSize;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -39,14 +48,14 @@ public class PoolManager : MonoBehaviour
         {
             if (!projectilePool.ContainsKey(bullet))
             {
-                projectilePool.Add(bullet, new ProjectilePool(bullet, projectileParent, initialSize));
+                projectilePool.Add(bullet, new ProjectilePool(bullet, projectileParent, projectileInitialSize));
             }
         }
         foreach (var VFX in visualEffects)
         {
             if (!vfxPool.ContainsKey(VFX))
             {
-                vfxPool.Add(VFX, new VFXPool(VFX, VFXParent, initialSize));
+                vfxPool.Add(VFX, new VFXPool(VFX, VFXParent, VFXInitialSize));
 
             }
         }
@@ -54,7 +63,7 @@ public class PoolManager : MonoBehaviour
         {
             if (!dropsPool.ContainsKey(weapon))
             {
-                dropsPool.Add(weapon, new DropsPool(weapon, weaponDropsParent, initialSize));
+                dropsPool.Add(weapon, new DropsPool(weapon, weaponDropsParent, weaponInitialSize));
             }
         }
 
@@ -62,7 +71,14 @@ public class PoolManager : MonoBehaviour
         {
             if (!dropsPool.ContainsKey(mycelia))
             {
-                dropsPool.Add(mycelia, new DropsPool(mycelia, myceliaDropsParent, initialSize));
+                dropsPool.Add(mycelia, new DropsPool(mycelia, myceliaDropsParent, myceliaInitialSize));
+            }
+        }
+        foreach(var structure in structures)
+        {
+            if (!structurePool.ContainsKey(structure))
+            {
+                structurePool.Add(structure, new StructurePool(structure, structuresParent, structureInitialSize));
             }
         }
     }

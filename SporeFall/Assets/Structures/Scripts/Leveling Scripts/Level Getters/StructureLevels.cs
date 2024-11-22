@@ -5,6 +5,7 @@ using UnityEngine;
 // Base ScriptableObject for structure configurations
 public abstract class StructureLevels : ScriptableObject
 {
+    public StructureType type;
     public string structureName;
     public string description;
     public Sprite icon;

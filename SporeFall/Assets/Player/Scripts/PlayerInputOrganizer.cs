@@ -232,6 +232,9 @@ public class PlayerInputOrganizer : MonoBehaviour
             playerInputMap.Disable();
             shootInputMap.Disable();
 
+            pMan.pUI.gameObject.SetActive(false);
+
+
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -243,6 +246,9 @@ public class PlayerInputOrganizer : MonoBehaviour
             playerInputMap.Enable();
             shootInputMap.Enable();
 
+            pMan.pUI.gameObject.SetActive(true);
+
+
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -250,6 +256,64 @@ public class PlayerInputOrganizer : MonoBehaviour
             GameManager.Instance.WaveManager.paused = false;
         }
    
+    }
+    public void ToggleUpgradeMenu(bool toggle)
+    {
+        if (toggle)
+        {
+            if (pMan.isBuilding)
+            {
+                // if player is holding fire, prevent press from carrying over
+                // Fixes auto shoot bug
+                fireAction.Disable();
+
+                fireAction = shootInputMap.FindAction("Fire");
+                // Assign build mode actions
+                fireAction.started += OnFireStarted;
+                fireAction.canceled += OnFireCanceled;
+
+                pMan.ToggleBuildMode();
+
+                editInputMap.Disable();
+                buildInputMap.Disable();
+                shootInputMap.Enable();
+                // After Shoot map is enabled re enable fire action
+                fireAction.Enable();
+            }
+
+            playerInputMap.Disable();
+            shootInputMap.Disable();
+
+            pauseGame.performed -= OnPause;
+            pauseGame.performed += OnUpgradeMenu;
+
+            pMan.pUI.gameObject.SetActive(false);
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            playerInputMap.Enable();
+            shootInputMap.Enable();
+            // return to default pause menu interactions
+            pauseGame.performed -= OnUpgradeMenu;
+            pauseGame.performed += OnPause;
+
+            pMan.pUI.gameObject.SetActive(true);
+
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+
+    }
+    private void OnUpgradeMenu(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.GameUIManager.ShowUpgradeMenu(false);
+
+        ToggleUpgradeMenu(false);
     }
     private void OnExitGame(InputAction.CallbackContext context)
     {

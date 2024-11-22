@@ -12,6 +12,8 @@ public class StructureLevel
     public float maxHealth;
     public float cost;
     public float energyCost;
+
+    public string upgradeDescription;
 }
 
 

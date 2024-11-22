@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Structure : MonoBehaviour
@@ -11,6 +12,8 @@ public class Structure : MonoBehaviour
     [SerializeField] private StructureLevels levels;
     [SerializeField] private GameObject radiusIndicator;
     [SerializeField] private StructureHP healthComponent;
+    [HideInInspector]
+    public StructurePoolBehavior poolBehavior;
 
     private TrainHandler train;
     private IStructureStats structureBehavior;
@@ -18,6 +21,7 @@ public class Structure : MonoBehaviour
 
     private void Awake()
     {
+        poolBehavior = GetComponent<StructurePoolBehavior>();
         structureBehavior = GetComponent<IStructureStats>();
         UpdateRadiusVisual(levels.GetLevel(currentLevel));
     }
@@ -73,7 +77,7 @@ public class Structure : MonoBehaviour
     {
         if (currentLevel >= levels.GetLevelCount() - 1) return;
 
-        currentLevel++;
+        currentLevel = GameManager.Instance.UpgradeManager.GetStructureLevel(levels.type);
         UpdateVisuals();
         UpdateStats();
         structureBehavior?.UpdateStats(levels, currentLevel);
@@ -81,14 +85,14 @@ public class Structure : MonoBehaviour
     private void UpdateVisuals()
     {
         // Deactivate current visual if it exists
-        if(currentLevel - 1 > 0)
+        if(currentLevel - 1 >= 0)
         {
             levelVisuals[currentLevel - 1].SetActive(false);
         }
 
         // Get and activate new visual
         var levelData = levels.GetLevel(currentLevel);
-        if (levelVisuals[currentLevel] != null)
+        if (currentLevel < levelVisuals.Count() && levelVisuals[currentLevel] != null)
         {
             levelVisuals[currentLevel].SetActive(true);
         }

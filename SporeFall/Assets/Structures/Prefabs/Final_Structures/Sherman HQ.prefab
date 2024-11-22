@@ -285,6 +285,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6235960519757877823}
+  - {fileID: 3171391640748320709}
   m_Father: {fileID: 486190185445929729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &2682952239649668205
@@ -507,6 +508,7 @@ GameObject:
   - component: {fileID: 486190185445929729}
   - component: {fileID: 6160126734740821747}
   - component: {fileID: 2256723778526685127}
+  - component: {fileID: -5009125851695181038}
   m_Layer: 7
   m_Name: Sherman HQ
   m_TagString: Structure
@@ -548,9 +550,11 @@ MonoBehaviour:
   controlScriptObject: {fileID: 795503593085061794}
   levelVisuals:
   - {fileID: 6755757473945553029}
+  - {fileID: 2830753469776936319}
   levels: {fileID: 11400000, guid: 490f894373af6f644ae2dfc18d0959cb, type: 2}
   radiusIndicator: {fileID: 0}
   healthComponent: {fileID: 8933941658098722499}
+  poolBehavior: {fileID: 0}
 --- !u!114 &2256723778526685127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,6 +568,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sherman: {fileID: 1875395865627073804, guid: ac4d833fce99bdf4cbbbf7b128249300, type: 3}
+--- !u!114 &-5009125851695181038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5415324038918524610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb3880fdb3dcdb4da56039a876dda60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3127742029315791310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -634,28 +650,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588137888749594261, guid: ac4d833fce99bdf4cbbbf7b128249300,
         type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2588137888749594261, guid: ac4d833fce99bdf4cbbbf7b128249300,
-        type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3991209753368682062, guid: ac4d833fce99bdf4cbbbf7b128249300,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027642367429550200, guid: ac4d833fce99bdf4cbbbf7b128249300,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9169997755307460049, guid: ac4d833fce99bdf4cbbbf7b128249300,
-        type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 512
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -680,6 +676,141 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fe4c735c32553f4a87b230c0ed4aa4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &3137234987801051182
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4129738175944824664}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.000000081460335
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_AABB.m_Center.y
+      value: -0.013536572
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: -0.00000011920929
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.y
+      value: 1.0712585
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 288dd58737e2a7f478875040f1e64710, type: 2}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 66340d1ea3be0294a9a8624db8a92e88, type: 2}
+    - target: {fileID: -3887185075125053422, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_Name
+      value: Sherman's House LV2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6e9012cb93b1b594c978a79e2327fc29, type: 3}
+--- !u!1 &2830753469776936319 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6e9012cb93b1b594c978a79e2327fc29,
+    type: 3}
+  m_PrefabInstance: {fileID: 3137234987801051182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3171391640748320709 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6e9012cb93b1b594c978a79e2327fc29,
+    type: 3}
+  m_PrefabInstance: {fileID: 3137234987801051182}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5836713980432365012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -786,12 +917,17 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 6e9012cb93b1b594c978a79e2327fc29,
         type: 3}
       propertyPath: m_Name
-      value: Sherman's House FBX
+      value: Sherman's House LV1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6e9012cb93b1b594c978a79e2327fc29,
         type: 3}
       propertyPath: m_Layer
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6e9012cb93b1b594c978a79e2327fc29,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
