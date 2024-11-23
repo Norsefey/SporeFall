@@ -6,10 +6,9 @@ using UnityEngine.UIElements;
 public class BuildGun : Weapon
 {
     [Header("Build Gun Settings")]
-    //[SerializeField] private StructuresUI sUI;
-    public GameObject[] buildableStructures; // Array of objects the player can spawn
-    public Structure selectedStructure; // The currently selected placed object (for moving or deleting)
-    public LayerMask groundLayer; // LayerMask to identify what is "ground"
+    public GameObject[] buildableStructures;
+    public Structure selectedStructure; // The currently selected object (for placing, moving or deleting)
+    public LayerMask groundLayer;
     public LayerMask structureLayer; // LayerMask for detecting objects the player can select
     public int currentBuildIndex = 0; // Current selected object to build
     public float maxBuildDistance = 100f; // Maximum distance for building
@@ -22,19 +21,19 @@ public class BuildGun : Weapon
     private bool movingStructure = false;
 
     [Header("Placement Validation")]
-    public LayerMask structureOverlapMask; // Layer mask for checking structure overlaps
+    public LayerMask structureOverlapMask;
     public Color validPlacementColor = new Color(0, 1, 0, 0.25f); // Green tint for valid placement
     public Color invalidPlacementColor = new Color(1, 0, 0, 0.25f); // Red tint for invalid placement
     private bool isValidPlacement = true;
-    private Vector3 originalPosition; // Store original position for edit mode
+    private Vector3 originalPosition; // Store original position for edit mode, in case move doesn't work, returns to original position
     private Quaternion originalRotation; // Store original rotation for edit mode
-    private bool showRadius = true;
+    private bool showRadius = true; // player can toggle the radius display
     [Header("Prompt Text")]
     [SerializeField] private string buildModeText = "<color=red>Build Mode</color> Q/E to change Structure \n Hold Right mouse to Preview" + "\n F to Select Placed Structure";
     [SerializeField] private string editModeText = "<color=green>Edit Mode</color> \n Left mouse to Move \n Hold X to Destroy \n F to return";
 
 
-    // Store original colors
+    // To Store original colors
     private class MaterialData
     {
         public Material Material;
@@ -81,6 +80,24 @@ public class BuildGun : Weapon
             }
         }
     }
+    public void CycleBuildableStructure(float indexIncrement)
+    {
+        // Cycle to the next object in the buildableObjects array
+        currentBuildIndex += (int)indexIncrement;
+        if (currentBuildIndex >= buildableStructures.Length)
+            currentBuildIndex = 0;
+        else if (currentBuildIndex < 0)
+            currentBuildIndex = buildableStructures.Length - 1;
+
+        if (selectedStructure != null)
+            selectedStructure.poolBehavior.ReturnObject();
+
+        selectedStructure = null;
+
+        PreviewStructure();
+
+        player.pUI.SwitchStructureIcon();
+    }
     private void PreviewStructure()
     {
         Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
@@ -88,9 +105,8 @@ public class BuildGun : Weapon
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, groundLayer))
         {
             if (!isEditing && selectedStructure == null)
-            {
-                //selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
-
+            {// spawn in a new structure
+                // structures are part of the pooling system, pull from there
                 if (!PoolManager.Instance.structurePool.TryGetValue(buildableStructures[currentBuildIndex], out StructurePool pool))
                 {
                     Debug.LogError($"No pool found for Structure prefab: {buildableStructures[currentBuildIndex].name}");
@@ -106,9 +122,7 @@ public class BuildGun : Weapon
 
             }
             else if (selectedStructure != null)
-            {
-                RotateStructure();
-
+            {// allow player to move
                 // Only check for overlaps if we're in edit mode and moving
                 if (isEditing && movingStructure || !isEditing)
                 {
@@ -121,49 +135,77 @@ public class BuildGun : Weapon
                     transform.forward = player.pCamera.myCamera.transform.forward;
                 }
                 else
-                {
+                {// player character is always looking in direction of structure
                     player.pController.RotateOnFire(this.transform, player.pCamera.myCamera.transform.forward);
                 }
             }
         }else if(!isEditing && selectedStructure != null)
-        {
-            DestroyPreview();
+        {// player not aiming at a valide placement area, remove Preview
+            RemovePreview();
         }
     }
-
-    private void StoreOriginalColors(GameObject obj)
+    public void PlaceStructure()
     {
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
-        originalMaterials = new MaterialData[0];
-
-        foreach (Renderer renderer in renderers)
+        if (!isValidPlacement)
         {
-            MaterialData[] newData = new MaterialData[originalMaterials.Length + renderer.materials.Length];
-            originalMaterials.CopyTo(newData, 0);
-
-            for (int i = 0; i < renderer.materials.Length; i++)
+            player.pUI.EnablePrompt("<color=red>Invalid Placement - Structures Overlapping</color>");
+            return;
+        }
+        // some test scenes do not have a train to reference off of, so check if a train is valid to do an energy check
+        if (GameManager.Instance.TrainHandler != null)
+        {
+            if (selectedStructure != null && GameManager.Instance.TrainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
             {
-                newData[originalMaterials.Length + i] = new MaterialData
-                {
-                    Material = renderer.materials[i],
-                    OriginalColor = renderer.materials[i].color
-                };
+                player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
+                selectedStructure.Initialize();
+                selectedStructure.ToggleStructureBehavior(true);
+                selectedStructure.ShowRadius(false);
+                SetStructureToOpaque();
+                RestoreOriginalColors(); // Restore original colors when placing
+                // for moving train stores all active structures
+                GameManager.Instance.TrainHandler.AddStructure(selectedStructure);
+                selectedStructure = null;
+                originalMaterials = null; // Clear stored colors
+                // show build controls
+                player.pUI.EnableControls(buildModeText);
             }
-
-            originalMaterials = newData;
-        }
-    }
-    private void RestoreOriginalColors()
-    {
-        if (originalMaterials != null)
-        {
-            foreach (var materialData in originalMaterials)
+            else
             {
-                if (materialData.Material != null)
+                // tell player why placement failed, either not enough money, or too many active structure
+                if (selectedStructure.GetCurrentMyceliaCost() > player.Mycelia)
                 {
-                    materialData.Material.color = materialData.OriginalColor;
+                    player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
+                }
+                else if (!player.train.CheckEnergy(selectedStructure.GetCurrentEnergyCost()))
+                {
+                    player.pUI.EnablePrompt("<color=red>Too many Active Structures</color>");
                 }
             }
+        }
+        else
+        {
+            // mostly for testing, cost and placement of structures, should not be used in final build
+            if (selectedStructure != null && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
+            {
+                player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
+                selectedStructure.Initialize();
+                SetStructureToOpaque();
+                RestoreOriginalColors(); // Restore original colors when placing
+
+                selectedStructure = null;
+                originalMaterials = null; // Clear stored colors
+
+                player.pUI.EnableControls(buildModeText);
+            }
+        }
+    }
+    public void RemovePreview()
+    {
+        if (selectedStructure != null)
+        {
+            selectedStructure.poolBehavior.ReturnObject();
+            selectedStructure = null;
+            originalMaterials = null; // Clear stored colors
         }
     }
     private void CheckStructureOverlap()
@@ -205,6 +247,42 @@ public class BuildGun : Weapon
         isValidPlacement = !hasOverlap;
         UpdatePreviewColor(isValidPlacement);
     }
+    #region Color Management
+    private void StoreOriginalColors(GameObject obj)
+    {
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+        originalMaterials = new MaterialData[0];
+
+        foreach (Renderer renderer in renderers)
+        {
+            MaterialData[] newData = new MaterialData[originalMaterials.Length + renderer.materials.Length];
+            originalMaterials.CopyTo(newData, 0);
+
+            for (int i = 0; i < renderer.materials.Length; i++)
+            {
+                newData[originalMaterials.Length + i] = new MaterialData
+                {
+                    Material = renderer.materials[i],
+                    OriginalColor = renderer.materials[i].color
+                };
+            }
+
+            originalMaterials = newData;
+        }
+    }
+    private void RestoreOriginalColors()
+    {
+        if (originalMaterials != null)
+        {
+            foreach (var materialData in originalMaterials)
+            {
+                if (materialData.Material != null)
+                {
+                    materialData.Material.color = materialData.OriginalColor;
+                }
+            }
+        }
+    }
     private void UpdatePreviewColor(bool isValid)
     {
         GameObject visual = selectedStructure.GetCurrentVisual();
@@ -224,88 +302,6 @@ public class BuildGun : Weapon
                 material.color = color;
             }
         }
-    }
-    public void PlaceStructure()
-    {
-        if (!isValidPlacement)
-        {
-            player.pUI.EnablePrompt("<color=red>Invalid Placement - Structures Overlapping</color>");
-            return;
-        }
-
-        if (player.train != null)
-        {
-            if (selectedStructure != null && player.train.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
-            {
-                player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
-                selectedStructure.Initialize();
-                selectedStructure.ToggleStructureBehavior(true);
-                selectedStructure.ShowRadius(false);
-                SetStructureToOpaque();
-                RestoreOriginalColors(); // Restore original colors when placing
-
-                player.train.AddStructure(selectedStructure);
-                selectedStructure = null;
-                originalMaterials = null; // Clear stored colors
-
-                player.pUI.EnableControls(buildModeText);
-            }
-            else
-            {
-                if (selectedStructure.GetCurrentMyceliaCost() > player.Mycelia)
-                {
-                    player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
-                }
-                else if (!player.train.CheckEnergy(selectedStructure.GetCurrentEnergyCost()))
-                {
-                    player.pUI.EnablePrompt("<color=red>Too many Active Structures</color>");
-                }
-            }
-        }
-        else
-        {
-            if (selectedStructure != null && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
-            {
-                player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
-                selectedStructure.Initialize();
-                SetStructureToOpaque();
-                RestoreOriginalColors(); // Restore original colors when placing
-
-                selectedStructure = null;
-                originalMaterials = null; // Clear stored colors
-
-                player.pUI.EnableControls(buildModeText);
-            }
-        }
-    }
-    // Update DestroyPreview to clean up stored colors
-    public void DestroyPreview()
-    {
-        if (selectedStructure != null)
-        {
-            //Destroy(selectedStructure.gameObject);
-            selectedStructure.poolBehavior.ReturnObject();
-            selectedStructure = null;
-            originalMaterials = null; // Clear stored colors
-        }
-    }
-    public void CycleSelectedStructure(float indexIncrement)
-    {
-        // Cycle to the next object in the buildableObjects array
-        currentBuildIndex += (int)indexIncrement;
-        if (currentBuildIndex >= buildableStructures.Length)
-            currentBuildIndex = 0;
-        else if(currentBuildIndex < 0)
-            currentBuildIndex = buildableStructures.Length - 1;
-
-        if(selectedStructure != null)
-            selectedStructure.poolBehavior.ReturnObject();
-
-        selectedStructure = null;
-
-        PreviewStructure();
-
-        player.pUI.SwitchStructureIcon();
     }
     private void SetStructureToTransparent(GameObject obj)
     {
@@ -339,7 +335,7 @@ public class BuildGun : Weapon
     }
     private void SetStructureToOpaque()
     {
-        if(selectedStructure == null)
+        if (selectedStructure == null)
             return;
 
         // Set the object material to opaque for final placement
@@ -376,16 +372,17 @@ public class BuildGun : Weapon
             }
         }
     }
-    // Edit Mode Functions
+    #endregion
+
+
+    #region EditMode
     public void EnterEditMode()
     {
         if(selectedStructure != null)
         {
-            selectedStructure.gameObject.SetActive(false);
-            Destroy(selectedStructure.gameObject); // Destroy the current preview
+            RemovePreview();
         }
         isEditing = true;
-        selectedStructure = null;
     }
     public void ExitEditMode()
     {
@@ -406,8 +403,8 @@ public class BuildGun : Weapon
         Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer) && !movingStructure)
-        {
-            if (selectedStructure == null)
+        {// we are looking at a structure select it and deactivate it to edit it
+            if (selectedStructure == null)// to prevent assigning the same structure
             {
                 selectedStructure = hit.collider.transform.parent.GetComponent<Structure>();
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
@@ -426,7 +423,7 @@ public class BuildGun : Weapon
             return true;
         }
         else if (selectedStructure != null)
-        {
+        {// we are no longer looking a structure, return it to normal
             RestoreOriginalColors();
             DeselectStructure();
             return false;
@@ -450,23 +447,11 @@ public class BuildGun : Weapon
             player.pUI.EnableControls(editModeText);
         }
     }
-    public void RotateStructure()
+    public void RotateStructure(float direction)
     {
         if (selectedStructure != null)
         {
-            float yRot = 0;
-            if (player.myDevice is Gamepad)
-            {
-                // left and right on d-Pad on controller
-                 yRot = player.pInput.rotateStructAction.ReadValue<Vector2>().x * structRotSpeed * Time.deltaTime;
-            }
-            else
-            {
-                // mouse scroll wheel uses Y
-                 yRot = player.pInput.rotateStructAction.ReadValue<Vector2>().y * structRotSpeed * Time.deltaTime;
-            }
-
-            selectedStructure.transform.Rotate(new Vector3(0, yRot, 0));
+            selectedStructure.transform.Rotate(new Vector3(0, direction * 25, 0));
         }
     }
     public void SellStructure()
@@ -493,5 +478,6 @@ public class BuildGun : Weapon
             selectedStructure.ShowRadius(showRadius);
         }
     }
+    #endregion
 
 }

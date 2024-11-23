@@ -14,16 +14,16 @@ public abstract class Weapon : MonoBehaviour
     public Transform firePoint;
     public LayerMask hitLayers;
 
-    [Header("Audio Clips")]
-    [SerializeField, Range(0f, 1f)] protected float fireSoundVolume = 0.5f; // Volume control for the firing sound
-    [SerializeField] protected AudioClip fireSound; // Assign the gun's firing sound in the Inspector
-    [SerializeField] protected AudioClip reloadSound; // Assign the gun's Reload sound in the Inspector
+    [Header("Audio Clips")] // uses audio player on player to play sfx
+    [SerializeField, Range(0f, 1f)] protected float fireSoundVolume = 0.5f;
+    [SerializeField] protected AudioClip fireSound;
+    [SerializeField] protected AudioClip reloadSound;
     
     [Header("Corruption")]
     public bool isCorrupted;
     public float corruptionRate = 1.2f;
   
-    [Header("Hold Type")]
+    [Header("Hold Type")]// animation hold changes based on hold type
     public bool isTwoHanded = false;
     public Transform secondHandHold;
   
@@ -39,7 +39,7 @@ public abstract class Weapon : MonoBehaviour
     public bool limitedAmmo = false;
 
     [Header("Bullet Type")]
-    public bool isHitScan; // Whether the weapon is hitscan or projectile based
+    public bool isHitScan;
     public float hitScanDistance = 50;
     [Header("Projectile Settings"), Tooltip("If Bullet is not a Hitscan")]
     [SerializeField] protected float projectileSpeed = 20f;
@@ -57,7 +57,7 @@ public abstract class Weapon : MonoBehaviour
     public virtual void Fire()
     {
         if (bulletCount <= 0 && !IsReloading)
-        {
+        {// auto reload if player tries shooting at 0 ammo clip
             PlaySFX(reloadSound, false);
             StartReload();
         }
@@ -81,7 +81,7 @@ public abstract class Weapon : MonoBehaviour
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
         // Rotate player first before shooting
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
-        {
+        {// don't rotate player if aiming, rotation is handled in playerMovement script
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
         
@@ -90,7 +90,7 @@ public abstract class Weapon : MonoBehaviour
             Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
             return;
         }
-        // Get projectile from pool
+        // Get projectile from pool and initialize it
         ProjectileBehavior projectile = pool.Get(
             firePoint.position,
             Quaternion.LookRotation(shootDirection));

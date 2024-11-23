@@ -110,11 +110,11 @@ public class PlayerManager : MonoBehaviour
             if (currentWeapon is BuildGun bGun)
             {
                 pUI.DisplayMycelia(mycelia);
-                if (bGun.isEditing)
+           /*     if (bGun.isEditing)
                 {
                     if (bGun.SelectStructure())
                         bGun.RotateStructure();
-                }
+                }*/
             }
 
             if (isFiring && !currentWeapon.IsReloading && currentWeapon is not ChargeGun)
@@ -237,7 +237,7 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
-                bGun.DestroyPreview();
+                bGun.RemovePreview();
             }
 
             if (equippedWeapon != null)

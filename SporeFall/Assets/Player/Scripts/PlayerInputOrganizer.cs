@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 public class PlayerInputOrganizer : MonoBehaviour
 {
     private PlayerManager pMan;
@@ -12,35 +14,39 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputActionMap playerInputMap;
     private InputActionMap shootInputMap;
     private InputActionMap buildInputMap;
+    private InputActionMap placementInputMap;
     private InputActionMap editInputMap;
     [Header("Input Actions")]// sorted into their respective action maps
+    //Game Actions
+    private InputAction exitGame;
+    private InputAction pauseGame;
+    private InputAction toggleFullscreen;
     // Player Actions
-    public  InputAction moveAction;
+    public InputAction moveAction;
     public  InputAction lookAction;
     private InputAction jumpAction;
     private InputAction aimAction;
     private InputAction sprintAction;
     private InputAction interactAction;
-    private InputAction exitGame;
-    private InputAction pauseGame;
-    private InputAction toggleFullscreen;
     private InputAction flipCameraSide;
-    private InputAction showStructureRadius;
+    private InputAction buildModeAction;
     // Shoot Actions
     private InputAction fireAction;
     private InputAction reloadAction;
     private InputAction dropAction;
     // Build Actions
-    private InputAction buildModeAction;
+    private InputAction showStructureRadius;
+    private InputAction editModeAction;
+    private InputAction rotateStructAction;
+    // Placement Actions
     private InputAction changeStructAction;
     private InputAction placeStructAction;
-    private InputAction enterEditMode;
     // Edit Actions
-    public  InputAction rotateStructAction;
     private InputAction moveStructAcion;
     private InputAction destroyStructAction;
-    private InputAction upgradeStructAction;
-    private InputAction exitEditAction;
+    // have to store this, since Hold needs to be check first, and after that, release value is just zero
+    private float rotationDirection = 0;
+
     private void Awake()
     {
         // get and assign input Action Map
@@ -49,7 +55,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         playerInputMap = inputAsset.FindActionMap("Player");
         shootInputMap = inputAsset.FindActionMap("Shoot");
         buildInputMap = inputAsset.FindActionMap("Build");
-        editInputMap = inputAsset.FindActionMap("Edit");
+        placementInputMap = inputAsset.FindActionMap("BuildPlacement");
+        editInputMap = inputAsset.FindActionMap("BuildEdit");
     }
     private void OnEnable()
     {
@@ -66,27 +73,29 @@ public class PlayerInputOrganizer : MonoBehaviour
         aimAction = playerInputMap.FindAction("Aim");
         interactAction = playerInputMap.FindAction("Interact");
         flipCameraSide = playerInputMap.FindAction("FlipCamera");
-        showStructureRadius = playerInputMap.FindAction("ToggleRadius");
         // shoot action map
         jumpAction = shootInputMap.FindAction("Jump");
         reloadAction = shootInputMap.FindAction("Reload");
         dropAction = shootInputMap.FindAction("Drop");
         fireAction = shootInputMap.FindAction("Fire");
         // build Action Maps
-        changeStructAction = buildInputMap.FindAction("Change");
-        placeStructAction = buildInputMap.FindAction("Place");
+        showStructureRadius = buildInputMap.FindAction("ToggleRadius");
         rotateStructAction = buildInputMap.FindAction("Rotate");
-        enterEditMode = buildInputMap.FindAction("Edit");
+        editModeAction = buildInputMap.FindAction("EditMode");
+        // Placement Action map
+        changeStructAction = placementInputMap.FindAction("Change");
+        placeStructAction = placementInputMap.FindAction("Place");
         // Edit Action Maps
         moveStructAcion = editInputMap.FindAction("Move");
         destroyStructAction = editInputMap.FindAction("Destroy");
-        upgradeStructAction = editInputMap.FindAction("Upgrade");
-        exitEditAction = editInputMap.FindAction("Exit");
-        // this enables the controls
+
+        // player starts in default mode
         gameInputMap.Enable();
         playerInputMap.Enable();
         shootInputMap.Enable();
+
         buildInputMap.Disable();
+        placementInputMap.Disable();
         editInputMap.Disable();
     }
     public void AssignAllActions()
@@ -110,18 +119,16 @@ public class PlayerInputOrganizer : MonoBehaviour
         reloadAction.performed += OnReload;
         dropAction.performed += OnDropWeapon;
         // build actions
+        editModeAction.started += OnToggleEditMode;
+        rotateStructAction.started += OnRotateStarted;
+        rotateStructAction.performed += OnRotate;
+        // Placement Actions
         changeStructAction.performed += OnCycleBuildStrcuture;
         placeStructAction.performed += OnPlaceStructure;
-        enterEditMode.started += OnEnterEditMode;
-        rotateStructAction.started += OnEditRotateStarted;
-        rotateStructAction.canceled += OnEditRotateCancled;
         // Edit Actions
         moveStructAcion.started += OnEditStructureMoveStarted;
         moveStructAcion.canceled += OnEditMoveStructureCancled;
-        exitEditAction.performed += OnExitEditMode;
         destroyStructAction.performed += OnEditDestroy;
-        //upgradeStructAction.started += OnEditUpgrade;
-
     }
     private void OnDisable()
     {
@@ -145,19 +152,19 @@ public class PlayerInputOrganizer : MonoBehaviour
         // build Mode actions
         changeStructAction.performed -= OnCycleBuildStrcuture;
         placeStructAction.performed -= OnPlaceStructure;
-        enterEditMode.started -= OnEnterEditMode;
+        editModeAction.started -= OnToggleEditMode;
+        rotateStructAction.started -= OnRotateStarted;
+        rotateStructAction.performed -= OnRotate;
+
         // edit Actions
         moveStructAcion.started -= OnEditStructureMoveStarted;
         moveStructAcion.canceled -= OnEditMoveStructureCancled;
-        exitEditAction.performed -= OnExitEditMode;
         destroyStructAction.performed -= OnEditDestroy;
-        rotateStructAction.started -= OnEditRotateStarted;
-        rotateStructAction.canceled -= OnEditRotateCancled;
-        //upgradeStructAction.started -= OnEditUpgrade;
         // disable Input map
         playerInputMap.Disable();
         shootInputMap.Disable();
         buildInputMap.Disable();
+        placementInputMap.Disable();
         editInputMap.Disable();
     }
     // interaction button will be the same button but do different things
@@ -198,7 +205,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         buildInputMap.Disable();
         editInputMap.Disable();
     }
-    // Setting the player manager
+    // Setting the player manager to use as reference
     public void SetManager(PlayerManager manger)
     {
         pMan = manger;
@@ -418,7 +425,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             // if player is holding fire, prevent press from carrying over
             fireAction.Disable();
             //Change build Actions
-            fireAction = buildInputMap.FindAction("Preview");
+            fireAction = placementInputMap.FindAction("WideView");
             
             // Assign build mode actions
             fireAction.started += OnFireStarted;
@@ -429,6 +436,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             shootInputMap.Disable();
             editInputMap.Disable();
             buildInputMap.Enable();
+            placementInputMap.Enable();
             // After Build map is enabled re enable fire action
             fireAction.Enable();
         }
@@ -446,6 +454,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             pMan.ToggleBuildMode();
 
             editInputMap.Disable();
+            placementInputMap.Disable();
             buildInputMap.Disable();
             shootInputMap.Enable();
             // After Shoot map is enabled re enable fire action
@@ -457,7 +466,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-            buildGun.CycleSelectedStructure(changeStructAction.ReadValue<float>()); // Cycle through build able objects
+            buildGun.CycleBuildableStructure(changeStructAction.ReadValue<float>()); // Cycle through build able objects
             pMan.pUI.AmmoDisplay(pMan.currentWeapon);
         }
     }
@@ -466,35 +475,38 @@ public class PlayerInputOrganizer : MonoBehaviour
         pMan.bGun.PlaceStructure();
     }
     // Editing a Structure
-    private void OnEnterEditMode(InputAction.CallbackContext context)
+    private void OnToggleEditMode(InputAction.CallbackContext context)
+    {
+        if (!pMan.bGun.isEditing)
+        {
+            EnterEditMode();
+        }
+        else
+        {
+            ExitEditMode();
+        }
+    }
+
+    private void EnterEditMode()
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
-
             buildGun.EnterEditMode();
 
-            rotateStructAction = editInputMap.FindAction("Rotate");
-            rotateStructAction.started += OnEditRotateStarted;
-            rotateStructAction.canceled += OnEditRotateCancled;
-
             pMan.pUI.EnableControls("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
-            buildInputMap.Disable();
+            placementInputMap.Disable();
             editInputMap.Enable();
         }
     }
-    private void OnExitEditMode(InputAction.CallbackContext context)
+    private void ExitEditMode()
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
             buildGun.ExitEditMode();
-            
-            rotateStructAction = buildInputMap.FindAction("Rotate");
-            rotateStructAction.started -= OnEditRotateStarted;
-            rotateStructAction.canceled -= OnEditRotateCancled;
-
+           
             pMan.pUI.EnableControls("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             editInputMap.Disable();
-            buildInputMap.Enable();
+            placementInputMap.Enable();
         }
     }
     private void OnEditStructureMoveStarted(InputAction.CallbackContext context)
@@ -521,20 +533,31 @@ public class PlayerInputOrganizer : MonoBehaviour
             buildGun.SellStructure();
         }
     }
-    private void OnEditRotateStarted(InputAction.CallbackContext context)
+    private void OnRotateStarted(InputAction.CallbackContext context)
     {
-        pMan.isRotating = true;
+        if( rotateStructAction.ReadValue<float>() != 0)
+            rotationDirection = rotateStructAction.ReadValue<float>();
     }
-    private void OnEditRotateCancled(InputAction.CallbackContext context)
+    private void OnRotate(InputAction.CallbackContext context)
     {
-        pMan.isRotating = false;
+        if (context.interaction is HoldInteraction)
+        {
+            StartCoroutine(KeepRotating());
+        }
+        else
+        {
+            pMan.bGun.RotateStructure(rotationDirection);
+        }
+
     }
-/*    private void OnEditUpgrade(InputAction.CallbackContext context)
+    IEnumerator KeepRotating()
     {
-        // put upgrade code here
-        pMan.bGun.UpgradeStructure();
+        while (rotateStructAction.IsPressed())
+        {
+            pMan.bGun.RotateStructure(rotateStructAction.ReadValue<float>() * 10 * Time.deltaTime);
+            yield return null;
+        }
     }
-*/
     public string GetInteractionKey()
     {
         string key = interactAction.GetBindingDisplayString();
