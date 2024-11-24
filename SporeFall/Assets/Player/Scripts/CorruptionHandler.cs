@@ -127,7 +127,7 @@ public class CorruptionHandler : MonoBehaviour
         robert.AssignDefaultTarget(pMan.train, pMan.pController.transform);
         robert.transform.SetParent(pMan.train.dropsHolder, true);
 
-        GameManager.Instance.WaveManager.AddRobert(robert.gameObject);
+        GameManager.Instance.waveManager.AddRobert(robert.gameObject);
     }
     public void SetManager(PlayerManager player)
     {

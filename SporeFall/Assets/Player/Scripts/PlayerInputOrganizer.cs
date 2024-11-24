@@ -214,7 +214,10 @@ public class PlayerInputOrganizer : MonoBehaviour
     #region input Calls
     private void OnPause(InputAction.CallbackContext context)
     {
-        if (!GameManager.Instance.WaveManager.paused)
+        if(GameManager.Instance == null)
+            return;
+
+        if (!GameManager.Instance.paused)
         {
             if (pMan.isBuilding)
             {
@@ -245,8 +248,8 @@ public class PlayerInputOrganizer : MonoBehaviour
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            GameManager.Instance.WaveManager.pauseMenu.OpenPauseMenu();
-            GameManager.Instance.WaveManager.paused = true;
+            GameManager.Instance.pauseMenu.OpenPauseMenu();
+            GameManager.Instance.paused = true;
         }
         else
         {
@@ -259,8 +262,8 @@ public class PlayerInputOrganizer : MonoBehaviour
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            GameManager.Instance.WaveManager.pauseMenu.ClosePauseMenu();
-            GameManager.Instance.WaveManager.paused = false;
+            GameManager.Instance.pauseMenu.ClosePauseMenu();
+            GameManager.Instance.paused = false;
         }
    
     }
@@ -318,7 +321,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnUpgradeMenu(InputAction.CallbackContext context)
     {
-        GameManager.Instance.GameUIManager.ShowUpgradeMenu(false);
+        GameManager.Instance.gameUIManager.ShowUpgradeMenu(false);
 
         ToggleUpgradeMenu(false);
     }

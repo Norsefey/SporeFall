@@ -23,10 +23,10 @@ public class UpgradeUI : MonoBehaviour
             UpgradeBanner banner = bannerObj.GetComponent<UpgradeBanner>();
             banner.upgradeUI = this;
             // Fetch appropriate StructureLevels scriptable object for this type
-            StructureLevels structureLevels = gameManager.UpgradeManager.GetStructureLevelsForType(type);
+            StructureLevels structureLevels = gameManager.upgradeManager.GetStructureLevelsForType(type);
 
-            int currentLevel = gameManager.UpgradeManager.GetStructureLevel(type);
-            StructureLevel nextLevel = gameManager.UpgradeManager.GetNextLevel(type);
+            int currentLevel = gameManager.upgradeManager.GetStructureLevel(type);
+            StructureLevel nextLevel = gameManager.upgradeManager.GetNextLevel(type);
             if(nextLevel != null)
                 banner.SetupBanner(type, nextLevel);
         }
@@ -36,9 +36,9 @@ public class UpgradeUI : MonoBehaviour
     {
         myceliaText.color = Color.white;
 
-        myceliaText.text = $"Mycelia: {gameManager.TrainHandler.players[0].Mycelia}";
+        myceliaText.text = $"Mycelia: {gameManager.players[0].Mycelia}";
         
-        if(gameManager.TrainHandler.players[0].Mycelia <= 0)
+        if(gameManager.players[0].Mycelia <= 0)
             myceliaText.color = Color.red;
     }
 

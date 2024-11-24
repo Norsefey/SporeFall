@@ -16,7 +16,7 @@ public abstract class Damageable : MonoBehaviour
     {
 
     }
-    private void Awake()
+    private void Start()
     {
         ResetHealth();
     }

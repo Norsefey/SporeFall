@@ -77,7 +77,7 @@ public class Structure : MonoBehaviour
     {
         if (currentLevel >= levels.GetLevelCount() - 1) return;
 
-        currentLevel = GameManager.Instance.UpgradeManager.GetStructureLevel(levels.type);
+        currentLevel = GameManager.Instance.upgradeManager.GetStructureLevel(levels.type);
         UpdateVisuals();
         UpdateStats();
         structureBehavior?.UpdateStats(levels, currentLevel);

@@ -152,9 +152,9 @@ public class BuildGun : Weapon
             return;
         }
         // some test scenes do not have a train to reference off of, so check if a train is valid to do an energy check
-        if (GameManager.Instance.TrainHandler != null)
+        if (GameManager.Instance.trainHandler != null)
         {
-            if (selectedStructure != null && GameManager.Instance.TrainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
+            if (selectedStructure != null && GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
             {
                 player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
                 selectedStructure.Initialize();
@@ -163,7 +163,7 @@ public class BuildGun : Weapon
                 SetStructureToOpaque();
                 RestoreOriginalColors(); // Restore original colors when placing
                 // for moving train stores all active structures
-                GameManager.Instance.TrainHandler.AddStructure(selectedStructure);
+                GameManager.Instance.trainHandler.AddStructure(selectedStructure);
                 selectedStructure = null;
                 originalMaterials = null; // Clear stored colors
                 // show build controls

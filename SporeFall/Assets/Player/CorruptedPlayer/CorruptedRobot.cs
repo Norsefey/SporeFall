@@ -45,7 +45,7 @@ public class CorruptedPlayer : BaseEnemy
         // return life to player// default target is the controller which is a child of the player manager
         myPlayer.pHealth.IncreaseLife();
         SpawnDrop();
-        GameManager.Instance.WaveManager.RemoveRobert(gameObject);
+        GameManager.Instance.waveManager.RemoveRobert(gameObject);
         base.Die();
     }
     private void SpawnDrop()

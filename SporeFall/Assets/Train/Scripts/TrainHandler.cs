@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class TrainHandler : MonoBehaviour
 {
-    public List<PlayerManager> players = new();
     [Header("References")]
     public WaveManager waveManager;
     [SerializeField] private TrainUI UI;
@@ -60,14 +59,13 @@ public class TrainHandler : MonoBehaviour
             tUI.SetMaxHP(trainHP.maxHP);
         }
         Debug.Log("Train Is awake");
-        trainState = TrainState.Moving;
     }
     public void SetParkedState()
     {
         trainState = TrainState.Parked;
         trainVisual.rotation = Quaternion.identity;
         ToggleStructures(true);
-        if(players.Count != 0)
+        if(GameManager.Instance.players.Count != 0)
         {
             DisembarkTrain();
         }
@@ -133,7 +131,7 @@ public class TrainHandler : MonoBehaviour
 
             if (overlappingObjects.Length > 0)
             {
-                foreach (PlayerManager player in players)
+                foreach (PlayerManager player in GameManager.Instance.players)
                 {
                     player.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
                 }
@@ -180,10 +178,10 @@ public class TrainHandler : MonoBehaviour
     }
     public void BoardTrain()
     {
-        if (players.Count == 0)
+        if (GameManager.Instance.players.Count == 0)
             return;
         // hide players to move train
-        foreach (var player in players)
+        foreach (var player in GameManager.Instance.players)
         {
             // switch to train camera
             player.TogglePControl(false);
@@ -194,11 +192,11 @@ public class TrainHandler : MonoBehaviour
         }
         listener.enabled = true;
     }
-    private void DisembarkTrain()
+    public void DisembarkTrain()
     {
         // show players once train has parked
         trainCamera.SetActive(false);
-        foreach (var player in players)
+        foreach (var player in GameManager.Instance.players)
         {
             player.TogglePControl(true);
             player.TogglePVisual(true);
@@ -206,30 +204,6 @@ public class TrainHandler : MonoBehaviour
             player.TogglePCorruption(true);
         }
         listener.enabled = false;
-    }
-    public void AddPlayer(PlayerManager player)
-    {
-        // keep track of active players
-        players.Add(player);
-        player.train = this;
-
-        Debug.Log("Player Added");
-
-        player.TogglePControl(false);
-        player.TogglePCamera(false);
-        player.TogglePVisual(false);
-        player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
-        player.transform.SetParent(this.transform);
-        if(trainState == TrainState.Parked)
-        {
-            Invoke(nameof(DisembarkTrain), .5f);
-            Debug.Log("Not Moving Disembarking");
-        }
-    }
-    public void RemovePlayer(PlayerManager player)
-    {
-        // remove disconnected players
-        players.Remove(player);
     }
     public IEnumerator DestroyTrain()
     {
@@ -245,7 +219,7 @@ public class TrainHandler : MonoBehaviour
     }
     private void BlowUpTrain()
     {
-        GameManager.Instance.WaveManager.SpawnExplosion(transform.position);
+        GameManager.Instance.waveManager.SpawnExplosion(transform.position);
     }
     public void CheckTrainCamera()
     {
@@ -265,7 +239,7 @@ public class TrainHandler : MonoBehaviour
     }
     public void GivePlayersMycelia(float amount)
     {
-        foreach(PlayerManager player in players)
+        foreach(PlayerManager player in GameManager.Instance.players)
         {
             player.IncreaseMycelia(amount);
         }

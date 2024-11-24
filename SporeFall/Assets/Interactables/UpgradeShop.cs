@@ -8,7 +8,7 @@ public class UpgradeShop : Interactables
     // prompt player to interact with
     public override void ItemAction()
     {
-        if (GameManager.Instance.WaveManager.wavePhase == WaveManager.WavePhase.NotStarted)
+        if (GameManager.Instance.waveManager.wavePhase == WaveManager.WavePhase.NotStarted)
         {
             player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()}  to Open Shop");
         }
@@ -19,9 +19,9 @@ public class UpgradeShop : Interactables
     {
         // Open Shop menu
         // ESC now closes Shop Menu instead of pause
-        if (GameManager.Instance.WaveManager.wavePhase == WaveManager.WavePhase.NotStarted)
+        if (GameManager.Instance.waveManager.wavePhase == WaveManager.WavePhase.NotStarted)
         {
-            GameManager.Instance.GameUIManager.ShowUpgradeMenu(true);
+            GameManager.Instance.gameUIManager.ShowUpgradeMenu(true);
             player.pInput.ToggleUpgradeMenu(true);
             player.pUI.DisablePrompt();
 

@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour
     public bool isRotating = false;
     [Header("Currency")]
     // Player Stats
-    private float mycelia = 200;
+    [SerializeField] private float mycelia = 200;
     public float Mycelia { get { return mycelia; } }
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
@@ -55,15 +55,24 @@ public class PlayerManager : MonoBehaviour
     }
     private void Start()
     {
-        GameManager.Instance.TrainHandler.AddPlayer(this);
+        if(GameManager.Instance != null)
+            GameManager.Instance.HandlePlayerJoining(this);
+        /*if(GameManager.Instance != null && GameManager.Instance.TrainHandler != null)
+            GameManager.Instance.TrainHandler.AddPlayer(this);*/
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        pUI.AmmoDisplay(currentWeapon);
+        if(currentWeapon == null)
+        {
+            pAnime.ToggleNoWeapon(true);
+            pUI.ToggleDefaultUI(false);
+        }
+        else
+        {
+            pUI.AmmoDisplay(currentWeapon);
+        }
         pInput.AssignAllActions();
-
-        
 
     }
     private void Update()
@@ -177,12 +186,15 @@ public class PlayerManager : MonoBehaviour
 
         // if weapon is corrupted start corruption increase
         if (currentWeapon.isCorrupted)
+        {
             holdingCorruption = true;
             corruptionPickupCount++;
             if (corruptionPickupCount == 1)
             {
-                 Tutorial.Instance.firstCorruptionPickup = true;
+                Tutorial.Instance.firstCorruptionPickup = true;
             }
+        }
+        pUI.ToggleDefaultUI(true);
     }
     public void DropWeapon()
     {
@@ -210,9 +222,20 @@ public class PlayerManager : MonoBehaviour
         pUI.SwitchWeaponIcon();
         pAnime.ToggleTwoHanded(false);
     }
+    public void EquipDefaultGun()
+    {
+        currentWeapon = defaultWeapon;
+        currentWeapon.gameObject.SetActive(true);
+        pAnime.ToggleNoWeapon(false);
+        pUI.ToggleDefaultUI(true);
+
+    }
     #region Toggle Switches
     public void ToggleBuildMode()
     {
+        if(currentWeapon == null)
+            return;
+
         if (!isBuilding)
         {// Enter Build mode
          // Avoid getting Stuck in reload
@@ -283,7 +306,7 @@ public class PlayerManager : MonoBehaviour
     {
         // Fixes bug where player gun is stuck in reloading state...hopefully
         // since weapon is child of visual put in visual to activate whenever visual is disabled or enabled
-        if (currentWeapon.IsReloading)
+        if (currentWeapon != null && currentWeapon.IsReloading)
             currentWeapon.CancelReload();
         pVisual.SetActive(toggle);
     }

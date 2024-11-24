@@ -10,8 +10,7 @@ public class WaveManager : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private WaveUI wUI;
-    public PauseMenu pauseMenu;
-    public bool paused = false;
+
 
     [Header("References")]
     [SerializeField] private GameObject bossPrefab; // Boss enemy prefab for the final wave
@@ -287,7 +286,7 @@ public class WaveManager : MonoBehaviour
         // Spawn the boss
         Transform spawnPoint = currentWave.spawnLocations[0];
         BaseEnemy boss = bossPool.Get(spawnPoint.position, spawnPoint.rotation);
-        boss.AssignDefaultTarget(train, train.players[0].transform);
+        boss.AssignDefaultTarget(train, GameManager.Instance.players[0].transform);
         boss.transform.SetParent(transform);
 
         boss.OnEnemyDeath += OnBossDeath;
@@ -377,7 +376,6 @@ public class WaveManager : MonoBehaviour
         wUI.DisplayBossFlag();
         StartCoroutine(SpawnPostBossHorde());
     }
-
     private void OnEnemyDeath(BaseEnemy enemy)
     {
         enemiesAlive--;
@@ -424,7 +422,6 @@ public class WaveManager : MonoBehaviour
             isRobertSpawned = false;
         }
     }
-
     private void RemoveAllRoberts()
     {
         int x = roberts.Count;

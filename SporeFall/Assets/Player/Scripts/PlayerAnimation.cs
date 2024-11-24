@@ -8,8 +8,8 @@ public class PlayerAnimation : MonoBehaviour
     private PlayerManager pMan;
 
     [SerializeField] private Animator anime;
-    [SerializeField] private Transform weaponSlot; // to always have gun in right hand
-    [SerializeField] private Transform rightHandBone;// where the weapon will move to
+    [SerializeField] private Transform weaponSlot; // holds weapon
+    [SerializeField] private Transform rightHandBone;// where the weapon slot will move to, to avoid having to dig for it in hierarchy
 
     [Header("Left Hand")]
     [SerializeField] private TwoBoneIKConstraint tbIk; // add or remove weight to constraint to enable or disable it
@@ -21,8 +21,9 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] private Rig twoHandedRig;
     // For animation layers
     private bool twoHanded = false;
-    private int oneHandedLayerIndex; // will holds one handed animations
+    private int oneHandedLayerIndex;// will holds one handed animations
     private int twoHandedLayerIndex;// holds two handed animations
+    private int noWeaponLayerIndex;// for when player holds no weapons
     // Animation states
     private bool isWalking = false;
     private bool isAiming = false;
@@ -31,34 +32,28 @@ public class PlayerAnimation : MonoBehaviour
         // get the index numbers for the animation layers
         oneHandedLayerIndex = anime.GetLayerIndex("OneHanded");
         twoHandedLayerIndex = anime.GetLayerIndex("TwoHanded");
+        noWeaponLayerIndex = anime.GetLayerIndex("NoWeapon");
     }
 
 
     // Update is called once per frame
     void Update()
     {
-      /*  // temp code to adjust animation speeds
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Time.timeScale = .1f;
-        }
-        // return time scale to normal
-        if (Input.GetKeyDown(KeyCode.M))
-            Time.timeScale = 1;*/
         // keep weapon to hand position
         WeaponPosition();
-        // check if we are walking or idle, will add sprint later
         WalkCheck();
     }
     private void WeaponPosition()
     {
+        if(pMan.currentWeapon == null)
+            return;
         weaponSlot.position = rightHandBone.position;
 
         Vector3 handForward = rightHandBone.up;
         weaponSlot.rotation = Quaternion.LookRotation(handForward);
 
-        
-        if(isAiming || twoHanded)
+        // Move left hand onto support position
+        if(pMan.currentWeapon != null && ( isAiming || twoHanded))
             leftHandTarget.position = pMan.currentWeapon.secondHandHold.position;
 
     }
@@ -86,6 +81,9 @@ public class PlayerAnimation : MonoBehaviour
     }
     public void ToggleAimAnime(bool toggle)
     {
+        if(pMan.currentWeapon == null)
+            return;
+
         if (toggle)
         {
             tbIk.weight = 1;
@@ -127,6 +125,8 @@ public class PlayerAnimation : MonoBehaviour
     }
     public void ToggleIKAim(bool toggle)
     {
+        if(pMan.currentWeapon == null)
+            return;
         if (!toggle)
         {
             if (twoHanded)
@@ -150,6 +150,36 @@ public class PlayerAnimation : MonoBehaviour
             }
         }
     
+    }
+    public void ToggleNoWeapon(bool toggle)
+    {
+        if (toggle)
+        {
+            oneHandedRig.weight = 0;
+            anime.SetLayerWeight(oneHandedLayerIndex, 0);
+
+            twoHandedRig.weight = 0;
+            anime.SetLayerWeight(twoHandedLayerIndex, 0);
+            twoHanded = false;
+
+            tbIk.weight = 0;
+
+            anime.SetLayerWeight(noWeaponLayerIndex, 1);
+        }
+        else
+        {
+            oneHandedRig.weight = 1;
+            anime.SetLayerWeight(oneHandedLayerIndex, 1);
+
+            twoHandedRig.weight = 0;
+            anime.SetLayerWeight(twoHandedLayerIndex, 0);
+            twoHanded = false;
+
+            tbIk.weight = 1;
+
+            anime.SetLayerWeight(noWeaponLayerIndex, 0);
+        }
+       
     }
     public void SetManager(PlayerManager player)
     {

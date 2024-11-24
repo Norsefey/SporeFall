@@ -9,7 +9,7 @@ public class PlayerUI : MonoBehaviour
     private PlayerManager pMan;
     [SerializeField] private BuildGun bGun;
     [Header("Gameplay UI")]
-    [SerializeField] private GameObject gameplayUI;
+    [SerializeField] private GameObject weaponUI;
     public Image weaponIcon;
     public Slider chargeGunSlider;
     //public Sprite weaponSprite;
@@ -172,7 +172,6 @@ public class PlayerUI : MonoBehaviour
     {
         pMan = player;
     }
-
     public void SwitchStructureIcon()
     {
         //selectedStructureIcon.sprite = bGun.selectedStructure.structureSprite;
@@ -211,7 +210,6 @@ public class PlayerUI : MonoBehaviour
             rightStructureIcon.sprite = turretSprite;
         }
     }
-
     public void ToggleChargeGunSlider(bool enable)
     {
         chargeGunSlider.gameObject.SetActive(enable);
@@ -219,5 +217,12 @@ public class PlayerUI : MonoBehaviour
     public void UpdateChargeGunSlider(float value)
     {
         chargeGunSlider.value = value;
+    }
+
+    public void ToggleDefaultUI(bool toggle)
+    {
+        if (toggle && weaponUI.activeSelf)
+            return;// already on return
+        weaponUI.SetActive(toggle);
     }
 }
