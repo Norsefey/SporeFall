@@ -16,6 +16,7 @@ public class PickUpDefaultGun : Interactables
         RemoveAction();
         DestroyIntractable();
         Destroy(gameObject, .5f);
+        Tutorial.Instance.ProgressTutorial();
     }
     // prompting player
     public override void ItemAction()

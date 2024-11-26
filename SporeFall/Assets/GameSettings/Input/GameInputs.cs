@@ -265,6 +265,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ProgressTutorial"",
+                    ""type"": ""Button"",
+                    ""id"": ""06ee54a4-fdcc-4a06-9e04-7fd29ee45d7f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -463,6 +472,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""FlipCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""843f9da2-fc70-4b27-801b-9afa4bd80eb6"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ProgressTutorial"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -984,6 +1004,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_FlipCamera = m_Player.FindAction("FlipCamera", throwIfNotFound: true);
+        m_Player_ProgressTutorial = m_Player.FindAction("ProgressTutorial", throwIfNotFound: true);
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
         m_Shoot_Reload = m_Shoot.FindAction("Reload", throwIfNotFound: true);
@@ -1142,6 +1163,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_FlipCamera;
+    private readonly InputAction m_Player_ProgressTutorial;
     public struct PlayerActions
     {
         private @GameInputs m_Wrapper;
@@ -1153,6 +1175,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @FlipCamera => m_Wrapper.m_Player_FlipCamera;
+        public InputAction @ProgressTutorial => m_Wrapper.m_Player_ProgressTutorial;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1183,6 +1206,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @FlipCamera.started += instance.OnFlipCamera;
             @FlipCamera.performed += instance.OnFlipCamera;
             @FlipCamera.canceled += instance.OnFlipCamera;
+            @ProgressTutorial.started += instance.OnProgressTutorial;
+            @ProgressTutorial.performed += instance.OnProgressTutorial;
+            @ProgressTutorial.canceled += instance.OnProgressTutorial;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1208,6 +1234,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @FlipCamera.started -= instance.OnFlipCamera;
             @FlipCamera.performed -= instance.OnFlipCamera;
             @FlipCamera.canceled -= instance.OnFlipCamera;
+            @ProgressTutorial.started -= instance.OnProgressTutorial;
+            @ProgressTutorial.performed -= instance.OnProgressTutorial;
+            @ProgressTutorial.canceled -= instance.OnProgressTutorial;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1507,6 +1536,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnFlipCamera(InputAction.CallbackContext context);
+        void OnProgressTutorial(InputAction.CallbackContext context);
     }
     public interface IShootActions
     {

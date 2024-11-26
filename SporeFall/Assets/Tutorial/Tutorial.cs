@@ -13,6 +13,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] GameObject bgImage;
     [SerializeField] TMP_Text tutorialText;
     [SerializeField] TMP_Text continueText;
+    [SerializeField] GameObject floorButton;
     private bool keyboardTutorial = false;
     public bool tutorialStarted = false;
     public bool firstCorruptionPickup = false;
@@ -21,21 +22,28 @@ public class Tutorial : MonoBehaviour
     public bool usingKeyboard = false;
     public bool usingGamepad = false;
     private int tutorialPrompt = 0;
+    private bool canProgress = false;
+    public bool clickNeeded = false;
 
     private void Awake()
     {
         Instance = this;
         tutorialPopup.SetActive(true);
         bgImage.SetActive(false);
+        floorButton.SetActive(false);
         tutorialText.text = " ";
         continueText.text = " ";
     }
     // Start is called before the first frame update
     void Start()
     {
-        
-        StartCoroutine(FirstTutorialPopup());
-        
+
+        Debug.Log("Showing first prompt");
+        bgImage.SetActive(true);
+        tutorialText.text = "Left click (keyboard) or Start Button (controller) to lock cursor and start the game";
+        continueText.text = " ";
+        tutorialStarted = true;
+
     }
 
     private void Update()
@@ -60,75 +68,97 @@ public class Tutorial : MonoBehaviour
             }
 
         }
-        
+
+        //tutorialText.text = "Right click to aim" + "\n Left click to shoot" + "\n R to reload";
+        //tutorialText.text = "HP and extra lives are in bottom left" + "\n  Current gun and ammo are in bottom right";
+
         if (keyboardTutorial == true)
         {
-            if (Input.GetKeyDown(KeyCode.C))
+            if (canProgress == true)
             {
                 if (tutorialPrompt == 1)
                 {
-                    tutorialText.text = "Right click to aim" + "\n Left click to shoot" + "\n R to reload";
+                    tutorialText.text = "Pick up your weapon from the table using F";
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
                 }
 
                 if (tutorialPrompt == 2)
                 {
-                    tutorialText.text = "HP and extra lives are in bottom left" + "\n  Current gun and ammo are in bottom right";
+                    tutorialText.text = "This is your default weapon. Your active weapon and its ammo are in the bottom right.";
+                    continueText.text = "(Press C to continue)";
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
+                    clickNeeded = true;
                 }
 
                 if (tutorialPrompt == 3)
                 {
-                    tutorialText.text = "B to toggle Build Mode" + "\n Right click to preview" + "\n Left click to place";
+                    tutorialText.text = "Right click to aim" + "\n Left click to shoot" + "\n R to reload";
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
+                    clickNeeded = true;
                 }
 
                 if (tutorialPrompt == 4)
                 {
-                    tutorialText.text = "Q/E to change structure" + "\n Structures cost Mycelia," + "\n which is dropped by enemies";
+                    tutorialText.text = "Continue to the next room";
+                    continueText.text = " ";
+                    floorButton.SetActive(true);
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
                 }
 
                 if (tutorialPrompt == 5)
                 {
-                    tutorialText.text = "F to toggle Edit Mode" + "\n and look at the structure you want to edit";
+                    tutorialText.text = "Destroy the dummy";
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
                 }
 
                 if (tutorialPrompt == 6)
                 {
-                    tutorialText.text = "Left click to move the structure" + "\n X to destroy the structure" + "\n for a partial refund";
+                    tutorialText.text = "Q/E to change structure" + "\n Structures cost Mycelia," + "\n which is dropped by enemies";
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
                 }
 
                 if (tutorialPrompt == 7)
                 {
-                    tutorialText.text = "When not in Build Mode," + "\n  F to press buttons and pick up weapons dropped by enemies";
+                    tutorialText.text = "F to toggle Edit Mode" + "\n and look at the structure you want to edit";
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
                 }
 
                 if (tutorialPrompt == 8)
                 {
-                    tutorialText.text = "When you are ready to start the next wave," + "\n find and press the button in the middle of the train";
+                    tutorialText.text = "Left click to move the structure" + "\n X to destroy the structure" + "\n for a partial refund";
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
                 }
 
                 if (tutorialPrompt == 9)
                 {
+                    tutorialText.text = "When not in Build Mode," + "\n  F to press buttons and pick up weapons dropped by enemies";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                if (tutorialPrompt == 10)
+                {
+                    tutorialText.text = "When you are ready to start the next wave," + "\n find and press the button in the middle of the train";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                if (tutorialPrompt == 11)
+                {
                     tutorialText.text = "Esc to pause" + "\n Controls can be reviewed any time in pause menu";
                     Debug.Log("Progressing tutorial");
-                    StartCoroutine(Cooldown());
+                    canProgress = false;
                 }
                 
-                if (tutorialPrompt == 10)
+                if (tutorialPrompt == 12)
                 {
                     StartCoroutine(FinalPrompts());
                 }
@@ -149,10 +179,7 @@ public class Tutorial : MonoBehaviour
     {
         Debug.Log("Keyboard tutorial has started");
         tutorialText.text = "WASD to move" + "\n Shift to sprint" + "\n Space to jump";
-        continueText.text = "(Press C to continue)";
         keyboardTutorial = true;
-        tutorialPrompt++;
-        
     }
 
     public void StartGamepadTutorial()
@@ -170,19 +197,17 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(FinalWaveTutorial());
     }
 
-    IEnumerator FirstTutorialPopup()
+    public void ProgressTutorial()
     {
-        Debug.Log("Showing first prompt");
-        yield return new WaitForSeconds(2);
-        bgImage.SetActive(true);
-        tutorialText.text = "Left click/Start Button to lock cursor" + "\n and start the game";
-        continueText.text = " ";
-        tutorialStarted = true;
+        StartCoroutine(NextPrompt());
     }
-    IEnumerator Cooldown()
+
+    IEnumerator NextPrompt()
     {
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(.02f);
         tutorialPrompt++;
+        canProgress = true;
+        clickNeeded = false;
     }
 
     IEnumerator FinalPrompts()

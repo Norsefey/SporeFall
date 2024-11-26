@@ -30,6 +30,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction interactAction;
     private InputAction flipCameraSide;
     private InputAction buildModeAction;
+    private InputAction tutorialAction;
     // Shoot Actions
     private InputAction fireAction;
     private InputAction reloadAction;
@@ -73,6 +74,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         aimAction = playerInputMap.FindAction("Aim");
         interactAction = playerInputMap.FindAction("Interact");
         flipCameraSide = playerInputMap.FindAction("FlipCamera");
+        tutorialAction = playerInputMap.FindAction("ProgressTutorial");
         // shoot action map
         jumpAction = shootInputMap.FindAction("Jump");
         reloadAction = shootInputMap.FindAction("Reload");
@@ -114,6 +116,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame.performed += OnExitGame;
         toggleFullscreen.performed += ToggleFullscreen;
         flipCameraSide.performed += OnFlipCamera;
+        tutorialAction.performed += OnProgressTutorial;
         showStructureRadius.performed += OnToggleShowRadius;
         // shoot actions
         reloadAction.performed += OnReload;
@@ -145,6 +148,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame.performed -= OnExitGame;
         toggleFullscreen.performed -= ToggleFullscreen;
         flipCameraSide.performed -= OnFlipCamera;
+        tutorialAction.performed -= OnProgressTutorial;
         showStructureRadius.performed -= OnToggleShowRadius;
         //shoot actions
         reloadAction.performed -= OnReload;
@@ -420,6 +424,15 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         pMan.pCamera.FlipCameraSide();
     }
+
+    private void OnProgressTutorial(InputAction.CallbackContext context)
+    {
+        if (Tutorial.Instance.clickNeeded == true)
+        {
+            Tutorial.Instance.ProgressTutorial();
+        }
+    }
+
     // building stuff
     private void OnBuildMode(InputAction.CallbackContext context)
     {
