@@ -16,6 +16,7 @@ public class EnemyHP : Damageable
     }
     public override void TakeDamage(float damage)
     {
+        Debug.Log("Base took damage");
         base.TakeDamage(damage);
         manager.CheckDamageThreshold(maxHP - currentHP);
         manager.recentDamage.Enqueue(new BaseEnemy.DamageInstance(damage, Time.time));

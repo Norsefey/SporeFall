@@ -128,19 +128,19 @@ public class Turret : MonoBehaviour
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
     private void TrackTarget()
     {
-        if (!targetEnemy.gameObject.activeSelf)
+        if (!targetEnemy.parent.gameObject.activeSelf)
         {
             hasTarget = false;
             return;
         }
-        Vector3 targetDirection = targetEnemy.position - transform.position;
+        Vector3 targetDirection = targetEnemy.parent.position - transform.position;
         targetDirection.y = 0; // Keep rotation only on Y axis
 
         if (targetDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
+            turretGuns.transform.rotation = Quaternion.Slerp(
+                turretGuns.transform.rotation,
                 targetRotation,
                 rotationSpeed * Time.deltaTime
             );
@@ -224,34 +224,5 @@ public class Turret : MonoBehaviour
             projectile.Initialize(bulletData, pool);
         }
     }
-/*    private void OnGUI()
-    {
-        if (!showDebug) return;
 
-        GUIStyle style = new GUIStyle();
-        style.normal.textColor = canShoot ? Color.green : Color.red;
-        style.fontSize = 14;
-        style.padding = new RectOffset(10, 10, 10, 10);
-
-        GUI.Label(new Rect(10, 10, Screen.width - 20, 30), debugStatus, style);
-    }*/
- /*   private void OnDrawGizmosSelected()
-    {
-        // Draw detection range
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-        // Draw minimum and maximum fire ranges
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, minimumFireRange);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, fireRange);
-
-      *//*  if (showDebug && hasTarget && targetEnemy != null)
-        {
-            // Draw line to target
-            Gizmos.color = canShoot ? Color.green : Color.red;
-            Gizmos.DrawLine(firePoint.position, targetEnemy.position);
-        }*//*
-    }*/
 }
