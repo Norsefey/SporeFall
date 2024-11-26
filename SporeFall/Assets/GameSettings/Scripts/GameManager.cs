@@ -41,19 +41,22 @@ public class GameManager : MonoBehaviour
         player.TogglePControl(false);
         player.TogglePCamera(false);
         player.TogglePVisual(false);
-        player.transform.SetParent(this.transform);
 
         if(trainHandler != null)
         {
+            player.transform.SetParent(trainHandler.transform);
+
+
             player.MovePlayerTo(trainHandler.playerSpawnPoint[player.GetPlayerIndex()].position);
             if (trainHandler.trainState == TrainState.Parked)
             {
-                Invoke(nameof(trainHandler.DisembarkTrain), .5f);
+               trainHandler.DisembarkTrain();
                 Debug.Log("Not Moving Disembarking");
             }
         }
         else
         {
+                    player.transform.SetParent(this.transform);
 
             SpawnPlayer();
         }

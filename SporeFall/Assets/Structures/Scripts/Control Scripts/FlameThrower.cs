@@ -58,6 +58,9 @@ public class FlameThrower : MonoBehaviour
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range, enemyLayer);
         foreach (Collider enemy in enemiesInRange)
         {
+            if(enemy.CompareTag("HeadShot"))
+                 continue;
+
             hasHitEnemies = true;
 
             // Assuming the enemy has a script with a method to take damage

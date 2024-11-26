@@ -159,7 +159,7 @@ public class ChargeGun : Weapon
             VFXPoolingBehavior vfx = pool.Get(hit.point, transform.rotation);
             vfx.Initialize(pool);
 
-            if (hit.collider.CompareTag("Enemy"))
+            if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("HeadShot"))
             {
                 if (hit.transform.TryGetComponent<Damageable>(out var damageable))
                 {
