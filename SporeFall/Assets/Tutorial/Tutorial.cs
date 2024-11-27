@@ -13,7 +13,8 @@ public class Tutorial : MonoBehaviour
     [SerializeField] GameObject bgImage;
     [SerializeField] TMP_Text tutorialText;
     [SerializeField] TMP_Text continueText;
-    [SerializeField] GameObject floorButton;
+    [SerializeField] GameObject floorButton1;
+    [SerializeField] GameObject floorButton2;
     private bool keyboardTutorial = false;
     public bool tutorialStarted = false;
     public bool firstCorruptionPickup = false;
@@ -30,7 +31,8 @@ public class Tutorial : MonoBehaviour
         Instance = this;
         tutorialPopup.SetActive(true);
         bgImage.SetActive(false);
-        floorButton.SetActive(false);
+        floorButton1.SetActive(false);
+        floorButton2.SetActive(false);
         tutorialText.text = " ";
         continueText.text = " ";
     }
@@ -104,7 +106,7 @@ public class Tutorial : MonoBehaviour
                 {
                     tutorialText.text = "Continue to the next room";
                     continueText.text = " ";
-                    floorButton.SetActive(true);
+                    floorButton1.SetActive(true);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -118,7 +120,51 @@ public class Tutorial : MonoBehaviour
 
                 if (tutorialPrompt == 6)
                 {
-                    tutorialText.text = "Q/E to change structure" + "\n Structures cost Mycelia," + "\n which is dropped by enemies";
+                    tutorialText.text = "Enemies will sometimes drop weapons, which you can pick up with F";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                if (tutorialPrompt == 7)
+                {
+                    tutorialText.text = "This weapon can be charged by holding left click." + "\n It is also corrupted...";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                if (tutorialPrompt == 8)
+                {
+                    tutorialText.text = "The bottom left shows your extra lives (blue), HP bar (green), and corruption meter (red)";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                if (tutorialPrompt == 9)
+                {
+                    tutorialText.text = "Holding a corrupted weapon fills the corruption meter over time. To drop a weapon, hold Q";
+                    continueText.text = " ";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                if (tutorialPrompt == 10)
+                {
+                    tutorialText.text = "Your corruption decreases gradually when you aren't holding a corrupted weapon.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                if (tutorialPrompt == 11)
+                {
+                    tutorialText.text = "Continue to the next room";
+                    continueText.text = " ";
+                    floorButton2.SetActive(true);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
