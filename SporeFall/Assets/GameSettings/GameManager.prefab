@@ -573,6 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeBannerPrefab: {fileID: 1120636154265092365, guid: f0401a8590274264f9c006c05b39edb1,
     type: 3}
+  myceliaText: {fileID: 0}
   scrollViewContent: {fileID: 8954401864962996764}
   gameManager: {fileID: 6157649121178500711}
 --- !u!1 &2870780505427520185
@@ -1793,10 +1794,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51493de691057a546acfaf0dc0934e8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WaveManager: {fileID: 0}
-  TrainHandler: {fileID: 0}
-  UpgradeManager: {fileID: 7014688283519553976}
-  GameUIManager: {fileID: 4323958132541929440}
+  waveManager: {fileID: 0}
+  trainHandler: {fileID: 0}
+  upgradeManager: {fileID: 0}
+  gameUIManager: {fileID: 0}
+  players: []
+  pauseMenu: {fileID: 0}
+  paused: 0
+  backUpPlayerSpawner: {fileID: 0}
 --- !u!1001 &2854881260335643292
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2058,6 +2063,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5987931271889222927, guid: 9ebd08380afc6294fb9061d26479a04b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 5987931271889222927, guid: 9ebd08380afc6294fb9061d26479a04b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 6513525066859591843, guid: 9ebd08380afc6294fb9061d26479a04b,
         type: 3}

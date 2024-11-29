@@ -6,6 +6,9 @@ using UnityEngine.Windows;
 
 public class WaveButton : Interactables
 {
+
+    private int buttonPress = 0;
+
     public override void ItemAction()
     {
         switch (GameManager.Instance.waveManager.wavePhase)
@@ -24,6 +27,12 @@ public class WaveButton : Interactables
         switch (GameManager.Instance.waveManager.wavePhase)
         {
             case WaveManager.WavePhase.NotStarted:
+                buttonPress++;
+                if (buttonPress == 1)
+                {
+                    Tutorial.Instance.tutorialPrompt = 5;
+                    Tutorial.Instance.ProgressTutorial();
+                }
                 GameManager.Instance.waveManager.OnStartWave();
                 player.pUI.DisablePrompt();
                 break;

@@ -41,7 +41,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Transform fallbackSpawnPoint;
 
     public bool holdingCorruption = false;
-    private int corruptionPickupCount = 0;
     public InputDevice myDevice;
     private void Awake()
     {
@@ -188,11 +187,6 @@ public class PlayerManager : MonoBehaviour
         if (currentWeapon.isCorrupted)
         {
             holdingCorruption = true;
-            corruptionPickupCount++;
-            if (corruptionPickupCount == 1)
-            {
-                Tutorial.Instance.firstCorruptionPickup = true;
-            }
         }
         pUI.ToggleDefaultUI(true);
     }
@@ -246,7 +240,7 @@ public class PlayerManager : MonoBehaviour
             currentWeapon = bGun;
             pUI.buildUI.SetActive(true);
             
-            pUI.EnableControls("<color=red>Build Mode</color> \n Q/E to change Structure \n Hold Right mouse to Preview" + "\n F to Select Placed Structure");
+            pUI.EnableControls("<color=red>Build Mode</color> \n Mousewheel to change Structure \n Hold Right mouse to Preview" + "\n F to Select Placed Structure");
             pUI.AmmoDisplay(currentWeapon);
             pUI.SwitchWeaponIcon();
             pAnime.ToggleTwoHanded(false);

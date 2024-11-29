@@ -520,7 +520,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         {
             buildGun.ExitEditMode();
            
-            pMan.pUI.EnableControls("<color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+            pMan.pUI.EnableControls("<color=red>Build Mode</color> \n Mousewheel to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
             editInputMap.Disable();
             placementInputMap.Enable();
         }
