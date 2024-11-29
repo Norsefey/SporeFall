@@ -18,12 +18,11 @@ public class Tutorial : MonoBehaviour
     [SerializeField] GameObject floorButton1;
     [SerializeField] GameObject floorButton2;
 
-    [Header("Variables")]
+    [Header("Main Variables")]
     private bool keyboardTutorial = false;
     //private bool gamepadTutorial = false;
     private bool mainLevelTutorial = false;
     public bool tutorialStarted = false;
-    //public bool firstCorruptionPickup = false;
     public bool playerActive = false;
     public bool usingKeyboard = false;
     public bool usingGamepad = false;
@@ -75,17 +74,17 @@ public class Tutorial : MonoBehaviour
             {
                 Debug.Log("Player is active and tutorial has started");
 
-                if (usingGamepad == true)
-                {
-                    Debug.Log("Starting gamepad tutorial");
-                    StartGamepadTutorial();
-                    tutorialStarted = false;
-                }
-
                 if (usingKeyboard == true)
                 {
                     Debug.Log("Starting keyboard tutorial");
                     StartKeyboardTutorial();
+                    tutorialStarted = false;
+                }
+
+                else if (usingGamepad == true)
+                {
+                    Debug.Log("Starting gamepad tutorial");
+                    StartGamepadTutorial();
                     tutorialStarted = false;
                 }
             }
@@ -265,7 +264,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                if (tutorialPrompt == 1)
+                else if (tutorialPrompt == 1)
                 {
                     tutorialText.text = "...but we need to reach that source, first. You must escort the train and defend if with your life.";
                     continueText.text = "(Press C to continue)";
@@ -274,7 +273,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                if (tutorialPrompt == 2)
+                else if (tutorialPrompt == 2)
                 {
                     tutorialText.text = "Those giant red pods across from you are where they'll come from. There are more pods ahead.";
                     continueText.text = "(Press C to continue)";
@@ -283,7 +282,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                if (tutorialPrompt == 3)
+                else if (tutorialPrompt == 3)
                 {
                     tutorialText.text = "The bar at the top shows you how many enemies and pods you have left to destroy.";
                     continueText.text = "(Press C to continue)";
@@ -292,7 +291,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                if (tutorialPrompt == 4)
+                else if (tutorialPrompt == 4)
                 {
                     tutorialText.text = "Set up your defenses. They'll move with the train (and be refunded if they overlap with anything).";
                     continueText.text = "(Press C to continue)";
@@ -301,7 +300,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                if (tutorialPrompt == 5)
+                else if (tutorialPrompt == 5)
                 {
                     tutorialText.text = "When you're ready, press the Main Button to lure your enemies out of hiding.";
                     continueText.text = " ";
@@ -309,15 +308,54 @@ public class Tutorial : MonoBehaviour
                     canProgress = false;
                 }
 
-                if (tutorialPrompt == 6)
+                else if (tutorialPrompt == 6)
                 {
                     canProgress = false;
                     StartCoroutine(FinalPrompts());
+                }
+
+                else if (tutorialPrompt == 7)
+                {
+                    tutorialText.text = "You can also hit the Main Button to go early.";
+                    continueText.text = "(Press C to close)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 8)
+                {
+                    canProgress = false;
+                    tutorialPopup.SetActive(false);
+                }
+
+                else if (tutorialPrompt == 9)
+                {
+                    canProgress = false;
+                    tutorialPopup.SetActive(false);
+                }
+
+                else if (tutorialPrompt == 10)
+                {
+                    canProgress = false;
+                    tutorialPopup.SetActive(false);
+                    mainLevelTutorial = false;
                 }
             }
         }
         #endregion
 
+    }
+
+    IEnumerator InitialCooldown()
+    {
+        yield return new WaitForSeconds(2);
+        Debug.Log("Showing first prompt");
+        tutorialPopup.SetActive(true);
+        bgImage.SetActive(true);
+        tutorialText.text = "Left click (keyboard) or Start Button (controller) to lock cursor and start the game";
+        continueText.text = " ";
+        tutorialStarted = true;
     }
 
     public void StartKeyboardTutorial()
@@ -337,26 +375,35 @@ public class Tutorial : MonoBehaviour
         StartCoroutine(TempGamepadTutorial());
     }
 
+    public void StartBetweenWaveTutorial()
+    {
+        tutorialPopup.SetActive(true);
+        tutorialText.text = "The train will move to the next area shortly, picking up any uncollected Mycelia.";
+        continueText.text = "(Press C to continue)";
+        clickNeeded = true;
+    }
+
     public void StartFinalWaveTutorial()
     {
-        StartCoroutine(FinalWaveTutorial());
+        tutorialPopup.SetActive(true);
+        tutorialText.text = "This is it! Defeat the boss so we can deploy our payload and stop them for good.";
+        continueText.text = "(Press C to close)";
+        clickNeeded = true;
+    }
+
+    public void StartPayloadTutorial()
+    {
+        tutorialPopup.SetActive(true);
+        tutorialText.text = "Payload deployed. Leave the train be, focus on defending the payload!";
+        continueText.text = "(Press C to close)";
+        clickNeeded = true;
     }
 
     public void ProgressTutorial()
     {
         StartCoroutine(NextPrompt());
     }
-
-    IEnumerator InitialCooldown()
-    {
-        yield return new WaitForSeconds(2);
-        Debug.Log("Showing first prompt");
-        tutorialPopup.SetActive(true);
-        bgImage.SetActive(true);
-        tutorialText.text = "Left click (keyboard) or Start Button (controller) to lock cursor and start the game";
-        continueText.text = " ";
-        tutorialStarted = true;
-    }
+    
     IEnumerator NextPrompt()
     {
         yield return new WaitForSeconds(.02f);
@@ -399,14 +446,4 @@ public class Tutorial : MonoBehaviour
         tutorialPopup.SetActive(false);
     }
 
-    IEnumerator FinalWaveTutorial()
-    {
-        tutorialPopup.SetActive(true);
-        tutorialText.text = "This is the final wave!" + "\n Defeat the boss, and a payload will spawn";
-        continueText.text = " ";
-        yield return new WaitForSeconds(7);
-        tutorialText.text = "Don't worry about the train, protect the payload and escort it to its destination";
-        yield return new WaitForSeconds(7);
-        tutorialPopup.SetActive(false);
-    }
 }

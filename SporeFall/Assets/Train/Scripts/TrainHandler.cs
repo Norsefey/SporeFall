@@ -98,6 +98,7 @@ public class TrainHandler : MonoBehaviour
         Payload = Instantiate(payloadPrefab, payloadSpawnPos).GetComponentInChildren<Payload>();
         UI.gameObject.SetActive(false);
         Payload.StartMoving(path);
+        Tutorial.Instance.StartPayloadTutorial();
     }
     private void ToggleStructures(bool toggle)
     {

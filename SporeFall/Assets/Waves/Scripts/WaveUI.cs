@@ -172,6 +172,10 @@ public class WaveUI : MonoBehaviour
         if (waveManager.currentWaveIndex <= 2)
         {
             waveText.text = "Wave " + (waveManager.currentWaveIndex + 1) + " Clear";
+            if (waveManager.currentWaveIndex == 0)
+            {
+                Tutorial.Instance.StartBetweenWaveTutorial();
+            }
         }
         StartCoroutine(WaveTextCooldown());
     }
