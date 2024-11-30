@@ -436,6 +436,9 @@ public class PlayerInputOrganizer : MonoBehaviour
     // building stuff
     private void OnBuildMode(InputAction.CallbackContext context)
     {
+        if (pMan.currentWeapon == null)
+            return;
+
         if (!pMan.isBuilding)
         {
             // if player is holding fire, prevent press from carrying over

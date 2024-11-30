@@ -50,25 +50,25 @@ public class PlayerManager : MonoBehaviour
         SetDeviceSettings();
         if(Tutorial.Instance != null)
             Tutorial.Instance.playerActive = true;
-        Debug.Log("Player is awake");
     }
     private void Start()
     {
         if(GameManager.Instance != null)
             GameManager.Instance.HandlePlayerJoining(this);
-        /*if(GameManager.Instance != null && GameManager.Instance.TrainHandler != null)
-            GameManager.Instance.TrainHandler.AddPlayer(this);*/
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         if(currentWeapon == null)
         {
+            Debug.Log("No Weapon");
             pAnime.ToggleNoWeapon(true);
             pUI.ToggleDefaultUI(false);
         }
         else
         {
+            Debug.Log("Yes Weapon");
+
             pUI.AmmoDisplay(currentWeapon);
         }
         pInput.AssignAllActions();
@@ -118,11 +118,6 @@ public class PlayerManager : MonoBehaviour
             if (currentWeapon is BuildGun bGun)
             {
                 pUI.DisplayMycelia(mycelia);
-           /*     if (bGun.isEditing)
-                {
-                    if (bGun.SelectStructure())
-                        bGun.RotateStructure();
-                }*/
             }
 
             if (isFiring && !currentWeapon.IsReloading && currentWeapon is not ChargeGun)

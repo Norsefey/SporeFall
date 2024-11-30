@@ -17,7 +17,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] TMP_Text continueText;
     [SerializeField] GameObject floorButton1;
     [SerializeField] GameObject floorButton2;
-
+    [SerializeField] GameObject dummyEnemy;
     [Header("Main Variables")]
     private bool keyboardTutorial = false;
     //private bool gamepadTutorial = false;

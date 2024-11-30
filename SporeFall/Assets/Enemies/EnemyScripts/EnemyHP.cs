@@ -18,13 +18,19 @@ public class EnemyHP : Damageable
     {
         Debug.Log("Base took damage");
         base.TakeDamage(damage);
-        manager.CheckDamageThreshold(maxHP - currentHP);
-        manager.recentDamage.Enqueue(new BaseEnemy.DamageInstance(damage, Time.time));
+        if (manager != null)
+        {
+            manager.CheckDamageThreshold(maxHP - currentHP);
+            manager.recentDamage.Enqueue(new BaseEnemy.DamageInstance(damage, Time.time));
+        }
     }
     protected override void Die()
     {
         // call death on enemy
-        manager.Die();
+        if (manager != null)
+            manager.Die();
+        else
+            Destroy(transform.parent.gameObject);
     }
     protected override void UpdateUI()
     {

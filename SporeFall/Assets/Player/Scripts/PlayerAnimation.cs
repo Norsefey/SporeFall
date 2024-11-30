@@ -10,11 +10,10 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] private Animator anime;
     [SerializeField] private Transform weaponSlot; // holds weapon
     [SerializeField] private Transform rightHandBone;// where the weapon slot will move to, to avoid having to dig for it in hierarchy
-
+    [SerializeField] private GameObject aimTarget;
     [Header("Left Hand")]
     [SerializeField] private TwoBoneIKConstraint tbIk; // add or remove weight to constraint to enable or disable it
     [SerializeField] private Transform leftHandTarget;// the IK target, will move to weapon hold slot
-
 
     [Header("Rigs")]// IK rigs for Aiming
     [SerializeField] private Rig oneHandedRig;
@@ -153,27 +152,37 @@ public class PlayerAnimation : MonoBehaviour
     }
     public void ToggleNoWeapon(bool toggle)
     {
+        Debug.Log($"ToggleNoWeapon called with toggle: {toggle}");
+        Debug.Log($"Current layer weights before toggle:");
+        Debug.Log($"One-Handed Layer Weight: {anime.GetLayerWeight(oneHandedLayerIndex)}");
+        Debug.Log($"Two-Handed Layer Weight: {anime.GetLayerWeight(twoHandedLayerIndex)}");
+        Debug.Log($"No Weapon Layer Weight: {anime.GetLayerWeight(noWeaponLayerIndex)}");
         if (toggle)
         {
+            Debug.Log("Setting No Weapon Animations");
+            anime.SetBool("NoWeapon", true);
             oneHandedRig.weight = 0;
             anime.SetLayerWeight(oneHandedLayerIndex, 0);
 
             twoHandedRig.weight = 0;
             anime.SetLayerWeight(twoHandedLayerIndex, 0);
             twoHanded = false;
-
+            aimTarget.SetActive(false);
             tbIk.weight = 0;
 
             anime.SetLayerWeight(noWeaponLayerIndex, 1);
         }
         else
         {
+            anime.SetBool("NoWeapon", false);
+
             oneHandedRig.weight = 1;
             anime.SetLayerWeight(oneHandedLayerIndex, 1);
 
             twoHandedRig.weight = 0;
             anime.SetLayerWeight(twoHandedLayerIndex, 0);
             twoHanded = false;
+            aimTarget.SetActive(true);
 
             tbIk.weight = 1;
 
