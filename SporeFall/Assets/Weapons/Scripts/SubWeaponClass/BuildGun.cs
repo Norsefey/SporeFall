@@ -51,11 +51,15 @@ public class BuildGun : Weapon
         if (isEditing)
         {
             movingStructure = true;
+            PreviewStructure();
         }
     }
     private void Update()
     {
-        PreviewStructure();
+        if (!isEditing)
+            PreviewStructure();
+        else
+            SelectStructure();
     }
     public void OnFireReleased()
     {
@@ -64,7 +68,7 @@ public class BuildGun : Weapon
             movingStructure = false;
 
             // If placement is invalid, return to original position
-            if (!isValidPlacement)
+            if (!isValidPlacement && selectedStructure != null)
             {
                 selectedStructure.transform.position = originalPosition;
                 selectedStructure.transform.rotation = originalRotation;
@@ -123,7 +127,7 @@ public class BuildGun : Weapon
             }
             else if (selectedStructure != null)
             {// allow player to move
-                // Only check for overlaps if we're in edit mode and moving
+                // Only check for overlaps when we're in edit mode and moving, or just previewing
                 if (isEditing && movingStructure || !isEditing)
                 {
                     selectedStructure.transform.position = hit.point;
@@ -404,6 +408,7 @@ public class BuildGun : Weapon
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer) && !movingStructure)
         {// we are looking at a structure select it and deactivate it to edit it
+            Debug.Log(hit.collider.name);
             if (selectedStructure == null)// to prevent assigning the same structure
             {
                 selectedStructure = hit.collider.transform.parent.GetComponent<Structure>();

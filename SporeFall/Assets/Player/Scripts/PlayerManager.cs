@@ -59,18 +59,6 @@ public class PlayerManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        if(currentWeapon == null)
-        {
-            Debug.Log("No Weapon");
-            pAnime.ToggleNoWeapon(true);
-            pUI.ToggleDefaultUI(false);
-        }
-        else
-        {
-            Debug.Log("Yes Weapon");
-
-            pUI.AmmoDisplay(currentWeapon);
-        }
         pInput.AssignAllActions();
 
     }
@@ -174,9 +162,9 @@ public class PlayerManager : MonoBehaviour
 
         // Animation switch depending on weapon type
         if(currentWeapon.isTwoHanded)
-            pAnime.ToggleTwoHanded(true);
+            pAnime.SetWeaponHoldAnimation(2);
         else
-            pAnime.ToggleTwoHanded(false);
+            pAnime.SetWeaponHoldAnimation(1);
 
         // if weapon is corrupted start corruption increase
         if (currentWeapon.isCorrupted)
@@ -209,13 +197,13 @@ public class PlayerManager : MonoBehaviour
         holdingCorruption = false;
         pUI.AmmoDisplay(currentWeapon);
         pUI.SwitchWeaponIcon();
-        pAnime.ToggleTwoHanded(false);
+        pAnime.SetWeaponHoldAnimation(1);
     }
     public void EquipDefaultGun()
     {
         currentWeapon = defaultWeapon;
         currentWeapon.gameObject.SetActive(true);
-        pAnime.ToggleNoWeapon(false);
+        pAnime.SetWeaponHoldAnimation(1);
         pUI.ToggleDefaultUI(true);
 
     }
@@ -238,7 +226,7 @@ public class PlayerManager : MonoBehaviour
             pUI.EnableControls("<color=red>Build Mode</color> \n Mousewheel to change Structure \n Hold Right mouse to Preview" + "\n F to Select Placed Structure");
             pUI.AmmoDisplay(currentWeapon);
             pUI.SwitchWeaponIcon();
-            pAnime.ToggleTwoHanded(false);
+            pAnime.SetWeaponHoldAnimation(1);
             isBuilding = true;
         }
         else
@@ -271,9 +259,9 @@ public class PlayerManager : MonoBehaviour
             pUI.SwitchWeaponIcon();
 
             if (currentWeapon.isTwoHanded)
-                pAnime.ToggleTwoHanded(true);
+                pAnime.SetWeaponHoldAnimation(2);
             else
-                pAnime.ToggleTwoHanded(false);
+                pAnime.SetWeaponHoldAnimation(1);
         }
     }
     public void TogglePControl(bool toggle)
