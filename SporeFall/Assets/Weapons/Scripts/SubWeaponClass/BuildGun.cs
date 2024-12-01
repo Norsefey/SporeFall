@@ -156,9 +156,9 @@ public class BuildGun : Weapon
             return;
         }
         // some test scenes do not have a train to reference off of, so check if a train is valid to do an energy check
-        if (GameManager.Instance.trainHandler != null)
+        if (GameManager.Instance.trainHandler != null && selectedStructure != null)
         {
-            if (selectedStructure != null && GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
+            if (GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
             {
                 player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
                 selectedStructure.Initialize();
@@ -173,7 +173,7 @@ public class BuildGun : Weapon
                 // show build controls
                 player.pUI.EnableControls(buildModeText);
             }
-            else
+            else if(selectedStructure != null)
             {
                 // tell player why placement failed, either not enough money, or too many active structure
                 if (selectedStructure.GetCurrentMyceliaCost() > player.Mycelia)
@@ -188,7 +188,7 @@ public class BuildGun : Weapon
         }
         else
         {
-            // mostly for testing, cost and placement of structures, should not be used in final build
+            // mostly for testing the cost and placement of structures
             if (selectedStructure != null && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
             {
                 player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
