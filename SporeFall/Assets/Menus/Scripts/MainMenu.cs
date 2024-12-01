@@ -6,12 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    //Script that controls various buttons and screens on main menu
+    //Script that controls various buttons and screens on main menu and allows player to fullscreen
 
+    [Header("Game Objects")]
     [SerializeField] GameObject titleScreen;
     [SerializeField] GameObject mainScreen;
     [SerializeField] GameObject levelSelectScreen;
+    [SerializeField] GameObject tutorialQuestionScreen;
+
+    [Header("Level Names")]
+    [SerializeField] string tutorialName;
     [SerializeField] string level1Name;
+    //[SerializeField] string level2Name;
+    //[SerializeField] string level3Name;
 
     void Start()
     {
@@ -43,10 +50,21 @@ public class MainMenu : MonoBehaviour
         titleScreen.SetActive(false);
     }
 
+    public void TutorialQuestion()
+    {
+        tutorialQuestionScreen.SetActive(true);
+        mainScreen.SetActive(false);
+    }
+
     public void LevelSelect()
     {
         levelSelectScreen.SetActive(true);
-        mainScreen.SetActive(false);
+        tutorialQuestionScreen.SetActive(false);
+    }
+
+    public void StartTutorial()
+    {
+        SceneManager.LoadScene(tutorialName);
     }
 
     public void StartLevel1()
