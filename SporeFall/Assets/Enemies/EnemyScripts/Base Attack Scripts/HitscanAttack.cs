@@ -22,18 +22,26 @@ public class HitscanAttack : RangedAttack
         [SerializeField] private float beamDuration = 0.1f;
 
 
-    public override IEnumerator ExecuteAttack(BaseEnemy boss, Transform target)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
     {
-        boss.SetIsAttacking(true);
-        if (boss.Animator != null)
-            boss.Animator.SetTrigger(animationTrigger);
-        SpawnVFX(boss.firePoint.position, boss.transform.rotation);
+        enemy.SetIsAttacking(true);
+        if (enemy.Animator != null)
+            enemy.Animator.SetTrigger(animationTrigger);
+        SpawnVFX(enemy.firePoint.position, enemy.transform.rotation);
+
+        Coroutine trackingCoroutine = enemy.StartCoroutine(TrackTarget(enemy, target));
 
         yield return new WaitForSeconds(attackDelay);
 
+        // Stop tracking once the delay is complete
+        if (trackingCoroutine != null)
+        {
+            enemy.StopCoroutine(trackingCoroutine);
+        }
+
         if (target != null)
         {
-            Vector3 attackOrigin = boss.firePoint.position;
+            Vector3 attackOrigin = enemy.firePoint.position;
             Vector3 targetPosition = GetPredictedTargetPosition(target, attackOrigin);
             Vector3 baseDirection = (targetPosition - attackOrigin).normalized;
             yield return new WaitForSeconds(.05f);
@@ -52,20 +60,20 @@ public class HitscanAttack : RangedAttack
 
                 if (penetratingShot)
                 {
-                    FirePenetratingRay(attackOrigin, direction, boss);
+                    FirePenetratingRay(attackOrigin, direction, enemy);
                 }
                 else
                 {
-                    FireSingleRay(attackOrigin, direction, boss);
+                    FireSingleRay(attackOrigin, direction, enemy);
                 }
             }
         }
 
-        PlaySFX(boss.AudioSource);
+        PlaySFX(enemy.AudioSource);
         StartCooldown();
 
         yield return new WaitForSeconds(recoveryTime);
-        boss.SetIsAttacking(false);
+        enemy.SetIsAttacking(false);
     }
     private void FireSingleRay(Vector3 origin, Vector3 direction, BaseEnemy boss)
     {
@@ -85,7 +93,6 @@ public class HitscanAttack : RangedAttack
             SpawnBeamEffect(origin, origin + direction * range);
         }
     }
-
     private void FirePenetratingRay(Vector3 origin, Vector3 direction, BaseEnemy boss)
     {
         RaycastHit[] hits = Physics.RaycastAll(origin, direction, range, targetLayers)
@@ -124,6 +131,20 @@ public class HitscanAttack : RangedAttack
                 lineRenderer.SetPosition(1, end);
                 Destroy(beam, beamDuration);
             }
+        }
+    }
+
+    // track the target during attack charge-up
+    private IEnumerator TrackTarget(BaseEnemy enemy, Transform target)
+    {
+        while (target != null)
+        {
+            // Smoothly rotate to face the target
+            Vector3 directionToTarget = (target.position - enemy.transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
+            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, lookRotation, Time.deltaTime * 5f);
+
+            yield return null;
         }
     }
 }

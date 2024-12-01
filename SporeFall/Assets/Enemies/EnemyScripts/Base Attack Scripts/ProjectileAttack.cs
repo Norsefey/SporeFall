@@ -94,7 +94,7 @@ public class ProjectileAttack : RangedAttack
         enemy.SetIsAttacking(false);
     }
 
-    // New method to track the target during attack charge-up
+    // track the target during attack charge-up
     private IEnumerator TrackTarget(BaseEnemy enemy, Transform target)
     {
         while (target != null)
