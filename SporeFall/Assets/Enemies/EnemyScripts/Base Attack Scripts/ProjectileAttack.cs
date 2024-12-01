@@ -26,7 +26,15 @@ public class ProjectileAttack : RangedAttack
         if(enemy.Animator != null)
             enemy.Animator.SetTrigger(animationTrigger);
 
+        Coroutine trackingCoroutine = enemy.StartCoroutine(TrackTarget(enemy, target));
+
         yield return new WaitForSeconds(attackDelay);
+
+        // Stop tracking once the delay is complete
+        if (trackingCoroutine != null)
+        {
+            enemy.StopCoroutine(trackingCoroutine);
+        }
 
         if (target != null)
         {
@@ -84,6 +92,20 @@ public class ProjectileAttack : RangedAttack
 
         yield return new WaitForSeconds(recoveryTime);
         enemy.SetIsAttacking(false);
+    }
+
+    // New method to track the target during attack charge-up
+    private IEnumerator TrackTarget(BaseEnemy enemy, Transform target)
+    {
+        while (target != null)
+        {
+            // Smoothly rotate to face the target
+            Vector3 directionToTarget = (target.position - enemy.transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
+            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, lookRotation, Time.deltaTime * 5f);
+
+            yield return null;
+        }
     }
 }
 

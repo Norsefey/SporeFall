@@ -9,7 +9,7 @@ public class ExplosiveAttack : Attack
     [SerializeField] private float explosionRadius = 10f;
     [SerializeField] private LayerMask damageableLayers;
     [SerializeField] private AnimationCurve damageFalloff = AnimationCurve.Linear(0f, 1f, 1f, 0f);
-    [SerializeField] private bool destroyEnemyOnExplode = true;
+    [SerializeField] private bool destroySelfOnExplode = true;
 
     /*[Header("Additional Effects")]
     [SerializeField] private float explosionForce = 1000f;
@@ -46,6 +46,7 @@ public class ExplosiveAttack : Attack
             Damageable damageable = hit.GetComponent<Damageable>();
             if (damageable != null)
             {
+                if(hit.CompareTag("structure"))
                 damageable.TakeDamage(damage * damageMultiplier);
             }
 
@@ -60,7 +61,7 @@ public class ExplosiveAttack : Attack
         // Wait for recovery time
         yield return new WaitForSeconds(recoveryTime);
 
-        if (destroyEnemyOnExplode)
+        if (destroySelfOnExplode)
         {
             enemy.Die();
         }
