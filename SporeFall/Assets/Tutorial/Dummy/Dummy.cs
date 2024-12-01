@@ -25,6 +25,7 @@ public class Dummy : Damageable
         // what happens upon death
         nextButton.SetActive(true);
         weaponPickUp.SetActive(true);
+        Tutorial.Instance.ProgressTutorial();
         Destroy(transform.parent.gameObject);
     }
     protected override void UpdateUI()

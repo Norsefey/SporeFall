@@ -18,7 +18,9 @@ public class Tutorial : MonoBehaviour
     [SerializeField] GameObject floorButton1;
     [SerializeField] GameObject floorButton2;
     [SerializeField] GameObject dummyEnemy;
+
     [Header("Main Variables")]
+    public int tutorialPrompt = 0;
     private bool keyboardTutorial = false;
     //private bool gamepadTutorial = false;
     private bool mainLevelTutorial = false;
@@ -26,7 +28,6 @@ public class Tutorial : MonoBehaviour
     public bool playerActive = false;
     public bool usingKeyboard = false;
     public bool usingGamepad = false;
-    public int tutorialPrompt = 0;
     private bool canProgress = false;
     public bool clickNeeded = false;
     [SerializeField] string currentScene;
