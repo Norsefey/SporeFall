@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PickUpWeapon : Interactables
 {
@@ -19,6 +20,7 @@ public class PickUpWeapon : Interactables
     [SerializeField] private AudioClip pickupSound;
     [Range(0f, 1f)][SerializeField] private float pickupVolume = 0.5f;
 
+    private int pickupCount = 0;
     private AudioSource audioSource;
     private float despawnTimer;
     private bool isBlinking;
@@ -107,6 +109,15 @@ public class PickUpWeapon : Interactables
 
         player.PickUpWeapon();
         RemoveAction();
+
+        if (pickupCount < 1)
+        {
+            pickupCount++;
+            if (Tutorial.Instance.currentScene == "Tutorial")
+            {
+                Tutorial.Instance.DestroyDoor(2);
+            }
+        }
 
         if (pickupSound != null && audioSource != null)
         {

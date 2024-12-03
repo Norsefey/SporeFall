@@ -8,8 +8,9 @@ public class Dummy : Damageable
     // Health properties
     [SerializeField] private TMP_Text hpDisplay;
     [Tooltip("Thing Used to go to progress tutorial")]
-    [SerializeField] private GameObject nextButton;
+    //[SerializeField] private GameObject nextButton;
     [SerializeField] private GameObject weaponPickUp;
+
     private void Start()
     {
         currentHP = maxHP;
@@ -23,9 +24,13 @@ public class Dummy : Damageable
     protected override void Die()
     {
         // what happens upon death
-        nextButton.SetActive(true);
-        weaponPickUp.SetActive(true);
+        //nextButton.SetActive(true);
+        if (Tutorial.Instance.tutorialPrompt == 5)
+        {
+            weaponPickUp.SetActive(true);
+        }
         Tutorial.Instance.ProgressTutorial();
+        Debug.Log("Dying Now");
         Destroy(transform.parent.gameObject);
     }
     protected override void UpdateUI()

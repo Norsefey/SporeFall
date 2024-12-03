@@ -188,6 +188,10 @@ public class PlayerManager : MonoBehaviour
                 pUI.ToggleChargeGunSlider(false);
             }
             Destroy(currentWeapon.gameObject); // Drop the current weapon
+            if (Tutorial.Instance.currentScene == "Tutorial")
+            {
+                Tutorial.Instance.ProgressTutorial();
+            }
         }
 
         currentWeapon = defaultWeapon;

@@ -5,8 +5,8 @@ using UnityEngine;
 public class OpenDoor : MonoBehaviour
 {
     // Opens doors as player progresses through tutorial
-    [SerializeField] GameObject door;
     private bool canProgress = true;
+    [SerializeField] int doorNumber;
 
     // Start is called before the first frame update
     void Start()
@@ -22,10 +22,9 @@ public class OpenDoor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(door);
         if (canProgress == true)
         {
-            Tutorial.Instance.ProgressTutorial();
+            Tutorial.Instance.DestroyDoor(doorNumber);
             canProgress = false;
         }
     }

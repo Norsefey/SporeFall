@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using JetBrains.Annotations;
 
 public class Tutorial : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class Tutorial : MonoBehaviour
     [SerializeField] GameObject floorButton1;
     [SerializeField] GameObject floorButton2;
     [SerializeField] GameObject dummyEnemy;
+    public GameObject[] door;
 
     [Header("Main Variables")]
     public int tutorialPrompt = 0;
@@ -30,7 +32,7 @@ public class Tutorial : MonoBehaviour
     public bool usingGamepad = false;
     private bool canProgress = false;
     public bool clickNeeded = false;
-    [SerializeField] string currentScene;
+    public string currentScene;
 
     private void Awake()
     {
@@ -138,9 +140,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 4)
                 {
-                    tutorialText.text = "Continue to the next room";
-                    continueText.text = " ";
-                    floorButton1.SetActive(true);
+                    DestroyDoor(1);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -148,6 +148,8 @@ public class Tutorial : MonoBehaviour
                 else if (tutorialPrompt == 5)
                 {
                     tutorialText.text = "Destroy the dummy";
+                    continueText.text = " ";
+                    
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -161,16 +163,14 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 7)
                 {
-                    tutorialText.text = "Some weapons, like this one, can be charged by holding left click." + "\n It is also corrupted...";
-                    continueText.text = "(Press C to continue)";
+                    tutorialText.text = "Some weapons, like this one, can be charged by holding left click." + "\n Try charging it now.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
-                    clickNeeded = true;
                 }
 
                 else if (tutorialPrompt == 8)
                 {
-                    tutorialText.text = "Corrupted weapons are powerful, but fill your corruption meter over time as you hold them";
+                    tutorialText.text = "Weapons dropped by enemies, like this one, are what we call 'corrupted'.";
                     continueText.text = "(Press C to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
@@ -178,6 +178,15 @@ public class Tutorial : MonoBehaviour
                 }
 
                 else if (tutorialPrompt == 9)
+                {
+                    tutorialText.text = "Corrupted weapons are powerful, but fill your corruption meter over time as you hold them.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 10)
                 {
                     tutorialText.text = "The bottom left shows your extra lives (blue), HP bar (green), and corruption meter (red)";
                     continueText.text = "(Press C to continue)";
@@ -186,7 +195,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                else if (tutorialPrompt == 10)
+                else if (tutorialPrompt == 11)
                 {
                     tutorialText.text = "Something bad might happen if your corruption maxes out..." + "\n To drop a weapon, hold Q";
                     continueText.text = " ";
@@ -194,7 +203,7 @@ public class Tutorial : MonoBehaviour
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 11)
+                else if (tutorialPrompt == 12)
                 {
                     tutorialText.text = "Your corruption decreases gradually when you aren't holding a corrupted weapon.";
                     continueText.text = "(Press C to continue)";
@@ -203,7 +212,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                else if (tutorialPrompt == 12)
+                else if (tutorialPrompt == 13)
                 {
                     tutorialText.text = "Continue to the next room";
                     continueText.text = " ";
@@ -212,42 +221,42 @@ public class Tutorial : MonoBehaviour
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 7)
+                else if (tutorialPrompt == 22)
                 {
                     tutorialText.text = "F to toggle Edit Mode" + "\n and look at the structure you want to edit";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 8)
+                else if (tutorialPrompt == 22)
                 {
                     tutorialText.text = "Left click to move the structure" + "\n X to destroy the structure" + "\n for a partial refund";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 9)
+                else if (tutorialPrompt == 22)
                 {
                     tutorialText.text = "When not in Build Mode," + "\n  F to press buttons and pick up weapons dropped by enemies";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 10)
+                else if (tutorialPrompt == 22)
                 {
                     tutorialText.text = "When you are ready to start the next wave," + "\n find and press the button in the middle of the train";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 11)
+                else if (tutorialPrompt == 22)
                 {
                     tutorialText.text = "Esc to pause" + "\n Controls can be reviewed any time in pause menu";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
                 
-                else if (tutorialPrompt == 12)
+                else if (tutorialPrompt == 22)
                 {
                     keyboardTutorial = false;
                     StartCoroutine(FinalPrompts());
@@ -410,6 +419,12 @@ public class Tutorial : MonoBehaviour
     public void ProgressTutorial()
     {
         StartCoroutine(NextPrompt());
+    }
+
+    public void DestroyDoor(int doorNumber)
+    {
+        Destroy(door[doorNumber]);
+        ProgressTutorial();
     }
     
     IEnumerator NextPrompt()
