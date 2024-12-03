@@ -42,6 +42,7 @@ public class PlayerManager : MonoBehaviour
 
     public bool holdingCorruption = false;
     public InputDevice myDevice;
+    private bool tutorialMycelia = true;
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -65,6 +66,11 @@ public class PlayerManager : MonoBehaviour
     private void Update()
     {
         WeaponBehavior();
+        if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
+        {
+            tutorialMycelia = false;
+            IncreaseMycelia(25);
+        }
     }
     private void SetManager()
     {
@@ -232,6 +238,10 @@ public class PlayerManager : MonoBehaviour
             pUI.SwitchWeaponIcon();
             pAnime.SetWeaponHoldAnimation(1);
             isBuilding = true;
+            if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 15)
+            {
+                Tutorial.Instance.ProgressTutorial();
+            }
         }
         else
         {// Exit Build Mode
