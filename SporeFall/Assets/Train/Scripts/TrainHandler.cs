@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -120,15 +121,62 @@ public class TrainHandler : MonoBehaviour
     private void CheckStructureObstructions()
     {
         List<Structure> structuresToRemove = new();
-
         foreach (Structure structure in activeStructures)
         {
+            Debug.Log("Checking Obstructions");
+
+            Collider[] structureColliders = structure.GetComponentsInChildren<Collider>();
+            bool hasOverlap = false;
+
+            foreach (Collider structureCollider in structureColliders)
+            {
+                bool wasIsTrigger = structureCollider.isTrigger;
+                structureCollider.isTrigger = true;
+
+                Bounds bounds = structureCollider.bounds;
+
+                Collider[] overlaps = Physics.OverlapBox(
+                    bounds.center,
+                    bounds.extents,
+                    structure.transform.rotation,
+                    obstructionLayer
+                );
+
+                structureCollider.isTrigger = wasIsTrigger;
+
+                foreach (Collider overlap in overlaps)
+                {
+                    // Ignore collisions with the structure itself
+                    if (!overlap.transform.IsChildOf(structure.transform))
+                    {
+                        hasOverlap = true;
+                        break;
+                    }
+                }
+
+                if (hasOverlap) break;
+            }
+
+            if (hasOverlap)
+            {
+                foreach (PlayerManager player in GameManager.Instance.players)
+                {
+                    player.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
+                }
+                Debug.Log($"{structure.name} Refunded Due to Overlap");
+                structuresToRemove.Add(structure);
+            }
+            
+            
+            
+            /* Debug.Log("Checking Structure");
             Collider[] overlappingObjects = Physics.OverlapBox(
                    structure.transform.position,
                    structureCheckSize / 2f, // Half extents
                    structure.transform.rotation,
                    obstructionLayer
                );
+            Debug.Log("Found Overlapps: " + overlappingObjects.Length);
 
             if (overlappingObjects.Length > 0)
             {
@@ -138,13 +186,13 @@ public class TrainHandler : MonoBehaviour
                 }
                 Debug.Log($"{structure.name} Refunded Due to Overlap");
                 structuresToRemove.Add(structure);
-                //emoveStructure(structure);
-            }
+            }*/
         }
         // Remove all the marked structures
         for (int i = 0; i < structuresToRemove.Count; i++)
         {
             RemoveStructure(structuresToRemove[i]);
+            structuresToRemove[i].ReturnToPool();
         }
         structuresToRemove.Clear();
     }

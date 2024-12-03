@@ -25,7 +25,6 @@ public class Structure : MonoBehaviour
         structureBehavior = GetComponent<IStructureStats>();
         UpdateRadiusVisual(levels.GetLevel(currentLevel));
     }
-
     public void Initialize()
     {
         if (levels == null || levels.GetLevelCount() == 0)
@@ -106,6 +105,7 @@ public class Structure : MonoBehaviour
     public void ToggleStructureBehavior(bool toggle)
     {
         controlScriptObject.SetActive(toggle);
+        // prevent structure from taking damage when not active
         healthComponent.canTakeDamage = toggle;
     }
     // Getter methods
@@ -135,9 +135,13 @@ public class Structure : MonoBehaviour
 
         return refundAmount;
     }
-    private void OnDestroy()
+    public void ReturnToPool()
     {
         if (train != null)
             train.RemoveStructure(this);
+
+        healthComponent.ResetHealth();
+        controlScriptObject.SetActive(false);
+        poolBehavior.ReturnObject();
     }
 }

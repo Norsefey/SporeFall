@@ -110,13 +110,11 @@ public abstract class BaseEnemy : MonoBehaviour
 
         ResetState();
     }
-
     protected virtual void Initialize()
     {
         // One-time initialization code
         agent.stoppingDistance = stoppingDistance;
     }
-
     protected virtual void ResetState()
     {
         // Reset all state when object is reused from pool
@@ -161,7 +159,6 @@ public abstract class BaseEnemy : MonoBehaviour
         DetectTargets();
         SetRandomState();
     }
-
     protected virtual void Update()
     {
         UpdateStateTimer();
@@ -312,7 +309,12 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         // for when current target is destroyed find a new target
         if (currentTarget == null)
+        {
             DetectTargets();
+        }else if(currentTarget.gameObject.activeSelf == false)
+        {
+            DetectTargets();
+        }
         // alot of behavior relies on distance to current target
         float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
 
@@ -406,7 +408,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
 
         Attack bestAttack = ChooseBestAttack(distanceToTarget);
-        if (bestAttack != null)
+        if (bestAttack != null && currentTarget.gameObject.activeSelf)
         {
             // Calculate direction to the actual target position for rotation
             Vector3 direction = (targetPosition - transform.position).normalized;
@@ -540,7 +542,7 @@ public abstract class BaseEnemy : MonoBehaviour
         int detectedCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRange, detectedColliders, targetsLayerMask);
 
         currentTarget = detectedColliders
-        .Where(c => c != null && priorityTags.Contains(c.tag))    // Filter by priority tags
+        .Where(c => c != null && c.gameObject.activeSelf && priorityTags.Contains(c.tag))    // Filter by priority tags
         .Where(c => IsTargetAccessible(c.transform))              // Filter by NavMesh accessibility
         .OrderBy(c => GetPriorityIndex(c.tag))                   // Prioritize by tag order
         .ThenBy(c => Vector3.Distance(transform.position, c.transform.position)) // If same tag, choose closest
