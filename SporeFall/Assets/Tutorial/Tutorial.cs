@@ -24,12 +24,16 @@ public class Tutorial : MonoBehaviour
     [Header("Main Variables")]
     public int tutorialPrompt = 0;
     private bool keyboardTutorial = false;
+    private bool xboxTutorial = false;
+    private bool playstationTutorial = false;
     //private bool gamepadTutorial = false;
     private bool mainLevelTutorial = false;
     public bool tutorialStarted = false;
     public bool playerActive = false;
     public bool usingKeyboard = false;
     public bool usingGamepad = false;
+    public bool usingXbox = false;
+    public bool usingPlaystation = false;
     private bool canProgress = false;
     public bool clickNeeded = false;
     public string currentScene;
@@ -90,10 +94,17 @@ public class Tutorial : MonoBehaviour
                     tutorialStarted = false;
                 }
 
-                else if (usingGamepad == true)
+                else if (usingXbox == true)
                 {
-                    Debug.Log("Starting gamepad tutorial");
-                    StartGamepadTutorial();
+                    Debug.Log("Starting xbox tutorial");
+                    StartXboxTutorial();
+                    tutorialStarted = false;
+                }
+
+                else if (usingPlaystation == true)
+                {
+                    Debug.Log("Starting xbox tutorial");
+                    StartPlaystationTutorial();
                     tutorialStarted = false;
                 }
             }
@@ -315,6 +326,212 @@ public class Tutorial : MonoBehaviour
         }
         #endregion
 
+        #region xbox Tutorial
+        if (xboxTutorial == true)
+        {
+            if (canProgress == true)
+            {
+                if (tutorialPrompt == 1)
+                {
+                    tutorialText.text = "Pick up your weapon from the table using X.";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 2)
+                {
+                    tutorialText.text = "This is your default weapon. Your active weapon and its ammo are in the bottom right.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 3)
+                {
+                    tutorialText.text = "Right click to aim," + "\n Left click to shoot," + "\n R to reload.";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 4)
+                {
+                    DestroyDoor(1);
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 5)
+                {
+                    tutorialText.text = "Destroy the dummy.";
+                    continueText.text = " ";
+
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 6)
+                {
+                    tutorialText.text = "Enemies will sometimes drop weapons, which you can pick up with F.";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 7)
+                {
+                    tutorialText.text = "Some weapons, like this one, can be charged by holding left click." + "\n Try charging it now.";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 8)
+                {
+                    tutorialText.text = "Weapons dropped by enemies, like this one, are what we call 'corrupted'.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 9)
+                {
+                    tutorialText.text = "Corrupted weapons are powerful, but fill your corruption meter over time as you hold them.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 10)
+                {
+                    tutorialText.text = "The bottom left shows your extra lives (blue), HP bar (green), and corruption meter (red).";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 11)
+                {
+                    tutorialText.text = "Something bad might happen if your corruption maxes out... To drop a weapon, hold Q.";
+                    continueText.text = " ";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 12)
+                {
+                    tutorialText.text = "Your corruption decreases gradually when you aren't holding a corrupted weapon.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 13)
+                {
+                    tutorialText.text = "Continue to the next room.";
+                    continueText.text = " ";
+                    floorButton2.SetActive(true);
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 14)
+                {
+                    tutorialText.text = "Along with your weapons, you can build structures to help you fight.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 15)
+                {
+                    tutorialText.text = "Press B to toggle Build Mode.";
+                    continueText.text = " ";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 16)
+                {
+                    tutorialText.text = "Use the mousewheel to view each structure. Right click to preview placement at a greater distance.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 17)
+                {
+                    tutorialText.text = "Structures cost Mycelia, which is dropped by enemies, and shown in the top left.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 18)
+                {
+                    tutorialText.text = "Try placing a turret with left click.";
+                    continueText.text = " ";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 19)
+                {
+                    tutorialText.text = "Press F to toggle Edit Mode, which allows you to edit placed structures.";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 20)
+                {
+                    tutorialText.text = "Look at the turret, and move it with left click.";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 21)
+                {
+                    tutorialText.text = "Structures can also be destroyed by holding X for a (partial if damaged) refund. Destroy the turret.";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 22)
+                {
+                    tutorialText.text = "You can pause at any time with Esc to review the controls if needed.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 23)
+                {
+                    tutorialText.text = "Great, that should be all you need to know for now. Are you ready for the real deal?";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 24)
+                {
+                    tutorialText.text = "You better be, we're under attack! Quick, get to the train!";
+                    continueText.text = " ";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+            }
+        }
+        #endregion
+
         #region main Level Tutorial
         if (mainLevelTutorial == true)
         {
@@ -431,14 +648,18 @@ public class Tutorial : MonoBehaviour
         keyboardTutorial = true;
     }
 
-    public void StartGamepadTutorial()
+    public void StartXboxTutorial()
     {
-        //tutorialText.text = "Left Stick to move" + "\n Hold L3 to sprint" + "\n A to jump";
-        //continueText.text = "(Press C to continue)";
-        //StartCoroutine(Cooldown());
-        //gamepadTutorial = true;
-        //tutorialPrompt++;
-        StartCoroutine(TempGamepadTutorial());
+        Debug.Log("Xbox tutorial has started");
+        tutorialText.text = "Left Stick to move" + "\n Press Left Stick to sprint" + "\n A to jump";
+        xboxTutorial = true;
+    }
+
+    public void StartPlaystationTutorial()
+    {
+        Debug.Log("Playstation tutorial has started");
+        tutorialText.text = "Left Stick to move" + "\n Press Left Stick to sprint" + "\n X to jump";
+        xboxTutorial = true;
     }
 
     public void StartBetweenWaveTutorial()

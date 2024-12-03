@@ -17,6 +17,8 @@ public class PlayerDeviceHandler : MonoBehaviour
 
     private bool usingKeyboard = false;
     private bool usingGamepad = false;
+    private bool usingXbox = false;
+    private bool usingPlaystation = false;
 
 
     private void Awake()
@@ -37,6 +39,18 @@ public class PlayerDeviceHandler : MonoBehaviour
                 usingKeyboard = true;
                 Debug.Log("mouse detected");
             }
+            if (device is XInputController)
+            {
+                usingXbox = true;
+                usingKeyboard = false;
+                Debug.Log("xbox controller detected");
+            }
+            if (device is DualShockGamepad)
+            {
+                usingPlaystation = true;
+                usingKeyboard = false;
+                Debug.Log("xbox controller detected");
+            }
 
             if (keyboardDevice != null && mouseDevice != null)
             {
@@ -48,18 +62,28 @@ public class PlayerDeviceHandler : MonoBehaviour
 
     private void Start()
     {
-        if (usingKeyboard == true)
+        
+
+        if (usingXbox == true)
         {
-            Debug.Log("Telling Tutorial script keyboard = true");
-            if(Tutorial.Instance != null)
-                Tutorial.Instance.usingKeyboard = true;
-            usingKeyboard = false;
+            Tutorial.Instance.usingXbox = true;
+            Tutorial.Instance.usingKeyboard = false;
+            usingXbox = false;
         }
 
-        if (usingGamepad == true)
+        if (usingPlaystation == true)
         {
-            Tutorial.Instance.usingGamepad = true;
-            usingGamepad = false;
+            Tutorial.Instance.usingPlaystation = true;
+            Tutorial.Instance.usingKeyboard = false;
+            usingPlaystation = false;
+        }
+
+        else if (usingKeyboard == true)
+        {
+            Debug.Log("Telling Tutorial script keyboard = true");
+            if (Tutorial.Instance != null)
+                Tutorial.Instance.usingKeyboard = true;
+            usingKeyboard = false;
         }
     }
 
