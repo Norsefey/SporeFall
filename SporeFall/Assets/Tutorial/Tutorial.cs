@@ -116,7 +116,7 @@ public class Tutorial : MonoBehaviour
             {
                 if (tutorialPrompt == 1)
                 {
-                    tutorialText.text = "Pick up your weapon from the table using F";
+                    tutorialText.text = "Pick up your weapon from the table using F.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -132,7 +132,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 3)
                 {
-                    tutorialText.text = "Right click to aim" + "\n Left click to shoot" + "\n R to reload";
+                    tutorialText.text = "Right click to aim," + "\n Left click to shoot," + "\n R to reload.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                     clickNeeded = true;
@@ -147,7 +147,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 5)
                 {
-                    tutorialText.text = "Destroy the dummy";
+                    tutorialText.text = "Destroy the dummy.";
                     continueText.text = " ";
                     
                     Debug.Log("Progressing tutorial");
@@ -156,7 +156,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 6)
                 {
-                    tutorialText.text = "Enemies will sometimes drop weapons, which you can pick up with F";
+                    tutorialText.text = "Enemies will sometimes drop weapons, which you can pick up with F.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -188,7 +188,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 10)
                 {
-                    tutorialText.text = "The bottom left shows your extra lives (blue), HP bar (green), and corruption meter (red)";
+                    tutorialText.text = "The bottom left shows your extra lives (blue), HP bar (green), and corruption meter (red).";
                     continueText.text = "(Press C to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
@@ -197,7 +197,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 11)
                 {
-                    tutorialText.text = "Something bad might happen if your corruption maxes out..." + "\n To drop a weapon, hold Q";
+                    tutorialText.text = "Something bad might happen if your corruption maxes out... To drop a weapon, hold Q.";
                     continueText.text = " ";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
@@ -214,52 +214,92 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 13)
                 {
-                    tutorialText.text = "Continue to the next room";
+                    tutorialText.text = "Continue to the next room.";
                     continueText.text = " ";
                     floorButton2.SetActive(true);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 22)
+                else if (tutorialPrompt == 14)
                 {
-                    tutorialText.text = "F to toggle Edit Mode" + "\n and look at the structure you want to edit";
+                    tutorialText.text = "Along with your weapons, you can build structures to help you fight.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 15)
+                {
+                    tutorialText.text = "Press B to toggle Build Mode.";
+                    continueText.text = " ";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 22)
+                else if (tutorialPrompt == 16)
                 {
-                    tutorialText.text = "Left click to move the structure" + "\n X to destroy the structure" + "\n for a partial refund";
+                    tutorialText.text = "Use the mousewheel to view each structure." + "\n Right click to preview placement at a greater distance.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 17)
+                {
+                    tutorialText.text = "Structures cost Mycelia, which is dropped by enemies. Try placing a turret near that dummy.";
+                    continueText.text = " ";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 22)
+                else if (tutorialPrompt == 18)
                 {
-                    tutorialText.text = "When not in Build Mode," + "\n  F to press buttons and pick up weapons dropped by enemies";
+                    tutorialText.text = "Press F to toggle Edit Mode, which allows you to edit placed structures.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 22)
+                else if (tutorialPrompt == 19)
                 {
-                    tutorialText.text = "When you are ready to start the next wave," + "\n find and press the button in the middle of the train";
+                    tutorialText.text = "Look at the turret, and move it with left click.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 22)
+                else if (tutorialPrompt == 20)
                 {
-                    tutorialText.text = "Esc to pause" + "\n Controls can be reviewed any time in pause menu";
+                    tutorialText.text = "Structures can also be destroyed by holding X for a (partial if damaged) refund. Destroy the turret.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
-                
+
+                else if (tutorialPrompt == 21)
+                {
+                    tutorialText.text = "You can pause at any time with Esc to review the controls if needed.";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
                 else if (tutorialPrompt == 22)
                 {
-                    keyboardTutorial = false;
-                    StartCoroutine(FinalPrompts());
+                    tutorialText.text = "Great, that should be all you need to know for now. Are you ready for the real deal?";
+                    continueText.text = "(Press C to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 23)
+                {
+                    tutorialText.text = "You better be, we're under attack! Quick, get to the train!";
+                    continueText.text = " ";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
                 }
                 
             }
@@ -318,7 +358,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 5)
                 {
-                    tutorialText.text = "When you're ready, press the Main Button to lure your enemies out of hiding.";
+                    tutorialText.text = "When you're ready, press the Main Button in the middle of the train to lure out your enemies.";
                     continueText.text = " ";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;

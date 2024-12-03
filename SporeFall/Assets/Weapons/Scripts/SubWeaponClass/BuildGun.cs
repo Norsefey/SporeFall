@@ -29,7 +29,7 @@ public class BuildGun : Weapon
     private Quaternion originalRotation; // Store original rotation for edit mode
     private bool showRadius = true; // player can toggle the radius display
     [Header("Prompt Text")]
-    [SerializeField] private string buildModeText = "<color=red>Build Mode</color> Mousewheel to change Structure \n Hold Right mouse to Preview" + "\n F to Select Placed Structure";
+    [SerializeField] private string buildModeText = "<color=red>Build Mode</color> \n Mousewheel to change Structure \n Hold Right mouse to Preview \n F to enter Edit Mode";
     [SerializeField] private string editModeText = "<color=green>Edit Mode</color> \n Left mouse to Move \n Hold X to Destroy \n F to return";
 
 

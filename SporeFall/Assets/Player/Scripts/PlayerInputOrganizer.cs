@@ -512,7 +512,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         {
             buildGun.EnterEditMode();
 
-            pMan.pUI.EnableControls("<color=green>Edit Mode</color> \n RC to Move \n Hold X to Destroy \n Z to Upgrade \n F to return");
+            pMan.pUI.EnableControls("<color=green>Edit Mode</color> \n Left mouse to Move \n Hold X to Destroy \n F to return");
             placementInputMap.Disable();
             editInputMap.Enable();
         }
@@ -523,7 +523,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         {
             buildGun.ExitEditMode();
            
-            pMan.pUI.EnableControls("<color=red>Build Mode</color> \n Mousewheel to change Structure" + "\n F to Select Structure" + "\n Hold Right mouse to Preview");
+            pMan.pUI.EnableControls("<color=red>Build Mode</color> \n Mousewheel to change Structure \n Hold Right mouse to Preview \n F to enter Edit Mode");
             editInputMap.Disable();
             placementInputMap.Enable();
         }
