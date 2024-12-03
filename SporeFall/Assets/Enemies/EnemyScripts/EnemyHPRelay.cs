@@ -9,7 +9,6 @@ public class EnemyHPRelay : Damageable
 
     public override void TakeDamage(float damage)
     {
-        Debug.Log("Relay passed Damage: " + damageMultiplier);
         mainHP.TakeDamage(damage * damageMultiplier);
     }
 
