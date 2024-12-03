@@ -4,7 +4,7 @@ using TMPro;
 public class StructureHP : Damageable
 {
     [SerializeField] private TMP_Text healthDisplay;
-
+    [SerializeField] private Structure structure;
     void Start()
     {
         currentHP = maxHP;
@@ -15,6 +15,8 @@ public class StructureHP : Damageable
     protected override void Die()
     {
         Debug.Log(gameObject.name + " has died.");
+        structure.ReturnToPool();
+        /*
 
         // Check if the object has a parent
         if (transform.parent != null)
@@ -26,7 +28,7 @@ public class StructureHP : Damageable
         {
             // If there's no parent, destroy the current object
             Destroy(gameObject);
-        }
+        }*/
     }
 
     protected override void UpdateUI()

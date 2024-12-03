@@ -58,7 +58,7 @@ public class BuildGun : Weapon
     {
         if (!isEditing)
             PreviewStructure();
-        else
+        else if(!movingStructure)
             SelectStructure();
     }
     public void OnFireReleased()
@@ -200,6 +200,13 @@ public class BuildGun : Weapon
                 originalMaterials = null; // Clear stored colors
 
                 player.pUI.EnableControls(buildModeText);
+            }
+            else
+            {
+                if (selectedStructure.GetCurrentMyceliaCost() > player.Mycelia)
+                {
+                    player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
+                }
             }
         }
     }
@@ -411,7 +418,7 @@ public class BuildGun : Weapon
             Debug.Log(hit.collider.name);
             if (selectedStructure == null)// to prevent assigning the same structure
             {
-                selectedStructure = hit.collider.transform.parent.GetComponent<Structure>();
+                selectedStructure = hit.collider.transform.GetComponent<Structure>();
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
                 SetStructureToTransparent(selectedStructure.gameObject);
                 // Store original position and rotation

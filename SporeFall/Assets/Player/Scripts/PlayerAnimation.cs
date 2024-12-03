@@ -121,7 +121,10 @@ public class PlayerAnimation : MonoBehaviour
         anime.SetBool("IsAiming", toggle);
         isAiming = toggle;
     }
-
+    public void TriggerAnimation(string trigger)
+    {
+        anime.SetTrigger(trigger);
+    }
     public void SetWeaponHoldAnimation(int holdPosIndex)
     {
         switch (holdPosIndex)
