@@ -172,6 +172,7 @@ public class BuildGun : Weapon
                 originalMaterials = null; // Clear stored colors
                 // show build controls
                 player.pUI.EnableControls(buildModeText);
+                
             }
             else if(selectedStructure != null)
             {
@@ -200,6 +201,10 @@ public class BuildGun : Weapon
                 originalMaterials = null; // Clear stored colors
 
                 player.pUI.EnableControls(buildModeText);
+                if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18)
+                {
+                    Tutorial.Instance.ProgressTutorial();
+                }
             }
         }
     }
@@ -387,6 +392,10 @@ public class BuildGun : Weapon
             RemovePreview();
         }
         isEditing = true;
+        if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 19)
+        {
+            Tutorial.Instance.ProgressTutorial();
+        }
     }
     public void ExitEditMode()
     {

@@ -240,7 +240,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 16)
                 {
-                    tutorialText.text = "Use the mousewheel to view each structure." + "\n Right click to preview placement at a greater distance.";
+                    tutorialText.text = "Use the mousewheel to view each structure. Right click to preview placement at a greater distance.";
                     continueText.text = "(Press C to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
@@ -249,34 +249,43 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 17)
                 {
-                    tutorialText.text = "Structures cost Mycelia, which is dropped by enemies. Try placing a turret near that dummy.";
-                    continueText.text = " ";
+                    tutorialText.text = "Structures cost Mycelia, which is dropped by enemies, and shown in the top left.";
+                    continueText.text = "(Press C to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
+                    clickNeeded = true;
                 }
 
                 else if (tutorialPrompt == 18)
                 {
-                    tutorialText.text = "Press F to toggle Edit Mode, which allows you to edit placed structures.";
+                    tutorialText.text = "Try placing a turret with left click.";
+                    continueText.text = " ";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
                 else if (tutorialPrompt == 19)
                 {
-                    tutorialText.text = "Look at the turret, and move it with left click.";
+                    tutorialText.text = "Press F to toggle Edit Mode, which allows you to edit placed structures.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
                 else if (tutorialPrompt == 20)
                 {
-                    tutorialText.text = "Structures can also be destroyed by holding X for a (partial if damaged) refund. Destroy the turret.";
+                    tutorialText.text = "Look at the turret, and move it with left click.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
                 else if (tutorialPrompt == 21)
+                {
+                    tutorialText.text = "Structures can also be destroyed by holding X for a (partial if damaged) refund. Destroy the turret.";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                }
+
+                else if (tutorialPrompt == 22)
                 {
                     tutorialText.text = "You can pause at any time with Esc to review the controls if needed.";
                     continueText.text = "(Press C to continue)";
@@ -285,7 +294,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                else if (tutorialPrompt == 22)
+                else if (tutorialPrompt == 23)
                 {
                     tutorialText.text = "Great, that should be all you need to know for now. Are you ready for the real deal?";
                     continueText.text = "(Press C to continue)";
@@ -294,7 +303,7 @@ public class Tutorial : MonoBehaviour
                     clickNeeded = true;
                 }
 
-                else if (tutorialPrompt == 23)
+                else if (tutorialPrompt == 24)
                 {
                     tutorialText.text = "You better be, we're under attack! Quick, get to the train!";
                     continueText.text = " ";
