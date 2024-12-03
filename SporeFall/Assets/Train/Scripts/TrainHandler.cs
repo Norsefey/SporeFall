@@ -123,8 +123,9 @@ public class TrainHandler : MonoBehaviour
         List<Structure> structuresToRemove = new();
         foreach (Structure structure in activeStructures)
         {
-            Collider[] structureColliders = structure.GetComponentsInChildren<Collider>();
+            Debug.Log("Checking Obstructions");
 
+            Collider[] structureColliders = structure.GetComponentsInChildren<Collider>();
             bool hasOverlap = false;
 
             foreach (Collider structureCollider in structureColliders)

@@ -137,14 +137,11 @@ public class Structure : MonoBehaviour
     }
     public void ReturnToPool()
     {
-        controlScriptObject.SetActive(false);
-        poolBehavior.ReturnObject();
-    }
-    private void OnDisable()
-    {
         if (train != null)
             train.RemoveStructure(this);
 
         healthComponent.ResetHealth();
+        controlScriptObject.SetActive(false);
+        poolBehavior.ReturnObject();
     }
 }
