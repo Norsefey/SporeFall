@@ -11,31 +11,30 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] private Transform weaponSlot; // holds weapon
     [SerializeField] private Transform rightHandBone;// where the weapon slot will move to, to avoid having to dig for it in hierarchy
     [SerializeField] private GameObject aimTarget;
-    [Header("Left Hand")]
-    [SerializeField] private TwoBoneIKConstraint tbIk; // add or remove weight to constraint to enable or disable it
-    [SerializeField] private Transform leftHandTarget;// the IK target, will move to weapon hold slot
+    //[Header("Left Hand")]
+    //[SerializeField] private TwoBoneIKConstraint tbIk; // add or remove weight to constraint to enable or disable it
+    //[SerializeField] private Transform leftHandTarget;// the IK target, will move to weapon hold slot
 
-    [Header("Rigs")]// IK rigs for Aiming
-    [SerializeField] private Rig oneHandedRig;
-    [SerializeField] private Rig twoHandedRig;
+    //[Header("Rigs")]// IK rigs for Aiming
+    //[SerializeField] private Rig oneHandedRig;
+   // [SerializeField] private Rig twoHandedRig;
     // For animation layers
-    private bool twoHanded = false;
-    private int oneHandedLayerIndex = 1;// will holds one handed animations
-    private int twoHandedLayerIndex = 2;// holds two handed animations
-    private int noWeaponLayerIndex = 3;// for when player holds no weapons
+    //private int oneHandedLayerIndex = 1;// will holds one handed animations
+    //private int twoHandedLayerIndex = 2;// holds two handed animations
+    //private int noWeaponLayerIndex = 3;// for when player holds no weapons
     // Animation states
     private bool isWalking = false;
     private bool isAiming = false;
     private void Start()
     {
-        // get the index numbers for the animation layers
+       /* // get the index numbers for the animation layers
         oneHandedLayerIndex = anime.GetLayerIndex("OneHanded");
         twoHandedLayerIndex = anime.GetLayerIndex("TwoHanded");
         noWeaponLayerIndex = anime.GetLayerIndex("NoWeapon");
 
         anime.SetLayerWeight(oneHandedLayerIndex, 0);
         anime.SetLayerWeight(twoHandedLayerIndex, 0);
-        anime.SetLayerWeight(noWeaponLayerIndex, 0);
+        anime.SetLayerWeight(noWeaponLayerIndex, 0);*/
 
 
         if (pMan.currentWeapon == null)
@@ -47,18 +46,15 @@ public class PlayerAnimation : MonoBehaviour
         else
         {
             Debug.Log("Yes Weapon");
-            if (pMan.currentWeapon.isTwoHanded)
-                SetWeaponHoldAnimation(2);
-            else 
-                SetWeaponHoldAnimation(1);
+            SetWeaponHoldAnimation(pMan.currentWeapon.holdType);
 
             pMan.pUI.AmmoDisplay(pMan.currentWeapon);
         }
 
-        Debug.Log($"Starting layer weights:");
+/*        Debug.Log($"Starting layer weights:");
         Debug.Log($"{anime.GetLayerName(oneHandedLayerIndex)} : {anime.GetLayerWeight(oneHandedLayerIndex)}");
         Debug.Log($"{anime.GetLayerName(twoHandedLayerIndex)} : {anime.GetLayerWeight(twoHandedLayerIndex)}");
-        Debug.Log($"{anime.GetLayerName(noWeaponLayerIndex)} : {anime.GetLayerWeight(noWeaponLayerIndex)}");
+        Debug.Log($"{anime.GetLayerName(noWeaponLayerIndex)} : {anime.GetLayerWeight(noWeaponLayerIndex)}");*/
     }
 
 
@@ -68,19 +64,24 @@ public class PlayerAnimation : MonoBehaviour
         // keep weapon to hand position
         WeaponPosition();
         WalkCheck();
+
+        if (isAiming)
+        {
+            pMan.currentWeapon.transform.forward = pMan.pCamera.myCamera.transform.forward;
+
+        }
     }
     private void WeaponPosition()
     {
         if(pMan.currentWeapon == null)
             return;
         weaponSlot.position = rightHandBone.position;
-
         Vector3 handForward = rightHandBone.up;
         weaponSlot.rotation = Quaternion.LookRotation(handForward);
 
         // Move left hand onto support position
-        if(pMan.currentWeapon != null && ( isAiming || twoHanded))
-            leftHandTarget.position = pMan.currentWeapon.secondHandHold.position;
+        // if(pMan.currentWeapon != null && ( isAiming || twoHanded))
+        //leftHandTarget.position = pMan.currentWeapon.secondHandHold.position;
 
     }
     private void WalkCheck()
@@ -110,14 +111,14 @@ public class PlayerAnimation : MonoBehaviour
         if(pMan.currentWeapon == null)
             return;
 
-        if (toggle)
+      /*  if (toggle)
         {
             tbIk.weight = 1;
         }
         else if(!twoHanded)
         {
             tbIk.weight = 0;
-        }
+        }*/
         anime.SetBool("IsAiming", toggle);
         isAiming = toggle;
     }
@@ -125,9 +126,11 @@ public class PlayerAnimation : MonoBehaviour
     {
         anime.SetTrigger(trigger);
     }
-    public void SetWeaponHoldAnimation(int holdPosIndex)
+    public void SetWeaponHoldAnimation(int weaponType)
     {
-        switch (holdPosIndex)
+        anime.SetInteger("WeaponType", weaponType);
+
+      /*  switch (holdPosIndex)
         {
             case 0:// No Weapon
                 Debug.Log("Setting No Weapon Animations");
@@ -135,14 +138,14 @@ public class PlayerAnimation : MonoBehaviour
 
                 anime.SetBool("NoWeapon", true);
                 oneHandedRig.weight = 0;
-                anime.SetLayerWeight(oneHandedLayerIndex, 0);
+                //anime.SetLayerWeight(oneHandedLayerIndex, 0);
 
                 twoHandedRig.weight = 0;
-                anime.SetLayerWeight(twoHandedLayerIndex, 0);
+                //anime.SetLayerWeight(twoHandedLayerIndex, 0);
                 twoHanded = false;
                 aimTarget.SetActive(false);
 
-                anime.SetLayerWeight(noWeaponLayerIndex, 1);
+                //anime.SetLayerWeight(noWeaponLayerIndex, 1);
                 break;
             case 1:// 1 Handed Weapon
                 if (!isAiming)
@@ -172,7 +175,7 @@ public class PlayerAnimation : MonoBehaviour
                 break;
 
 
-        }
+        }*/
     }
 
     /*public void ToggleTwoHanded(bool toggle)
@@ -207,16 +210,16 @@ public class PlayerAnimation : MonoBehaviour
     {
         if(pMan.currentWeapon == null)
             return;
-        if (!toggle)
+       /* if (!toggle)
         {
-            if (twoHanded)
+           *//* if (twoHanded)
             {
                 twoHandedRig.weight = 0;
             }
             else
             {
                 oneHandedRig.weight = 0;
-            }
+            }*//*
         }
         else
         {
@@ -228,7 +231,7 @@ public class PlayerAnimation : MonoBehaviour
             {
                 oneHandedRig.weight = 1;
             }
-        }
+        }*/
     
     }
    /* public void ToggleNoWeapon(bool toggle)
@@ -277,6 +280,14 @@ public class PlayerAnimation : MonoBehaviour
         Debug.Log($"{anime.GetLayerName(twoHandedLayerIndex)} : {anime.GetLayerWeight(twoHandedLayerIndex)}");
         Debug.Log($"{anime.GetLayerName(noWeaponLayerIndex)} : {anime.GetLayerWeight(noWeaponLayerIndex)}");
     }*/
+   public void ActivateATrigger(string triggerName)
+    {
+        anime.SetTrigger(triggerName);
+    }
+   public void ToggleRespawn(bool toggle)
+    {
+        anime.SetBool("Respawn", toggle);
+    }
     public void SetManager(PlayerManager player)
     {
         pMan = player;

@@ -138,7 +138,7 @@ public class PlayerUI : MonoBehaviour
         else if (currentWeapon is BuildGun)
             ammoIndicator.text = "Build Mode";
         else
-            ammoIndicator.text = currentWeapon.bulletCount + "/" + "\u221E";
+            ammoIndicator.text = $"{currentWeapon.bulletCount}";
     }
     public void SwitchWeaponIcon()
     {
@@ -218,7 +218,6 @@ public class PlayerUI : MonoBehaviour
     {
         chargeGunSlider.value = value;
     }
-
     public void ToggleDefaultUI(bool toggle)
     {
         if (toggle && weaponUI.activeSelf)

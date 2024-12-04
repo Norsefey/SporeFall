@@ -22,9 +22,9 @@ public abstract class Weapon : MonoBehaviour
     [Header("Corruption")]
     public bool isCorrupted;
     public float corruptionRate = 1.2f;
-  
+
     [Header("Hold Type")]// animation hold changes based on hold type
-    public bool isTwoHanded = false;
+    public int holdType;
     public Transform secondHandHold;
   
     [Header("Base Stats")]
@@ -84,7 +84,8 @@ public abstract class Weapon : MonoBehaviour
         {// don't rotate player if aiming, rotation is handled in playerMovement script
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
-        
+        transform.forward = playerCamera.transform.forward;
+
         if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
         {
             Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");

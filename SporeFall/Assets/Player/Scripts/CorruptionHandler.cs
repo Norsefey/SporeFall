@@ -116,6 +116,7 @@ public class CorruptionHandler : MonoBehaviour
         Invoke(nameof(SpawnCorruptedRobot), 1);
         // player loses life and respawns
         pMan.pHealth.DepleteLife();
+        pMan.pAnime.ActivateATrigger("Corrupted");
         pMan.StartRespawn();
     }
     private void SpawnCorruptedRobot()
@@ -128,6 +129,10 @@ public class CorruptionHandler : MonoBehaviour
         robert.transform.SetParent(pMan.train.dropsHolder, true);
 
         GameManager.Instance.waveManager.AddRobert(robert.gameObject);
+    }
+    public void ResetCorruptionLevel()
+    {
+        corruptionLevel = 0;
     }
     public void SetManager(PlayerManager player)
     {

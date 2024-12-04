@@ -19,13 +19,17 @@ public class PlayerManager : MonoBehaviour
     public CorruptionHandler pCorruption;
     public TrainHandler train;
     public Interactables interactable;
-    [Header("Weapons")]
+    [Header("Default Weapons")]
+    public Weapon defaultWeapon;
+    public Weapon defaultSword;
+
     // Weapons and Shooting
+    [Header("Weapons")]
     public Transform weaponHolder; // Where the weapon is equipped
     public Weapon currentWeapon;
-    public Weapon defaultWeapon;
     public Weapon equippedWeapon;
     // pickables
+    [HideInInspector]
     public GameObject nearByWeapon;
 
     public bool isFiring = false;
@@ -43,6 +47,7 @@ public class PlayerManager : MonoBehaviour
     public bool holdingCorruption = false;
     public InputDevice myDevice;
     private bool tutorialMycelia = true;
+    private bool meleeActive = false;
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -66,10 +71,37 @@ public class PlayerManager : MonoBehaviour
     private void Update()
     {
         WeaponBehavior();
-        if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
+        if(Tutorial.Instance != null)
         {
-            tutorialMycelia = false;
-            IncreaseMycelia(25);
+            if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
+            {
+                tutorialMycelia = false;
+                IncreaseMycelia(25);
+            }
+        }
+
+        // For Testing
+        {
+            if (Input.GetKeyDown(KeyCode.Y) && !isBuilding)
+            {
+                if (!meleeActive)
+                {
+                    currentWeapon.gameObject.SetActive(false);
+
+                    currentWeapon = defaultSword;
+                    currentWeapon.gameObject.SetActive(true);
+                    pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
+                    pUI.ToggleDefaultUI(false);
+                }
+                else
+                {
+                    currentWeapon.gameObject.SetActive(false);
+
+                    EquipDefaultGun();
+                }
+
+             
+            }
         }
     }
     private void SetManager()
@@ -167,10 +199,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         // Animation switch depending on weapon type
-        if(currentWeapon.isTwoHanded)
-            pAnime.SetWeaponHoldAnimation(2);
-        else
-            pAnime.SetWeaponHoldAnimation(1);
+        pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
 
         // if weapon is corrupted start corruption increase
         if (currentWeapon.isCorrupted)
@@ -213,7 +242,7 @@ public class PlayerManager : MonoBehaviour
     {
         currentWeapon = defaultWeapon;
         currentWeapon.gameObject.SetActive(true);
-        pAnime.SetWeaponHoldAnimation(1);
+        pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
         pUI.ToggleDefaultUI(true);
 
     }
@@ -257,7 +286,8 @@ public class PlayerManager : MonoBehaviour
             if (equippedWeapon != null)
                 currentWeapon = equippedWeapon;
             else
-                currentWeapon = defaultWeapon;
+                EquipDefaultGun();
+
             isBuilding = false;
             if (isFiring)
                 pCamera.AimSight();
@@ -272,10 +302,7 @@ public class PlayerManager : MonoBehaviour
             pUI.DisablePrompt();
             pUI.SwitchWeaponIcon();
 
-            if (currentWeapon.isTwoHanded)
-                pAnime.SetWeaponHoldAnimation(2);
-            else
-                pAnime.SetWeaponHoldAnimation(1);
+            pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
         }
     }
     public void TogglePControl(bool toggle)
@@ -323,11 +350,15 @@ public class PlayerManager : MonoBehaviour
         {
             ToggleBuildMode();
         }
-        yield return new WaitForSeconds(2);
+
+        yield return new WaitForSeconds(3);
+        pAnime.ToggleRespawn(true);
+
         if (train != null)
             MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
         else
             MovePlayerTo(fallbackSpawnPoint.position);
+        pCorruption.ResetCorruptionLevel();
         pHealth.ResetHealth();
         TogglePControl(true);
         if (pHealth.lives == 2)
@@ -338,6 +369,8 @@ public class PlayerManager : MonoBehaviour
         {
             pUI.life1.SetActive(false);
         }
+        yield return new WaitForSeconds (1);
+        pAnime.ToggleRespawn(false);
     }
     public void GameOver()
     {

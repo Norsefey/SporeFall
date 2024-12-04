@@ -46,6 +46,8 @@ public class PlayerHP : Damageable
     }
     protected override void Die()
     {
+        pMan.pAnime.ActivateATrigger("Dead");
+
         DepleteLife();
         pMan.StartRespawn();
     }
