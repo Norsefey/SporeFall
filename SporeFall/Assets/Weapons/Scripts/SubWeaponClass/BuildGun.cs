@@ -81,6 +81,10 @@ public class BuildGun : Weapon
                 // If placement is valid, restore original colors and place
                 RestoreOriginalColors();
                 SetStructureToOpaque();
+                if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 20)
+                {
+                    Tutorial.Instance.ProgressTutorial();
+                }
             }
         }
     }
@@ -427,6 +431,7 @@ public class BuildGun : Weapon
             Debug.Log(hit.collider.name);
             if (selectedStructure == null)// to prevent assigning the same structure
             {
+                
                 selectedStructure = hit.collider.transform.GetComponent<Structure>();
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
                 SetStructureToTransparent(selectedStructure.gameObject);
@@ -488,6 +493,10 @@ public class BuildGun : Weapon
                 player.train.RemoveStructure(toDelet);
             }
             Debug.Log("Structure Deleted");
+            if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 21)
+            {
+                Tutorial.Instance.ProgressTutorial();
+            }
             player.pUI.EnableControls(editModeText);
         }
     }

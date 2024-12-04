@@ -16,9 +16,11 @@ public class PlayerDeviceHandler : MonoBehaviour
     private InputDevice mouseDevice;
 
     private bool usingKeyboard = false;
-    private bool usingGamepad = false;
+    //private bool usingGamepad = false;
     private bool usingXbox = false;
     private bool usingPlaystation = false;
+
+    private bool tutorialNeeded = true;
 
 
     private void Awake()
@@ -27,30 +29,21 @@ public class PlayerDeviceHandler : MonoBehaviour
         // Find the keyboard device
         foreach (var device in InputSystem.devices)
         {
+            
             if (device is Keyboard)
             {
                 keyboardDevice = device;
-                usingKeyboard = true;
+                //usingKeyboard = true;
                 Debug.Log("Keyboard detected");
             }
+
             else if (device is Mouse)
             {
                 mouseDevice = device;
-                usingKeyboard = true;
+                //usingKeyboard = true;
                 Debug.Log("mouse detected");
             }
-            if (device is XInputController)
-            {
-                usingXbox = true;
-                usingKeyboard = false;
-                Debug.Log("xbox controller detected");
-            }
-            if (device is DualShockGamepad)
-            {
-                usingPlaystation = true;
-                usingKeyboard = false;
-                Debug.Log("xbox controller detected");
-            }
+            
 
             if (keyboardDevice != null && mouseDevice != null)
             {
@@ -64,26 +57,44 @@ public class PlayerDeviceHandler : MonoBehaviour
     {
         
 
-        if (usingXbox == true)
-        {
-            Tutorial.Instance.usingXbox = true;
-            Tutorial.Instance.usingKeyboard = false;
-            usingXbox = false;
-        }
+        
+    }
 
-        if (usingPlaystation == true)
+    private void Update()
+    {
+        if (Tutorial.Instance.playerActive == true && tutorialNeeded == true)
         {
-            Tutorial.Instance.usingPlaystation = true;
-            Tutorial.Instance.usingKeyboard = false;
-            usingPlaystation = false;
-        }
+            tutorialNeeded = false;
 
-        else if (usingKeyboard == true)
-        {
-            Debug.Log("Telling Tutorial script keyboard = true");
-            if (Tutorial.Instance != null)
-                Tutorial.Instance.usingKeyboard = true;
-            usingKeyboard = false;
+            if (usingXbox == true)
+            {
+                Debug.Log("Telling Tutorial script xbox = true");
+                if (Tutorial.Instance != null)
+                {
+                    Tutorial.Instance.usingXbox = true;
+                }
+                usingXbox = false;
+            }
+
+            else if (usingPlaystation == true)
+            {
+                Debug.Log("Telling Tutorial script playstation = true");
+                if (Tutorial.Instance != null)
+                {
+                    Tutorial.Instance.usingPlaystation = true;
+                }
+                usingPlaystation = false;
+            }
+
+            else if (usingKeyboard == true)
+            {
+                Debug.Log("Telling Tutorial script keyboard = true");
+                if (Tutorial.Instance != null)
+                {
+                    Tutorial.Instance.usingKeyboard = true;
+                } 
+                usingKeyboard = false;
+            }
         }
     }
 
@@ -109,10 +120,31 @@ public class PlayerDeviceHandler : MonoBehaviour
         Debug.Log($"Player {playerInput.playerIndex} joined with device {playerInput.devices[0].displayName}");
         players.Add(playerInput);
 
+        
+
         if (singlePlayer && players.Count == 1)
         {
             // In single player, disable joining after first player
             inputManager.DisableJoining();
+
+            if (playerInput.devices[0].displayName == "Xbox Controller")
+            {
+                Debug.Log("Setting usingXbox to true");
+                usingXbox = true;
+            }
+
+            else if (playerInput.devices[0].displayName == "PlayStation Controller")
+            {
+                Debug.Log("Setting usingPlaystation to true");
+                usingPlaystation = true;
+            }
+
+            else if (playerInput.devices[0].displayName == "Keyboard" || playerInput.devices[0].displayName == "Mouse")
+            {
+                Debug.Log("Setting usingKeyboard to true");
+                usingKeyboard = true;
+            }
+
         }
     }
     private void OnPlayerLeft(PlayerInput playerInput)
@@ -142,7 +174,7 @@ public class PlayerDeviceHandler : MonoBehaviour
     {
         if (device is Gamepad gamepad)
         {
-            usingGamepad = true;
+            //usingGamepad = true;
 
             if (device is XInputController)
             {
@@ -171,6 +203,7 @@ public class PlayerDeviceHandler : MonoBehaviour
                 Debug.Log($"Multiplayer: Ready for new player to join with gamepad: {gamepad.displayName}");
             }
         }
+
     }
     private void UpdateSensitivity()
     {
