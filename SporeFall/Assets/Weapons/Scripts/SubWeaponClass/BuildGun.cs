@@ -156,6 +156,7 @@ public class BuildGun : Weapon
     {
         if (!isValidPlacement)
         {
+            //Debug.Log("Invalid Placement");
             player.pUI.EnablePrompt("<color=red>Invalid Placement - Structures Overlapping</color>");
             return;
         }
@@ -168,12 +169,13 @@ public class BuildGun : Weapon
                 selectedStructure.Initialize();
                 selectedStructure.ToggleStructureBehavior(true);
                 selectedStructure.ShowRadius(false);
+                
                 SetStructureToOpaque();
+                
                 RestoreOriginalColors(); // Restore original colors when placing
                 // for moving train stores all active structures
                 GameManager.Instance.trainHandler.AddStructure(selectedStructure);
                 selectedStructure = null;
-                originalMaterials = null; // Clear stored colors
                 // show build controls
                 player.pUI.EnableControls(buildModeText);
                 
@@ -191,8 +193,10 @@ public class BuildGun : Weapon
                 }
             }
         }
-        else
+        else if(selectedStructure != null)
         {
+            Debug.Log("Trainless Placement");
+
             // mostly for testing the cost and placement of structures
             if (selectedStructure != null && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
             {
@@ -202,8 +206,6 @@ public class BuildGun : Weapon
                 RestoreOriginalColors(); // Restore original colors when placing
 
                 selectedStructure = null;
-                originalMaterials = null; // Clear stored colors
-
                 player.pUI.EnableControls(buildModeText);
                 if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18)
                 {
@@ -224,8 +226,8 @@ public class BuildGun : Weapon
         if (selectedStructure != null)
         {
             selectedStructure.poolBehavior.ReturnObject();
-            selectedStructure = null;
-            originalMaterials = null; // Clear stored colors
+            DeselectStructure();
+
         }
     }
     private void CheckStructureOverlap()
@@ -301,6 +303,12 @@ public class BuildGun : Weapon
                     materialData.Material.color = materialData.OriginalColor;
                 }
             }
+
+            originalMaterials = null; // Clear stored colors
+        }
+        else
+        {
+            Debug.Log("No Original Materials");
         }
     }
     private void UpdatePreviewColor(bool isValid)
@@ -486,7 +494,8 @@ public class BuildGun : Weapon
         {
             Structure toDelet = selectedStructure;
             selectedStructure.poolBehavior.ReturnObject();
-            selectedStructure = null;
+
+            DeselectStructure();
             if (player.train != null)
             {
                 player.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));

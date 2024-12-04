@@ -86,6 +86,8 @@ public class PlayerManager : MonoBehaviour
             {
                 if (!meleeActive)
                 {
+                    meleeActive = true;
+
                     currentWeapon.gameObject.SetActive(false);
 
                     currentWeapon = defaultSword;
@@ -95,6 +97,8 @@ public class PlayerManager : MonoBehaviour
                 }
                 else
                 {
+                    meleeActive = false;
+
                     currentWeapon.gameObject.SetActive(false);
 
                     EquipDefaultGun();
