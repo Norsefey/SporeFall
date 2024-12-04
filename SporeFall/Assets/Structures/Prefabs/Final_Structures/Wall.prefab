@@ -261,6 +261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7619541815717285705}
   - component: {fileID: 5513447413048775376}
+  - component: {fileID: 7612861402183079232}
   m_Layer: 7
   m_Name: ControlScript
   m_TagString: Untagged
@@ -299,6 +300,27 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1.04, z: 0.37}
   m_TimeToStationary: 0.5
+--- !u!65 &7612861402183079232
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7631706225286248583}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.9, y: 0.5886816, z: 2.7528605}
+  m_Center: {x: 0, y: -0.11800308, z: 0.063569784}
 --- !u!1 &8770088602794142600
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +331,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5992522698283046421}
   - component: {fileID: 3346339046060649887}
-  - component: {fileID: 8089561338107829531}
   - component: {fileID: 8926340626617740079}
   m_Layer: 13
   m_Name: WallControls
@@ -350,27 +371,7 @@ MonoBehaviour:
   canHoldCorruption: 0
   canTakeDamage: 1
   healthDisplay: {fileID: 6385971974125593382}
---- !u!65 &8089561338107829531
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8770088602794142600}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3.9, y: 0.5886816, z: 2.7528605}
-  m_Center: {x: 0, y: -0.11800308, z: 0.063569784}
+  structure: {fileID: 0}
 --- !u!65 &8926340626617740079
 BoxCollider:
   m_ObjectHideFlags: 0

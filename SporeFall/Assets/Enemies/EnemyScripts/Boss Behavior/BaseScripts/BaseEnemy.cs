@@ -85,7 +85,7 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected float targetSwitchThreshold = 100f;
     private bool passedThreshold = false;
     private Collider[] detectedColliders;      // Array to store detected colliders
-    private int maxDetectedObjects = 10; // Max number of objects the enemy can detect at once
+    private int maxDetectedObjects = 25; // Max number of objects the enemy can detect at once
     public Animator Animator => animator;
     public AudioSource AudioSource => audioSource;
 
@@ -107,7 +107,7 @@ public abstract class BaseEnemy : MonoBehaviour
             Initialize();
             isInitialized = true;
         }
-
+        StartCoroutine(PeriodicTargetDetection());
         ResetState();
     }
     protected virtual void Initialize()
@@ -557,6 +557,16 @@ public abstract class BaseEnemy : MonoBehaviour
                 currentTarget = train.Payload.transform;
             else
                 currentTarget = trainWall;
+        }
+    }
+    private IEnumerator PeriodicTargetDetection()
+    {
+        WaitForSeconds waitTime = new WaitForSeconds(4f); // Adjust interval as needed
+
+        while (gameObject.activeInHierarchy)
+        {
+            DetectTargets();
+            yield return waitTime;
         }
     }
     private void SetDefaultTarget()

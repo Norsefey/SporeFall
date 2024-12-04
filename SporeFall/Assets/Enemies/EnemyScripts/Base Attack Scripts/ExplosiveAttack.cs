@@ -46,7 +46,7 @@ public class ExplosiveAttack : Attack
             Damageable damageable = hit.GetComponent<Damageable>();
             if (damageable != null)
             {
-                if(hit.CompareTag("structure"))
+                if(hit.CompareTag("Structure"))
                 damageable.TakeDamage(damage * damageMultiplier);
             }
 

@@ -98,7 +98,10 @@ public class BuildGun : Weapon
             currentBuildIndex = buildableStructures.Length - 1;
 
         if (selectedStructure != null)
-            selectedStructure.poolBehavior.ReturnObject();
+        {
+            RemovePreview();
+            //selectedStructure.poolBehavior.ReturnObject();
+        }
 
         selectedStructure = null;
 

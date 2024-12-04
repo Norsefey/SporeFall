@@ -70,8 +70,6 @@ public class ProjectileBehavior : MonoBehaviour
 
     public void Initialize(ProjectileData projectileData, ProjectilePool pool)
     {
-        Debug.Log("Projectile Active");
-
         data = projectileData;
         damage = data.Damage;
         this.pool = pool;

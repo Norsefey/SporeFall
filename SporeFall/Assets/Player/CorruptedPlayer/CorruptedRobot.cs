@@ -27,7 +27,7 @@ public class CorruptedPlayer : BaseEnemy
         {
             priority *= 1.5f;
         }
-        else if (attack is AoeAttack && currentTarget != train)
+        else if (attack is AoeAttack && currentTarget != null)
         {
             // if not attacking train, and target is near train, do an AOE attack to damage both
             float distanceBetweenTargets = Vector3.Distance(train.transform.position, currentTarget.position);
