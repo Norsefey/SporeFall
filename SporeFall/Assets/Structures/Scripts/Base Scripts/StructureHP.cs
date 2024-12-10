@@ -16,19 +16,6 @@ public class StructureHP : Damageable
     {
         Debug.Log(gameObject.name + " has died.");
         structure.ReturnToPool();
-        /*
-
-        // Check if the object has a parent
-        if (transform.parent != null)
-        {
-            Debug.Log("Destroying parent object: " + transform.parent.name);
-            Destroy(transform.parent.gameObject); // Destroy the parent object
-        }
-        else
-        {
-            // If there's no parent, destroy the current object
-            Destroy(gameObject);
-        }*/
     }
 
     protected override void UpdateUI()

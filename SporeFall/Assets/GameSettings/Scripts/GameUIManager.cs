@@ -2,14 +2,18 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameUIManager : MonoBehaviour
 {
-    public GameObject trainUI;
-    public GameObject waveUI;
-    public GameObject gameplayUI;
-    public GameObject upgradeMenu;
+    [SerializeField] private GameObject trainUI;
+    [SerializeField] private GameObject waveUI;
+    [SerializeField] private GameObject gameplayUI;
+    [SerializeField] private GameObject upgradeMenu;
+    [SerializeField] private TMP_Text myceliaIndicator;
+
+
     public void ShowUpgradeMenu(bool toggle)
     {
         trainUI.SetActive(!toggle); 
@@ -17,5 +21,9 @@ public class GameUIManager : MonoBehaviour
         gameplayUI.SetActive(!toggle);
 
         upgradeMenu.SetActive(toggle);
+    }
+    public void DisplayMycelia(float value)
+    {
+        myceliaIndicator.text = "Mycelia: " + value.ToString();
     }
 }

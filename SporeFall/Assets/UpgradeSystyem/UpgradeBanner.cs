@@ -49,9 +49,9 @@ public class UpgradeBanner : MonoBehaviour
 
     void PerformUpgrade()
     {
-        if (GameManager.Instance.upgradeManager.CanUpgrade(currentType, GameManager.Instance.players[0].Mycelia))
+        if (GameManager.Instance.upgradeManager.CanUpgrade(currentType, GameManager.Instance.Mycelia))
         {
-            GameManager.Instance.upgradeManager.UpgradeStructure(currentType, GameManager.Instance.players[0].Mycelia);
+            GameManager.Instance.upgradeManager.UpgradeStructure(currentType, GameManager.Instance.Mycelia);
             GameManager.Instance.trainHandler.ApplyUpgradeToStructures();
             upgradeUI.UpdateMyceliaAmount();
             // Get the next level after upgrade

@@ -12,10 +12,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private GameObject weaponUI;
     public Image weaponIcon;
     public Slider chargeGunSlider;
-    //public Sprite weaponSprite;
     [Space(5)]
     [SerializeField] private TMP_Text ammoIndicator;
-    [SerializeField] private TMP_Text myceliaIndicator;
     [SerializeField] private GameObject promptHolder;
     [SerializeField] public GameObject controlsHolder;
     [SerializeField] public TMP_Text textPrompt;
@@ -29,10 +27,6 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Image corruptedVisionImage;
     [SerializeField] private Button purifyButton; // Button to purchase corruption reduction
     [SerializeField] private Sprite[] corruptionSprites; // Array of corruption vision sprites
-/*
-    [SerializeField] private Sprite corruptionSpread1;
-    [SerializeField] private Sprite corruptionSpread2;
-    [SerializeField] private Sprite corruptionSpread3;*/
     [Header("Build/Structures UI")]
     public GameObject buildUI;
     [SerializeField] private Image selectedStructureIcon;
@@ -51,7 +45,6 @@ public class PlayerUI : MonoBehaviour
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
         HPBar.maxValue = pMan.pHealth.maxHP;
         corruptedVisionHolder.SetActive(false);
-        DisplayMycelia(pMan.Mycelia);
     }
     public void UpdateCorruptionDisplay(float value)
     {
@@ -149,10 +142,7 @@ public class PlayerUI : MonoBehaviour
         if (HPBar != null)
             HPBar.value = value;
     }
-    public void DisplayMycelia(float value)
-    {
-        myceliaIndicator.text = "Mycelia: " + value.ToString();
-    }
+
     public void EnablePrompt(string text)
     {
         promptHolder.SetActive(true);

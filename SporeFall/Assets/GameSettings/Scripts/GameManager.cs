@@ -11,12 +11,16 @@ public class GameManager : MonoBehaviour
     public WaveManager waveManager;
     public TrainHandler trainHandler;
     public UpgradeManager upgradeManager;
-    public GameUIManager gameUIManager;
+    public GameUIManager gameUI;
     public List<PlayerManager> players = new();
     public PauseMenu pauseMenu;
     public bool paused = false;
 
     [SerializeField] BackUpPlayerSpawner backUpPlayerSpawner;
+
+    [SerializeField] private float mycelia = 200;
+    public float Mycelia { get { return mycelia; } }
+    private bool tutorialMycelia = true;
 
     private void Awake()
     {
@@ -28,6 +32,21 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+    }
+    private void Start()
+    {
+        gameUI.DisplayMycelia(mycelia);
+    }
+    private void Update()
+    {
+        if (Tutorial.Instance != null)
+        {
+            if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
+            {
+                tutorialMycelia = false;
+                IncreaseMycelia(25);
+            }
+        }
     }
     public void HandlePlayerJoining(PlayerManager player)
     {
@@ -75,6 +94,16 @@ public class GameManager : MonoBehaviour
     {
         // remove disconnected players
         players.Remove(player);
+    }
+    public void IncreaseMycelia(float amount)
+    {
+        mycelia += amount;
+        gameUI.DisplayMycelia(mycelia);
+    }
+    public void DecreaseMycelia(float amount)
+    {
+        mycelia -= amount;
+        gameUI.DisplayMycelia(mycelia);
     }
     // Called when object is destroyed (including scene changes)
     private void OnDestroy()

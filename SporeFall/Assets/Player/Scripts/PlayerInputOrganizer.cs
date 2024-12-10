@@ -325,7 +325,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnUpgradeMenu(InputAction.CallbackContext context)
     {
-        GameManager.Instance.gameUIManager.ShowUpgradeMenu(false);
+        GameManager.Instance.gameUI.ShowUpgradeMenu(false);
 
         ToggleUpgradeMenu(false);
     }
@@ -413,8 +413,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnReload(InputAction.CallbackContext context)
     {
-        Debug.Log("Reloading");
-
         if (pMan.currentWeapon != null)
         {
             pMan.currentWeapon.StartReload();
@@ -507,7 +505,6 @@ public class PlayerInputOrganizer : MonoBehaviour
             ExitEditMode();
         }
     }
-
     private void EnterEditMode()
     {
         if (pMan.currentWeapon is BuildGun buildGun)

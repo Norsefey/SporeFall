@@ -179,6 +179,7 @@ public abstract class Weapon : MonoBehaviour
     }
     private IEnumerator ReloadCoroutine()
     {
+        Debug.Log("Starting Reload");
         isReloading = true;
         if (player.pUI != null)
             player.pUI.AmmoDisplay(this);

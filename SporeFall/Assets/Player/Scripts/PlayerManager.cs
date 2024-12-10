@@ -37,16 +37,12 @@ public class PlayerManager : MonoBehaviour
     public bool isBuilding = false;
     public bool isRotating = false;
     [Header("Currency")]
-    // Player Stats
-    [SerializeField] private float mycelia = 200;
-    public float Mycelia { get { return mycelia; } }
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
     [SerializeField] private Transform fallbackSpawnPoint;
 
     public bool holdingCorruption = false;
     public InputDevice myDevice;
-    private bool tutorialMycelia = true;
     private bool meleeActive = false;
     private void Awake()
     {
@@ -71,14 +67,7 @@ public class PlayerManager : MonoBehaviour
     private void Update()
     {
         WeaponBehavior();
-        if(Tutorial.Instance != null)
-        {
-            if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
-            {
-                tutorialMycelia = false;
-                IncreaseMycelia(25);
-            }
-        }
+
 
         // For Testing
         {
@@ -145,11 +134,6 @@ public class PlayerManager : MonoBehaviour
     {
         if (currentWeapon != null)
         {
-            if (currentWeapon is BuildGun bGun)
-            {
-                pUI.DisplayMycelia(mycelia);
-            }
-
             if (isFiring && !currentWeapon.IsReloading && currentWeapon is not ChargeGun)
             {
                 currentWeapon.Fire();
@@ -381,16 +365,7 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("No Life No Game");
         SceneTransitioner.Instance.LoadLoseScene();
     }
-    public void IncreaseMycelia(float amount)
-    {
-        mycelia += amount;
-        pUI.DisplayMycelia(mycelia);
-    }
-    public void DecreaseMycelia(float amount)
-    {
-        mycelia -= amount;
-        pUI.DisplayMycelia(mycelia);
-    }
+
     public int GetPlayerIndex()
     {
         return GetComponent<PlayerInput>().playerIndex;

@@ -25,7 +25,7 @@ public class MyceliaPickup : DropsPoolBehavior
 
     public void RewardPlayer(PlayerManager player)
     {
-        player.IncreaseMycelia(myceliaAmount);
+        GameManager.Instance.IncreaseMycelia(myceliaAmount);
         ReturnObject();
     }
 }

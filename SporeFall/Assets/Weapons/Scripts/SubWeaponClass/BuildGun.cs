@@ -166,9 +166,9 @@ public class BuildGun : Weapon
         // some test scenes do not have a train to reference off of, so check if a train is valid to do an energy check
         if (GameManager.Instance.trainHandler != null && selectedStructure != null)
         {
-            if (GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
+            if (GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= GameManager.Instance.Mycelia)
             {
-                player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
+                GameManager.Instance.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
                 selectedStructure.Initialize();
                 selectedStructure.ToggleStructureBehavior(true);
                 selectedStructure.ShowRadius(false);
@@ -186,7 +186,7 @@ public class BuildGun : Weapon
             else if(selectedStructure != null)
             {
                 // tell player why placement failed, either not enough money, or too many active structure
-                if (selectedStructure.GetCurrentMyceliaCost() > player.Mycelia)
+                if (selectedStructure.GetCurrentMyceliaCost() > GameManager.Instance.Mycelia)
                 {
                     player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
                 }
@@ -201,9 +201,9 @@ public class BuildGun : Weapon
             Debug.Log("Trainless Placement");
 
             // mostly for testing the cost and placement of structures
-            if (selectedStructure != null && selectedStructure.GetCurrentMyceliaCost() <= player.Mycelia)
+            if (selectedStructure != null && selectedStructure.GetCurrentMyceliaCost() <= GameManager.Instance.Mycelia)
             {
-                player.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
+                GameManager.Instance.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
                 selectedStructure.Initialize();
                 SetStructureToOpaque();
                 RestoreOriginalColors(); // Restore original colors when placing
@@ -217,7 +217,7 @@ public class BuildGun : Weapon
             }
             else
             {
-                if (selectedStructure.GetCurrentMyceliaCost() > player.Mycelia)
+                if (selectedStructure.GetCurrentMyceliaCost() > GameManager.Instance.Mycelia)
                 {
                     player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
                 }
@@ -501,7 +501,7 @@ public class BuildGun : Weapon
             DeselectStructure();
             if (player.train != null)
             {
-                player.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));
+                GameManager.Instance.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));
                 player.train.RemoveStructure(toDelet);
             }
             Debug.Log("Structure Deleted");

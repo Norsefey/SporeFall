@@ -36,9 +36,9 @@ public class UpgradeUI : MonoBehaviour
     {
         myceliaText.color = Color.white;
 
-        myceliaText.text = $"Mycelia: {gameManager.players[0].Mycelia}";
+        myceliaText.text = $"Mycelia: {gameManager.Mycelia}";
         
-        if(gameManager.players[0].Mycelia <= 0)
+        if(gameManager.Mycelia <= 0)
             myceliaText.color = Color.red;
     }
 

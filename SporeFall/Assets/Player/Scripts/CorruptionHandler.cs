@@ -86,14 +86,14 @@ public class CorruptionHandler : MonoBehaviour
     public bool TryPurchaseCorruptionReduction()
     {
         // Check if player has enough currency (you'll need to implement this check)
-        if (pMan.Mycelia >= corruptionReductionCost)
+        if (GameManager.Instance.Mycelia >= corruptionReductionCost)
         {
             if(corruptionLevel > 0)
             {
                 return false;
             }
             // Deduct currency
-            pMan.DecreaseMycelia(corruptionReductionCost);
+            GameManager.Instance.DecreaseMycelia(corruptionReductionCost);
 
             // Reduce corruption
             corruptionLevel = Mathf.Max(0, corruptionLevel - corruptionReductionAmount);
@@ -133,6 +133,8 @@ public class CorruptionHandler : MonoBehaviour
     public void ResetCorruptionLevel()
     {
         corruptionLevel = 0;
+        pMan.pUI.UpdateCorruptionDisplay(0);
+        pMan.pUI.UpdateCorruptedVision(0);
     }
     public void SetManager(PlayerManager player)
     {

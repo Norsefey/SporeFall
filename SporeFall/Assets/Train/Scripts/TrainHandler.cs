@@ -161,32 +161,11 @@ public class TrainHandler : MonoBehaviour
             {
                 foreach (PlayerManager player in GameManager.Instance.players)
                 {
-                    player.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
+                    GameManager.Instance.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
                 }
                 Debug.Log($"{structure.name} Refunded Due to Overlap");
                 structuresToRemove.Add(structure);
             }
-            
-            
-            
-            /* Debug.Log("Checking Structure");
-            Collider[] overlappingObjects = Physics.OverlapBox(
-                   structure.transform.position,
-                   structureCheckSize / 2f, // Half extents
-                   structure.transform.rotation,
-                   obstructionLayer
-               );
-            Debug.Log("Found Overlapps: " + overlappingObjects.Length);
-
-            if (overlappingObjects.Length > 0)
-            {
-                foreach (PlayerManager player in GameManager.Instance.players)
-                {
-                    player.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
-                }
-                Debug.Log($"{structure.name} Refunded Due to Overlap");
-                structuresToRemove.Add(structure);
-            }*/
         }
         // Remove all the marked structures
         for (int i = 0; i < structuresToRemove.Count; i++)
@@ -288,10 +267,7 @@ public class TrainHandler : MonoBehaviour
     }
     public void GivePlayersMycelia(float amount)
     {
-        foreach(PlayerManager player in GameManager.Instance.players)
-        {
-            player.IncreaseMycelia(amount);
-        }
+        GameManager.Instance.IncreaseMycelia(amount);
     }
     private void ClearDrops()
     {

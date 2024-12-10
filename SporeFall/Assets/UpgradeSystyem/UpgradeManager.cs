@@ -34,7 +34,7 @@ public class UpgradeManager : MonoBehaviour
         StructureLevel nextLevel = structureLevelData.GetLevel(currentLevel + 1);
         if (availableMycelia >= nextLevel.cost)
         {
-            GameManager.Instance.players[0].DecreaseMycelia(nextLevel.cost);
+            GameManager.Instance.DecreaseMycelia(nextLevel.cost);
             return true;
         }
         else
