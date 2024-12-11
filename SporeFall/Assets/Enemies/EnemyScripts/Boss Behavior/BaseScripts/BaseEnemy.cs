@@ -26,9 +26,9 @@ public abstract class BaseEnemy : MonoBehaviour
     [Header("Base Components")]
     [SerializeField] protected Attack[] attacks;
     [SerializeField] protected Animator animator;
-    protected NavMeshAgent agent;
     protected AudioSource audioSource;
     protected Damageable health;
+    public NavMeshAgent agent;
     public Transform firePoint;
 
     [Header("Strafe Behavior")]

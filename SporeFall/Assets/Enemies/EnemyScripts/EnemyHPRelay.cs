@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class EnemyHPRelay : Damageable
 {
-    [SerializeField] Damageable mainHP;
+    [SerializeField] EnemyHP mainHP;
     [SerializeField] float damageMultiplier = 1;
 
     public override void TakeDamage(float damage)
     {
         mainHP.TakeDamage(damage * damageMultiplier);
     }
-
+    public void KnockBack(Vector3 attackerPosition, float knockbackMultiplier)
+    {
+        StartCoroutine(mainHP.KnockBack(attackerPosition, knockbackMultiplier));
+    }
     protected override void Die()
     {
         throw new System.NotImplementedException();

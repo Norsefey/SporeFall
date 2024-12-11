@@ -32,6 +32,7 @@ public abstract class Weapon : MonoBehaviour
     public bool useSpread = true;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
     public float reloadTime = 2f; // Time it takes to reload
+    public float knockBackForce = 0;
     [Header("Ammo Variables")]
     public int bulletCount;
     public int bulletCapacity;
@@ -141,9 +142,10 @@ public abstract class Weapon : MonoBehaviour
             // Apply damage to the hit object
             if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("HeadShot"))
             {
-                if (hit.transform.TryGetComponent<Damageable>(out var damageable))
+                if (hit.transform.TryGetComponent<EnemyHPRelay>(out var damageable))
                 {
                     damageable.TakeDamage(damage);
+                    damageable.KnockBack(transform.position, knockBackForce);
                 }
             }
             vfx.MoveToLocation(hit.point, 50);
