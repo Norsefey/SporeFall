@@ -53,7 +53,6 @@ public class PlayerUI : MonoBehaviour
             corruptionBar.value = value;
         }
     }
-
     public void UpdateCorruptedVision(int corruptionStage)
     {
         if (corruptionStage == 0)
@@ -74,7 +73,6 @@ public class PlayerUI : MonoBehaviour
         imageColor.a = alpha;
         corruptedVisionImage.color = imageColor;
     }
-
     public IEnumerator ShowInsufficientFundsWarning(string text)
     {
         // Show warning text
@@ -100,7 +98,6 @@ public class PlayerUI : MonoBehaviour
             textPrompt.gameObject.SetActive(isActive);
         }
     }
-
     /* public void DisplayCorruptedVision(float value)
      {
          if (value < 60)
@@ -142,7 +139,6 @@ public class PlayerUI : MonoBehaviour
         if (HPBar != null)
             HPBar.value = value;
     }
-
     public void EnablePrompt(string text)
     {
         promptHolder.SetActive(true);

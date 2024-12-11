@@ -230,7 +230,6 @@ public class BuildGun : Weapon
         {
             selectedStructure.poolBehavior.ReturnObject();
             DeselectStructure();
-
         }
     }
     private void CheckStructureOverlap()
@@ -481,7 +480,8 @@ public class BuildGun : Weapon
 
             selectedStructure = null;
             originalMaterials = null;
-            player.pUI.EnableControls(editModeText);
+            if(isEditing)
+                player.pUI.EnableControls(editModeText);
         }
     }
     public void RotateStructure(float direction)
