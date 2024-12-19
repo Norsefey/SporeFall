@@ -13,7 +13,8 @@ public class EnemyHPRelay : Damageable
     }
     public void KnockBack(Vector3 attackerPosition, float knockbackMultiplier)
     {
-        StartCoroutine(mainHP.KnockBack(attackerPosition, knockbackMultiplier));
+        if(mainHP.isActiveAndEnabled)
+            StartCoroutine(mainHP.KnockBack(attackerPosition, knockbackMultiplier));
     }
     protected override void Die()
     {

@@ -76,10 +76,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attacks:
+  - {fileID: 11400000, guid: b5a3ee0b93524764c9c7e28f320d3407, type: 2}
   - {fileID: 11400000, guid: f3f6ba211ac99d04ca620388a9f1e136, type: 2}
   - {fileID: 11400000, guid: 7e5d88fc506a4134ebc0ba0346729ea2, type: 2}
-  - {fileID: 11400000, guid: 3868a9abeaaa90646a29a4e90adeb83c, type: 2}
   animator: {fileID: 7701723478874781303}
+  health: {fileID: 8705147953746396791}
+  agent: {fileID: 0}
   firePoint: {fileID: 8637544824667225467}
   strafeRadius: 20
   retreatDistance: 15
@@ -400,6 +402,7 @@ MonoBehaviour:
   canTakeDamage: 1
   hpDisplay: {fileID: 8336710176901167264}
   manager: {fileID: 6396919194862041732}
+  knockBackable: 0
 --- !u!1 &4493509185744279603
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,9 +507,9 @@ GameObject:
   - component: {fileID: 7429335551148465907}
   - component: {fileID: 2923401775885587930}
   - component: {fileID: 4801462645870735171}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BodyCollider
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -631,8 +634,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1000/1000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -771,9 +774,9 @@ GameObject:
   - component: {fileID: 2022286223459503743}
   - component: {fileID: 3435287363365828522}
   - component: {fileID: 3852553763801743831}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HeadShotCollider
-  m_TagString: Untagged
+  m_TagString: HeadShot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

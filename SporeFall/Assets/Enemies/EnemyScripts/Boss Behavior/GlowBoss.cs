@@ -77,6 +77,7 @@ public class GlowBoss : BaseEnemy
     }
     public override void Die()
     {
+        SpawnDrop();
         base.Die();
     }
 }

@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d946acd70ddf4646879bd435017a3d0, type: 3}
-  m_Name: SpitBall
+  m_Name: reinforcements
   m_EditorClassIdentifier: 
   range: 25
-  cooldown: 5
+  cooldown: 2
   damage: 10
-  attackDelay: 2
-  recoveryTime: 1.5
+  attackDelay: 0.5
+  recoveryTime: 0.5
   animationTrigger: RangedAttack
   attackVFXPrefab: {fileID: 0}
-  attackSFX: {fileID: 8300000, guid: 4a9558accb615124c8442867c1ff4bd7, type: 3}
-  predictTargetPosition: 1
+  attackSFX: {fileID: 0}
+  predictTargetPosition: 0
   predictionTime: 0.5
-  projectilePrefab: {fileID: 7441200720383325235, guid: 0d1af68ac54f4b84e8580e47f5c49ff8,
+  projectilePrefab: {fileID: 7441200720383325235, guid: 35ce948b26c2ac149953beb86bbc49b8,
     type: 3}
-  projectileSpeed: 20
-  projectileLifetime: 5
-  useGravity: 0
-  projectileArcHeight: 2.8
+  projectileSpeed: 10
+  projectileLifetime: 10
+  useGravity: 1
+  projectileArcHeight: 10
   canBounce: 0
   maxBounces: 3
   bounceDamageMultiplier: 0.7
-  projectileCount: 1
-  spreadAngle: 0
+  projectileCount: 15
+  spreadAngle: 180

@@ -26,8 +26,8 @@ public abstract class BaseEnemy : MonoBehaviour
     [Header("Base Components")]
     [SerializeField] protected Attack[] attacks;
     [SerializeField] protected Animator animator;
+    [SerializeField] protected Damageable health;
     protected AudioSource audioSource;
-    protected Damageable health;
     public NavMeshAgent agent;
     public Transform firePoint;
 
@@ -96,7 +96,6 @@ public abstract class BaseEnemy : MonoBehaviour
         // Get component references once
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
-        health = GetComponent<Damageable>();
         detectedColliders = new Collider[maxDetectedObjects];
     }
 

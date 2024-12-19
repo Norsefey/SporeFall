@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -266,7 +264,7 @@ public class WaveManager : MonoBehaviour
     }
 
     // Modified SpawnEnemy method to use object pooling
-    private void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint)
+    public void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint)
     {
         if (!enemyPools.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
         {

@@ -30,7 +30,10 @@ public class EnemyHP : Damageable
     {
         // call death on enemy
         if (manager != null)
+        {
+            StopAllCoroutines();
             manager.Die();
+        }
         else
             Destroy(transform.parent.gameObject);
     }

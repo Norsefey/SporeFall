@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
 // Projectile data structure
-[Serializable]
+[System.Serializable]
 public struct ProjectileData
 {
     public Vector3 Direction;
@@ -24,7 +21,8 @@ public enum ProjectileType
     Standard,
     Explosive,
     DOT, 
-    Corrupted
+    Corrupted,
+    Spawner
 }
 public class ProjectileBehavior : MonoBehaviour
 {
@@ -60,6 +58,9 @@ public class ProjectileBehavior : MonoBehaviour
 
     [Header("Corruption Settings")]
     [SerializeField] private float corruptionAmount;
+
+    [Header("Spawner Settings")]
+    [SerializeField] private GameObject[] entitiesToSpawn;
 
     private void Awake()
     {
@@ -136,6 +137,9 @@ public class ProjectileBehavior : MonoBehaviour
                     break;
                 case ProjectileType.Corrupted:
                     HandleCorruptionAttack(collision);
+                    break;
+                case ProjectileType.Spawner:
+                    HandleSpawnerBehavior();
                     break;
             }
         }
@@ -244,5 +248,12 @@ public class ProjectileBehavior : MonoBehaviour
             }
             damageable.TakeDamage(damage);
         }
+    }
+    private void HandleSpawnerBehavior()
+    {
+        int index = Random.Range(0, entitiesToSpawn.Length);
+
+        GameManager.Instance.waveManager.SpawnEnemy(entitiesToSpawn[index], transform);
+
     }
 }

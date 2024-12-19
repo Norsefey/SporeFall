@@ -204,7 +204,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6723776635264665680
 Transform:
   m_ObjectHideFlags: 0
@@ -264,6 +264,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bd0f54f78ab21f047a1dbcf3c3307695, type: 2}
   - {fileID: 11400000, guid: 57c900952df740a4c8571f61b136a711, type: 2}
   animator: {fileID: 7725938692442383174}
+  health: {fileID: 731574464148815496}
+  agent: {fileID: 0}
   firePoint: {fileID: 8961610249997544806}
   strafeRadius: 5
   retreatDistance: 10
@@ -509,6 +511,7 @@ MonoBehaviour:
   canTakeDamage: 1
   hpDisplay: {fileID: 8293907463534621136}
   manager: {fileID: 9009785512476672233}
+  knockBackable: 1
 --- !u!1 &6861531013628662072
 GameObject:
   m_ObjectHideFlags: 0
