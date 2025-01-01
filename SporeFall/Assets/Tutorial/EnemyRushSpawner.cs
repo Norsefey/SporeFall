@@ -41,7 +41,7 @@ public class EnemyRushSpawner : MonoBehaviour
     private IEnumerator SpawnWaveEnemies()
     {
         // Determine how many enemies to spawn this interval
-        int enemiesToSpawn = Random.Range(spawnSettings.minIntervalSpawn, spawnSettings.maxIntervalSpawn + 1);
+        int enemiesToSpawn = Random.Range(spawnSettings.minToSpawnAtOnce, spawnSettings.maxToSpawnAtOnce + 1);
 
         for (int i = 0; i < enemiesToSpawn; i++)
         {

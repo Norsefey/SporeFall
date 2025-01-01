@@ -44,8 +44,8 @@ public class Wave
     [Header("Spawn Settings")]
     public float minIntervalTime;
     public float maxIntervalTime;
-    public int minIntervalSpawn;
-    public int maxIntervalSpawn;
+    public int minToSpawnAtOnce;
+    public int maxToSpawnAtOnce;
 
     [Header("Final Wave Settings")]
     [Tooltip("Only configure if this is the final wave")]

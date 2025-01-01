@@ -153,7 +153,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
     protected void HandleCollision(Collision collision)
     {
-        if (audioPlayer != null)
+        if (audioPlayer != null && audioPlayer.isActiveAndEnabled)
             audioPlayer.PlayOneShot(bulletSound);
         if (vfxPrefab != null)
         {// if you have a VFX assigned, play it on collision

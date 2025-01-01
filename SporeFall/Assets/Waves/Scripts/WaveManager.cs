@@ -96,7 +96,7 @@ public class WaveManager : MonoBehaviour
                 continue;
             }
 
-            int spawnCount = Random.Range(currentWave.minIntervalSpawn, currentWave.maxIntervalSpawn);
+            int spawnCount = Random.Range(currentWave.minToSpawnAtOnce, currentWave.maxToSpawnAtOnce);
             for (int i = 0; i < spawnCount; i++)
             {
                 if (enemiesSpawned < currentWave.totalEnemies && enemiesAlive < maxEnemiesOnField)

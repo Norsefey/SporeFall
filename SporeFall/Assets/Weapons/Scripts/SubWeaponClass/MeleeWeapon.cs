@@ -7,7 +7,7 @@ public class MeleeWeapon : Weapon
     [Header("Melee Settings")]
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackArc = 90f; // Attack arc in degrees
-    [SerializeField] private float comboWindow = 1.5f; // Time window to perform next combo
+    //[SerializeField] private float comboWindow = 1.5f; // Time window to perform next combo
     [SerializeField] private float attackCooldown = 0.2f; // Cooldown between attacks
 
     [Header("Combo System")]
@@ -15,7 +15,8 @@ public class MeleeWeapon : Weapon
     private int currentComboIndex = 0;
     private float lastAttackTime;
     private bool canAttack = true;
-    private Coroutine comboResetCoroutine;
+    private bool isComboInProgress = false;
+    private Coroutine autoComboCoroutine;
 
     [System.Serializable]
     private class ComboAttack
@@ -25,6 +26,7 @@ public class MeleeWeapon : Weapon
         public float knockbackForce;
         public AudioClip attackSound;
         public string animationTrigger;
+        public float animationDuration; // Duration of this attack's animation
     }
 
     private void Start()
@@ -39,34 +41,56 @@ public class MeleeWeapon : Weapon
 
     public override void Fire()
     {
-        if (!canAttack) return;
-
-        if (Time.time - lastAttackTime > comboWindow)
+        // Start combo sequence if player is holding the fire button
+        if (player.isFiring && !isComboInProgress && canAttack)
         {
-            // Reset combo if too much time has passed
-            currentComboIndex = 0;
+            StartComboSequence();
         }
-
-        if (currentComboIndex >= comboAttacks.Count)
+        // Single attack if just clicked
+        else if (!player.isFiring && canAttack && !isComboInProgress)
         {
-            // Reset combo if we've completed all attacks
-            currentComboIndex = 0;
+            PerformSingleAttack();
         }
+    }
 
+    private void StartComboSequence()
+    {
+        isComboInProgress = true;
+        currentComboIndex = 0;
+        if (autoComboCoroutine != null)
+            StopCoroutine(autoComboCoroutine);
+        autoComboCoroutine = StartCoroutine(AutoCombo());
+    }
+
+    private void PerformSingleAttack()
+    {
+        currentComboIndex = 0; // Always use first attack
         PerformAttack(comboAttacks[currentComboIndex]);
-
-        // Update attack tracking
-        lastAttackTime = Time.time;
-        currentComboIndex++;
         canAttack = false;
-
-        // Start cooldown
         StartCoroutine(AttackCooldown());
+    }
 
-        // Reset combo after window expires
-        if (comboResetCoroutine != null)
-            StopCoroutine(comboResetCoroutine);
-        comboResetCoroutine = StartCoroutine(ResetComboAfterDelay());
+    private IEnumerator AutoCombo()
+    {
+        while (player.isFiring && currentComboIndex < comboAttacks.Count)
+        {
+            if (canAttack)
+            {
+                ComboAttack currentAttack = comboAttacks[currentComboIndex];
+                PerformAttack(currentAttack);
+                canAttack = false;
+                StartCoroutine(AttackCooldown());
+
+                // Wait for animation to complete before next attack
+                yield return new WaitForSeconds(currentAttack.animationDuration);
+                currentComboIndex++;
+            }
+            yield return null;
+        }
+
+        // Reset combo when sequence ends or player releases button
+        isComboInProgress = false;
+        currentComboIndex = 0;
     }
 
     private void PerformAttack(ComboAttack attack)
@@ -115,9 +139,14 @@ public class MeleeWeapon : Weapon
         canAttack = true;
     }
 
-    private IEnumerator ResetComboAfterDelay()
+    // This method can be called when the player releases the fire button early
+    public void CancelCombo()
     {
-        yield return new WaitForSeconds(comboWindow);
+        if (autoComboCoroutine != null)
+        {
+            StopCoroutine(autoComboCoroutine);
+        }
+        isComboInProgress = false;
         currentComboIndex = 0;
     }
 

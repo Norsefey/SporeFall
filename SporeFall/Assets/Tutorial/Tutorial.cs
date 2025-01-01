@@ -25,7 +25,7 @@ public class Tutorial : MonoBehaviour
     public int tutorialPrompt = 0;
     private bool keyboardTutorial = false;
     private bool xboxTutorial = false;
-    private bool playstationTutorial = false;
+    //private bool playstationTutorial = false;
     //private bool gamepadTutorial = false;
     private bool mainLevelTutorial = false;
     public bool tutorialStarted = false;

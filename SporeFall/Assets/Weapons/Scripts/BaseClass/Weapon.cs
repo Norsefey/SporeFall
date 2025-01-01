@@ -140,10 +140,9 @@ public abstract class Weapon : MonoBehaviour
             // Apply damage to the hit object
             if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("HeadShot"))
             {
-                if (hit.transform.TryGetComponent<EnemyHPRelay>(out var damageable))
+                if (hit.transform.TryGetComponent<Damageable>(out var damageable))
                 {
                     damageable.TakeDamage(damage);
-                    damageable.KnockBack(transform.position, knockBackForce);
                 }
             }
             vfx.MoveToLocation(hit.point, 50);
