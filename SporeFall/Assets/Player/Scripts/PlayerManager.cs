@@ -17,7 +17,6 @@ public class PlayerManager : MonoBehaviour
     public BuildGun bGun;
     public PlayerAnimation pAnime;
     public CorruptionHandler pCorruption;
-    public TrainHandler train;
     public Interactables interactable;
     [Header("Default Weapons")]
     public Weapon defaultWeapon;
@@ -342,8 +341,8 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(3);
         pAnime.ToggleRespawn(true);
 
-        if (train != null)
-            MovePlayerTo(train.playerSpawnPoint[GetPlayerIndex()].position);
+        if (GameManager.Instance.trainHandler != null)
+            MovePlayerTo(GameManager.Instance.trainHandler.playerSpawnPoint[GetPlayerIndex()].position);
         else
             MovePlayerTo(fallbackSpawnPoint.position);
         pCorruption.ResetCorruptionLevel();

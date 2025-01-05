@@ -52,8 +52,6 @@ public class GameManager : MonoBehaviour
     {
         // keep track of active players
         players.Add(player);
-        player.train = trainHandler;
-
         Debug.Log("Player Added");
 
         player.TogglePControl(false);

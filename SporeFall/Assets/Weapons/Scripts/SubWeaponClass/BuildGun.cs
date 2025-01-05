@@ -190,7 +190,7 @@ public class BuildGun : Weapon
                 {
                     player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
                 }
-                else if (!player.train.CheckEnergy(selectedStructure.GetCurrentEnergyCost()))
+                else if (!GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()))
                 {
                     player.pUI.EnablePrompt("<color=red>Too many Active Structures</color>");
                 }
@@ -499,10 +499,10 @@ public class BuildGun : Weapon
             selectedStructure.poolBehavior.ReturnObject();
 
             DeselectStructure();
-            if (player.train != null)
+            if (GameManager.Instance.trainHandler != null)
             {
                 GameManager.Instance.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));
-                player.train.RemoveStructure(toDelet);
+                GameManager.Instance.trainHandler.RemoveStructure(toDelet);
             }
             Debug.Log("Structure Deleted");
             if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 21)
