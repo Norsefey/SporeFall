@@ -437,8 +437,8 @@ public class BuildGun : Weapon
         Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, structureLayer) && !movingStructure)
-        {// we are looking at a structure select it and deactivate it to edit it
-            Debug.Log(hit.collider.name);
+        {// we are looking at a structure select it and deactivate its control script to edit it
+            //Debug.Log(hit.collider.name);
             if (selectedStructure == null)// to prevent assigning the same structure
             {
                 
@@ -470,7 +470,7 @@ public class BuildGun : Weapon
         }
     }
     private void DeselectStructure()
-    {
+    {// restores selected structures to default functionality
         if (selectedStructure != null && !movingStructure)
         {
             SetStructureToOpaque();

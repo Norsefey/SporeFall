@@ -72,6 +72,9 @@ public class PlayerManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Y) && !isBuilding)
             {
+                if(defaultSword == null)
+                    return;
+
                 if (!meleeActive)
                 {
                     meleeActive = true;

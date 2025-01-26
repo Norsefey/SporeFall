@@ -15,6 +15,8 @@ public class UpgradeManager : MonoBehaviour
     public Dictionary<StructureType, int> structureLevels = new Dictionary<StructureType, int>();
     public List<StructureLevels> structureStats = new List<StructureLevels>();
 
+    //public List<PlayerUpgrade> playerUpgrades = new List<PlayerUpgrade>();
+
     private void Awake()
     {
         // Initialize all structure levels to 0

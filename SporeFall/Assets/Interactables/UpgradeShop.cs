@@ -21,12 +21,10 @@ public class UpgradeShop : Interactables
         // ESC now closes Shop Menu instead of pause
         if (GameManager.Instance.waveManager.wavePhase == WaveManager.WavePhase.NotStarted)
         {
+            // Update upgrade UI
             GameManager.Instance.gameUI.ShowUpgradeMenu(true);
             player.pInput.ToggleUpgradeMenu(true);
             player.pUI.DisablePrompt();
-
-            // Update upgrade UI
-
         }
     }
     // remove prompt and anything else

@@ -9,14 +9,22 @@ public class UpgradeUI : MonoBehaviour
     public TMP_Text myceliaText;
     public Transform scrollViewContent;
     public GameManager gameManager;
+
+    [SerializeField] private GameObject structBannerHolder;
+    [SerializeField] private GameObject playerBannerHolder;
+
+
     private void OnEnable()
     {
         UpdateMyceliaAmount();
-        PopulateUpgradeBanners();
+        ShowStructureUpgrades();
     }
 
-    public void PopulateUpgradeBanners()
+    public void ShowStructureUpgrades()
     {
+        playerBannerHolder.SetActive(false);
+        structBannerHolder.SetActive(true);
+
         foreach (StructureType type in System.Enum.GetValues(typeof(StructureType)))
         {
             GameObject bannerObj = Instantiate(upgradeBannerPrefab, scrollViewContent);
@@ -31,7 +39,11 @@ public class UpgradeUI : MonoBehaviour
                 banner.SetupBanner(type, nextLevel);
         }
     }
-
+    public void ShowPlayerUpgrades()
+    {
+        structBannerHolder.SetActive(false);
+        playerBannerHolder.SetActive(true);
+    }
     public void UpdateMyceliaAmount()
     {
         myceliaText.color = Color.white;
