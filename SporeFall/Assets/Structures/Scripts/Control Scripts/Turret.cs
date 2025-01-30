@@ -11,8 +11,8 @@ public class Turret : MonoBehaviour
         detectionRange, 
         rotationSpeed, 
         fireRate, 
-        fireRange, 
-        fireCooldown;
+        fireRange 
+        ;
     //[HideInInspector]
     public ProjectileData bulletData;
     [Header("Turret Settings")]
@@ -117,10 +117,10 @@ public class Turret : MonoBehaviour
         float distance = Vector3.Distance(transform.position, targetEnemy.position);
         bool isInRange = distance >= minimumFireRange && distance <= fireRange;
 
-        if (!isInRange)
+     /*   if (!isInRange)
         {
            // debugStatus += $"Target out of range (distance: {distance:F1})... ";
-        }
+        }*/
 
         return isInRange;
     }
@@ -193,10 +193,6 @@ public class Turret : MonoBehaviour
             Shoot();
             lastFireTime = currentTime;
         }
-        else
-        {
-          //  debugStatus += "Can't shoot: Raycast missed... ";
-        }
     }
 
     // Fire a bullet towards the enemy and play the firing sound
@@ -212,16 +208,15 @@ public class Turret : MonoBehaviour
            // Debug.LogError($"No pool found for projectile prefab: {bulletPrefab.name}");
             return;
         }
-
-        ProjectileBehavior projectile = pool.Get(
-            firePoint.position,
-            Quaternion.LookRotation(firePoint.forward)
-        );
-
-        if (projectile != null)
+        else
         {
-            bulletData.Direction = firePoint.forward;
-            projectile.Initialize(bulletData, pool);
+            ProjectileBehavior projectile = pool.Get(firePoint.position,Quaternion.LookRotation(firePoint.forward));
+
+            if (projectile != null)
+            {
+                bulletData.Direction = firePoint.forward;
+                projectile.Initialize(bulletData, pool);
+            }
         }
     }
 

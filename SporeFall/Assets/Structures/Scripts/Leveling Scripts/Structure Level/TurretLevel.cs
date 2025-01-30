@@ -12,7 +12,6 @@ public class TurretLevel : StructureLevel
     public float rotationSpeed = 5f;         // Speed of the turret rotation
     public float fireRate = 1f;              // How often the turret fires
     public float fireRange = 100f;        // Maximum range of raycast
-    public float fireCooldown = 0f;
 
     [Header("Projectile Stats")]
     public float speed;

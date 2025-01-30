@@ -7,7 +7,7 @@ using UnityEngine;
 public class FlameThrowerLevel : StructureLevel
 {
     [Header("Flamethrower Specific")]
-    public float damagePerSecond;
+    public float damageAmount;
     public float range;
-    public float tickRate;
+    public float damageTickRate;
 }

@@ -26,9 +26,9 @@ public class FlameThrowerStatUpdater : MonoBehaviour, IStructureStats
     {
         var levelData = levels.levels[level];
 
-        flamey.damagePerSecond = levelData.damagePerSecond;
+        flamey.damageAmount = levelData.damageAmount;
         flamey.range = levelData.range;
-        flamey.tickRate = levelData.tickRate;
+        flamey.damageTickRate = levelData.damageTickRate;
 
     }
 }

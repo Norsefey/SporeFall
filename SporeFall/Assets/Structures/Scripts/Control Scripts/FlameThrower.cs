@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlameThrower : MonoBehaviour
 {
     [HideInInspector]
-    public float damagePerSecond, range, tickRate;      // Damage per second dealt to enemies
+    public float damageAmount, range, damageTickRate;      // Damage per second dealt to enemies
     public LayerMask enemyLayer;            // The layer that enemies are on
 
     private float tickTimer = 0f;
@@ -32,7 +32,7 @@ public class FlameThrower : MonoBehaviour
         tickTimer += Time.deltaTime;
 
         // Apply damage at intervals (tickRate)
-        if (tickTimer >= tickRate)
+        if (tickTimer >= damageTickRate)
         {
             bool enemiesInRange = DamageEnemiesInRange();
             tickTimer = 0f; // Reset timer
@@ -64,7 +64,7 @@ public class FlameThrower : MonoBehaviour
             hasHitEnemies = true;
 
             // Assuming the enemy has a script with a method to take damage
-            enemy.GetComponent<Damageable>()?.TakeDamage(damagePerSecond * tickRate);
+            enemy.GetComponent<Damageable>()?.TakeDamage(damageAmount * damageTickRate);
             Debug.Log("hit");
             pp.PlayEffects();
             
