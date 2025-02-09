@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHP : Damageable
 {
     private PlayerManager pMan;
     public int lives = 3;
+
+    [SerializeField] GameObject flashImage;
     // Start is called before the first frame update
     private void Start()
     {
@@ -28,6 +31,9 @@ public class PlayerHP : Damageable
 
         }
     }
+
+
+
     public void IncreaseLife()
     {
         lives++;
@@ -49,9 +55,24 @@ public class PlayerHP : Damageable
         pMan.pAnime.ActivateATrigger("Dead");
 
         DepleteLife();
-        pMan.StartRespawn();
+        StartCoroutine(DeathEffectRoutine());
     }
-    
+    private IEnumerator DeathEffectRoutine()
+    {
+        // Flash effect
+        flashImage.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(.2f);
+        // Freeze the game
+        Time.timeScale = 0f;
+        yield return new WaitForSecondsRealtime(.9f);
+
+        // Restore normal time scale
+        flashImage.SetActive(false);
+        Time.timeScale = 1f;
+        pMan.StartRespawn();
+
+    }
     protected override void UpdateUI()
     {
         pMan.pUI.UpdateHPDisplay(currentHP);
