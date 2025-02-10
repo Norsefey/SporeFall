@@ -67,8 +67,8 @@ public class PlayerHP : Damageable
         // Freeze the game
         Time.timeScale = 0f;
         // pan camera around player
-        StartCoroutine( pMan.pCamera.PanAroundPlayer(transform, 4, 90));
-        yield return new WaitForSecondsRealtime(4f);
+        StartCoroutine( pMan.pCamera.PanAroundPlayer(transform, 3, 90));
+        yield return new WaitForSecondsRealtime(3f);
 
         // Unfreeze game and respawn
         pMan.pAnime.ToggleIKAim(true);
