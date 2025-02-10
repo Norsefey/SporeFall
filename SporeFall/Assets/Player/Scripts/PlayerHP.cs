@@ -8,7 +8,7 @@ public class PlayerHP : Damageable
     private PlayerManager pMan;
     public int lives = 3;
 
-    [SerializeField] GameObject flashImage;
+    [SerializeField] GameObject deathVFX;
     // Start is called before the first frame update
     private void Start()
     {
@@ -60,15 +60,19 @@ public class PlayerHP : Damageable
     private IEnumerator DeathEffectRoutine()
     {
         // Flash effect
-        flashImage.SetActive(true);
-
-        yield return new WaitForSecondsRealtime(.2f);
+        deathVFX.SetActive(true);
+        pMan.pAnime.ToggleIKAim(false);
+        // allow death animation to play abit
+        yield return new WaitForSecondsRealtime(.5f);
         // Freeze the game
         Time.timeScale = 0f;
-        yield return new WaitForSecondsRealtime(.9f);
+        // pan camera around player
+        StartCoroutine( pMan.pCamera.PanAroundPlayer(transform, 4, 90));
+        yield return new WaitForSecondsRealtime(4f);
 
-        // Restore normal time scale
-        flashImage.SetActive(false);
+        // Unfreeze game and respawn
+        pMan.pAnime.ToggleIKAim(true);
+        deathVFX.SetActive(false);
         Time.timeScale = 1f;
         pMan.StartRespawn();
 

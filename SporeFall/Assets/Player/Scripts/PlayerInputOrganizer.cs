@@ -357,12 +357,12 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnAimSightCall(InputAction.CallbackContext context)
     {
-        pMan.pAnime.ToggleAimAnime(true);
+        pMan.pAnime.ToggleAimSightAnime(true);
         pMan.pCamera.AimSight();
     }
     private void OnDefaultSightCall(InputAction.CallbackContext context)
     {
-        pMan.pAnime.ToggleAimAnime(false);
+        pMan.pAnime.ToggleAimSightAnime(false);
         pMan.pCamera.DefaultSight();
     }
     private void OnJumpCall(InputAction.CallbackContext context)

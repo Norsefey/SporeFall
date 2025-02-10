@@ -17,11 +17,13 @@ public class PlayerAnimation : MonoBehaviour
 
     //[Header("Rigs")]// IK rigs for Aiming
     //[SerializeField] private Rig oneHandedRig;
-   // [SerializeField] private Rig twoHandedRig;
+    // [SerializeField] private Rig twoHandedRig;
     // For animation layers
     //private int oneHandedLayerIndex = 1;// will holds one handed animations
     //private int twoHandedLayerIndex = 2;// holds two handed animations
     //private int noWeaponLayerIndex = 3;// for when player holds no weapons
+
+    [SerializeField] private Rig headLook;
     // Animation states
     private bool isWalking = false;
     private bool isAiming = false;
@@ -106,19 +108,10 @@ public class PlayerAnimation : MonoBehaviour
     {
         anime.SetBool("IsSprinting", toggle);
     }
-    public void ToggleAimAnime(bool toggle)
+    public void ToggleAimSightAnime(bool toggle)
     {
         if(pMan.currentWeapon == null)
             return;
-
-      /*  if (toggle)
-        {
-            tbIk.weight = 1;
-        }
-        else if(!twoHanded)
-        {
-            tbIk.weight = 0;
-        }*/
         anime.SetBool("IsAiming", toggle);
         isAiming = toggle;
     }
@@ -208,31 +201,7 @@ public class PlayerAnimation : MonoBehaviour
     }*/
     public void ToggleIKAim(bool toggle)
     {
-        if(pMan.currentWeapon == null)
-            return;
-       /* if (!toggle)
-        {
-           *//* if (twoHanded)
-            {
-                twoHandedRig.weight = 0;
-            }
-            else
-            {
-                oneHandedRig.weight = 0;
-            }*//*
-        }
-        else
-        {
-            if (twoHanded)
-            {
-                twoHandedRig.weight = 1;
-            }
-            else
-            {
-                oneHandedRig.weight = 1;
-            }
-        }*/
-    
+        headLook.weight = toggle ? 1 : 0;
     }
    /* public void ToggleNoWeapon(bool toggle)
     {

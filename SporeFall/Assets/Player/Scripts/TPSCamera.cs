@@ -1,9 +1,7 @@
 // Ignore Spelling: Gamepad
 
-using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
-
 public class TPSCamera : MonoBehaviour
 {
     [Header("references")]
@@ -45,7 +43,7 @@ public class TPSCamera : MonoBehaviour
     private float vertRot = 0;
     private float horSense = 50;
     private float verSense = 50;
-
+    private float angle = 0f;
     private void Start()
     {
         myCamera.transform.localPosition = defaultOffset;
@@ -53,7 +51,7 @@ public class TPSCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        Ray ray = new(myCamera.transform.position, myCamera.transform.forward);
+       /* Ray ray = new(myCamera.transform.position, myCamera.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, targetMask))
         {
             pMan.pAnime.ToggleIKAim(true);
@@ -62,7 +60,7 @@ public class TPSCamera : MonoBehaviour
         else
         {
             pMan.pAnime.ToggleIKAim(false);
-        }
+        }*/
 
             // moves camera set along with Character
             HolderMovement();
@@ -157,6 +155,30 @@ public class TPSCamera : MonoBehaviour
 
         player.SetDefaultState();
     }
+    public IEnumerator PanAroundPlayer(Transform target, float duration, float orbitSpeed)
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.unscaledDeltaTime; // Use unscaledDeltaTime since time is frozen
+
+            // Increment angle for rotation
+            angle += orbitSpeed * Time.unscaledDeltaTime;
+
+            // Calculate new position around the player
+            float x = target.position.x + Mathf.Cos(angle * Mathf.Deg2Rad) * 5;
+            float z = target.position.z + Mathf.Sin(angle * Mathf.Deg2Rad) * 5;
+
+            // Update camera position
+            transform.position = new Vector3(x, transform.position.y, z);
+
+            // Keep looking at the player
+            transform.LookAt(target);
+
+            yield return null;
+        }
+    }
+
     public void SetManager(PlayerManager pManager)
     {
         this.pMan = pManager;
