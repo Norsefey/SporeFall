@@ -89,6 +89,8 @@ public abstract class BaseEnemy : MonoBehaviour
 
     private bool isInitialized = false;
     private bool isRising = false;
+    [Header("Animations")]
+    [SerializeField] private float risingAnimationLength = 2;
 
     protected virtual void Awake()
     {
@@ -666,9 +668,16 @@ public abstract class BaseEnemy : MonoBehaviour
     private IEnumerator RisingFromGround()
     {
         agent.isStopped = true;
+        float temp = agent.speed;
+        agent.speed = 0;
         isRising = true;
-        yield return new WaitForSeconds(2);
+        Debug.Log("Rising From Ground");
+        yield return new WaitForSeconds(risingAnimationLength);
+        Debug.Log("Done Rising");
+
         agent.isStopped = false;
+        agent.speed = temp;
+
         isRising = false;
         DetectTargets();
         SetRandomState();
