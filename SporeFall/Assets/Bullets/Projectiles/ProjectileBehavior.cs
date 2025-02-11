@@ -253,7 +253,7 @@ public class ProjectileBehavior : MonoBehaviour
     {
         int index = Random.Range(0, entitiesToSpawn.Length);
 
-        GameManager.Instance.waveManager.SpawnEnemy(entitiesToSpawn[index], transform);
+        GameManager.Instance.waveManager.SpawnEnemy(entitiesToSpawn[index], transform, 0);
 
     }
 }

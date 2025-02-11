@@ -31,7 +31,6 @@ public class MobEnemy : BaseEnemy
 
         return priority;
     }
-
     private void SpawnMyceliaDrop()
     {
         if (myceliaDropPrefab == null)
@@ -52,7 +51,6 @@ public class MobEnemy : BaseEnemy
             mycelia.Setup(worth);  // Fixed to use the calculated worth instead of minMyceliaWorth
         }
     }
-
     private void TrySpawnWeaponDrop()
     {
         // Check if we have any weapons to drop and if we pass the random chance check

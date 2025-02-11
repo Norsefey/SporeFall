@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.GraphicsBuffer;
-
+using UnityEngine.UIElements;
 
 public enum EnemyState
 {
@@ -21,7 +20,6 @@ public abstract class BaseEnemy : MonoBehaviour
     // Public events
     public delegate void EnemyDeath(BaseEnemy enemy); // Modified to pass the enemy instance
     public event EnemyDeath OnEnemyDeath;
-
 
     [Header("Base Components")]
     [SerializeField] protected Attack[] attacks;
@@ -90,6 +88,7 @@ public abstract class BaseEnemy : MonoBehaviour
     public AudioSource AudioSource => audioSource;
 
     private bool isInitialized = false;
+    private bool isRising = false;
 
     protected virtual void Awake()
     {
@@ -111,7 +110,6 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     protected virtual void Initialize()
     {
-        // One-time initialization code
         agent.stoppingDistance = stoppingDistance;
     }
     protected virtual void ResetState()
@@ -147,16 +145,20 @@ public abstract class BaseEnemy : MonoBehaviour
             agent.velocity = Vector3.zero;
         }
 
-        // Reset animation
+       /* // Reset animation
         if (animator != null)
         {
             animator.Rebind();
             animator.Update(0f);
-        }
+        }*/
 
-        // Start behavior
-        DetectTargets();
-        SetRandomState();
+        // do not want movement while rising from from ground
+        if (!isRising)
+        {
+            // Start behavior
+            DetectTargets();
+            SetRandomState();
+        }
     }
     protected virtual void Update()
     {
@@ -568,13 +570,6 @@ public abstract class BaseEnemy : MonoBehaviour
             yield return waitTime;
         }
     }
-    private void SetDefaultTarget()
-    {
-        if(train != null)
-        {
-            trainWall = train.GetDamagePoint();
-        }
-    }
     // Add this helper method to check if a target position is accessible via NavMesh
     private bool IsTargetAccessible(Transform target)
     {
@@ -660,5 +655,22 @@ public abstract class BaseEnemy : MonoBehaviour
     public void CheckDamageThreshold(float damageTaken)
     {
         passedThreshold = damageTaken >= targetSwitchThreshold;
+    }
+
+    public void TriggerRiseAnimation()
+    {
+        animator.SetTrigger("Rise");
+        StartCoroutine(RisingFromGround());
+    } 
+
+    private IEnumerator RisingFromGround()
+    {
+        agent.isStopped = true;
+        isRising = true;
+        yield return new WaitForSeconds(2);
+        agent.isStopped = false;
+        isRising = false;
+        DetectTargets();
+        SetRandomState();
     }
 }

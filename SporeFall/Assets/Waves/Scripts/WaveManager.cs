@@ -50,7 +50,6 @@ public class WaveManager : MonoBehaviour
     private Dictionary<GameObject, EnemyObjectPool> enemyPools;
     private EnemyObjectPool bossPool;
 
-
     public GameObject explosionPrefab;
 
     private void Start()
@@ -219,15 +218,15 @@ public class WaveManager : MonoBehaviour
             {
                 if (selectedEnemy.SpawnedCount < selectedEnemy.totalToSpawn)
                 {
-                    SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint);
-                    selectedEnemy.SpawnedCount++;
+                    SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint, spawnPointIndex);
+                    selectedEnemy.SpawnedCount++; 
                 }
             }
         }
         else
         {
             // Spawn single enemy
-            SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint);
+            SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint, spawnPointIndex);
             selectedEnemy.SpawnedCount++;
         }
     }
@@ -263,8 +262,8 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    // Modified SpawnEnemy method to use object pooling
-    public void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint)
+   
+    public void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint, int spawnIndex)
     {
         if (!enemyPools.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
         {
@@ -275,6 +274,9 @@ public class WaveManager : MonoBehaviour
         BaseEnemy enemy = pool.Get(spawnPoint.position, spawnPoint.rotation);
         enemy.OnEnemyDeath += OnEnemyDeath;
         enemy.AssignDefaultTarget(train, train.transform);
+        // enemy is spawning outside the pod, play rise from ground animation
+        if(spawnIndex > 2)
+            enemy.TriggerRiseAnimation();
 
         enemiesAlive++;
         enemiesSpawned++;
@@ -310,7 +312,7 @@ public class WaveManager : MonoBehaviour
                 int randomSpawnPoint = Random.Range(0, currentWave.spawnLocations.Length);
                 Transform squadSpawnPoint = currentWave.spawnLocations[randomSpawnPoint];
 
-                SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint);
+                SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint, randomSpawnPoint);
 
                 yield return new WaitForSeconds(0.1f); // Prevent overlap
             }
@@ -345,14 +347,14 @@ public class WaveManager : MonoBehaviour
                 {
                     if (randomEnemyData.SpawnedCount < randomEnemyData.totalToSpawn)
                     {
-                        SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint);
+                        SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint, randomSpawnPoint);
                     }
                 }
             }
             else
             {
                 // Spawn single enemy
-                SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint);
+                SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint, randomSpawnPoint);
             }
             // horde is endless
             //hordeSpawned++;
