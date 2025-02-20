@@ -6,15 +6,13 @@ public class Billboard : MonoBehaviour
 {
     private Camera mainCamera;
 
-    private void Start()
-    {
-        // Cache the main camera reference for performance
-    }
-
     private void LateUpdate()
     {
         if(mainCamera == null)
+        {
             mainCamera = Camera.main;
+        }
+            
 
         if (mainCamera != null)
         {

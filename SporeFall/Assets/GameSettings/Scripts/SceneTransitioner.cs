@@ -36,4 +36,9 @@ public class SceneTransitioner : MonoBehaviour
         Cursor.visible = true;
         SceneManager.LoadScene(loseSceneIndex);
     }
+
+    public void UseIndexToLoadScene(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
 }
