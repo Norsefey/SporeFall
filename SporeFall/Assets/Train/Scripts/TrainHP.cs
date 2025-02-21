@@ -8,7 +8,7 @@ public class TrainHP : Damageable
     private void Start()
     {
         currentHP = maxHP;
-        UpdateUI();
+        UpdateHPUI();
     }
 
     private void Update()
@@ -29,7 +29,7 @@ public class TrainHP : Damageable
         StartCoroutine(train.DestroyTrain());
     }
 
-    protected override void UpdateUI()
+    protected override void UpdateHPUI()
     {
         train.tUI.UpdateHPDisplay(currentHP);
     }

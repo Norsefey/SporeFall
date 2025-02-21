@@ -12,7 +12,7 @@ public class PayloadHP : Damageable
     private void Start()
     {
         currentHP = maxHP; // Initialize health
-        UpdateUI();
+        UpdateHPUI();
     }
     protected override void Die()
     {
@@ -20,7 +20,7 @@ public class PayloadHP : Damageable
         payload.DestroyPayload();
     }
 
-    protected override void UpdateUI()
+    protected override void UpdateHPUI()
     {
         if(healthDisplay != null)
             healthDisplay.text = currentHP.ToString("F0") + "/" + maxHP.ToString();

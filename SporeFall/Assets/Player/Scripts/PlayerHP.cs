@@ -5,15 +5,17 @@ using UnityEngine.UI;
 
 public class PlayerHP : Damageable
 {
-    [SerializeField]private PlayerManager pMan;
-    public int lives = 3;
-
+    [SerializeField] private PlayerManager pMan;
+    [SerializeField] private int defaultMaxLives = 3;
+    [SerializeField] private int coopMaxLives = 2;
+    private int currentLives = 3;
+    public int CurrentLives => currentLives;
     [SerializeField] GameObject deathVFX;
     // Start is called before the first frame update
     private void Start()
     {
         currentHP = maxHP;
-        UpdateUI();
+        UpdateHPUI();
     }
     public override void TakeDamage(float damage)
     {
@@ -22,34 +24,43 @@ public class PlayerHP : Damageable
 
     public void DepleteLife()
     {
-        lives--;
-        if(pMan != null)
-            pMan.pUI.UpdateLifeDisplay(lives);
-        if (lives <= 0)
+        currentLives--;
+        if (pMan != null)
+            pMan.pUI.UpdateLifeDisplay(currentLives);
+        if (currentLives <= 0)
         {
-            lives = 0;
+            currentLives = 0;
             isDead = true;
             GameManager.Instance.GameOver();
         }
     }
     public void IncreaseLife()
     {
-        lives++;
-        pMan.pUI.UpdateLifeDisplay(lives);
+        currentLives++;
+        pMan.pUI.UpdateLifeDisplay(currentLives);
     }
-    public void SetReducedLife(int setAmount)
+    public void SetReducedLife()
     {
         // When another player joins, i want each to have 2 lives instead of the default 3, but only if player hasn't already died once
-        if(lives > setAmount)
-            lives = setAmount;
-        pMan.pUI.UpdateLifeDisplay(lives);
+        if(currentLives > coopMaxLives)
+            currentLives = coopMaxLives;
+        else if(currentLives == coopMaxLives)// if player has lost a life, they do not regain a life
+            currentLives = coopMaxLives - 1;
+        // finally if player lives is below the coop max lives, we do not need to do anything
+       
+        // Update UI
+        pMan.pUI.UpdateLifeDisplay(coopMaxLives);
+    }
+    // when coop player leaves return lives to normal
+    public void SetDefaultLife()
+    {
+        // restore life lost with coop
+        if (currentLives < defaultMaxLives)
+            IncreaseLife();
     }
     public void SetManager(PlayerManager player)
     {
         pMan = player;
-
-        if (pMan.pUI != null)
-            pMan.pUI.UpdateLifeDisplay(lives);
     }
     protected override void Die()
     {
@@ -81,14 +92,14 @@ public class PlayerHP : Damageable
         pMan.StartRespawn();
 
     }
-    protected override void UpdateUI()
+    protected override void UpdateHPUI()
     {
         pMan.pUI.UpdateHPDisplay(currentHP);
     }
     public override void ResetHealth()
     {
         base.ResetHealth();
-        UpdateUI();
+        UpdateHPUI();
     }
     public override void IncreaseCorruption(float amount)
     {

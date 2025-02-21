@@ -113,8 +113,6 @@ public class PlayerDeviceHandler : MonoBehaviour
         Debug.Log($"Player {playerInput.playerIndex} joined with device {playerInput.devices[0].displayName}");
         players.Add(playerInput);
 
-
-
         if (singlePlayer && players.Count == 1)
         {
             // In single player, disable joining after first player
@@ -142,7 +140,7 @@ public class PlayerDeviceHandler : MonoBehaviour
         else if(players.Count > 1)
         {
             // reduce lives on first player
-            //players[0].GetComponent<PlayerManager>().pHealth.SetReducedLife(2);
+            players[0].GetComponent<PlayerManager>().pHealth.SetReducedLife();
 
             // perform set up for player two
             if (players[1] != null)
@@ -150,6 +148,8 @@ public class PlayerDeviceHandler : MonoBehaviour
                 // change color, lose a HP, disable audio listener, and any other thing need for second player
                 players[1].GetComponent<PlayerManager>().SetupPlayerTwo();
             }
+            // max 2 players
+            inputManager.DisableJoining();
         }
     }
     private void OnPlayerLeft(PlayerInput playerInput)
@@ -158,7 +158,16 @@ public class PlayerDeviceHandler : MonoBehaviour
         {
             players.Remove(playerInput);
             Debug.Log($"Player {playerInput.playerIndex} left the game.");
+
         }
+
+        if (players.Count == 1)
+        {
+            Debug.Log("Resetting to single player view");
+            ResetToSinglePlayer();
+        }
+
+        inputManager.EnableJoining();
     }
 
     // Handle device disconnection
@@ -179,9 +188,7 @@ public class PlayerDeviceHandler : MonoBehaviour
     {
         if (device is Gamepad gamepad)
         {
-            //usingGamepad = true;
-
-            if (device is XInputController)
+            /*if (device is XInputController)
             {
                 Debug.Log($"Single player switched to Xbox Controller: {gamepad.displayName}");
 
@@ -190,7 +197,7 @@ public class PlayerDeviceHandler : MonoBehaviour
             {
                 Debug.Log($"Single player switched to PS Controller: {gamepad.displayName}");
 
-            }
+            }*/
 
 
             if (singlePlayer && players.Count > 0)
@@ -238,26 +245,91 @@ public class PlayerDeviceHandler : MonoBehaviour
             }
             else if (!singlePlayer)
             {
+                Debug.Log("Not Singleplayer need to remove player");
                 // In multiplayer, find and remove the player using this device
-                PlayerInput playerToRemove = FindPlayerByDevice(device);
+                PlayerInput playerToRemove = FindPlayerWithoutDevice(device);
                 if (playerToRemove != null)
                 {
-                    Debug.Log($"Removing player {playerToRemove.playerIndex} due to disconnected device");
-                    Destroy(playerToRemove.gameObject);
+                    int playerIndex = playerToRemove.playerIndex;
+                    Debug.Log($"Found player to remove: Player {playerIndex}");
+
+                    // Remove from our list
+                    players.Remove(playerToRemove);
+                    Debug.Log($"Players remaining after removal: {players.Count}");
+
+                    // Destroy the player GameObject
+                    GameManager.Instance.RemovePlayer(playerToRemove.GetComponent<PlayerManager>());
+                    // Reset to single player view if only one player remains
+                    if (players.Count == 1)
+                    {
+                        Debug.Log("Resetting to single player view");
+                        ResetToSinglePlayer();
+                    }
+
+                    inputManager.EnableJoining();
+                }
+                else
+                {
+                    Debug.LogWarning("Could not find player associated with disconnected device!");
+                    // Fallback: try to find player by checking all active players
+                    LogAllActivePlayers();
                 }
             }
+        
         }
     }
 
-    private PlayerInput FindPlayerByDevice(InputDevice device)
+    private PlayerInput FindPlayerWithoutDevice(InputDevice device)
     {
+        Debug.Log($"Searching for player using device: {device.displayName}");
+
         foreach (var player in players)
         {
-            if (player.devices.Contains(device))
+            int counter = 0;
+            if (player == null) continue;
+
+            Debug.Log($"Checking player {player.playerIndex} with devices:");
+            foreach (var playerDevice in player.devices)
             {
+                Debug.Log($"- {playerDevice.displayName}");
+                counter++;
+            }
+
+            if(counter == 0)
                 return player;
+        }
+
+        // If we get here, we didn't find a match
+        Debug.Log("No player found for disconnected device");
+        return null;
+    }
+    private void ResetToSinglePlayer()
+    {
+        // Reset remaining player's position if needed
+        if (players.Count > 0)
+        {
+            PlayerManager remainingPlayer = players[0].GetComponent<PlayerManager>();
+            if (remainingPlayer != null)
+            {
+                // Reset any other player-specific settings
+                remainingPlayer.pHealth.SetDefaultLife();
             }
         }
-        return null;
+    }
+    private void LogAllActivePlayers()
+    {
+        Debug.Log("=== Active Players ===");
+        foreach (var player in players)
+        {
+            if (player != null)
+            {
+                Debug.Log($"Player {player.playerIndex} devices:");
+                foreach (var device in player.devices)
+                {
+                    Debug.Log($"- {device.displayName}");
+                }
+            }
+        }
+        Debug.Log("===================");
     }
 }

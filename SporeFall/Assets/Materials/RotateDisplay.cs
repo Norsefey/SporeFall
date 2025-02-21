@@ -1,14 +1,87 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RotateDisplay : MonoBehaviour
 {
-    [SerializeField] private Slider slider;
+    private bool canRotate = false;
+    public float rotationSpeed = 5f; // Adjust rotation speed
 
-    public void SetRotation()
+    private bool isDragging = false;
+    private float lastMouseX;
+    [SerializeField] TMP_Text playerTitle;
+    [Header("Player One")]
+    [SerializeField] GameObject playerOne;
+    [SerializeField] GameObject pOneColorPickers;
+    [Header("Player Two")]
+    [SerializeField] GameObject playerTwo;
+    [SerializeField] GameObject pTwoColorPickers;
+    /* public void SetRotation()
+     {
+         transform.rotation = Quaternion.Euler(0,slider.value,0);
+
+         if (slider.value > 360)
+             slider.value = 0;
+         else if (slider.value < 0)
+             slider.value = 360;
+     }*/
+    private void Start()
     {
-        transform.rotation = Quaternion.Euler(0,slider.value,0);
+        pTwoColorPickers.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (canRotate)
+        {
+            Vector3 mousePos = Input.mousePosition;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                isDragging = true;
+                lastMouseX = mousePos.x;
+            }
+
+
+            if (isDragging)
+            {
+                if (Input.GetMouseButton(0))
+                {
+                    float deltaX = mousePos.x - lastMouseX;
+                    transform.Rotate(Vector3.up, -deltaX * rotationSpeed * Time.deltaTime);
+                    lastMouseX = mousePos.x;
+                }
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                isDragging = false;
+            }
+        }
+    }
+    public void ChangePlayer()
+    {
+        if (playerOne.activeSelf)
+        {
+            playerTitle.text = "Player Two";
+            playerOne.SetActive(false);
+            pOneColorPickers.SetActive(false);
+            pTwoColorPickers.SetActive(true);
+            playerTwo.SetActive(true);
+        }
+        else
+        {
+            playerTitle.text = "Player One";
+            playerTwo.SetActive(false);
+            pTwoColorPickers.SetActive(false);
+            pOneColorPickers.SetActive(true);
+            playerOne.SetActive(true);
+        }
+    }
+    public void SetCanRotate(bool toggle)
+    {
+        canRotate = toggle;
     }
 }

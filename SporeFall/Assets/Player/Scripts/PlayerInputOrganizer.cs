@@ -20,6 +20,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     //Game Actions
     private InputAction exitGame;
     private InputAction pauseGame;
+    private InputAction leaveGame;
     private InputAction toggleFullscreen;
     // Player Actions
     public InputAction moveAction;
@@ -66,6 +67,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame = gameInputMap.FindAction("ExitGame");
         pauseGame = gameInputMap.FindAction("Pause");
         toggleFullscreen = gameInputMap.FindAction("ToggleFullscreen");
+        leaveGame = gameInputMap.FindAction("Leave");
         // player action map
         moveAction = playerInputMap.FindAction("Move");
         lookAction = playerInputMap.FindAction("Look");
@@ -104,6 +106,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // Assign Calls to each action
         // basic player actions
+        leaveGame.performed += OnLeaveGame;
         jumpAction.started += OnJumpCall;
         sprintAction.started += OnSprintStarted;
         sprintAction.canceled += OnSprintCanceled;
@@ -136,6 +139,8 @@ public class PlayerInputOrganizer : MonoBehaviour
     private void OnDisable()
     {
         // remove calls
+        leaveGame.performed -= OnLeaveGame;
+
         jumpAction.started -= OnJumpCall;
         sprintAction.started -= OnSprintStarted;
         sprintAction.canceled -= OnSprintCanceled;
@@ -333,6 +338,10 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         Debug.Log("Closing down Game");
         Application.Quit();
+    }
+    private void OnLeaveGame(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.RemovePlayer(pMan);
     }
     private void ToggleFullscreen(InputAction.CallbackContext context)
     {

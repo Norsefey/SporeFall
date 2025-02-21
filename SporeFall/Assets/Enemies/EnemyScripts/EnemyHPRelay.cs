@@ -21,7 +21,7 @@ public class EnemyHPRelay : Damageable
         throw new System.NotImplementedException();
     }
 
-    protected override void UpdateUI()
+    protected override void UpdateHPUI()
     {
         throw new System.NotImplementedException();
     }

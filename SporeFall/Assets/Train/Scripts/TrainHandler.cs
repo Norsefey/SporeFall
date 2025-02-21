@@ -224,7 +224,7 @@ public class TrainHandler : MonoBehaviour
         trainCamera.SetActive(false);
         foreach (var player in GameManager.Instance.players)
         {
-            if (player.pHealth.lives <= 0)
+            if (player.pHealth.CurrentLives <= 0)
             {
                 Debug.Log("respawning Player");
                 player.pHealth.IncreaseLife();

@@ -8,7 +8,7 @@ public class StructureHP : Damageable
     void Start()
     {
         currentHP = maxHP;
-        UpdateUI();
+        UpdateHPUI();
     }
 
     // Handle death and destroy the parent object
@@ -18,7 +18,7 @@ public class StructureHP : Damageable
         structure.ReturnToPool();
     }
 
-    protected override void UpdateUI()
+    protected override void UpdateHPUI()
     {
         if (healthDisplay != null)
         {

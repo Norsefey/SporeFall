@@ -14,7 +14,7 @@ public class EnemyHP : Damageable
     private void Start()
     {
         currentHP = maxHP;
-        UpdateUI();
+        UpdateHPUI();
     }
     public override void TakeDamage(float damage)
     {
@@ -37,7 +37,7 @@ public class EnemyHP : Damageable
         else
             Destroy(transform.parent.gameObject);
     }
-    protected override void UpdateUI()
+    protected override void UpdateHPUI()
     {
         if (hpDisplay != null)
         {

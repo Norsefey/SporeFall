@@ -90,6 +90,8 @@ public class GameManager : MonoBehaviour
     {
         // remove disconnected players
         players.Remove(player);
+
+        Destroy(player.gameObject);
     }
     public void IncreaseMycelia(float amount)
     {
@@ -109,7 +111,7 @@ public class GameManager : MonoBehaviour
         bool allPlayersDead = true;
         foreach (var player in players)
         {
-            if(player.pHealth.lives > 0)
+            if(player.pHealth.CurrentLives > 0)
                 allPlayersDead = false;
         }
 

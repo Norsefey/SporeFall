@@ -14,7 +14,7 @@ public class Dummy : Damageable
     private void Start()
     {
         currentHP = maxHP;
-        UpdateUI();
+        UpdateHPUI();
     }
     public override void TakeDamage(float damage)
     {
@@ -33,7 +33,7 @@ public class Dummy : Damageable
         Debug.Log("Dying Now");
         Destroy(transform.parent.gameObject);
     }
-    protected override void UpdateUI()
+    protected override void UpdateHPUI()
     {
         if (hpDisplay != null)
         {

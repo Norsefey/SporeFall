@@ -344,7 +344,7 @@ public class PlayerManager : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
-        if (pHealth.lives <= 0)
+        if (pHealth.CurrentLives <= 0)
             yield return null;
         else
         {
@@ -367,7 +367,7 @@ public class PlayerManager : MonoBehaviour
     {
         pCamera.DisableAudioListener();
         changePlayerMaterials.ChangeMaterials();
-        pHealth.SetReducedLife(2);
+        pHealth.SetReducedLife();
     }
     public int GetPlayerIndex()
     {

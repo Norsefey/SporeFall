@@ -62,6 +62,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Leave"",
+                    ""type"": ""Button"",
+                    ""id"": ""384290a2-9d21-4a2b-98f3-e349deab4124"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(duration=0.6)"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -194,6 +203,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""405b88cb-16b9-4e6a-b16e-42a5d7adf83e"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Leave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1006,6 +1026,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Game_ToggleFullscreen = m_Game.FindAction("ToggleFullscreen", throwIfNotFound: true);
         m_Game_ExitGame = m_Game.FindAction("ExitGame", throwIfNotFound: true);
         m_Game_Join = m_Game.FindAction("Join", throwIfNotFound: true);
+        m_Game_Leave = m_Game.FindAction("Leave", throwIfNotFound: true);
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
@@ -1101,6 +1122,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Game_ToggleFullscreen;
     private readonly InputAction m_Game_ExitGame;
     private readonly InputAction m_Game_Join;
+    private readonly InputAction m_Game_Leave;
     public struct GameActions
     {
         private @GameInputs m_Wrapper;
@@ -1109,6 +1131,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @ToggleFullscreen => m_Wrapper.m_Game_ToggleFullscreen;
         public InputAction @ExitGame => m_Wrapper.m_Game_ExitGame;
         public InputAction @Join => m_Wrapper.m_Game_Join;
+        public InputAction @Leave => m_Wrapper.m_Game_Leave;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1130,6 +1153,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Join.started += instance.OnJoin;
             @Join.performed += instance.OnJoin;
             @Join.canceled += instance.OnJoin;
+            @Leave.started += instance.OnLeave;
+            @Leave.performed += instance.OnLeave;
+            @Leave.canceled += instance.OnLeave;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -1146,6 +1172,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Join.started -= instance.OnJoin;
             @Join.performed -= instance.OnJoin;
             @Join.canceled -= instance.OnJoin;
+            @Leave.started -= instance.OnLeave;
+            @Leave.performed -= instance.OnLeave;
+            @Leave.canceled -= instance.OnLeave;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -1537,6 +1566,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnToggleFullscreen(InputAction.CallbackContext context);
         void OnExitGame(InputAction.CallbackContext context);
         void OnJoin(InputAction.CallbackContext context);
+        void OnLeave(InputAction.CallbackContext context);
     }
     public interface IPlayerActions
     {
