@@ -667,6 +667,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
     private IEnumerator RisingFromGround()
     {
+        SetState(EnemyState.Idle);
         agent.isStopped = true;
         float temp = agent.speed;
         agent.speed = 0;
