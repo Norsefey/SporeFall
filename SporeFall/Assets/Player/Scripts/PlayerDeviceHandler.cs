@@ -53,13 +53,6 @@ public class PlayerDeviceHandler : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        
-
-        
-    }
-
     private void Update()
     {
         if (Tutorial.Instance.playerActive == true && tutorialNeeded == true)
@@ -120,7 +113,7 @@ public class PlayerDeviceHandler : MonoBehaviour
         Debug.Log($"Player {playerInput.playerIndex} joined with device {playerInput.devices[0].displayName}");
         players.Add(playerInput);
 
-        
+
 
         if (singlePlayer && players.Count == 1)
         {
@@ -145,6 +138,18 @@ public class PlayerDeviceHandler : MonoBehaviour
                 usingKeyboard = true;
             }
 
+        }
+        else if(players.Count > 1)
+        {
+            // reduce lives on first player
+            //players[0].GetComponent<PlayerManager>().pHealth.SetReducedLife(2);
+
+            // perform set up for player two
+            if (players[1] != null)
+            {
+                // change color, lose a HP, disable audio listener, and any other thing need for second player
+                players[1].GetComponent<PlayerManager>().SetupPlayerTwo();
+            }
         }
     }
     private void OnPlayerLeft(PlayerInput playerInput)
@@ -201,6 +206,8 @@ public class PlayerDeviceHandler : MonoBehaviour
                 // In multiplayer, the PlayerInputManager will automatically handle creating 
                 // a new player with the gamepad through its join system
                 Debug.Log($"Multiplayer: Ready for new player to join with gamepad: {gamepad.displayName}");
+
+
             }
         }
 

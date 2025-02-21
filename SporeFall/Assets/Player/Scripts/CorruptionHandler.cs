@@ -112,8 +112,9 @@ public class CorruptionHandler : MonoBehaviour
         pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
         // Reset Corruption Vision
         pMan.pUI.UpdateCorruptedVision(0);
-        // add a delay to coruppted robot spawning
+        // add a delay to corrupted robot spawning
         Invoke(nameof(SpawnCorruptedRobot), 2);
+        
         // player loses life and respawns
         pMan.pHealth.DepleteLife();
         pMan.pAnime.ActivateATrigger("Corrupted");

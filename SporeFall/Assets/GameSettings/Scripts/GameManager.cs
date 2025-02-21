@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour
         {
             player.transform.SetParent(trainHandler.transform);
 
-
             player.MovePlayerTo(trainHandler.playerSpawnPoint[player.GetPlayerIndex()].position);
             if (trainHandler.trainState == TrainState.Parked)
             {
@@ -72,8 +71,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-                    player.transform.SetParent(this.transform);
-
+            player.transform.SetParent(this.transform);
             SpawnPlayer();
         }
 
@@ -104,6 +102,24 @@ public class GameManager : MonoBehaviour
         gameUI.DisplayMycelia(mycelia);
     }
     // Called when object is destroyed (including scene changes)
+    public void GameOver()
+    {
+        Debug.Log("No Life No Game");
+        // check if all players are dead
+        bool allPlayersDead = true;
+        foreach (var player in players)
+        {
+            if(player.pHealth.lives > 0)
+                allPlayersDead = false;
+        }
+
+        if (allPlayersDead)// if all dead load game over scene
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            SceneTransitioner.Instance.LoadLoseScene();
+        }
+    }
     private void OnDestroy()
     {
         // Clear static instance if this is the current instance

@@ -9,7 +9,7 @@ public abstract class Damageable : MonoBehaviour
     public bool canHoldCorruption;
     public bool canTakeDamage = true;
     public float CurrentHP {  get { return currentHP; } }
-    private bool isDead = false;
+    public bool isDead = false;
     protected abstract void Die();
     protected abstract void UpdateUI();
     public virtual void IncreaseCorruption(float amount)

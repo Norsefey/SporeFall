@@ -224,10 +224,19 @@ public class TrainHandler : MonoBehaviour
         trainCamera.SetActive(false);
         foreach (var player in GameManager.Instance.players)
         {
+            if (player.pHealth.lives <= 0)
+            {
+                Debug.Log("respawning Player");
+                player.pHealth.IncreaseLife();
+                player.StartRespawn();
+            }
+
             player.TogglePControl(true);
             player.TogglePVisual(true);
             player.TogglePCamera(true);
             player.TogglePCorruption(true);
+
+           
         }
         listener.enabled = false;
     }

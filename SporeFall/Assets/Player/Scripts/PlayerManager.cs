@@ -1,6 +1,7 @@
 // Ignore Spelling: mycelia Interactable
 
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerManager : MonoBehaviour
@@ -16,6 +17,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerAnimation pAnime;
     public CorruptionHandler pCorruption;
     public Interactables interactable;
+    public ChangePlayerMaterials changePlayerMaterials;
     [Header("Default Weapons")]
     public Weapon defaultWeapon;
     public Weapon defaultSword;
@@ -49,6 +51,7 @@ public class PlayerManager : MonoBehaviour
         SetDeviceSettings();
         if(Tutorial.Instance != null)
             Tutorial.Instance.playerActive = true;
+
     }
     private void Start()
     {
@@ -59,7 +62,6 @@ public class PlayerManager : MonoBehaviour
         Cursor.visible = false;
 
         pInput.AssignAllActions();
-
     }
     private void Update()
     {
@@ -332,6 +334,7 @@ public class PlayerManager : MonoBehaviour
     }
     private IEnumerator Respawn()
     {
+        // turn off controls
         TogglePControl(false);
         DropWeapon();
         if (isBuilding)
@@ -340,32 +343,32 @@ public class PlayerManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(3);
-        pAnime.ToggleRespawn(true);
 
-        if (GameManager.Instance.trainHandler != null)
-            MovePlayerTo(GameManager.Instance.trainHandler.playerSpawnPoint[GetPlayerIndex()].position);
+        if (pHealth.lives <= 0)
+            yield return null;
         else
-            MovePlayerTo(fallbackSpawnPoint.position);
-        pCorruption.ResetCorruptionLevel();
-        pHealth.ResetHealth();
-        TogglePControl(true);
-        if (pHealth.lives == 2)
         {
-            pUI.life2.SetActive(false);
-        }
-        if (pHealth.lives == 1)
-        {
-            pUI.life1.SetActive(false);
-        }
-        yield return new WaitForSeconds (1);
-        pAnime.ToggleRespawn(false);
-    }
-    public void GameOver()
-    {
-        Debug.Log("No Life No Game");
-        SceneTransitioner.Instance.LoadLoseScene();
-    }
+            pAnime.ToggleRespawn(true);
 
+            if (GameManager.Instance.trainHandler != null)
+                MovePlayerTo(GameManager.Instance.trainHandler.playerSpawnPoint[GetPlayerIndex()].position);
+            else
+                MovePlayerTo(fallbackSpawnPoint.position);
+            pCorruption.ResetCorruptionLevel();
+            pHealth.ResetHealth();
+            TogglePControl(true);
+
+            yield return new WaitForSeconds(1);
+            pAnime.ToggleRespawn(false);
+        }
+     
+    }
+    public void SetupPlayerTwo()
+    {
+        pCamera.DisableAudioListener();
+        changePlayerMaterials.ChangeMaterials();
+        pHealth.SetReducedLife(2);
+    }
     public int GetPlayerIndex()
     {
         return GetComponent<PlayerInput>().playerIndex;

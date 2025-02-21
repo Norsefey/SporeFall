@@ -7,7 +7,7 @@ public class TPSCamera : MonoBehaviour
     [Header("references")]
     public Camera myCamera;
     [SerializeField] private PlayerMovement player;
-
+    [SerializeField] private AudioListener audioListener;
     [Header("Mouse Sensitivity")]
     [SerializeField] private float mHorSense = 50;
     [SerializeField] private float mvertSense = 50;
@@ -178,7 +178,11 @@ public class TPSCamera : MonoBehaviour
             yield return null;
         }
     }
-
+    public void DisableAudioListener()
+    {
+        Debug.Log("Disabling Audio Listener");
+        audioListener.enabled = false;
+    }
     public void SetManager(PlayerManager pManager)
     {
         this.pMan = pManager;

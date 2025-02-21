@@ -249,13 +249,21 @@ public class PlayerAnimation : MonoBehaviour
         Debug.Log($"{anime.GetLayerName(twoHandedLayerIndex)} : {anime.GetLayerWeight(twoHandedLayerIndex)}");
         Debug.Log($"{anime.GetLayerName(noWeaponLayerIndex)} : {anime.GetLayerWeight(noWeaponLayerIndex)}");
     }*/
-   public void ActivateATrigger(string triggerName)
+     public void ActivateATrigger(string triggerName)
     {
         anime.SetTrigger(triggerName);
     }
-   public void ToggleRespawn(bool toggle)
+    public void ToggleRespawn(bool toggle)
     {
         anime.SetBool("Respawn", toggle);
+    }
+    public void ToggleUnscaledUpdateMode(bool toggle)
+    {
+        if(toggle)
+            anime.updateMode = AnimatorUpdateMode.UnscaledTime;
+        else
+            anime.updateMode = AnimatorUpdateMode.Normal;
+
     }
     public void SetManager(PlayerManager player)
     {

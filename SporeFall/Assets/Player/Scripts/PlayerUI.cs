@@ -19,8 +19,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] public TMP_Text textPrompt;
     [SerializeField] private TMP_Text textControls;
     [SerializeField] private Slider HPBar;
-    public GameObject life1;
-    public GameObject life2;
+    [SerializeField] private GameObject[] lifeIcons;
     [Header("Corruption UI")]
     [SerializeField] private Slider corruptionBar;
     [SerializeField] private GameObject corruptedVisionHolder;
@@ -209,5 +208,23 @@ public class PlayerUI : MonoBehaviour
         if (toggle && weaponUI.activeSelf)
             return;// already on return
         weaponUI.SetActive(toggle);
+    }
+    public void UpdateLifeDisplay(int currentLives)
+    {
+        switch (currentLives)
+        {
+            case 1:
+                lifeIcons[0].SetActive(false);
+                lifeIcons[1].SetActive(false);
+                break;
+            case 2:
+                lifeIcons[0].SetActive(true);
+                lifeIcons[1].SetActive(false);
+                break;
+            case 3:
+                lifeIcons[0].SetActive(true);
+                lifeIcons[1].SetActive(true);
+                break;
+        }
     }
 }

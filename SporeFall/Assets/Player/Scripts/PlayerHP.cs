@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerHP : Damageable
 {
-    private PlayerManager pMan;
+    [SerializeField]private PlayerManager pMan;
     public int lives = 3;
 
     [SerializeField] GameObject deathVFX;
@@ -23,38 +23,37 @@ public class PlayerHP : Damageable
     public void DepleteLife()
     {
         lives--;
-        if(lives <= 0)
+        if(pMan != null)
+            pMan.pUI.UpdateLifeDisplay(lives);
+        if (lives <= 0)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            pMan.GameOver();
-
+            lives = 0;
+            isDead = true;
+            GameManager.Instance.GameOver();
         }
     }
-
-
-
     public void IncreaseLife()
     {
         lives++;
-        if (lives == 2)
-        {
-            pMan.pUI.life1.SetActive(true);
-        }
-        if (lives == 3)
-        {
-            pMan.pUI.life2.SetActive(true);
-        }
+        pMan.pUI.UpdateLifeDisplay(lives);
+    }
+    public void SetReducedLife(int setAmount)
+    {
+        // When another player joins, i want each to have 2 lives instead of the default 3, but only if player hasn't already died once
+        if(lives > setAmount)
+            lives = setAmount;
+        pMan.pUI.UpdateLifeDisplay(lives);
     }
     public void SetManager(PlayerManager player)
     {
         pMan = player;
+
+        if (pMan.pUI != null)
+            pMan.pUI.UpdateLifeDisplay(lives);
     }
     protected override void Die()
     {
         pMan.pAnime.ActivateATrigger("Dead");
-
-        DepleteLife();
         StartCoroutine(DeathEffectRoutine());
     }
     private IEnumerator DeathEffectRoutine()
@@ -62,18 +61,23 @@ public class PlayerHP : Damageable
         // Flash effect
         deathVFX.SetActive(true);
         pMan.pAnime.ToggleIKAim(false);
+        pMan.pAnime.ToggleUnscaledUpdateMode(true);
         // allow death animation to play abit
         yield return new WaitForSecondsRealtime(.5f);
         // Freeze the game
-        Time.timeScale = 0f;
+        Time.timeScale = 0.1f;
         // pan camera around player
         StartCoroutine( pMan.pCamera.PanAroundPlayer(transform, 3, 90));
         yield return new WaitForSecondsRealtime(3f);
 
         // Unfreeze game and respawn
-        pMan.pAnime.ToggleIKAim(true);
-        deathVFX.SetActive(false);
         Time.timeScale = 1f;
+
+        pMan.pAnime.ToggleUnscaledUpdateMode(false);
+        deathVFX.SetActive(false);
+        pMan.pAnime.ToggleIKAim(true);
+        DepleteLife();
+
         pMan.StartRespawn();
 
     }
