@@ -8,14 +8,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform visual;
     private Transform myCamera;
     private PlayerManager pMan;
-    private CharacterController cc;
+    public CharacterController cc;
 
     [Header("Movement Variables")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float rotSpeed = 15;
     private float moveSpeed;
-
+    public bool isSprinting = false;
     [Header("Jump Variables")]
     public float playerHeight = 2;
     public float JumpSpeed = 15;
@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
     [Range(0f, 1f)] public float footstepVolume = 0.5f; // Volume of footstep sound
     public AudioSource audioSource;
 
-    private void Start()
+    private void Awake()
     {
         cc = GetComponent<CharacterController>();
         moveSpeed = walkSpeed;
@@ -200,7 +200,9 @@ public class PlayerMovement : MonoBehaviour
     {
         currentState = PlayerState.Aiming;
         if (moveSpeed == sprintSpeed)
-            moveSpeed = walkSpeed;
+        {
+            SetSprintSpeed(false);
+        }
     }
 
     public void SetDefaultState()
@@ -213,17 +215,19 @@ public class PlayerMovement : MonoBehaviour
         this.pMan = pManager;
     }
 
-    public void SetSprintSpeed(bool isSprinting)
+    public void SetSprintSpeed(bool sprinting)
     {
-        if (isSprinting && currentState != PlayerState.Aiming)
+        if (sprinting && currentState != PlayerState.Aiming)
         {
             moveSpeed = sprintSpeed;
             pMan.pAnime.ToggleSprint(true);
+            isSprinting = true;
         }
         else
         {
             moveSpeed = walkSpeed;
             pMan.pAnime.ToggleSprint(false);
+            isSprinting = false;
 
         }
     }

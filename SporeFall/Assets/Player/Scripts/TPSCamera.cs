@@ -28,6 +28,25 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] Vector3 aimOffset; // camera zooms in
     [SerializeField] Vector3 buildOffset; // camera zooms Out
 
+    [Header("Camera Shake Settings")]
+    [SerializeField] private float sprintShakeIntensity = 0.15f;
+    [SerializeField] private float walkShakeIntensity = 0.08f;
+    [SerializeField] private float shakeSpeed = 14f;
+    [SerializeField] private float aimSteadiness = 0.4f; // Reduces shake while aiming
+                                                         // Local private variables for shake
+    private float shakeTime;
+    [Header("Improved Collision Settings")]
+    [SerializeField] private float sphereCastRadius = 0.2f;
+    [SerializeField] private float collisionSmoothSpeed = 10f;
+    [SerializeField] private float returnSmoothSpeed = 5f;
+    [SerializeField] private float maxCheckDistance = 10f;
+    [SerializeField] private float shoulderOffset = 0.5f; // Offset from center for better wall detection
+
+    // Local private variables
+    private Vector3 currentCameraOffset;
+    private Vector3 targetCameraOffset;
+    private Vector3 smoothVelocity;
+    private bool isColliding;
     [Header("Collision Detection")]
     [SerializeField] private LayerMask obstructions;
     [SerializeField] private float minDistance = 1f; // Minimum distance between camera and player
@@ -35,9 +54,9 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private float groundOffset = 0.5f;  // Offset to apply when colliding with the ground
     [SerializeField] private float groundDetectionAngle = 45f; // Angle to define what is considered 'ground'
     [SerializeField] private float collisionFreeTime = 0.5f;  // Time to wait before moving camera back
-    private float timeSinceCollision = 0f;  // Time since last collision
     [SerializeField] private Transform aimTarget;
     [SerializeField] private LayerMask targetMask;
+    
     // local private variables
     private PlayerManager pMan;
     private float vertRot = 0;
@@ -51,23 +70,28 @@ public class TPSCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-       /* Ray ray = new(myCamera.transform.position, myCamera.transform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, targetMask))
+        // moves camera set along with Character
+        HolderMovement();
+        // Calculate base rotation
+        Vector3 baseRotation = new Vector3(VerticalRotation(), HorizontalRotation(), 0);
+
+        // Add camera shake if moving
+        if (player.cc.velocity.magnitude > 0.1f)
         {
-            pMan.pAnime.ToggleIKAim(true);
-            aimTarget.position = hit.point;
+            float currentShakeIntensity = CalculateShakeIntensity();
+            Vector3 shakeOffset = CalculateShakeOffset(currentShakeIntensity);
+            transform.localEulerAngles = baseRotation + shakeOffset;
         }
         else
         {
-            pMan.pAnime.ToggleIKAim(false);
-        }*/
+            transform.localEulerAngles = baseRotation;
+        }
 
-            // moves camera set along with Character
-            HolderMovement();
-        // rotates camera based on mouse movement
-        transform.localEulerAngles = new Vector3(VerticalRotation(), HorizontalRotation(), 0);
         if (player.currentState == PlayerMovement.PlayerState.Default)
-            ObstructionCheck();
+        {
+            //ObstructionCheck();
+            ImprovedObstructionCheck();
+        }
     }
     private void HolderMovement()
     {
@@ -88,58 +112,65 @@ public class TPSCamera : MonoBehaviour
         vertRot = Mathf.Clamp(vertRot, minVertRot, maxVertRot);
         return vertRot;
     }
-    private void ObstructionCheck()
+    private void ImprovedObstructionCheck()
     {
-        // Player position adjusted for height
-        Vector3 playerPos = player.transform.position + (Vector3.up * 2);
+        // Get the desired camera position based on current offset
+        Vector3 targetOffset = player.currentState == PlayerMovement.PlayerState.Aiming ? aimOffset : defaultOffset;
 
-        // Desired position with default offset
-        Vector3 desiredCameraPos = playerPos + transform.TransformDirection(defaultOffset);
-        float currentDistance = defaultOffset.magnitude;
+        // Calculate camera desired position with shoulder offset
+        Vector3 shoulderPosition = transform.position + (transform.right * (flipSide ? -shoulderOffset : shoulderOffset));
+        Vector3 desiredPosition = shoulderPosition + transform.TransformDirection(targetOffset);
 
-        // Check for obstructions using raycast
-        if (Physics.Linecast(playerPos, desiredCameraPos, out RaycastHit hit, obstructions))
+        // Cast a sphere from the player's shoulder to the desired camera position
+        RaycastHit hit;
+        Vector3 directionToCamera = (desiredPosition - shoulderPosition).normalized;
+        float distanceToCamera = Vector3.Distance(shoulderPosition, desiredPosition);
+
+        bool hasCollision = Physics.SphereCast(
+            shoulderPosition,
+            sphereCastRadius,
+            directionToCamera,
+            out hit,
+            Mathf.Min(distanceToCamera, maxCheckDistance),
+            obstructions
+        );
+
+        if (hasCollision)
         {
-            // If hit, reset the collision-free timer
-            timeSinceCollision = 0f;
+            // Calculate new position based on hit point
+            float adjustedDistance = hit.distance - sphereCastRadius;
+            Vector3 newPosition = shoulderPosition + directionToCamera * adjustedDistance;
 
-            // Calculate new camera position closer to the player
-            float hitDistance = Mathf.Clamp(hit.distance, minDistance, currentDistance);
-            Vector3 hitPoint = playerPos + (desiredCameraPos - playerPos).normalized * hitDistance;
+            // Convert world position to local offset
+            Vector3 newOffset = transform.InverseTransformPoint(newPosition) - transform.InverseTransformPoint(shoulderPosition);
 
-            // Check if the hit is considered 'ground' based on the hit normal
-            bool isGround = Vector3.Angle(hit.normal, Vector3.up) <= groundDetectionAngle;
-
-            if (isGround)
-            {
-                // Apply ground offset if the hit object is the ground
-                hitPoint.y += groundOffset;
-            }
-
-            // Move camera smoothly, but only if the difference is greater than the threshold
-            if (Vector3.Distance(myCamera.transform.position, hitPoint) > cameraMoveThreshold)
-            {
-                myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, hitPoint, Time.deltaTime * 10f);
-            }
+            // Update target offset with collision position
+            targetCameraOffset = newOffset;
+            isColliding = true;
         }
-        else
+        else if (isColliding)
         {
-            // If no collision, increment the time since last collision
-            timeSinceCollision += Time.deltaTime;
-
-            // Only move camera back to default if it has been free of collisions for some time
-            if (timeSinceCollision >= collisionFreeTime)
+            // Smoothly return to default position when no collision
+            targetCameraOffset = targetOffset;
+            if (Vector3.Distance(currentCameraOffset, targetCameraOffset) < 0.01f)
             {
-                // Smoothly move the camera back to the default offset
-                Vector3 targetPosition = playerPos + transform.TransformDirection(defaultOffset);
-                if (Vector3.Distance(myCamera.transform.position, targetPosition) > cameraMoveThreshold)
-                {
-                    myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, targetPosition, Time.deltaTime * 5f);
-                }
+                isColliding = false;
             }
         }
 
+        // Smooth camera movement
+        float smoothSpeed = isColliding ? collisionSmoothSpeed : returnSmoothSpeed;
+        currentCameraOffset = Vector3.SmoothDamp(
+            currentCameraOffset,
+            targetCameraOffset,
+            ref smoothVelocity,
+            Time.deltaTime * smoothSpeed
+        );
+
+        // Apply the offset to the camera
+        myCamera.transform.localPosition = currentCameraOffset;
     }
+
     public void AimSight()
     {
         if(pMan.isBuilding)
@@ -206,5 +237,39 @@ public class TPSCamera : MonoBehaviour
         buildOffset.x *= -1;
 
         DefaultSight();
+    }
+
+    private float CalculateShakeIntensity()
+    {
+        float baseIntensity;
+
+        // Determine base intensity based on movement speed
+        if (player.isSprinting)
+        {
+            baseIntensity = sprintShakeIntensity;
+        }
+        else
+        {
+            baseIntensity = walkShakeIntensity;
+        }
+
+        // Reduce shake while aiming
+        if (player.currentState == PlayerMovement.PlayerState.Aiming)
+        {
+            baseIntensity *= aimSteadiness;
+        }
+
+        return baseIntensity;
+    }
+
+    private Vector3 CalculateShakeOffset(float intensity)
+    {
+        shakeTime += Time.deltaTime * shakeSpeed;
+
+        // Create procedural shake using perlin noise for smooth random movement
+        float xShake = (Mathf.PerlinNoise(shakeTime, 0.0f) * 2.0f - 1.0f) * intensity;
+        float yShake = (Mathf.PerlinNoise(0.0f, shakeTime) * 2.0f - 1.0f) * intensity;
+
+        return new Vector3(xShake, yShake, 0);
     }
 }
