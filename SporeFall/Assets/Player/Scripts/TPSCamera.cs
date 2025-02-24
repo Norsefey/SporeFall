@@ -8,6 +8,7 @@ public class TPSCamera : MonoBehaviour
     public Camera myCamera;
     [SerializeField] private PlayerMovement player;
     [SerializeField] private AudioListener audioListener;
+
     [Header("Mouse Sensitivity")]
     [SerializeField] private float mHorSense = 50;
     [SerializeField] private float mvertSense = 50;
@@ -33,31 +34,22 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private float walkShakeIntensity = 0.08f;
     [SerializeField] private float shakeSpeed = 14f;
     [SerializeField] private float aimSteadiness = 0.4f; // Reduces shake while aiming
-                                                         // Local private variables for shake
     private float shakeTime;
+
     [Header("Improved Collision Settings")]
+    [SerializeField] private LayerMask obstructions;
+    [SerializeField] private Transform aimTarget;
+    [SerializeField] private LayerMask targetMask;
     [SerializeField] private float sphereCastRadius = 0.2f;
     [SerializeField] private float collisionSmoothSpeed = 10f;
     [SerializeField] private float returnSmoothSpeed = 5f;
     [SerializeField] private float maxCheckDistance = 10f;
     [SerializeField] private float shoulderOffset = 0.5f; // Offset from center for better wall detection
-
-    // Local private variables
     private Vector3 currentCameraOffset;
     private Vector3 targetCameraOffset;
     private Vector3 smoothVelocity;
     private bool isColliding;
-    [Header("Collision Detection")]
-    [SerializeField] private LayerMask obstructions;
-    [SerializeField] private float minDistance = 1f; // Minimum distance between camera and player
-    [SerializeField] private float cameraMoveThreshold = 0.05f;  // Small threshold to stop jitter
-    [SerializeField] private float groundOffset = 0.5f;  // Offset to apply when colliding with the ground
-    [SerializeField] private float groundDetectionAngle = 45f; // Angle to define what is considered 'ground'
-    [SerializeField] private float collisionFreeTime = 0.5f;  // Time to wait before moving camera back
-    [SerializeField] private Transform aimTarget;
-    [SerializeField] private LayerMask targetMask;
-    
-    // local private variables
+   
     private PlayerManager pMan;
     private float vertRot = 0;
     private float horSense = 50;
@@ -89,7 +81,6 @@ public class TPSCamera : MonoBehaviour
 
         if (player.currentState == PlayerMovement.PlayerState.Default)
         {
-            //ObstructionCheck();
             ImprovedObstructionCheck();
         }
     }
@@ -170,7 +161,6 @@ public class TPSCamera : MonoBehaviour
         // Apply the offset to the camera
         myCamera.transform.localPosition = currentCameraOffset;
     }
-
     public void AimSight()
     {
         if(pMan.isBuilding)
@@ -238,7 +228,6 @@ public class TPSCamera : MonoBehaviour
 
         DefaultSight();
     }
-
     private float CalculateShakeIntensity()
     {
         float baseIntensity;
@@ -261,7 +250,6 @@ public class TPSCamera : MonoBehaviour
 
         return baseIntensity;
     }
-
     private Vector3 CalculateShakeOffset(float intensity)
     {
         shakeTime += Time.deltaTime * shakeSpeed;

@@ -55,7 +55,7 @@ public class TrainHandler : MonoBehaviour
         if (transform.GetChild(0).TryGetComponent<TrainHP>(out trainHP))
         {// get and assign train HP
             trainHP.train = this;
-            tUI.SetMaxHP(trainHP.maxHP);
+            tUI.SetMaxHP(trainHP.MaxHP);
         }
         Debug.Log("Train Is awake");
     }

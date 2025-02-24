@@ -33,7 +33,7 @@ public class BuildGun : Weapon
     [SerializeField] private string editModeText = "<color=green>Edit Mode</color> \n Left mouse to Move \n Hold X to Destroy \n F to return";
 
 
-    // To Store original colors
+    // To Store original colors for changing preview colors
     private class MaterialData
     {
         public Material Material;
@@ -80,7 +80,7 @@ public class BuildGun : Weapon
             {
                 // If placement is valid, restore original colors and place
                 RestoreOriginalColors();
-                SetStructureToOpaque();
+                //SetStructureToOpaque();
                 if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 20)
                 {
                     Tutorial.Instance.ProgressTutorial();
@@ -128,7 +128,7 @@ public class BuildGun : Weapon
 
                 selectedStructure.ShowRadius(showRadius);
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
-                SetStructureToTransparent(selectedStructure.GetCurrentVisual());
+                //SetStructureToTransparent(selectedStructure.GetCurrentVisual());
                 player.pUI.EnablePrompt(selectedStructure.GetStructureName() + "\n Cost: " + selectedStructure.GetCurrentMyceliaCost() + "\n" + selectedStructure.GetStructureDescription());
 
             }
@@ -173,7 +173,7 @@ public class BuildGun : Weapon
                 selectedStructure.ToggleStructureBehavior(true);
                 selectedStructure.ShowRadius(false);
                 
-                SetStructureToOpaque();
+                //SetStructureToOpaque();
                 
                 RestoreOriginalColors(); // Restore original colors when placing
                 // for moving train stores all active structures
@@ -205,7 +205,7 @@ public class BuildGun : Weapon
             {
                 GameManager.Instance.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
                 selectedStructure.Initialize();
-                SetStructureToOpaque();
+                //SetStructureToOpaque();
                 RestoreOriginalColors(); // Restore original colors when placing
 
                 selectedStructure = null;
@@ -302,8 +302,9 @@ public class BuildGun : Weapon
             {
                 if (materialData.Material != null)
                 {
-                    materialData.Material.color = materialData.OriginalColor;
+                    materialData.Material.SetColor("_BaseColor", materialData.OriginalColor);
                 }
+
             }
 
             originalMaterials = null; // Clear stored colors
@@ -324,16 +325,11 @@ public class BuildGun : Weapon
         {
             foreach (var material in renderer.materials)
             {
-                Color color = material.color;
-                color.r = previewColor.r;
-                color.g = previewColor.g;
-                color.b = previewColor.b;
-                color.a = previewColor.a;
-                material.color = color;
+                material.SetColor("_BaseColor", previewColor);
             }
         }
     }
-    private void SetStructureToTransparent(GameObject obj)
+   /* private void SetStructureToTransparent(GameObject obj)
     {
         // Set the object material to transparent for preview
         GameObject visual = selectedStructure.GetCurrentVisual();
@@ -401,7 +397,7 @@ public class BuildGun : Weapon
                 }
             }
         }
-    }
+    }*/
     #endregion
 
 
@@ -422,7 +418,7 @@ public class BuildGun : Weapon
     {
         if (selectedStructure != null)
         {
-            SetStructureToOpaque();
+            //SetStructureToOpaque();
             RestoreOriginalColors();
             selectedStructure.ToggleStructureBehavior(true);
             selectedStructure.ShowRadius(false);
@@ -444,7 +440,7 @@ public class BuildGun : Weapon
                 
                 selectedStructure = hit.collider.transform.GetComponent<Structure>();
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
-                SetStructureToTransparent(selectedStructure.gameObject);
+                //SetStructureToTransparent(selectedStructure.gameObject);
                 // Store original position and rotation
                 originalPosition = selectedStructure.transform.position;
                 originalRotation = selectedStructure.transform.rotation;
@@ -473,7 +469,7 @@ public class BuildGun : Weapon
     {// restores selected structures to default functionality
         if (selectedStructure != null && !movingStructure)
         {
-            SetStructureToOpaque();
+            //SetStructureToOpaque();
             RestoreOriginalColors();
             selectedStructure.ToggleStructureBehavior(true);
             selectedStructure.ShowRadius(false);

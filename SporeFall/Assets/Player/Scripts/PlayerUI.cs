@@ -42,7 +42,7 @@ public class PlayerUI : MonoBehaviour
     private void Start()
     {
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
-        HPBar.maxValue = pMan.pHealth.maxHP;
+        HPBar.maxValue = pMan.pHealth.MaxHP;
         corruptedVisionHolder.SetActive(false);
     }
     public void UpdateCorruptionDisplay(float value)

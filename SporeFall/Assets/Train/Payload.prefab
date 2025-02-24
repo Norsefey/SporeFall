@@ -361,9 +361,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a7e65cc817f72946881419531237e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 350
   canHoldCorruption: 0
   canTakeDamage: 1
+  maxHP: 350
+  isDead: 0
   healthDisplay: {fileID: 6081992139835096196}
 --- !u!136 &4899571317474799090
 CapsuleCollider:
@@ -1233,6 +1234,16 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ca57652a06f631d469835a6ec746c546,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d401490c9645a1145bfdc9f0448c1b5e, type: 2}
+    - target: {fileID: -7511558181221131132, guid: ca57652a06f631d469835a6ec746c546,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: ddc5e518513f3b246817a3ab96ff23bd, type: 2}
     - target: {fileID: 919132149155446097, guid: ca57652a06f631d469835a6ec746c546,
         type: 3}
       propertyPath: m_Name

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public abstract class Damageable : MonoBehaviour
 {
-    public float maxHP;
-    protected float currentHP;
     public bool canHoldCorruption;
     public bool canTakeDamage = true;
+    [SerializeField] protected float maxHP;
+    protected float currentHP;
+    public float MaxHP {  get { return maxHP; } }
     public float CurrentHP {  get { return currentHP; } }
     public bool isDead = false;
     protected abstract void Die();
