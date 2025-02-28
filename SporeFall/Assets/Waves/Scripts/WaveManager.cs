@@ -41,6 +41,9 @@ public class WaveManager : MonoBehaviour
     }
     public WavePhase wavePhase;
 
+    [Header("Train")]
+    [SerializeField] private float trainDisembarkDelay = 15;
+
     [Header("Moving to Next Wave")]
     public float departTime = 30;
     private float timer = 0;
@@ -157,7 +160,7 @@ public class WaveManager : MonoBehaviour
             // Destroy pod will spawn in an explosion so made it into Coroutine
             StartCoroutine(DestroyShroomPod(waitTime));
         }
-
+        // animation wait time
         yield return new WaitForSeconds(waitTime);
         Debug.Log("Moving Train");
 
@@ -182,7 +185,8 @@ public class WaveManager : MonoBehaviour
 
             yield return null;
         }
-
+        // animation wait time
+        yield return new WaitForSeconds(trainDisembarkDelay);
         // Ensuring the final position is set precisely after the movement
         train.transform.position = targetPosition;
         train.SetParkedState();

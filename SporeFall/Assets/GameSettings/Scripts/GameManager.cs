@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         if(backUpPlayerSpawner == null)
             return;
 
-        foreach (var player in GameManager.Instance.players)
+        foreach (var player in players)
         {
             StartCoroutine(backUpPlayerSpawner.SpawnPlayer(player));
         }

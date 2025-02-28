@@ -7,6 +7,7 @@ public class TrainHandler : MonoBehaviour
     [Header("References")]
     public WaveManager waveManager;
     [SerializeField] private TrainUI UI;
+    [SerializeField] private TrainAnimation animations;
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject forceField;
@@ -62,7 +63,6 @@ public class TrainHandler : MonoBehaviour
     public void SetParkedState()
     {
         trainState = TrainState.Parked;
-        trainVisual.rotation = Quaternion.identity;
         ToggleStructures(true);
         if(GameManager.Instance.players.Count != 0)
         {
@@ -86,7 +86,7 @@ public class TrainHandler : MonoBehaviour
     public void SetMovingState()
     {
         trainState = TrainState.Moving;
-        trainVisual.rotation = Quaternion.Euler(0,-70,0);
+        animations.ResetAnimation();
         ToggleStructures(false);
 
         audioPlayer.clip = movingAudio;
@@ -220,10 +220,13 @@ public class TrainHandler : MonoBehaviour
     }
     public void DisembarkTrain()
     {
+
         // show players once train has parked
-        trainCamera.SetActive(false);
         foreach (var player in GameManager.Instance.players)
         {
+            // correct player position
+            player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
+
             if (player.pHealth.CurrentLives <= 0)
             {
                 Debug.Log("respawning Player");
@@ -233,13 +236,20 @@ public class TrainHandler : MonoBehaviour
 
             player.TogglePControl(true);
             player.TogglePVisual(true);
-            player.TogglePCamera(true);
             player.TogglePCorruption(true);
 
-           
+            StartCoroutine(DelayCameraToggle(player));
         }
-        listener.enabled = false;
     }
+
+    private IEnumerator DelayCameraToggle(PlayerManager player)
+    {
+        yield return new WaitForSeconds(.2f);
+        listener.enabled = false;
+        player.TogglePCamera(true);
+        trainCamera.SetActive(false);
+    }
+
     public IEnumerator DestroyTrain()
     {
         // Load Lose Scene

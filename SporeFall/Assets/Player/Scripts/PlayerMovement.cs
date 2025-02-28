@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
         cc = GetComponent<CharacterController>();
         moveSpeed = walkSpeed;
         SetDefaultState();
-        myCamera = pMan.pCamera.myCamera.transform;
+        myCamera = pMan.pCamera.transform;
         audioSource = GetComponent<AudioSource>(); // Get the AudioSource component
     }
 

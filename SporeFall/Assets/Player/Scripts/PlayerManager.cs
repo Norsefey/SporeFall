@@ -325,6 +325,7 @@ public class PlayerManager : MonoBehaviour
     #endregion
     public void MovePlayerTo(Vector3 position)
     {
+        Debug.Log("Moving player to: " + position);
         pController.transform.position = position;
         
     }
