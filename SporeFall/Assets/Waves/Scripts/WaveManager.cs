@@ -186,11 +186,13 @@ public class WaveManager : MonoBehaviour
             yield return null;
         }
         // animation wait time
+        train.animations.ParkTrain();
         yield return new WaitForSeconds(trainDisembarkDelay);
         // Ensuring the final position is set precisely after the movement
         train.transform.position = targetPosition;
         train.SetParkedState();
-        
+        if (currentWaveIndex > 0)
+            train.animations.OpenUpgradesPanel();
         wavePhase = WavePhase.NotStarted;
     }
     public void SpawnExplosion(Vector3 pos)

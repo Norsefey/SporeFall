@@ -66,9 +66,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 0
   canHoldCorruption: 0
   canTakeDamage: 1
+  maxHP: 0
+  isDead: 0
   mainHP: {fileID: 1049953242552480228}
   damageMultiplier: 2
 --- !u!1 &1449122144284458558
@@ -204,7 +205,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6723776635264665680
 Transform:
   m_ObjectHideFlags: 0
@@ -437,9 +438,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6edf8b238b198524fb1ecb35917fd7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 150
   canHoldCorruption: 0
   canTakeDamage: 1
+  maxHP: 150
+  isDead: 0
   hpDisplay: {fileID: 8293907463534621136}
   manager: {fileID: 313471775743458934}
   knockBackable: 1
@@ -615,9 +617,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 0
   canHoldCorruption: 0
   canTakeDamage: 1
+  maxHP: 0
+  isDead: 0
   mainHP: {fileID: 1049953242552480228}
   damageMultiplier: 1
 --- !u!1 &9030144842525589066
@@ -768,7 +771,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 129300, guid: c5968258f00b447449d85f810a478b9e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 411756, guid: c5968258f00b447449d85f810a478b9e, type: 3}
       propertyPath: m_LocalScale.x

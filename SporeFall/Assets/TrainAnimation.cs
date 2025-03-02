@@ -11,9 +11,25 @@ public class TrainAnimation : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void ResetAnimation()
+    public void ParkTrain()
     {
-        animator.StartPlayback();
-    }
+        Debug.Log("Parking Train");
 
+
+        animator.SetTrigger("Park");
+    }
+    public void SetMovingTrain()
+    {
+        animator.SetTrigger("Moving");
+        animator.ResetTrigger("Moving");
+
+    }
+    public void FireCannon()
+    {
+        animator.SetTrigger("FireCannon");
+    }
+    public void OpenUpgradesPanel()
+    {
+        animator.SetTrigger("Upgrades");
+    }
 }

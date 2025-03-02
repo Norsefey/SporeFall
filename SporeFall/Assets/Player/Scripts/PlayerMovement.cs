@@ -70,7 +70,6 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
     }
-
     public void RotateOnFire(Transform gun, Vector3 shootDir)
     {
         Quaternion temp = myCamera.localRotation;
@@ -93,7 +92,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
     void DefaultMovement()
     {
         Vector3 movement = Vector3.zero;
@@ -132,13 +130,18 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded())
         {
             vertSpeed = JumpSpeed;
+            pMan.pAnime.ToggleFallingAnime(true);
+
         }
     }
 
     private void GravityHandler()
     {
         if (IsGrounded())
+        {
+            pMan.pAnime.ToggleFallingAnime(false);
             vertSpeed = minFall;
+        }
         else
         {
             vertSpeed += gravity * 5 * Time.deltaTime;

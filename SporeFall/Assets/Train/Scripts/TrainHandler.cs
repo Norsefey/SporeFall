@@ -7,7 +7,7 @@ public class TrainHandler : MonoBehaviour
     [Header("References")]
     public WaveManager waveManager;
     [SerializeField] private TrainUI UI;
-    [SerializeField] private TrainAnimation animations;
+    [SerializeField] public TrainAnimation animations;
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject forceField;
@@ -73,6 +73,8 @@ public class TrainHandler : MonoBehaviour
     public void SetFiringState()
     {
         trainState = TrainState.Firing;
+        animations.FireCannon();
+
         trainCamera.SetActive(true);
         ClearDrops();
         BoardTrain();
@@ -86,7 +88,7 @@ public class TrainHandler : MonoBehaviour
     public void SetMovingState()
     {
         trainState = TrainState.Moving;
-        animations.ResetAnimation();
+        animations.SetMovingTrain();
         ToggleStructures(false);
 
         audioPlayer.clip = movingAudio;
@@ -241,7 +243,6 @@ public class TrainHandler : MonoBehaviour
             StartCoroutine(DelayCameraToggle(player));
         }
     }
-
     private IEnumerator DelayCameraToggle(PlayerManager player)
     {
         yield return new WaitForSeconds(.2f);

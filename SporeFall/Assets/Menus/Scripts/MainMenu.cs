@@ -77,6 +77,11 @@ public class MainMenu : MonoBehaviour
         mainScreen.SetActive(true);
         levelSelectScreen.SetActive(false);
     }
+
+    public void LoadSceneUsingIndex(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
     public void QuitGame()
     {
         Application.Quit();
