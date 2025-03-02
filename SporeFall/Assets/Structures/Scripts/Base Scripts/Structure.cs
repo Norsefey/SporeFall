@@ -108,19 +108,9 @@ public class Structure : MonoBehaviour
         // prevent structure from taking damage when not active
         healthComponent.canTakeDamage = toggle;
     }
-    // Getter methods
-    public float GetCurrentMyceliaCost() => levels.GetLevel(currentLevel).cost;
-    public float GetCurrentEnergyCost() => levels.GetLevel(currentLevel).energyCost;
-    public int GetCurrentLevel() => currentLevel;
-    public bool IsMaxLevel() => currentLevel >= levels.GetLevelCount() - 1;
-    public StructureLevels GetLevels() => levels;
-    public StructureHP GetStructureHP() => healthComponent;
-    public GameObject GetCurrentVisual() => levelVisuals[currentLevel];
-    public string GetStructureName() => levels.GetLevel(currentLevel).name;
-    public string GetStructureDescription() => levels.description;
     public void SetTrainHandler(TrainHandler train)
     {
-        this.train = train; 
+        this.train = train;
     }
     public float CalculateStructureRefund(float minimumRefundPercent)
     {
@@ -144,4 +134,15 @@ public class Structure : MonoBehaviour
         controlScriptObject.SetActive(false);
         poolBehavior.ReturnObject();
     }
+    // Getter methods
+    public float GetCurrentMyceliaCost() => levels.GetLevel(currentLevel).cost;
+    public float GetCurrentEnergyCost() => levels.GetLevel(currentLevel).energyCost;
+    public int GetCurrentLevel() => currentLevel;
+    public bool IsMaxLevel() => currentLevel >= levels.GetLevelCount() - 1;
+    public StructureLevels GetLevels() => levels;
+    public StructureHP GetStructureHP() => healthComponent;
+    public GameObject GetCurrentVisual() => levelVisuals[currentLevel];
+    public string GetStructureName() => levels.GetLevel(currentLevel).name;
+    public string GetStructureDescription() => levels.description;
+
 }

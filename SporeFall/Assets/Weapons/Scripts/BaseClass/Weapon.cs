@@ -122,15 +122,26 @@ public abstract class Weapon : MonoBehaviour
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
         transform.forward = playerCamera.transform.forward;
-        
-        // Get VFX from pool
-        if (!PoolManager.Instance.vfxPool.TryGetValue(bulletPrefab, out VFXPool pool))
+
+        VFXPoolingBehavior vfx = null;
+        if (PoolManager.Instance != null)
         {
-            Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
-            return;
+            // Get VFX from pool
+            if (!PoolManager.Instance.vfxPool.TryGetValue(bulletPrefab, out VFXPool pool))
+            {
+                Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+                return;
+            }
+            vfx = pool.Get(firePoint.position, transform.rotation);
+            vfx.Initialize(pool);
         }
-        VFXPoolingBehavior vfx = pool.Get(firePoint.position, transform.rotation);
-        vfx.Initialize(pool);
+        else
+        {
+            // No pool spawn and enabled VFX
+            vfx = Instantiate(bulletPrefab, firePoint.position, transform.rotation).GetComponent<VFXPoolingBehavior>();
+            vfx.gameObject.SetActive(true);
+        }
+     
 
         Ray ray = new(playerCamera.transform.position, shootDirection);
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon

@@ -47,7 +47,7 @@ public abstract class Attack : ScriptableObject
     }
     protected virtual void SpawnVFX(Vector3 position, Quaternion rotation)
     {
-        if (attackVFXPrefab != null)
+        if (attackVFXPrefab != null && PoolManager.Instance != null)
         {
             // Get VFX from pool
             if (!PoolManager.Instance.vfxPool.TryGetValue(attackVFXPrefab, out VFXPool pool))

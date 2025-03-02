@@ -33,7 +33,7 @@ public class MobEnemy : BaseEnemy
     }
     private void SpawnMyceliaDrop()
     {
-        if (myceliaDropPrefab == null)
+        if (myceliaDropPrefab == null || PoolManager.Instance == null)
             return;
         // Get mycelia drop from pool
         if (!PoolManager.Instance.dropsPool.TryGetValue(myceliaDropPrefab, out DropsPool myceliaPool))

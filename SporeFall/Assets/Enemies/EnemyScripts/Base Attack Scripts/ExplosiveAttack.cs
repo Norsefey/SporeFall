@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Explosion Attack", menuName = "Enemy/Attacks/Explosion Attack")]
@@ -10,10 +11,6 @@ public class ExplosiveAttack : Attack
     [SerializeField] private LayerMask damageableLayers;
     [SerializeField] private AnimationCurve damageFalloff = AnimationCurve.Linear(0f, 1f, 1f, 0f);
     [SerializeField] private bool destroySelfOnExplode = true;
-
-    /*[Header("Additional Effects")]
-    [SerializeField] private float explosionForce = 1000f;
-    [SerializeField] private float upwardsModifier = 3f;*/
 
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
     {
@@ -38,6 +35,7 @@ public class ExplosiveAttack : Attack
 
         foreach (Collider hit in hitColliders)
         {
+            Debug.Log(hit.name + "");
             // Calculate distance for damage falloff
             float distance = Vector3.Distance(enemy.transform.position, hit.transform.position);
             float damageMultiplier = damageFalloff.Evaluate(distance / explosionRadius);
@@ -46,16 +44,8 @@ public class ExplosiveAttack : Attack
             Damageable damageable = hit.GetComponent<Damageable>();
             if (damageable != null)
             {
-                if(hit.CompareTag("Structure"))
                 damageable.TakeDamage(damage * damageMultiplier);
             }
-
-          /*  // Add explosion force to rigidbodies
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddExplosionForce(explosionForce, enemy.transform.position, explosionRadius, upwardsModifier);
-            }*/
         }
 
         // Wait for recovery time
@@ -66,4 +56,6 @@ public class ExplosiveAttack : Attack
             enemy.Die();
         }
     }
+
+
 }

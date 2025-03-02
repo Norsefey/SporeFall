@@ -257,7 +257,7 @@ public class PlayerManager : MonoBehaviour
             pUI.SwitchWeaponIcon();
             pAnime.SetWeaponHoldAnimation(1);
             isBuilding = true;
-            if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 15)
+            if (Tutorial.Instance != null && Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 15)
             {
                 Tutorial.Instance.ProgressTutorial();
             }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FlameThrower : MonoBehaviour
 {
-    [HideInInspector]
+
     public float damageAmount, range, damageTickRate;      // Damage per second dealt to enemies
     public LayerMask enemyLayer;            // The layer that enemies are on
 
@@ -58,16 +58,11 @@ public class FlameThrower : MonoBehaviour
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range, enemyLayer);
         foreach (Collider enemy in enemiesInRange)
         {
-            if(enemy.CompareTag("HeadShot"))
-                 continue;
-
             hasHitEnemies = true;
 
             // Assuming the enemy has a script with a method to take damage
             enemy.GetComponent<Damageable>()?.TakeDamage(damageAmount * damageTickRate);
-            Debug.Log("hit");
             pp.PlayEffects();
-            
         }
 
         return hasHitEnemies;

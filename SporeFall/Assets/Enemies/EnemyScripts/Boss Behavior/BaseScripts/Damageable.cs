@@ -40,6 +40,8 @@ public abstract class Damageable : MonoBehaviour
     {
         isDead = false;
         currentHP = maxHP;
+
+        UpdateHPUI();
     }
     public void RestoreHP(float value)
     {

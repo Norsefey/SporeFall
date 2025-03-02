@@ -112,6 +112,10 @@ public class ProjectileBehavior : MonoBehaviour
         {
             pool.Return(this);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     private void OnDisable()
     {

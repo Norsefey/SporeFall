@@ -118,13 +118,21 @@ public class BuildGun : Weapon
             if (!isEditing && selectedStructure == null)
             {// spawn in a new structure
                 // structures are part of the pooling system, pull from there
-                if (!PoolManager.Instance.structurePool.TryGetValue(buildableStructures[currentBuildIndex], out StructurePool pool))
+                if(PoolManager.Instance != null)
                 {
-                    Debug.LogError($"No pool found for Structure prefab: {buildableStructures[currentBuildIndex].name}");
-                    return;
+                    if (!PoolManager.Instance.structurePool.TryGetValue(buildableStructures[currentBuildIndex], out StructurePool pool))
+                    {
+                        Debug.LogError($"No pool found for Structure prefab: {buildableStructures[currentBuildIndex].name}");
+                        return;
+                    }
+                    selectedStructure = pool.Get(firePoint.position, Quaternion.identity).GetComponent<Structure>();
+                    selectedStructure.poolBehavior.Initialize(pool);
                 }
-                selectedStructure = pool.Get(firePoint.position, Quaternion.identity).GetComponent<Structure>();
-                selectedStructure.poolBehavior.Initialize(pool);
+                else
+                {
+                    selectedStructure = Instantiate(buildableStructures[currentBuildIndex], firePoint.position, Quaternion.identity).GetComponent<Structure>();
+                }
+               
 
                 selectedStructure.ShowRadius(showRadius);
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
@@ -164,7 +172,7 @@ public class BuildGun : Weapon
             return;
         }
         // some test scenes do not have a train to reference off of, so check if a train is valid to do an energy check
-        if (GameManager.Instance.trainHandler != null && selectedStructure != null)
+        if (GameManager.Instance != null && GameManager.Instance.trainHandler != null && selectedStructure != null)
         {
             if (GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= GameManager.Instance.Mycelia)
             {
@@ -198,28 +206,20 @@ public class BuildGun : Weapon
         }
         else if(selectedStructure != null)
         {
-            Debug.Log("Trainless Placement");
+            Debug.Log("Train less Placement");
 
             // mostly for testing the cost and placement of structures
-            if (selectedStructure != null && selectedStructure.GetCurrentMyceliaCost() <= GameManager.Instance.Mycelia)
+            if (selectedStructure != null)
             {
-                GameManager.Instance.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
                 selectedStructure.Initialize();
-                //SetStructureToOpaque();
+                selectedStructure.ShowRadius(false);
                 RestoreOriginalColors(); // Restore original colors when placing
-
                 selectedStructure = null;
                 player.pUI.EnableControls(buildModeText);
-                if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18)
+
+                if (Tutorial.Instance != null && Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18)
                 {
                     Tutorial.Instance.ProgressTutorial();
-                }
-            }
-            else
-            {
-                if (selectedStructure.GetCurrentMyceliaCost() > GameManager.Instance.Mycelia)
-                {
-                    player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
                 }
             }
         }
@@ -228,7 +228,11 @@ public class BuildGun : Weapon
     {
         if (selectedStructure != null)
         {
-            selectedStructure.poolBehavior.ReturnObject();
+            if (PoolManager.Instance != null)
+                selectedStructure.poolBehavior.ReturnObject();
+            else
+                Destroy(selectedStructure.gameObject);
+
             DeselectStructure();
         }
     }

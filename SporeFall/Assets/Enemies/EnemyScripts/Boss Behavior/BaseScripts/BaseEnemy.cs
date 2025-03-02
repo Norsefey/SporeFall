@@ -658,13 +658,11 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         passedThreshold = damageTaken >= targetSwitchThreshold;
     }
-
     public void TriggerRiseAnimation()
     {
         animator.SetTrigger("Rise");
         StartCoroutine(RisingFromGround());
     } 
-
     private IEnumerator RisingFromGround()
     {
         SetState(EnemyState.Idle);

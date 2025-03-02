@@ -21,19 +21,21 @@ public class VFXPoolingBehavior : MonoBehaviour
             {
                 if(Vector3.Distance(transform.position, targetPos) < .5f)
                 {
-                    // Get VFX from pool
-                    if (!PoolManager.Instance.vfxPool.TryGetValue(hitEffect, out VFXPool pool))
+                    if(PoolManager.Instance != null)
                     {
-                        Debug.LogError($"No pool found for enemy prefab: {hitEffect.name}");
-                        //return;
-                    }
-                    else
-                    {
-                        VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
-                        vfx.Initialize(pool);
+                        // Spawn Hit VFX
+                        if (!PoolManager.Instance.vfxPool.TryGetValue(hitEffect, out VFXPool pool))
+                        {
+                            Debug.LogError($"No pool found for enemy prefab: {hitEffect.name}");
+                            //return;
+                        }
+                        else
+                        {
+                            VFXPoolingBehavior vfx = pool.Get(transform.position, transform.rotation);
+                            vfx.Initialize(pool);
+                        }
                     }
                     ReturnBullet();
-
                 }
                 transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed * Time.deltaTime);
             }
@@ -51,7 +53,11 @@ public class VFXPoolingBehavior : MonoBehaviour
     {
         targetPos = Vector3.zero;
         shouldMove = false;
-        pool.Return(this);
+        // return to pool if a pool is available
+        if (pool != null)
+            pool.Return(this);
+        else
+            Destroy(gameObject);
     }
     public void MoveForward()
     {

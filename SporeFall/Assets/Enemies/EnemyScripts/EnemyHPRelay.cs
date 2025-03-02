@@ -18,11 +18,11 @@ public class EnemyHPRelay : Damageable
     }
     protected override void Die()
     {
-        throw new System.NotImplementedException();
+       
     }
 
     protected override void UpdateHPUI()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

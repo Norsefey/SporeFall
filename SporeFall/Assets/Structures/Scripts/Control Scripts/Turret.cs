@@ -203,21 +203,32 @@ public class Turret : MonoBehaviour
             audioSource.PlayOneShot(firingSound);
         }
 
-        if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
+        if(PoolManager.Instance != null)
         {
-           // Debug.LogError($"No pool found for projectile prefab: {bulletPrefab.name}");
-            return;
+            if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
+            {
+                // Debug.LogError($"No pool found for projectile prefab: {bulletPrefab.name}");
+                return;
+            }
+            else
+            {
+                ProjectileBehavior projectile = pool.Get(firePoint.position, Quaternion.LookRotation(firePoint.forward));
+
+                if (projectile != null)
+                {
+                    bulletData.Direction = firePoint.forward;
+                    projectile.Initialize(bulletData, pool);
+                }
+            }
         }
         else
         {
-            ProjectileBehavior projectile = pool.Get(firePoint.position,Quaternion.LookRotation(firePoint.forward));
+            ProjectileBehavior projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(firePoint.forward)).GetComponent<ProjectileBehavior>();
 
-            if (projectile != null)
-            {
-                bulletData.Direction = firePoint.forward;
-                projectile.Initialize(bulletData, pool);
-            }
+            bulletData.Direction = firePoint.forward;
+            projectile.Initialize(bulletData, null);
         }
+       
     }
 
 }
