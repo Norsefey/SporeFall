@@ -71,6 +71,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=0.6)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkipCutscene"",
+                    ""type"": ""Button"",
+                    ""id"": ""e107011a-0417-47e1-b2cd-ec5ad94ffb2e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -214,6 +223,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Leave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7dd03884-6aed-447c-bf91-151b87afeec1"",
+                    ""path"": ""<Keyboard>/#(Z)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SkipCutscene"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1027,6 +1047,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Game_ExitGame = m_Game.FindAction("ExitGame", throwIfNotFound: true);
         m_Game_Join = m_Game.FindAction("Join", throwIfNotFound: true);
         m_Game_Leave = m_Game.FindAction("Leave", throwIfNotFound: true);
+        m_Game_SkipCutscene = m_Game.FindAction("SkipCutscene", throwIfNotFound: true);
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
@@ -1123,6 +1144,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Game_ExitGame;
     private readonly InputAction m_Game_Join;
     private readonly InputAction m_Game_Leave;
+    private readonly InputAction m_Game_SkipCutscene;
     public struct GameActions
     {
         private @GameInputs m_Wrapper;
@@ -1132,6 +1154,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @ExitGame => m_Wrapper.m_Game_ExitGame;
         public InputAction @Join => m_Wrapper.m_Game_Join;
         public InputAction @Leave => m_Wrapper.m_Game_Leave;
+        public InputAction @SkipCutscene => m_Wrapper.m_Game_SkipCutscene;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1156,6 +1179,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Leave.started += instance.OnLeave;
             @Leave.performed += instance.OnLeave;
             @Leave.canceled += instance.OnLeave;
+            @SkipCutscene.started += instance.OnSkipCutscene;
+            @SkipCutscene.performed += instance.OnSkipCutscene;
+            @SkipCutscene.canceled += instance.OnSkipCutscene;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -1175,6 +1201,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Leave.started -= instance.OnLeave;
             @Leave.performed -= instance.OnLeave;
             @Leave.canceled -= instance.OnLeave;
+            @SkipCutscene.started -= instance.OnSkipCutscene;
+            @SkipCutscene.performed -= instance.OnSkipCutscene;
+            @SkipCutscene.canceled -= instance.OnSkipCutscene;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -1567,6 +1596,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnExitGame(InputAction.CallbackContext context);
         void OnJoin(InputAction.CallbackContext context);
         void OnLeave(InputAction.CallbackContext context);
+        void OnSkipCutscene(InputAction.CallbackContext context);
     }
     public interface IPlayerActions
     {

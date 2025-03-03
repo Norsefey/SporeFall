@@ -22,6 +22,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction pauseGame;
     private InputAction leaveGame;
     private InputAction toggleFullscreen;
+    private InputAction skipCutscene;
     // Player Actions
     public InputAction moveAction;
     public  InputAction lookAction;
@@ -67,6 +68,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame = gameInputMap.FindAction("ExitGame");
         pauseGame = gameInputMap.FindAction("Pause");
         toggleFullscreen = gameInputMap.FindAction("ToggleFullscreen");
+        skipCutscene = gameInputMap.FindAction("SkipCutscene");
         leaveGame = gameInputMap.FindAction("Leave");
         // player action map
         moveAction = playerInputMap.FindAction("Move");
@@ -106,6 +108,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // Assign Calls to each action
         // basic player actions
+        skipCutscene.performed += OnSkipCutscene;
         leaveGame.performed += OnLeaveGame;
         jumpAction.started += OnJumpCall;
         sprintAction.started += OnSprintStarted;
@@ -140,7 +143,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // remove calls
         leaveGame.performed -= OnLeaveGame;
-
+        skipCutscene.performed -= OnSkipCutscene;
         jumpAction.started -= OnJumpCall;
         sprintAction.started -= OnSprintStarted;
         sprintAction.canceled -= OnSprintCanceled;
@@ -343,6 +346,10 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         GameManager.Instance.RemovePlayer(pMan);
     }
+    private void OnSkipCutscene(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.waveManager.SkippParkingAnimation();
+    }
     private void ToggleFullscreen(InputAction.CallbackContext context)
     {
         Debug.Log("Toggling fullscreen");
@@ -431,7 +438,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         pMan.pCamera.FlipCameraSide();
     }
-
     private void OnProgressTutorial(InputAction.CallbackContext context)
     {
         if (Tutorial.Instance.clickNeeded == true)

@@ -26,37 +26,46 @@ public class UpgradeBanner : MonoBehaviour
     }
     private void UpdateBannerVisuals(StructureType type, StructureLevel level)
     {
-        typeText.text = $"{type.ToString()} : \n Current Lv {GameManager.Instance.upgradeManager.GetStructureLevel(type) + 1}";
+        UpgradeManager upgradeManager = GameManager.Instance.upgradeManager;
 
-        // Check if this is the max level
-        bool isMaxLevel = GameManager.Instance.upgradeManager.IsMaxLevel(type);
+        typeText.text = $"{type.ToString()} : \n Current Lv {upgradeManager.GetStructureLevel(type) + 1}";
+
+        bool isMaxLevel = upgradeManager.IsMaxLevel(type);
 
         if (isMaxLevel)
         {
             costText.text = "Max Level";
             upgradeButton.interactable = false;
+            descriptionText.text = "This structure is fully upgraded.";
         }
-        else
+        else if (level != null)
         {
             costText.text = $"Mycelia: {level.cost}";
             upgradeButton.interactable = true;
             descriptionText.text = level.upgradeDescription;
         }
-        // Remove any existing listeners to prevent multiple calls
-        upgradeButton.onClick.RemoveAllListeners();
-        upgradeButton.onClick.AddListener(PerformUpgrade);
-    }
 
+        // Ensure button doesn't keep old listeners
+        upgradeButton.onClick.RemoveAllListeners();
+        if (!isMaxLevel)
+        {
+            upgradeButton.onClick.AddListener(PerformUpgrade);
+        }
+    }
     void PerformUpgrade()
     {
-        if (GameManager.Instance.upgradeManager.CanUpgrade(currentType, GameManager.Instance.Mycelia))
+        UpgradeManager upgradeManager = GameManager.Instance.upgradeManager;
+        float currentMycelia = GameManager.Instance.Mycelia;
+
+        if (upgradeManager.CanUpgrade(currentType, currentMycelia))
         {
-            GameManager.Instance.upgradeManager.UpgradeStructure(currentType, GameManager.Instance.Mycelia);
+            upgradeManager.UpgradeStructure(currentType, currentMycelia);
             GameManager.Instance.trainHandler.ApplyUpgradeToStructures();
             upgradeUI.UpdateMyceliaAmount();
-            // Get the next level after upgrade
-            StructureLevel nextLevel = GameManager.Instance.upgradeManager.GetNextLevel(currentType);
-            // Update the banner visuals
+
+            int newLevel = upgradeManager.GetStructureLevel(currentType);
+            StructureLevel nextLevel = upgradeManager.GetNextLevel(currentType);
+
             UpdateBannerVisuals(currentType, nextLevel);
         }
     }

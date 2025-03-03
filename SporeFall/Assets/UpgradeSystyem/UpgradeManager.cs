@@ -15,8 +15,6 @@ public class UpgradeManager : MonoBehaviour
     public Dictionary<StructureType, int> structureLevels = new Dictionary<StructureType, int>();
     public List<StructureLevels> structureStats = new List<StructureLevels>();
 
-    //public List<PlayerUpgrade> playerUpgrades = new List<PlayerUpgrade>();
-
     private void Awake()
     {
         // Initialize all structure levels to 0
@@ -52,14 +50,10 @@ public class UpgradeManager : MonoBehaviour
     }
     public StructureLevel GetNextLevel(StructureType type)
     {
-        int currentLevel = this.structureLevels[type];
+        if (!structureLevels.TryGetValue(type, out int currentLevel)) return null;
+
         StructureLevels structureLevelData = GetStructureLevelsForType(type);
-        
-        if (structureLevelData == null || IsMaxLevel(type))
-        {
-            Debug.Log("No More levels");
-            return null;
-        }
+        if (structureLevelData == null || IsMaxLevel(type)) return null;
 
         return structureLevelData.GetLevel(currentLevel + 1);
     }
@@ -69,13 +63,10 @@ public class UpgradeManager : MonoBehaviour
     }
     public int GetStructureLevel(StructureType type)
     {
-        return structureLevels[type];
+        return structureLevels.TryGetValue(type, out int level) ? level : 0;
     }
     public bool IsMaxLevel(StructureType type)
     {
-        StructureLevels structureLevelData = GetStructureLevelsForType(type);
-        if (structureLevelData == null) return true;
-
-        return structureLevelData.GetLevelCount() <= this.structureLevels[type] + 1;
+        return GetStructureLevelsForType(type)?.GetLevelCount() - 1 <= GetStructureLevel(type);
     }
 }

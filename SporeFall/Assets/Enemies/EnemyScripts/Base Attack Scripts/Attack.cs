@@ -8,12 +8,17 @@ public abstract class Attack : ScriptableObject
 {
     // Base ScriptableObject for all boss attacks
     [Header("Base Attack Settings")]
+    [Tooltip("How close to target to do attack")]
     [SerializeField] protected float range = 5f;
+    [Tooltip("How Long until Attack can be used again")]
     [SerializeField] protected float cooldown = 2f;
+    [Tooltip("How base damage of Attack")]
     [SerializeField] protected float damage = 10f;
+    [Tooltip("How when to do Damage. Gives time for a wind up animation")]
     [SerializeField] protected float attackDelay = 0.5f;
-    [Tooltip("Time the boss must wait after attacking before moving")]
+    [Tooltip("Time to wait after attacking before moving again. ")]
     [SerializeField] protected float recoveryTime = 0.5f;
+    [Tooltip("Name of trigger to activate correct animation")]
     [SerializeField] protected string animationTrigger = "Attack";
 
     // Optional VFX and SFX references

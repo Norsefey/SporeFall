@@ -22,7 +22,7 @@ public class StructureHP : Damageable
     {
         if (healthDisplay != null)
         {
-            healthDisplay.text = currentHP.ToString("F0") + "/" + maxHP;
+            healthDisplay.text = $"LV:{structure.GetCurrentLevel() + 1} \n" + currentHP.ToString("F0") + "/" + maxHP;
         }
     }
 }

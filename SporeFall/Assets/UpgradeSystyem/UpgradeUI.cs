@@ -12,7 +12,8 @@ public class UpgradeUI : MonoBehaviour
 
     [SerializeField] private GameObject structBannerHolder;
     [SerializeField] private GameObject playerBannerHolder;
-
+    private static readonly Color DefaultColor = Color.white;
+    private static readonly Color NoMyceliaColor = Color.red;
 
     private void OnEnable()
     {
@@ -25,18 +26,29 @@ public class UpgradeUI : MonoBehaviour
         playerBannerHolder.SetActive(false);
         structBannerHolder.SetActive(true);
 
+        ClearBanners();
+
         foreach (StructureType type in System.Enum.GetValues(typeof(StructureType)))
         {
             GameObject bannerObj = Instantiate(upgradeBannerPrefab, scrollViewContent);
             UpgradeBanner banner = bannerObj.GetComponent<UpgradeBanner>();
             banner.upgradeUI = this;
-            // Fetch appropriate StructureLevels scriptable object for this type
-            StructureLevels structureLevels = gameManager.upgradeManager.GetStructureLevelsForType(type);
 
+            // Get structure levels and current upgrade level
+            StructureLevels structureLevels = gameManager.upgradeManager.GetStructureLevelsForType(type);
             int currentLevel = gameManager.upgradeManager.GetStructureLevel(type);
             StructureLevel nextLevel = gameManager.upgradeManager.GetNextLevel(type);
-            if(nextLevel != null)
-                banner.SetupBanner(type, nextLevel);
+
+            // Always show the banner, even if it's at max level
+            banner.SetupBanner(type, nextLevel ?? structureLevels.GetLevel(currentLevel));
+        }
+    }
+    private void ClearBanners()
+    {
+        // Clear existing banners before adding new ones
+        foreach (Transform child in scrollViewContent)
+        {
+            Destroy(child.gameObject);
         }
     }
     public void ShowPlayerUpgrades()
@@ -46,12 +58,8 @@ public class UpgradeUI : MonoBehaviour
     }
     public void UpdateMyceliaAmount()
     {
-        myceliaText.color = Color.white;
-
+        myceliaText.color = gameManager.Mycelia > 0 ? DefaultColor : NoMyceliaColor;
         myceliaText.text = $"Mycelia: {gameManager.Mycelia}";
-        
-        if(gameManager.Mycelia <= 0)
-            myceliaText.color = Color.red;
     }
 
 }

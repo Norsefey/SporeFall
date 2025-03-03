@@ -1,17 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Explosion Attack", menuName = "Enemy/Attacks/Explosion Attack")]
 public class ExplosiveAttack : Attack
 {
     [Header("Explosion Settings")]
+    [Tooltip("How far the explosion can do damage")]
     [SerializeField] private float explosionRadius = 10f;
     [SerializeField] private LayerMask damageableLayers;
+    [Tooltip("Further away from center of explosion less damage")]
     [SerializeField] private AnimationCurve damageFalloff = AnimationCurve.Linear(0f, 1f, 1f, 0f);
     [SerializeField] private bool destroySelfOnExplode = true;
-
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
     {
         // Start the attack cooldown
@@ -44,6 +43,7 @@ public class ExplosiveAttack : Attack
             Damageable damageable = hit.GetComponent<Damageable>();
             if (damageable != null)
             {
+                Debug.Log("Eplosive Damage Amount: " + damage * damageMultiplier);
                 damageable.TakeDamage(damage * damageMultiplier);
             }
         }
@@ -56,6 +56,5 @@ public class ExplosiveAttack : Attack
             enemy.Die();
         }
     }
-
 
 }

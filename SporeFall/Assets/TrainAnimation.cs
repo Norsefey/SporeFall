@@ -10,7 +10,10 @@ public class TrainAnimation : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
-
+    public void SkipParkingAnimation()
+    {
+        animator.SetTrigger("Parked");
+    }
     public void ParkTrain()
     {
         Debug.Log("Parking Train");
