@@ -173,6 +173,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         moveStructAcion.canceled -= OnEditMoveStructureCancled;
         destroyStructAction.performed -= OnEditDestroy;
         // disable Input map
+        gameInputMap.Disable();
         playerInputMap.Disable();
         shootInputMap.Disable();
         buildInputMap.Disable();
@@ -208,6 +209,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         playerInputMap.Disable();
         shootInputMap.Disable();
         buildInputMap.Disable();
+        placementInputMap.Disable();
         editInputMap.Disable();
     }
     public void EnableDefaultInputs()
@@ -215,6 +217,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         playerInputMap.Enable();
         shootInputMap.Enable();
         buildInputMap.Disable();
+        placementInputMap.Disable();
         editInputMap.Disable();
     }
     // Setting the player manager to use as reference

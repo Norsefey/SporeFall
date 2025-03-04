@@ -212,6 +212,7 @@ public class BuildGun : Weapon
             if (selectedStructure != null)
             {
                 selectedStructure.Initialize();
+                selectedStructure.ToggleStructureBehavior(true);
                 selectedStructure.ShowRadius(false);
                 RestoreOriginalColors(); // Restore original colors when placing
                 selectedStructure = null;

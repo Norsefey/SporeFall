@@ -121,7 +121,7 @@ public abstract class Weapon : MonoBehaviour
         {
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
-        transform.forward = playerCamera.transform.forward;
+        //transform.forward = playerCamera.transform.forward;
 
         VFXPoolingBehavior vfx = null;
         if (PoolManager.Instance != null)

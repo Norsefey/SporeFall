@@ -43,7 +43,6 @@ public class TPSCamera : MonoBehaviour
 
     [Header("Improved Collision Settings")]
     [SerializeField] private LayerMask obstructions;
-    [SerializeField] private Transform aimTarget;
     [SerializeField] private LayerMask targetMask;
     [SerializeField] private float sphereCastRadius = 0.2f;
     [SerializeField] private float collisionSmoothSpeed = 10f;
@@ -62,6 +61,8 @@ public class TPSCamera : MonoBehaviour
     private float verSense = 50;
     private float angle = 0f;
 
+    [SerializeField] private Transform rigLookAtTarget;
+
     private void Start()
     {
         if (player == null)
@@ -74,13 +75,14 @@ public class TPSCamera : MonoBehaviour
     {
         if (player == null || pMan == null)
             return;
-
         // Handle state transitions
         HandleStateTransitions();
         // Calculate and apply rotation
         UpdateCameraRotation();
         // Check for obstructions between camera and player
         HandleCameraCollision();
+
+        MoveRigTarget();
     }
     private void HandleStateTransitions()
     {
@@ -179,6 +181,20 @@ public class TPSCamera : MonoBehaviour
 
         // Make sure camera is looking at the right direction
         LookAtPlayer();
+    }
+    private void MoveRigTarget()
+    {
+        Vector3 shootDirection = myCamera.transform.forward;
+        
+        Ray ray = new(transform.position, shootDirection);
+        if (Physics.Raycast(ray, out RaycastHit hit, 100, obstructions)) // Range of the hitscan weapon
+        {
+            rigLookAtTarget.position = hit.point;
+        }
+        else
+        {
+            rigLookAtTarget.position = shootDirection * 100;
+        }
     }
     private void LookAtPlayer()
     {

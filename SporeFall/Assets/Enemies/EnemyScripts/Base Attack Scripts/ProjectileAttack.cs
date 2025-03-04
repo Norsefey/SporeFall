@@ -54,20 +54,41 @@ public class ProjectileAttack : RangedAttack
                     direction = Quaternion.Euler(0, currentAngle, 0) * direction;
                 }
 
-              
-                if(!PoolManager.Instance.projectilePool.TryGetValue(projectilePrefab, out ProjectilePool pool))
+                ProjectileBehavior projectile = null;
+                if (PoolManager.Instance != null)
                 {
-                    Debug.LogError($"No pool found for enemy prefab: {projectilePrefab.name}");
+                    if (!PoolManager.Instance.projectilePool.TryGetValue(projectilePrefab, out ProjectilePool pool))
+                    {
+                        Debug.LogError($"No pool found for enemy prefab: {projectilePrefab.name}");
 
-                    yield return null;
+                        yield return null;
+                    }
+
+                     projectile = pool.Get(spawnPosition, Quaternion.LookRotation(direction));
+
+                    if (projectile)
+                    {
+                        ProjectileData data = new()
+                        {
+                            Direction = direction,
+                            Speed = projectileSpeed,
+                            Damage = damage,
+                            Lifetime = projectileLifetime,
+                            UseGravity = useGravity,
+                            ArcHeight = projectileArcHeight,
+                            CanBounce = canBounce,
+                            MaxBounces = maxBounces,
+                            BounceDamageMultiplier = bounceDamageMultiplier
+                        };
+
+                        projectile.Initialize(data, pool);
+                    }
                 }
-                ProjectileBehavior projectile = pool.Get(spawnPosition, Quaternion.LookRotation(direction));
-                /* // Get projectile from pool
-                 ProjectileBehavior projectile = projectilePool.Get(
-                 spawnPosition,
-                     Quaternion.LookRotation(direction));  */
-                if (projectile)
+                else
                 {
+                    // If Pool Is missing Simply Spawn A projectile
+                    projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<ProjectileBehavior>();
+
                     ProjectileData data = new()
                     {
                         Direction = direction,
@@ -80,8 +101,7 @@ public class ProjectileAttack : RangedAttack
                         MaxBounces = maxBounces,
                         BounceDamageMultiplier = bounceDamageMultiplier
                     };
-
-                    projectile.Initialize(data, pool);
+                    projectile.Initialize(data, null);
                 }
             }
         }

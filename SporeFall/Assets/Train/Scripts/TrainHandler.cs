@@ -238,6 +238,7 @@ public class TrainHandler : MonoBehaviour
 
             player.TogglePControl(true);
             player.TogglePVisual(true);
+            player.pAnime.SetWeaponHoldAnimation(player.currentWeapon.holdType);
             player.TogglePCorruption(true);
 
             StartCoroutine(DelayCameraToggle(player));

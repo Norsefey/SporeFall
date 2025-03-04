@@ -65,7 +65,6 @@ public class WaveManager : MonoBehaviour
         currentWave = waves[currentWaveIndex];
         StartCoroutine(MoveToWaveLocation(0));
     }
-
     #region Wave State Transitions
     public void OnStartWave()
     {
@@ -165,8 +164,6 @@ public class WaveManager : MonoBehaviour
         }
         // animation wait time
         yield return new WaitForSeconds(waitTime);
-        Debug.Log("Moving Train");
-
         // at the start we have zero wait time, and don't want to go to next index
         if (waitTime > 0)
         {
@@ -198,7 +195,7 @@ public class WaveManager : MonoBehaviour
         {
             // Ensuring the final position is set precisely after the movement
             train.transform.position = targetPosition;
-            train.SetParkedState();
+            SetTrainParkState();
             if (currentWaveIndex >= 0)
                 train.animations.OpenUpgradesPanel();
             wavePhase = WavePhase.NotStarted;
@@ -300,6 +297,9 @@ public class WaveManager : MonoBehaviour
     }
     public void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint, int spawnIndex)
     {
+        if (enemyPools == null)
+            return;
+
         if (!enemyPools.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
         {
             Debug.LogError($"No pool found for enemy prefab: {enemyPrefab.name}");

@@ -12,7 +12,7 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] private Transform rightHandBone;// where the weapon slot will move to, to avoid having to dig for it in hierarchy
     [SerializeField] private GameObject aimTarget;
 
-    [SerializeField] private Rig headLook;
+    [SerializeField] private Rig bodyLook;
     // Animation states
     private bool isWalking = false;
     private bool isAiming = false;
@@ -97,133 +97,11 @@ public class PlayerAnimation : MonoBehaviour
     public void SetWeaponHoldAnimation(int weaponType)
     {
         anime.SetInteger("WeaponType", weaponType);
-
-      /*  switch (holdPosIndex)
-        {
-            case 0:// No Weapon
-                Debug.Log("Setting No Weapon Animations");
-                tbIk.weight = 0;
-
-                anime.SetBool("NoWeapon", true);
-                oneHandedRig.weight = 0;
-                //anime.SetLayerWeight(oneHandedLayerIndex, 0);
-
-                twoHandedRig.weight = 0;
-                //anime.SetLayerWeight(twoHandedLayerIndex, 0);
-                twoHanded = false;
-                aimTarget.SetActive(false);
-
-                //anime.SetLayerWeight(noWeaponLayerIndex, 1);
-                break;
-            case 1:// 1 Handed Weapon
-                if (!isAiming)
-                    tbIk.weight = 0;
-
-                twoHandedRig.weight = 0;
-                oneHandedRig.weight = 1;
-                anime.SetLayerWeight(noWeaponLayerIndex, 0);
-                anime.SetLayerWeight(twoHandedLayerIndex, 0);
-
-                anime.SetLayerWeight(oneHandedLayerIndex, 1);
-                aimTarget.SetActive(true);
-                twoHanded = false;
-                break;
-            case 2:// Two Handed Weapon
-                tbIk.weight = 1;
-
-                oneHandedRig.weight = 0;
-                twoHandedRig.weight = 1;
-                leftHandTarget.position = pMan.currentWeapon.secondHandHold.position;
-                anime.SetLayerWeight(noWeaponLayerIndex, 0);
-                anime.SetLayerWeight(oneHandedLayerIndex, 0);
-
-                anime.SetLayerWeight(twoHandedLayerIndex, 1);
-                aimTarget.SetActive(true);
-                twoHanded = true;
-                break;
-
-
-        }*/
     }
-
-    /*public void ToggleTwoHanded(bool toggle)
-    {
-        if (toggle == twoHanded)// already in state no need to switch
-            return;
-        if (toggle)
-        {
-            tbIk.weight = 1;
-
-            oneHandedRig.weight = 0;
-            twoHandedRig.weight = 1;
-            leftHandTarget.position = pMan.currentWeapon.secondHandHold.position;
-            anime.SetLayerWeight(oneHandedLayerIndex, 0);
-            anime.SetLayerWeight(twoHandedLayerIndex, 1);
-            twoHanded = true;
-        }
-        else
-        {
-            if(!isAiming)
-                tbIk.weight = 0;
-
-            twoHandedRig.weight = 0;
-            oneHandedRig.weight = 1;
-            anime.SetLayerWeight(twoHandedLayerIndex, 0);
-            anime.SetLayerWeight(oneHandedLayerIndex, 1);
-            twoHanded = false;
-        }
-       
-    }*/
     public void ToggleIKAim(bool toggle)
     {
-        headLook.weight = toggle ? 1 : 0;
+        bodyLook.weight = toggle ? 1 : 0;
     }
-   /* public void ToggleNoWeapon(bool toggle)
-    {
-        Debug.Log($"ToggleNoWeapon called with toggle: {toggle}");
-        Debug.Log($"Current layer weights before toggle:");
-        Debug.Log($"{anime.GetLayerName(oneHandedLayerIndex)} : {anime.GetLayerWeight(oneHandedLayerIndex)}");
-        Debug.Log($"{anime.GetLayerName(twoHandedLayerIndex)} : {anime.GetLayerWeight(twoHandedLayerIndex)}");
-        Debug.Log($"{anime.GetLayerName(noWeaponLayerIndex)} : {anime.GetLayerWeight(noWeaponLayerIndex)}");
-
-
-        if (toggle)
-        {
-            Debug.Log("Setting No Weapon Animations");
-            anime.SetBool("NoWeapon", true);
-            oneHandedRig.weight = 0;
-            anime.SetLayerWeight(oneHandedLayerIndex, 0);
-
-            twoHandedRig.weight = 0;
-            anime.SetLayerWeight(twoHandedLayerIndex, 0);
-            twoHanded = false;
-            aimTarget.SetActive(false);
-            tbIk.weight = 0;
-
-            anime.SetLayerWeight(noWeaponLayerIndex, 1);
-        }
-        else
-        {
-            anime.SetBool("NoWeapon", false);
-
-            oneHandedRig.weight = 1;
-            anime.SetLayerWeight(oneHandedLayerIndex, 1);
-
-            twoHandedRig.weight = 0;
-            anime.SetLayerWeight(twoHandedLayerIndex, 0);
-            twoHanded = false;
-            aimTarget.SetActive(true);
-
-            tbIk.weight = 1;
-
-            anime.SetLayerWeight(noWeaponLayerIndex, 0);
-        }
-        Debug.Log($"layer weights After toggle:");
-
-        Debug.Log($"{anime.GetLayerName(oneHandedLayerIndex)} : {anime.GetLayerWeight(oneHandedLayerIndex)}");
-        Debug.Log($"{anime.GetLayerName(twoHandedLayerIndex)} : {anime.GetLayerWeight(twoHandedLayerIndex)}");
-        Debug.Log($"{anime.GetLayerName(noWeaponLayerIndex)} : {anime.GetLayerWeight(noWeaponLayerIndex)}");
-    }*/
      public void ActivateATrigger(string triggerName)
     {
         anime.SetTrigger(triggerName);

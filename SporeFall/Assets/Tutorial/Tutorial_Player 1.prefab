@@ -971,11 +971,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 6448954540098733701}
+    m_ConstrainedObject: {fileID: 6912029658092336780}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 115411705176582172}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
@@ -1001,14 +1001,14 @@ MonoBehaviour:
     m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: -45
     m_MaxLimit: 45
-    m_AimAxis: 2
-    m_UpAxis: 5
+    m_AimAxis: 4
+    m_UpAxis: 2
     m_WorldUpType: 0
     m_WorldUpObject: {fileID: 0}
     m_WorldUpAxis: 2
     m_MaintainOffset: 0
     m_ConstrainedAxes:
-      x: 0
+      x: 1
       y: 1
       z: 1
 --- !u!1 &1693253479759288121
@@ -4989,7 +4989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &115411705176582172
 Transform:
   m_ObjectHideFlags: 0
@@ -7740,7 +7740,6 @@ MonoBehaviour:
   obstructions:
     serializedVersion: 2
     m_Bits: 4544
-  aimTarget: {fileID: 0}
   targetMask:
     serializedVersion: 2
     m_Bits: 448
@@ -7749,6 +7748,7 @@ MonoBehaviour:
   returnSmoothSpeed: 0.14
   maxCheckDistance: 5
   shoulderOffset: 0.25
+  rigLookAtTarget: {fileID: 115411705176582172}
 --- !u!1 &8596723275014151061
 GameObject:
   m_ObjectHideFlags: 0
@@ -7929,6 +7929,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5420474873883288264}
   - component: {fileID: 9096700486556321276}
+  - component: {fileID: 8504307998573751356}
   m_Layer: 9
   m_Name: Player Visual
   m_TagString: Untagged
@@ -7949,8 +7950,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4628489011372826661}
   - {fileID: 115411705176582172}
+  - {fileID: 4628489011372826661}
   - {fileID: 9137967517877648668}
   m_Father: {fileID: 3018480702699007562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7970,7 +7971,30 @@ MonoBehaviour:
   weaponSlot: {fileID: 4628489011372826661}
   rightHandBone: {fileID: 1433118806335360630}
   aimTarget: {fileID: 6520306076713153152}
-  headLook: {fileID: 3349133834125234747}
+  bodyLook: {fileID: 0}
+--- !u!114 &8504307998573751356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8888361769575659606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c3b04e544660e4eba59b0b5a800e1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  robotParts:
+  - {fileID: 3897933982053793600}
+  - {fileID: 7274665632288203224}
+  - {fileID: 3076726730713549536}
+  - {fileID: 5558445448410727839}
+  - {fileID: 3916548894086673015}
+  - {fileID: 2891502725843156751}
+  - {fileID: 3169539879575160199}
+  altMaterials:
+  - {fileID: 2100000, guid: 1553f02db4a9e87458ae9d9141610513, type: 2}
+  - {fileID: 2100000, guid: d934bf5378a090c48a849c44a953371b, type: 2}
 --- !u!1 &8956435813189323272
 GameObject:
   m_ObjectHideFlags: 0
