@@ -12,7 +12,7 @@ public enum StructureType
 }
 public class UpgradeManager : MonoBehaviour
 {
-    public Dictionary<StructureType, int> structureLevels = new Dictionary<StructureType, int>();
+    public Dictionary<StructureType, int> currentStructureLevel = new Dictionary<StructureType, int>();
     public List<StructureLevels> structureStats = new List<StructureLevels>();
 
     private void Awake()
@@ -20,7 +20,7 @@ public class UpgradeManager : MonoBehaviour
         // Initialize all structure levels to 0
         foreach (var stat in structureStats)
         {
-            structureLevels[stat.type] = 0;
+            currentStructureLevel[stat.type] = 0;
         }
     }
     public bool CanUpgrade(StructureType type, float availableMycelia)
@@ -28,13 +28,12 @@ public class UpgradeManager : MonoBehaviour
         StructureLevels structureLevelData = GetStructureLevelsForType(type);
         if (structureLevelData == null) return false;
 
-        int currentLevel = structureLevels[type];
+        int currentLevel = currentStructureLevel[type];
         if (currentLevel + 1 >= structureLevelData.GetLevelCount()) return false;
 
         StructureLevel nextLevel = structureLevelData.GetLevel(currentLevel + 1);
         if (availableMycelia >= nextLevel.cost)
         {
-            GameManager.Instance.DecreaseMycelia(nextLevel.cost);
             return true;
         }
         else
@@ -44,13 +43,11 @@ public class UpgradeManager : MonoBehaviour
     }
     public void UpgradeStructure(StructureType type, float availableMycelia)
     {
-        if (!CanUpgrade(type, availableMycelia))
-            return;
-        structureLevels[type]++;
+        currentStructureLevel[type]++;
     }
     public StructureLevel GetNextLevel(StructureType type)
     {
-        if (!structureLevels.TryGetValue(type, out int currentLevel)) return null;
+        if (!currentStructureLevel.TryGetValue(type, out int currentLevel)) return null;
 
         StructureLevels structureLevelData = GetStructureLevelsForType(type);
         if (structureLevelData == null || IsMaxLevel(type)) return null;
@@ -63,7 +60,7 @@ public class UpgradeManager : MonoBehaviour
     }
     public int GetStructureLevel(StructureType type)
     {
-        return structureLevels.TryGetValue(type, out int level) ? level : 0;
+        return currentStructureLevel.TryGetValue(type, out int level) ? level : 0;
     }
     public bool IsMaxLevel(StructureType type)
     {
