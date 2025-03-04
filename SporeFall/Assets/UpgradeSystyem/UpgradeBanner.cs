@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class UpgradeBanner : MonoBehaviour
 {
-    public StructureLevels levels;
-
     public TMP_Text typeText;
     public TMP_Text costText;
     public TMP_Text descriptionText;
@@ -61,12 +59,14 @@ public class UpgradeBanner : MonoBehaviour
         {
             upgradeManager.UpgradeStructure(currentType, currentMycelia);
             GameManager.Instance.trainHandler.ApplyUpgradeToStructures();
+
+
+            GameManager.Instance.DecreaseMycelia(currentLevel.cost);
             upgradeUI.UpdateMyceliaAmount();
 
-            int newLevel = upgradeManager.GetStructureLevel(currentType);
-            StructureLevel nextLevel = upgradeManager.GetNextLevel(currentType);
+            currentLevel = upgradeManager.GetNextLevel(currentType);
 
-            UpdateBannerVisuals(currentType, nextLevel);
+            UpdateBannerVisuals(currentType, currentLevel);
         }
     }
 }
