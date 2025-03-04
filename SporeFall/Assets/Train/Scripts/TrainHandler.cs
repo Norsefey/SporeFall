@@ -244,6 +244,26 @@ public class TrainHandler : MonoBehaviour
             StartCoroutine(DelayCameraToggle(player));
         }
     }
+
+    public void DisembarkSinglePlayer(PlayerManager player)
+    {
+        // correct player position
+        player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
+
+        if (player.pHealth.CurrentLives <= 0)
+        {
+            Debug.Log("respawning Player");
+            player.pHealth.IncreaseLife();
+            player.StartRespawn();
+        }
+
+        player.TogglePControl(true);
+        player.TogglePVisual(true);
+        player.pAnime.SetWeaponHoldAnimation(player.currentWeapon.holdType);
+        player.TogglePCorruption(true);
+
+        StartCoroutine(DelayCameraToggle(player));
+    }
     private IEnumerator DelayCameraToggle(PlayerManager player)
     {
         yield return new WaitForSeconds(.2f);

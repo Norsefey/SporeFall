@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
             player.MovePlayerTo(trainHandler.playerSpawnPoint[player.GetPlayerIndex()].position);
             if (trainHandler.trainState == TrainState.Parked)
             {
-               trainHandler.DisembarkTrain();
+               trainHandler.DisembarkSinglePlayer(player);
                 Debug.Log("Not Moving Disembarking");
             }
         }
