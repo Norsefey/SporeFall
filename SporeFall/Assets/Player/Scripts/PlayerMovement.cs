@@ -40,13 +40,16 @@ public class PlayerMovement : MonoBehaviour
     [Range(0f, 1f)] public float footstepVolume = 0.5f; // Volume of footstep sound
     public AudioSource audioSource;
 
-    private void Start()
+    private void Awake()
     {
         cc = GetComponent<CharacterController>();
+        audioSource = GetComponent<AudioSource>(); // Get the AudioSource component
+    }
+    private void Start()
+    {
         moveSpeed = walkSpeed;
         SetDefaultState();
         myCamera = pMan.pCamera.transform;
-        audioSource = GetComponent<AudioSource>(); // Get the AudioSource component
     }
 
     private void Update()

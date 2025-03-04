@@ -51,7 +51,6 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private float maxCheckDistance = 10f;
     [SerializeField] private float shoulderOffset = 0.5f; // Offset from center for better wall detection
     private Vector3 currentCameraOffset;
-    private Vector3 targetCameraOffset;
     private Vector3 smoothOffsetVelocity; // For offset transitions
     private Vector3 smoothPositionVelocity; // For position transitions
     private bool isColliding;
@@ -62,46 +61,26 @@ public class TPSCamera : MonoBehaviour
     private float horSense = 50;
     private float verSense = 50;
     private float angle = 0f;
-    private Vector3 desiredPosition; // To track where camera should be
-    private PlayerMovement.PlayerState lastPlayerState;
 
     private void Start()
     {
+        if (player == null)
+            player = pMan.pController;
         // Initialize the camera offset
         currentCameraOffset = defaultOffset;
-        targetCameraOffset = defaultOffset;
-
-        // If we have a player reference, initialize the camera position and store initial state
-        if (player != null)
-        {
-            UpdateCameraPosition();
-            lastPlayerState = player.currentState;
-        }
     }
 
     private void LateUpdate()
     {
         if (player == null || pMan == null)
             return;
-        // Update camera position based on player's position
-        UpdateCameraPosition();
 
         // Handle state transitions
         HandleStateTransitions();
-
         // Calculate and apply rotation
         UpdateCameraRotation();
-
         // Check for obstructions between camera and player
         HandleCameraCollision();
-
-        // Store current state for next frame comparison
-        lastPlayerState = player.currentState;
-    }
-    private void UpdateCameraPosition()
-    {
-        // Calculate the desired position based on player position
-        desiredPosition = player.transform.position;
     }
     private void HandleStateTransitions()
     {
@@ -222,17 +201,11 @@ public class TPSCamera : MonoBehaviour
     }
     public void AimSight()
     {
-        // Update target offset based on state
-        targetCameraOffset = pMan.isBuilding ? buildOffset : aimOffset;
-
         // Update player state
         player.SetAimState();
     }
     public void DefaultSight()
     {
-        // Update target offset
-        targetCameraOffset = defaultOffset;
-
         // Update player state
         player.SetDefaultState();
     }

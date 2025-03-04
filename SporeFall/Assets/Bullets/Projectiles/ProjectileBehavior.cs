@@ -203,7 +203,7 @@ public class ProjectileBehavior : MonoBehaviour
     private void HandleExplosiveAttack()
     {
         // Create explosion effect if prefab is assigned
-        if (explosionEffectPrefab != null)
+        if (PoolManager.Instance != null && explosionEffectPrefab != null)
         {
             if (!PoolManager.Instance.vfxPool.TryGetValue(explosionEffectPrefab, out VFXPool pool))
             {
@@ -212,6 +212,10 @@ public class ProjectileBehavior : MonoBehaviour
             }
             VFXPoolingBehavior explosiveVfx = pool.Get(transform.position, transform.rotation);
             explosiveVfx.Initialize(pool);
+        }
+        else
+        {
+            Instantiate(explosionEffectPrefab, transform.position, transform.rotation);
         }
 
         // Use OverlapSphere with the layer mask
