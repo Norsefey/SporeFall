@@ -53,40 +53,43 @@ public class PlayerDeviceHandler : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void Start()
     {
-        if (Tutorial.Instance.playerActive == true && tutorialNeeded == true)
+        if (Tutorial.Instance != null)
         {
-            tutorialNeeded = false;
-
-            if (usingXbox == true)
+            if (Tutorial.Instance.playerActive == true && tutorialNeeded == true)
             {
-                Debug.Log("Telling Tutorial script xbox = true");
-                if (Tutorial.Instance != null)
+                tutorialNeeded = false;
+
+                if (usingXbox == true)
                 {
-                    Tutorial.Instance.usingXbox = true;
+                    Debug.Log("Telling Tutorial script xbox = true");
+                    if (Tutorial.Instance != null)
+                    {
+                        Tutorial.Instance.usingXbox = true;
+                    }
+                    usingXbox = false;
                 }
-                usingXbox = false;
-            }
 
-            else if (usingPlaystation == true)
-            {
-                Debug.Log("Telling Tutorial script playstation = true");
-                if (Tutorial.Instance != null)
+                else if (usingPlaystation == true)
                 {
-                    Tutorial.Instance.usingPlaystation = true;
+                    Debug.Log("Telling Tutorial script playstation = true");
+                    if (Tutorial.Instance != null)
+                    {
+                        Tutorial.Instance.usingPlaystation = true;
+                    }
+                    usingPlaystation = false;
                 }
-                usingPlaystation = false;
-            }
 
-            else if (usingKeyboard == true)
-            {
-                Debug.Log("Telling Tutorial script keyboard = true");
-                if (Tutorial.Instance != null)
+                else if (usingKeyboard == true)
                 {
-                    Tutorial.Instance.usingKeyboard = true;
-                } 
-                usingKeyboard = false;
+                    Debug.Log("Telling Tutorial script keyboard = true");
+                    if (Tutorial.Instance != null)
+                    {
+                        Tutorial.Instance.usingKeyboard = true;
+                    }
+                    usingKeyboard = false;
+                }
             }
         }
     }

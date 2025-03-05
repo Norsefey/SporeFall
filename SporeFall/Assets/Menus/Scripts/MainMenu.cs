@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] string level1Name;
     //[SerializeField] string level2Name;
     //[SerializeField] string level3Name;
+
+    [SerializeField] GameObject LoadingScreen;
+    [SerializeField] private Slider progressBar;
+
 
     void Start()
     {
@@ -80,10 +85,34 @@ public class MainMenu : MonoBehaviour
 
     public void LoadSceneUsingIndex(int index)
     {
-        SceneManager.LoadScene(index);
+        LoadingScreen.SetActive(true);
+        StartCoroutine( LoadSceneAsync());
     }
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    IEnumerator LoadSceneAsync()
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync("GlowingForest");
+        operation.allowSceneActivation = false;
+
+        while (!operation.isDone)
+        {
+            Debug.Log(operation.progress);
+            // Update progress bar (normalized 0 to 1)
+            progressBar.value = Mathf.Clamp01(operation.progress / 0.9f);
+
+            if (operation.progress >= 0.9f)
+            {
+                // Wait for user input or small delay before activating
+                yield return new WaitForSeconds(1f);
+                Debug.Log("Activating Scene");
+                operation.allowSceneActivation = true;
+            }
+
+            yield return null;
+        }
     }
 }

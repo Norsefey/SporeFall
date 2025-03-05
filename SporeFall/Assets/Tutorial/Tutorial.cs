@@ -67,7 +67,6 @@ public class Tutorial : MonoBehaviour
             continueText.text = " ";
             tutorialStarted = true;
         }
-
         else
         {
             StartCoroutine(InitialCooldown());
@@ -101,7 +100,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (usingPlaystation == true)
                 {
-                    Debug.Log("Starting xbox tutorial");
+                    Debug.Log("Starting PS tutorial");
                     StartPlaystationTutorial();
                     tutorialStarted = false;
                 }

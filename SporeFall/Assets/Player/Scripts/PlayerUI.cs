@@ -24,7 +24,6 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider corruptionBar;
     [SerializeField] private GameObject corruptedVisionHolder;
     [SerializeField] private Image corruptedVisionImage;
-    [SerializeField] private Button purifyButton; // Button to purchase corruption reduction
     [SerializeField] private Sprite[] corruptionSprites; // Array of corruption vision sprites
     [Header("Build/Structures UI")]
     public GameObject buildUI;

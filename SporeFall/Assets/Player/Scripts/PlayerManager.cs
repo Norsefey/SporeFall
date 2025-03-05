@@ -172,6 +172,7 @@ public class PlayerManager : MonoBehaviour
         currentWeapon = Instantiate(nearByWeapon, weaponHolder).GetComponent<Weapon>();
         // set the transforms of the new weapon
         currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        nearByWeapon.SetActive(true);
         // set References
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
