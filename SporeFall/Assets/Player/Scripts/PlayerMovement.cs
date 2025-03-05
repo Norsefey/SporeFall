@@ -77,23 +77,22 @@ public class PlayerMovement : MonoBehaviour
     {
         Quaternion temp = myCamera.localRotation;
         myCamera.eulerAngles = new Vector3(0, myCamera.eulerAngles.y, 0);
-        visual.forward = myCamera.forward;
         transform.forward = myCamera.forward;
+        visual.forward = myCamera.forward;
 
         myCamera.localRotation = temp;
 
-        if (cc.velocity.magnitude > 0)
+
+        if (currentState != PlayerState.TempAim)
         {
-            if (currentState != PlayerState.TempAim)
-            {
-                currentState = PlayerState.TempAim;
-                tempAimTimer = 1.5f;
-            }
-            else if (currentState == PlayerState.TempAim)
-            {
-                tempAimTimer = 1.5f;
-            }
+            currentState = PlayerState.TempAim;
+            tempAimTimer = 1.5f;
         }
+        else if (currentState == PlayerState.TempAim)
+        {
+            tempAimTimer = 1.5f;
+        }
+
     }
     void DefaultMovement()
     {
@@ -127,7 +126,6 @@ public class PlayerMovement : MonoBehaviour
         visual.position = transform.position - Vector3.up;
         visual.forward = transform.forward;
     }
-
     public void JumpCall()
     {
         if (IsGrounded())
@@ -137,7 +135,6 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
-
     private void GravityHandler()
     {
         if (IsGrounded())
@@ -154,7 +151,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
     private bool IsGrounded()
     {
         bool hitground = false;
@@ -167,7 +163,6 @@ public class PlayerMovement : MonoBehaviour
 
         return hitground && cc.isGrounded;
     }
-
     void AimingMovement()
     {
         Vector3 movement = Vector3.zero;
@@ -201,7 +196,6 @@ public class PlayerMovement : MonoBehaviour
         cc.Move(movement);
         visual.position = transform.position - Vector3.up;
     }
-
     public void SetAimState()
     {
         currentState = PlayerState.Aiming;
@@ -210,17 +204,14 @@ public class PlayerMovement : MonoBehaviour
             SetSprintSpeed(false);
         }
     }
-
     public void SetDefaultState()
     {
         currentState = PlayerState.Default;
     }
-
     public void SetManager(PlayerManager pManager)
     {
         this.pMan = pManager;
     }
-
     public void SetSprintSpeed(bool sprinting)
     {
         if (sprinting && currentState != PlayerState.Aiming)
@@ -237,7 +228,6 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
-
     private void PlayFootstepSound()
     {
         // Play footstep sound at intervals to avoid spamming

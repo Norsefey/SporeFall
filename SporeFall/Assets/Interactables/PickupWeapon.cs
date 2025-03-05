@@ -25,15 +25,11 @@ public class PickUpWeapon : Interactables
     private float despawnTimer;
     private bool isBlinking;
     private Coroutine blinkCoroutine;
-    private MeshRenderer[] weaponRenderers;
     private void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = pickupSound;
         audioSource.volume = pickupVolume;
-
-        // Get all mesh renderers from the weapon
-        weaponRenderers = GetComponentsInChildren<MeshRenderer>();
 
         // Start despawn timer
         despawnTimer = despawnTime;
@@ -74,11 +70,8 @@ public class PickUpWeapon : Interactables
 
         while (isBlinking)
         {
-            // Toggle visibility of all renderers
-            foreach (var renderer in weaponRenderers)
-            {
-                renderer.enabled = visible;
-            }
+            // Toggle visibility of weapon
+            weapon.gameObject.SetActive(visible);
 
             visible = !visible;
             yield return new WaitForSeconds(blinkRate);
@@ -143,14 +136,7 @@ public class PickUpWeapon : Interactables
     private void OnDisable()
     {
         // Ensure renderers are enabled when object is returned to pool
-        if (weaponRenderers != null)
-        {
-            foreach (var renderer in weaponRenderers)
-            {
-                renderer.enabled = true;
-            }
-        }
-
+        weapon.gameObject.SetActive(true);
         // Reset the despawn timer
         despawnTimer = despawnTime;
         isBlinking = false;

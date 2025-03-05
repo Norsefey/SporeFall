@@ -115,14 +115,18 @@ public abstract class Weapon : MonoBehaviour
     protected void FireHitscan(Camera playerCamera)
     {
         PlaySFX(fireSound, false);
-        // Apply bullet spread
+        // Calculate shoot direction with spread
         Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
+        // Rotate player if not aiming
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             player.pController.RotateOnFire(this.transform, shootDirection);
         }
-        //transform.forward = playerCamera.transform.forward;
-
+        else
+        {
+            // Ensure the weapon is aligned with the shoot direction
+            transform.forward = shootDirection;
+        }
         VFXPoolingBehavior vfx = null;
         if (PoolManager.Instance != null)
         {
@@ -132,13 +136,13 @@ public abstract class Weapon : MonoBehaviour
                 Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
                 return;
             }
-            vfx = pool.Get(firePoint.position, transform.rotation);
+            vfx = pool.Get(firePoint.position, Quaternion.LookRotation(shootDirection));
             vfx.Initialize(pool);
         }
         else
         {
             // No pool spawn and enabled VFX
-            vfx = Instantiate(bulletPrefab, firePoint.position, transform.rotation).GetComponent<VFXPoolingBehavior>();
+            vfx = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection)).GetComponent<VFXPoolingBehavior>();
             vfx.gameObject.SetActive(true);
         }
      
