@@ -74,7 +74,8 @@ public class MainMenu : MonoBehaviour
 
     public void StartLevel1()
     {
-        SceneManager.LoadScene(level1Name);
+        LoadingScreen.SetActive(true);
+        StartCoroutine(LoadSceneAsync(1));
     }
 
     public void BackToMain()
@@ -85,17 +86,16 @@ public class MainMenu : MonoBehaviour
 
     public void LoadSceneUsingIndex(int index)
     {
-        LoadingScreen.SetActive(true);
-        StartCoroutine( LoadSceneAsync());
+        SceneManager.LoadScene(index);
     }
     public void QuitGame()
     {
         Application.Quit();
     }
 
-    IEnumerator LoadSceneAsync()
+    IEnumerator LoadSceneAsync(int index)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync("GlowingForest");
+        AsyncOperation operation = SceneManager.LoadSceneAsync(index);
         operation.allowSceneActivation = false;
 
         while (!operation.isDone)
