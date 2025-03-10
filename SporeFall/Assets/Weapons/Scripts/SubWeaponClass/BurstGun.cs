@@ -54,7 +54,7 @@ public class BurstGun : Weapon
             {
                 if (isHitScan)
                 {
-                    FireHitscan(player.pCamera.myCamera);
+                    FireHitscan(player.pCamera.transform);
                 }
                 else
                 {

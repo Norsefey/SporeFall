@@ -336,8 +336,6 @@ public class PlayerManager : MonoBehaviour
     }
     private IEnumerator Respawn()
     {
-        // turn off controls
-        TogglePControl(false);
         DropWeapon();
         if (isBuilding)
         {

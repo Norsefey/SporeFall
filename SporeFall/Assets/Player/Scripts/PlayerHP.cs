@@ -69,10 +69,12 @@ public class PlayerHP : Damageable
     }
     private IEnumerator DeathEffectRoutine()
     {
-        // Flash effect
+        // Death effect
         deathVFX.SetActive(true);
         pMan.pAnime.ToggleIKAim(false);
         pMan.pAnime.ToggleUnscaledUpdateMode(true);
+        pMan.pInput.DisableAllInputs();
+
         // allow death animation to play abit
         yield return new WaitForSecondsRealtime(.5f);
         // Freeze the game

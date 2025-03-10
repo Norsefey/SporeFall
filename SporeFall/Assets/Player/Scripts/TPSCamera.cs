@@ -62,7 +62,7 @@ public class TPSCamera : MonoBehaviour
     private float angle = 0f;
 
     [SerializeField] private Transform rigLookAtTarget;
-
+    private bool isPanning = false;
     private void Start()
     {
         if (player == null)
@@ -75,14 +75,19 @@ public class TPSCamera : MonoBehaviour
     {
         if (player == null || pMan == null)
             return;
-        // Handle state transitions
-        HandleStateTransitions();
-        // Calculate and apply rotation
-        UpdateCameraRotation();
-        // Check for obstructions between camera and player
-        HandleCameraCollision();
 
-        MoveRigTarget();
+        if (!isPanning)
+        {
+            // Handle state transitions
+            HandleStateTransitions();
+
+            // Calculate and apply rotation
+            UpdateCameraRotation();
+            // Check for obstructions between camera and player
+            HandleCameraCollision();
+
+            MoveRigTarget();
+        }
     }
     private void HandleStateTransitions()
     {
@@ -228,6 +233,8 @@ public class TPSCamera : MonoBehaviour
     }
     public IEnumerator PanAroundPlayer(Transform target, float duration, float orbitSpeed)
     {
+        isPanning = true;
+        player.SetDefaultState();
         // Store original camera state
         float elapsedTime = 0f;
         Vector3 originalPosition = transform.position;
@@ -289,6 +296,7 @@ public class TPSCamera : MonoBehaviour
         transform.rotation = rotation;
         currentCameraOffset = offset;
         isColliding = wasColliding;
+        isPanning = false;
     }
     public void DisableAudioListener()
     {

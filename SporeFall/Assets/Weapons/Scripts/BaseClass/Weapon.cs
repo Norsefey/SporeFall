@@ -64,7 +64,7 @@ public abstract class Weapon : MonoBehaviour
         {
             if (isHitScan)
             {
-                FireHitscan(player.pCamera.myCamera);
+                FireHitscan(player.pCamera.transform);
             }
             else
             {
@@ -112,11 +112,11 @@ public abstract class Weapon : MonoBehaviour
             projectile.Initialize(data, pool);
         }
     }
-    protected void FireHitscan(Camera playerCamera)
+    protected void FireHitscan(Transform playerCamera)
     {
         PlaySFX(fireSound, false);
         // Calculate shoot direction with spread
-        Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
+        Vector3 shootDirection = GetSpreadDirection(playerCamera.forward);
         // Rotate player if not aiming
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
@@ -147,7 +147,7 @@ public abstract class Weapon : MonoBehaviour
         }
      
 
-        Ray ray = new(playerCamera.transform.position, shootDirection);
+        Ray ray = new(playerCamera.position, shootDirection);
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
             Debug.Log("Hit" + hit.transform.gameObject.name);
