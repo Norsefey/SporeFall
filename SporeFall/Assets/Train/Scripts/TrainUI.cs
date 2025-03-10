@@ -14,16 +14,19 @@ public class TrainUI : MonoBehaviour
     private void Start()
     {
         HPText.text = "Train HP: 100%";
+
+        trainHP.OnHPChange += UpdateHPDisplay;
     }
 
     public void SetMaxHP(float max)
     {
         HPBar.maxValue = max;
+        HPBar.value = max;
     }
-    public void UpdateHPDisplay(float value)
+    public void UpdateHPDisplay(Damageable trainHP, float value)
     {
-        HPBar.value = value;
-        float hpPercantage = ((value / trainHP.MaxHP) * 100);
+        HPBar.value = trainHP.CurrentHP;
+        float hpPercantage = ((trainHP.CurrentHP / trainHP.MaxHP) * 100);
 
         if (hpPercantage > 0)
         {
@@ -36,7 +39,5 @@ public class TrainUI : MonoBehaviour
             HPText.text = "Train HP: 0%";
             Debug.Log("Updating train HP bar");
         }
-
-        
     }
 }

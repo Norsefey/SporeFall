@@ -54,7 +54,7 @@ public class MobEnemy : BaseEnemy
     private void TrySpawnWeaponDrop()
     {
         // Check if we have any weapons to drop and if we pass the random chance check
-        if (weaponDropPrefab.Length == 0 || Random.Range(0f, 100f) > dropChance)
+        if (PoolManager.Instance == null || weaponDropPrefab.Length == 0 || Random.Range(0f, 100f) > dropChance)
         {
             return;
         }

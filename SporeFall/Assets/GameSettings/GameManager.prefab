@@ -579,6 +579,8 @@ MonoBehaviour:
   myceliaText: {fileID: 1541354766266603236}
   scrollViewContent: {fileID: 8954401864962996764}
   gameManager: {fileID: 6157649121178500711}
+  structBannerHolder: {fileID: 0}
+  playerBannerHolder: {fileID: 0}
 --- !u!1 &2870780505427520185
 GameObject:
   m_ObjectHideFlags: 0
@@ -2045,7 +2047,7 @@ Transform:
   m_GameObject: {fileID: 8831307648259571777}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.0277805, y: 20.639715, z: 108.1193}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2073,8 +2075,15 @@ MonoBehaviour:
   players: []
   pauseMenu: {fileID: 8427006963364940737}
   paused: 0
+  playerOneUI:
+    serializedVersion: 2
+    m_Bits: 32768
+  playerTwoUI:
+    serializedVersion: 2
+    m_Bits: 65536
   backUpPlayerSpawner: {fileID: 0}
   mycelia: 150
+  isTesting: 1
 --- !u!1001 &2854881260335643292
 PrefabInstance:
   m_ObjectHideFlags: 0

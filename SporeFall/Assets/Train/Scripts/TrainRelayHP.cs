@@ -14,8 +14,4 @@ public class TrainRelayHP : Damageable
     protected override void Die()
     {
     }
-
-    protected override void UpdateHPUI()
-    {
-    }
 }

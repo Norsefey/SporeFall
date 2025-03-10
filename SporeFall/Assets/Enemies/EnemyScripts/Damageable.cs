@@ -1,4 +1,5 @@
 // Interface for objects that can take damage
+using System;
 using UnityEngine;
 // Add this interface to Damageable class
 
@@ -11,8 +12,9 @@ public abstract class Damageable : MonoBehaviour
     public float MaxHP {  get { return maxHP; } }
     public float CurrentHP {  get { return currentHP; } }
     public bool isDead = false;
+    // Event that will be triggered when enemy takes damage
+    public event Action<Damageable, float> OnHPChange;
     protected abstract void Die();
-    protected abstract void UpdateHPUI();
     public virtual void IncreaseCorruption(float amount)
     {
 
@@ -29,8 +31,10 @@ public abstract class Damageable : MonoBehaviour
         }
 
         currentHP -= damage;
-        UpdateHPUI();
-        if(currentHP <= 0 && !isDead)
+        // Trigger the event After damage is taken
+        OnHPChange?.Invoke(this, damage);
+
+        if (currentHP <= 0 && !isDead)
         {
             isDead = true;
             Die();
@@ -41,7 +45,7 @@ public abstract class Damageable : MonoBehaviour
         isDead = false;
         currentHP = maxHP;
 
-        UpdateHPUI();
+        OnHPChange?.Invoke(this, maxHP);
     }
     public void RestoreHP(float value)
     {
@@ -50,7 +54,8 @@ public abstract class Damageable : MonoBehaviour
         if(currentHP > maxHP)
             currentHP = maxHP;
 
-        UpdateHPUI();
+        OnHPChange?.Invoke(this, currentHP);
+
     }
     public void SetMaxHP(float value)
     {

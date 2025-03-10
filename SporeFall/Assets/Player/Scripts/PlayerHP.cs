@@ -15,7 +15,6 @@ public class PlayerHP : Damageable
     private void Start()
     {
         currentHP = maxHP;
-        UpdateHPUI();
     }
     public override void TakeDamage(float damage)
     {
@@ -94,14 +93,9 @@ public class PlayerHP : Damageable
         pMan.StartRespawn();
 
     }
-    protected override void UpdateHPUI()
-    {
-        pMan.pUI.UpdateHPDisplay(currentHP);
-    }
     public override void ResetHealth()
     {
         base.ResetHealth();
-        UpdateHPUI();
     }
     public override void IncreaseCorruption(float amount)
     {

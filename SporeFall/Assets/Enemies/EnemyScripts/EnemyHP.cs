@@ -1,25 +1,24 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyHP : Damageable
 {
     // Health properties
-    [SerializeField] private TMP_Text hpDisplay;
     [SerializeField] private BaseEnemy manager;
     public bool knockBackable = true;
     private bool beingKnockedBack = false;
+
     private void Start()
     {
         currentHP = maxHP;
-        UpdateHPUI();
     }
     public override void TakeDamage(float damage)
     {
         Debug.Log("Base took damage");
         base.TakeDamage(damage);
+
         if (manager != null)
         {
             manager.CheckDamageThreshold(maxHP - currentHP);
@@ -37,14 +36,6 @@ public class EnemyHP : Damageable
         else
             Destroy(transform.parent.gameObject);
     }
-    protected override void UpdateHPUI()
-    {
-        if (hpDisplay != null)
-        {
-            hpDisplay.text = currentHP.ToString("F0") + "/" + maxHP.ToString();
-        }
-    }
-
     public IEnumerator KnockBack(Vector3 attackerPosition, float knockbackMultiplier)
     {
         if(!knockBackable || beingKnockedBack)

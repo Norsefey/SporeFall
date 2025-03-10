@@ -443,6 +443,8 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnProgressTutorial(InputAction.CallbackContext context)
     {
+        if(Tutorial.Instance == null)
+            return;
         if (Tutorial.Instance.clickNeeded == true)
         {
             shootInputMap.Disable();

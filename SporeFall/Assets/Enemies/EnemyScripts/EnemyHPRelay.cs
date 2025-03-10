@@ -20,9 +20,4 @@ public class EnemyHPRelay : Damageable
     {
        
     }
-
-    protected override void UpdateHPUI()
-    {
-        
-    }
 }

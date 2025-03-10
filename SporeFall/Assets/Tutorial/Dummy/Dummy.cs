@@ -20,6 +20,8 @@ public class Dummy : Damageable
     {
         Debug.Log("Base took damage");
         base.TakeDamage(damage);
+
+        UpdateHPUI();
     }
     protected override void Die()
     {
@@ -33,7 +35,7 @@ public class Dummy : Damageable
         Debug.Log("Dying Now");
         Destroy(transform.parent.gameObject);
     }
-    protected override void UpdateHPUI()
+    protected void UpdateHPUI()
     {
         if (hpDisplay != null)
         {

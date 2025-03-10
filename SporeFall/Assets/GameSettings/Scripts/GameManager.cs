@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,12 +17,17 @@ public class GameManager : MonoBehaviour
     public PauseMenu pauseMenu;
     public bool paused = false;
 
-    [SerializeField] BackUpPlayerSpawner backUpPlayerSpawner;
+    public static event Action OnPlayerJoin;
+    public static event Action OnPlayerLeave;
 
+    [SerializeField] LayerMask playerOneUI;
+    [SerializeField] LayerMask playerTwoUI;
+    [SerializeField] BackUpPlayerSpawner backUpPlayerSpawner;
     [SerializeField] private float mycelia = 200;
     public float Mycelia { get { return mycelia; } }
     private bool tutorialMycelia = true;
-
+    [Space(25)]
+    public bool isTesting = false;
     private void Awake()
     {
         Time.timeScale = 1.0f;
@@ -52,12 +58,22 @@ public class GameManager : MonoBehaviour
     {
         // keep track of active players
         players.Add(player);
+
+        if(players.Count == 1)
+        {
+            player.pCamera.myCamera.cullingMask |= playerOneUI.value;
+        }else if(players.Count == 2)
+        {
+            player.pCamera.myCamera.cullingMask |= playerTwoUI.value;
+        }
+
         Debug.Log("Player Added");
-
-        player.TogglePControl(false);
-        player.TogglePCamera(false);
-        player.TogglePVisual(false);
-
+        if (!isTesting)
+        {
+            player.TogglePControl(false);
+            player.TogglePCamera(false);
+            player.TogglePVisual(false);
+        }
         if(trainHandler != null)
         {
             player.transform.SetParent(trainHandler.transform);
@@ -74,7 +90,7 @@ public class GameManager : MonoBehaviour
             player.transform.SetParent(this.transform);
             SpawnPlayer();
         }
-
+        OnPlayerJoin?.Invoke();
     }
     private void SpawnPlayer()
     {
@@ -89,6 +105,7 @@ public class GameManager : MonoBehaviour
     public void RemovePlayer(PlayerManager player)
     {
         // remove disconnected players
+        OnPlayerLeave?.Invoke();
         players.Remove(player);
 
         Destroy(player.gameObject);
