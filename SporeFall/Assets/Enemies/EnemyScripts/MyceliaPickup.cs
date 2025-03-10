@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class MyceliaPickup : DropsPoolBehavior
 {
-    public float myceliaAmount;
+    public float minMyceliaAmount;
+    public float maxMyceliaAmount;
+    public float amountToGive;
 
     public void Setup(float myceliaAmount)
     {
-        this.myceliaAmount = myceliaAmount;
+        amountToGive = Random.Range(minMyceliaAmount, maxMyceliaAmount);
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
     }
@@ -25,7 +27,7 @@ public class MyceliaPickup : DropsPoolBehavior
 
     public void RewardPlayer(PlayerManager player)
     {
-        GameManager.Instance.IncreaseMycelia(myceliaAmount);
+        GameManager.Instance.IncreaseMycelia(amountToGive);
         ReturnObject();
     }
 }

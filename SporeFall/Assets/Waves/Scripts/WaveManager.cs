@@ -249,7 +249,7 @@ public class WaveManager : MonoBehaviour
             {
                 if (selectedEnemy.SpawnedCount < selectedEnemy.totalToSpawn)
                 {
-                    Vector3 spawnPointOffset = new Vector3(spawnPoint.position.x + i, spawnPoint.position.y, spawnPoint.position.z + Random.Range(-1, 1));
+                    Vector3 spawnPointOffset = new Vector3(spawnPoint.position.x + (i * 5), spawnPoint.position.y, spawnPoint.position.z + Random.Range(-1, 1));
                     Transform finalSpawnPoint = spawnPoint;
                     finalSpawnPoint.position = spawnPointOffset;
                     SpawnEnemy(selectedEnemy.EnemyToSpawn, finalSpawnPoint, spawnPointIndex);

@@ -98,7 +98,7 @@ public class PoolManager : MonoBehaviour
         {
             if (mycelia.gameObject.activeSelf)
             {
-                GameManager.Instance.trainHandler.GivePlayersMycelia(mycelia.GetComponent<MyceliaPickup>().myceliaAmount);
+                GameManager.Instance.trainHandler.GivePlayersMycelia(mycelia.GetComponent<MyceliaPickup>().amountToGive);
                 mycelia.GetComponent<DropsPoolBehavior>().ReturnObject();
             }
         }
