@@ -13,20 +13,20 @@ public class PickUpDefaultGun : Interactables
         Debug.Log("Player Interacting");
 
         player.EquipDefaultGun();
-        RemoveAction();
+        RemovePrompt();
         DestroyIntractable();
         Destroy(gameObject, .5f);
         Tutorial.Instance.ProgressTutorial();
     }
     // prompting player
-    public override void ItemAction()
+    public override void ItemPrompt()
     {
         Debug.Log("Prompting Player");
         promptText = $"Press {player.pInput.GetInteractionKey()} To Pick Up Your Gun";
         player.pUI.EnablePrompt(promptText);
     }
 
-    public override void RemoveAction()
+    public override void RemovePrompt()
     {
         if (player == null)
             return;

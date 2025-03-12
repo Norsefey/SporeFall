@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class CorruptionReduction : Interactables
 {
-    public override void ItemAction()
+    public override void ItemPrompt()
     {
         player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} To Purchase Corruption Reduction");
     }
@@ -22,7 +22,7 @@ public class CorruptionReduction : Interactables
         }
     }
 
-    public override void RemoveAction()
+    public override void RemovePrompt()
     {
         player.pUI.DisablePrompt();
     }

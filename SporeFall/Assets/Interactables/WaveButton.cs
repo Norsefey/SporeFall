@@ -9,7 +9,7 @@ public class WaveButton : Interactables
 
     private int buttonPress = 0;
 
-    public override void ItemAction()
+    public override void ItemPrompt()
     {
         switch (GameManager.Instance.waveManager.wavePhase)
         {
@@ -39,7 +39,7 @@ public class WaveButton : Interactables
             case WaveManager.WavePhase.Departing:
                 GameManager.Instance.waveManager.SkipDepartTime();
                 player.pInput.RemoveInteraction(this);
-                RemoveAction();
+                RemovePrompt();
                 break;
             default:
                 Debug.Log("No Action");
@@ -47,7 +47,7 @@ public class WaveButton : Interactables
         }
     }
 
-    public override void RemoveAction()
+    public override void RemovePrompt()
     {
         player.pUI.DisablePrompt();
     }

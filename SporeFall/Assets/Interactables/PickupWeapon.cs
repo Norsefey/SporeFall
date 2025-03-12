@@ -85,11 +85,11 @@ public class PickUpWeapon : Interactables
             StopCoroutine(blinkCoroutine);
         }
 
-        RemoveAction();
+        RemovePrompt();
         DestroyIntractable();
     }
 
-    public override void ItemAction()
+    public override void ItemPrompt()
     {
         player.nearByWeapon = weapon.gameObject;
         promptText = $"Press {player.pInput.GetInteractionKey()} To Pick Up: {weapon.weaponName}";
@@ -101,7 +101,7 @@ public class PickUpWeapon : Interactables
         StopAllCoroutines();
 
         player.PickUpWeapon();
-        RemoveAction();
+        RemovePrompt();
 
         if (pickupCount < 1)
         {
@@ -125,7 +125,7 @@ public class PickUpWeapon : Interactables
         Debug.Log("Picked up: " + weapon.name);
     }
 
-    public override void RemoveAction()
+    public override void RemovePrompt()
     {
         if(player == null)
             return;

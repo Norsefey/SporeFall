@@ -7,8 +7,8 @@ public abstract class Interactables : DropsPoolBehavior
 {
     protected PlayerManager player;
     public abstract void Interact(InputAction.CallbackContext context);
-    public abstract void ItemAction();
-    public abstract void RemoveAction();
+    public abstract void ItemPrompt();
+    public abstract void RemovePrompt();
     public void DestroyIntractable()
     {
         if(player != null)
@@ -29,7 +29,7 @@ public abstract class Interactables : DropsPoolBehavior
         {
             player = other.transform.parent.GetComponent<PlayerManager>();
             player.pInput.AssignInteraction(this);
-            ItemAction();
+            ItemPrompt();
         }
     }
     private void OnTriggerExit(Collider other)
@@ -43,6 +43,6 @@ public abstract class Interactables : DropsPoolBehavior
     public void RemoveIntractable()
     {
         player.pInput.RemoveInteraction(this);
-        RemoveAction();
+        RemovePrompt();
     }
 }

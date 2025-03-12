@@ -6,11 +6,11 @@ using UnityEngine.InputSystem;
 public class UpgradeShop : Interactables
 {
     // prompt player to interact with
-    public override void ItemAction()
+    public override void ItemPrompt()
     {
         if (GameManager.Instance.waveManager.wavePhase == WaveManager.WavePhase.NotStarted)
         {
-            player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()}  to Open Shop");
+            player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to Open Shop");
         }
     
     }
@@ -28,7 +28,7 @@ public class UpgradeShop : Interactables
         }
     }
     // remove prompt and anything else
-    public override void RemoveAction()
+    public override void RemovePrompt()
     {
         player.pUI.DisablePrompt();
     }
