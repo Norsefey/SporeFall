@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UpgradeUI : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class UpgradeUI : MonoBehaviour
     private static readonly Color DefaultColor = Color.white;
     private static readonly Color NoMyceliaColor = Color.red;
 
+    [SerializeField] GameObject firstUpgradeButton;
+
     private void OnEnable()
     {
         UpdateMyceliaAmount();
@@ -25,6 +28,8 @@ public class UpgradeUI : MonoBehaviour
     {
         playerBannerHolder.SetActive(false);
         structBannerHolder.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstUpgradeButton);
 
         ClearBanners();
 
