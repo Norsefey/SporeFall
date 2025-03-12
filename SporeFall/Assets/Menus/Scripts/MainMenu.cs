@@ -4,16 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.EventSystems;
 
 public class MainMenu : MonoBehaviour
 {
     //Script that controls various buttons and screens on main menu and allows player to fullscreen
 
-    [Header("Game Objects")]
+    [Header("Menus")]
     [SerializeField] GameObject titleScreen;
     [SerializeField] GameObject mainScreen;
     [SerializeField] GameObject levelSelectScreen;
     [SerializeField] GameObject tutorialQuestionScreen;
+
+    [Header("First Buttons")]
+    [SerializeField] GameObject firstTitleButton;
+    [SerializeField] GameObject firstMainButton;
+    [SerializeField] GameObject firstTutorialButton;
+    [SerializeField] GameObject firstLevelSelectButton;
+    [SerializeField] GameObject firstSettingsButton;
+
 
     [Header("Level Names")]
     [SerializeField] string tutorialName;
@@ -30,6 +39,8 @@ public class MainMenu : MonoBehaviour
         titleScreen.SetActive(true);
         mainScreen.SetActive(false);
         levelSelectScreen.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstTitleButton);
     }
     private void Update()
     {
@@ -53,18 +64,24 @@ public class MainMenu : MonoBehaviour
     {
         mainScreen.SetActive(true);
         titleScreen.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstMainButton);
     }
 
     public void TutorialQuestion()
     {
         tutorialQuestionScreen.SetActive(true);
         mainScreen.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstTutorialButton);
     }
 
     public void LevelSelect()
     {
         levelSelectScreen.SetActive(true);
         tutorialQuestionScreen.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstLevelSelectButton);
     }
 
     public void StartTutorial()
@@ -82,6 +99,8 @@ public class MainMenu : MonoBehaviour
     {
         mainScreen.SetActive(true);
         levelSelectScreen.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstMainButton);
     }
 
     public void LoadSceneUsingIndex(int index)
