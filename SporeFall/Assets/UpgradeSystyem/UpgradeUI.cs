@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UpgradeUI : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class UpgradeUI : MonoBehaviour
     public TMP_Text myceliaText;
     public Transform scrollViewContent;
     public GameManager gameManager;
+    
 
     [SerializeField] private GameObject structBannerHolder;
     [SerializeField] private GameObject playerBannerHolder;
@@ -17,11 +19,17 @@ public class UpgradeUI : MonoBehaviour
     private static readonly Color NoMyceliaColor = Color.red;
 
     [SerializeField] GameObject firstUpgradeButton;
+    Navigation firstButtonNav = new Navigation();
+    private List<Button> upgradeButtons;
+    private Button upgradeButton1;
+    
 
     private void OnEnable()
     {
         UpdateMyceliaAmount();
         ShowStructureUpgrades();
+        //firstButtonNav.mode = Navigation.Mode.Explicit;
+        
     }
 
     public void ShowStructureUpgrades()
@@ -38,6 +46,7 @@ public class UpgradeUI : MonoBehaviour
             GameObject bannerObj = Instantiate(upgradeBannerPrefab, scrollViewContent);
             UpgradeBanner banner = bannerObj.GetComponent<UpgradeBanner>();
             banner.upgradeUI = this;
+            //upgradeButtons.Add(banner.upgradeButton);
 
             // Get structure levels and current upgrade level
             StructureLevels structureLevels = gameManager.upgradeManager.GetStructureLevelsForType(type);
@@ -47,6 +56,10 @@ public class UpgradeUI : MonoBehaviour
             // Always show the banner, even if it's at max level
             banner.SetupBanner(type, nextLevel ?? structureLevels.GetLevel(currentLevel));
         }
+
+        //upgradeButton1 = upgradeButtons(1);
+        //firstButtonNav.selectOnRight = upgradeButton1.GetComponent<Button>();
+        //firstUpgradeButton.GetComponent<Button>().navigation = firstButtonNav;
     }
     private void ClearBanners()
     {
