@@ -2,10 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using JetBrains.Annotations;
+using UnityEngine.InputSystem;
 
 public class Tutorial : MonoBehaviour
 {
@@ -16,8 +13,6 @@ public class Tutorial : MonoBehaviour
     [SerializeField] GameObject bgImage;
     [SerializeField] TMP_Text tutorialText;
     [SerializeField] TMP_Text continueText;
-    [SerializeField] GameObject floorButton1;
-    [SerializeField] GameObject floorButton2;
     [SerializeField] GameObject dummyEnemy;
     public GameObject[] door;
 
@@ -44,8 +39,6 @@ public class Tutorial : MonoBehaviour
         if (currentScene == "Tutorial")
         {
             tutorialPopup.SetActive(true);
-            floorButton1.SetActive(false);
-            floorButton2.SetActive(false);
         }
         
         bgImage.SetActive(false);
@@ -58,7 +51,6 @@ public class Tutorial : MonoBehaviour
         //Tutorial scene has more in-depth tutorial than the one in the main level(s)
         //Checks which scene it is and determines what tutorial to play
         //Main level tutorial is on a delay, full tutorial is not
-
         if (currentScene == "Tutorial")
         {
             Debug.Log("Showing first prompt");
@@ -71,7 +63,8 @@ public class Tutorial : MonoBehaviour
         {
             StartCoroutine(InitialCooldown());
         }
-        
+        // when the player joins, an event is played, this listens in and calls the function when the event is played
+        GameManager.OnPlayerJoin += GetPlayerDevice;
 
     }
 
@@ -124,7 +117,7 @@ public class Tutorial : MonoBehaviour
             {
                 if (tutorialPrompt == 1)
                 {
-                    tutorialText.text = "Pick up your weapon from the table using F.";
+                    tutorialText.text = "Pick up your weapon.";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -148,7 +141,6 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 4)
                 {
-                    DestroyDoor(1);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -224,7 +216,6 @@ public class Tutorial : MonoBehaviour
                 {
                     tutorialText.text = "Continue to the next room.";
                     continueText.text = " ";
-                    floorButton2.SetActive(true);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -313,7 +304,6 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 24)
                 {
-                    DestroyDoor(4);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -361,7 +351,6 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 4)
                 {
-                    DestroyDoor(1);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -437,7 +426,6 @@ public class Tutorial : MonoBehaviour
                 {
                     tutorialText.text = "Continue to the next room.";
                     continueText.text = " ";
-                    floorButton2.SetActive(true);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -526,7 +514,6 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 24)
                 {
-                    DestroyDoor(4);
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
@@ -652,21 +639,32 @@ public class Tutorial : MonoBehaviour
         tutorialStarted = true;
     }
 
-    public void StartKeyboardTutorial()
+    private void GetPlayerDevice(int playerIndex)
+    {
+        var device = GameManager.Instance.players[0].myDevice;
+
+        if (device is Gamepad)
+        {
+            StartXboxTutorial();
+        }
+        else
+        {
+            StartKeyboardTutorial();
+        }
+    }
+    private void StartKeyboardTutorial()
     {
         Debug.Log("Keyboard tutorial has started");
         tutorialText.text = "WASD to move \n Mouse to look around" + "\n Shift to sprint" + "\n Space to jump";
         keyboardTutorial = true;
     }
-
-    public void StartXboxTutorial()
+    private void StartXboxTutorial()
     {
         Debug.Log("Xbox tutorial has started");
         tutorialText.text = "Left stick to move \n Right stick to look around" + "\n Press Left stick to sprint" + "\n A to jump";
         xboxTutorial = true;
     }
-
-    public void StartPlaystationTutorial()
+    private void StartPlaystationTutorial()
     {
         Debug.Log("Playstation tutorial has started");
         tutorialText.text = "Left stick to move \n Right stick to look around" + "\n Press Left stick to sprint" + "\n X to jump";
@@ -701,12 +699,6 @@ public class Tutorial : MonoBehaviour
     {
         StartCoroutine(NextPrompt());
     }
-
-    public void DestroyDoor(int doorNumber)
-    {
-        Destroy(door[doorNumber]);
-        ProgressTutorial();
-    }
     
     IEnumerator NextPrompt()
     {
@@ -716,7 +708,6 @@ public class Tutorial : MonoBehaviour
         canProgress = true;
         clickNeeded = false;
     }
-
     IEnumerator FinalPrompts()
     {
         continueText.text = " ";
@@ -728,7 +719,10 @@ public class Tutorial : MonoBehaviour
         yield return new WaitForSeconds(2.2f);
         tutorialPopup.SetActive(false);
     }
-
+    public void SetPrompt(string text)
+    {
+        tutorialText.text = text;
+    }
     IEnumerator TempGamepadTutorial()
     {
         continueText.text = " ";

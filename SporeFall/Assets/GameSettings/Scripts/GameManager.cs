@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public PauseMenu pauseMenu;
     public bool paused = false;
 
-    public static event Action OnPlayerJoin;
+    public static event Action<int> OnPlayerJoin;
     public static event Action OnPlayerLeave;
 
     [SerializeField] LayerMask playerOneUI;
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+        Debug.Log("Setting Game Manager Instance");
         Instance = this;
     }
     private void Start()
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
             player.transform.SetParent(this.transform);
             SpawnPlayer();
         }
-        OnPlayerJoin?.Invoke();
+        OnPlayerJoin?.Invoke(player.GetPlayerIndex());
     }
     private void SpawnPlayer()
     {

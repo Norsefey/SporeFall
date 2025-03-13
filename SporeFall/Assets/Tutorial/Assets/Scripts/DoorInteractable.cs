@@ -13,7 +13,8 @@ public class DoorInteractable : Interactables
     public bool canOpen = true;
     public override void Interact(InputAction.CallbackContext context)
     {
-        StartCoroutine(OpenDoor());
+        if(canOpen)
+            StartCoroutine(OpenDoor());
     }
 
     public override void ItemPrompt()
@@ -21,7 +22,7 @@ public class DoorInteractable : Interactables
         if(canOpen)
             player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to Open Door");
         else
-            player.pUI.EnablePrompt($"Door Is Locked");
+            player.pUI.EnablePrompt($" <color=red>Door Is Locked</color>");
 
     }
     public override void RemovePrompt()
@@ -51,7 +52,6 @@ public class DoorInteractable : Interactables
         // Ensure collider has been disabled
         doorCollider.enabled = false;
     }
-
     private IEnumerator CloseDoor()
     {
         float elapsedTime = 0f;
@@ -71,5 +71,9 @@ public class DoorInteractable : Interactables
         doorMesh.SetBlendShapeWeight(blendShapeIndex, 0);
         // Ensure collider has been disabled
         doorCollider.enabled = true;
+    }
+    public void UnlockDoor()
+    {
+        canOpen = true;
     }
 }

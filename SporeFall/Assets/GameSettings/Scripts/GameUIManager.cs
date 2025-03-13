@@ -24,6 +24,7 @@ public class GameUIManager : MonoBehaviour
     }
     public void DisplayMycelia(float value)
     {
-        myceliaIndicator.text = "Mycelia: " + value.ToString();
+        if (myceliaIndicator != null)
+            myceliaIndicator.text = "Mycelia: " + value.ToString();
     }
 }

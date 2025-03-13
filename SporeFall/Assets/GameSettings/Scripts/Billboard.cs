@@ -6,11 +6,14 @@ public class Billboard : MonoBehaviour
 {
     [SerializeField] private BillboardUIUpdater uiContainerPlayerOne;
     [SerializeField] private BillboardUIUpdater uiContainerPlayerTwo;
-    
-    private void OnEnable()
+
+    private void Start()
     {
         InitialSetup();
-        SetPlayer();
+    }
+    private void OnEnable()
+    {
+        SetPlayer(0);
     }
     private void OnDisable()
     {
@@ -26,8 +29,10 @@ public class Billboard : MonoBehaviour
         }
     }
     // Call this to set which player this UI belongs to
-    public void SetPlayer()
+    public void SetPlayer(int playerIndex)
     {
+        if (!GameManager.Instance)
+            return;
         Debug.Log("Setting Up players");
         if (GameManager.Instance.players.Count == 1)
         {   

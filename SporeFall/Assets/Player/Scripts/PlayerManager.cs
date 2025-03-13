@@ -184,7 +184,7 @@ public class PlayerManager : MonoBehaviour
         // update weapon icon
         pUI.SwitchWeaponIcon();
 
-        if(currentWeapon is ChargeGun cGun)
+        if(currentWeapon is ChargeGun)
         {
             pUI.ToggleChargeGunSlider(true);
         }

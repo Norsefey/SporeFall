@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PickUpWeapon : Interactables
 {
@@ -12,30 +10,30 @@ public class PickUpWeapon : Interactables
     [SerializeField] private float rotSpeed = 45;
 
     [Header("Despawn Settings")]
+    [SerializeField] private bool shouldDespawn = true; // Mostly for testing, toggle despawning
     [SerializeField] private float despawnTime = 30f;    // Time in seconds before weapon despawns
     [SerializeField] private float blinkStartTime = 5f;  // Time before despawn when weapon starts blinking
     [SerializeField] private float blinkRate = 0.5f;     // How fast the weapon blinks (in seconds)
+    private Coroutine blinkCoroutine; // assign the coroutine to be able to stop it after despawning
+    private float despawnTimer;
+    private bool isBlinking;
+
 
     [Header("Audio Settings")]
     [SerializeField] private AudioClip pickupSound;
-    [Range(0f, 1f)][SerializeField] private float pickupVolume = 0.5f;
-
-    private int pickupCount = 0;
     private AudioSource audioSource;
-    private float despawnTimer;
-    private bool isBlinking;
-    private Coroutine blinkCoroutine;
+
     private void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = pickupSound;
-        audioSource.volume = pickupVolume;
-
-        // Start despawn timer
-        despawnTimer = despawnTime;
-
-        // Start the despawn countdown
-        StartCoroutine(DespawnCountdown());
+        if (shouldDespawn)
+        {
+            // Start despawn timer
+            despawnTimer = despawnTime;
+            // Start the despawn countdown
+            StartCoroutine(DespawnCountdown());
+        }
     }
     private void LateUpdate()
     {
@@ -54,13 +52,11 @@ public class PickUpWeapon : Interactables
                 isBlinking = true;
                 blinkCoroutine = StartCoroutine(BlinkWeapon());
             }
-
             if (despawnTimer <= 0)
             {
                 DespawnWeapon();
                 yield break;
             }
-
             yield return null;
         }
     }
@@ -77,7 +73,6 @@ public class PickUpWeapon : Interactables
             yield return new WaitForSeconds(blinkRate);
         }
     }
-
     private void DespawnWeapon()
     {
         if (blinkCoroutine != null)
@@ -88,7 +83,6 @@ public class PickUpWeapon : Interactables
         RemovePrompt();
         DestroyIntractable();
     }
-
     public override void ItemPrompt()
     {
         player.nearByWeapon = weapon.gameObject;
@@ -103,15 +97,6 @@ public class PickUpWeapon : Interactables
         player.PickUpWeapon();
         RemovePrompt();
 
-        if (pickupCount < 1)
-        {
-            pickupCount++;
-            if (Tutorial.Instance.currentScene == "Tutorial")
-            {
-                Tutorial.Instance.DestroyDoor(2);
-            }
-        }
-
         if (pickupSound != null && audioSource != null)
         {
             audioSource.Play();
@@ -124,7 +109,6 @@ public class PickUpWeapon : Interactables
         Invoke(nameof(DestroyIntractable), pickupSound.length);
         Debug.Log("Picked up: " + weapon.name);
     }
-
     public override void RemovePrompt()
     {
         if(player == null)
@@ -132,7 +116,6 @@ public class PickUpWeapon : Interactables
         player.nearByWeapon = null;
         player.pUI.DisablePrompt();
     }
-
     private void OnDisable()
     {
         // Ensure renderers are enabled when object is returned to pool
