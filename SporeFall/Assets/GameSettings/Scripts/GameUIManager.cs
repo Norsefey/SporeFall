@@ -21,6 +21,7 @@ public class GameUIManager : MonoBehaviour
         gameplayUI.SetActive(!toggle);
 
         upgradeMenu.SetActive(toggle);
+        upgradeMenu.GetComponent<UpgradeUI>().SetSelectable();
     }
     public void DisplayMycelia(float value)
     {

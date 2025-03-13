@@ -196,7 +196,7 @@ public class WaveManager : MonoBehaviour
             // Ensuring the final position is set precisely after the movement
             train.transform.position = targetPosition;
             SetTrainParkState();
-            if (currentWaveIndex > 0)
+            if (currentWaveIndex >= 0)
                 train.animations.OpenUpgradesPanel();
             wavePhase = WavePhase.NotStarted;
         }
@@ -209,7 +209,7 @@ public class WaveManager : MonoBehaviour
             train.animations.SkipParkingAnimation();
             // Ensuring the final position is set precisely after the movement
             train.transform.position = currentWave.trainLocation.position;
-            if (currentWaveIndex > 0)
+            if (currentWaveIndex >= 0)
                 train.animations.OpenUpgradesPanel();
             wavePhase = WavePhase.NotStarted;
 

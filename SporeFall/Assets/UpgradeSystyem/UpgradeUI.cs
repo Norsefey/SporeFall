@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class UpgradeUI : MonoBehaviour
 {
+    [SerializeField] private UpgradeManager upgradeManager;
+
     public GameObject upgradeBannerPrefab;
     public TMP_Text myceliaText;
     public Transform scrollViewContent;
-    public GameManager gameManager;
-    
 
     [SerializeField] private GameObject structBannerHolder;
     [SerializeField] private GameObject playerBannerHolder;
@@ -19,25 +18,22 @@ public class UpgradeUI : MonoBehaviour
     private static readonly Color NoMyceliaColor = Color.red;
 
     [SerializeField] GameObject firstUpgradeButton;
-    Navigation firstButtonNav = new Navigation();
-    private List<Button> upgradeButtons;
-    private Button upgradeButton1;
-    
-
-    private void OnEnable()
+    private void Start()
     {
         UpdateMyceliaAmount();
         ShowStructureUpgrades();
-        //firstButtonNav.mode = Navigation.Mode.Explicit;
-        
     }
-
-    public void ShowStructureUpgrades()
+    public void SetSelectable()
     {
-        playerBannerHolder.SetActive(false);
-        structBannerHolder.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstUpgradeButton);
+    }
+    public void ShowStructureUpgrades()
+    {
+
+        playerBannerHolder.SetActive(false);
+        structBannerHolder.SetActive(true);
+
 
         ClearBanners();
 
@@ -49,17 +45,16 @@ public class UpgradeUI : MonoBehaviour
             //upgradeButtons.Add(banner.upgradeButton);
 
             // Get structure levels and current upgrade level
-            StructureLevels structureLevels = gameManager.upgradeManager.GetStructureLevelsForType(type);
-            int currentLevel = gameManager.upgradeManager.GetStructureLevel(type);
-            StructureLevel nextLevel = gameManager.upgradeManager.GetNextLevel(type);
+            StructureLevels structureLevels = upgradeManager.GetStructureLevelsForType(type);
+            int currentLevel = upgradeManager.GetStructureLevel(type);
+            StructureLevel nextLevel = upgradeManager.GetNextLevel(type);
 
             // Always show the banner, even if it's at max level
-            banner.SetupBanner(type, nextLevel ?? structureLevels.GetLevel(currentLevel));
+            banner.SetupBanner(type, nextLevel ?? structureLevels.GetLevel(currentLevel), upgradeManager);
         }
 
-        //upgradeButton1 = upgradeButtons(1);
-        //firstButtonNav.selectOnRight = upgradeButton1.GetComponent<Button>();
-        //firstUpgradeButton.GetComponent<Button>().navigation = firstButtonNav;
+        // For when it refreshes
+        SetSelectable();
     }
     private void ClearBanners()
     {
@@ -76,8 +71,8 @@ public class UpgradeUI : MonoBehaviour
     }
     public void UpdateMyceliaAmount()
     {
-        myceliaText.color = gameManager.Mycelia > 0 ? DefaultColor : NoMyceliaColor;
-        myceliaText.text = $"Mycelia: {gameManager.Mycelia}";
+        myceliaText.color = GameManager.Instance.Mycelia > 0 ? DefaultColor : NoMyceliaColor;
+        myceliaText.text = $"Mycelia: {GameManager.Instance.Mycelia}";
     }
 
 }
