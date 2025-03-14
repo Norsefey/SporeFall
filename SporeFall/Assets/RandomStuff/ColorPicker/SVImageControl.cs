@@ -12,15 +12,44 @@ public class SVImageControl : MonoBehaviour, IDragHandler, IPointerClickHandler
     private RawImage SVImage;
     private RectTransform rectTransform, pickerTransform;
 
+    // Current normalized position values (0-1 range)
+    private float currentXNorm = 0;
+    private float currentYNorm = 0;
+
     private void Start()
     {
         SVImage = GetComponent<RawImage>();
         rectTransform = GetComponent<RectTransform>();
 
         pickerTransform = pickerImage.GetComponent<RectTransform>();
-        pickerTransform.position = new Vector2 (x: -(rectTransform.sizeDelta.x * 0.5f), -(rectTransform.sizeDelta.y * 0.5f));
+        pickerTransform.localPosition = new Vector2(-(rectTransform.sizeDelta.x * 0.5f), -(rectTransform.sizeDelta.y * 0.5f));
+        
     }
+    // Called by ColorPickerControl for gamepad input
+    public void AdjustValueWithGamepad(float xDelta, float yDelta)
+    {
+        // Update normalized position based on gamepad input
+        currentXNorm = Mathf.Clamp01(currentXNorm + xDelta);
+        currentYNorm = Mathf.Clamp01(currentYNorm + yDelta);
 
+        // Convert normalized position to local space
+        float deltaX = rectTransform.sizeDelta.x * 0.5f;
+        float deltaY = rectTransform.sizeDelta.y * 0.5f;
+
+        float posX = (currentXNorm * rectTransform.sizeDelta.x) - deltaX;
+        float posY = (currentYNorm * rectTransform.sizeDelta.y) - deltaY;
+
+        // Update picker position
+        pickerTransform.localPosition = new Vector3(posX, posY, 0);
+
+        // Update picker color for visual feedback
+        pickerImage.color = Color.HSVToRGB(0, 0, 1 - currentYNorm);
+
+        Debug.Log(currentXNorm + " " + currentYNorm);
+
+        // Update the color in the main control
+        colorPickerControl.SetSV(currentXNorm, currentYNorm);
+    }
     void UpdateColor(PointerEventData eventData)
     {
         // get current position of pointer
@@ -34,15 +63,16 @@ public class SVImageControl : MonoBehaviour, IDragHandler, IPointerClickHandler
         {
             pos.x = -deltaX;
         }
-        else if (pos.x > deltaX) 
+        else if (pos.x > deltaX)
         {
             pos.x = deltaX;
         }
 
-        if(pos.y < -deltaY)
+        if (pos.y < -deltaY)
         {
             pos.y = -deltaY;
-        }else if (pos.y > deltaY)
+        }
+        else if (pos.y > deltaY)
         {
             pos.y = deltaY;
         }
@@ -50,13 +80,13 @@ public class SVImageControl : MonoBehaviour, IDragHandler, IPointerClickHandler
         float x = pos.x + deltaX;
         float y = pos.y + deltaY;
 
-        float xNorm = x / rectTransform.sizeDelta.x;
-        float yNorm = y / rectTransform.sizeDelta.y;
+        currentXNorm = x / rectTransform.sizeDelta.x;
+        currentYNorm = y / rectTransform.sizeDelta.y;
 
         pickerTransform.localPosition = pos;
-        pickerImage.color = Color.HSVToRGB(0, 0, 1 - yNorm);
+        pickerImage.color = Color.HSVToRGB(0, 0, 1 - currentYNorm);
 
-        colorPickerControl.SetSV(xNorm, yNorm);
+        colorPickerControl.SetSV(currentXNorm, currentYNorm);
     }
 
     public void OnDrag(PointerEventData eventData)

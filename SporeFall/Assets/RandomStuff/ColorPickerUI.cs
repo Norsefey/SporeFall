@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class ColorPickerUI : MonoBehaviour
 {
-    
     public GameObject firstButton;
     public GameObject finishButton;
 
@@ -14,6 +13,10 @@ public class ColorPickerUI : MonoBehaviour
     [HideInInspector] public Navigation finishButtonNav = new Navigation();
 
     [Header("Player 1 Variables")]
+    // to activate the gamepad controls on the selected color picker
+    [SerializeField] private ColorPickerControl p1PC;
+    [SerializeField] private ColorPickerControl p1SC;
+
     public GameObject colorPickerButton1p1;
     [SerializeField] GameObject svButton1p1;
     [SerializeField] GameObject svSlider1p1;
@@ -27,6 +30,9 @@ public class ColorPickerUI : MonoBehaviour
     [SerializeField] GameObject hueSlider2p1;
 
     [Header("Player 2 Variables")]
+    [SerializeField] private ColorPickerControl p2PC;
+    [SerializeField] private ColorPickerControl p2SC;
+
     public GameObject colorPickerButton1p2;
     [SerializeField] GameObject svButton1p2;
     [SerializeField] GameObject svSlider1p2;
@@ -73,18 +79,21 @@ public class ColorPickerUI : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(svButton1p1);
+        p1PC.selected = true;
     }
 
     public void SelectSVSlider1P1()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(svSlider1p1);
+        p1PC.isHueSelected = false;
     }
 
     public void SelectHueSlider1P1()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(hueSlider1p1);
+        p1PC.isHueSelected = true;
     }
 
     public void DoneColorPicker1P1()

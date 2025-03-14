@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ColorPickerControl : MonoBehaviour
@@ -18,8 +19,15 @@ public class ColorPickerControl : MonoBehaviour
     [SerializeField]
     Material materialToChange;
 
+    [Header("Gamepad Settings")]
+    [SerializeField] private float gamepadSensitivity = 0.5f;
+    [SerializeField] private SVImageControl svImageControl;
+    public bool isHueSelected = false;
+    public bool selected = false;
+
     private void Awake()
     {
+
         CreateHueImage();
 
         CreateSVImage();
@@ -28,7 +36,65 @@ public class ColorPickerControl : MonoBehaviour
 
         SetInitialColor();
     }
+    private void Update()
+    {
+        if(selected)
+            HandleGamepadInput();
+    }
 
+    private void HandleGamepadInput()
+    {
+        // Check for gamepad input
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad == null) return;
+
+        // Switch between hue slider and SV picker with shoulder buttons
+        if (gamepad.leftShoulder.wasPressedThisFrame || gamepad.rightShoulder.wasPressedThisFrame)
+        {
+            isHueSelected = !isHueSelected;
+
+            // Visual feedback that could be added
+            // For now just log the state
+            Debug.Log(isHueSelected ? "Hue slider selected" : "SV picker selected");
+        }
+
+        // Vertical movement controls the selected component
+        float verticalInput = gamepad.leftStick.y.ReadValue();
+
+        if (Mathf.Abs(verticalInput) > 0.1f)
+        {
+            if (isHueSelected)
+            {
+                // Control hue slider
+                hueSlider.value = Mathf.Clamp01(hueSlider.value + verticalInput * Time.deltaTime * gamepadSensitivity);
+                UpdateSVImage();
+            }
+            else
+            {
+                // Delegate SV control to SVImageControl
+                if (svImageControl != null)
+                {
+                    svImageControl.AdjustValueWithGamepad(0, verticalInput * Time.deltaTime * gamepadSensitivity);
+                }
+            }
+        }
+
+        // Horizontal movement for SV picker when it's selected
+        float horizontalInput = gamepad.leftStick.x.ReadValue();
+
+        if (!isHueSelected && Mathf.Abs(horizontalInput) > 0.1f && svImageControl != null)
+        {
+            svImageControl.AdjustValueWithGamepad(horizontalInput * Time.deltaTime * gamepadSensitivity, 0);
+        }
+
+        // Optional: Button to confirm/exit color picker
+        if (gamepad.buttonSouth.wasPressedThisFrame)
+        {
+            // Confirm color selection
+            Debug.Log("Color confirmed: " + Color.HSVToRGB(currentHue, currentSat, currentVal));
+            // You could add events here to notify other systems
+        }
+    }
     private void CreateHueImage()
     {
         hueTexture = new Texture2D(1, 16);
@@ -45,7 +111,6 @@ public class ColorPickerControl : MonoBehaviour
 
         hueImage.texture = hueTexture;
     }
-
     private void CreateSVImage()
     {
         svTexture = new Texture2D (16, 16);
@@ -68,7 +133,6 @@ public class ColorPickerControl : MonoBehaviour
 
         satValImage.texture = svTexture;
     }
-
     private void CreateOutputImage()
     {
         outputTexture = new Texture2D (1, 16);
@@ -86,7 +150,6 @@ public class ColorPickerControl : MonoBehaviour
 
         outputImage.texture = outputTexture;
     }
-
     private void SetInitialColor()
     {
         Color currentColor = materialToChange.GetColor("_BaseColor");
@@ -108,7 +171,6 @@ public class ColorPickerControl : MonoBehaviour
         hueSlider.value = currentHue;
 
     }
-
     private void UpdateOutputImage()
     {
         Color currentColor = Color.HSVToRGB(currentHue, currentSat, currentVal);
@@ -122,7 +184,6 @@ public class ColorPickerControl : MonoBehaviour
 
         materialToChange.SetColor("_BaseColor", currentColor);
     }
-
     public void SetSV(float s, float v)
     {
         currentSat = s;
@@ -130,7 +191,6 @@ public class ColorPickerControl : MonoBehaviour
 
         UpdateOutputImage();
     }
-
     // called by slider
     public void UpdateSVImage()
     {
