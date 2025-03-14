@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,25 +13,27 @@ public class UpgradeBanner : MonoBehaviour
 
     private StructureType currentType;
     private StructureLevel currentLevel;
+    private UpgradeManager UpgradeManager;
     public UpgradeUI upgradeUI;
-    public void SetupBanner(StructureType type, StructureLevel level)
+    public void SetupBanner(StructureType type, StructureLevel level, UpgradeManager manager)
     {
         currentType = type;
         currentLevel = level;
-
+        UpgradeManager = manager;
         UpdateBannerVisuals(type, level);
     }
     private void UpdateBannerVisuals(StructureType type, StructureLevel level)
     {
-        UpgradeManager upgradeManager = GameManager.Instance.upgradeManager;
 
-        typeText.text = $"{type.ToString()} : \n Current Lv {upgradeManager.GetStructureLevel(type) + 1}";
+        typeText.text = $"{type.ToString()} : \n Current Lv {UpgradeManager.GetStructureLevel(type) + 1}";
 
-        bool isMaxLevel = upgradeManager.IsMaxLevel(type);
+        bool isMaxLevel = UpgradeManager.IsMaxLevel(type);
 
         if (isMaxLevel)
         {
             costText.text = "Max Level";
+            //select The scroll bar
+            upgradeButton.FindSelectableOnRight().Select();
             upgradeButton.interactable = false;
             descriptionText.text = "This structure is fully upgraded.";
         }

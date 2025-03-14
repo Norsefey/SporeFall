@@ -45,6 +45,15 @@ public class UpgradeManager : MonoBehaviour
     {
         currentStructureLevel[type]++;
     }
+    public StructureLevel GetCurrentLevel(StructureType type)
+    {
+        if (!currentStructureLevel.TryGetValue(type, out int currentLevel)) return null;
+
+        StructureLevels structureLevelData = GetStructureLevelsForType(type);
+        if (structureLevelData == null || IsMaxLevel(type)) return null;
+
+        return structureLevelData.GetLevel(currentLevel);
+    }
     public StructureLevel GetNextLevel(StructureType type)
     {
         if (!currentStructureLevel.TryGetValue(type, out int currentLevel)) return null;
