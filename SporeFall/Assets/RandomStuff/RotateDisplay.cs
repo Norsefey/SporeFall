@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class RotateDisplay : MonoBehaviour
 {
+    [SerializeField] private ColorPickerUI colorPickerUI;
     private bool canRotate = false;
     public float rotationSpeed = 5f; // Adjust rotation speed
 
@@ -70,6 +71,14 @@ public class RotateDisplay : MonoBehaviour
             pOneColorPickers.SetActive(false);
             pTwoColorPickers.SetActive(true);
             playerTwo.SetActive(true);
+
+            colorPickerUI.firstButtonNav.selectOnRight = colorPickerUI.colorPickerButton1p2.GetComponent<Button>();
+            colorPickerUI.firstButtonNav.selectOnDown = colorPickerUI.finishButton.GetComponent<Button>();
+            colorPickerUI.firstButton.GetComponent<Button>().navigation = colorPickerUI.firstButtonNav;
+
+            colorPickerUI.finishButtonNav.selectOnLeft = colorPickerUI.firstButton.GetComponent<Button>();
+            colorPickerUI.finishButtonNav.selectOnUp = colorPickerUI.colorPickerButton2p2.GetComponent<Button>();
+            colorPickerUI.finishButton.GetComponent<Button>().navigation = colorPickerUI.finishButtonNav;
         }
         else
         {
@@ -78,6 +87,14 @@ public class RotateDisplay : MonoBehaviour
             pTwoColorPickers.SetActive(false);
             pOneColorPickers.SetActive(true);
             playerOne.SetActive(true);
+
+            colorPickerUI.firstButtonNav.selectOnRight = colorPickerUI.colorPickerButton1p1.GetComponent<Button>();
+            colorPickerUI.firstButtonNav.selectOnDown = colorPickerUI.finishButton.GetComponent<Button>();
+            colorPickerUI.firstButton.GetComponent<Button>().navigation = colorPickerUI.firstButtonNav;
+
+            colorPickerUI.finishButtonNav.selectOnLeft = colorPickerUI.firstButton.GetComponent<Button>();
+            colorPickerUI.finishButtonNav.selectOnUp = colorPickerUI.colorPickerButton2p1.GetComponent<Button>();
+            colorPickerUI.finishButton.GetComponent<Button>().navigation = colorPickerUI.finishButtonNav;
         }
     }
     public void SetCanRotate(bool toggle)
