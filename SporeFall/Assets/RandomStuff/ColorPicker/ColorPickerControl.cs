@@ -52,9 +52,7 @@ public class ColorPickerControl : MonoBehaviour
         if (gamepad.leftShoulder.wasPressedThisFrame || gamepad.rightShoulder.wasPressedThisFrame)
         {
             isHueSelected = !isHueSelected;
-
-            // Visual feedback that could be added
-            // For now just log the state
+            // We can put the highlight functionality here??
             Debug.Log(isHueSelected ? "Hue slider selected" : "SV picker selected");
         }
 
@@ -87,12 +85,12 @@ public class ColorPickerControl : MonoBehaviour
             svImageControl.AdjustValueWithGamepad(horizontalInput * Time.deltaTime * gamepadSensitivity, 0);
         }
 
-        // Optional: Button to confirm/exit color picker
+        // Button to confirm/exit color picker
         if (gamepad.buttonSouth.wasPressedThisFrame)
         {
             // Confirm color selection
             Debug.Log("Color confirmed: " + Color.HSVToRGB(currentHue, currentSat, currentVal));
-            // You could add events here to notify other systems
+            // Then do stuff to exit the selection
         }
     }
     private void CreateHueImage()

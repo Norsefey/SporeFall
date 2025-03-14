@@ -79,20 +79,24 @@ public class ColorPickerUI : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(svButton1p1);
-        p1PC.selected = true;
     }
 
     public void SelectSVSlider1P1()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(svSlider1p1);
+        // activates SV Controls and Deactivates Hue controls just in case
+        p1PC.selected = true;
         p1PC.isHueSelected = false;
     }
 
     public void SelectHueSlider1P1()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(hueSlider1p1);
+        // Disabled to prevent Slider jumping and stuttering
+        //EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(hueSlider1p1);
+
+        // activates Hue controls, no need to deactivate SV control as this is handled in color picker
         p1PC.isHueSelected = true;
     }
 

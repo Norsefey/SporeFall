@@ -89,11 +89,11 @@ public class SVImageControl : MonoBehaviour, IDragHandler, IPointerClickHandler
         colorPickerControl.SetSV(currentXNorm, currentYNorm);
     }
 
+    // Mouse Control events
     public void OnDrag(PointerEventData eventData)
     {
         UpdateColor(eventData);
     }
-
     public void OnPointerClick(PointerEventData eventData)
     {
         UpdateColor(eventData);
