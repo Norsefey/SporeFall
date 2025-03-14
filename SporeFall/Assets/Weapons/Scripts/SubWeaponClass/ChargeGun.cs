@@ -95,21 +95,33 @@ public class ChargeGun : Weapon
             player.pController.RotateOnFire(this.transform, baseDirection);
         }
 
-        if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
-        {
-            Debug.LogError($"No pool found for Bullet prefab: {bulletPrefab.name}");
-            return;
-        }
+        ProjectilePool pool = null;
 
+        if (PoolManager.Instance != null)
+        {
+            if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out pool))
+            {
+                Debug.LogError($"No pool found for Bullet prefab: {bulletPrefab.name}");
+                return;
+            }
+        }
         // Fire multiple projectiles with spread
         for (int i = 0; i < currentProjectileCount; i++)
         {
             Vector3 shootDirection = GetSpreadDirection(baseDirection, currentProjectileCount, i);
 
-            // Get projectile from pool
-            ProjectileBehavior projectile = pool.Get(
-                firePoint.position,
-                Quaternion.LookRotation(shootDirection));
+            ProjectileBehavior projectile = null;
+
+            if (pool != null)
+            {
+                // Get projectile from pool
+                 projectile = pool.Get(firePoint.position, Quaternion.LookRotation(shootDirection));
+            }
+            else
+            {
+                projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection)).GetComponent<ProjectileBehavior>();
+            }
+          
 
             if (projectile != null)
             {
