@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class ColorPickerControl : MonoBehaviour
 {
+    [SerializeField] private ColorPickerUI ColorPickerUI;
+    
     public float currentHue, currentSat, currentVal;
 
     [SerializeField]
@@ -54,6 +56,17 @@ public class ColorPickerControl : MonoBehaviour
             isHueSelected = !isHueSelected;
             // We can put the highlight functionality here??
             Debug.Log(isHueSelected ? "Hue slider selected" : "SV picker selected");
+            //Changes color to show what is currently selected when the bumpers are hit
+            if (isHueSelected)
+            {
+                ColorPickerUI.currentHueButton.GetComponent<Image>().color = ColorPickerUI.shroomRed;
+                ColorPickerUI.currentSVButton.GetComponent<Image>().color = Color.white;
+            }
+            else
+            {
+                ColorPickerUI.currentSVButton.GetComponent<Image>().color = ColorPickerUI.shroomRed;
+                ColorPickerUI.currentHueButton.GetComponent<Image>().color = Color.white;
+            }
         }
 
         // Vertical movement controls the selected component
