@@ -26,27 +26,27 @@ public class PlayerInputOrganizer : MonoBehaviour
     // Player Actions
     public InputAction moveAction;
     public  InputAction lookAction;
-    private InputAction jumpAction;
-    private InputAction aimAction;
-    private InputAction sprintAction;
-    private InputAction interactAction;
+    public InputAction jumpAction;
+    public InputAction aimAction;
+    public InputAction sprintAction;
+    public InputAction interactAction;
     private InputAction flipCameraSide;
-    private InputAction buildModeAction;
+    public InputAction buildModeAction;
     private InputAction tutorialAction;
     // Shoot Actions
     private InputAction fireAction;
     private InputAction reloadAction;
-    private InputAction dropAction;
+    public InputAction dropAction;
     // Build Actions
     private InputAction showStructureRadius;
-    private InputAction editModeAction;
+    public InputAction editModeAction;
     private InputAction rotateStructAction;
     // Placement Actions
-    private InputAction changeStructAction;
+    public InputAction changeStructAction;
     private InputAction placeStructAction;
     // Edit Actions
     private InputAction moveStructAcion;
-    private InputAction destroyStructAction;
+    public InputAction destroyStructAction;
     // have to store this, since Hold needs to be check first, and after that, release value is just zero
     private float rotationDirection = 0;
 
@@ -336,7 +336,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnUpgradeMenu(InputAction.CallbackContext context)
     {
-        GameManager.Instance.gameUI.ShowUpgradeMenu(false);
+        GameManager.Instance.gameUI.ToggleUpgradeMenu(false);
 
         ToggleUpgradeMenu(false);
     }

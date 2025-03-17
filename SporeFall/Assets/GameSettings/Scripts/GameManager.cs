@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
             player.TogglePCamera(false);
             player.TogglePVisual(false);
         }
+
         if(trainHandler != null)
         {
             player.transform.SetParent(trainHandler.transform);
@@ -90,6 +91,7 @@ public class GameManager : MonoBehaviour
             player.transform.SetParent(this.transform);
             SpawnPlayer();
         }
+
         OnPlayerJoin?.Invoke(player.GetPlayerIndex());
     }
     private void SpawnPlayer()

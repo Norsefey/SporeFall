@@ -14,8 +14,6 @@ public class DefaultGunPickupTutorial : Interactables
         Debug.Log("Player Interacting");
         RemovePrompt();
         player.EquipDefaultGun();
-        doorToOpen.UnlockDoor();
-        Tutorial.Instance.ProgressTutorial();
         DestroyIntractable();
     }
     // prompting player
@@ -25,11 +23,10 @@ public class DefaultGunPickupTutorial : Interactables
         if (player.currentWeapon != null)
             promptText = $"You already have a gun";
         else
-            promptText = $"Press {player.pInput.GetInteractionKey()} To Pick Up Your Gun";
+            promptText = $"Press {player.pInput.GetInteractionKey()} To Pick Up Pulse Pistol";
        
         player.pUI.EnablePrompt(promptText);
     }
-
     public override void RemovePrompt()
     {
         if (player == null)

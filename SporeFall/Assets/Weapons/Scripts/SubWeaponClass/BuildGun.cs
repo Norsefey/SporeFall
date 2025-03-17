@@ -18,7 +18,7 @@ public class BuildGun : Weapon
     public float minimumRefundPercent = 0.5f;
 
     public bool isEditing = false;
-    private bool movingStructure = false;
+    public bool movingStructure = false;
 
     [Header("Placement Validation")]
     public LayerMask structureOverlapMask;
@@ -81,10 +81,6 @@ public class BuildGun : Weapon
                 // If placement is valid, restore original colors and place
                 RestoreOriginalColors();
                 //SetStructureToOpaque();
-                if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 20)
-                {
-                    Tutorial.Instance.ProgressTutorial();
-                }
             }
         }
     }
@@ -211,6 +207,10 @@ public class BuildGun : Weapon
             // mostly for testing the cost and placement of structures
             if (selectedStructure != null)
             {
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.DecreaseMycelia(selectedStructure.GetCurrentEnergyCost());
+                }
                 selectedStructure.Initialize();
                 selectedStructure.ToggleStructureBehavior(true);
                 selectedStructure.ShowRadius(false);
@@ -218,10 +218,6 @@ public class BuildGun : Weapon
                 selectedStructure = null;
                 player.pUI.EnableControls(buildModeText);
 
-                if (Tutorial.Instance != null && Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18)
-                {
-                    Tutorial.Instance.ProgressTutorial();
-                }
             }
         }
     }
@@ -414,10 +410,6 @@ public class BuildGun : Weapon
             RemovePreview();
         }
         isEditing = true;
-        if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 19)
-        {
-            Tutorial.Instance.ProgressTutorial();
-        }
     }
     public void ExitEditMode()
     {
@@ -497,8 +489,10 @@ public class BuildGun : Weapon
         if (selectedStructure != null)
         {
             Structure toDelet = selectedStructure;
-            selectedStructure.poolBehavior.ReturnObject();
-
+            if (PoolManager.Instance != null)
+                selectedStructure.poolBehavior.ReturnObject();
+            else
+                Destroy(selectedStructure.gameObject);
             DeselectStructure();
             if (GameManager.Instance.trainHandler != null)
             {
@@ -506,10 +500,6 @@ public class BuildGun : Weapon
                 GameManager.Instance.trainHandler.RemoveStructure(toDelet);
             }
             Debug.Log("Structure Deleted");
-            if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 21)
-            {
-                Tutorial.Instance.ProgressTutorial();
-            }
             player.pUI.EnableControls(editModeText);
         }
     }

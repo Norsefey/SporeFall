@@ -723,7 +723,7 @@ public class Tutorial : MonoBehaviour
     {
         tutorialText.text = text;
     }
-    IEnumerator TempGamepadTutorial()
+   /* IEnumerator TempGamepadTutorial()
     {
         continueText.text = " ";
         tutorialText.text = "Left Stick to move" + "\n Hold L3 to sprint" + "\n A to jump";
@@ -743,6 +743,6 @@ public class Tutorial : MonoBehaviour
         tutorialText.text = "Good luck!";
         yield return new WaitForSeconds(2);
         tutorialPopup.SetActive(false);
-    }
+    }*/
 
 }

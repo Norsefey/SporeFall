@@ -35,7 +35,7 @@ public class PlayerManager : MonoBehaviour
     public bool isCharging = false;
     public bool isBuilding = false;
     public bool isRotating = false;
-    [Header("Currency")]
+    public bool canBuild = true;
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
     [SerializeField] private Transform fallbackSpawnPoint;
@@ -49,6 +49,9 @@ public class PlayerManager : MonoBehaviour
         // since we will have multiple players, this manager cannot be a public instance, so we assign it locally
         SetManager();
         SetDeviceSettings();
+
+        TogglePCamera(false);
+
         if(Tutorial.Instance != null)
             Tutorial.Instance.playerActive = true;
 
@@ -84,7 +87,7 @@ public class PlayerManager : MonoBehaviour
                     currentWeapon = defaultSword;
                     currentWeapon.gameObject.SetActive(true);
                     pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
-                    pUI.ToggleDefaultUI(false);
+                    pUI.ToggleWeaponUI(false);
                 }
                 else
                 {
@@ -197,7 +200,7 @@ public class PlayerManager : MonoBehaviour
         {
             holdingCorruption = true;
         }
-        pUI.ToggleDefaultUI(true);
+        pUI.ToggleWeaponUI(true);
     }
     public void DropWeapon()
     {
@@ -214,10 +217,13 @@ public class PlayerManager : MonoBehaviour
                 pUI.ToggleChargeGunSlider(false);
             }
             Destroy(currentWeapon.gameObject); // Drop the current weapon
-            if (Tutorial.Instance.currentScene == "Tutorial")
+            /*if(Tutorial.Instance != null)
             {
-                Tutorial.Instance.ProgressTutorial();
-            }
+                if (Tutorial.Instance.currentScene == "Tutorial")
+                {
+                    Tutorial.Instance.ProgressTutorial();
+                }
+            }*/
         }
 
         currentWeapon = defaultWeapon;
@@ -234,7 +240,7 @@ public class PlayerManager : MonoBehaviour
         currentWeapon = defaultWeapon;
         currentWeapon.gameObject.SetActive(true);
         pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
-        pUI.ToggleDefaultUI(true);
+        pUI.ToggleWeaponUI(true);
 
     }
     #region Toggle Switches
@@ -243,7 +249,7 @@ public class PlayerManager : MonoBehaviour
         if(currentWeapon == null)
             return;
 
-        if (!isBuilding)
+        if (!isBuilding && canBuild)
         {// Enter Build mode
          // Avoid getting Stuck in reload
             if (currentWeapon.IsReloading)

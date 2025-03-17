@@ -4,7 +4,7 @@ public class TutorialEnemy : Damageable
 {
     [Tooltip("Guaranteed weapon drop for next tutorial stage")]
     [SerializeField] private GameObject weaponPickUp;
-    [SerializeField] private TrainingRoom_Tutorial tutorial;
+    [SerializeField] private ShootingRoomTutorial shootingRoomTutorial;
     private void Awake()
     {
         currentHP = maxHP;
@@ -22,7 +22,8 @@ public class TutorialEnemy : Damageable
             weaponPickUp.SetActive(true);
         }
 
-        Tutorial.Instance.ProgressTutorial();
+        shootingRoomTutorial.TargetKilled();
+
         Debug.Log("Dying Now");
         Destroy(transform.parent.gameObject);
     }

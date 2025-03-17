@@ -30,7 +30,7 @@ public class BillboardUIUpdater : MonoBehaviour
     public void HandleHPChange(Damageable damagedEnemy, float damage)
     {
        Debug.Log("Updating Enemy HP UI");
-       hpDisplay.text = damagedEnemy.CurrentHP + "/" + damagedEnemy.MaxHP;        
+       hpDisplay.text = damagedEnemy.CurrentHP.ToString("F0") + "/" + damagedEnemy.MaxHP;        
     }
     public void SetupTarget(Transform target)
     {

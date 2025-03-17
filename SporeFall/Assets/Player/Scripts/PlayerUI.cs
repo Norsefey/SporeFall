@@ -202,7 +202,7 @@ public class PlayerUI : MonoBehaviour
     {
         chargeGunSlider.value = value;
     }
-    public void ToggleDefaultUI(bool toggle)
+    public void ToggleWeaponUI(bool toggle)
     {
         if (toggle && weaponUI.activeSelf)
             return;// already on return

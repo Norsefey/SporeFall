@@ -14,14 +14,19 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private TMP_Text myceliaIndicator;
 
 
-    public void ShowUpgradeMenu(bool toggle)
+    public void ToggleUpgradeMenu(bool toggle)
     {
-        trainUI.SetActive(!toggle); 
-        waveUI.SetActive(!toggle);
-        gameplayUI.SetActive(!toggle);
+        if(trainUI != null)
+            trainUI.SetActive(!toggle); 
+        if(waveUI != null)
+            waveUI.SetActive(!toggle);
+        if (gameplayUI != null)
+            gameplayUI.SetActive(!toggle);
 
         upgradeMenu.SetActive(toggle);
-        upgradeMenu.GetComponent<UpgradeUI>().SetSelectable();
+        UpgradeUI upUI = upgradeMenu.GetComponent<UpgradeUI>();
+        if(upUI != null)
+            upUI.SetSelectable();
     }
     public void DisplayMycelia(float value)
     {

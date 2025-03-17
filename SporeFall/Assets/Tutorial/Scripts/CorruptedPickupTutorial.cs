@@ -6,7 +6,7 @@ public class CorruptedPickupTutorial : Interactables
     private string promptText;
     [Space(5), Header("Pick Up")]
     [SerializeField] private Weapon weapon;
-
+    [SerializeField] private ShootingRoomTutorial roomTutorial;
     [Header("Audio Settings")]
     [SerializeField] private AudioClip pickupSound;
     private AudioSource audioSource;
@@ -28,7 +28,8 @@ public class CorruptedPickupTutorial : Interactables
         Invoke(nameof(DestroyIntractable), pickupSound.length);
         Debug.Log("Picked up: " + weapon.name);
 
-        Tutorial.Instance.ProgressTutorial();
+        roomTutorial.StartCorruptedWeaponTutorial();
+
         DestroyIntractable();
     }
 

@@ -23,7 +23,7 @@ public class PlayerAnimation : MonoBehaviour
         {
             Debug.Log("No Weapon");
             SetWeaponHoldAnimation(0);
-            pMan.pUI.ToggleDefaultUI(false);
+            pMan.pUI.ToggleWeaponUI(false);
         }
         else
         {

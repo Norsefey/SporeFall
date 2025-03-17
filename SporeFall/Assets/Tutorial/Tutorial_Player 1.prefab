@@ -5293,6 +5293,7 @@ MonoBehaviour:
   isCharging: 0
   isBuilding: 0
   isRotating: 0
+  canBuild: 0
   respawnTime: 1
   fallbackSpawnPoint: {fileID: 0}
   holdingCorruption: 0
@@ -5322,6 +5323,51 @@ MonoBehaviour:
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: ba80e752-cc8a-4230-acee-587645e970c6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a069c7d0-09bb-423e-9b6c-2d2b21cd9a55
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  aimAction:
+    m_Name: Aim
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e39cefa2-c810-411f-b8de-5ce2574fb525
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  sprintAction:
+    m_Name: Sprint
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f302286a-f050-45c1-8018-71c50f1b57fe
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  interactAction:
+    m_Name: Interact
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e5bb9c21-5fbe-4d49-bc62-419966e3e7d6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  dropAction:
+    m_Name: Drop
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: d0471feb-bb97-4572-ace0-a0ed494afa63
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -6484,7 +6530,6 @@ MonoBehaviour:
   corruptionBar: {fileID: 3704275658623612333}
   corruptedVisionHolder: {fileID: 271343339829594523}
   corruptedVisionImage: {fileID: 1086980013589070081}
-  purifyButton: {fileID: 0}
   corruptionSprites:
   - {fileID: 21300000, guid: 6d1958a6436dc2e43b69eb17d317cf5a, type: 3}
   - {fileID: 21300000, guid: a3d2080a5f339194fb685b1061bfd045, type: 3}
@@ -6905,7 +6950,7 @@ Transform:
   m_GameObject: {fileID: 8585381979673394487}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0061941454, y: -0.000000029802322, z: 2.3283064e-10, w: 0.9999808}
-  m_LocalPosition: {x: -0.17999879, y: 3.102, z: -4.4619994}
+  m_LocalPosition: {x: -0.14, y: 3.43, z: -5.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
