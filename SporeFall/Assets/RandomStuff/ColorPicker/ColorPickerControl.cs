@@ -25,6 +25,7 @@ public class ColorPickerControl : MonoBehaviour
     [SerializeField] private float gamepadSensitivity = 0.5f;
     [SerializeField] private SVImageControl svImageControl;
     public bool isHueSelected = false;
+    public bool isSVSelected = false;
     public bool selected = false;
 
     private void Awake()
@@ -74,13 +75,13 @@ public class ColorPickerControl : MonoBehaviour
 
         if (Mathf.Abs(verticalInput) > 0.1f)
         {
-            if (isHueSelected)
+            if (isHueSelected && ColorPickerUI.canSelectColor)
             {
                 // Control hue slider
                 hueSlider.value = Mathf.Clamp01(hueSlider.value + verticalInput * Time.deltaTime * gamepadSensitivity);
                 UpdateSVImage();
             }
-            else
+            else if (isSVSelected && ColorPickerUI.canSelectColor)
             {
                 // Delegate SV control to SVImageControl
                 if (svImageControl != null)
@@ -93,17 +94,40 @@ public class ColorPickerControl : MonoBehaviour
         // Horizontal movement for SV picker when it's selected
         float horizontalInput = gamepad.leftStick.x.ReadValue();
 
-        if (!isHueSelected && Mathf.Abs(horizontalInput) > 0.1f && svImageControl != null)
+        if (!isHueSelected && Mathf.Abs(horizontalInput) > 0.1f && svImageControl != null && ColorPickerUI.canSelectColor)
         {
             svImageControl.AdjustValueWithGamepad(horizontalInput * Time.deltaTime * gamepadSensitivity, 0);
         }
 
         // Button to confirm/exit color picker
-        if (gamepad.buttonSouth.wasPressedThisFrame)
+        if (gamepad.buttonSouth.wasPressedThisFrame && ColorPickerUI.canSelectColor) 
         {
             // Confirm color selection
             Debug.Log("Color confirmed: " + Color.HSVToRGB(currentHue, currentSat, currentVal));
             // Then do stuff to exit the selection
+            if (isHueSelected)
+            {
+                Debug.Log("Exiting to hue button");
+                isHueSelected = false;
+                isSVSelected = false;
+                ColorPickerUI.canSelectColor = false;
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(ColorPickerUI.currentHueButton);
+                Debug.Log("Cannot select color");
+                ColorPickerUI.currentHueButton.GetComponent<Image>().color = Color.white;
+            }
+            else if (isSVSelected)
+            {
+                Debug.Log("Exiting to SV button");
+                isSVSelected = false;
+                isHueSelected = false;
+                ColorPickerUI.canSelectColor = false;
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(ColorPickerUI.currentSVButton);
+                Debug.Log("Cannot select color");
+                ColorPickerUI.currentSVButton.GetComponent<Image>().color = Color.white;
+            }
+
         }
     }
     private void CreateHueImage()
