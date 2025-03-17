@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ColorPickerUI : MonoBehaviour
 {
     //Script that controls UI, mostly navigation for controller, for the Color Picker scene
-
+    
     public GameObject firstButton;
     public GameObject finishButton;
 
@@ -19,6 +19,8 @@ public class ColorPickerUI : MonoBehaviour
 
     //Same red as text on most menus
     [HideInInspector] public Color shroomRed = new Color(1f, 0.3254902f, 0.3215686f, 1f);
+
+    public bool canSelectColor = false;
 
     [Header("Player 1 Variables")]
     // to activate the gamepad controls on the selected color picker
@@ -55,7 +57,6 @@ public class ColorPickerUI : MonoBehaviour
 
     private void Awake()
     {
-
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstButton);
 
@@ -83,19 +84,21 @@ public class ColorPickerUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(svButton1p1);
         currentSVButton = svButton1p1;
         currentHueButton = hueButton1p1;
+        canSelectColor = false;
     }
-
     public void SelectSVSlider1P1()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(svSlider1p1);
+        EventSystem.current.sendNavigationEvents = false;
         // activates SV Controls and Deactivates Hue controls just in case
+        p1PC.isSVSelected = true;
         p1PC.selected = true;
         p1PC.isHueSelected = false;
         //Changes color of selected button to show what you're changing the color on
         svButton1p1.GetComponent<Image>().color = shroomRed;
+        StartCoroutine(SelectionColdown());
     }
-
     public void SelectHueSlider1P1()
     {
         // Disabled to prevent Slider jumping and stuttering
@@ -103,14 +106,19 @@ public class ColorPickerUI : MonoBehaviour
         //EventSystem.current.SetSelectedGameObject(hueSlider1p1);
 
         // activates Hue controls, no need to deactivate SV control as this is handled in color picker
+        EventSystem.current.sendNavigationEvents = false;
         p1PC.isHueSelected = true;
         hueButton1p1.GetComponent<Image>().color = shroomRed;
+        StartCoroutine(SelectionColdown());
     }
-
     public void DoneColorPicker1P1()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(colorPickerButton1p1);
+        EventSystem.current.sendNavigationEvents = true;
+        p1PC.isSVSelected = false;
+        p1PC.selected = false;
+        p1PC.isHueSelected = false;
     }
     #endregion
 
@@ -121,27 +129,35 @@ public class ColorPickerUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(svButton2p1);
         currentSVButton = svButton2p1;
         currentHueButton = hueButton2p1;
+        canSelectColor = false;
     }
-
     public void SelectSVSlider2P1()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(svSlider2p1);
+        EventSystem.current.SetSelectedGameObject(svSlider1p1);
+        EventSystem.current.sendNavigationEvents = false;
+        // activates SV Controls and Deactivates Hue controls just in case
+        p1SC.isSVSelected = true;
         p1SC.selected = true;
         p1SC.isHueSelected = false;
+        //Changes color of selected button to show what you're changing the color on
         svButton2p1.GetComponent<Image>().color = shroomRed;
+        StartCoroutine(SelectionColdown());
     }
-
     public void SelectHueSlider2P1()
     {
+        EventSystem.current.sendNavigationEvents = false;
         p1SC.isHueSelected = true;
         hueButton2p1.GetComponent<Image>().color = shroomRed;
+        StartCoroutine(SelectionColdown());
     }
-
     public void DoneColorPicker2P1()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(colorPickerButton2p1);
+        p1SC.isSVSelected = false;
+        p1SC.selected = false;
+        p1SC.isHueSelected = false;
     }
     #endregion
     #endregion
@@ -153,27 +169,37 @@ public class ColorPickerUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(svButton1p2);
         currentSVButton = svButton1p2;
         currentHueButton = hueButton1p2;
+        canSelectColor = false;
     }
-
     public void SelectSVSlider1P2()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(svSlider1p2);
+        // So that nothing else can be selected
+        EventSystem.current.sendNavigationEvents = false;
+        // activates SV Controls and Deactivates Hue controls just in case
+        p2PC.isSVSelected = true;
         p2PC.selected = true;
         p2PC.isHueSelected = false;
+        //Changes color of selected button to show what you're changing the color on
         svButton1p2.GetComponent<Image>().color = shroomRed;
+        StartCoroutine(SelectionColdown());
     }
-
     public void SelectHueSlider1P2()
     {
+        EventSystem.current.sendNavigationEvents = false;
         p2PC.isHueSelected = true;
         hueButton1p2.GetComponent<Image>().color = shroomRed;
+        StartCoroutine(SelectionColdown());
     }
-
     public void DoneColorPicker1P2()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(colorPickerButton1p2);
+        EventSystem.current.sendNavigationEvents = true;
+        p2PC.isSVSelected = false;
+        p2PC.selected = false;
+        p2PC.isHueSelected = false;
     }
     #endregion
 
@@ -184,28 +210,49 @@ public class ColorPickerUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(svButton2p2);
         currentSVButton = svButton2p2;
         currentHueButton = hueButton2p2;
+        canSelectColor = false;
     }
 
     public void SelectSVSlider2P2()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(svSlider2p2);
+        // So that nothing else can be selected
+        EventSystem.current.sendNavigationEvents = false;
+        // activates SV Controls and Deactivates Hue controls just in case
+        p2SC.isSVSelected = true;
         p2SC.selected = true;
         p2SC.isHueSelected = false;
+        //Changes color of selected button to show what you're changing the color on
         svButton2p2.GetComponent<Image>().color = shroomRed;
+        StartCoroutine(SelectionColdown());
     }
 
     public void SelectHueSlider2P2()
     {
+        EventSystem.current.sendNavigationEvents = false;
         p2SC.isHueSelected = true;
         hueButton2p2.GetComponent<Image>().color = shroomRed;
+        StartCoroutine(SelectionColdown());
     }
 
     public void DoneColorPicker2P2()
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(colorPickerButton2p2);
+        EventSystem.current.sendNavigationEvents = true;
+        p2SC.isSVSelected = false;
+        p2SC.selected = false;
+        p2SC.isHueSelected = false;
     }
     #endregion
     #endregion
+
+    IEnumerator SelectionColdown()
+    {
+        yield return new WaitForSeconds(.1f);
+        canSelectColor = true;
+        Debug.Log("Can select color");
+    }
+
 }
