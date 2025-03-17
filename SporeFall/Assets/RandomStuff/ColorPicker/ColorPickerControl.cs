@@ -111,6 +111,7 @@ public class ColorPickerControl : MonoBehaviour
                 isHueSelected = false;
                 isSVSelected = false;
                 ColorPickerUI.canSelectColor = false;
+                EventSystem.current.sendNavigationEvents = true;
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(ColorPickerUI.currentHueButton);
                 Debug.Log("Cannot select color");
@@ -122,6 +123,7 @@ public class ColorPickerControl : MonoBehaviour
                 isSVSelected = false;
                 isHueSelected = false;
                 ColorPickerUI.canSelectColor = false;
+                EventSystem.current.sendNavigationEvents = true;
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(ColorPickerUI.currentSVButton);
                 Debug.Log("Cannot select color");
