@@ -158,8 +158,25 @@ public class PlayerUI : MonoBehaviour
     }
     public void SwitchStructureIcon()
     {
-        //selectedStructureIcon.sprite = bGun.selectedStructure.structureSprite;
-        if (bGun.currentBuildIndex == 0)
+        // A more modular way to set the sprites for each structure
+        int leftIndex = bGun.currentBuildIndex - 1;
+        if (leftIndex < 0)
+        {
+            leftIndex = bGun.buildableStructures.Length - 1;
+        }
+         rightStructureIcon.sprite = bGun.buildableStructures[leftIndex].GetComponent<Structure>().structureStats.icon;       
+
+        int rightIndex = bGun.currentBuildIndex + 1;
+        if(rightIndex >= bGun.buildableStructures.Length)
+        {
+            rightIndex = 0;
+        }
+        leftStructureIcon.sprite = bGun.buildableStructures[rightIndex].GetComponent<Structure>().structureStats.icon;
+
+        selectedStructureIcon.sprite = bGun.buildableStructures[c].structureStats.icon;
+        
+
+       /* if (bGun.currentBuildIndex == 0)
         {
             selectedStructureIcon.sprite = turretSprite;
             leftStructureIcon.sprite = shermanSprite;
@@ -192,7 +209,7 @@ public class PlayerUI : MonoBehaviour
             selectedStructureIcon.sprite = shermanSprite;
             leftStructureIcon.sprite = repairTowerSprite;
             rightStructureIcon.sprite = turretSprite;
-        }
+        }*/
     }
     public void ToggleChargeGunSlider(bool enable)
     {

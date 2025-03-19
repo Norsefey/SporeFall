@@ -8,7 +8,8 @@ public enum StructureType
     FlameThower,
     Sherman,
     RepairStation,
-    Wall
+    Wall,
+    Lily
 }
 public class UpgradeManager : MonoBehaviour
 {

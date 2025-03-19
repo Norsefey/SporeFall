@@ -40,11 +40,6 @@ public class BuildGun : Weapon
         public Color OriginalColor;
     }
     private MaterialData[] originalMaterials;
-
-    public void Start()
-    {
-        player.pUI.SwitchStructureIcon();
-    }
     public override void Fire()
     {
         // Called when player presses fire button
@@ -103,10 +98,11 @@ public class BuildGun : Weapon
 
         PreviewStructure();
 
-        player.pUI.SwitchStructureIcon();
+        //player.pUI.SwitchStructureIcon();
     }
     private void PreviewStructure()
     {
+
         Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, groundLayer))
@@ -158,6 +154,8 @@ public class BuildGun : Weapon
         {// player not aiming at a valide placement area, remove Preview
             RemovePreview();
         }
+
+        player.pUI.SwitchStructureIcon();
     }
     public void PlaceStructure()
     {

@@ -36,6 +36,8 @@ public class PlayerManager : MonoBehaviour
     public bool isBuilding = false;
     public bool isRotating = false;
     public bool canBuild = true;
+    private bool canUseWeapon = true;
+
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
     [SerializeField] private Transform fallbackSpawnPoint;
@@ -68,7 +70,8 @@ public class PlayerManager : MonoBehaviour
     }
     private void Update()
     {
-        WeaponBehavior();
+        if(canUseWeapon)
+            WeaponBehavior();
 
 
         // For Testing
@@ -148,7 +151,6 @@ public class PlayerManager : MonoBehaviour
             {
                 // Charge weapons handle firing when the fire button is held
                 gun.Charge();
-
                 pUI.UpdateChargeGunSlider(gun.chargeAmount);
             }
         }
@@ -308,6 +310,7 @@ public class PlayerManager : MonoBehaviour
             ToggleBuildMode();
 
         pController.gameObject.SetActive(toggle);
+        canUseWeapon = toggle;
         if(toggle)
             pInput.EnableDefaultInputs();
         else

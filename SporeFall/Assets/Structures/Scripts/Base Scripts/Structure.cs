@@ -9,7 +9,7 @@ public class Structure : MonoBehaviour
     [SerializeField] private GameObject controlScriptObject;
     [Space(5)]
     [SerializeField] private GameObject[] levelVisuals;
-    [SerializeField] private StructureLevels levels;
+    [SerializeField] public StructureLevels structureStats;
     [SerializeField] private GameObject radiusIndicator;
     [SerializeField] private StructureHP healthComponent;
     [HideInInspector]
@@ -23,11 +23,11 @@ public class Structure : MonoBehaviour
     {
         poolBehavior = GetComponent<StructurePoolBehavior>();
         structureBehavior = GetComponent<IStructureStats>();
-        UpdateRadiusVisual(levels.GetLevel(currentLevel));
+        UpdateRadiusVisual(structureStats.GetLevel(currentLevel));
     }
     public void Initialize()
     {
-        if (levels == null || levels.GetLevelCount() == 0)
+        if (structureStats == null || structureStats.GetLevelCount() == 0)
         {
             Debug.LogError($"No levels configured for structure: {gameObject.name}");
             return;
@@ -35,7 +35,7 @@ public class Structure : MonoBehaviour
 
         UpdateVisuals();
         UpdateStats();
-        structureBehavior?.Initialize(levels, currentLevel);
+        structureBehavior?.Initialize(structureStats, currentLevel);
     }
     public void UpdateRadiusVisual(StructureLevel level)
     {
@@ -67,19 +67,19 @@ public class Structure : MonoBehaviour
     }
     public bool CanUpgrade(float availableMycelia)
     {
-        if (currentLevel >= levels.GetLevelCount() - 1) return false;
+        if (currentLevel >= structureStats.GetLevelCount() - 1) return false;
 
-        var nextLevel = levels.GetLevel(currentLevel + 1);
+        var nextLevel = structureStats.GetLevel(currentLevel + 1);
         return availableMycelia >= nextLevel.cost;
     }
     public void Upgrade()
     {
-        if (currentLevel >= levels.GetLevelCount() - 1) return;
+        if (currentLevel >= structureStats.GetLevelCount() - 1) return;
 
-        currentLevel = GameManager.Instance.upgradeManager.GetStructureLevel(levels.type);
+        currentLevel = GameManager.Instance.upgradeManager.GetStructureLevel(structureStats.type);
         UpdateVisuals();
         UpdateStats();
-        structureBehavior?.UpdateStats(levels, currentLevel);
+        structureBehavior?.UpdateStats(structureStats, currentLevel);
     }
     private void UpdateVisuals()
     {
@@ -90,7 +90,7 @@ public class Structure : MonoBehaviour
         }
 
         // Get and activate new visual
-        var levelData = levels.GetLevel(currentLevel);
+        var levelData = structureStats.GetLevel(currentLevel);
         if (currentLevel < levelVisuals.Count() && levelVisuals[currentLevel] != null)
         {
             levelVisuals[currentLevel].SetActive(true);
@@ -98,7 +98,7 @@ public class Structure : MonoBehaviour
     }
     private void UpdateStats()
     {
-        var levelData = levels.GetLevel(currentLevel);
+        var levelData = structureStats.GetLevel(currentLevel);
         // Set the new HP value
         healthComponent.SetMaxHP(levelData.maxHealth);
     }
@@ -135,14 +135,14 @@ public class Structure : MonoBehaviour
         poolBehavior.ReturnObject();
     }
     // Getter methods
-    public float GetCurrentMyceliaCost() => levels.GetLevel(currentLevel).cost;
-    public float GetCurrentEnergyCost() => levels.GetLevel(currentLevel).energyCost;
+    public float GetCurrentMyceliaCost() => structureStats.GetLevel(currentLevel).cost;
+    public float GetCurrentEnergyCost() => structureStats.GetLevel(currentLevel).energyCost;
     public int GetCurrentLevel() => currentLevel;
-    public bool IsMaxLevel() => currentLevel >= levels.GetLevelCount() - 1;
-    public StructureLevels GetLevels() => levels;
+    public bool IsMaxLevel() => currentLevel >= structureStats.GetLevelCount() - 1;
+    public StructureLevels GetLevels() => structureStats;
     public StructureHP GetStructureHP() => healthComponent;
     public GameObject GetCurrentVisual() => levelVisuals[currentLevel];
-    public string GetStructureName() => levels.GetLevel(currentLevel).name;
-    public string GetStructureDescription() => levels.description;
+    public string GetStructureName() => structureStats.GetLevel(currentLevel).name;
+    public string GetStructureDescription() => structureStats.description;
 
 }
