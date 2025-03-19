@@ -13,16 +13,16 @@ public class MainMenu : MonoBehaviour
     [Header("Menus")]
     [SerializeField] GameObject titleScreen;
     [SerializeField] GameObject mainScreen;
+    [SerializeField] GameObject settingsScreen;
     [SerializeField] GameObject levelSelectScreen;
     [SerializeField] GameObject tutorialQuestionScreen;
 
     [Header("First Buttons")]
     [SerializeField] GameObject firstTitleButton;
     [SerializeField] GameObject firstMainButton;
+    [SerializeField] GameObject firstSettingsButton;
     [SerializeField] GameObject firstTutorialButton;
     [SerializeField] GameObject firstLevelSelectButton;
-    [SerializeField] GameObject firstSettingsButton;
-
 
     [Header("Level Names")]
     [SerializeField] string tutorialName;
@@ -68,6 +68,14 @@ public class MainMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(firstMainButton);
     }
 
+    public void OpenSettingsMenu()
+    {
+        settingsScreen.SetActive(true);
+        mainScreen.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstSettingsButton);
+    }
+
     public void TutorialQuestion()
     {
         tutorialQuestionScreen.SetActive(true);
@@ -99,6 +107,7 @@ public class MainMenu : MonoBehaviour
     {
         mainScreen.SetActive(true);
         levelSelectScreen.SetActive(false);
+        settingsScreen.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(firstMainButton);
     }
