@@ -7,21 +7,23 @@ public class LilyRepairBot : MonoBehaviour
 {
     public bool isActive = false;
     // upgradeable Stats
-    [SerializeField] public float patrolRange = 10f;
-    [SerializeField] public float moveSpeed = 2f;
-    [SerializeField] public float repairRate = 7f;
-
+    public float patrolRange = 10f;
+    public float moveSpeed = 2f;
+    public float repairRate = 7f;
+    public GameObject[] lilyVisuals;
     // Non-upgradeable Stats
     [SerializeField] private float detectionRadius = 5f;
     [SerializeField] private float minDistanceToTarget = 1.5f;
 
     private Transform shopStructure;
-    private float maxHealTime = 0f;
-    private float healTimer = 0f;
+
+    [SerializeField] private LayerMask structureHPLayer;
     private StructureHP currentTarget;
-    private bool isRepairing = false;
     private Coroutine repairCoroutine;
     private NavMeshAgent navAgent;
+    private float maxHealTime = 0f;
+    private float healTimer = 0f;
+    private bool isRepairing = false;
 
     private enum BotState { Roaming, MovingToTarget, Repairing }
     private BotState currentState;
@@ -86,8 +88,7 @@ public class LilyRepairBot : MonoBehaviour
         Vector3 randomDirection = Random.insideUnitSphere * patrolRange;
         randomDirection += shopStructure.position;
 
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomDirection, out hit, patrolRange, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, patrolRange, NavMesh.AllAreas))
         {
             navAgent.SetDestination(hit.position);
         }
@@ -104,19 +105,21 @@ public class LilyRepairBot : MonoBehaviour
     }
     private void DetectStructures()
     {
-        // Find all colliders within detection radius
-        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        // Pre-allocate an array to store results
+        Collider[] colliderResults = new Collider[20];
 
-        foreach (var collider in colliders)
+        // Use OverlapSphereNonAlloc to avoid allocating a new array each time and reduce garbage collection
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, colliderResults, structureHPLayer);
+
+        // Loop through only the colliders that were found
+        for (int i = 0; i < numColliders; i++)
         {
-            StructureHP structure = collider.GetComponent<StructureHP>();
-
+            StructureHP structure = colliderResults[i].GetComponent<StructureHP>();
             if (structure != null && structure.CurrentHP < structure.MaxHP)
             {
                 // Found damaged structure
                 currentTarget = structure;
                 currentState = BotState.MovingToTarget;
-
                 // Set navigation destination to structure
                 navAgent.SetDestination(structure.transform.position);
                 return;
@@ -221,6 +224,12 @@ public class LilyRepairBot : MonoBehaviour
     public void SetShopStructure(Transform shop)
     {
         shopStructure = shop;
+    }
+    public void UpdateVisual(int index)
+    {
+        lilyVisuals[index].SetActive(true);
+        if (index > 0)
+            lilyVisuals[index - 1].SetActive(false);
     }
     private void OnDrawGizmosSelected()
     {

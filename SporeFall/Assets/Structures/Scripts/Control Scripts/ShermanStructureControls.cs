@@ -4,47 +4,39 @@ using UnityEngine;
 public class ShermanStructureControls : MonoBehaviour
 {
     public Transform spawnPoint;     // Where to spawn the prefab
-    public ShermanControl currentSherman; // Holds reference to the current spawned object
+    public ShermanControl[] currentShermans; // Holds reference to the current spawned object
     public float respawnDelay = 2f;  // Delay time in seconds before respawning
+
+    public int maxActiveShermans = 1;
 
     //[SerializeField] private SkinnedMeshRenderer sHouse;
     //float blendShapeValue = 0;
     void Start()
     {
-        StartCoroutine(ResetAfterDelay());
-    }
-
-    void Update()
-    {
-      /*  // If there is no active prefab and we're not already spawning one
-        if (currentSherman == null && !isSpawning)
-        {
-            StartCoroutine(SpawnAfterDelay());
-        }*/
-        /*else if (!isSpawning && blendShapeValue > 0)
-        {
-            CloseHatch();
-        }
-        else if (isSpawning)
-        {
-            OpenHatch();
-        }*/
+        StartCoroutine(ResetShermanBots());
     }
     private void OnDisable()
     {
-        currentSherman.DeactivateSherman();
+        foreach (var sherman in currentShermans) 
+        {
+            sherman.DeactivateSherman();
+        }
     }
     private void OnEnable()
     {
-        StartCoroutine(ResetAfterDelay());
+        StartCoroutine(ResetShermanBots());
     }
     // Coroutine to handle the delay before spawning
-    public IEnumerator ResetAfterDelay()
+    public IEnumerator ResetShermanBots()
     {
-        if(currentSherman != null)
-            currentSherman.DeactivateSherman();
-        yield return new WaitForSeconds(respawnDelay); // Wait for the delay
-        ResetSherman();
+        for (int i = 0; i < maxActiveShermans; i++)
+        {
+            if (currentShermans[i] != null)
+                currentShermans[i].DeactivateSherman();
+            yield return new WaitForSeconds(respawnDelay); // Wait for the delay
+            currentShermans[i].transform.position = spawnPoint.position;
+            currentShermans[i].ActivateSherman();
+        }
     }
 
     /*private void OpenHatch()
@@ -62,14 +54,4 @@ public class ShermanStructureControls : MonoBehaviour
         // Apply the blend shape value
         sHouse.SetBlendShapeWeight(0, blendShapeValue);
     }*/
-
-    // Method to spawn the prefab at the spawn point
-    private void ResetSherman()
-    {
-        if (currentSherman != null && spawnPoint != null)
-        {
-            currentSherman.ActivateSherman();
-            currentSherman.transform.position = spawnPoint.position;
-        }
-    }
 }

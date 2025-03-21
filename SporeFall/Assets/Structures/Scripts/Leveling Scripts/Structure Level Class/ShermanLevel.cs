@@ -8,6 +8,7 @@ using UnityEngine;
 public class ShermanLevel : StructureLevel
 {
     [Header("Sherman Specific")]
+    public int maxActiveShermans = 1;
     public float moveSpeed = 2f;
     public float turnSpeed = 1f;    // How fast the object changes direction
     public float changeDirectionInterval = 2f;    // How often to change direction

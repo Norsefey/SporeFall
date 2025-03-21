@@ -173,7 +173,7 @@ public class PlayerUI : MonoBehaviour
         }
         leftStructureIcon.sprite = bGun.buildableStructures[rightIndex].GetComponent<Structure>().structureStats.icon;
 
-        selectedStructureIcon.sprite = bGun.buildableStructures[c].structureStats.icon;
+        selectedStructureIcon.sprite = bGun.buildableStructures[bGun.currentBuildIndex].GetComponent<Structure>().structureStats.icon;
         
 
        /* if (bGun.currentBuildIndex == 0)

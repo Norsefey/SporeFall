@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ShermanControl : MonoBehaviour
 {
+    private const string enemyTag = "Enemy";
     [HideInInspector]
     public float
         moveSpeed, 
@@ -29,7 +30,6 @@ public class ShermanControl : MonoBehaviour
     [SerializeField] private GameObject explosionVF;
     private AudioSource audioPlayer;
     private Vector3 currentDirection;
-    private string enemyTag = "Enemy";
     private bool active = true;
     void Start()
     {
@@ -39,7 +39,7 @@ public class ShermanControl : MonoBehaviour
         // Set initial direction to forward
         currentDirection = Vector3.forward;
         // Start the direction-changing process
-        InvokeRepeating("UpdateDirection", 1f, changeDirectionInterval);
+        InvokeRepeating(nameof(UpdateDirection), 1f, changeDirectionInterval);
 
         // Get the layer that enemies are on
         damageableLayers = LayerMask.GetMask("Enemy");
@@ -52,7 +52,7 @@ public class ShermanControl : MonoBehaviour
             // Check for walls before moving
             if (!IsBlockedByWall(currentDirection))
             {
-                transform.Translate(currentDirection * moveSpeed * Time.deltaTime, Space.World);
+                transform.Translate(moveSpeed * Time.deltaTime * currentDirection, Space.World);
             }
 
             // Smooth rotation towards movement direction
@@ -82,8 +82,7 @@ public class ShermanControl : MonoBehaviour
             float angle = i * 45f;
             Vector3 direction = Quaternion.Euler(0, angle, 0) * Vector3.forward;
 
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, direction, out hit, wallAvoidanceDistance, obstacleLayers))
+            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, wallAvoidanceDistance, obstacleLayers))
             {
                 // Add a force away from the wall, stronger when closer
                 float distance = hit.distance;
@@ -120,16 +119,23 @@ public class ShermanControl : MonoBehaviour
     private Vector3 GetEnemyInfluenceDirection()
     {
         Vector3 enemyInfluence = Vector3.zero;
-        Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, detectionRadius, damageableLayers);
+        /*        Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, detectionRadius, damageableLayers);
+        */
 
-        if (nearbyColliders.Length == 0)
+        // Pre-allocate an array to store results
+        Collider[] nearbyColliders = new Collider[20];
+
+        // Use OverlapSphereNonAlloc to avoid allocating a new array each time and reduce garbage collection
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, nearbyColliders, damageableLayers);
+        
+        if (numColliders == 0)
             return GetRandomDirection(); // If no enemies nearby, return random direction
-
-        // Calculate direction based on nearby enemies
-        foreach (Collider enemyCollider in nearbyColliders)
+        
+        // Loop through only the colliders that were found
+        for (int i = 0; i < numColliders; i++)
         {
-            Vector3 directionToEnemy = (enemyCollider.transform.position - transform.position).normalized;
-            float distanceToEnemy = Vector3.Distance(transform.position, enemyCollider.transform.position);
+            Vector3 directionToEnemy = (nearbyColliders[i].transform.position - transform.position).normalized;
+            float distanceToEnemy = Vector3.Distance(transform.position, nearbyColliders[i].transform.position);
 
             // Enemies closer by have more influence
             float influence = 1f - (distanceToEnemy / detectionRadius);
@@ -149,24 +155,29 @@ public class ShermanControl : MonoBehaviour
             PlaySFX();
             SpawnVFX(transform.position, Quaternion.identity);
 
-            // Find all colliders in explosion radius
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius, damageableLayers);
+       /*     // Find all colliders in explosion radius
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius, damageableLayers);*/
 
-            foreach (Collider hit in hitColliders)
+            // Pre-allocate an array to store results
+            Collider[] colliderResults = new Collider[20];
+
+            // Use OverlapSphereNonAlloc to avoid allocating a new array each time and reduce garbage collection
+            int numColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, colliderResults, damageableLayers);
+
+            // Loop through only the colliders that were found
+            for (int i = 0; i < numColliders; i++)
             {
                 // Calculate distance for damage falloff
-                float distance = Vector3.Distance(transform.position, hit.transform.position);
+                float distance = Vector3.Distance(transform.position, colliderResults[i].transform.position);
                 float damageMultiplier = damageFalloff.Evaluate(distance / explosionRadius);
 
                 // Apply damage if object has IDamageable interface
-                Damageable damageable = hit.GetComponent<Damageable>();
-                if (damageable != null)
+                if (colliderResults[i].TryGetComponent<Damageable>(out var damageable))
                 {
                     damageable.TakeDamage(damage * damageMultiplier);
                 }
             }
-            //Destroy(gameObject, explosionSF.length);
-            StartCoroutine(parentStructure.ResetAfterDelay());
+            StartCoroutine(parentStructure.ResetShermanBots());
         }
     }
     protected virtual void SpawnVFX(Vector3 position, Quaternion rotation)

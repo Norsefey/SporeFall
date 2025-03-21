@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShermanStatUpdater : MonoBehaviour, IStructureStats
 {
-    [SerializeField] private ShermanControl sherman;
+    [SerializeField] private ShermanStructureControls ShermanStation;
     public void Initialize(StructureLevels levels, int level)
     {
         if (levels is ShermanLevels shermanLevels)
@@ -24,15 +24,21 @@ public class ShermanStatUpdater : MonoBehaviour, IStructureStats
     private void UpdateShermanStats(ShermanLevels levels, int level)
     {
         var levelData = levels.levels[level];
-        sherman.UpdateVisual(level);
-        sherman.moveSpeed = levelData.moveSpeed;
-        sherman.turnSpeed = levelData.turnSpeed;
-        sherman.changeDirectionInterval = levelData.changeDirectionInterval;
-        sherman.damage = levelData.damage;
-        sherman.detectionRadius = levelData.detectionRadius;
-        sherman.randomMovementWeight = levelData.enemyInfluenceWeight;
-        sherman.randomMovementWeight = levelData.randomMovementWeight;
-        sherman.explosionRadius = levelData.explosionRadius;
-        sherman.damageFalloff = levelData.damageFalloff;
+
+        ShermanStation.maxActiveShermans = levelData.maxActiveShermans;
+        foreach(var sherman in ShermanStation.currentShermans)
+        {
+            sherman.UpdateVisual(level);
+            sherman.moveSpeed = levelData.moveSpeed;
+            sherman.turnSpeed = levelData.turnSpeed;
+            sherman.changeDirectionInterval = levelData.changeDirectionInterval;
+            sherman.damage = levelData.damage;
+            sherman.detectionRadius = levelData.detectionRadius;
+            sherman.randomMovementWeight = levelData.enemyInfluenceWeight;
+            sherman.randomMovementWeight = levelData.randomMovementWeight;
+            sherman.explosionRadius = levelData.explosionRadius;
+            sherman.damageFalloff = levelData.damageFalloff;
+        }
+        StartCoroutine(ShermanStation.ResetShermanBots());
     }
 }
