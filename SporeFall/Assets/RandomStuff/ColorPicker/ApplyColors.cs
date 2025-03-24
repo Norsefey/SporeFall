@@ -14,6 +14,13 @@ public class ApplyColors : MonoBehaviour
 {
     [SerializeField] private RendererMaterialSetup[] renderers;
 
+    [SerializeField] private bool setOnAwake;
+    private void Awake()
+    {
+        if (setOnAwake)
+            SetColors(1);
+    }
+
     public void SetColors(int index)
     {
         if (PlayerColorManager.Instance != null)

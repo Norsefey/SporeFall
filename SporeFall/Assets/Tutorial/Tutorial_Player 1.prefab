@@ -5283,6 +5283,7 @@ MonoBehaviour:
   pCorruption: {fileID: 1051023995295471204}
   interactable: {fileID: 0}
   changePlayerMaterials: {fileID: 0}
+  coloring: {fileID: 7293488271440790830}
   defaultWeapon: {fileID: 6316963350049643411}
   defaultSword: {fileID: 0}
   weaponHolder: {fileID: 4628489011372826661}
@@ -5297,6 +5298,8 @@ MonoBehaviour:
   respawnTime: 1
   fallbackSpawnPoint: {fileID: 0}
   holdingCorruption: 0
+  mainColors: {fileID: 0}
+  colorPropertyName: _BaseColor
 --- !u!114 &1632749462520726094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5656,6 +5659,7 @@ GameObject:
   - component: {fileID: 6934769111992247638}
   - component: {fileID: 1523489280514987400}
   - component: {fileID: 4718902054212270470}
+  - component: {fileID: 7293488271440790830}
   m_Layer: 0
   m_Name: RobotReAnimated
   m_TagString: Untagged
@@ -5790,6 +5794,47 @@ MonoBehaviour:
   - m_Rig: {fileID: 3349133834125234747}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &7293488271440790830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7457113120058671760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e00c5eb244584429cc5ad5e812084e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - name: Arm L
+    renderer: {fileID: 3897933982053793600}
+    primaryMaterialIndex: 0
+    secondaryMaterialIndex: 1
+  - name: Arm R
+    renderer: {fileID: 7274665632288203224}
+    primaryMaterialIndex: 0
+    secondaryMaterialIndex: 1
+  - name: Hand L
+    renderer: {fileID: 3076726730713549536}
+    primaryMaterialIndex: 1
+    secondaryMaterialIndex: 0
+  - name: Hand R
+    renderer: {fileID: 5558445448410727839}
+    primaryMaterialIndex: 1
+    secondaryMaterialIndex: 0
+  - name: Legs
+    renderer: {fileID: 3916548894086673015}
+    primaryMaterialIndex: 1
+    secondaryMaterialIndex: 0
+  - name: Neck
+    renderer: {fileID: 2891502725843156751}
+    primaryMaterialIndex: 0
+    secondaryMaterialIndex: 1
+  - name: Body
+    renderer: {fileID: 3169539879575160199}
+    primaryMaterialIndex: 1
+    secondaryMaterialIndex: 0
 --- !u!1 &7524097501062795589
 GameObject:
   m_ObjectHideFlags: 0
