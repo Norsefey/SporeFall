@@ -9,6 +9,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject introText;
     [SerializeField] private GameObject tutorialText;
     [SerializeField] private MovementRoomTutorial moveTut;
+    [SerializeField] private GameObject worldCamera;
     public bool usingGamepad = false;
     public PlayerManager player;
 
@@ -33,7 +34,7 @@ public class TutorialManager : MonoBehaviour
         }
         introText.SetActive(false);
         tutorialText.SetActive(true);
-
+        worldCamera.SetActive(false);
         moveTut.StartTutorial(player);
     }
 

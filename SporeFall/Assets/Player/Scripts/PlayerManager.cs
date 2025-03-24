@@ -18,6 +18,7 @@ public class PlayerManager : MonoBehaviour
     public CorruptionHandler pCorruption;
     public Interactables interactable;
     public ChangePlayerMaterials changePlayerMaterials;
+   public ApplyColors coloring;
     [Header("Default Weapons")]
     public Weapon defaultWeapon;
     public Weapon defaultSword;
@@ -45,6 +46,10 @@ public class PlayerManager : MonoBehaviour
     public bool holdingCorruption = false;
     public InputDevice myDevice;
     private bool meleeActive = false;
+
+    [SerializeField] private Renderer mainColors;
+    [SerializeField] private string colorPropertyName = "_BaseColor"; // Change this if your shader uses a different property
+
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -65,14 +70,12 @@ public class PlayerManager : MonoBehaviour
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
         pInput.AssignAllActions();
     }
     private void Update()
     {
         if(canUseWeapon)
             WeaponBehavior();
-
 
         // For Testing
         {

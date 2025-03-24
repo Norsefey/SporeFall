@@ -33,8 +33,6 @@ public class PlayerAnimation : MonoBehaviour
             pMan.pUI.AmmoDisplay(pMan.currentWeapon);
         }
     }
-
-
     // Update is called once per frame
     void Update()
     {

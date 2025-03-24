@@ -3,7 +3,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
+public enum ColorPickerMode
+{
+    Player1Primary,
+    Player1Secondary,
+    Player2Primary,
+    Player2Secondary
+}
 public class ColorPickerControl : MonoBehaviour
 {
     [SerializeField] private ColorPickerUI ColorPickerUI;
@@ -20,6 +26,9 @@ public class ColorPickerControl : MonoBehaviour
 
     [SerializeField]
     Material materialToChange;
+    
+    [Header("Color Picker Configuration")]
+    [SerializeField] private ColorPickerMode currentMode = ColorPickerMode.Player1Primary;
 
     [Header("Gamepad Settings")]
     [SerializeField] private float gamepadSensitivity = 0.5f;
@@ -36,7 +45,7 @@ public class ColorPickerControl : MonoBehaviour
         CreateSVImage();
 
         CreateOutputImage();
-
+        
         SetInitialColor();
     }
     private void Update()
@@ -44,7 +53,6 @@ public class ColorPickerControl : MonoBehaviour
         if(selected)
             HandleGamepadInput();
     }
-
     private void HandleGamepadInput()
     {
         // Check for gamepad input
@@ -189,10 +197,18 @@ public class ColorPickerControl : MonoBehaviour
     }
     private void SetInitialColor()
     {
-        Color currentColor = materialToChange.GetColor("_BaseColor");
-        Debug.Log(currentColor.ToString());
-        
-        Color.RGBToHSV(currentColor, out currentHue, out currentSat, out currentVal);
+
+        if (PlayerColorManager.Instance != null)
+        {
+            Color currentColor = PlayerColorManager.Instance.GetColor(currentMode);
+            materialToChange.SetColor("_BaseColor", currentColor);
+            Color.RGBToHSV(currentColor, out currentHue, out currentSat, out currentVal);
+            Debug.Log(currentColor.ToString());
+        }
+
+        /*    Color currentColor = materialToChange.GetColor("_BaseColor");
+              Debug.Log(currentColor.ToString());
+              Color.RGBToHSV(currentColor, out currentHue, out currentSat, out currentVal);*/
 
         for (int y = 0; y < svTexture.height; y++)
         {
@@ -220,6 +236,12 @@ public class ColorPickerControl : MonoBehaviour
         outputTexture.Apply();
 
         materialToChange.SetColor("_BaseColor", currentColor);
+
+        // Store the selected color in ColorManager
+        if (PlayerColorManager.Instance != null)
+        {
+            PlayerColorManager.Instance.SetColor(currentMode, currentColor);
+        }
     }
     public void SetSV(float s, float v)
     {

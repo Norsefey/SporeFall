@@ -62,9 +62,12 @@ public class GameManager : MonoBehaviour
         if(players.Count == 1)
         {
             player.pCamera.myCamera.cullingMask |= playerOneUI.value;
-        }else if(players.Count == 2)
+            player.coloring.SetColors(0);
+        }
+        else if(players.Count == 2)
         {
             player.pCamera.myCamera.cullingMask |= playerTwoUI.value;
+            player.coloring.SetColors(2);
         }
 
         Debug.Log("Player Added");

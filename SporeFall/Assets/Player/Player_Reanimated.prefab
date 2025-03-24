@@ -3280,6 +3280,7 @@ MonoBehaviour:
   pCorruption: {fileID: 9014188931901740013}
   interactable: {fileID: 0}
   changePlayerMaterials: {fileID: 2747749875540551374}
+  coloring: {fileID: 6184624852068251}
   defaultWeapon: {fileID: 42895871167763471}
   defaultSword: {fileID: 2505576936833502252}
   weaponHolder: {fileID: 6914484274402736655}
@@ -3294,6 +3295,8 @@ MonoBehaviour:
   respawnTime: 1
   fallbackSpawnPoint: {fileID: 0}
   holdingCorruption: 0
+  mainColors: {fileID: 6483538678624093703}
+  colorPropertyName: _BaseColor
 --- !u!114 &4254327476817490809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4746,6 +4749,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1505568875655751568, guid: 0669a0ef97cc5ef448e602c78d0d3d33,
+        type: 3}
+      propertyPath: m_Name
+      value: Robot Arm.R
+      objectReference: {fileID: 0}
     - target: {fileID: 2221906180048662026, guid: 0669a0ef97cc5ef448e602c78d0d3d33,
         type: 3}
       propertyPath: m_UpdateWhenOffscreen
@@ -4846,6 +4854,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[2]
       value: 
       objectReference: {fileID: 2100000, guid: f96fdd3a72db72b4f840f820036cc309, type: 2}
+    - target: {fileID: 5773259894266827878, guid: 0669a0ef97cc5ef448e602c78d0d3d33,
+        type: 3}
+      propertyPath: m_Name
+      value: Robot Legs
+      objectReference: {fileID: 0}
     - target: {fileID: 6359124775938099641, guid: 0669a0ef97cc5ef448e602c78d0d3d33,
         type: 3}
       propertyPath: m_Enabled
@@ -4934,6 +4947,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7698097778655156495}
+    - targetCorrespondingSourceObject: {fileID: 550463572334581890, guid: 0669a0ef97cc5ef448e602c78d0d3d33,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6184624852068251}
   m_SourcePrefab: {fileID: 100100000, guid: 0669a0ef97cc5ef448e602c78d0d3d33, type: 3}
 --- !u!4 &16986302799518267 stripped
 Transform:
@@ -4975,6 +4992,47 @@ MonoBehaviour:
   - m_Rig: {fileID: 8313897859080504775}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &6184624852068251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2994883382098656935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e00c5eb244584429cc5ad5e812084e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - name: Arm L
+    renderer: {fileID: 6483538678624093703}
+    primaryMaterialIndex: 0
+    secondaryMaterialIndex: 1
+  - name: Arm R
+    renderer: {fileID: 1299653965009514224}
+    primaryMaterialIndex: 0
+    secondaryMaterialIndex: 1
+  - name: Hand L
+    renderer: {fileID: 3529026349106055215}
+    primaryMaterialIndex: 1
+    secondaryMaterialIndex: 0
+  - name: Hand R
+    renderer: {fileID: 6891560363544825391}
+    primaryMaterialIndex: 1
+    secondaryMaterialIndex: 0
+  - name: Legs
+    renderer: {fileID: 7434124273623331044}
+    primaryMaterialIndex: 1
+    secondaryMaterialIndex: 0
+  - name: Neck
+    renderer: {fileID: 7432955971932063755}
+    primaryMaterialIndex: 0
+    secondaryMaterialIndex: 1
+  - name: Body
+    renderer: {fileID: 5246523511086224050}
+    primaryMaterialIndex: 1
+    secondaryMaterialIndex: 0
 --- !u!137 &3529026349106055215 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2221906180048662026, guid: 0669a0ef97cc5ef448e602c78d0d3d33,
