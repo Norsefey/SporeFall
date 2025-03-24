@@ -39,6 +39,7 @@ public class ShermanStatUpdater : MonoBehaviour, IStructureStats
             sherman.explosionRadius = levelData.explosionRadius;
             sherman.damageFalloff = levelData.damageFalloff;
         }
-        StartCoroutine(ShermanStation.ResetShermanBots());
+        if (gameObject.activeSelf)
+            StartCoroutine(ShermanStation.ResetShermanBots());
     }
 }

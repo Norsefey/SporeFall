@@ -15,7 +15,7 @@ public class LilyRepairBot : MonoBehaviour
     [SerializeField] private float detectionRadius = 5f;
     [SerializeField] private float minDistanceToTarget = 1.5f;
 
-    private Transform shopStructure;
+    [SerializeField] private Transform shopStructure;
 
     [SerializeField] private LayerMask structureHPLayer;
     private StructureHP currentTarget;
@@ -191,15 +191,13 @@ public class LilyRepairBot : MonoBehaviour
 
         transform.position = startPos.position;
         navAgent.Warp(startPos.position); // Ensure NavMeshAgent position is updated
-
         isActive = true;
-        transform.GetChild(0).gameObject.SetActive(true);
-
-        // Resume agent if it was stopped
-        navAgent.isStopped = false;
-
         currentState = BotState.Roaming;
-        SetNewRandomTarget();
+
+        transform.GetChild(0).gameObject.SetActive(true);
+/*        // Resume agent if it was stopped
+        navAgent.isStopped = false;
+        SetNewRandomTarget();*/
     }
     public void DeactivateBot()
     {

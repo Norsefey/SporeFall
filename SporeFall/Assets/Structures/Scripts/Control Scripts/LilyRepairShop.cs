@@ -19,7 +19,7 @@ public class LilyRepairShop : MonoBehaviour
     }
     private void OnEnable()
     {
-        StartCoroutine(ActivateLilyBots());
+        //StartCoroutine(ActivateLilyBots());
     }
     private void OnDisable()
     {
@@ -42,6 +42,8 @@ public class LilyRepairShop : MonoBehaviour
 
         for (int i = 0; i < botsToActivate; i++)
         {
+            Debug.Log("Activating Lily Bot: " + i);
+            lilyBots[i].gameObject.SetActive(true);
             lilyBots[i].ActivateBot(spawnPoint);
             yield return new WaitForSeconds(2);
         }

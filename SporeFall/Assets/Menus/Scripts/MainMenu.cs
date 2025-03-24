@@ -38,6 +38,7 @@ public class MainMenu : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 1;
 
         titleScreen.SetActive(true);
         mainScreen.SetActive(false);
