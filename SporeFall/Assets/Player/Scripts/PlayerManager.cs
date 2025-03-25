@@ -18,7 +18,21 @@ public class PlayerManager : MonoBehaviour
     public CorruptionHandler pCorruption;
     public Interactables interactable;
     public ChangePlayerMaterials changePlayerMaterials;
-   public ApplyColors coloring;
+    public ApplyColors coloring;
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip health75Sound;
+    public AudioClip health50Sound;
+    public AudioClip health25Sound;
+    public AudioClip deathSound;
+
+    [Header("Corruption Audio")]
+    public AudioClip corruption25Sound;
+    public AudioClip corruption50Sound;
+    public AudioClip corruption75Sound;
+    public AudioClip corruption100Sound;
+
     [Header("Default Weapons")]
     public Weapon defaultWeapon;
     public Weapon defaultSword;
@@ -42,6 +56,7 @@ public class PlayerManager : MonoBehaviour
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
     [SerializeField] private Transform fallbackSpawnPoint;
+
 
     public bool holdingCorruption = false;
     public InputDevice myDevice;

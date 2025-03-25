@@ -363,6 +363,7 @@ MonoBehaviour:
   defaultOffset: {x: 0.75, y: 1, z: -5}
   aimOffset: {x: 0.75, y: 1, z: -1}
   buildOffset: {x: 0.75, y: 4, z: -3}
+  offsetTransitionSpeed: 5
   sprintShakeIntensity: 0.5
   walkShakeIntensity: 0.25
   shakeSpeed: 8
@@ -373,7 +374,6 @@ MonoBehaviour:
   obstructions:
     serializedVersion: 2
     m_Bits: 4548
-  aimTarget: {fileID: 5920701559751099239}
   targetMask:
     serializedVersion: 2
     m_Bits: 448
@@ -382,6 +382,7 @@ MonoBehaviour:
   returnSmoothSpeed: 5
   maxCheckDistance: 10
   shoulderOffset: 0.5
+  rigLookAtTarget: {fileID: 0}
 --- !u!1 &975909510267145954
 GameObject:
   m_ObjectHideFlags: 0
@@ -1896,6 +1897,7 @@ MonoBehaviour:
   pCorruption: {fileID: 6864331604824539103}
   interactable: {fileID: 0}
   changePlayerMaterials: {fileID: 0}
+  coloring: {fileID: 0}
   defaultWeapon: {fileID: 5858223751772533858}
   defaultSword: {fileID: 0}
   weaponHolder: {fileID: 6892831285903471383}
@@ -1906,9 +1908,12 @@ MonoBehaviour:
   isCharging: 0
   isBuilding: 0
   isRotating: 0
+  canBuild: 1
   respawnTime: 1
   fallbackSpawnPoint: {fileID: 0}
   holdingCorruption: 0
+  mainColors: {fileID: 0}
+  colorPropertyName: _BaseColor
 --- !u!114 &4119618120729430109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1935,6 +1940,87 @@ MonoBehaviour:
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: ba80e752-cc8a-4230-acee-587645e970c6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 0be3f6e0-8553-40e9-8fd7-3eb8367bd1af
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  aimAction:
+    m_Name: Aim
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 87becef7-ff87-4465-9d7d-6d381bfb4741
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  sprintAction:
+    m_Name: Sprint
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e74df99f-5944-4fcc-9bae-c47850282bb3
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  interactAction:
+    m_Name: Interact
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: b68579e0-7916-4a4a-b2b0-01c5b7efd1eb
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  buildModeAction:
+    m_Name: Build Mode
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: da61441f-e6bd-493a-87af-f274c007c254
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  dropAction:
+    m_Name: Drop
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 16bfefdc-c85d-4f99-97e3-14520d0277d1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  editModeAction:
+    m_Name: Edit Mode
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a1b8f465-1226-418b-96e8-5b9ff4652e1c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  changeStructAction:
+    m_Name: Change Struct
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 61f1d9da-128e-42df-9264-1c274ace0de1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  destroyStructAction:
+    m_Name: Destroy Struct
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 1deeb3c6-5727-47d4-9d9a-d5fefbb257fe
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -2265,7 +2351,6 @@ MonoBehaviour:
   corruptionBar: {fileID: 8766654047427145266}
   corruptedVisionHolder: {fileID: 6561783858093722924}
   corruptedVisionImage: {fileID: 2289475726698845273}
-  purifyButton: {fileID: 0}
   corruptionSprites:
   - {fileID: 21300000, guid: 6d1958a6436dc2e43b69eb17d317cf5a, type: 3}
   - {fileID: 21300000, guid: a3d2080a5f339194fb685b1061bfd045, type: 3}
@@ -2483,6 +2568,7 @@ MonoBehaviour:
   structRotSpeed: 25
   minimumRefundPercent: 0.5
   isEditing: 0
+  movingStructure: 0
   structureOverlapMask:
     serializedVersion: 2
     m_Bits: 4224
@@ -3572,7 +3658,7 @@ MonoBehaviour:
   weaponSlot: {fileID: 6892831285903471383}
   rightHandBone: {fileID: 0}
   aimTarget: {fileID: 2852550648749365356}
-  headLook: {fileID: 0}
+  bodyLook: {fileID: 0}
 --- !u!1 &6457925494864928825
 GameObject:
   m_ObjectHideFlags: 0

@@ -59,9 +59,23 @@ public class CorruptionHandler : MonoBehaviour
     }
     public void IncreaseCorruption(float value)
     {
+        float previousCorruption = corruptionLevel;
         // Reset timer when corrupted
         timer = corruptionRecoveryDelay;
         corruptionLevel += value;
+
+        if (pMan != null && pMan.audioSource != null)
+        {
+            if (previousCorruption < 25 && corruptionLevel >= 25)
+                pMan.audioSource.PlayOneShot(pMan.corruption25Sound,1.5f);
+            else if (previousCorruption < 50 && corruptionLevel >= 50)
+                pMan.audioSource.PlayOneShot(pMan.corruption50Sound, 1.5f);
+            else if (previousCorruption < 75 && corruptionLevel >= 75)
+                pMan.audioSource.PlayOneShot(pMan.corruption75Sound, 1.5f);
+            else if (previousCorruption < 100 && corruptionLevel >= 100)
+                pMan.audioSource.PlayOneShot(pMan.corruption100Sound, 1.5f);
+        }
+
         pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
     }
     private void UpdateCorruptionVision()
@@ -108,6 +122,9 @@ public class CorruptionHandler : MonoBehaviour
     }
     private void CorruptPlayer()
     {
+        if (pMan.audioSource != null)
+            pMan.audioSource.PlayOneShot(pMan.corruption100Sound, 1.5f);
+
         corruptionLevel = 0;
         pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
         // Reset Corruption Vision

@@ -18,7 +18,18 @@ public class PlayerHP : Damageable
     }
     public override void TakeDamage(float damage)
     {
+        float previousHP = currentHP;
         base.TakeDamage(damage);
+
+        if (pMan != null && pMan.audioSource != null)
+        {
+            if (previousHP > 75 && currentHP <= 75)
+                pMan.audioSource.PlayOneShot(pMan.health75Sound, 1.5f);
+            else if (previousHP > 50 && currentHP <= 50)
+                pMan.audioSource.PlayOneShot(pMan.health50Sound, 1.5f);
+            else if (previousHP > 25 && currentHP <= 25)
+                pMan.audioSource.PlayOneShot(pMan.health25Sound, 1.5f);
+        }
     }
 
     public void DepleteLife()
@@ -63,6 +74,9 @@ public class PlayerHP : Damageable
     }
     protected override void Die()
     {
+        if (pMan.audioSource != null)
+            pMan.audioSource.PlayOneShot(pMan.deathSound, 1.5f);
+
         pMan.pAnime.ActivateATrigger("Dead");
         StartCoroutine(DeathEffectRoutine());
     }

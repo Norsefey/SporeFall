@@ -9,7 +9,6 @@ public class TrainHP : Damageable
     {
         currentHP = maxHP;
     }
-
     protected override void Die()
     {
         // put other death behavior here

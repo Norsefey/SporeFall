@@ -700,13 +700,13 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.458
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 106
+  Priority: 59
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -3281,6 +3281,15 @@ MonoBehaviour:
   interactable: {fileID: 0}
   changePlayerMaterials: {fileID: 2747749875540551374}
   coloring: {fileID: 6184624852068251}
+  audioSource: {fileID: 5309746850474507401}
+  health75Sound: {fileID: 8300000, guid: fdefdc67f00a4344da04f96696e6d901, type: 3}
+  health50Sound: {fileID: 8300000, guid: 161820c3a17c7bf469b0498fd2f63c66, type: 3}
+  health25Sound: {fileID: 8300000, guid: 6b2df251d3e32cd4faba17afee6df69a, type: 3}
+  deathSound: {fileID: 8300000, guid: d69fd30fa2c856d4f94e93154be2869f, type: 3}
+  corruption25Sound: {fileID: 8300000, guid: cf598ae708d4be74c847857f9a1acf6e, type: 3}
+  corruption50Sound: {fileID: 8300000, guid: f004aaca07727e94e9d98d21866e15e9, type: 3}
+  corruption75Sound: {fileID: 8300000, guid: c1fbb6dcfa4cb6145bc241baa301af8a, type: 3}
+  corruption100Sound: {fileID: 8300000, guid: 3a78f6f2a93ac514db59c36db1e4b1e9, type: 3}
   defaultWeapon: {fileID: 42895871167763471}
   defaultSword: {fileID: 2505576936833502252}
   weaponHolder: {fileID: 6914484274402736655}
@@ -3445,7 +3454,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b637a7e3e9c194048bf4aa63edc756bf, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.158
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5033,6 +5042,7 @@ MonoBehaviour:
     renderer: {fileID: 5246523511086224050}
     primaryMaterialIndex: 1
     secondaryMaterialIndex: 0
+  setOnAwake: 0
 --- !u!137 &3529026349106055215 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 2221906180048662026, guid: 0669a0ef97cc5ef448e602c78d0d3d33,

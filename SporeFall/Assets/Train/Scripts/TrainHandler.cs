@@ -32,7 +32,6 @@ public class TrainHandler : MonoBehaviour
     [SerializeField] private AudioClip movingAudio;
     [SerializeField] private AudioClip fireCannonAudio;
     private AudioSource audioPlayer;
-
     public enum TrainState
     {
         Parked,
@@ -48,7 +47,6 @@ public class TrainHandler : MonoBehaviour
 
     [SerializeField] private LayerMask obstructionLayer;
     [SerializeField] private Vector3 structureCheckSize = Vector3.one; // Size of the overlap check box
-
     private void Awake()
     {
         audioPlayer = GetComponent<AudioSource>();
