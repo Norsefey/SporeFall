@@ -61,10 +61,6 @@ public class PlayerManager : MonoBehaviour
     public bool holdingCorruption = false;
     public InputDevice myDevice;
     private bool meleeActive = false;
-
-    [SerializeField] private Renderer mainColors;
-    [SerializeField] private string colorPropertyName = "_BaseColor"; // Change this if your shader uses a different property
-
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
