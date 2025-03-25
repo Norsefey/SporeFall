@@ -35,7 +35,9 @@ public class ShermanStructureControls : MonoBehaviour
                 currentShermans[i].DeactivateSherman();
             yield return new WaitForSeconds(respawnDelay); // Wait for the delay
             currentShermans[i].transform.position = spawnPoint.position;
+            currentShermans[i].gameObject.SetActive(true);
             currentShermans[i].ActivateSherman();
+            Debug.Log("Activating Sherman Bot: " + i);
         }
     }
 

@@ -34,7 +34,8 @@ public class LilyStatUpdater : MonoBehaviour, IStructureStats
             lily.repairRate = levelData.repairRate;
         }
 
-        StartCoroutine(lilyShop.ActivateLilyBots());
+        if(gameObject.activeSelf)
+            StartCoroutine(lilyShop.ActivateLilyBots());
 
     }
 }

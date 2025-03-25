@@ -18,10 +18,6 @@ public class TutorialManager : MonoBehaviour
     {
         GameManager.OnPlayerJoin += GetPlayerDevice;
     }
-    private void OnDisable()
-    {
-        GameManager.OnPlayerJoin -= GetPlayerDevice;
-    }
     private void GetPlayerDevice(int playerIndex)
     {
         player = GameManager.Instance.players[playerIndex];
@@ -39,6 +35,8 @@ public class TutorialManager : MonoBehaviour
         tutorialText.SetActive(true);
         worldCamera.SetActive(false);
         moveTut.StartTutorial(player);
+
+        GameManager.OnPlayerJoin -= GetPlayerDevice;
     }
 
 }
