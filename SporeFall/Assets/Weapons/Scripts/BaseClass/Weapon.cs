@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 
 
 public abstract class Weapon : MonoBehaviour
@@ -16,7 +17,7 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField, Range(0f, 1f)] protected float fireSoundVolume = 0.5f;
     [SerializeField] protected AudioClip fireSound;
     [SerializeField] protected AudioClip reloadSound;
-    
+
     [Header("Corruption")]
     public bool isCorrupted;
     public float corruptionRate = 1.2f;
