@@ -43,6 +43,8 @@ public class PlayerUI : MonoBehaviour
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
         HPBar.maxValue = pMan.pHealth.MaxHP;
         corruptedVisionHolder.SetActive(false);
+
+        pMan.pHealth.OnHPChange += UpdateHPDisplay;
     }
     public void UpdateCorruptionDisplay(float value)
     {
@@ -132,10 +134,10 @@ public class PlayerUI : MonoBehaviour
     {
         weaponIcon.sprite = pMan.currentWeapon.weaponSprite;
     }
-    public void UpdateHPDisplay(float value)
+    public void UpdateHPDisplay(Damageable hpScript, float value)
     {
         if (HPBar != null)
-            HPBar.value = value;
+            HPBar.value = pMan.pHealth.CurrentHP;
     }
     public void EnablePrompt(string text)
     {
@@ -242,5 +244,12 @@ public class PlayerUI : MonoBehaviour
                 lifeIcons[1].SetActive(true);
                 break;
         }
+    }
+
+    private void OnDestroy()
+    {
+        if(pMan != null)
+        pMan.pHealth.OnHPChange -= UpdateHPDisplay;
+
     }
 }

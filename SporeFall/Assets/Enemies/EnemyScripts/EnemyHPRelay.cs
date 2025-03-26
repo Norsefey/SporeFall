@@ -11,11 +11,6 @@ public class EnemyHPRelay : Damageable
     {
         mainHP.TakeDamage(damage * damageMultiplier);
     }
-    public void KnockBack(Vector3 attackerPosition, float knockbackMultiplier)
-    {
-        if(mainHP.isActiveAndEnabled)
-            StartCoroutine(mainHP.KnockBack(attackerPosition, knockbackMultiplier));
-    }
     protected override void Die()
     {
        

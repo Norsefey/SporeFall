@@ -1,14 +1,12 @@
-using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class EnemyHP : Damageable
 {
     // Health properties
     [SerializeField] private BaseEnemy manager;
-    public bool knockBackable = true;
-    private bool beingKnockedBack = false;
+    public bool flinchable = true;
+    private bool flinching = false;
 
     private void Start()
     {
@@ -23,6 +21,14 @@ public class EnemyHP : Damageable
         {
             manager.CheckDamageThreshold(maxHP - currentHP);
             manager.recentDamage.Enqueue(new BaseEnemy.DamageInstance(damage, Time.time));
+
+            // Calculate flinch probability (higher HP = higher chance to flinch)
+            float flinchChance = currentHP / maxHP; // 1 at full HP, 0 at 0 HP
+
+            if (!flinching && Random.value < flinchChance)
+            {
+                StartCoroutine(Flinch());
+            }
         }
     }
     protected override void Die()
@@ -36,32 +42,25 @@ public class EnemyHP : Damageable
         else
             Destroy(transform.parent.gameObject);
     }
-    public IEnumerator KnockBack(Vector3 attackerPosition, float knockbackMultiplier)
+    public IEnumerator Flinch()
     {
-        if(!knockBackable || beingKnockedBack)
+        manager.Animator.SetTrigger("Flinch");
+
+        if (!flinchable || flinching)
             yield break;
 
-        beingKnockedBack = true;
-        // Calculate knockback direction away from the attacker
-        Vector3 knockbackDirection = (transform.position - attackerPosition).normalized;
+        Debug.Log("Flinching");
+        flinching = true;
 
         // Disable NavMeshAgent during knockback
         manager.agent.isStopped = true;
 
-        // Apply knockback force
-        float elapsedTime = 0f;
-        while (elapsedTime < .5f)
-        {
-            
-            // Move the agent manually
-            manager.agent.transform.position += knockbackDirection * 1 * knockbackMultiplier * Time.deltaTime;
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+        yield return new WaitForSeconds(1);
 
-        beingKnockedBack = false;
         // Re-enable NavMeshAgent
         manager.agent.isStopped = false;
         manager.agent.ResetPath();
+        manager.Animator.ResetTrigger("Flinch");
+        flinching = false;
     }
 }
