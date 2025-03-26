@@ -116,7 +116,7 @@ public class MovementRoomTutorial : MonoBehaviour
         detectInput = false;
         if (manager.usingGamepad)
         {
-            tutorialText.text = "Press Down on LEFT STICK to Look around";
+            tutorialText.text = "Hold Down on LEFT STICK to Sprint";
         }
         else
         {
@@ -141,11 +141,11 @@ public class MovementRoomTutorial : MonoBehaviour
         detectInput = false;
         if (manager.usingGamepad)
         {
-            tutorialText.text = "Press SOUTH BUTTON to Look around";
+            tutorialText.text = "Press <b>SOUTH Button</b> to Look around";
         }
         else
         {
-            tutorialText.text = "Press SPACEBAR to Jump";
+            tutorialText.text = "Press <b>SPACEBAR</b> to Jump";
         }
         Invoke(nameof(ToggleStartDetectingInput), nextPromptDelay);
     }

@@ -205,7 +205,7 @@ public class ColorPickerControl : MonoBehaviour
             Color.RGBToHSV(currentColor, out currentHue, out currentSat, out currentVal);
             Debug.Log(currentColor.ToString());
         }
-
+        // had to change to an instance based color setter and getter in order for colors to save between scenes
         /*    Color currentColor = materialToChange.GetColor("_BaseColor");
               Debug.Log(currentColor.ToString());
               Color.RGBToHSV(currentColor, out currentHue, out currentSat, out currentVal);*/

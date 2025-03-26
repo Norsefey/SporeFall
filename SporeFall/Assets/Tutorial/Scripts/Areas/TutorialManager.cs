@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -35,7 +34,8 @@ public class TutorialManager : MonoBehaviour
         tutorialText.SetActive(true);
         worldCamera.SetActive(false);
         moveTut.StartTutorial(player);
-
+        // remove listener, since it stays even when changing scenes,
+        // which leads to errors as this scripts doesn't exist in other scenes
         GameManager.OnPlayerJoin -= GetPlayerDevice;
     }
 

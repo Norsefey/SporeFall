@@ -65,7 +65,7 @@ public class WaveUI : MonoBehaviour
 
     public void DisplayWaveProgress(int value)
     {
-        /// I would recommend using if else here, same with the Displayflags
+        ///y- I would recommend using if else here, same with the Displayflags
         /// if you just use ifs, it checks through all of them, whereas with if else, it stops at the first true statement
         /// and in here you can stop at the first true
         ///If you want to go a little more advance with it I would recommend using a switch statement, something like this:
@@ -147,7 +147,7 @@ public class WaveUI : MonoBehaviour
     public void DisplayWaveStart()
     {
         waveTextHolder.SetActive(true);
-        /// I took a peek and realized i never made Current wave public, so I made it public
+        ///y- I took a peek and realized i never made Current wave public, so I made it public
         /// Each wave has a give name that can be called by .waveName, you can see it in the wave manager
         /// They also have a public .IsFinalWave bool
         /// I commented it out, but this could make things easier for you, as you would not need to check the wave index or if it is final wave

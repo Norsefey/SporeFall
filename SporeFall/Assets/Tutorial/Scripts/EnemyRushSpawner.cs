@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyRushSpawner : MonoBehaviour
-{
+{// No longer in use
     [SerializeField] private float initialSpawnDelay = 1f;
     [SerializeField] private Wave spawnSettings = new();
 

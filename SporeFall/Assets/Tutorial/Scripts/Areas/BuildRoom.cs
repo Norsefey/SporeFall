@@ -66,11 +66,11 @@ public class BuildRoom : MonoBehaviour
     {
         if (manager.usingGamepad)
         {
-            tutorialText.text = "Press North Button to toggle Build Mode";
+            tutorialText.text = "Press <b>NORTH Button</b> to toggle Build Mode";
         }
         else
         {
-            tutorialText.text = "Press B to toggle Build Mode";
+            tutorialText.text = "Press <b>B</b> to toggle Build Mode";
         }
         tutorialStarted = true;
     }
@@ -86,12 +86,13 @@ public class BuildRoom : MonoBehaviour
     {
         if (manager.usingGamepad)
         {
-
+            tutorialText.text = "Use the <b>R/L Shoulder</b> Buttons to view each structure." +
+                "\n Hold <b>Left Trigger</b> to preview placement at a greater distance.";
         }
         else
         {
             tutorialText.text = "Use the Mouse-Wheel to view each structure. " +
-                "\n Hold Right click to preview placement at a greater distance.";
+                "\n Hold <b>Right click</b> to preview placement at a greater distance.";
         }
     }
     private void WaitForStructureSwitch()
@@ -110,11 +111,11 @@ public class BuildRoom : MonoBehaviour
 
         if (manager.usingGamepad)
         {
-
+            tutorialText.text = "Try placing a structure on the platform by pressing <b>Right Trigger</b>";
         }
         else
         {
-            tutorialText.text = "Try placing a structure on the platform by left clicking";
+            tutorialText.text = "Try placing a structure on the platform by <b>left clicking</b>";
         }
         currentMycelia = GameManager.Instance.Mycelia;
     }
@@ -131,11 +132,11 @@ public class BuildRoom : MonoBehaviour
     {
         if (manager.usingGamepad)
         {
-
+            tutorialText.text = "Press <b>WEST Button</b> to toggle Edit Mode, which allows you to edit placed structures.";
         }
         else
         {
-            tutorialText.text = "Press F to toggle Edit Mode, which allows you to edit placed structures.";
+            tutorialText.text = "Press <b>F</b> to toggle Edit Mode, which allows you to edit placed structures.";
         }
     }
     private void WaitForEditToggle()
@@ -145,7 +146,7 @@ public class BuildRoom : MonoBehaviour
             tutorialIndex++;
             if (manager.usingGamepad)
             {
-
+                tutorialText.text = "Look at the turret, and move it by holding <b>Right Trigger</b>";
             }
             else
             {
@@ -160,7 +161,8 @@ public class BuildRoom : MonoBehaviour
             tutorialIndex++;
             if (manager.usingGamepad)
             {
-
+                tutorialText.text = "Structures can also be Recycled by holding <b>EAST Button</b> for a (partial if damaged) refund." +
+                   " \n Recycle the Structure.";
             }
             else
             {
@@ -177,6 +179,7 @@ public class BuildRoom : MonoBehaviour
             tutorialIndex++;
             if (manager.usingGamepad)
             {
+                tutorialText.text = "You can pause at any time with <b>Start Button</b> to review the controls if needed.";
 
             }
             else

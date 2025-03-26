@@ -78,7 +78,7 @@ public class ShootingRoomTutorial : MonoBehaviour
 
         if (manager.usingGamepad)
         {
-            tutorialText.text += "\n To drop a weapon, hold East Button.";
+            tutorialText.text += "\n To drop a weapon, hold <b>EAST Button</b>.";
         }
         else
         {

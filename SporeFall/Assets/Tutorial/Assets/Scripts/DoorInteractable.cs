@@ -72,8 +72,4 @@ public class DoorInteractable : Interactables
         // Ensure collider has been disabled
         doorCollider.enabled = true;
     }
-    public void UnlockDoor()
-    {
-        canOpen = true;
-    }
 }

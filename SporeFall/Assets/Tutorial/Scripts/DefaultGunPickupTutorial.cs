@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DefaultGunPickupTutorial : Interactables
-{
+{/// <summary>
+/// Tutorial Script to teach players how to pick up weapons
+/// </summary>
     [SerializeField] DoorInteractable doorToOpen;
     private string promptText;
 

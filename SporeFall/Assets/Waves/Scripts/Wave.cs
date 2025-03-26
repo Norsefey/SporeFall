@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// New class to hold enemy spawn data
+// class to hold enemy spawn data
 [System.Serializable]
 public class EnemySpawnData
 {
