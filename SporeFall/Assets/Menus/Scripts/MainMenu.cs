@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
@@ -43,8 +44,15 @@ public class MainMenu : MonoBehaviour
         titleScreen.SetActive(true);
         mainScreen.SetActive(false);
         levelSelectScreen.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstTitleButton);
+
+        Debug.Log("There is/are " + Gamepad.all.Count + "Gamepad(s) connected");
+
+        if (Gamepad.all.Count > 0 )
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstTitleButton);
+        }
+        
     }
     private void Update()
     {
@@ -68,32 +76,47 @@ public class MainMenu : MonoBehaviour
     {
         mainScreen.SetActive(true);
         titleScreen.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstMainButton);
+        if (Gamepad.all.Count > 0)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstMainButton);
+        }
     }
 
     public void OpenSettingsMenu()
     {
         settingsScreen.SetActive(true);
         mainScreen.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstSettingsButton);
+        if (Gamepad.all.Count > 0)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstSettingsButton);
+        }
+        
     }
 
     public void TutorialQuestion()
     {
         tutorialQuestionScreen.SetActive(true);
         mainScreen.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstTutorialButton);
+        if (Gamepad.all.Count > 0)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstTutorialButton);
+        }
+        
     }
 
     public void LevelSelect()
     {
         levelSelectScreen.SetActive(true);
         tutorialQuestionScreen.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstLevelSelectButton);
+        if (Gamepad.all.Count > 0)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstLevelSelectButton);
+        }
+        
     }
 
     public void StartTutorial()
@@ -112,8 +135,12 @@ public class MainMenu : MonoBehaviour
         mainScreen.SetActive(true);
         levelSelectScreen.SetActive(false);
         settingsScreen.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstMainButton);
+        if (Gamepad.all.Count > 0)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstMainButton);
+        }
+        
     }
 
     public void LoadSceneUsingIndex(int index)
