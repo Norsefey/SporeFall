@@ -5284,6 +5284,15 @@ MonoBehaviour:
   interactable: {fileID: 0}
   changePlayerMaterials: {fileID: 0}
   coloring: {fileID: 7293488271440790830}
+  audioSource: {fileID: 0}
+  health75Sound: {fileID: 0}
+  health50Sound: {fileID: 0}
+  health25Sound: {fileID: 0}
+  deathSound: {fileID: 0}
+  corruption25Sound: {fileID: 0}
+  corruption50Sound: {fileID: 0}
+  corruption75Sound: {fileID: 0}
+  corruption100Sound: {fileID: 0}
   defaultWeapon: {fileID: 6316963350049643411}
   defaultSword: {fileID: 0}
   weaponHolder: {fileID: 4628489011372826661}
@@ -5298,8 +5307,6 @@ MonoBehaviour:
   respawnTime: 1
   fallbackSpawnPoint: {fileID: 0}
   holdingCorruption: 0
-  mainColors: {fileID: 0}
-  colorPropertyName: _BaseColor
 --- !u!114 &1632749462520726094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5436,6 +5443,7 @@ MonoBehaviour:
   - 60
   - 75
   - 90
+  preventFullCorruption: 1
 --- !u!82 &145210266668978571
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5835,6 +5843,7 @@ MonoBehaviour:
     renderer: {fileID: 3169539879575160199}
     primaryMaterialIndex: 1
     secondaryMaterialIndex: 0
+  setOnAwake: 0
 --- !u!1 &7524097501062795589
 GameObject:
   m_ObjectHideFlags: 0

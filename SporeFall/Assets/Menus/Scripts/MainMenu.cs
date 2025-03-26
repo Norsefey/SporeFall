@@ -52,7 +52,6 @@ public class MainMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstTitleButton);
         }
-        
     }
     private void Update()
     {
@@ -71,7 +70,7 @@ public class MainMenu : MonoBehaviour
             }
         }
     }
-
+    
     public void ClickToContinue()
     {
         mainScreen.SetActive(true);

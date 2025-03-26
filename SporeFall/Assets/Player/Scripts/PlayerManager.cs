@@ -72,7 +72,6 @@ public class PlayerManager : MonoBehaviour
 
         if(Tutorial.Instance != null)
             Tutorial.Instance.playerActive = true;
-
     }
     private void Start()
     {

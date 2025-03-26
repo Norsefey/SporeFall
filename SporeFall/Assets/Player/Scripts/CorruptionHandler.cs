@@ -23,6 +23,8 @@ public class CorruptionHandler : MonoBehaviour
     [SerializeField] private float[] corruptionThresholds = new float[] { 30f, 60f, 90f }; // Thresholds for different vision effects
     private int currentCorruptionStage = 0;
 
+    public bool preventFullCorruption = false;
+
     private void Start()
     {
         UpdateCorruptionVision();
@@ -30,7 +32,7 @@ public class CorruptionHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (corruptionLevel >= maxCorruption)
+        if (corruptionLevel >= maxCorruption && !preventFullCorruption)
         {
             CorruptPlayer();
             return;
