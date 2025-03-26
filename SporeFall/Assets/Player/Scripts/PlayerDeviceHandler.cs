@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.DualShock;
-using UnityEngine.InputSystem.XInput;
 
 public class PlayerDeviceHandler : MonoBehaviour
 {
@@ -281,7 +279,6 @@ public class PlayerDeviceHandler : MonoBehaviour
         
         }
     }
-
     private PlayerInput FindPlayerWithoutDevice(InputDevice device)
     {
         Debug.Log($"Searching for player using device: {device.displayName}");

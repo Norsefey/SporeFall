@@ -52,7 +52,15 @@ public class MainMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstTitleButton);
         }
+
+        InputSystem.onDeviceChange += OnDeviceChange;
     }
+
+    private void OnDisable()
+    {
+        InputSystem.onDeviceChange -= OnDeviceChange;
+    }
+
     private void Update()
     {
         if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F))
@@ -171,6 +179,20 @@ public class MainMenu : MonoBehaviour
             }
 
             yield return null;
+        }
+    }
+
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (change == InputDeviceChange.Added)
+        {
+            Debug.Log($"Device Connected: {device.displayName}");
+
+        }
+        else if (change == InputDeviceChange.Disconnected)
+        {
+            Debug.Log($"Device Disconnected: {device.displayName}");
+
         }
     }
 }
