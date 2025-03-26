@@ -35,6 +35,10 @@ public class VFXPoolingBehavior : MonoBehaviour
                             vfx.Initialize(pool);
                         }
                     }
+                    else
+                    {
+                        Instantiate(hitEffect, transform.position, Quaternion.identity);
+                    }
                     ReturnBullet();
                 }
                 transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed * Time.deltaTime);
