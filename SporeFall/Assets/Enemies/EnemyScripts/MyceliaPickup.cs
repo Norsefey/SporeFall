@@ -10,7 +10,7 @@ public class MyceliaPickup : DropsPoolBehavior
 
     public void Setup(float myceliaAmount)
     {
-        amountToGive = Random.Range(minMyceliaAmount, maxMyceliaAmount);
+        amountToGive = Mathf.RoundToInt(Random.Range(minMyceliaAmount, maxMyceliaAmount));
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
     }
