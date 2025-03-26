@@ -12,18 +12,24 @@ public class SettingsMenu : MonoBehaviour
 
     [Header("Buttons")]
     [SerializeField] private GameObject masterVolume;
-    [SerializeField] private Button masterButton;
+    public Button masterButton;
     [SerializeField] private GameObject musicVolume;
-    [SerializeField] private Button musicButton;
+    public Button musicButton;
     [SerializeField] private GameObject sfxVolume;
-    [SerializeField] private Button sfxButton;
+    public Button sfxButton;
+    [SerializeField] private GameObject voiceVolume;
+    public Button voiceButton;
     [SerializeField] private GameObject aimSensitivity;
-    [SerializeField] private Button aimButton;
+    public Button aimButton;
+
+    public CanvasGroup buttonGroup;
+    
 
     [Header("Sliders")]
     [SerializeField] private GameObject masterSlider;
     [SerializeField] private GameObject musicSlider;
     [SerializeField] private GameObject sfxSlider;
+    [SerializeField] private GameObject voiceSlider;
     [SerializeField] private GameObject sensitivitySlider;
 
     private bool isSliderSelected = false;
@@ -34,15 +40,7 @@ public class SettingsMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (Gamepad.all.Count == 0)
-        {
-            isGamepadConnected = false;
-            masterButton.interactable = false;
-            musicButton.interactable = false;
-            sfxButton.interactable = false;
-            aimButton.interactable = false;
-            Debug.Log("No gamepad on startup");
-        }
+
     }
 
     // Update is called once per frame
@@ -62,29 +60,6 @@ public class SettingsMenu : MonoBehaviour
             }
         }
 
-        if (Gamepad.all.Count > 0 && isGamepadConnected == false)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(masterVolume);
-            isGamepadConnected = true;
-            masterButton.interactable = true;
-            musicButton.interactable = true;
-            sfxButton.interactable = true;
-            aimButton.interactable = true;
-            Debug.Log("Gamepad connected");
-        }
-
-        //this one doesn't work right now
-        if (Gamepad.all.Count == 0 && isGamepadConnected == true)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            isGamepadConnected = false;
-            masterButton.interactable = false;
-            musicButton.interactable = false;
-            sfxButton.interactable = false;
-            aimButton.interactable = false;
-            Debug.Log("Gamepad disconnected");
-        }
     }
 
     public void SelectMasterVolume()

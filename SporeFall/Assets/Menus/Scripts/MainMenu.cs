@@ -9,7 +9,9 @@ using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
-    //Script that controls various buttons and screens on main menu and allows player to fullscreen
+    //Script that controls various buttons and screens on main menu
+
+    [SerializeField] SettingsMenu settings;
 
     [Header("Menus")]
     [SerializeField] GameObject titleScreen;
@@ -24,6 +26,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject firstSettingsButton;
     [SerializeField] GameObject firstTutorialButton;
     [SerializeField] GameObject firstLevelSelectButton;
+    private GameObject savedFirstButton;
 
     [Header("Level Names")]
     [SerializeField] string tutorialName;
@@ -33,6 +36,7 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] GameObject LoadingScreen;
     [SerializeField] private Slider progressBar;
+    private bool isControllerConnected = false;
 
 
     void Start()
@@ -45,15 +49,15 @@ public class MainMenu : MonoBehaviour
         mainScreen.SetActive(false);
         levelSelectScreen.SetActive(false);
 
-        Debug.Log("There is/are " + Gamepad.all.Count + "Gamepad(s) connected");
-
-        if (Gamepad.all.Count > 0 )
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(firstTitleButton);
-        }
-
+        Debug.Log("There are " + InputSystem.devices.Count + "devices connected");
+        savedFirstButton = firstTitleButton;
         InputSystem.onDeviceChange += OnDeviceChange;
+        if (InputSystem.devices.Count > 2 )
+        {
+            isControllerConnected = true;
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(savedFirstButton);
+        }
     }
 
     private void OnDisable()
@@ -83,47 +87,56 @@ public class MainMenu : MonoBehaviour
     {
         mainScreen.SetActive(true);
         titleScreen.SetActive(false);
-        if (Gamepad.all.Count > 0)
+        if (isControllerConnected)
         {
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstMainButton);
         }
+        savedFirstButton = firstMainButton;
     }
 
     public void OpenSettingsMenu()
     {
         settingsScreen.SetActive(true);
         mainScreen.SetActive(false);
-        if (Gamepad.all.Count > 0)
+        if (isControllerConnected)
         {
+            settings.buttonGroup.interactable = true;
+            Debug.Log("Controller detected, enabling buttons");
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstSettingsButton);
         }
-        
+        else if (!isControllerConnected)
+        {
+            settings.buttonGroup.interactable = false;
+            Debug.Log("Controller not detected, disabling buttons");
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+        savedFirstButton = firstSettingsButton;
     }
 
     public void TutorialQuestion()
     {
         tutorialQuestionScreen.SetActive(true);
         mainScreen.SetActive(false);
-        if (Gamepad.all.Count > 0)
+        if (isControllerConnected)
         {
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstTutorialButton);
         }
-        
+        savedFirstButton = firstTutorialButton;
     }
 
     public void LevelSelect()
     {
         levelSelectScreen.SetActive(true);
         tutorialQuestionScreen.SetActive(false);
-        if (Gamepad.all.Count > 0)
+        if (isControllerConnected)
         {
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstLevelSelectButton);
         }
-        
+        savedFirstButton = firstLevelSelectButton;
     }
 
     public void StartTutorial()
@@ -142,12 +155,12 @@ public class MainMenu : MonoBehaviour
         mainScreen.SetActive(true);
         levelSelectScreen.SetActive(false);
         settingsScreen.SetActive(false);
-        if (Gamepad.all.Count > 0)
+        if (isControllerConnected)
         {
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstMainButton);
         }
-        
+        savedFirstButton = firstMainButton;
     }
 
     public void LoadSceneUsingIndex(int index)
@@ -187,12 +200,24 @@ public class MainMenu : MonoBehaviour
         if (change == InputDeviceChange.Added)
         {
             Debug.Log($"Device Connected: {device.displayName}");
-
+            isControllerConnected = true;
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(savedFirstButton);
+            if (savedFirstButton = firstSettingsButton)
+            {
+                settings.buttonGroup.interactable = true;
+            }
         }
         else if (change == InputDeviceChange.Disconnected)
         {
             Debug.Log($"Device Disconnected: {device.displayName}");
+            isControllerConnected= false;
+            EventSystem.current.SetSelectedGameObject(null);
 
+            if (savedFirstButton = firstSettingsButton)
+            {
+                settings.buttonGroup.interactable = false;
+            }
         }
     }
 }
