@@ -6,7 +6,7 @@ public class MyceliaPickup : DropsPoolBehavior
 {
     public float minMyceliaAmount;
     public float maxMyceliaAmount;
-    public float amountToGive;
+    private float amountToGive;
 
     public void Setup(float myceliaAmount)
     {
@@ -20,12 +20,12 @@ public class MyceliaPickup : DropsPoolBehavior
         {
             if (pool != null)
             {
-                RewardPlayer(other.transform.parent.GetComponent<PlayerManager>());
+                PickupMycelia();
             }
         }
     }
 
-    public void RewardPlayer(PlayerManager player)
+    public void PickupMycelia()
     {
         GameManager.Instance.IncreaseMycelia(amountToGive);
         ReturnObject();

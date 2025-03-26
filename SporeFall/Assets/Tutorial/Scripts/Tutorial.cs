@@ -63,9 +63,6 @@ public class Tutorial : MonoBehaviour
         {
             StartCoroutine(InitialCooldown());
         }
-        // when the player joins, an event is played, this listens in and calls the function when the event is played
-        GameManager.OnPlayerJoin += GetPlayerDevice;
-
     }
 
     private void Update()
@@ -98,7 +95,6 @@ public class Tutorial : MonoBehaviour
                     tutorialStarted = false;
                 }
             }
-
             else
             {
                 Debug.Log("Starting main level tutorial");
@@ -638,20 +634,6 @@ public class Tutorial : MonoBehaviour
         continueText.text = " ";
         tutorialStarted = true;
     }
-
-    private void GetPlayerDevice(int playerIndex)
-    {
-        var device = GameManager.Instance.players[0].myDevice;
-
-        if (device is Gamepad)
-        {
-            StartXboxTutorial();
-        }
-        else
-        {
-            StartKeyboardTutorial();
-        }
-    }
     private void StartKeyboardTutorial()
     {
         Debug.Log("Keyboard tutorial has started");
@@ -718,10 +700,6 @@ public class Tutorial : MonoBehaviour
         tutorialText.text = "Good luck!";
         yield return new WaitForSeconds(2.2f);
         tutorialPopup.SetActive(false);
-    }
-    public void SetPrompt(string text)
-    {
-        tutorialText.text = text;
     }
    /* IEnumerator TempGamepadTutorial()
     {
