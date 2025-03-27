@@ -73,12 +73,18 @@ public class MainMenu : MonoBehaviour
             {
                 // turn off fullscreen
                 Screen.SetResolution(960, 540, false);
+                settings.fullscreenToggle.image.sprite = settings.fullscreenToggleSourceUnchecked;
+                settings.fullscreenToggle.spriteState = settings.uncheckedState;
+                Debug.Log("Disabling fullscreen");
             }
             else
             {
                 Resolution defaultRes = Screen.currentResolution;
                 // turn On fullscreen
                 Screen.SetResolution(defaultRes.width, defaultRes.height, true);
+                settings.fullscreenToggle.image.sprite = settings.fullscreenToggleSourceChecked;
+                settings.fullscreenToggle.spriteState = settings.checkedState;
+                Debug.Log("Enabling fullscreen");
             }
         }
     }

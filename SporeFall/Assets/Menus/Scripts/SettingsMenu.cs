@@ -12,35 +12,55 @@ public class SettingsMenu : MonoBehaviour
 
     [Header("Buttons")]
     [SerializeField] private GameObject masterVolume;
-    public Button masterButton;
+    //public Button masterButton;
     [SerializeField] private GameObject musicVolume;
-    public Button musicButton;
+    //public Button musicButton;
     [SerializeField] private GameObject sfxVolume;
-    public Button sfxButton;
+    //public Button sfxButton;
     [SerializeField] private GameObject voiceVolume;
-    public Button voiceButton;
+    //public Button voiceButton;
     [SerializeField] private GameObject aimSensitivity;
-    public Button aimButton;
+    //public Button aimButton;
+    [SerializeField] private GameObject fullscreen;
+    //public Button fullscreenButton;
 
     public CanvasGroup buttonGroup;
     
 
-    [Header("Sliders")]
+    [Header("Interactables")]
     [SerializeField] private GameObject masterSlider;
     [SerializeField] private GameObject musicSlider;
     [SerializeField] private GameObject sfxSlider;
     [SerializeField] private GameObject voiceSlider;
     [SerializeField] private GameObject sensitivitySlider;
+    [SerializeField] private GameObject fullscreenToggleParent;
+    public Button fullscreenToggle;
+
+    [Header("Sprites")]
+    public Sprite fullscreenToggleSourceUnchecked;
+    [SerializeField] private Sprite fullscreenToggleSelectedUnchecked;
+    [SerializeField] private Sprite fullscreenTogglePressedUnchecked;
+    public Sprite fullscreenToggleSourceChecked;
+    [SerializeField] private Sprite fullscreenToggleSelectedChecked;
+    [SerializeField] private Sprite fullscreenTogglePressedChecked;
 
     private bool isSliderSelected = false;
     private bool canSelect = false;
     private GameObject lastSelected;
-    private bool isGamepadConnected = true;
+
+    [HideInInspector] public SpriteState uncheckedState;
+    [HideInInspector] public SpriteState checkedState;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        uncheckedState.highlightedSprite = fullscreenToggleSelectedUnchecked;
+        uncheckedState.selectedSprite = fullscreenToggleSelectedUnchecked;
+        uncheckedState.pressedSprite = fullscreenTogglePressedUnchecked;
+        checkedState.highlightedSprite = fullscreenToggleSelectedChecked;
+        checkedState.selectedSprite = fullscreenToggleSelectedChecked;
+        checkedState.pressedSprite = fullscreenTogglePressedChecked;
     }
 
     // Update is called once per frame
@@ -52,12 +72,17 @@ public class SettingsMenu : MonoBehaviour
 
         if (isSliderSelected)
         {
-            if (gamepad.buttonSouth.wasPressedThisFrame && canSelect)
+            if (gamepad.buttonSouth.wasPressedThisFrame && canSelect && lastSelected != fullscreen)
             {
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(lastSelected);
                 Debug.Log("Returning to button");
             }
+        }
+
+        if (Screen.fullScreen)
+        {
+            Debug.Log("Screen is fullscreen");
         }
 
     }
@@ -103,6 +128,16 @@ public class SettingsMenu : MonoBehaviour
         StartCoroutine(SelectionCooldown());
     }
 
+    public void SelectFullscreen()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(fullscreenToggleParent);
+        isSliderSelected = true;
+        canSelect = false;
+        lastSelected = fullscreen;
+        StartCoroutine(SelectionCooldown());
+    }
+
     public void SetMasterVolume(float volume)
     {
         Debug.Log("Master volume: " + volume);
@@ -125,6 +160,27 @@ public class SettingsMenu : MonoBehaviour
     {
         Debug.Log("Voice volume: " + volume);
         audioMixer.SetFloat("voiceVolume", volume);
+    }
+
+    public void FullscreenToggle()
+    {
+        if (Screen.fullScreen)
+        {
+            // turn off fullscreen
+            Screen.SetResolution(960, 540, false);
+            fullscreenToggle.image.sprite = fullscreenToggleSourceUnchecked;
+            fullscreenToggle.spriteState = uncheckedState;
+            Debug.Log("Toggling off fullscreen");
+        }
+        else
+        {
+            Resolution defaultRes = Screen.currentResolution;
+            // turn On fullscreen
+            Screen.SetResolution(defaultRes.width, defaultRes.height, true);
+            fullscreenToggle.image.sprite = fullscreenToggleSourceChecked;
+            fullscreenToggle.spriteState = checkedState;
+            Debug.Log("Toggling on fullscreen");
+        }
     }
 
     IEnumerator SelectionCooldown()
