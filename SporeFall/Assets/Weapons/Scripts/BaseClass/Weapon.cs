@@ -82,7 +82,7 @@ public abstract class Weapon : MonoBehaviour
         // Rotate player first before shooting
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {// don't rotate player if aiming, rotation is handled in playerMovement script
-            player.pController.RotateOnFire(this.transform, shootDirection);
+            player.pController.RotateOnFire();
         }
         transform.forward = playerCamera.transform.forward;
 
@@ -121,7 +121,7 @@ public abstract class Weapon : MonoBehaviour
         // Rotate player if not aiming
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
-            player.pController.RotateOnFire(this.transform, shootDirection);
+            player.pController.RotateOnFire();
         }
         else
         {

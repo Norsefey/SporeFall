@@ -26,7 +26,7 @@ public class VFXPoolingBehavior : MonoBehaviour
                         // Spawn Hit VFX
                         if (!PoolManager.Instance.vfxPool.TryGetValue(hitEffect, out VFXPool pool))
                         {
-                            Debug.LogError($"No pool found for enemy prefab: {hitEffect.name}");
+                            Debug.LogError($"No pool found for Effect prefab: {hitEffect.name}");
                             //return;
                         }
                         else

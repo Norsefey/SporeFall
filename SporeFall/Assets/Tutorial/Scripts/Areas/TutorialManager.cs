@@ -32,11 +32,17 @@ public class TutorialManager : MonoBehaviour
         }
         introText.SetActive(false);
         tutorialText.SetActive(true);
-        worldCamera.SetActive(false);
         moveTut.StartTutorial(player);
+
+        Invoke(nameof(DisableWorldCamera), 1);
+       ;
         // remove listener, since it stays even when changing scenes,
         // which leads to errors as this scripts doesn't exist in other scenes
         GameManager.OnPlayerJoin -= GetPlayerDevice;
     }
 
+    private void DisableWorldCamera()
+    {
+        worldCamera.SetActive(false);
+    }
 }

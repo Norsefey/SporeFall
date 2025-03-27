@@ -147,7 +147,7 @@ public class BuildGun : Weapon
                 }
                 else
                 {// player character is always looking in direction of structure
-                    player.pController.RotateOnFire(this.transform, player.pCamera.myCamera.transform.forward);
+                    player.pController.RotateOnFire();
                 }
             }
         }else if(!isEditing && selectedStructure != null)

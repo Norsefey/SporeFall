@@ -67,7 +67,7 @@ public class PlayerManager : MonoBehaviour
         // since we will have multiple players, this manager cannot be a public instance, so we assign it locally
         SetManager();
         SetDeviceSettings();
-
+        // To prevent player from seeing spawning stuff, or switching camera too soon
         TogglePCamera(false);
 
         if(Tutorial.Instance != null)
@@ -227,7 +227,7 @@ public class PlayerManager : MonoBehaviour
             if(currentWeapon.IsReloading)
                 currentWeapon.CancelReload();
 
-            if(currentWeapon is ChargeGun cGun)
+            if(currentWeapon is ChargeGun)
             {
                 pUI.ToggleChargeGunSlider(false);
             }

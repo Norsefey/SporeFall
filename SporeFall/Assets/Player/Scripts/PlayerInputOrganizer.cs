@@ -386,8 +386,10 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnJumpCall(InputAction.CallbackContext context)
     {
-        if (pMan != null)
+        // Check if the jump action is started (button pressed down)
+        if (context.started)
         {
+            // Call the jump method on the player controller
             pMan.pController.JumpCall();
         }
     }

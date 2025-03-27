@@ -92,7 +92,7 @@ public class ChargeGun : Weapon
 
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
-            player.pController.RotateOnFire(this.transform, baseDirection);
+            player.pController.RotateOnFire();
         }
 
         ProjectilePool pool = null;
@@ -155,7 +155,7 @@ public class ChargeGun : Weapon
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             Debug.Log("Rotating on Fire");
-            player.pController.RotateOnFire(this.transform, shootDirection);
+            player.pController.RotateOnFire();
         }
 
         Ray ray = new(player.pCamera.myCamera.transform.position, shootDirection);

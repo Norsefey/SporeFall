@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 public class WaveButton : Interactables
 {
@@ -28,11 +27,13 @@ public class WaveButton : Interactables
         {
             case WaveManager.WavePhase.NotStarted:
                 buttonPress++;
-                if (buttonPress == 1)
+                
+                if (Tutorial.Instance != null && buttonPress == 1)
                 {
                     Tutorial.Instance.tutorialPrompt = 5;
                     Tutorial.Instance.ProgressTutorial();
                 }
+
                 GameManager.Instance.waveManager.OnStartWave();
                 player.pUI.DisablePrompt();
                 break;

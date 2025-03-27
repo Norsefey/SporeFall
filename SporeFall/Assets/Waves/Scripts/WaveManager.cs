@@ -268,7 +268,7 @@ public class WaveManager : MonoBehaviour
     {
         enemyPools = new Dictionary<GameObject, EnemyObjectPool>();
         GameObject poolParent = new GameObject($"Pool_Enemies");
-        poolParent.transform.SetParent(transform);
+        poolParent.transform.SetParent(transform, false);
 
         // Initialize pools for all enemy types across all waves
         foreach (Wave wave in waves)

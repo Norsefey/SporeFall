@@ -23,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
     readonly float minFall = -1.5f;
     readonly float gravity = -9.81f;
     private float vertSpeed;
+    public float coyoteTime = 0.2f; // coyote time variable
+    private float coyoteTimeCounter; // Counter to track coyote time
 
     private float tempAimTimer = 0;
 
@@ -73,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
     }
-    public void RotateOnFire(Transform gun, Vector3 shootDir)
+    public void RotateOnFire()
     {
         Quaternion temp = myCamera.localRotation;
         myCamera.eulerAngles = new Vector3(0, myCamera.eulerAngles.y, 0);
@@ -128,11 +130,11 @@ public class PlayerMovement : MonoBehaviour
     }
     public void JumpCall()
     {
-        if (IsGrounded())
+        if (IsGrounded() || coyoteTimeCounter > 0f)
         {
             vertSpeed = JumpSpeed;
             pMan.pAnime.ToggleFallingAnime(true);
-
+            coyoteTimeCounter = 0f; // Reset coyote time counter
         }
     }
     private void GravityHandler()
@@ -141,9 +143,12 @@ public class PlayerMovement : MonoBehaviour
         {
             pMan.pAnime.ToggleFallingAnime(false);
             vertSpeed = minFall;
+            coyoteTimeCounter = coyoteTime; // Reset coyote time when grounded
         }
         else
         {
+            // Decrement coyote time counter when not grounded
+            coyoteTimeCounter -= Time.deltaTime;
             vertSpeed += gravity * 5 * Time.deltaTime;
             if (vertSpeed < terminalVelocity)
             {
