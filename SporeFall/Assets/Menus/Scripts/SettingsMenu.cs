@@ -105,20 +105,26 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetMasterVolume(float volume)
     {
-        Debug.Log(volume);
+        Debug.Log("Master volume: " + volume);
         audioMixer.SetFloat("masterVolume", volume);
     }
 
     public void SetMusicVolume(float volume)
     {
-        Debug.Log(volume);
+        Debug.Log("Music volume: " + volume);
         audioMixer.SetFloat("musicVolume", volume);
     }
 
     public void SetSFXVolume(float volume)
     {
-        Debug.Log(volume);
+        Debug.Log("SFX volume: " + volume);
         audioMixer.SetFloat("sfxVolume", volume);
+    }
+
+    public void SetVoiceVolume(float volume)
+    {
+        Debug.Log("Voice volume: " + volume);
+        audioMixer.SetFloat("voiceVolume", volume);
     }
 
     IEnumerator SelectionCooldown()
