@@ -5,10 +5,12 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class SettingsMenu : MonoBehaviour
 {
     public AudioMixer audioMixer;
+    public SavedSettings savedSettings;
 
     [Header("Buttons")]
     [SerializeField] private GameObject masterVolume;
@@ -51,6 +53,7 @@ public class SettingsMenu : MonoBehaviour
     [HideInInspector] public SpriteState uncheckedState;
     [HideInInspector] public SpriteState checkedState;
 
+    private float camSensitivity;
 
     // Start is called before the first frame update
     void Start()
@@ -160,6 +163,15 @@ public class SettingsMenu : MonoBehaviour
     {
         Debug.Log("Voice volume: " + volume);
         audioMixer.SetFloat("voiceVolume", volume);
+    }
+
+    public void SetSensitivity(float sensitivity)
+    {
+        Debug.Log("Cam sensitivity: " + sensitivity + ", " + sensitivity * 10 + ", " + sensitivity * 8);
+        
+        savedSettings.mouseCamSensitivity = sensitivity;
+        savedSettings.gamepadHorCamSensitivity = sensitivity * 10;
+        savedSettings.gamepadVertCamSensitivity = sensitivity * 8;
     }
 
     public void FullscreenToggle()

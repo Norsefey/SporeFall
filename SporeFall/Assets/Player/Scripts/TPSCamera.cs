@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 public class TPSCamera : MonoBehaviour
 {
+
     [Header("references")]
     public Camera myCamera;
     [SerializeField] private PlayerMovement player;
@@ -69,6 +70,18 @@ public class TPSCamera : MonoBehaviour
             player = pMan.pController;
         // Initialize the camera offset
         currentCameraOffset = defaultOffset;
+
+        if (SavedSettings.instance != null)
+        {
+            Debug.Log("Saved Settings detected");
+            mHorSense = SavedSettings.instance.mouseCamSensitivity;
+            mvertSense = SavedSettings.instance.mouseCamSensitivity;
+            gHorSense = SavedSettings.instance.gamepadHorCamSensitivity;
+            gvertSense = SavedSettings.instance.gamepadVertCamSensitivity;
+
+            Debug.Log("Cam sensitivity is: " + SavedSettings.instance.mouseCamSensitivity);
+        }
+        
     }
 
     private void LateUpdate()
