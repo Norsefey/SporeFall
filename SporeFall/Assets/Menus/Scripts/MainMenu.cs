@@ -54,6 +54,8 @@ public class MainMenu : MonoBehaviour
         InputSystem.onDeviceChange += OnDeviceChange;
         if (InputSystem.devices.Count > 2 )
         {
+            //If a controller is being used, highlights the first button
+            //If a controller is not being used, no buttons are highlighted
             isControllerConnected = true;
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(savedFirstButton);
