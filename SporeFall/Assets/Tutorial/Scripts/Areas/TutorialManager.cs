@@ -34,7 +34,7 @@ public class TutorialManager : MonoBehaviour
         tutorialText.SetActive(true);
         moveTut.StartTutorial(player);
 
-        Invoke(nameof(DisableWorldCamera), 1);
+        Invoke(nameof(DisableWorldCamera), 2);
        ;
         // remove listener, since it stays even when changing scenes,
         // which leads to errors as this scripts doesn't exist in other scenes

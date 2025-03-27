@@ -14,8 +14,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float rotSpeed = 15;
-    private float moveSpeed;
     public bool isSprinting = false;
+    private float moveSpeed;
+    private float moveSpeedModifier = 1;
+
     [Header("Jump Variables")]
     public float playerHeight = 2;
     public float JumpSpeed = 15;
@@ -106,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
         {
             movement.x = horInput * moveSpeed;
             movement.z = verInput * moveSpeed;
-            movement = Vector3.ClampMagnitude(movement, moveSpeed);
+            movement = Vector3.ClampMagnitude(movement, moveSpeed * moveSpeedModifier);
 
             Quaternion temp = myCamera.localRotation;
             myCamera.eulerAngles = new Vector3(0, myCamera.eulerAngles.y, 0);
@@ -160,10 +162,13 @@ public class PlayerMovement : MonoBehaviour
     {
         bool hitground = false;
 
-        if (vertSpeed < 0.1 && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit))
+        if (vertSpeed < 0.1 && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, playerHeight))
         {
             float check = playerHeight;
             hitground = hit.distance <= check;
+
+            pMan.inToxicWater = hit.collider.CompareTag("Water");
+            moveSpeedModifier = pMan.inToxicWater ? .2f : 1;
         }
 
         return hitground && cc.isGrounded;
@@ -183,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
         {
             movement.x = horInput * moveSpeed;
             movement.z = verInput * moveSpeed;
-            movement = Vector3.ClampMagnitude(movement, moveSpeed);
+            movement = Vector3.ClampMagnitude(movement, moveSpeed * moveSpeedModifier);
             movement = myCamera.TransformDirection(movement);
             Quaternion direction = Quaternion.LookRotation(movement);
             transform.rotation = Quaternion.Lerp(transform.rotation, direction, rotSpeed * Time.deltaTime);
