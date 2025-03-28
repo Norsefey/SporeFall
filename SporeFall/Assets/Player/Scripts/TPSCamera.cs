@@ -64,24 +64,13 @@ public class TPSCamera : MonoBehaviour
 
     [SerializeField] private Transform rigLookAtTarget;
     private bool isPanning = false;
+
     private void Start()
     {
         if (player == null)
             player = pMan.pController;
         // Initialize the camera offset
         currentCameraOffset = defaultOffset;
-
-        if (SavedSettings.instance != null)
-        {
-            Debug.Log("Saved Settings detected");
-            mHorSense = SavedSettings.instance.mouseCamSensitivity;
-            mvertSense = SavedSettings.instance.mouseCamSensitivity;
-            gHorSense = SavedSettings.instance.gamepadHorCamSensitivity;
-            gvertSense = SavedSettings.instance.gamepadVertCamSensitivity;
-
-            Debug.Log("Cam sensitivity is: " + SavedSettings.instance.mouseCamSensitivity);
-        }
-        
     }
 
     private void LateUpdate()
@@ -322,11 +311,17 @@ public class TPSCamera : MonoBehaviour
     }
     public void SetMouseSettings()
     {
+        mHorSense = SavedSettings.mouseCamSensitivity;
+        mvertSense = SavedSettings.mouseCamSensitivity;
         horSense = mHorSense;
         verSense = mvertSense;
+        Debug.Log("Mouse settings are: " + SavedSettings.mouseCamSensitivity);
+        Debug.Log("Mouse settings are: " + mHorSense);
     }
     public void SetGamepadSettings()
     {
+        gHorSense = SavedSettings.gamepadHorCamSensitivity;
+        gvertSense = SavedSettings.gamepadVertCamSensitivity;
         horSense = gHorSense;
         verSense = gvertSense;
     }

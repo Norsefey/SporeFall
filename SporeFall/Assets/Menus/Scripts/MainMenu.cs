@@ -6,12 +6,14 @@ using UnityEngine.SceneManagement;
 using System;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Audio;
 
 public class MainMenu : MonoBehaviour
 {
     //Script that controls various buttons and screens on main menu
 
     [SerializeField] SettingsMenu settings;
+    public AudioMixer audioMixer;
 
     [Header("Menus")]
     [SerializeField] GameObject titleScreen;
@@ -37,10 +39,17 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject LoadingScreen;
     [SerializeField] private Slider progressBar;
     private bool isControllerConnected = false;
+    private float volume = 2;
+    private float volume2;
 
 
     void Start()
     {
+        audioMixer.SetFloat("masterVolume", volume);
+        audioMixer.SetFloat("musicVolume", volume);
+        audioMixer.SetFloat("sfxVolume", volume);
+        audioMixer.SetFloat("voiceVolume", volume);
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 1;

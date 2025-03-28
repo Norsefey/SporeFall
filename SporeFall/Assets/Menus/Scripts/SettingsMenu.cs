@@ -10,31 +10,29 @@ using UnityEngine.Rendering;
 public class SettingsMenu : MonoBehaviour
 {
     public AudioMixer audioMixer;
-    public SavedSettings savedSettings;
 
     [Header("Buttons")]
     [SerializeField] private GameObject masterVolume;
-    //public Button masterButton;
     [SerializeField] private GameObject musicVolume;
-    //public Button musicButton;
     [SerializeField] private GameObject sfxVolume;
-    //public Button sfxButton;
     [SerializeField] private GameObject voiceVolume;
-    //public Button voiceButton;
     [SerializeField] private GameObject aimSensitivity;
-    //public Button aimButton;
     [SerializeField] private GameObject fullscreen;
-    //public Button fullscreenButton;
 
     public CanvasGroup buttonGroup;
-    
 
     [Header("Interactables")]
+    //Two copies of the same button/slider, a GameObject for navigation settings, and a Slider/Button for settings specific to those
     [SerializeField] private GameObject masterSlider;
+    [SerializeField] private Slider masterSlider2;
     [SerializeField] private GameObject musicSlider;
+    [SerializeField] private Slider musicSlider2;
     [SerializeField] private GameObject sfxSlider;
+    [SerializeField] private Slider sfxSlider2;
     [SerializeField] private GameObject voiceSlider;
+    [SerializeField] private Slider voiceSlider2;
     [SerializeField] private GameObject sensitivitySlider;
+    [SerializeField] private Slider sensitivitySlider2;
     [SerializeField] private GameObject fullscreenToggleParent;
     public Button fullscreenToggle;
 
@@ -53,7 +51,7 @@ public class SettingsMenu : MonoBehaviour
     [HideInInspector] public SpriteState uncheckedState;
     [HideInInspector] public SpriteState checkedState;
 
-    private float camSensitivity;
+    private float volume;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +62,10 @@ public class SettingsMenu : MonoBehaviour
         checkedState.highlightedSprite = fullscreenToggleSelectedChecked;
         checkedState.selectedSprite = fullscreenToggleSelectedChecked;
         checkedState.pressedSprite = fullscreenTogglePressedChecked;
+
+        
+
+        SetSliderDefaults();
     }
 
     // Update is called once per frame
@@ -88,6 +90,19 @@ public class SettingsMenu : MonoBehaviour
             Debug.Log("Screen is fullscreen");
         }
 
+    }
+
+    public void SetSliderDefaults()
+    {
+        audioMixer.GetFloat("masterVolume", out volume);
+        masterSlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("musicVolume", out volume);
+        musicSlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("sfxVolume", out volume);
+        sfxSlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("voiceVolume", out volume);
+        voiceSlider2.value = Mathf.Pow(10, volume / 20);
+        sensitivitySlider2.value = SavedSettings.mouseCamSensitivity;
     }
 
     public void SelectMasterVolume()
@@ -143,35 +158,35 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetMasterVolume(float volume)
     {
-        Debug.Log("Master volume: " + volume);
-        audioMixer.SetFloat("masterVolume", volume);
+        Debug.Log("Master volume: " + Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("masterVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetMusicVolume(float volume)
     {
-        Debug.Log("Music volume: " + volume);
-        audioMixer.SetFloat("musicVolume", volume);
+        Debug.Log("Music volume: " + Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("musicVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetSFXVolume(float volume)
     {
-        Debug.Log("SFX volume: " + volume);
-        audioMixer.SetFloat("sfxVolume", volume);
+        Debug.Log("SFX volume: " + Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("sfxVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetVoiceVolume(float volume)
     {
-        Debug.Log("Voice volume: " + volume);
-        audioMixer.SetFloat("voiceVolume", volume);
+        Debug.Log("Voice volume: " + Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("voiceVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetSensitivity(float sensitivity)
     {
         Debug.Log("Cam sensitivity: " + sensitivity + ", " + sensitivity * 10 + ", " + sensitivity * 8);
         
-        savedSettings.mouseCamSensitivity = sensitivity;
-        savedSettings.gamepadHorCamSensitivity = sensitivity * 10;
-        savedSettings.gamepadVertCamSensitivity = sensitivity * 8;
+        SavedSettings.mouseCamSensitivity = sensitivity;
+        SavedSettings.gamepadHorCamSensitivity = sensitivity * 10;
+        SavedSettings.gamepadVertCamSensitivity = sensitivity * 8;
     }
 
     public void FullscreenToggle()
