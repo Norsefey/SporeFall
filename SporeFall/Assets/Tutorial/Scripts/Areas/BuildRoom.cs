@@ -111,11 +111,11 @@ public class BuildRoom : MonoBehaviour
 
         if (manager.usingGamepad)
         {
-            tutorialText.text = "Try placing a structure on the platform by pressing <b>Right Trigger</b>";
+            tutorialText.text = "Try placing a structure on the <b>Grassy</b> platform by pressing <b>Right Trigger</b>";
         }
         else
         {
-            tutorialText.text = "Try placing a structure on the platform by <b>left clicking</b>";
+            tutorialText.text = "Try placing a structure on the <b>Grassy</b>  platform by <b>left clicking</b>";
         }
         currentMycelia = GameManager.Instance.Mycelia;
     }
@@ -146,11 +146,11 @@ public class BuildRoom : MonoBehaviour
             tutorialIndex++;
             if (manager.usingGamepad)
             {
-                tutorialText.text = "Look at the turret, and move it by holding <b>Right Trigger</b>";
+                tutorialText.text = "Look at the Structure, and move it by holding <b>Right Trigger</b>";
             }
             else
             {
-                tutorialText.text = "Look at the turret, and move it by left clicking and dragging.";
+                tutorialText.text = "Look at the Structure, and move it by <b>left clicking</b> and dragging.";
             }
         }
     }
@@ -166,7 +166,7 @@ public class BuildRoom : MonoBehaviour
             }
             else
             {
-                tutorialText.text = "Structures can also be Recycled by holding X for a (partial if damaged) refund." +
+                tutorialText.text = "Structures can also be Recycled by holding <b>X</b> for a (partial if damaged) refund." +
                     " \n Recycle the Structure.";
             }
         }
@@ -184,7 +184,7 @@ public class BuildRoom : MonoBehaviour
             }
             else
             {
-                tutorialText.text = "You can pause at any time with Esc to review the controls if needed.";
+                tutorialText.text = "You can pause at any time with <b>Esc</b> to review the controls if needed.";
             }
             manager.player.ToggleBuildMode();
             StartCoroutine(TutorialComplete());

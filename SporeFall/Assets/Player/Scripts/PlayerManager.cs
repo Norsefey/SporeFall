@@ -61,6 +61,11 @@ public class PlayerManager : MonoBehaviour
     public bool holdingCorruption = false;
     public InputDevice myDevice;
     private bool meleeActive = false;
+
+    [Header("Toxic Water")]
+    [SerializeField] private float toxicDamageRate = 1;
+    public bool inToxicWater;
+
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -87,7 +92,12 @@ public class PlayerManager : MonoBehaviour
         if(canUseWeapon)
             WeaponBehavior();
 
-        // For Testing
+        if(inToxicWater)
+        {
+            pHealth.TakeDamage(toxicDamageRate * Time.deltaTime);
+        }
+
+       /* // For Testing
         {
             if (Input.GetKeyDown(KeyCode.Y) && !isBuilding)
             {
@@ -116,7 +126,7 @@ public class PlayerManager : MonoBehaviour
 
              
             }
-        }
+        }*/
     }
     private void SetManager()
     {
