@@ -159,7 +159,7 @@ public class SettingsMenu : MonoBehaviour
     public void SetMasterVolume(float volume)
     {
         Debug.Log("Master volume: " + Mathf.Log10(volume) * 20);
-        audioMixer.SetFloat("masterVolume", Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetMusicVolume(float volume)

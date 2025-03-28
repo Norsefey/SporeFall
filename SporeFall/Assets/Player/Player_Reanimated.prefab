@@ -663,6 +663,7 @@ MonoBehaviour:
   playerHeight: 1.5
   JumpSpeed: 15
   terminalVelocity: -10
+  coyoteTime: 0.2
   currentState: 0
   footstepSound: {fileID: 8300000, guid: 570571783ec6fd447969f9520df3b919, type: 3}
   footstepVolume: 0.03
@@ -2172,7 +2173,7 @@ MonoBehaviour:
   movingStructure: 0
   structureOverlapMask:
     serializedVersion: 2
-    m_Bits: 4224
+    m_Bits: 4240
   validPlacementColor: {r: 0, g: 1, b: 0, a: 0.25}
   invalidPlacementColor: {r: 1, g: 0, b: 0, a: 0.25}
   buildModeText: "<color=red>Build Mode</color> \n F to Select Placed Structure\n
@@ -3304,6 +3305,8 @@ MonoBehaviour:
   respawnTime: 1
   fallbackSpawnPoint: {fileID: 0}
   holdingCorruption: 0
+  toxicDamageRate: 2
+  inToxicWater: 0
 --- !u!114 &4254327476817490809
 MonoBehaviour:
   m_ObjectHideFlags: 0
