@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public enum EnemyState
 {
@@ -14,14 +13,13 @@ public enum EnemyState
     Strafe
 }
 
-// Abstract base class for all bosses
+// Abstract base class for all Enemies
 public abstract class BaseEnemy : MonoBehaviour
 {
     // Public events
     public delegate void EnemyDeath(BaseEnemy enemy); // Modified to pass the enemy instance
     public event EnemyDeath OnEnemyDeath;
 
-    [Header("Base Components")]
     [SerializeField] protected Attack[] attacks;
     [SerializeField] protected Animator animator;
     [SerializeField] protected Damageable health;
@@ -42,7 +40,7 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected float damagePriorityThreshold = 20f; // Amount of damage that triggers defensive priorities
     [SerializeField] protected float damageTrackingDuration = 3f; // How long to track damage for
     private bool targetingStructure = false;
-    public Queue<DamageInstance> recentDamage = new Queue<DamageInstance>();
+    public Queue<DamageInstance> recentDamage = new();
     public struct DamageInstance
     {
         public float amount;
@@ -208,7 +206,7 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     protected virtual List<StateWeight> CalculateStateWeights()
     {
-        List<StateWeight> weights = new List<StateWeight>();
+        List<StateWeight> weights = new();
         float distanceToTarget = currentTarget ? Vector3.Distance(transform.position, currentTarget.position) : float.MaxValue;
         float recentDamageSum = CalculateRecentDamage();
         // Chase Priority
@@ -375,7 +373,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
         else
         {
-            // For structures, use the actual position
+            // Structures
             targetPosition = currentTarget.position;
         }
 
@@ -548,7 +546,7 @@ public abstract class BaseEnemy : MonoBehaviour
         .Where(c => c != null && c.gameObject.activeSelf && priorityTags.Contains(c.tag))    // Filter by priority tags
         .Where(c => IsTargetAccessible(c.transform))              // Filter by NavMesh accessibility
         .OrderBy(c => GetPriorityIndex(c.tag))                   // Prioritize by tag order
-        .ThenBy(c => Vector3.Distance(transform.position, c.transform.position)) // If same tag, choose closest
+        .ThenBy(c => Vector3.Distance(transform.position, c.transform.GetComponent<Collider>().ClosestPoint(transform.position))) // If same tag, choose closest
         .Select(c => c.transform)
         .FirstOrDefault();
         targetingStructure = true;
@@ -564,7 +562,7 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     private IEnumerator PeriodicTargetDetection()
     {
-        WaitForSeconds waitTime = new WaitForSeconds(4f); // Adjust interval as needed
+        WaitForSeconds waitTime = new(4f); // Adjust interval as needed
 
         while (gameObject.activeInHierarchy)
         {
@@ -578,14 +576,13 @@ public abstract class BaseEnemy : MonoBehaviour
         if (target == null) return false;
 
         // Get the nearest valid position on NavMesh to the target
-        NavMeshHit hit;
         Vector3 targetPosition = target.position;
 
         // First check if the target is directly on a NavMesh
-        if (NavMesh.SamplePosition(targetPosition, out hit, 1.0f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
         {
             // Calculate path to target
-            NavMeshPath path = new NavMeshPath();
+            NavMeshPath path = new();
             if (agent.CalculatePath(hit.position, path))
             {
                 // Check if the path is complete and valid
@@ -596,7 +593,7 @@ public abstract class BaseEnemy : MonoBehaviour
         // If target isn't directly on NavMesh, try to find the nearest valid position
         if (NavMesh.SamplePosition(targetPosition, out hit, 2.0f, NavMesh.AllAreas))
         {
-            NavMeshPath path = new NavMeshPath();
+            NavMeshPath path = new();
             if (agent.CalculatePath(hit.position, path))
             {
                 return path.status == NavMeshPathStatus.PathComplete;

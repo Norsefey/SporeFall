@@ -1,4 +1,5 @@
 // Ignore Spelling: buildable
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -8,7 +9,7 @@ public class BuildGun : Weapon
     [Header("Build Gun Settings")]
     public GameObject[] buildableStructures;
     public Structure selectedStructure; // The currently selected object (for placing, moving or deleting)
-    public LayerMask groundLayer;
+    public LayerMask placeableLayerMask;
     public LayerMask structureLayer; // LayerMask for detecting objects the player can select
     public int currentBuildIndex = 0; // Current selected object to build
     public float maxBuildDistance = 100f; // Maximum distance for building
@@ -22,8 +23,8 @@ public class BuildGun : Weapon
 
     [Header("Placement Validation")]
     public LayerMask structureOverlapMask;
-    public Color validPlacementColor = new Color(0, 1, 0, 0.25f); // Green tint for valid placement
-    public Color invalidPlacementColor = new Color(1, 0, 0, 0.25f); // Red tint for invalid placement
+    public Color validPlacementColor = new(0, 1, 0, 0.25f); // Green tint for valid placement
+    public Color invalidPlacementColor = new(1, 0, 0, 0.25f); // Red tint for invalid placement
     private bool isValidPlacement = true;
     private Vector3 originalPosition; // Store original position for edit mode, in case move doesn't work, returns to original position
     private Quaternion originalRotation; // Store original rotation for edit mode
@@ -32,7 +33,8 @@ public class BuildGun : Weapon
     [SerializeField] private string buildModeText = "<color=red>Build Mode</color> \n Mousewheel to change Structure \n Hold Right mouse to Preview \n F to enter Edit Mode";
     [SerializeField] private string editModeText = "<color=green>Edit Mode</color> \n Left mouse to Move \n Hold X to Destroy \n F to return";
 
-
+    private PlatformStructure selectedPlatform;
+    private bool placingOnPlatform = false;
     // To Store original colors for changing preview colors
     private class MaterialData
     {
@@ -45,7 +47,21 @@ public class BuildGun : Weapon
         // Called when player presses fire button
         if (isEditing)
         {
-            movingStructure = true;
+            if (selectedStructure.CompareTag("Platform"))
+            {
+                if (selectedStructure.transform.GetChild(0).GetComponentInChildren<PlatformStructure>().hasStructure)
+                {
+                    player.pUI.EnablePrompt("<color=red>Holding A Structure</color> - Cannot Move");
+                }
+                else
+                {
+                    movingStructure = true;
+                }
+            }
+            else
+            {
+                movingStructure = true;
+            }
             PreviewStructure();
         }
     }
@@ -65,8 +81,7 @@ public class BuildGun : Weapon
             // If placement is invalid, return to original position
             if (!isValidPlacement && selectedStructure != null)
             {
-                selectedStructure.transform.position = originalPosition;
-                selectedStructure.transform.rotation = originalRotation;
+                selectedStructure.transform.SetPositionAndRotation(originalPosition, originalRotation);
                 isValidPlacement = true;
                 UpdatePreviewColor(true);
                 player.pUI.EnablePrompt("<color=red>Invalid Placement</color> - Returned to original position");
@@ -88,6 +103,9 @@ public class BuildGun : Weapon
         else if (currentBuildIndex < 0)
             currentBuildIndex = buildableStructures.Length - 1;
 
+        placeableLayerMask = buildableStructures[currentBuildIndex].GetComponent<Structure>().placeableLayer;
+        structureOverlapMask = buildableStructures[currentBuildIndex].GetComponent<Structure>().collisionOverlapLayer;
+
         if (selectedStructure != null)
         {
             RemovePreview();
@@ -105,7 +123,7 @@ public class BuildGun : Weapon
 
         Ray ray = new(player.pCamera.myCamera.transform.position, player.pCamera.myCamera.transform.forward);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, groundLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxBuildDistance, placeableLayerMask))
         {
             if (!isEditing && selectedStructure == null)
             {// spawn in a new structure
@@ -137,8 +155,28 @@ public class BuildGun : Weapon
                 // Only check for overlaps when we're in edit mode and moving, or just previewing
                 if (isEditing && movingStructure || !isEditing)
                 {
-                    selectedStructure.transform.position = hit.point;
-                    CheckStructureOverlap();
+                    if (hit.collider.CompareTag("Platform") && !selectedStructure.CompareTag("Platform"))
+                    {
+                        selectedPlatform = hit.transform.GetComponent<PlatformStructure>();
+                        if (selectedPlatform.hasStructure)
+                        {
+                            isValidPlacement = false;
+                            UpdatePreviewColor(isValidPlacement);
+                        }
+                        else
+                        {
+                            selectedStructure.transform.position = hit.transform.position + (Vector3.up);
+                            placingOnPlatform = true;
+                            isValidPlacement = true;
+                            UpdatePreviewColor(isValidPlacement);
+                        }
+                    }
+                    else
+                    {
+                        placingOnPlatform = false;
+                        selectedStructure.transform.position = hit.point;
+                        CheckStructureOverlap();
+                    }
                 }
 
                 if (player.pController.currentState == PlayerMovement.PlayerState.Aiming)
@@ -174,9 +212,25 @@ public class BuildGun : Weapon
                 selectedStructure.Initialize();
                 selectedStructure.ToggleStructureBehavior(true);
                 selectedStructure.ShowRadius(false);
-                
+
+                if (placingOnPlatform)
+                {
+                    selectedPlatform.SetStructure(selectedStructure);
+                    selectedStructure.myPlatform = selectedPlatform;
+                    selectedStructure.onPlatform = true;
+                }
+                else
+                {
+                    if (selectedStructure.onPlatform)
+                    {
+                        selectedStructure.myPlatform.RemoveStructure();
+                        selectedStructure.onPlatform = false;
+                        selectedStructure.myPlatform = null;
+                    }
+                }
+
                 //SetStructureToOpaque();
-                
+
                 RestoreOriginalColors(); // Restore original colors when placing
                 // for moving train stores all active structures
                 GameManager.Instance.trainHandler.AddStructure(selectedStructure);

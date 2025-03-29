@@ -3,7 +3,7 @@ using TMPro;
 
 public class StructureHP : Damageable
 {
-    [SerializeField] private Structure structure;
+    public Structure structure;
     void Start()
     {
         currentHP = maxHP;
@@ -17,7 +17,7 @@ public class StructureHP : Damageable
     // Handle death and destroy the parent object
     protected override void Die()
     {
-        Debug.Log(gameObject.name + " has died.");
+        //Debug.Log(gameObject.name + " has died.");
         structure.ReturnToPool();
     }
 }

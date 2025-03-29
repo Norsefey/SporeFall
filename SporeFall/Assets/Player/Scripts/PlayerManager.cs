@@ -60,7 +60,6 @@ public class PlayerManager : MonoBehaviour
 
     public bool holdingCorruption = false;
     public InputDevice myDevice;
-    private bool meleeActive = false;
 
     [Header("Toxic Water")]
     [SerializeField] private float toxicDamageRate = 1;

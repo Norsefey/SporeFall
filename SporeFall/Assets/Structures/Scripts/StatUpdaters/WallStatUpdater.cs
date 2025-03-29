@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WallStatUpdater : MonoBehaviour, IStructureStats
 {
+    [SerializeField] private StructureHP wallHP;
     public void Initialize(StructureLevels levels, int level)
     {
         if (levels is WallLevels wallLevels)
@@ -22,7 +23,8 @@ public class WallStatUpdater : MonoBehaviour, IStructureStats
 
     private void UpdateWallStats(WallLevels levels, int level)
     {
-        //var levelData = levels.levels[level];
+        var levelData = levels.levels[level];
 
+        wallHP.SetMaxHP(levelData.maxHealth);
     }
 }

@@ -9,7 +9,8 @@ public enum StructureType
     Sherman,
     RepairStation,
     Wall,
-    Lily
+    Lily,
+    Platform
 }
 public class UpgradeManager : MonoBehaviour
 {

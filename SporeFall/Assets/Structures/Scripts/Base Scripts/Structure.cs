@@ -8,17 +8,26 @@ public class Structure : MonoBehaviour
     [Space(5)]
     [SerializeField] private GameObject controlScriptObject;
     [Space(5)]
+    public StructureLevels structureStats;
     [SerializeField] private GameObject[] levelVisuals;
-    [SerializeField] public StructureLevels structureStats;
     [SerializeField] private GameObject radiusIndicator;
     [SerializeField] private StructureHP healthComponent;
+
+    [Header("LayerMasks")]
+    public LayerMask placeableLayer;
+    public LayerMask collisionOverlapLayer;
+
     [HideInInspector]
     public StructurePoolBehavior poolBehavior;
-
     private TrainHandler train;
     private IStructureStats structureBehavior;
     private int currentLevel = 0;
 
+
+    [HideInInspector]
+    public bool onPlatform = false;
+    [HideInInspector]
+    public PlatformStructure myPlatform;
     private void Awake()
     {
         poolBehavior = GetComponent<StructurePoolBehavior>();
@@ -88,9 +97,7 @@ public class Structure : MonoBehaviour
         {
             levelVisuals[currentLevel - 1].SetActive(false);
         }
-
         // Get and activate new visual
-        var levelData = structureStats.GetLevel(currentLevel);
         if (currentLevel < levelVisuals.Count() && levelVisuals[currentLevel] != null)
         {
             levelVisuals[currentLevel].SetActive(true);
@@ -129,6 +136,10 @@ public class Structure : MonoBehaviour
     {
         if (train != null)
             train.RemoveStructure(this);
+        if(onPlatform && myPlatform != null)
+        {
+            myPlatform.RemoveStructure();
+        }
 
         healthComponent.ResetHealth();
         controlScriptObject.SetActive(false);

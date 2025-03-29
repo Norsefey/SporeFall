@@ -14,7 +14,6 @@ public class SinkablePlatform : Interactables
     private Vector3 originalPosition;
     private bool isSinking = false;
     private bool isRising = false;
-    private float timer = 0f;
 
     private void Awake()
     {
