@@ -438,6 +438,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_Area
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_GenerateLinks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_OverrideGenerateLinks
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4798988233583954354, guid: 87c9b304df4b31044b1784a32b85502a,
         type: 3}
       propertyPath: m_Name
@@ -535,6 +550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 274371485}
   - component: {fileID: 274371486}
+  - component: {fileID: 274371487}
   m_Layer: 4
   m_Name: Water
   m_TagString: Water
@@ -579,6 +595,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 400, y: 1, z: 1500}
   m_Center: {x: 0, y: -1, z: 500}
+--- !u!114 &274371487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274371484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1001 &305367343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -587,6 +622,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_Area
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_GenerateLinks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_OverrideGenerateLinks
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4798988233583954354, guid: 87c9b304df4b31044b1784a32b85502a,
         type: 3}
       propertyPath: m_Name
@@ -792,6 +842,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_Area
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_GenerateLinks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_OverrideGenerateLinks
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4798988233583954354, guid: 87c9b304df4b31044b1784a32b85502a,
         type: 3}
       propertyPath: m_Name
@@ -910,6 +975,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de12e1eec9f48a84db51d0b278da1f21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &487268869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 487268870}
+  - component: {fileID: 487268871}
+  m_Layer: 0
+  m_Name: NavBlocker (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &487268870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487268869}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -126, y: 0, z: -204}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1556852243}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &487268871
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487268869}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 75, y: 0.5, z: 500}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 15, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &578684324
 GameObject:
   m_ObjectHideFlags: 0
@@ -1625,6 +1738,7 @@ GameObject:
   - component: {fileID: 1018447123}
   - component: {fileID: 1018447125}
   - component: {fileID: 1018447124}
+  - component: {fileID: 1018447126}
   m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
@@ -1707,6 +1821,25 @@ Terrain:
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
   m_TreeMotionVectorModeOverride: 3
+--- !u!114 &1018447126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018447122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1105193554 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 322841761071777453, guid: fdc926a78f277614cafc0f9621ce8e8a,
@@ -1744,6 +1877,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1790993140}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1178559981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1178559982}
+  - component: {fileID: 1178559983}
+  m_Layer: 0
+  m_Name: NavBlocker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1178559982
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178559981}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 126.4, y: 0, z: -204}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1556852243}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &1178559983
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178559981}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 75, y: 0.5, z: 500}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 15, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1195646313
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1752,6 +1933,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_Area
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_GenerateLinks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639960759822324687, guid: 87c9b304df4b31044b1784a32b85502a,
+        type: 3}
+      propertyPath: m_OverrideGenerateLinks
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4798988233583954354, guid: 87c9b304df4b31044b1784a32b85502a,
         type: 3}
       propertyPath: m_Name
@@ -2554,7 +2750,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 588}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1178559982}
+  - {fileID: 487268870}
   m_Father: {fileID: 586955518}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1556852244
@@ -2571,14 +2769,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
   m_CollectObjects: 1
-  m_Size: {x: 350, y: 10, z: 1200}
+  m_Size: {x: 350, y: 10, z: 1400}
   m_Center: {x: 0, y: 15, z: 0}
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
   m_UseGeometry: 1
   m_DefaultArea: 0
-  m_GenerateLinks: 1
+  m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
@@ -2760,6 +2958,7 @@ GameObject:
   - component: {fileID: 1664895862}
   - component: {fileID: 1664895861}
   - component: {fileID: 1664895860}
+  - component: {fileID: 1664895863}
   m_Layer: 6
   m_Name: Terrain_(-500.00, 0.00, 500.00)
   m_TagString: Untagged
@@ -2842,6 +3041,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 586955518}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1664895863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664895859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!4 &1729670024 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8384043556144029723, guid: fdc926a78f277614cafc0f9621ce8e8a,

@@ -20,7 +20,7 @@ public class EnemyHP : Damageable
         if (manager != null)
         {
             manager.CheckDamageThreshold(maxHP - currentHP);
-            manager.recentDamage.Enqueue(new BaseEnemy.DamageInstance(damage, Time.time));
+            manager.AddDamageInstance(damage);
 
             // Calculate flinch probability (higher HP = higher chance to flinch)
             float flinchChance = currentHP / maxHP; // 1 at full HP, 0 at 0 HP

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,7 +19,7 @@ public enum EnemyState
 public abstract class BaseEnemy : MonoBehaviour
 {
     // Public events
-    public delegate void EnemyDeath(BaseEnemy enemy); // Modified to pass the enemy instance
+    public delegate void EnemyDeath(BaseEnemy enemy);
     public event EnemyDeath OnEnemyDeath;
 
     [SerializeField] protected Attack[] attacks;
@@ -33,14 +35,22 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected float strafeSpeed = 5f;
     protected EnemyState currentState = EnemyState.Idle;
     private float stateTimer;
-    private Vector3 strafeTarget;
     private bool strafeDirectionRight = true;
+    [HideInInspector]
+    public Vector3 strafeTarget;
+
     [Header("State Selection")]
-    [SerializeField] protected float chasePriorityDistance = 25f; // Distance above which chase becomes high priority
-    [SerializeField] protected float damagePriorityThreshold = 20f; // Amount of damage that triggers defensive priorities
-    [SerializeField] protected float damageTrackingDuration = 3f; // How long to track damage for
+    [SerializeField] protected float chasePriorityDistance = 25f;
+    [SerializeField] protected float damagePriorityThreshold = 20f;
+    [SerializeField] protected float damageTrackingDuration = 3f;
     private bool targetingStructure = false;
-    public Queue<DamageInstance> recentDamage = new();
+
+    // Use a simple array instead of Queue for better performance
+    private const int MAX_DAMAGE_HISTORY = 10;
+    private DamageInstance[] damageHistory;
+    private int damageHistoryCount = 0;
+    private int damageHistoryIndex = 0;
+
     public struct DamageInstance
     {
         public float amount;
@@ -52,6 +62,9 @@ public abstract class BaseEnemy : MonoBehaviour
             this.time = time;
         }
     }
+
+    // Reuse this list to avoid allocations
+    private List<StateWeight> stateWeightsList = new List<StateWeight>(5);
     protected struct StateWeight
     {
         public EnemyState state;
@@ -63,40 +76,77 @@ public abstract class BaseEnemy : MonoBehaviour
             this.weight = weight;
         }
     }
+
     [Header("Attack Stats")]
     [SerializeField] protected float stoppingDistance = 20f;
-/*    [SerializeField] protected float minAttackInterval = 5;
-    [SerializeField] protected float maxAttackInterval = 8;*/
-    [SerializeField] protected float aggressionFactor = 0.6f; // Chance to choose aggressive actions
+    [SerializeField] protected float aggressionFactor = 0.6f;
     protected bool isAttacking;
 
+    // Cached best attack to avoid recalculation
+    protected Attack cachedBestAttack;
+    protected float cachedAttackDistance;
+    protected float cachedAttackTime;
+    protected float attackCacheTime = 0.5f;
+
     [Header("Targeting")]
-    public TrainHandler train; // if nothing is in range will move to Payload or train
+    public TrainHandler train;
     private Transform trainWall;
     public Transform currentTarget;
-    // Array to hold multiple valid target tags
-    public string[] priorityTags; // e.g., "Player", "Ally"
+    public string[] priorityTags;
     public float detectionRange = 20;
-    public LayerMask targetsLayerMask; // So we only detect what we need to
+    public LayerMask targetsLayerMask;
     [SerializeField] protected float targetSwitchThreshold = 100f;
     private bool passedThreshold = false;
-    private Collider[] detectedColliders;      // Array to store detected colliders
-    private int maxDetectedObjects = 25; // Max number of objects the enemy can detect at once
+
+    // For target detection optimization
+    private Collider[] detectedColliders;
+    private int maxDetectedObjects = 25;
+    private float targetDetectionInterval = 0.5f;
+    private float targetDetectionTimer = 0;
+    private int lastDetectedCount = 0;
+
+    // Position caching to reduce collider calculations
+    private Vector3 cachedTargetPosition;
+    private float targetPositionCacheTime = 0.2f;
+    private float targetPositionCacheTimer = 0;
+
     public Animator Animator => animator;
     public AudioSource AudioSource => audioSource;
 
     private bool isInitialized = false;
     private bool isRising = false;
+
     [Header("Animations")]
     [SerializeField] private float risingAnimationLength = 2;
 
+    // State machine references
+    private Dictionary<EnemyState, IEnemyState> states;
+    private IEnemyState currentStateObj;
+
     protected virtual void Awake()
     {
-        // Get component references once
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
         detectedColliders = new Collider[maxDetectedObjects];
+        damageHistory = new DamageInstance[MAX_DAMAGE_HISTORY];
+
+        // Initialize state machine
+        InitializeStateMachine();
     }
+    protected virtual void InitializeStateMachine()
+    {
+        states = new Dictionary<EnemyState, IEnemyState>
+        {
+            { EnemyState.Idle, new IdleState(this) },
+            { EnemyState.Chase, new ChaseState(this) },
+            { EnemyState.Attack, new AttackState(this) },
+            { EnemyState.Retreat, new RetreatState(this) },
+            { EnemyState.Strafe, new StrafeState(this) }
+        };
+
+        currentStateObj = states[EnemyState.Idle];
+    }
+
 
     protected virtual void OnEnable()
     {
@@ -105,7 +155,9 @@ public abstract class BaseEnemy : MonoBehaviour
             Initialize();
             isInitialized = true;
         }
-        StartCoroutine(PeriodicTargetDetection());
+
+        // Use a simple repeated check instead of coroutine for better performance
+        targetDetectionTimer = 0;
         ResetState();
     }
     protected virtual void Initialize()
@@ -122,14 +174,16 @@ public abstract class BaseEnemy : MonoBehaviour
 
         // Reset variables
         currentState = EnemyState.Idle;
+        currentStateObj = states[EnemyState.Idle];
         isAttacking = false;
         passedThreshold = false;
         targetingStructure = false;
         strafeDirectionRight = true;
         stateTimer = 0f;
 
-        // Reset queues and collections
-        recentDamage.Clear();
+        // Clear the damage history
+        damageHistoryCount = 0;
+        damageHistoryIndex = 0;
 
         // Reset health
         if (health != null)
@@ -138,35 +192,40 @@ public abstract class BaseEnemy : MonoBehaviour
         }
 
         // Reset NavMeshAgent
-        if (agent != null)
+        if (agent != null && agent.isActiveAndEnabled)
         {
             agent.ResetPath();
             agent.isStopped = false;
             agent.velocity = Vector3.zero;
         }
 
-       /* // Reset animation
-        if (animator != null)
-        {
-            animator.Rebind();
-            animator.Update(0f);
-        }*/
-
-        // do not want movement while rising from from ground
+        // Start behavior if not rising
         if (!isRising)
         {
-            // Start behavior
             DetectTargets();
             SetRandomState();
         }
     }
+
     protected virtual void Update()
     {
+        // Handle target detection on a timer instead of every frame
+        targetDetectionTimer -= Time.deltaTime;
+        if (targetDetectionTimer <= 0)
+        {
+            if (currentTarget == null || !currentTarget.gameObject.activeSelf)
+            {
+                DetectTargets();
+            }
+            targetDetectionTimer = targetDetectionInterval;
+        }
+
         UpdateStateTimer();
 
         if (!isAttacking)
         {
-            UpdateCurrentState();
+            // Use the state pattern
+            currentStateObj.UpdateState();
         }
     }
     protected virtual void UpdateStateTimer()
@@ -179,23 +238,37 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     protected virtual void SetRandomState()
     {
-        List<StateWeight> stateWeights = CalculateStateWeights();
+        // Clear and reuse the list
+        stateWeightsList.Clear();
 
-        // Normalize weights
-        float totalWeight = stateWeights.Sum(sw => sw.weight);
+        float distanceToTarget = GetDistanceToTarget();
+        float recentDamageSum = CalculateRecentDamage();
+
+        // Add state weights to our reused list
+        stateWeightsList.Add(new StateWeight(EnemyState.Chase, CalculateChaseWeight(distanceToTarget)));
+        stateWeightsList.Add(new StateWeight(EnemyState.Attack, CalculateAttackWeight(distanceToTarget)));
+        stateWeightsList.Add(new StateWeight(EnemyState.Retreat, CalculateRetreatWeight(recentDamageSum, distanceToTarget)));
+        stateWeightsList.Add(new StateWeight(EnemyState.Strafe, CalculateStrafeWeight(recentDamageSum, distanceToTarget)));
+        stateWeightsList.Add(new StateWeight(EnemyState.Idle, 0.01f));
+
+        // Calculate total weight
+        float totalWeight = 0;
+        for (int i = 0; i < stateWeightsList.Count; i++)
+        {
+            totalWeight += stateWeightsList[i].weight;
+        }
+
         if (totalWeight > 0)
         {
             float randomValue = Random.value * totalWeight;
             float currentSum = 0;
 
-            foreach (var stateWeight in stateWeights)
+            for (int i = 0; i < stateWeightsList.Count; i++)
             {
-                currentSum += stateWeight.weight;
-                //Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
+                currentSum += stateWeightsList[i].weight;
                 if (randomValue <= currentSum)
                 {
-                    //Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
-                    SetState(stateWeight.state);
+                    SetState(stateWeightsList[i].state);
                     return;
                 }
             }
@@ -204,7 +277,7 @@ public abstract class BaseEnemy : MonoBehaviour
         // Fallback to idle if something goes wrong
         SetState(EnemyState.Idle);
     }
-    protected virtual List<StateWeight> CalculateStateWeights()
+   /* protected virtual List<StateWeight> CalculateStateWeights()
     {
         List<StateWeight> weights = new();
         float distanceToTarget = currentTarget ? Vector3.Distance(transform.position, currentTarget.position) : float.MaxValue;
@@ -225,7 +298,7 @@ public abstract class BaseEnemy : MonoBehaviour
         weights.Add(new StateWeight(EnemyState.Idle, 0.01f));
 
         return weights;
-    }
+    }*/
     protected virtual float CalculateChaseWeight(float distanceToTarget)
     {
         if (distanceToTarget > chasePriorityDistance)
@@ -236,7 +309,7 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     protected virtual float CalculateAttackWeight(float distanceToTarget)
     {
-        Attack bestAttack = ChooseBestAttack(distanceToTarget);
+        Attack bestAttack = GetBestAttack(distanceToTarget);
         if (bestAttack != null)
             return 2.5f;
         return 0.5f;
@@ -254,7 +327,7 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     protected virtual float CalculateStrafeWeight(float recentDamage, float distanceToTarget)
     {
-        float weight = 0.01f; // Base weight for strafing
+        float weight = 0.1f; // Base weight for strafing
 
         if (recentDamage > damagePriorityThreshold * 0.5f)
             weight += 1.5f;
@@ -263,20 +336,66 @@ public abstract class BaseEnemy : MonoBehaviour
 
         return weight;
     }
-    protected float CalculateRecentDamage()
+    public virtual void CalculateStrafePosition()
+    {
+        if (currentTarget != null)
+        {
+            strafeDirectionRight = !strafeDirectionRight;
+            Vector3 directionToTarget = (GetTargetPosition() - transform.position).normalized;
+            Vector3 perpendicularDirection = strafeDirectionRight ?
+                Vector3.Cross(directionToTarget, Vector3.up) :
+                Vector3.Cross(Vector3.up, directionToTarget);
+
+            Vector3 potentialStrafePosition = transform.position + perpendicularDirection * strafeRadius;
+
+            // Simplify NavMesh sampling with a raycast first
+            if (Physics.Raycast(potentialStrafePosition + Vector3.up * 5, Vector3.down, out RaycastHit hit, 10f))
+            {
+                potentialStrafePosition = hit.point;
+            }
+
+            if (NavMesh.SamplePosition(potentialStrafePosition, out NavMeshHit navHit, strafeRadius, NavMesh.AllAreas))
+            {
+                strafeTarget = navHit.position;
+            }
+        }
+    }
+    public void AddDamageInstance(float amount)
     {
         float currentTime = Time.time;
 
-        // Remove old damage instances
-        while (recentDamage.Count > 0 && currentTime - recentDamage.Peek().time > damageTrackingDuration)
+        if (damageHistoryCount < MAX_DAMAGE_HISTORY)
         {
-            recentDamage.Dequeue();
+            damageHistory[damageHistoryCount] = new DamageInstance(amount, currentTime);
+            damageHistoryCount++;
         }
-        return recentDamage.Sum(d => d.amount);
+        else
+        {
+            // Replace oldest entry in circular buffer
+            damageHistory[damageHistoryIndex] = new DamageInstance(amount, currentTime);
+            damageHistoryIndex = (damageHistoryIndex + 1) % MAX_DAMAGE_HISTORY;
+        }
+    }
+    protected float CalculateRecentDamage()
+    {
+        float currentTime = Time.time;
+        float totalDamage = 0;
+
+        for (int i = 0; i < damageHistoryCount; i++)
+        {
+            if (currentTime - damageHistory[i].time <= damageTrackingDuration)
+            {
+                totalDamage += damageHistory[i].amount;
+            }
+        }
+
+        return totalDamage;
     }
     protected virtual void SetState(EnemyState newState)
     {
         currentState = newState;
+        currentStateObj = states[newState];
+        currentStateObj.EnterState();
 
         // Set appropriate timer for the new state
         switch (currentState)
@@ -295,7 +414,6 @@ public abstract class BaseEnemy : MonoBehaviour
                 stateTimer = Random.Range(5f, 8f);
                 break;
             case EnemyState.Chase:
-                DetectTargets();
                 stateTimer = Random.Range(1f, 4f);
                 break;
             default:
@@ -306,7 +424,7 @@ public abstract class BaseEnemy : MonoBehaviour
         if (animator != null)
             animator.SetInteger("State", (int)currentState);
     }
-    protected virtual void UpdateCurrentState()
+/*    protected virtual void UpdateCurrentState()
     {
         // for when current target is destroyed find a new target
         if (currentTarget == null)
@@ -483,38 +601,49 @@ public abstract class BaseEnemy : MonoBehaviour
                 CalculateStrafePosition();
             }
         }
-    }
+    }*/
     public void SetIsAttacking(bool attacking)
     {
         isAttacking = attacking;
         if (!agent.isActiveAndEnabled)
             return;
-        if (attacking)
-        {
-            agent.isStopped = true;
-        }
-        else
-        {
-            agent.isStopped = false;
-        }
+
+        agent.isStopped = attacking;
     }
-    protected virtual Attack ChooseBestAttack(float distanceToTarget)
+    public virtual Attack GetBestAttack(float distanceToTarget)
     {
+        float currentTime = Time.time;
+
+        // Use cached result if it's recent and distance hasn't changed much
+        if (cachedBestAttack != null &&
+            currentTime - cachedAttackTime < attackCacheTime &&
+            Mathf.Abs(cachedAttackDistance - distanceToTarget) < 2f)
+        {
+            return cachedBestAttack;
+        }
+
+        // Recalculate best attack
         Attack bestAttack = null;
         float bestPriority = float.MinValue;
 
-        foreach (Attack attack in attacks)
+        for (int i = 0; i < attacks.Length; i++)
         {
-            if (attack.CanUse(distanceToTarget))
+            if (attacks[i].CanUse(distanceToTarget))
             {
-                float priority = EvaluateAttackPriority(attack, distanceToTarget);
+                float priority = EvaluateAttackPriority(attacks[i], distanceToTarget);
                 if (priority > bestPriority)
                 {
                     bestPriority = priority;
-                    bestAttack = attack;
+                    bestAttack = attacks[i];
                 }
             }
         }
+
+        // Cache the result
+        cachedBestAttack = bestAttack;
+        cachedAttackDistance = distanceToTarget;
+        cachedAttackTime = currentTime;
+
         return bestAttack;
     }
     protected virtual float EvaluateAttackPriority(Attack attack, float distanceToTarget)
@@ -530,28 +659,70 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         float elapsedTime = 0f;
         float damagePerTick = totalDamage * (tickRate / duration);
+        WaitForSeconds waitTickTime = new WaitForSeconds(tickRate);
 
         while (elapsedTime < duration)
         {
             target.TakeDamage(damagePerTick);
-            yield return new WaitForSeconds(tickRate);
+            yield return waitTickTime;
             elapsedTime += tickRate;
         }
     }
     void DetectTargets()
     {
         int detectedCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRange, detectedColliders, targetsLayerMask);
+        lastDetectedCount = detectedCount;
+        // Early exit if nothing detected
+        if (detectedCount == 0)
+        {
+            if (train != null)
+            {
+                targetingStructure = false;
+                if (train.Payload != null)
+                    currentTarget = train.Payload.transform;
+                else
+                    currentTarget = trainWall;
+            }
+            return;
+        }
 
-        currentTarget = detectedColliders
-        .Where(c => c != null && c.gameObject.activeSelf && priorityTags.Contains(c.tag))    // Filter by priority tags
-        .Where(c => IsTargetAccessible(c.transform))              // Filter by NavMesh accessibility
-        .OrderBy(c => GetPriorityIndex(c.tag))                   // Prioritize by tag order
-        .ThenBy(c => Vector3.Distance(transform.position, c.transform.GetComponent<Collider>().ClosestPoint(transform.position))) // If same tag, choose closest
-        .Select(c => c.transform)
-        .FirstOrDefault();
-        targetingStructure = true;
+        // Find best target
+        Transform bestTarget = null;
+        int bestPriority = int.MaxValue;
+        float bestDistance = float.MaxValue;
 
-        if (train != null && (currentTarget == null || currentTarget.CompareTag("Train")))
+        for (int i = 0; i < detectedCount; i++)
+        {
+            var collider = detectedColliders[i];
+            if (collider == null || !collider.gameObject.activeSelf)
+                continue;
+
+            string tag = collider.tag;
+            if (!System.Array.Exists(priorityTags, t => t == tag))
+                continue;
+
+            if (!IsTargetAccessible(collider.transform))
+                continue;
+
+            int priority = GetPriorityIndex(tag);
+            if (priority < bestPriority ||
+                (priority == bestPriority &&
+                 Vector3.Distance(transform.position, collider.transform.position) < bestDistance))
+            {
+                bestTarget = collider.transform;
+                bestPriority = priority;
+                bestDistance = Vector3.Distance(transform.position, collider.transform.position);
+            }
+        }
+
+        targetingStructure = bestTarget == null || bestTarget.CompareTag("Structure");
+
+        if (bestTarget != null)
+        {
+            currentTarget = bestTarget;
+            targetPositionCacheTimer = 0; // Force update of cached position
+        }
+        else if (train != null)
         {
             targetingStructure = false;
             if (train.Payload != null)
@@ -560,7 +731,69 @@ public abstract class BaseEnemy : MonoBehaviour
                 currentTarget = trainWall;
         }
     }
-    private IEnumerator PeriodicTargetDetection()
+    public Vector3 GetTargetPosition()
+    {
+        if (currentTarget == null)
+            return transform.position;
+
+        targetPositionCacheTimer -= Time.deltaTime;
+
+        if (targetPositionCacheTimer <= 0)
+        {
+            if (!targetingStructure && currentTarget.TryGetComponent<Collider>(out var collider))
+            {
+                cachedTargetPosition = collider.ClosestPoint(transform.position);
+                cachedTargetPosition.y = transform.position.y; // Keep level with enemy
+            }
+            else
+            {
+                cachedTargetPosition = currentTarget.position;
+            }
+
+            targetPositionCacheTimer = targetPositionCacheTime;
+        }
+
+        return cachedTargetPosition;
+    }
+    // Get distance to target using cached position when possible
+    public float GetDistanceToTarget()
+    {
+        if (currentTarget == null)
+            return float.MaxValue;
+
+        return Vector3.Distance(transform.position, GetTargetPosition());
+    }
+
+    // Optimization: check accessibility less frequently
+    private bool IsTargetAccessible(Transform target)
+    {
+        if (target == null) return false;
+
+        // Simple distance check first (optimization)
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+        if (distanceToTarget > detectionRange * 1.5f)
+            return false;
+
+        // Use a simple raycast first as it's faster than NavMesh operations
+        if (Physics.Linecast(transform.position, target.position, out RaycastHit hitInfo, LayerMask.GetMask("Obstacles")))
+        {
+            // If there's an obstacle, do the more expensive NavMesh check
+            if (NavMesh.SamplePosition(target.position, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas))
+            {
+                NavMeshPath path = new NavMeshPath();
+                if (agent.CalculatePath(navHit.position, path))
+                {
+                    return path.status == NavMeshPathStatus.PathComplete;
+                }
+            }
+            return false;
+        }
+
+        // If no obstacles detected by raycast, assume it's accessible
+        return true;
+    }
+
+   /* private IEnumerator PeriodicTargetDetection()
     {
         WaitForSeconds waitTime = new(4f); // Adjust interval as needed
 
@@ -569,39 +802,7 @@ public abstract class BaseEnemy : MonoBehaviour
             DetectTargets();
             yield return waitTime;
         }
-    }
-    // Add this helper method to check if a target position is accessible via NavMesh
-    private bool IsTargetAccessible(Transform target)
-    {
-        if (target == null) return false;
-
-        // Get the nearest valid position on NavMesh to the target
-        Vector3 targetPosition = target.position;
-
-        // First check if the target is directly on a NavMesh
-        if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
-        {
-            // Calculate path to target
-            NavMeshPath path = new();
-            if (agent.CalculatePath(hit.position, path))
-            {
-                // Check if the path is complete and valid
-                return path.status == NavMeshPathStatus.PathComplete;
-            }
-        }
-
-        // If target isn't directly on NavMesh, try to find the nearest valid position
-        if (NavMesh.SamplePosition(targetPosition, out hit, 2.0f, NavMesh.AllAreas))
-        {
-            NavMeshPath path = new();
-            if (agent.CalculatePath(hit.position, path))
-            {
-                return path.status == NavMeshPathStatus.PathComplete;
-            }
-        }
-
-        return false;
-    }
+    }*/
     // Get the priority index of the tag, lower numbers mean higher priority
     int GetPriorityIndex(string tag)
     {
@@ -633,19 +834,14 @@ public abstract class BaseEnemy : MonoBehaviour
             trainWall = train.GetDamagePoint();
         }
     }
-    // Optional: Add method to clean up any persistent effects or coroutines when returned to pool
     protected virtual void OnDisable()
     {
         StopAllCoroutines();
-
-        // Clean up any references
         currentTarget = null;
         train = null;
-
-        // Reset any ongoing effects or states
         SetIsAttacking(false);
 
-        if (agent.isActiveAndEnabled)
+        if (agent != null && agent.isActiveAndEnabled)
         {
             agent.ResetPath();
             agent.isStopped = true;
@@ -654,6 +850,8 @@ public abstract class BaseEnemy : MonoBehaviour
     public void CheckDamageThreshold(float damageTaken)
     {
         passedThreshold = damageTaken >= targetSwitchThreshold;
+        // Add to damage history
+        AddDamageInstance(damageTaken);
     }
     public void TriggerRiseAnimation()
     {
@@ -667,14 +865,13 @@ public abstract class BaseEnemy : MonoBehaviour
         float temp = agent.speed;
         agent.speed = 0;
         isRising = true;
-        Debug.Log("Rising From Ground");
+        //Debug.Log("Rising From Ground");
         yield return new WaitForSeconds(risingAnimationLength);
-        Debug.Log("Done Rising");
-
+        //Debug.Log("Done Rising");
         agent.isStopped = false;
         agent.speed = temp;
-
         isRising = false;
+
         DetectTargets();
         SetRandomState();
     }
