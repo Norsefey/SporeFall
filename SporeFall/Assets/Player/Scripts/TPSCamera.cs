@@ -311,19 +311,46 @@ public class TPSCamera : MonoBehaviour
     }
     public void SetMouseSettings()
     {
-        mHorSense = SavedSettings.mouseCamSensitivity;
-        mvertSense = SavedSettings.mouseCamSensitivity;
-        horSense = mHorSense;
-        verSense = mvertSense;
-        Debug.Log("Mouse settings are: " + SavedSettings.mouseCamSensitivity);
-        Debug.Log("Mouse settings are: " + mHorSense);
+        if (GameManager.Instance.players.Count == 0)
+        {
+            mHorSense = SavedSettings.mouseCamSensitivity;
+            mvertSense = SavedSettings.mouseCamSensitivity;
+            horSense = mHorSense;
+            verSense = mvertSense;
+            Debug.Log("Saved P1 Mouse settings are: " + SavedSettings.mouseCamSensitivity);
+            Debug.Log("P1 Mouse settings are: " + mHorSense);
+        }
+        else if (GameManager.Instance.players.Count > 0)
+        {
+            mHorSense = SavedSettings.mouseCamSensitivity2;
+            mvertSense = SavedSettings.mouseCamSensitivity2;
+            horSense = mHorSense;
+            verSense = mvertSense;
+            Debug.Log("Saved P2 Mouse settings are: " + SavedSettings.mouseCamSensitivity2);
+            Debug.Log("P2 Mouse settings are: " + mHorSense);
+        }
     }
     public void SetGamepadSettings()
     {
-        gHorSense = SavedSettings.gamepadHorCamSensitivity;
-        gvertSense = SavedSettings.gamepadVertCamSensitivity;
-        horSense = gHorSense;
-        verSense = gvertSense;
+        
+        if (GameManager.Instance.players.Count == 0)
+        {
+            gHorSense = SavedSettings.gamepadHorCamSensitivity;
+            gvertSense = SavedSettings.gamepadVertCamSensitivity;
+            horSense = gHorSense;
+            verSense = gvertSense;
+            Debug.Log("Saved P1 gamepad settings are: " + SavedSettings.gamepadHorCamSensitivity + ", " + SavedSettings.gamepadVertCamSensitivity);
+            Debug.Log("P1 Gamepad settings are: " + ", " + gHorSense);
+        }
+        else if (GameManager.Instance.players.Count > 0)
+        {
+            gHorSense = SavedSettings.gamepadHorCamSensitivity2;
+            gvertSense = SavedSettings.gamepadVertCamSensitivity2;
+            horSense = gHorSense;
+            verSense = gvertSense;
+            Debug.Log("Saved P2 gamepad settings are: " + SavedSettings.gamepadHorCamSensitivity2 + ", " + SavedSettings.gamepadVertCamSensitivity2);
+            Debug.Log("P2 Gamepad settings are: " + gHorSense + ", " + gvertSense);
+        }
     }
     public void FlipCameraSide()
     {

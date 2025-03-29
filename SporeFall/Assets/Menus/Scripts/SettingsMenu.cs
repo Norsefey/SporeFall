@@ -17,6 +17,7 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private GameObject sfxVolume;
     [SerializeField] private GameObject voiceVolume;
     [SerializeField] private GameObject aimSensitivity;
+    [SerializeField] private GameObject aimSensitivity2;
     [SerializeField] private GameObject fullscreen;
 
     public CanvasGroup buttonGroup;
@@ -31,8 +32,10 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Slider sfxSlider2;
     [SerializeField] private GameObject voiceSlider;
     [SerializeField] private Slider voiceSlider2;
-    [SerializeField] private GameObject sensitivitySlider;
-    [SerializeField] private Slider sensitivitySlider2;
+    [SerializeField] private GameObject sensitivityP1Slider;
+    [SerializeField] private Slider sensitivityP1Slider2;
+    [SerializeField] private GameObject sensitivityP2Slider;
+    [SerializeField] private Slider sensitivityP2Slider2;
     [SerializeField] private GameObject fullscreenToggleParent;
     public Button fullscreenToggle;
 
@@ -81,6 +84,7 @@ public class SettingsMenu : MonoBehaviour
             {
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(lastSelected);
+                isSliderSelected = false;
                 Debug.Log("Returning to button");
             }
         }
@@ -102,7 +106,8 @@ public class SettingsMenu : MonoBehaviour
         sfxSlider2.value = Mathf.Pow(10, volume / 20);
         audioMixer.GetFloat("voiceVolume", out volume);
         voiceSlider2.value = Mathf.Pow(10, volume / 20);
-        sensitivitySlider2.value = SavedSettings.mouseCamSensitivity;
+        sensitivityP1Slider2.value = SavedSettings.mouseCamSensitivity;
+        sensitivityP2Slider2.value = SavedSettings.mouseCamSensitivity2;
     }
 
     public void SelectMasterVolume()
@@ -136,13 +141,33 @@ public class SettingsMenu : MonoBehaviour
         StartCoroutine(SelectionCooldown());
     }
 
+    public void SelectVoiceVolume()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(voiceSlider);
+        isSliderSelected = true;
+        canSelect = false;
+        lastSelected = voiceVolume;
+        StartCoroutine(SelectionCooldown());
+    }
+
     public void SelectAimSensitivity()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(sensitivitySlider);
+        EventSystem.current.SetSelectedGameObject(sensitivityP1Slider);
         isSliderSelected = true;
         canSelect = false;
         lastSelected = aimSensitivity;
+        StartCoroutine(SelectionCooldown());
+    }
+
+    public void SelectAimSensitivity2()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(sensitivityP2Slider);
+        isSliderSelected = true;
+        canSelect = false;
+        lastSelected = aimSensitivity2;
         StartCoroutine(SelectionCooldown());
     }
 
@@ -158,6 +183,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetMasterVolume(float volume)
     {
+        //Using this math rather than flat numbers so the volume scale is linear rather than exponential
         Debug.Log("Master volume: " + Mathf.Log10(volume) * 20);
         audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
     }
@@ -187,6 +213,15 @@ public class SettingsMenu : MonoBehaviour
         SavedSettings.mouseCamSensitivity = sensitivity;
         SavedSettings.gamepadHorCamSensitivity = sensitivity * 10;
         SavedSettings.gamepadVertCamSensitivity = sensitivity * 8;
+    }
+
+    public void SetSensitivity2(float sensitivity)
+    {
+        Debug.Log("Cam sensitivity: " + sensitivity + ", " + sensitivity * 10 + ", " + sensitivity * 8);
+
+        SavedSettings.mouseCamSensitivity2 = sensitivity;
+        SavedSettings.gamepadHorCamSensitivity2 = sensitivity * 10;
+        SavedSettings.gamepadVertCamSensitivity2 = sensitivity * 8;
     }
 
     public void FullscreenToggle()

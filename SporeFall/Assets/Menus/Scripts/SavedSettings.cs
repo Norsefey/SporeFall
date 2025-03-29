@@ -11,4 +11,8 @@ public static class SavedSettings
     public static float gamepadHorCamSensitivity = 250;
     public static float gamepadVertCamSensitivity = 200;
 
+    public static float mouseCamSensitivity2 = 25;
+    public static float gamepadHorCamSensitivity2 = 250;
+    public static float gamepadVertCamSensitivity2 = 200;
+
 }
