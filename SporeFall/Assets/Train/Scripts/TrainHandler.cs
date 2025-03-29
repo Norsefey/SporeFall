@@ -72,6 +72,7 @@ public class TrainHandler : MonoBehaviour
     {
         trainState = TrainState.Firing;
         animations.FireCannon();
+        ToggleStructures(false);
 
         trainCamera.SetActive(true);
         ClearDrops();
@@ -87,7 +88,6 @@ public class TrainHandler : MonoBehaviour
     {
         trainState = TrainState.Moving;
         animations.SetMovingTrain();
-        ToggleStructures(false);
 
         audioPlayer.clip = movingAudio;
         audioPlayer.Play();
