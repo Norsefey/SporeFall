@@ -276,7 +276,8 @@ public class PlayerUI : MonoBehaviour
         while (delayedHP > pMan.pHealth.CurrentHP)
         {
             Debug.Log("Reducing delayedHP");
-            StartCoroutine(HPDelayDecrease());
+            delayedHP = delayedHP - .5f;
+            HPDelayBar.value = delayedHP;
         }
         if (delayedHP < pMan.pHealth.CurrentHP)
         {
@@ -286,10 +287,4 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
-    IEnumerator HPDelayDecrease()
-    {
-        yield return new WaitForSeconds(.1f);
-        delayedHP = delayedHP - .5f;
-        HPDelayBar.value = delayedHP;
-    }
 }
