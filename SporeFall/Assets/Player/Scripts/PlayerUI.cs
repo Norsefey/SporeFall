@@ -19,6 +19,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] public TMP_Text textPrompt;
     [SerializeField] private TMP_Text textControls;
     [SerializeField] private Slider HPBar;
+    [SerializeField] private Slider HPDelayBar;
+    private float delayedHP;
     [SerializeField] private GameObject[] lifeIcons;
     [Header("Corruption UI")]
     [SerializeField] private Slider corruptionBar;
@@ -42,6 +44,8 @@ public class PlayerUI : MonoBehaviour
     {
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
         HPBar.maxValue = pMan.pHealth.MaxHP;
+        HPDelayBar.maxValue = pMan.pHealth.MaxHP;
+        delayedHP = pMan.pHealth.MaxHP;
         corruptedVisionHolder.SetActive(false);
 
         pMan.pHealth.OnHPChange += UpdateHPDisplay;
@@ -138,6 +142,19 @@ public class PlayerUI : MonoBehaviour
     {
         if (HPBar != null)
             HPBar.value = pMan.pHealth.CurrentHP;
+        if (delayedHP < pMan.pHealth.CurrentHP)
+        {
+            Debug.Log("DelayedHP is less than current HP");
+            delayedHP = pMan.pHealth.CurrentHP;
+            HPDelayBar.value = delayedHP;
+            Debug.Log("Raising delayedHP to equal current HP");
+        }
+        else if (delayedHP > pMan.pHealth.CurrentHP)
+        {
+            Debug.Log("DelayedHP is greater than current HP");
+            StartCoroutine(HPDelayCooldown());
+            
+        }
     }
     public void EnablePrompt(string text)
     {
@@ -251,5 +268,28 @@ public class PlayerUI : MonoBehaviour
         if(pMan != null)
         pMan.pHealth.OnHPChange -= UpdateHPDisplay;
 
+    }
+
+    IEnumerator HPDelayCooldown()
+    {
+        yield return new WaitForSeconds(1f);
+        while (delayedHP > pMan.pHealth.CurrentHP)
+        {
+            Debug.Log("Reducing delayedHP");
+            StartCoroutine(HPDelayDecrease());
+        }
+        if (delayedHP < pMan.pHealth.CurrentHP)
+        {
+            Debug.Log("DelayedHP has been reduced lower than current HP, raising");
+            delayedHP = pMan.pHealth.CurrentHP;
+            HPDelayBar.value = delayedHP;
+        }
+    }
+
+    IEnumerator HPDelayDecrease()
+    {
+        yield return new WaitForSeconds(.1f);
+        delayedHP = delayedHP - .5f;
+        HPDelayBar.value = delayedHP;
     }
 }
