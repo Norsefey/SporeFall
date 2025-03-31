@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ColorPickerUI : MonoBehaviour
@@ -55,11 +56,10 @@ public class ColorPickerUI : MonoBehaviour
     [SerializeField] GameObject hueButton2p2;
     [SerializeField] GameObject hueSlider2p2;
 
+    private bool isControllerConnected = false;
+
     private void Awake()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(firstButton);
-
         firstButtonNav.mode = Navigation.Mode.Explicit;
         finishButtonNav.mode = Navigation.Mode.Explicit;
 
@@ -74,6 +74,25 @@ public class ColorPickerUI : MonoBehaviour
         //Doesn't matter which ones are selected first
         currentSVButton = svButton1p1;
         currentHueButton = hueButton1p1;
+    }
+
+    private void Start()
+    {
+        Debug.Log("There are " + InputSystem.devices.Count + "devices connected");
+        InputSystem.onDeviceChange += OnDeviceChange;
+        if (InputSystem.devices.Count > 2)
+        {
+            //If a controller is being used, highlights the first button
+            //If a controller is not being used, no buttons are highlighted
+            isControllerConnected = true;
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstButton);
+        }
+    }
+
+    private void OnDisable()
+    {
+        InputSystem.onDeviceChange -= OnDeviceChange;
     }
 
     #region Player One
@@ -247,6 +266,24 @@ public class ColorPickerUI : MonoBehaviour
     }
     #endregion
     #endregion
+
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (change == InputDeviceChange.Added)
+        {
+            Debug.Log($"Device Connected: {device.displayName}");
+            isControllerConnected = true;
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstButton);
+        }
+        else if (change == InputDeviceChange.Disconnected)
+        {
+            Debug.Log($"Device Disconnected: {device.displayName}");
+            isControllerConnected = false;
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+    }
+
 
     IEnumerator SelectionColdown()
     {
