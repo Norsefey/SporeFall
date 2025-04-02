@@ -8,24 +8,29 @@ using static TrainHandler;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
+    [Header("References")]
     public WaveManager waveManager;
     public TrainHandler trainHandler;
     public UpgradeManager upgradeManager;
     public GameUIManager gameUI;
-    public List<PlayerManager> players = new();
+    
+    [Header("Pause Menu")]
     public PauseMenu pauseMenu;
     public bool paused = false;
 
-    public static event Action<int> OnPlayerJoin;
-    public static event Action OnPlayerLeave;
-
-    [SerializeField] LayerMask playerOneUI;
-    [SerializeField] LayerMask playerTwoUI;
-    [SerializeField] BackUpPlayerSpawner backUpPlayerSpawner;
+    [Header("Build System")]
+    public List<GameObject> availableStructures;
     [SerializeField] private float mycelia = 200;
     public float Mycelia { get { return mycelia; } }
     private bool tutorialMycelia = true;
+
+    [Header("Coop Manager")]
+    public List<PlayerManager> players = new();
+    [SerializeField] LayerMask playerOneUI;
+    [SerializeField] LayerMask playerTwoUI;
+    [SerializeField] BackUpPlayerSpawner backUpPlayerSpawner;
+    public static event Action<int> OnPlayerJoin;
+    public static event Action OnPlayerLeave;
     [Space(25)]
     public bool isTesting = false;
     private void Awake()

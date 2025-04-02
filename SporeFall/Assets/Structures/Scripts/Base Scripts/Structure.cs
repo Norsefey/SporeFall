@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Structure : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Structure : MonoBehaviour
     [SerializeField] private GameObject[] levelVisuals;
     [SerializeField] private GameObject radiusIndicator;
     [SerializeField] private StructureHP healthComponent;
-
+    [SerializeField] private GameObject deathVFX;
     [Header("LayerMasks")]
     public LayerMask placeableLayer;
     public LayerMask collisionOverlapLayer;
@@ -134,6 +135,7 @@ public class Structure : MonoBehaviour
     }
     public void ReturnToPool()
     {
+        SpawnDeathVFX();
         if (train != null)
             train.RemoveStructure(this);
         if(onPlatform && myPlatform != null)
@@ -144,6 +146,28 @@ public class Structure : MonoBehaviour
         healthComponent.ResetHealth();
         controlScriptObject.SetActive(false);
         poolBehavior.ReturnObject();
+    }
+
+    private void SpawnDeathVFX()
+    {
+        VFXPoolingBehavior vfx = null;
+        if (PoolManager.Instance != null)
+        {
+            // Get VFX from pool
+            if (!PoolManager.Instance.vfxPool.TryGetValue(deathVFX, out VFXPool pool))
+            {
+                Debug.LogError($"No pool found for enemy prefab: {deathVFX.name}");
+                return;
+            }
+            vfx = pool.Get(transform.position, Quaternion.identity);
+            vfx.Initialize(pool);
+        }
+        else
+        {
+            // No pool spawn and enabled VFX
+            vfx = Instantiate(deathVFX, transform.position, Quaternion.identity).GetComponent<VFXPoolingBehavior>();
+            vfx.gameObject.SetActive(true);
+        }
     }
     // Getter methods
     public float GetCurrentMyceliaCost() => structureStats.GetLevel(currentLevel).cost;

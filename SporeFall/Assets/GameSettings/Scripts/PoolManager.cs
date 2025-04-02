@@ -29,7 +29,7 @@ public class PoolManager : MonoBehaviour
     public Transform myceliaDropsParent;
     [Header("Structures")]
     [SerializeField] private int structureInitialSize;
-    [SerializeField] private List<GameObject> structures;
+    //[SerializeField] private List<GameObject> structures;
     public Transform structuresParent;
 
 
@@ -74,7 +74,7 @@ public class PoolManager : MonoBehaviour
                 dropsPool.Add(mycelia, new DropsPool(mycelia, myceliaDropsParent, myceliaInitialSize));
             }
         }
-        foreach(var structure in structures)
+        foreach (var structure in GameManager.Instance.availableStructures)
         {
             if (!structurePool.ContainsKey(structure))
             {

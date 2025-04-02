@@ -1,13 +1,11 @@
 // Ignore Spelling: buildable
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class BuildGun : Weapon
 {
+    public List<GameObject> buildableStructures = new();
     [Header("Build Gun Settings")]
-    public GameObject[] buildableStructures;
     public Structure selectedStructure; // The currently selected object (for placing, moving or deleting)
     public LayerMask placeableLayerMask;
     public LayerMask structureLayer; // LayerMask for detecting objects the player can select
@@ -35,6 +33,12 @@ public class BuildGun : Weapon
 
     private PlatformStructure selectedPlatform;
     private bool placingOnPlatform = false;
+
+    private void Awake()
+    {
+        buildableStructures = GameManager.Instance.availableStructures;
+    }
+
     // To Store original colors for changing preview colors
     private class MaterialData
     {
@@ -98,10 +102,10 @@ public class BuildGun : Weapon
     {
         // Cycle to the next object in the buildableObjects array
         currentBuildIndex += (int)indexIncrement;
-        if (currentBuildIndex >= buildableStructures.Length)
+        if (currentBuildIndex >= buildableStructures.Count)
             currentBuildIndex = 0;
         else if (currentBuildIndex < 0)
-            currentBuildIndex = buildableStructures.Length - 1;
+            currentBuildIndex = buildableStructures.Count - 1;
 
         placeableLayerMask = buildableStructures[currentBuildIndex].GetComponent<Structure>().placeableLayer;
         structureOverlapMask = buildableStructures[currentBuildIndex].GetComponent<Structure>().collisionOverlapLayer;

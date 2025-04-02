@@ -181,12 +181,12 @@ public class PlayerUI : MonoBehaviour
         int leftIndex = bGun.currentBuildIndex - 1;
         if (leftIndex < 0)
         {
-            leftIndex = bGun.buildableStructures.Length - 1;
+            leftIndex = bGun.buildableStructures.Count - 1;
         }
          rightStructureIcon.sprite = bGun.buildableStructures[leftIndex].GetComponent<Structure>().structureStats.icon;       
 
         int rightIndex = bGun.currentBuildIndex + 1;
-        if(rightIndex >= bGun.buildableStructures.Length)
+        if(rightIndex >= bGun.buildableStructures.Count)
         {
             rightIndex = 0;
         }
