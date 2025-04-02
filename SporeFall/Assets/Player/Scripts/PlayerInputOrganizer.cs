@@ -108,7 +108,9 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // Assign Calls to each action
         // basic player actions
-        skipCutscene.performed += OnSkipCutscene;
+        if (GameManager.Instance.waveManager != null)
+            skipCutscene.performed += OnSkipCutscene;
+
         leaveGame.performed += OnLeaveGame;
         jumpAction.started += OnJumpCall;
         sprintAction.started += OnSprintStarted;
@@ -458,7 +460,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     // building stuff
     private void OnBuildMode(InputAction.CallbackContext context)
     {
-        if (pMan.currentWeapon == null)
+        if (pMan.currentWeapon == null || !pMan.canBuild)
             return;
 
         if (!pMan.isBuilding)

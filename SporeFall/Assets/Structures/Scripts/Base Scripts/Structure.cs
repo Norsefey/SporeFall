@@ -64,6 +64,9 @@ public class Structure : MonoBehaviour
                 case RepairLevel repairStation:
                     scale = repairStation.healRange;
                     break;
+                case LilyLevel lily:
+                    scale = lily.patrolRange * 2;
+                    break;
 
             }
             radiusIndicator.transform.localScale = new Vector3(scale, 0.3f, scale);
@@ -109,6 +112,8 @@ public class Structure : MonoBehaviour
         var levelData = structureStats.GetLevel(currentLevel);
         // Set the new HP value
         healthComponent.SetMaxHP(levelData.maxHealth);
+
+        UpdateRadiusVisual(levelData);
     }
     public void ToggleStructureBehavior(bool toggle)
     {

@@ -56,6 +56,7 @@ public class UpgradeUI : MonoBehaviour
 
         // For when it refreshes
         SetSelectable();
+        UpdateMyceliaAmount();
     }
     private void ClearBanners()
     {

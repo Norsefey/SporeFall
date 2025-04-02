@@ -128,7 +128,7 @@ public class WaveManager : MonoBehaviour
         deadEnemies = 0;
         timer = departTime;
         wavePhase = WavePhase.Departing;
-        Invoke(nameof(Depart), departTime);
+        Invoke(nameof(TrainAutoDepartCall), departTime);
     }
     private void Depart()
     {
@@ -144,8 +144,19 @@ public class WaveManager : MonoBehaviour
         SpawnExplosion(currentWave.ShroomPod.transform.position);
         Destroy(currentWave.ShroomPod);
     }
+    private void TrainAutoDepartCall()
+    {
+        // Train will Not Auto leave while Robert is present
+        if (isRobertSpawned)
+            return;
+        // since we are skipping, we no longer need to invoke, prevents repeat
+        CancelInvoke(nameof(Depart));
+        //player.RemoveButtonAction();
+        Depart();
+    }
     public void SkipDepartTime()
     {
+        // player can skip fight with Robert
         if(isRobertSpawned)
             RemoveAllRoberts();
         // since we are skipping, we no longer need to invoke, prevents repeat
@@ -155,7 +166,6 @@ public class WaveManager : MonoBehaviour
     }
     private IEnumerator MoveToWaveLocation(float waitTime)
     {
-
         if (waitTime > 0)
         {// At start wait time will be zero, and we dont want to do this stuff at start
             train.SetFiringState();
