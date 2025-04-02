@@ -244,11 +244,36 @@ public abstract class Weapon : MonoBehaviour
     {
         if (soundFX == null)
             return;
-        player.pController.audioSource.volume = fireSoundVolume;
-        // Set if looping or not
-        player.pController.audioSource.loop = loop;
-        // Play the firing sound on the player audio source
-        player.pController.audioSource.PlayOneShot(soundFX);
+        // Ensure player and player.pController are not null
+        if (player == null || player.pController == null)
+        {
+            Debug.LogWarning("Player or Player Controller is null!");
+            return;
+        }
+
+        // Get the parent GameObject of player.pController
+        Transform parentTransform = player.pController.transform.parent;
+
+        if (parentTransform == null)
+        {
+            Debug.LogWarning("Player Controller has no parent!");
+            return;
+        }
+
+        // Get the AudioSource on the parent
+        AudioSource parentAudioSource = parentTransform.GetComponent<AudioSource>();
+
+        if (parentAudioSource == null)
+        {
+            Debug.LogWarning("No AudioSource found on Player Controller's parent!");
+            return;
+        }
+
+        parentAudioSource.volume = fireSoundVolume;
+        parentAudioSource.loop = loop;
+
+        // Play the sound on the parent's AudioSource
+        parentAudioSource.PlayOneShot(soundFX);
 
     }
 }

@@ -1173,6 +1173,7 @@ MonoBehaviour:
   playerHeight: 1.5
   JumpSpeed: 15
   terminalVelocity: -10
+  coyoteTime: 0.2
   currentState: 0
   footstepSound: {fileID: 8300000, guid: 570571783ec6fd447969f9520df3b919, type: 3}
   footstepVolume: 0.03
@@ -1206,7 +1207,7 @@ AudioSource:
   m_GameObject: {fileID: 2105543068427918284}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -5282696504617974837, guid: e1deb095e002ad34f885e791bad58da6,
+  OutputAudioMixerGroup: {fileID: 5349180685286381477, guid: e1deb095e002ad34f885e791bad58da6,
     type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
@@ -1898,6 +1899,15 @@ MonoBehaviour:
   interactable: {fileID: 0}
   changePlayerMaterials: {fileID: 0}
   coloring: {fileID: 0}
+  audioSource: {fileID: 5224858030605110896}
+  health75Sound: {fileID: 0}
+  health50Sound: {fileID: 0}
+  health25Sound: {fileID: 0}
+  deathSound: {fileID: 0}
+  corruption25Sound: {fileID: 0}
+  corruption50Sound: {fileID: 0}
+  corruption75Sound: {fileID: 0}
+  corruption100Sound: {fileID: 0}
   defaultWeapon: {fileID: 5858223751772533858}
   defaultSword: {fileID: 0}
   weaponHolder: {fileID: 6892831285903471383}
@@ -1912,8 +1922,8 @@ MonoBehaviour:
   respawnTime: 1
   fallbackSpawnPoint: {fileID: 0}
   holdingCorruption: 0
-  mainColors: {fileID: 0}
-  colorPropertyName: _BaseColor
+  toxicDamageRate: 1
+  inToxicWater: 0
 --- !u!114 &4119618120729430109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2050,6 +2060,7 @@ MonoBehaviour:
   - 60
   - 75
   - 90
+  preventFullCorruption: 0
 --- !u!82 &4364514953781070037
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2347,6 +2358,7 @@ MonoBehaviour:
   textPrompt: {fileID: 3650090587815585418}
   textControls: {fileID: 8469434256905667855}
   HPBar: {fileID: 6208102358170014085}
+  HPDelayBar: {fileID: 0}
   lifeIcons: []
   corruptionBar: {fileID: 8766654047427145266}
   corruptedVisionHolder: {fileID: 6561783858093722924}
@@ -2557,9 +2569,9 @@ MonoBehaviour:
   - {fileID: 7608820938799165632, guid: 13b46ee8777608c41b49e3ddd2b65309, type: 3}
   - {fileID: 5415324038918524610, guid: fac6cdfab8399ee429dd9aa3546761f8, type: 3}
   selectedStructure: {fileID: 0}
-  groundLayer:
+  placeableLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   structureLayer:
     serializedVersion: 2
     m_Bits: 128
