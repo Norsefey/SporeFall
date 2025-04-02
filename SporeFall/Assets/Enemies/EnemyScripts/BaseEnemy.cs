@@ -274,7 +274,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
         return recentDamage.Sum(d => d.amount);
     }
-    protected virtual void SetState(EnemyState newState)
+    public virtual void SetState(EnemyState newState)
     {
         currentState = newState;
 

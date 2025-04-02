@@ -9,6 +9,11 @@ public class BackUpPlayerSpawner : MonoBehaviour
 
     public IEnumerator SpawnPlayer(PlayerManager player)
     {
+        player.TogglePControl(false);
+        player.TogglePVisual(false);
+        player.TogglePCamera(false);
+        player.TogglePCorruption(false);
+
         player.MovePlayerTo(playerSpawnPoints[player.GetPlayerIndex()].position);
 
         yield return new WaitForSeconds(1);

@@ -53,13 +53,14 @@ public class EnemyHP : Damageable
         flinching = true;
 
         // Disable NavMeshAgent during knockback
-        manager.agent.isStopped = true;
+        manager.SetState(EnemyState.Idle);
 
         yield return new WaitForSeconds(1);
 
         // Re-enable NavMeshAgent
-        manager.agent.isStopped = false;
-        manager.agent.ResetPath();
+        manager.SetState(EnemyState.Chase);
+        /* manager.agent.isStopped = false;
+         manager.agent.ResetPath();*/
         manager.Animator.ResetTrigger("Flinch");
         flinching = false;
     }

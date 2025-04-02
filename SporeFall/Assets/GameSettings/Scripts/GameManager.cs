@@ -97,20 +97,18 @@ public class GameManager : MonoBehaviour
         else
         {
             player.transform.SetParent(this.transform);
-            SpawnPlayer();
+            SpawnPlayer(player);
         }
 
         OnPlayerJoin?.Invoke(player.GetPlayerIndex());
     }
-    private void SpawnPlayer()
+    private void SpawnPlayer(PlayerManager player)
     {
         if(backUpPlayerSpawner == null)
             return;
 
-        foreach (var player in players)
-        {
-            StartCoroutine(backUpPlayerSpawner.SpawnPlayer(player));
-        }
+        StartCoroutine(backUpPlayerSpawner.SpawnPlayer(player));
+       
     }
     public void RemovePlayer(PlayerManager player)
     {
