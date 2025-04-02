@@ -29,32 +29,48 @@ public class ColorPickerUI : MonoBehaviour
     [SerializeField] private ColorPickerControl p1SC;
 
     public GameObject colorPickerButton1p1;
+    [SerializeField] Button colorPickerButton1p12;
     [SerializeField] GameObject svButton1p1;
+    [SerializeField] Button svButton1p12;
     [SerializeField] GameObject svSlider1p1;
     [SerializeField] GameObject hueButton1p1;
+    [SerializeField] Button hueButton1p12;
     [SerializeField] GameObject hueSlider1p1;
+    [SerializeField] GameObject doneButton1p1;
 
     public GameObject colorPickerButton2p1;
+    [SerializeField] Button colorPickerButton2p12;
     [SerializeField] GameObject svButton2p1;
+    [SerializeField] Button svButton2p12;
     [SerializeField] GameObject svSlider2p1;
     [SerializeField] GameObject hueButton2p1;
+    [SerializeField] Button hueButton2p12;
     [SerializeField] GameObject hueSlider2p1;
+    [SerializeField] GameObject doneButton2p1;
 
     [Header("Player 2 Variables")]
     [SerializeField] private ColorPickerControl p2PC;
     [SerializeField] private ColorPickerControl p2SC;
 
     public GameObject colorPickerButton1p2;
+    [SerializeField] Button colorPickerButton1p22;
     [SerializeField] GameObject svButton1p2;
+    [SerializeField] Button svButton1p22;
     [SerializeField] GameObject svSlider1p2;
     [SerializeField] GameObject hueButton1p2;
+    [SerializeField] Button hueButton1p22;
     [SerializeField] GameObject hueSlider1p2;
+    [SerializeField] GameObject doneButton1p2;
 
     public GameObject colorPickerButton2p2;
+    [SerializeField] Button colorPickerButton2p22;
     [SerializeField] GameObject svButton2p2;
+    [SerializeField] Button svButton2p22;
     [SerializeField] GameObject svSlider2p2;
     [SerializeField] GameObject hueButton2p2;
+    [SerializeField] Button hueButton2p22;
     [SerializeField] GameObject hueSlider2p2;
+    [SerializeField] GameObject doneButton2p2;
 
     private bool isControllerConnected = false;
 
@@ -87,6 +103,26 @@ public class ColorPickerUI : MonoBehaviour
             isControllerConnected = true;
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstButton);
+        }
+
+        if (!isControllerConnected)
+        {
+            colorPickerButton1p12.interactable = false;
+            colorPickerButton2p12.interactable= false;
+            colorPickerButton1p22.interactable= false;
+            colorPickerButton2p22.interactable= false;
+            svButton1p12.interactable = false;
+            svButton2p12.interactable = false;
+            svButton1p22.interactable = false;
+            svButton2p22.interactable = false;
+            hueButton1p12.interactable = false;
+            hueButton2p12.interactable = false;
+            hueButton1p22.interactable = false;
+            hueButton2p22.interactable = false;
+            doneButton1p1.SetActive(false);
+            doneButton2p1.SetActive(false);
+            doneButton1p2.SetActive(false);
+            doneButton2p2.SetActive(false);
         }
     }
 
@@ -275,12 +311,46 @@ public class ColorPickerUI : MonoBehaviour
             isControllerConnected = true;
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstButton);
+
+            colorPickerButton1p12.interactable = true;
+            colorPickerButton2p12.interactable = true;
+            colorPickerButton1p22.interactable = true;
+            colorPickerButton2p22.interactable = true;
+            svButton1p12.interactable = true;
+            svButton2p12.interactable = true;
+            svButton1p22.interactable = true;
+            svButton2p22.interactable = true;
+            hueButton1p12.interactable = true;
+            hueButton2p12.interactable = true;
+            hueButton1p22.interactable = true;
+            hueButton2p22.interactable = true;
+            doneButton1p1.SetActive(true);
+            doneButton2p1.SetActive(true);
+            doneButton1p2.SetActive(true);
+            doneButton2p2.SetActive(true);
         }
         else if (change == InputDeviceChange.Disconnected)
         {
             Debug.Log($"Device Disconnected: {device.displayName}");
             isControllerConnected = false;
             EventSystem.current.SetSelectedGameObject(null);
+
+            colorPickerButton1p12.interactable = false;
+            colorPickerButton2p12.interactable = false;
+            colorPickerButton1p22.interactable = false;
+            colorPickerButton2p22.interactable = false;
+            svButton1p12.interactable = false;
+            svButton2p12.interactable = false;
+            svButton1p22.interactable = false;
+            svButton2p22.interactable = false;
+            hueButton1p12.interactable = false;
+            hueButton2p12.interactable = false;
+            hueButton1p22.interactable = false;
+            hueButton2p22.interactable = false;
+            doneButton1p1.SetActive(false);
+            doneButton2p1.SetActive(false);
+            doneButton1p2.SetActive(false);
+            doneButton2p2.SetActive(false);
         }
     }
 

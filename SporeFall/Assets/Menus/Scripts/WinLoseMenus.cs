@@ -17,7 +17,7 @@ public class WinLoseMenus : MonoBehaviour
     private void Start()
     {
         InputSystem.onDeviceChange += OnDeviceChange;
-        if (InputSystem.devices.Count > 2)
+        if (Gamepad.all.Count > 0)
         {
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstButton);
