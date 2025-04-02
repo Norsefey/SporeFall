@@ -10,6 +10,8 @@ public class TrainUI : MonoBehaviour
 
     [SerializeField] private Slider HPBar;
     [SerializeField] private TMP_Text HPText;
+    [SerializeField] private Slider HPDelayBar;
+    private float delayedHP;
 
     private void Start()
     {
@@ -22,6 +24,9 @@ public class TrainUI : MonoBehaviour
     {
         HPBar.maxValue = max;
         HPBar.value = max;
+        HPDelayBar.maxValue = max;
+        HPDelayBar.value = max;
+        delayedHP = max;
     }
     public void UpdateHPDisplay(Damageable trainHP, float value)
     {
@@ -38,6 +43,40 @@ public class TrainUI : MonoBehaviour
         {
             HPText.text = "Train HP: 0%";
             Debug.Log("Updating train HP bar");
+        }
+
+        if (delayedHP < trainHP.CurrentHP)
+        {
+            Debug.Log("DelayedHP is less than current HP");
+            delayedHP = trainHP.CurrentHP;
+            HPDelayBar.value = delayedHP;
+            Debug.Log("Raising delayedHP to equal current HP");
+        }
+        else if (delayedHP > trainHP.CurrentHP)
+        {
+            Debug.Log("DelayedHP is greater than current HP");
+            StartCoroutine(HPDelayCooldown());
+
+        }
+    }
+
+    IEnumerator HPDelayCooldown()
+    {
+        yield return new WaitForSeconds(1f);
+        while (delayedHP > trainHP.CurrentHP)
+        {
+            Debug.Log("Reducing delayedHP");
+            delayedHP = delayedHP - .5f;
+            Debug.Log("Train HP is: " + trainHP.CurrentHP);
+            Debug.Log("Delayed HP is: " + delayedHP);
+            HPDelayBar.value = delayedHP;
+            Debug.Log("HPDelay Bar value is: " + HPDelayBar.value);
+        }
+        if (delayedHP < trainHP.CurrentHP)
+        {
+            Debug.Log("DelayedHP has been reduced lower than current HP, raising");
+            delayedHP = trainHP.CurrentHP;
+            HPDelayBar.value = delayedHP;
         }
     }
 }

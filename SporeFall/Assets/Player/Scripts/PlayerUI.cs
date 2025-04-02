@@ -144,14 +144,14 @@ public class PlayerUI : MonoBehaviour
             HPBar.value = pMan.pHealth.CurrentHP;
         if (delayedHP < pMan.pHealth.CurrentHP)
         {
-            Debug.Log("DelayedHP is less than current HP");
+            //Debug.Log("DelayedHP is less than current HP");
             delayedHP = pMan.pHealth.CurrentHP;
             HPDelayBar.value = delayedHP;
-            Debug.Log("Raising delayedHP to equal current HP");
+            //Debug.Log("Raising delayedHP to equal current HP");
         }
         else if (delayedHP > pMan.pHealth.CurrentHP)
         {
-            Debug.Log("DelayedHP is greater than current HP");
+            //Debug.Log("DelayedHP is greater than current HP");
             StartCoroutine(HPDelayCooldown());
             
         }
@@ -275,13 +275,13 @@ public class PlayerUI : MonoBehaviour
         yield return new WaitForSeconds(1f);
         while (delayedHP > pMan.pHealth.CurrentHP)
         {
-            Debug.Log("Reducing delayedHP");
+            //Debug.Log("Reducing delayedHP");
             delayedHP = delayedHP - .5f;
             HPDelayBar.value = delayedHP;
         }
         if (delayedHP < pMan.pHealth.CurrentHP)
         {
-            Debug.Log("DelayedHP has been reduced lower than current HP, raising");
+            //Debug.Log("DelayedHP has been reduced lower than current HP, raising");
             delayedHP = pMan.pHealth.CurrentHP;
             HPDelayBar.value = delayedHP;
         }
