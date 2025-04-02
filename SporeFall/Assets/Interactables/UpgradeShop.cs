@@ -34,6 +34,7 @@ public class UpgradeShop : Interactables
             {
                 // Update upgrade UI
                 GameManager.Instance.gameUI.ToggleUpgradeMenu(true);
+                player.ToggleUpgradeMenu(true);
                 player.pInput.ToggleUpgradeMenu(true);
                 player.pUI.DisablePrompt();
             }

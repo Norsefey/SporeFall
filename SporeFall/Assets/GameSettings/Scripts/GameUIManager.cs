@@ -10,7 +10,6 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private GameObject trainUI;
     [SerializeField] private GameObject waveUI;
     [SerializeField] private GameObject gameplayUI;
-    [SerializeField] private GameObject upgradeMenu;
     [SerializeField] private TMP_Text myceliaIndicator;
 
 
@@ -22,11 +21,6 @@ public class GameUIManager : MonoBehaviour
             waveUI.SetActive(!toggle);
         if (gameplayUI != null)
             gameplayUI.SetActive(!toggle);
-
-        upgradeMenu.SetActive(toggle);
-        UpgradeUI upUI = upgradeMenu.GetComponent<UpgradeUI>();
-        if(upUI != null)
-            upUI.SetSelectable();
     }
     public void DisplayMycelia(float value)
     {

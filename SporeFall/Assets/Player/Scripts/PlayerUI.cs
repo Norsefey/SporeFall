@@ -50,6 +50,9 @@ public class PlayerUI : MonoBehaviour
 
         pMan.pHealth.OnHPChange += UpdateHPDisplay;
     }
+
+    
+
     public void UpdateCorruptionDisplay(float value)
     {
         if (corruptionBar != null)
