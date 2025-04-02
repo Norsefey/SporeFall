@@ -240,10 +240,12 @@ public class PlayerMovement : MonoBehaviour
     }
     private void PlayFootstepSound()
     {
-        // Play footstep sound at intervals to avoid spamming
-        if (!audioSource.isPlaying) // Ensure sound only plays if not already playing
+        if (IsGrounded()) // Play footsteps only when grounded
         {
-            audioSource.PlayOneShot(footstepSound, footstepVolume);
+            if (!audioSource.isPlaying)
+            {
+                audioSource.PlayOneShot(footstepSound, footstepVolume);
+            }
         }
     }
 }
