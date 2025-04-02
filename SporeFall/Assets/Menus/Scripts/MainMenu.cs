@@ -62,6 +62,11 @@ public class MainMenu : MonoBehaviour
         levelSelectScreen.SetActive(false);
 
         Debug.Log("There are " + InputSystem.devices.Count + "devices connected");
+        foreach (var device in InputSystem.devices)
+        {
+            Debug.Log(device.name);
+        }
+
         savedFirstButton = firstTitleButton;
         InputSystem.onDeviceChange += OnDeviceChange;
         if (Gamepad.all.Count > 0)

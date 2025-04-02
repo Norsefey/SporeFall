@@ -13,21 +13,21 @@ public class UpgradeBanner : MonoBehaviour
 
     private StructureType currentType;
     private StructureLevel currentLevel;
-    private UpgradeManager UpgradeManager;
+    private UpgradeManager upgradeManager;
     public UpgradeUI upgradeUI;
     public void SetupBanner(StructureType type, StructureLevel level, UpgradeManager manager)
     {
         currentType = type;
         currentLevel = level;
-        UpgradeManager = manager;
+        upgradeManager = manager;
         UpdateBannerVisuals(type, level);
     }
     private void UpdateBannerVisuals(StructureType type, StructureLevel level)
     {
 
-        typeText.text = $"{type.ToString()} : \n Current Lv {UpgradeManager.GetStructureLevel(type) + 1}";
+        typeText.text = $"{type.ToString()} : \n Current Lv {upgradeManager.GetStructureLevel(type) + 1}";
 
-        bool isMaxLevel = UpgradeManager.IsMaxLevel(type);
+        bool isMaxLevel = upgradeManager.IsMaxLevel(type);
 
         if (isMaxLevel)
         {
@@ -52,8 +52,7 @@ public class UpgradeBanner : MonoBehaviour
         }
     }
     void PerformUpgrade()
-    {
-        UpgradeManager upgradeManager = GameManager.Instance.upgradeManager;
+    {        
         float currentMycelia = GameManager.Instance.Mycelia;
 
         if (upgradeManager.CanUpgrade(currentType, currentMycelia))

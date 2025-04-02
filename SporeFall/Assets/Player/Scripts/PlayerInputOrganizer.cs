@@ -312,9 +312,9 @@ public class PlayerInputOrganizer : MonoBehaviour
             shootInputMap.Disable();
 
             pauseGame.performed -= OnPause;
-            pauseGame.performed += OnUpgradeMenu;
+            pauseGame.performed += OnCloseUpgradeMenu;
 
-            pMan.pUI.gameObject.SetActive(false);
+            pMan.pUI.ToggleUpgradeMenu(true);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -324,22 +324,19 @@ public class PlayerInputOrganizer : MonoBehaviour
             playerInputMap.Enable();
             shootInputMap.Enable();
             // return to default pause menu interactions
-            pauseGame.performed -= OnUpgradeMenu;
+            pauseGame.performed -= OnCloseUpgradeMenu;
             pauseGame.performed += OnPause;
 
-            pMan.pUI.gameObject.SetActive(true);
+            pMan.pUI.ToggleUpgradeMenu(false);
 
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-
-
     }
-    private void OnUpgradeMenu(InputAction.CallbackContext context)
+    private void OnCloseUpgradeMenu(InputAction.CallbackContext context)
     {
-        GameManager.Instance.gameUI.ToggleUpgradeMenu(false);
-
+        GameManager.Instance.gameUI.ToggleGameUI(true);
         ToggleUpgradeMenu(false);
     }
     private void OnExitGame(InputAction.CallbackContext context)

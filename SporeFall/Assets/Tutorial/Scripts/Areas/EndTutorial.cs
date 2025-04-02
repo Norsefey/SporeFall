@@ -19,11 +19,11 @@ public class EndTutorial : MonoBehaviour
         {
             player.TogglePControl(false);
             player.TogglePCamera(false);
-            ///player.transform.SetParent(elevator);
-            if(count == 0)
+            player.transform.SetParent(elevator);
+ /*           if(count == 0)
                 player.MovePlayerTo(p1Point.position);
             else
-                player.MovePlayerTo(p2Point.position);
+                player.MovePlayerTo(p2Point.position);*/
 
             count++;
         }

@@ -6,8 +6,7 @@ using UnityEngine.EventSystems;
 
 public class UpgradeUI : MonoBehaviour
 {
-    [SerializeField] private UpgradeManager upgradeManager;
-
+    private UpgradeManager upgradeManager;
     public GameObject upgradeBannerPrefab;
     public TMP_Text myceliaText;
     public Transform scrollViewContent;
@@ -18,11 +17,14 @@ public class UpgradeUI : MonoBehaviour
     private static readonly Color NoMyceliaColor = Color.red;
 
     [SerializeField] GameObject firstUpgradeButton;
-    private void Start()
+
+    private void OnEnable()
     {
+        upgradeManager = GameManager.Instance.upgradeManager;
         UpdateMyceliaAmount();
         ShowStructureUpgrades();
     }
+
     public void SetSelectable()
     {
         EventSystem.current.SetSelectedGameObject(null);
@@ -30,11 +32,8 @@ public class UpgradeUI : MonoBehaviour
     }
     public void ShowStructureUpgrades()
     {
-
         playerBannerHolder.SetActive(false);
         structBannerHolder.SetActive(true);
-
-
         ClearBanners();
 
         foreach(GameObject structureObj in GameManager.Instance.availableStructures)
@@ -76,5 +75,4 @@ public class UpgradeUI : MonoBehaviour
         myceliaText.color = GameManager.Instance.Mycelia > 0 ? DefaultColor : NoMyceliaColor;
         myceliaText.text = $"Mycelia: {GameManager.Instance.Mycelia}";
     }
-
 }
