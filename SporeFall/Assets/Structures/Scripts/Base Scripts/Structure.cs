@@ -147,7 +147,6 @@ public class Structure : MonoBehaviour
         controlScriptObject.SetActive(false);
         poolBehavior.ReturnObject();
     }
-
     private void SpawnDeathVFX()
     {
         VFXPoolingBehavior vfx = null;
@@ -179,5 +178,6 @@ public class Structure : MonoBehaviour
     public GameObject GetCurrentVisual() => levelVisuals[currentLevel];
     public string GetStructureName() => structureStats.GetLevel(currentLevel).name;
     public string GetStructureDescription() => structureStats.description;
+    public StructureType GetStructureType() => structureStats.type;
 
 }

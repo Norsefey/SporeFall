@@ -37,7 +37,7 @@ public class UpgradeUI : MonoBehaviour
 
         ClearBanners();
 
-        foreach (StructureType type in System.Enum.GetValues(typeof(StructureType)))
+        foreach(GameObject structureObj in GameManager.Instance.availableStructures)
         {
             GameObject bannerObj = Instantiate(upgradeBannerPrefab, scrollViewContent);
             UpgradeBanner banner = bannerObj.GetComponent<UpgradeBanner>();
@@ -45,12 +45,13 @@ public class UpgradeUI : MonoBehaviour
             //upgradeButtons.Add(banner.upgradeButton);
 
             // Get structure levels and current upgrade level
-            StructureLevels structureLevels = upgradeManager.GetStructureLevelsForType(type);
-            int currentLevel = upgradeManager.GetStructureLevel(type);
-            StructureLevel nextLevel = upgradeManager.GetNextLevel(type);
+            Structure structure = structureObj.GetComponent<Structure>();
+            StructureLevels structureLevels = upgradeManager.GetStructureLevelsForType(structure.GetStructureType());
+            int currentLevel = upgradeManager.GetStructureLevel(structure.GetStructureType());
+            StructureLevel nextLevel = upgradeManager.GetNextLevel(structure.GetStructureType());
 
             // Always show the banner, even if it's at max level
-            banner.SetupBanner(type, nextLevel ?? structureLevels.GetLevel(currentLevel), upgradeManager);
+            banner.SetupBanner(structure.GetStructureType(), nextLevel ?? structureLevels.GetLevel(currentLevel), upgradeManager);
         }
 
         // For when it refreshes

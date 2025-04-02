@@ -6616,7 +6616,7 @@ MonoBehaviour:
   exitDoor: {fileID: 429938595}
   tutorialText: {fileID: 1559500626}
   nextPromptDelay: 2
-  dummyTwoWall: {fileID: 1192802220}
+  dummyTwoWall: {fileID: 1804369425}
 --- !u!54 &441556097
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -39277,12 +39277,6 @@ MonoBehaviour:
   - {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e, type: 3}
   myceliaDropsParent: {fileID: 6283020724911508794}
   structureInitialSize: 5
-  structures:
-  - {fileID: 1083017409998067897, guid: 32bb110230eb1c844bbcf862215db098, type: 3}
-  - {fileID: 5415324038918524610, guid: fac6cdfab8399ee429dd9aa3546761f8, type: 3}
-  - {fileID: 7608820938799165632, guid: 13b46ee8777608c41b49e3ddd2b65309, type: 3}
-  - {fileID: 2143417820075499101, guid: 877219f937a427a4889d673a029d294d, type: 3}
-  - {fileID: 3745370869290195764, guid: 49278954c29530a47a63cd420176d3be, type: 3}
   structuresParent: {fileID: 1466215129}
 --- !u!1 &1308866157403030551
 GameObject:
@@ -54433,9 +54427,14 @@ MonoBehaviour:
   trainHandler: {fileID: 0}
   upgradeManager: {fileID: 0}
   gameUI: {fileID: 4323958133478003850}
-  players: []
   pauseMenu: {fileID: 643717888}
   paused: 0
+  availableStructures:
+  - {fileID: 2143417820075499101, guid: 877219f937a427a4889d673a029d294d, type: 3}
+  - {fileID: 1083017409998067897, guid: 32bb110230eb1c844bbcf862215db098, type: 3}
+  - {fileID: 3745370869290195764, guid: 49278954c29530a47a63cd420176d3be, type: 3}
+  mycelia: 470
+  players: []
   playerOneUI:
     serializedVersion: 2
     m_Bits: 32768
@@ -54443,7 +54442,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   backUpPlayerSpawner: {fileID: 344367097}
-  mycelia: 470
   isTesting: 1
 --- !u!223 &6170230897045590387
 Canvas:
