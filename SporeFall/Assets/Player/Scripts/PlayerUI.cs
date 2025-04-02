@@ -10,6 +10,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private BuildGun bGun;
     [Header("Gameplay UI")]
     [SerializeField] private GameObject weaponUI;
+    [SerializeField] private GameObject defaultUI;
     public Image weaponIcon;
     public Slider chargeGunSlider;
     [Space(5)]
@@ -38,7 +39,9 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Sprite shermanSprite;
     [SerializeField] private Sprite repairTowerSprite;
     //[SerializeField] private Sprite lilySprite;
-    
+
+    [Header("Upgrade Menu")]
+    public GameObject upgradeMenu;
 
     private void Start()
     {
@@ -50,9 +53,6 @@ public class PlayerUI : MonoBehaviour
 
         pMan.pHealth.OnHPChange += UpdateHPDisplay;
     }
-
-    
-
     public void UpdateCorruptionDisplay(float value)
     {
         if (corruptionBar != null)
@@ -265,14 +265,12 @@ public class PlayerUI : MonoBehaviour
                 break;
         }
     }
-
     private void OnDestroy()
     {
         if(pMan != null)
         pMan.pHealth.OnHPChange -= UpdateHPDisplay;
 
     }
-
     IEnumerator HPDelayCooldown()
     {
         yield return new WaitForSeconds(1f);
@@ -289,5 +287,15 @@ public class PlayerUI : MonoBehaviour
             HPDelayBar.value = delayedHP;
         }
     }
+    public void ToggleUpgradeMenu(bool toggle)
+    {
+        GameManager.Instance.gameUI.ToggleGameUI(!toggle);
+        defaultUI.SetActive(!toggle);
 
+        upgradeMenu.SetActive(toggle);
+        
+        UpgradeUI upUI = upgradeMenu.GetComponent<UpgradeUI>();
+        if (upUI != null)
+            upUI.SetSelectable();
+    }
 }

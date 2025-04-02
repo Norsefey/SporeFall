@@ -57,8 +57,8 @@ public class BuildRoom : MonoBehaviour
         manager.player.canBuild = true;
         manager.player.pInput.ToggleUpgradeMenu(false);
         GameManager.Instance.DecreaseMycelia(100);
-        GameManager.Instance.gameUI.ToggleUpgradeMenu(false);
-        upgradeZone.DestroyIntractable();
+/*        GameManager.Instance.gameUI.ToggleUpgradeMenu(false);
+*/        upgradeZone.DestroyIntractable();
 
         BuildModeToggleTutorial();
     }

@@ -33,8 +33,6 @@ public class UpgradeShop : Interactables
             if (GameManager.Instance.waveManager.wavePhase == WaveManager.WavePhase.NotStarted)
             {
                 // Update upgrade UI
-                GameManager.Instance.gameUI.ToggleUpgradeMenu(true);
-                player.ToggleUpgradeMenu(true);
                 player.pInput.ToggleUpgradeMenu(true);
                 player.pUI.DisablePrompt();
             }
@@ -43,7 +41,6 @@ public class UpgradeShop : Interactables
         {
             Debug.LogWarning("No Wave Manager..Still Opening Upgrade Menu");
             // Update upgrade UI
-            GameManager.Instance.gameUI.ToggleUpgradeMenu(true);
             player.pInput.ToggleUpgradeMenu(true);
             player.pUI.DisablePrompt();
         }

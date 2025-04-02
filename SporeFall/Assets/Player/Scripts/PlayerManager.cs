@@ -65,9 +65,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private float toxicDamageRate = 1;
     public bool inToxicWater;
 
-    [Header("Upgrade Menu")]
-    public GameObject upgradeMenu;
-
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -129,14 +126,6 @@ public class PlayerManager : MonoBehaviour
              
             }
         }*/
-    }
-
-    public void ToggleUpgradeMenu(bool toggle)
-    {
-        upgradeMenu.SetActive(toggle);
-        UpgradeUI upUI = upgradeMenu.GetComponent<UpgradeUI>();
-        if (upUI != null)
-            upUI.SetSelectable();
     }
     private void SetManager()
     {
