@@ -80,7 +80,7 @@ public class ColorPickerUI : MonoBehaviour
     {
         Debug.Log("There are " + InputSystem.devices.Count + "devices connected");
         InputSystem.onDeviceChange += OnDeviceChange;
-        if (InputSystem.devices.Count > 2)
+        if (Gamepad.all.Count > 0)
         {
             //If a controller is being used, highlights the first button
             //If a controller is not being used, no buttons are highlighted

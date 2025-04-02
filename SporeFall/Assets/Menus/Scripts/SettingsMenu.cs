@@ -185,7 +185,7 @@ public class SettingsMenu : MonoBehaviour
     {
         //Using this math rather than flat numbers so the volume scale is linear rather than exponential
         Debug.Log("Master volume: " + Mathf.Log10(volume) * 20);
-        audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("masterVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetMusicVolume(float volume)

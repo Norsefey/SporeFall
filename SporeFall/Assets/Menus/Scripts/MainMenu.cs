@@ -40,16 +40,19 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Slider progressBar;
     private bool isControllerConnected = false;
     private float volume = 2;
-    private float volume2;
 
 
     void Start()
     {
-        audioMixer.SetFloat("masterVolume", volume);
-        audioMixer.SetFloat("musicVolume", volume);
-        audioMixer.SetFloat("sfxVolume", volume);
-        audioMixer.SetFloat("voiceVolume", volume);
-
+        if (SavedSettings.firstOpenedGame)
+        {
+            audioMixer.SetFloat("masterVolume", volume);
+            audioMixer.SetFloat("musicVolume", volume);
+            audioMixer.SetFloat("sfxVolume", volume);
+            audioMixer.SetFloat("voiceVolume", volume);
+            SavedSettings.firstOpenedGame = false;
+        }
+        
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 1;
@@ -61,7 +64,7 @@ public class MainMenu : MonoBehaviour
         Debug.Log("There are " + InputSystem.devices.Count + "devices connected");
         savedFirstButton = firstTitleButton;
         InputSystem.onDeviceChange += OnDeviceChange;
-        if (InputSystem.devices.Count > 2 )
+        if (Gamepad.all.Count > 0)
         {
             //If a controller is being used, highlights the first button
             //If a controller is not being used, no buttons are highlighted

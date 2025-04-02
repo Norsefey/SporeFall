@@ -15,4 +15,6 @@ public static class SavedSettings
     public static float gamepadHorCamSensitivity2 = 250;
     public static float gamepadVertCamSensitivity2 = 200;
 
+    public static bool firstOpenedGame = true;
+
 }
