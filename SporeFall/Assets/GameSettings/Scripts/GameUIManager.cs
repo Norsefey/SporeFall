@@ -34,8 +34,11 @@ public class GameUIManager : MonoBehaviour
         upgradeMenu.SetActive(toggle);
 
         UpgradeUI upUI = upgradeMenu.GetComponent<UpgradeUI>();
-        upUI.activePlayer = player;
-        if (upUI != null)
-            upUI.SetSelectable();
+        if (upUI)
+        {
+            upUI.activePlayer = player;
+            if (upUI != null)
+                upUI.SetSelectable();
+        }
     }
 }
