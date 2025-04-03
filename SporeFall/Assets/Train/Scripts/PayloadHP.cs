@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PayloadHP : Damageable
 {
-    [SerializeField] private TMP_Text healthDisplay;
     private Payload payload;
 
     [SerializeField] private AudioClip health75Clip;
@@ -24,21 +23,25 @@ public class PayloadHP : Damageable
     private void Start()
     {
         currentHP = maxHP; // Initialize health
-        healthDisplay.text = currentHP.ToString("F0") + "/" + maxHP.ToString();
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void Update()
+    public override void TakeDamage(float damage)
     {
-        // Check the health percentage and play the corresponding clip
-        float healthPercentage = currentHP / maxHP;
+        base.TakeDamage(damage);
+        
+        // moved it to only check when HP has changed
+        PlayHPAudioClip(currentHP / maxHP);
+    }
 
+    private void PlayHPAudioClip(float healthPercentage)
+    {
         if (healthPercentage <= 0.75f && !played75)
         {
             PlayAudioClip(health75Clip);
             played75 = true;
         }
-        if (healthPercentage <= 0.50f && !played50)
+        else if (healthPercentage <= 0.50f && !played50)
         {
             PlayAudioClip(health50Clip);
             played50 = true;
