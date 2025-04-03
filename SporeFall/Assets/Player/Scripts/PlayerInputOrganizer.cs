@@ -314,7 +314,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             pauseGame.performed -= OnPause;
             pauseGame.performed += OnCloseUpgradeMenu;
 
-            pMan.pUI.ToggleUpgradeMenu(true);
+            GameManager.Instance.gameUI.ToggleUpgradeMenu(true, pMan);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -327,7 +327,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             pauseGame.performed -= OnCloseUpgradeMenu;
             pauseGame.performed += OnPause;
 
-            pMan.pUI.ToggleUpgradeMenu(false);
+            GameManager.Instance.gameUI.ToggleUpgradeMenu(false, pMan);
 
 
             Cursor.lockState = CursorLockMode.Locked;

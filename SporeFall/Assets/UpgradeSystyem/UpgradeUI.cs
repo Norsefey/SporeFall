@@ -18,13 +18,14 @@ public class UpgradeUI : MonoBehaviour
 
     [SerializeField] GameObject firstUpgradeButton;
 
+    public PlayerManager activePlayer;
+
     private void OnEnable()
     {
         upgradeManager = GameManager.Instance.upgradeManager;
         UpdateMyceliaAmount();
         ShowStructureUpgrades();
     }
-
     public void SetSelectable()
     {
         EventSystem.current.SetSelectedGameObject(null);
@@ -74,5 +75,9 @@ public class UpgradeUI : MonoBehaviour
     {
         myceliaText.color = GameManager.Instance.Mycelia > 0 ? DefaultColor : NoMyceliaColor;
         myceliaText.text = $"Mycelia: {GameManager.Instance.Mycelia}";
+    }
+    public void CloseUpgradeMenu()
+    {
+        activePlayer.pInput.ToggleUpgradeMenu(false);
     }
 }

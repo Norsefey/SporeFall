@@ -39,10 +39,6 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Sprite shermanSprite;
     [SerializeField] private Sprite repairTowerSprite;
     //[SerializeField] private Sprite lilySprite;
-
-    [Header("Upgrade Menu")]
-    public GameObject upgradeMenu;
-
     private void Start()
     {
         corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
@@ -286,16 +282,5 @@ public class PlayerUI : MonoBehaviour
             delayedHP = pMan.pHealth.CurrentHP;
             HPDelayBar.value = delayedHP;
         }
-    }
-    public void ToggleUpgradeMenu(bool toggle)
-    {
-        GameManager.Instance.gameUI.ToggleGameUI(!toggle);
-        defaultUI.SetActive(!toggle);
-
-        upgradeMenu.SetActive(toggle);
-        
-        UpgradeUI upUI = upgradeMenu.GetComponent<UpgradeUI>();
-        if (upUI != null)
-            upUI.SetSelectable();
     }
 }
