@@ -6,15 +6,20 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
+using Unity.VisualScripting;
 
 public class SettingsMenu : MonoBehaviour
 {
     public AudioMixer audioMixer;
+    [SerializeField] MainMenu mainMenu;
 
     [Header("Buttons")]
     [SerializeField] private GameObject masterVolume;
     [SerializeField] private GameObject musicVolume;
-    [SerializeField] private GameObject sfxVolume;
+    [SerializeField] private GameObject enemyVolume;
+    [SerializeField] private GameObject weaponVolume;
+    [SerializeField] private GameObject structureVolume;
+    [SerializeField] private GameObject ambienceVolume;
     [SerializeField] private GameObject voiceVolume;
     [SerializeField] private GameObject aimSensitivity;
     [SerializeField] private GameObject aimSensitivity2;
@@ -25,17 +30,23 @@ public class SettingsMenu : MonoBehaviour
     [Header("Interactables")]
     //Two copies of the same button/slider, a GameObject for navigation settings, and a Slider/Button for settings specific to those
     [SerializeField] private GameObject masterSlider;
-    [SerializeField] private Slider masterSlider2;
+    public Slider masterSlider2;
     [SerializeField] private GameObject musicSlider;
-    [SerializeField] private Slider musicSlider2;
-    [SerializeField] private GameObject sfxSlider;
-    [SerializeField] private Slider sfxSlider2;
+    public Slider musicSlider2;
+    [SerializeField] private GameObject enemySlider;
+    public Slider enemySlider2;
+    [SerializeField] private GameObject weaponSlider;
+    public Slider weaponSlider2;
+    [SerializeField] private GameObject structureSlider;
+    public Slider structureSlider2;
+    [SerializeField] private GameObject ambienceSlider;
+    public Slider ambienceSlider2;
     [SerializeField] private GameObject voiceSlider;
-    [SerializeField] private Slider voiceSlider2;
+    public Slider voiceSlider2;
     [SerializeField] private GameObject sensitivityP1Slider;
-    [SerializeField] private Slider sensitivityP1Slider2;
+    public Slider sensitivityP1Slider2;
     [SerializeField] private GameObject sensitivityP2Slider;
-    [SerializeField] private Slider sensitivityP2Slider2;
+    public Slider sensitivityP2Slider2;
     [SerializeField] private GameObject fullscreenToggleParent;
     public Button fullscreenToggle;
 
@@ -65,15 +76,12 @@ public class SettingsMenu : MonoBehaviour
         checkedState.highlightedSprite = fullscreenToggleSelectedChecked;
         checkedState.selectedSprite = fullscreenToggleSelectedChecked;
         checkedState.pressedSprite = fullscreenTogglePressedChecked;
-
-        
-
-        SetSliderDefaults();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         // Check for gamepad input
         Gamepad gamepad = Gamepad.current;
         if (gamepad == null) return;
@@ -96,20 +104,7 @@ public class SettingsMenu : MonoBehaviour
 
     }
 
-    public void SetSliderDefaults()
-    {
-        audioMixer.GetFloat("masterVolume", out volume);
-        masterSlider2.value = Mathf.Pow(10, volume / 20);
-        audioMixer.GetFloat("musicVolume", out volume);
-        musicSlider2.value = Mathf.Pow(10, volume / 20);
-        audioMixer.GetFloat("sfxVolume", out volume);
-        sfxSlider2.value = Mathf.Pow(10, volume / 20);
-        audioMixer.GetFloat("voiceVolume", out volume);
-        voiceSlider2.value = Mathf.Pow(10, volume / 20);
-        sensitivityP1Slider2.value = SavedSettings.mouseCamSensitivity;
-        sensitivityP2Slider2.value = SavedSettings.mouseCamSensitivity2;
-    }
-
+    #region Button Selection
     public void SelectMasterVolume()
     {
         EventSystem.current.SetSelectedGameObject(null);
@@ -131,13 +126,43 @@ public class SettingsMenu : MonoBehaviour
         StartCoroutine(SelectionCooldown());
     }
 
-    public void SelectSFXVolume()
+    public void SelectEnemyVolume()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(sfxSlider);
+        EventSystem.current.SetSelectedGameObject(enemySlider);
         isSliderSelected = true;
         canSelect = false;
-        lastSelected = sfxVolume;
+        lastSelected = enemyVolume;
+        StartCoroutine(SelectionCooldown());
+    }
+
+    public void SelectWeaponVolume()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(weaponSlider);
+        isSliderSelected = true;
+        canSelect = false;
+        lastSelected = weaponVolume;
+        StartCoroutine(SelectionCooldown());
+    }
+
+    public void SelectStructureVolume()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(structureSlider);
+        isSliderSelected = true;
+        canSelect = false;
+        lastSelected = structureVolume;
+        StartCoroutine(SelectionCooldown());
+    }
+
+    public void SelectAmbienceVolume()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(ambienceSlider);
+        isSliderSelected = true;
+        canSelect = false;
+        lastSelected = ambienceVolume;
         StartCoroutine(SelectionCooldown());
     }
 
@@ -181,6 +206,9 @@ public class SettingsMenu : MonoBehaviour
         StartCoroutine(SelectionCooldown());
     }
 
+    #endregion
+
+    #region Confirm Settings
     public void SetMasterVolume(float volume)
     {
         //Using this math rather than flat numbers so the volume scale is linear rather than exponential
@@ -194,10 +222,28 @@ public class SettingsMenu : MonoBehaviour
         audioMixer.SetFloat("musicVolume", Mathf.Log10(volume) * 20);
     }
 
-    public void SetSFXVolume(float volume)
+    public void SetEnemySFXVolume(float volume)
     {
-        Debug.Log("SFX volume: " + Mathf.Log10(volume) * 20);
-        audioMixer.SetFloat("sfxVolume", Mathf.Log10(volume) * 20);
+        Debug.Log("Enemy SFX volume: " + Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("enemyVolume", Mathf.Log10(volume) * 20);
+    }
+
+    public void SetWeaponSFXVolume(float volume)
+    {
+        Debug.Log("Weapon SFX volume: " + Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("weaponVolume", Mathf.Log10(volume) * 20);
+    }
+
+    public void SetStructureSFXVolume(float volume)
+    {
+        Debug.Log("Structure SFX volume: " + Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("structureVolume", Mathf.Log10(volume) * 20);
+    }
+
+    public void SetAmbienceSFXVolume(float volume)
+    {
+        Debug.Log("Ambience SFX volume: " + Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("ambienceVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetVoiceVolume(float volume)
@@ -244,6 +290,8 @@ public class SettingsMenu : MonoBehaviour
             Debug.Log("Toggling on fullscreen");
         }
     }
+
+    #endregion
 
     IEnumerator SelectionCooldown()
     {

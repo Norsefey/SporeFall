@@ -39,20 +39,46 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject LoadingScreen;
     [SerializeField] private Slider progressBar;
     private bool isControllerConnected = false;
-    private float volume = 2;
 
+    [Header("Default Volumes")]
+    public float masterVolume;
+    [SerializeField] float musicVolume;
+    [SerializeField] float enemyVolume;
+    [SerializeField] float weaponVolume;
+    [SerializeField] float structureVolume;
+    [SerializeField] float ambienceVolume;
+    [SerializeField] float voiceVolume;
+
+    //Used for debugging
+    //private float volume;
 
     void Start()
     {
+
         if (SavedSettings.firstOpenedGame)
         {
-            audioMixer.SetFloat("masterVolume", volume);
-            audioMixer.SetFloat("musicVolume", volume);
-            audioMixer.SetFloat("sfxVolume", volume);
-            audioMixer.SetFloat("voiceVolume", volume);
+            Debug.Log("Game first started, setting volumes");
             SavedSettings.firstOpenedGame = false;
+
+            audioMixer.SetFloat("masterVolume", masterVolume);
+            audioMixer.SetFloat("musicVolume", musicVolume);
+            audioMixer.SetFloat("enemyVolume", enemyVolume);
+            audioMixer.SetFloat("weaponVolume", weaponVolume);
+            audioMixer.SetFloat("structureVolume", structureVolume);
+            audioMixer.SetFloat("ambienceVolume", ambienceVolume);
+            audioMixer.SetFloat("voiceVolume", voiceVolume);
+            
+            settings.masterSlider2.value = Mathf.Pow(10, masterVolume / 20);
+            settings.musicSlider2.value = Mathf.Pow(10, musicVolume / 20);
+            settings.enemySlider2.value = Mathf.Pow(10, enemyVolume / 20);
+            settings.weaponSlider2.value = Mathf.Pow(10, weaponVolume / 20);
+            settings.structureSlider2.value = Mathf.Pow(10, structureVolume / 20);
+            settings.ambienceSlider2.value = Mathf.Pow(10, ambienceVolume / 20);
+            settings.voiceSlider2.value = Mathf.Pow(10, voiceVolume / 20);
+            settings.sensitivityP1Slider2.value = SavedSettings.mouseCamSensitivity;
+            settings.sensitivityP2Slider2.value = SavedSettings.mouseCamSensitivity2;
         }
-        
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 1;
@@ -86,7 +112,8 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F))
+
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.F))
         {
             if (Screen.fullScreen)
             {
