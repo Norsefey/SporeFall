@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
             hitground = hit.distance <= check;
 
             pMan.inToxicWater = hit.collider.CompareTag("Water");
-            moveSpeedModifier = pMan.inToxicWater ? .2f : 1;
+            moveSpeedModifier = pMan.inToxicWater ? .25f : 1;
         }
 
         return hitground && cc.isGrounded;
