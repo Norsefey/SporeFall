@@ -160,7 +160,7 @@ public class WaveManager : MonoBehaviour
         if(isRobertSpawned)
             RemoveAllRoberts();
         // since we are skipping, we no longer need to invoke, prevents repeat
-        CancelInvoke(nameof(Depart));
+        CancelInvoke(nameof(TrainAutoDepartCall));
         //player.RemoveButtonAction();
         Depart();
     }
