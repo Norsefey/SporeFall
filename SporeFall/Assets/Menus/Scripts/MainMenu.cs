@@ -11,6 +11,7 @@ using UnityEngine.Audio;
 public class MainMenu : MonoBehaviour
 {
     //Script that controls various buttons and screens on main menu
+    //Also handles some settings because the settings menu starts disabled, more controllable via this script
 
     [SerializeField] SettingsMenu settings;
     public AudioMixer audioMixer;
@@ -49,14 +50,14 @@ public class MainMenu : MonoBehaviour
     [SerializeField] float ambienceVolume;
     [SerializeField] float voiceVolume;
 
-    //Used for debugging
-    //private float volume;
+    private float volume;
 
     void Start()
     {
 
         if (SavedSettings.firstOpenedGame)
         {
+            //Set audio mixer volumes to given numbers
             Debug.Log("Game first started, setting volumes");
             SavedSettings.firstOpenedGame = false;
 
@@ -67,17 +68,27 @@ public class MainMenu : MonoBehaviour
             audioMixer.SetFloat("structureVolume", structureVolume);
             audioMixer.SetFloat("ambienceVolume", ambienceVolume);
             audioMixer.SetFloat("voiceVolume", voiceVolume);
-            
-            settings.masterSlider2.value = Mathf.Pow(10, masterVolume / 20);
-            settings.musicSlider2.value = Mathf.Pow(10, musicVolume / 20);
-            settings.enemySlider2.value = Mathf.Pow(10, enemyVolume / 20);
-            settings.weaponSlider2.value = Mathf.Pow(10, weaponVolume / 20);
-            settings.structureSlider2.value = Mathf.Pow(10, structureVolume / 20);
-            settings.ambienceSlider2.value = Mathf.Pow(10, ambienceVolume / 20);
-            settings.voiceSlider2.value = Mathf.Pow(10, voiceVolume / 20);
-            settings.sensitivityP1Slider2.value = SavedSettings.mouseCamSensitivity;
-            settings.sensitivityP2Slider2.value = SavedSettings.mouseCamSensitivity2;
         }
+
+        //Set default slider values to match audio volumes
+        audioMixer.GetFloat("masterVolume", out volume);
+        settings.masterSlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("musicVolume", out volume);
+        settings.musicSlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("enemyVolume", out volume);
+        settings.enemySlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("weaponVolume", out volume);
+        settings.weaponSlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("structureVolume", out volume);
+        settings.structureSlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("ambienceVolume", out volume);
+        settings.ambienceSlider2.value = Mathf.Pow(10, volume / 20);
+        audioMixer.GetFloat("voiceVolume", out volume);
+        settings.voiceSlider2.value = Mathf.Pow(10, volume / 20);
+
+        //Set default sensitivity slider values
+        settings.sensitivityP1Slider2.value = SavedSettings.mouseCamSensitivity;
+        settings.sensitivityP2Slider2.value = SavedSettings.mouseCamSensitivity2;
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -95,6 +106,7 @@ public class MainMenu : MonoBehaviour
 
         savedFirstButton = firstTitleButton;
         InputSystem.onDeviceChange += OnDeviceChange;
+
         if (Gamepad.all.Count > 0)
         {
             //If a controller is being used, highlights the first button

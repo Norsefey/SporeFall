@@ -11,7 +11,6 @@ using Unity.VisualScripting;
 public class SettingsMenu : MonoBehaviour
 {
     public AudioMixer audioMixer;
-    [SerializeField] MainMenu mainMenu;
 
     [Header("Buttons")]
     [SerializeField] private GameObject masterVolume;
@@ -58,14 +57,11 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Sprite fullscreenToggleSelectedChecked;
     [SerializeField] private Sprite fullscreenTogglePressedChecked;
 
-    private bool isSliderSelected = false;
-    private bool canSelect = false;
+    [HideInInspector] public bool isSliderSelected = false;
     private GameObject lastSelected;
 
     [HideInInspector] public SpriteState uncheckedState;
     [HideInInspector] public SpriteState checkedState;
-
-    private float volume;
 
     // Start is called before the first frame update
     void Start()
@@ -88,18 +84,13 @@ public class SettingsMenu : MonoBehaviour
 
         if (isSliderSelected)
         {
-            if (gamepad.buttonSouth.wasPressedThisFrame && canSelect && lastSelected != fullscreen)
+            if (gamepad.buttonEast.wasPressedThisFrame)
             {
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(lastSelected);
                 isSliderSelected = false;
                 Debug.Log("Returning to button");
             }
-        }
-
-        if (Screen.fullScreen)
-        {
-            Debug.Log("Screen is fullscreen");
         }
 
     }
@@ -110,9 +101,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(masterSlider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = masterVolume;
-        StartCoroutine(SelectionCooldown());
         Debug.Log("Master volume selected");
     }
 
@@ -121,9 +110,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(musicSlider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = musicVolume;
-        StartCoroutine(SelectionCooldown());
     }
 
     public void SelectEnemyVolume()
@@ -131,9 +118,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(enemySlider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = enemyVolume;
-        StartCoroutine(SelectionCooldown());
     }
 
     public void SelectWeaponVolume()
@@ -141,9 +126,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(weaponSlider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = weaponVolume;
-        StartCoroutine(SelectionCooldown());
     }
 
     public void SelectStructureVolume()
@@ -151,9 +134,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(structureSlider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = structureVolume;
-        StartCoroutine(SelectionCooldown());
     }
 
     public void SelectAmbienceVolume()
@@ -161,9 +142,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(ambienceSlider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = ambienceVolume;
-        StartCoroutine(SelectionCooldown());
     }
 
     public void SelectVoiceVolume()
@@ -171,9 +150,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(voiceSlider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = voiceVolume;
-        StartCoroutine(SelectionCooldown());
     }
 
     public void SelectAimSensitivity()
@@ -181,9 +158,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(sensitivityP1Slider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = aimSensitivity;
-        StartCoroutine(SelectionCooldown());
     }
 
     public void SelectAimSensitivity2()
@@ -191,9 +166,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(sensitivityP2Slider);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = aimSensitivity2;
-        StartCoroutine(SelectionCooldown());
     }
 
     public void SelectFullscreen()
@@ -201,9 +174,7 @@ public class SettingsMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(fullscreenToggleParent);
         isSliderSelected = true;
-        canSelect = false;
         lastSelected = fullscreen;
-        StartCoroutine(SelectionCooldown());
     }
 
     #endregion
@@ -293,10 +264,5 @@ public class SettingsMenu : MonoBehaviour
 
     #endregion
 
-    IEnumerator SelectionCooldown()
-    {
-        yield return new WaitForSeconds(.1f);
-        canSelect = true;
-        Debug.Log("Can select slider level");
-    }
+
 }
