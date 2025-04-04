@@ -93,7 +93,6 @@ public class ShermanControl : MonoBehaviour
 
         return avoidanceDirection.normalized;
     }
-
     private void UpdateDirection()
     {
         Vector3 enemyDirection = GetEnemyInfluenceDirection();
@@ -144,7 +143,6 @@ public class ShermanControl : MonoBehaviour
 
         return enemyInfluence.normalized;
     }
-
     private void OnTriggerEnter(Collider other)
     {
 

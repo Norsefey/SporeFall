@@ -63,6 +63,7 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Toxic Water")]
     [SerializeField] private float toxicDamageRate = 1;
+    public float slowDownMultiplier = .25f;
     public bool inToxicWater;
 
     private void Awake()
