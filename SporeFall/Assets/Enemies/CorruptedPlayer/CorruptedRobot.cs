@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CorruptedPlayer : BaseEnemy
 {
+    [Header("Robert References")]
     public PlayerManager myPlayer;
     [Header("Drops")]
     [SerializeField] GameObject myceliaDropPrefab;
