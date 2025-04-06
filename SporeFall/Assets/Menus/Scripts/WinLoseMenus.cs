@@ -36,7 +36,7 @@ public class WinLoseMenus : MonoBehaviour
             if (Screen.fullScreen)
             {
                 // turn off fullscreen
-                Screen.SetResolution(960, 540, false);
+                Screen.SetResolution(1280, 720, false);
             }
             else
             {
@@ -50,7 +50,7 @@ public class WinLoseMenus : MonoBehaviour
 
     public void RetryLevel()
     {
-        SceneManager.LoadScene(gameSceneIndex);
+        SceneManager.LoadScene(0);
     }
 
     public void QuitToMainMenu()

@@ -5,6 +5,7 @@ public class EnemyHP : Damageable
 {
     // Health properties
     [SerializeField] private BaseEnemy manager;
+    [SerializeField] private float flinchModifier = 1.0f;
     public bool flinchable = true;
     private bool flinching = false;
 
@@ -23,7 +24,10 @@ public class EnemyHP : Damageable
             manager.recentDamage.Enqueue(new BaseEnemy.DamageInstance(damage, Time.time));
 
             // Calculate flinch probability (higher HP = higher chance to flinch)
-            float flinchChance = currentHP / maxHP; // 1 at full HP, 0 at 0 HP
+            float healthRatio = currentHP / maxHP; // 1 at full HP, 0 at 0 HP
+            float flinchChance = healthRatio * flinchModifier; // Apply the modifier
+            
+            flinchChance = Mathf.Clamp01(flinchChance);
 
             if (!flinching && Random.value < flinchChance)
             {

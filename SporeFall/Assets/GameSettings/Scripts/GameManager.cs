@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        Debug.Log("Setting Game Manager Instance");
+        //Debug.Log("Setting Game Manager Instance");
         Instance = this;
     }
     private void Start()

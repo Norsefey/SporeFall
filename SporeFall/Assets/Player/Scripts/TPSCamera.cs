@@ -156,7 +156,7 @@ public class TPSCamera : MonoBehaviour
 
         if (hasCollision)
         {
-            Debug.Log(hit.collider.gameObject.name);
+            //Debug.Log(hit.collider.gameObject.name);
             // Calculate adjusted position based on hit point
             float adjustedDistance = hit.distance - sphereCastRadius;
             Vector3 newPosition = shoulderPosition + directionToCamera * adjustedDistance;

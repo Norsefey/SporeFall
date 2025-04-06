@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Audio;
-using System.Security.Cryptography;
-using System.Security.Authentication.ExtendedProtection;
+
 
 public class PauseMenu : MonoBehaviour
 {
@@ -299,7 +298,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Retry()
     {
-        SceneTransitioner.Instance.LoadGameScene();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void QuitConfirmScreen()

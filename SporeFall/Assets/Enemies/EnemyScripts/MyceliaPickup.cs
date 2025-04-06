@@ -21,6 +21,9 @@ public class MyceliaPickup : DropsPoolBehavior
             if (pool != null)
             {
                 PickupMycelia();
+            }else
+            {
+                Debug.LogWarning("No pool for Mycelia Pick up");
             }
         }
     }

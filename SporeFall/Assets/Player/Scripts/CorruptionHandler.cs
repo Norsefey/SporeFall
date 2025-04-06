@@ -68,14 +68,14 @@ public class CorruptionHandler : MonoBehaviour
 
         if (pMan != null && pMan.audioSource != null)
         {
-            if (previousCorruption < 25 && corruptionLevel >= 25)
+           /* if (previousCorruption < 25 && corruptionLevel >= 25)
                 pMan.audioSource.PlayOneShot(pMan.corruption25Sound,1.5f);
             else if (previousCorruption < 50 && corruptionLevel >= 50)
                 pMan.audioSource.PlayOneShot(pMan.corruption50Sound, 1.5f);
-            else if (previousCorruption < 75 && corruptionLevel >= 75)
+            else */if (previousCorruption < 75 && corruptionLevel >= 75)
                 pMan.audioSource.PlayOneShot(pMan.corruption75Sound, 1.5f);
-            else if (previousCorruption < 100 && corruptionLevel >= 100)
-                pMan.audioSource.PlayOneShot(pMan.corruption100Sound, 1.5f);
+          /*  else if (previousCorruption < 100 && corruptionLevel >= 100)
+                pMan.audioSource.PlayOneShot(pMan.corruption100Sound, 1.5f);*/
         }
 
         pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
@@ -125,7 +125,16 @@ public class CorruptionHandler : MonoBehaviour
     private void CorruptPlayer()
     {
         if (pMan.audioSource != null)
+        {
+            pMan.audioSource.Stop();
             pMan.audioSource.PlayOneShot(pMan.corruption100Sound, 1.5f);
+        }
+        // player loses life and respawns
+        pMan.pHealth.DepleteLife();
+        pMan.TogglePControl(false);
+        pMan.pAnime.ToggleIKAim(false);
+        pMan.pAnime.ActivateATrigger("Corrupted");
+        pMan.StartRespawn();
 
         corruptionLevel = 0;
         pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
@@ -133,11 +142,6 @@ public class CorruptionHandler : MonoBehaviour
         pMan.pUI.UpdateCorruptedVision(0);
         // add a delay to corrupted robot spawning
         Invoke(nameof(SpawnCorruptedRobot), 2);
-        
-        // player loses life and respawns
-        pMan.pHealth.DepleteLife();
-        pMan.pAnime.ActivateATrigger("Corrupted");
-        pMan.StartRespawn();
     }
     private void SpawnCorruptedRobot()
     {

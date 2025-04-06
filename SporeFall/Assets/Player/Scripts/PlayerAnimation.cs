@@ -102,6 +102,7 @@ public class PlayerAnimation : MonoBehaviour
     }
      public void ActivateATrigger(string triggerName)
     {
+        anime.ResetTrigger(triggerName);
         anime.SetTrigger(triggerName);
     }
     public void ToggleRespawn(bool toggle)

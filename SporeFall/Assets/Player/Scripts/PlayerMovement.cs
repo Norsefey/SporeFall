@@ -34,7 +34,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Default,
         Aiming,
-        TempAim
+        TempAim,
+        Immobile
     }
     public PlayerState currentState = PlayerState.Default;
 
@@ -74,6 +75,9 @@ public class PlayerMovement : MonoBehaviour
                     if (currentState == PlayerState.TempAim)
                         currentState = PlayerState.Default;
                 }
+                break;
+            case PlayerState.Immobile:
+                Debug.Log("Player cannot Move");
                 break;
         }
     }

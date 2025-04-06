@@ -56,7 +56,7 @@ public class PlayerManager : MonoBehaviour
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
     [SerializeField] private Transform fallbackSpawnPoint;
-
+    public bool isRespawning = false;
 
     public bool holdingCorruption = false;
     public InputDevice myDevice;
@@ -95,6 +95,11 @@ public class PlayerManager : MonoBehaviour
         if(inToxicWater)
         {
             pHealth.TakeDamage(toxicDamageRate * Time.deltaTime);
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            StartRespawn();
         }
 
        /* // For Testing
@@ -333,7 +338,14 @@ public class PlayerManager : MonoBehaviour
         if (isBuilding)
             ToggleBuildMode();
 
-        pController.gameObject.SetActive(toggle);
+        if (!toggle)
+        {
+            pController.currentState = PlayerMovement.PlayerState.Immobile;
+        }
+        else
+        {
+            pController.currentState = PlayerMovement.PlayerState.Default;
+        }
         canUseWeapon = toggle;
         if(toggle)
             pInput.EnableDefaultInputs();
@@ -365,36 +377,89 @@ public class PlayerManager : MonoBehaviour
     }
     public void StartRespawn()
     {
-        StartCoroutine(Respawn());
+        if (!isRespawning) // Add a flag to prevent multiple respawn processes
+        {
+            isRespawning = true;
+            StartCoroutine(Respawn());
+        }
     }
     private IEnumerator Respawn()
     {
+        Debug.Log("Starting Player Respawn");
+
+        // Clean up current state
         DropWeapon();
         if (isBuilding)
         {
             ToggleBuildMode();
         }
 
-        yield return new WaitForSeconds(3);
+        // Disable player control during respawn
+        TogglePControl(false);
+
+        // Use unscaled time if there's a chance Time.timeScale could be 0
+        yield return new WaitForSecondsRealtime(3);
 
         if (pHealth.CurrentLives <= 0)
-            yield return null;
+        {
+            Debug.Log("No lives remaining, respawn canceled");
+            // Handle game over or player death permanently
+        }
         else
         {
+            Debug.Log("Continuing respawn process");
             pAnime.ToggleRespawn(true);
 
-            if (GameManager.Instance.trainHandler != null)
-                MovePlayerTo(GameManager.Instance.trainHandler.playerSpawnPoint[GetPlayerIndex()].position);
+            // Determine spawn position with fallback
+            Vector3 spawnPosition;
+            Transform spawnPoint = null;
+
+            if (GameManager.Instance != null && GameManager.Instance.trainHandler != null)
+            {
+                int playerIndex = GetPlayerIndex();
+                if (playerIndex >= 0 && playerIndex < GameManager.Instance.trainHandler.playerSpawnPoint.Length)
+                {
+                    spawnPoint = GameManager.Instance.trainHandler.playerSpawnPoint[playerIndex];
+                    Debug.Log("Using train spawn point for player " + playerIndex);
+                }
+            }
+
+            if (spawnPoint != null)
+            {
+                spawnPosition = spawnPoint.position;
+            }
             else
-                MovePlayerTo(fallbackSpawnPoint.position);
+            {
+                Debug.LogWarning("Train spawn point not available, using fallback");
+                spawnPosition = fallbackSpawnPoint != null ? fallbackSpawnPoint.position : transform.position;
+            }
+
+            // Move player to spawn position
+            Debug.Log("Moving player to position: " + spawnPosition);
+            MovePlayerTo(spawnPosition);
+
+            // Verify the move was successful
+            if (Vector3.Distance(transform.position, spawnPosition) > 0.1f)
+            {
+                //Debug.LogError("Player did not move to spawn position correctly");
+                // Force position directly as fallback
+                pController.transform.position = spawnPosition;
+            }
+
+            yield return new WaitForSecondsRealtime(1);
+
+            // Reset player state
+            Debug.Log("Resetting player state and returning control");
             pCorruption.ResetCorruptionLevel();
             pHealth.ResetHealth();
             TogglePControl(true);
-
-            yield return new WaitForSeconds(1);
+            pAnime.ToggleIKAim(true);
             pAnime.ToggleRespawn(false);
+
         }
-     
+
+        isRespawning = false;
+
     }
     public void SetupPlayerTwo()
     {

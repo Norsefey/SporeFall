@@ -97,7 +97,6 @@ public abstract class BaseEnemy : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         detectedColliders = new Collider[maxDetectedObjects];
     }
-
     protected virtual void OnEnable()
     {
         if (!isInitialized)
@@ -667,9 +666,9 @@ public abstract class BaseEnemy : MonoBehaviour
         float temp = agent.speed;
         agent.speed = 0;
         isRising = true;
-        Debug.Log("Rising From Ground");
+        //Debug.Log("Rising From Ground");
         yield return new WaitForSeconds(risingAnimationLength);
-        Debug.Log("Done Rising");
+        //Debug.Log("Done Rising");
 
         agent.isStopped = false;
         agent.speed = temp;

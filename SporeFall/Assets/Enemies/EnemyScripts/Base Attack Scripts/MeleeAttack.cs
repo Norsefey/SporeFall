@@ -47,7 +47,7 @@ public class MeleeAttack : Attack
         SpawnVFX(attackOrigin, enemy.transform.rotation);
         PlaySFX(enemy.AudioSource);
         StartCooldown();
-        Debug.Log("Melee Attack!!");
+        //Debug.Log("Melee Attack!!");
         // Recovery period
         yield return new WaitForSeconds(recoveryTime);
         enemy.SetIsAttacking(false);

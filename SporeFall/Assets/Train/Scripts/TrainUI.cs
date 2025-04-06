@@ -36,25 +36,25 @@ public class TrainUI : MonoBehaviour
         if (hpPercantage > 0)
         {
             HPText.text = "Train HP: " + hpPercantage.ToString("F0") + "%";
-            Debug.Log("Updating train HP bar");
+            //Debug.Log("Updating train HP bar");
         }
 
         else if (hpPercantage <= 0)
         {
             HPText.text = "Train HP: 0%";
-            Debug.Log("Updating train HP bar");
+            //Debug.Log("Updating train HP bar");
         }
 
         if (delayedHP < trainHP.CurrentHP)
         {
-            Debug.Log("DelayedHP is less than current HP");
+            //Debug.Log("DelayedHP is less than current HP");
             delayedHP = trainHP.CurrentHP;
             HPDelayBar.value = delayedHP;
-            Debug.Log("Raising delayedHP to equal current HP");
+            //Debug.Log("Raising delayedHP to equal current HP");
         }
         else if (delayedHP > trainHP.CurrentHP)
         {
-            Debug.Log("DelayedHP is greater than current HP");
+            //Debug.Log("DelayedHP is greater than current HP");
             StartCoroutine(HPDelayCooldown());
 
         }
@@ -65,16 +65,16 @@ public class TrainUI : MonoBehaviour
         yield return new WaitForSeconds(1f);
         while (delayedHP > trainHP.CurrentHP)
         {
-            Debug.Log("Reducing delayedHP");
+            //Debug.Log("Reducing delayedHP");
             delayedHP = delayedHP - .5f;
-            Debug.Log("Train HP is: " + trainHP.CurrentHP);
-            Debug.Log("Delayed HP is: " + delayedHP);
+            //Debug.Log("Train HP is: " + trainHP.CurrentHP);
+            //Debug.Log("Delayed HP is: " + delayedHP);
             HPDelayBar.value = delayedHP;
-            Debug.Log("HPDelay Bar value is: " + HPDelayBar.value);
+            //Debug.Log("HPDelay Bar value is: " + HPDelayBar.value);
         }
         if (delayedHP < trainHP.CurrentHP)
         {
-            Debug.Log("DelayedHP has been reduced lower than current HP, raising");
+            //Debug.Log("DelayedHP has been reduced lower than current HP, raising");
             delayedHP = trainHP.CurrentHP;
             HPDelayBar.value = delayedHP;
         }

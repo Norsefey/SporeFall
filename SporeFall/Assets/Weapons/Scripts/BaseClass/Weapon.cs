@@ -151,7 +151,7 @@ public abstract class Weapon : MonoBehaviour
         Ray ray = new(playerCamera.position, shootDirection);
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
-            Debug.Log("Hit" + hit.transform.gameObject.name);
+            //Debug.Log("Hit" + hit.transform.gameObject.name);
 
             // Apply damage to the hit object
             if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("HeadShot"))

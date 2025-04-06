@@ -106,7 +106,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void ReturnToPool()
     {
-        Debug.Log($"Returning to pool {name}");
+        //Debug.Log($"Returning to pool {name}");
         StopAllCoroutines();
         if (pool != null)
         {
@@ -123,7 +123,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Projectile Hit" + collision.gameObject.name);
+       // Debug.Log("Projectile Hit" + collision.gameObject.name);
 
         // Check if the collision object's layer is in our hitLayers mask
         if (hitLayers == (hitLayers | (1 << collision.gameObject.layer)))

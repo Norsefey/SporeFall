@@ -43,7 +43,7 @@ public abstract class Attack : ScriptableObject
 
     protected void StartCooldown()
     {
-        Debug.Log("Starting Cooldown");
+        //Debug.Log("Starting Cooldown");
         lastUseTime = Time.time;
     }
     public void ResetCooldown()

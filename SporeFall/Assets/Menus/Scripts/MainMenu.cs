@@ -208,10 +208,10 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(tutorialName);
     }
 
-    public void StartLevel1()
+    public void StartLevel(int index)
     {
         LoadingScreen.SetActive(true);
-        StartCoroutine(LoadSceneAsync(1));
+        StartCoroutine(LoadSceneAsync(index));
     }
 
     public void BackToMain()

@@ -89,7 +89,7 @@ public class SettingsMenu : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(lastSelected);
                 isSliderSelected = false;
-                Debug.Log("Returning to button");
+                //Debug.Log("Returning to button");
             }
         }
 
@@ -183,49 +183,49 @@ public class SettingsMenu : MonoBehaviour
     public void SetMasterVolume(float volume)
     {
         //Using this math rather than flat numbers so the volume scale is linear rather than exponential
-        Debug.Log("Master volume: " + Mathf.Log10(volume) * 20);
+        //Debug.Log("Master volume: " + Mathf.Log10(volume) * 20);
         audioMixer.SetFloat("masterVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetMusicVolume(float volume)
     {
-        Debug.Log("Music volume: " + Mathf.Log10(volume) * 20);
+        //Debug.Log("Music volume: " + Mathf.Log10(volume) * 20);
         audioMixer.SetFloat("musicVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetEnemySFXVolume(float volume)
     {
-        Debug.Log("Enemy SFX volume: " + Mathf.Log10(volume) * 20);
+        //Debug.Log("Enemy SFX volume: " + Mathf.Log10(volume) * 20);
         audioMixer.SetFloat("enemyVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetWeaponSFXVolume(float volume)
     {
-        Debug.Log("Weapon SFX volume: " + Mathf.Log10(volume) * 20);
+        //Debug.Log("Weapon SFX volume: " + Mathf.Log10(volume) * 20);
         audioMixer.SetFloat("weaponVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetStructureSFXVolume(float volume)
     {
-        Debug.Log("Structure SFX volume: " + Mathf.Log10(volume) * 20);
+        //Debug.Log("Structure SFX volume: " + Mathf.Log10(volume) * 20);
         audioMixer.SetFloat("structureVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetAmbienceSFXVolume(float volume)
     {
-        Debug.Log("Ambience SFX volume: " + Mathf.Log10(volume) * 20);
+        //Debug.Log("Ambience SFX volume: " + Mathf.Log10(volume) * 20);
         audioMixer.SetFloat("ambienceVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetVoiceVolume(float volume)
     {
-        Debug.Log("Voice volume: " + Mathf.Log10(volume) * 20);
+        //Debug.Log("Voice volume: " + Mathf.Log10(volume) * 20);
         audioMixer.SetFloat("voiceVolume", Mathf.Log10(volume) * 20);
     }
 
     public void SetSensitivity(float sensitivity)
     {
-        Debug.Log("Cam sensitivity: " + sensitivity + ", " + sensitivity * 10 + ", " + sensitivity * 8);
+        //Debug.Log("Cam sensitivity: " + sensitivity + ", " + sensitivity * 10 + ", " + sensitivity * 8);
         
         SavedSettings.mouseCamSensitivity = sensitivity;
         SavedSettings.gamepadHorCamSensitivity = sensitivity * 10;
@@ -234,7 +234,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetSensitivity2(float sensitivity)
     {
-        Debug.Log("Cam sensitivity: " + sensitivity + ", " + sensitivity * 10 + ", " + sensitivity * 8);
+        //Debug.Log("Cam sensitivity: " + sensitivity + ", " + sensitivity * 10 + ", " + sensitivity * 8);
 
         SavedSettings.mouseCamSensitivity2 = sensitivity;
         SavedSettings.gamepadHorCamSensitivity2 = sensitivity * 10;
@@ -249,7 +249,7 @@ public class SettingsMenu : MonoBehaviour
             Screen.SetResolution(960, 540, false);
             fullscreenToggle.image.sprite = fullscreenToggleSourceUnchecked;
             fullscreenToggle.spriteState = uncheckedState;
-            Debug.Log("Toggling off fullscreen");
+            //Debug.Log("Toggling off fullscreen");
         }
         else
         {
@@ -258,7 +258,7 @@ public class SettingsMenu : MonoBehaviour
             Screen.SetResolution(defaultRes.width, defaultRes.height, true);
             fullscreenToggle.image.sprite = fullscreenToggleSourceChecked;
             fullscreenToggle.spriteState = checkedState;
-            Debug.Log("Toggling on fullscreen");
+            //Debug.Log("Toggling on fullscreen");
         }
     }
 

@@ -32,14 +32,14 @@ public class PlayerDeviceHandler : MonoBehaviour
             {
                 keyboardDevice = device;
                 //usingKeyboard = true;
-                Debug.Log("Keyboard detected");
+                //Debug.Log("Keyboard detected");
             }
 
             else if (device is Mouse)
             {
                 mouseDevice = device;
                 //usingKeyboard = true;
-                Debug.Log("mouse detected");
+                //Debug.Log("mouse detected");
             }
             
 
@@ -111,7 +111,7 @@ public class PlayerDeviceHandler : MonoBehaviour
     // Called when a new player joins
     private void OnPlayerJoined(PlayerInput playerInput)
     {
-        Debug.Log($"Player {playerInput.playerIndex} joined with device {playerInput.devices[0].displayName}");
+        //Debug.Log($"Player {playerInput.playerIndex} joined with device {playerInput.devices[0].displayName}");
         players.Add(playerInput);
 
         if (singlePlayer && players.Count == 1)
@@ -121,19 +121,19 @@ public class PlayerDeviceHandler : MonoBehaviour
 
             if (playerInput.devices[0].displayName == "Xbox Controller")
             {
-                Debug.Log("Setting usingXbox to true");
+                //Debug.Log("Setting usingXbox to true");
                 usingXbox = true;
             }
 
             else if (playerInput.devices[0].displayName == "PlayStation Controller")
             {
-                Debug.Log("Setting usingPlaystation to true");
+               // Debug.Log("Setting usingPlaystation to true");
                 usingPlaystation = true;
             }
 
             else if (playerInput.devices[0].displayName == "Keyboard" || playerInput.devices[0].displayName == "Mouse")
             {
-                Debug.Log("Setting usingKeyboard to true");
+               // Debug.Log("Setting usingKeyboard to true");
                 usingKeyboard = true;
             }
 
@@ -158,13 +158,13 @@ public class PlayerDeviceHandler : MonoBehaviour
         if (players.Contains(playerInput))
         {
             players.Remove(playerInput);
-            Debug.Log($"Player {playerInput.playerIndex} left the game.");
+            //Debug.Log($"Player {playerInput.playerIndex} left the game.");
 
         }
 
         if (players.Count == 1)
         {
-            Debug.Log("Resetting to single player view");
+            //Debug.Log("Resetting to single player view");
             ResetToSinglePlayer();
         }
 
@@ -176,12 +176,12 @@ public class PlayerDeviceHandler : MonoBehaviour
     {
         if (change == InputDeviceChange.Added)
         {
-            Debug.Log($"Device Connected: {device.displayName}");
+           // Debug.Log($"Device Connected: {device.displayName}");
             HandleDeviceAdded(device);
         }
         else if (change == InputDeviceChange.Disconnected)
         {
-            Debug.Log($"Device Disconnected: {device.displayName}");
+           // Debug.Log($"Device Disconnected: {device.displayName}");
             HandleDeviceDisconnected(device);
         }
     }
@@ -206,14 +206,14 @@ public class PlayerDeviceHandler : MonoBehaviour
                 // In single player, switch the existing player to the gamepad
                 players[0].SwitchCurrentControlScheme("Gamepad", gamepad);
                 UpdateSensitivity();
-                Debug.Log($"Single player switched to gamepad: {gamepad.displayName}");
+               // Debug.Log($"Single player switched to gamepad: {gamepad.displayName}");
                 
             }
             else if (!singlePlayer && inputManager.joiningEnabled)
             {
                 // In multiplayer, the PlayerInputManager will automatically handle creating 
                 // a new player with the gamepad through its join system
-                Debug.Log($"Multiplayer: Ready for new player to join with gamepad: {gamepad.displayName}");
+               // Debug.Log($"Multiplayer: Ready for new player to join with gamepad: {gamepad.displayName}");
 
 
             }
@@ -237,33 +237,33 @@ public class PlayerDeviceHandler : MonoBehaviour
                     InputDevice[] keyboardMouseDevices = new InputDevice[] { keyboardDevice, mouseDevice };
                     players[0].SwitchCurrentControlScheme("Keyboard&Mouse", keyboardMouseDevices);
                     UpdateSensitivity();
-                    Debug.Log("Single player switched to Keyboard&Mouse");
+                    //Debug.Log("Single player switched to Keyboard&Mouse");
                 }
                 else
                 {
-                    Debug.LogWarning("Keyboard or mouse device not found!");
+                    //Debug.LogWarning("Keyboard or mouse device not found!");
                 }
             }
             else if (!singlePlayer)
             {
-                Debug.Log("Not Singleplayer need to remove player");
+                //Debug.Log("Not Singleplayer need to remove player");
                 // In multiplayer, find and remove the player using this device
                 PlayerInput playerToRemove = FindPlayerWithoutDevice(device);
                 if (playerToRemove != null)
                 {
                     int playerIndex = playerToRemove.playerIndex;
-                    Debug.Log($"Found player to remove: Player {playerIndex}");
+                    //Debug.Log($"Found player to remove: Player {playerIndex}");
 
                     // Remove from our list
                     players.Remove(playerToRemove);
-                    Debug.Log($"Players remaining after removal: {players.Count}");
+                   // Debug.Log($"Players remaining after removal: {players.Count}");
 
                     // Destroy the player GameObject
                     GameManager.Instance.RemovePlayer(playerToRemove.GetComponent<PlayerManager>());
                     // Reset to single player view if only one player remains
                     if (players.Count == 1)
                     {
-                        Debug.Log("Resetting to single player view");
+                        //Debug.Log("Resetting to single player view");
                         ResetToSinglePlayer();
                     }
 
@@ -271,7 +271,7 @@ public class PlayerDeviceHandler : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("Could not find player associated with disconnected device!");
+                    //Debug.LogWarning("Could not find player associated with disconnected device!");
                     // Fallback: try to find player by checking all active players
                     LogAllActivePlayers();
                 }
@@ -281,7 +281,7 @@ public class PlayerDeviceHandler : MonoBehaviour
     }
     private PlayerInput FindPlayerWithoutDevice(InputDevice device)
     {
-        Debug.Log($"Searching for player using device: {device.displayName}");
+        //Debug.Log($"Searching for player using device: {device.displayName}");
 
         foreach (var player in players)
         {
@@ -300,7 +300,7 @@ public class PlayerDeviceHandler : MonoBehaviour
         }
 
         // If we get here, we didn't find a match
-        Debug.Log("No player found for disconnected device");
+        //Debug.Log("No player found for disconnected device");
         return null;
     }
     private void ResetToSinglePlayer()

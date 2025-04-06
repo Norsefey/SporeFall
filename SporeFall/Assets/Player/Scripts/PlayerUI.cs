@@ -151,7 +151,8 @@ public class PlayerUI : MonoBehaviour
         else if (delayedHP > pMan.pHealth.CurrentHP)
         {
             //Debug.Log("DelayedHP is greater than current HP");
-            StartCoroutine(HPDelayCooldown());
+            if(isActiveAndEnabled)
+                StartCoroutine(HPDelayCooldown());
             
         }
     }

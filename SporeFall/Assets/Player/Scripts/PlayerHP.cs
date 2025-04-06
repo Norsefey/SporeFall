@@ -24,11 +24,21 @@ public class PlayerHP : Damageable
         if (pMan != null && pMan.audioSource != null)
         {
             if (previousHP > 75 && currentHP <= 75)
+            {
+                pMan.audioSource.Stop();
                 pMan.audioSource.PlayOneShot(pMan.health75Sound, 1.5f);
+            }
             else if (previousHP > 50 && currentHP <= 50)
+            {
+                pMan.audioSource.Stop();
                 pMan.audioSource.PlayOneShot(pMan.health50Sound, 1.5f);
+
+            }
             else if (previousHP > 25 && currentHP <= 25)
+            {
+                pMan.audioSource.Stop(); // Stop previous audio before playing new one
                 pMan.audioSource.PlayOneShot(pMan.health25Sound, 1.5f);
+            }
         }
     }
 
@@ -75,13 +85,19 @@ public class PlayerHP : Damageable
     protected override void Die()
     {
         if (pMan.audioSource != null)
+        {
+            pMan.audioSource.Stop(); // Stop previous audio before playing new one
             pMan.audioSource.PlayOneShot(pMan.deathSound, 1.5f);
+        }
 
         pMan.pAnime.ActivateATrigger("Dead");
         StartCoroutine(DeathEffectRoutine());
     }
     private IEnumerator DeathEffectRoutine()
     {
+        // prevent more damage
+        pMan.pHealth.canHoldCorruption = false;
+        pMan.pHealth.canTakeDamage = false;
         // Death effect
         deathVFX.SetActive(true);
         pMan.pAnime.ToggleIKAim(false);
@@ -101,15 +117,14 @@ public class PlayerHP : Damageable
 
         pMan.pAnime.ToggleUnscaledUpdateMode(false);
         deathVFX.SetActive(false);
-        pMan.pAnime.ToggleIKAim(true);
         DepleteLife();
-
         pMan.StartRespawn();
-
     }
     public override void ResetHealth()
     {
         base.ResetHealth();
+        pMan.pHealth.canHoldCorruption = true;
+        pMan.pHealth.canTakeDamage = true;
     }
     public override void IncreaseCorruption(float amount)
     {
