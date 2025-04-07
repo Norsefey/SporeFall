@@ -7,13 +7,14 @@ public class TrainHandler : MonoBehaviour
     [Header("References")]
     public WaveManager waveManager;
     [SerializeField] private TrainUI UI;
-    [SerializeField] public TrainAnimation animations;
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject forceField;
     [SerializeField] private GameObject payloadPrefab;
     [SerializeField] private Transform payloadSpawnPos;
     [SerializeField] private AudioListener listener;
+    public TrainAnimation animations;
+
     public Transform dropsHolder;
     public Payload Payload { get; private set; }
     public Transform[] playerSpawnPoint;
@@ -157,10 +158,7 @@ public class TrainHandler : MonoBehaviour
 
             if (hasOverlap)
             {
-                foreach (PlayerManager player in GameManager.Instance.players)
-                {
-                    GameManager.Instance.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
-                }
+                GameManager.Instance.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
                 Debug.Log($"{structure.name} Refunded Due to Overlap");
                 structuresToRemove.Add(structure);
             }
@@ -220,18 +218,17 @@ public class TrainHandler : MonoBehaviour
     }
     public void DisembarkTrain()
     {
-
         // show players once train has parked
         foreach (var player in GameManager.Instance.players)
         {
             // correct player position
-            player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
+            player.StartRespawn(0);
 
             if (player.pHealth.CurrentLives <= 0)
             {
                 Debug.Log("respawning Player");
                 player.pHealth.IncreaseLife();
-                player.StartRespawn();
+                player.StartRespawn(1);
             }
 
             player.TogglePControl(true);
@@ -246,13 +243,14 @@ public class TrainHandler : MonoBehaviour
     public void DisembarkSinglePlayer(PlayerManager player)
     {
         // correct player position
-        player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
+        //player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
+        player.StartRespawn(0);
 
         if (player.pHealth.CurrentLives <= 0)
         {
             Debug.Log("respawning Player");
             player.pHealth.IncreaseLife();
-            player.StartRespawn();
+            player.StartRespawn(1);
         }
 
         player.TogglePControl(true);
@@ -296,11 +294,7 @@ public class TrainHandler : MonoBehaviour
     public Transform GetDamagePoint()
     {
         int index = Random.Range(0, damagePoint.Length);
-
-       /* if (Payload != null)
-            return Payload.transform;
-        else*/
-            return damagePoint[index];
+        return damagePoint[index];
     }
     public void GivePlayersMycelia(float amount)
     {

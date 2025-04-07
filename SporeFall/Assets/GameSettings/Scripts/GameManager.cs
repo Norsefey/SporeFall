@@ -86,11 +86,10 @@ public class GameManager : MonoBehaviour
         if(trainHandler != null)
         {
             player.transform.SetParent(trainHandler.transform);
-
             player.MovePlayerTo(trainHandler.playerSpawnPoint[player.GetPlayerIndex()].position);
             if (trainHandler.trainState == TrainState.Parked)
             {
-               trainHandler.DisembarkSinglePlayer(player);
+                trainHandler.DisembarkSinglePlayer(player);
                 Debug.Log("Not Moving Disembarking");
             }
         }

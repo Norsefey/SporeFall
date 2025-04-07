@@ -40,11 +40,12 @@ public class MeleeAttack : Attack
                 if (hit.TryGetComponent<Damageable>(out var damageable))
                 {
                     damageable.TakeDamage(damage);
+                    SpawnVFX(hit.transform.position, enemy.transform.rotation);
+
                 }
             }
         }
 
-        SpawnVFX(attackOrigin, enemy.transform.rotation);
         PlaySFX(enemy.AudioSource);
         StartCooldown();
         //Debug.Log("Melee Attack!!");

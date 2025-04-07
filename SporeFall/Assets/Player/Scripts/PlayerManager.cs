@@ -99,7 +99,7 @@ public class PlayerManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            StartRespawn();
+            StartRespawn(1);
         }
 
        /* // For Testing
@@ -373,17 +373,24 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("Moving player to: " + position);
         pController.transform.position = position;
-        
+
+       /* // Verify the move was successful
+        if (Vector3.Distance(transform.position, position) > 0.1f)
+        {
+            Debug.LogError("Player did not move to spawn position correctly");
+            // Force position directly as fallback
+            pController.transform.position = position;
+        }*/
     }
-    public void StartRespawn()
+    public void StartRespawn(float waitTime)
     {
         if (!isRespawning) // Add a flag to prevent multiple respawn processes
         {
             isRespawning = true;
-            StartCoroutine(Respawn());
+            StartCoroutine(Respawn(waitTime));
         }
     }
-    private IEnumerator Respawn()
+    private IEnumerator Respawn(float waitTime)
     {
         Debug.Log("Starting Player Respawn");
 
@@ -398,7 +405,7 @@ public class PlayerManager : MonoBehaviour
         TogglePControl(false);
 
         // Use unscaled time if there's a chance Time.timeScale could be 0
-        yield return new WaitForSecondsRealtime(3);
+        yield return new WaitForSecondsRealtime(waitTime);
 
         if (pHealth.CurrentLives <= 0)
         {
@@ -420,7 +427,7 @@ public class PlayerManager : MonoBehaviour
                 if (playerIndex >= 0 && playerIndex < GameManager.Instance.trainHandler.playerSpawnPoint.Length)
                 {
                     spawnPoint = GameManager.Instance.trainHandler.playerSpawnPoint[playerIndex];
-                    Debug.Log("Using train spawn point for player " + playerIndex);
+                    Debug.Log("Using train spawn point" + spawnPoint.name + " for player " + playerIndex);
                 }
             }
 
@@ -437,14 +444,6 @@ public class PlayerManager : MonoBehaviour
             // Move player to spawn position
             Debug.Log("Moving player to position: " + spawnPosition);
             MovePlayerTo(spawnPosition);
-
-            // Verify the move was successful
-            if (Vector3.Distance(transform.position, spawnPosition) > 0.1f)
-            {
-                //Debug.LogError("Player did not move to spawn position correctly");
-                // Force position directly as fallback
-                pController.transform.position = spawnPosition;
-            }
 
             yield return new WaitForSecondsRealtime(1);
 

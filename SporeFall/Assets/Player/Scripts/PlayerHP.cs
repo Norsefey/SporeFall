@@ -23,7 +23,8 @@ public class PlayerHP : Damageable
 
         if (pMan != null && pMan.audioSource != null)
         {
-            if (previousHP > 75 && currentHP <= 75)
+            // These have no audio clip so disabled them to prevent errors
+            /*if (previousHP > 75 && currentHP <= 75)
             {
                 pMan.audioSource.Stop();
                 pMan.audioSource.PlayOneShot(pMan.health75Sound, 1.5f);
@@ -33,8 +34,8 @@ public class PlayerHP : Damageable
                 pMan.audioSource.Stop();
                 pMan.audioSource.PlayOneShot(pMan.health50Sound, 1.5f);
 
-            }
-            else if (previousHP > 25 && currentHP <= 25)
+            }*/
+           /* else*/ if (previousHP > 25 && currentHP <= 25)
             {
                 pMan.audioSource.Stop(); // Stop previous audio before playing new one
                 pMan.audioSource.PlayOneShot(pMan.health25Sound, 1.5f);
@@ -118,7 +119,7 @@ public class PlayerHP : Damageable
         pMan.pAnime.ToggleUnscaledUpdateMode(false);
         deathVFX.SetActive(false);
         DepleteLife();
-        pMan.StartRespawn();
+        pMan.StartRespawn(3);
     }
     public override void ResetHealth()
     {

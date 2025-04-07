@@ -78,6 +78,8 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case PlayerState.Immobile:
                 Debug.Log("Player cannot Move");
+                visual.position = transform.position - Vector3.up;
+                visual.forward = transform.forward;
                 break;
         }
     }
