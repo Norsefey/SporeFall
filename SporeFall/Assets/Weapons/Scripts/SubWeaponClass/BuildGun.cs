@@ -51,6 +51,10 @@ public class BuildGun : Weapon
         // Called when player presses fire button
         if (isEditing)
         {
+            if (selectedStructure == null)
+            {
+                return;
+            }
             if (selectedStructure.CompareTag("Platform"))
             {
                 if (selectedStructure.transform.GetChild(0).GetComponentInChildren<PlatformStructure>().hasStructure)

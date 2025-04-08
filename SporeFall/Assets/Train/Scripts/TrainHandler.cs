@@ -124,9 +124,64 @@ public class TrainHandler : MonoBehaviour
         {
             Debug.Log("Checking Obstructions");
 
-            Collider[] structureColliders = structure.GetComponentsInChildren<Collider>();
-            bool hasOverlap = false;
+            // First, check if structure is floating and move it down if needed
+            bool isGrounded = false;
+            float rayDistance = 5f; // Maximum distance to check downward
+            float moveDownStep = 0.1f; // How much to move down in each step
 
+            Collider[] structureColliders = structure.GetComponentsInChildren<Collider>();
+            Vector3 lowestPoint = structure.transform.position;
+            float lowestY = float.MaxValue;
+            foreach (Collider col in structureColliders)
+            {
+                if (col.bounds.min.y < lowestY)
+                {
+                    lowestY = col.bounds.min.y;
+                    lowestPoint = new Vector3(structure.transform.position.x, lowestY, structure.transform.position.z);
+                }
+            }
+            // Check if there's ground below
+            RaycastHit hit;
+            if (Physics.Raycast(lowestPoint, Vector3.down, out hit, rayDistance, obstructionLayer))
+            {
+                // If there's a gap between structure and ground, move structure down
+                if (hit.distance > 0.1f)
+                {
+                    Vector3 newPosition = structure.transform.position - new Vector3(0, hit.distance, 0);
+                    structure.transform.position = newPosition;
+                    Debug.Log($"{structure.name} moved down {hit.distance} units to contact ground");
+                }
+                isGrounded = true;
+            }
+            else
+            {
+                // Try moving down step by step until we hit something or reach max distance
+                float totalMoved = 0;
+                while (totalMoved < rayDistance && !isGrounded)
+                {
+                    structure.transform.position -= new Vector3(0, moveDownStep, 0);
+                    totalMoved += moveDownStep;
+
+                    // Check again for ground contact
+                    if (Physics.Raycast(lowestPoint - new Vector3(0, totalMoved, 0), Vector3.down, out hit, 0.2f, obstructionLayer))
+                    {
+                        isGrounded = true;
+                        Debug.Log($"{structure.name} moved down {totalMoved} units to contact ground");
+                        break;
+                    }
+                }
+            }
+
+            // If still not grounded after moving down, remove the structure
+            if (!isGrounded)
+            {
+                GameManager.Instance.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
+                Debug.Log($"{structure.name} Refunded Due to No Ground Contact");
+                structuresToRemove.Add(structure);
+                continue; // Skip collision checks for structures that will be removed anyway
+            }
+
+            bool hasOverlap = false;
             foreach (Collider structureCollider in structureColliders)
             {
                 bool wasIsTrigger = structureCollider.isTrigger;
