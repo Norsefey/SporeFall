@@ -44,6 +44,7 @@ public class LilyRepairShop : MonoBehaviour
         {
             Debug.Log("Activating Lily Bot: " + i);
             lilyBots[i].gameObject.SetActive(true);
+            lilyBots[i].UpdateVisual(maxActiveLilies);
             lilyBots[i].ActivateBot(spawnPoint);
             yield return new WaitForSeconds(2);
         }
