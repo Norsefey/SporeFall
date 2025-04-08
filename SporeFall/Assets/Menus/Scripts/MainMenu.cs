@@ -212,6 +212,16 @@ public class MainMenu : MonoBehaviour
     {
         LoadingScreen.SetActive(true);
         StartCoroutine(LoadSceneAsync(index));
+
+        if (index == 1)
+        {
+            SavedSettings.currentLevel = "GlowingForest";
+        }
+
+        else if (index == 7)
+        {
+            SavedSettings.currentLevel = "ToxicSwamp";
+        }
     }
 
     public void BackToMain()

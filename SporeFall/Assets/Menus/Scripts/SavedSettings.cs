@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class SavedSettings
 {
@@ -16,5 +17,7 @@ public static class SavedSettings
     public static float gamepadVertCamSensitivity2 = 200;
 
     public static bool firstOpenedGame = true;
+
+    public static string currentLevel = "GlowingForest";
 
 }

@@ -50,12 +50,12 @@ public class WinLoseMenus : MonoBehaviour
 
     public void RetryLevel()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SavedSettings.currentLevel);
     }
 
     public void QuitToMainMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void QuitGame()
