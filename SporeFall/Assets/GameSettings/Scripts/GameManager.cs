@@ -86,6 +86,8 @@ public class GameManager : MonoBehaviour
         if(trainHandler != null)
         {
             player.transform.SetParent(trainHandler.transform);
+            player.transform.localPosition = new Vector3(0, 5, 10);
+
             player.MovePlayerTo(trainHandler.playerSpawnPoint[player.GetPlayerIndex()].position);
             if (trainHandler.trainState == TrainState.Parked)
             {
@@ -95,7 +97,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            player.transform.SetParent(this.transform);
+            //player.transform.SetParent(this.transform);
             SpawnPlayer(player);
         }
 

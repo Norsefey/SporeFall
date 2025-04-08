@@ -54,8 +54,9 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private int initialPoolSize = 50;
     private Dictionary<GameObject, EnemyObjectPool> enemyPools;
     private EnemyObjectPool bossPool;
-
     public GameObject explosionPrefab;
+
+    private Coroutine movingCoroutine;
 
     private void Start()
     {
@@ -63,7 +64,7 @@ public class WaveManager : MonoBehaviour
 
         currentWaveIndex = 0;
         currentWave = waves[currentWaveIndex];
-        StartCoroutine(MoveToWaveLocation(0));
+        movingCoroutine = StartCoroutine(MoveToWaveLocation(0));
     }
     #region Wave State Transitions
     public void OnStartWave()
@@ -136,7 +137,7 @@ public class WaveManager : MonoBehaviour
         if(isRobertSpawned)
             return;
         train.ToggleForceField(false);
-        StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
+        movingCoroutine = StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
     }
     #endregion
     public IEnumerator DestroyShroomPod(float waitTime)
@@ -206,30 +207,26 @@ public class WaveManager : MonoBehaviour
         {
             // Ensuring the final position is set precisely after the movement
             train.transform.position = targetPosition;
+            train.animations.OpenUpgradesPanel();
             SetTrainParkState();
-            if (currentWaveIndex >= 0)
-                train.animations.OpenUpgradesPanel();
-            wavePhase = WavePhase.NotStarted;
         }
     }
     public void SkippParkingAnimation()
     {
         if (train.trainState == TrainHandler.TrainState.Moving)
         {
-            StopAllCoroutines();
+            StopCoroutine(movingCoroutine);
             train.animations.SkipParkingAnimation();
             // Ensuring the final position is set precisely after the movement
             train.transform.position = currentWave.trainLocation.position;
-            if (currentWaveIndex >= 0)
-                train.animations.OpenUpgradesPanel();
-            wavePhase = WavePhase.NotStarted;
-
+            train.animations.OpenUpgradesPanel();
             Invoke(nameof(SetTrainParkState), 2);
         }
     }
     private void SetTrainParkState()
     {
         train.SetParkedState();
+        wavePhase = WavePhase.NotStarted;
     }
     public void SpawnExplosion(Vector3 pos)
     {

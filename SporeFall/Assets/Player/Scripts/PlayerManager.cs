@@ -66,6 +66,8 @@ public class PlayerManager : MonoBehaviour
     public float slowDownMultiplier = .25f;
     public bool inToxicWater;
 
+    public Coroutine respawnCoroutine;
+
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -99,7 +101,7 @@ public class PlayerManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            StartRespawn(1);
+            StartRespawn(1, true);
         }
 
        /* // For Testing
@@ -374,23 +376,26 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("Moving player to: " + position);
         pController.transform.position = position;
 
-       /* // Verify the move was successful
-        if (Vector3.Distance(transform.position, position) > 0.1f)
+        Debug.Log("Player At: " + pController.transform.position);
+
+
+        // Verify the move was successful
+        if (Vector3.Distance(pController.transform.position, position) > 1f)
         {
-            Debug.LogError("Player did not move to spawn position correctly");
+            Debug.LogError("Player did not move to spawn position correctly \n Player At " + pController.transform.position + " Corrected to- " + position);
             // Force position directly as fallback
             pController.transform.position = position;
-        }*/
+        }
     }
-    public void StartRespawn(float waitTime)
+    public void StartRespawn(float waitTime, bool resetStats)
     {
         if (!isRespawning) // Add a flag to prevent multiple respawn processes
         {
             isRespawning = true;
-            StartCoroutine(Respawn(waitTime));
+            respawnCoroutine = StartCoroutine(Respawn(waitTime, resetStats));
         }
     }
-    private IEnumerator Respawn(float waitTime)
+    private IEnumerator Respawn(float waitTime, bool resetStats)
     {
         Debug.Log("Starting Player Respawn");
 
@@ -442,23 +447,29 @@ public class PlayerManager : MonoBehaviour
             }
 
             // Move player to spawn position
-            Debug.Log("Moving player to position: " + spawnPosition);
             MovePlayerTo(spawnPosition);
+            TogglePVisual(true);
 
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSecondsRealtime(.2f);
 
             // Reset player state
             Debug.Log("Resetting player state and returning control");
-            pCorruption.ResetCorruptionLevel();
-            pHealth.ResetHealth();
+
             TogglePControl(true);
+            TogglePCorruption(true);
+
             pAnime.ToggleIKAim(true);
             pAnime.ToggleRespawn(false);
+            pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
 
+            if (resetStats)
+            {
+                pCorruption.ResetCorruptionLevel();
+                pHealth.ResetHealth();
+            }
+           
         }
-
         isRespawning = false;
-
     }
     public void SetupPlayerTwo()
     {

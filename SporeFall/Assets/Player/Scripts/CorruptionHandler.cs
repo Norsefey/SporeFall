@@ -134,7 +134,7 @@ public class CorruptionHandler : MonoBehaviour
         pMan.TogglePControl(false);
         pMan.pAnime.ToggleIKAim(false);
         pMan.pAnime.ActivateATrigger("Corrupted");
-        pMan.StartRespawn(3);
+        pMan.StartRespawn(3, true);
 
         corruptionLevel = 0;
         pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);

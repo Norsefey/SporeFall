@@ -276,52 +276,32 @@ public class TrainHandler : MonoBehaviour
         foreach (var player in GameManager.Instance.players)
         {
             // correct player position
-            player.StartRespawn(0);
+            player.StartRespawn(1, false);
 
             if (player.pHealth.CurrentLives <= 0)
             {
-                Debug.Log("respawning Player");
+                Debug.Log("Respawning Dead Player");
                 player.pHealth.IncreaseLife();
-                player.StartRespawn(1);
+                player.StartRespawn(.5f, true);
             }
-
-            player.TogglePControl(true);
-            player.TogglePVisual(true);
-            player.pAnime.SetWeaponHoldAnimation(player.currentWeapon.holdType);
-            player.TogglePCorruption(true);
-
             StartCoroutine(DelayCameraToggle(player));
         }
     }
-
     public void DisembarkSinglePlayer(PlayerManager player)
     {
         // correct player position
         //player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
-        player.StartRespawn(0);
-
-        if (player.pHealth.CurrentLives <= 0)
-        {
-            Debug.Log("respawning Player");
-            player.pHealth.IncreaseLife();
-            player.StartRespawn(1);
-        }
-
-        player.TogglePControl(true);
-        player.TogglePVisual(true);
-        player.pAnime.SetWeaponHoldAnimation(player.currentWeapon.holdType);
-        player.TogglePCorruption(true);
+        player.StartRespawn(.5f, false);
 
         StartCoroutine(DelayCameraToggle(player));
     }
     private IEnumerator DelayCameraToggle(PlayerManager player)
     {
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(1);
         listener.enabled = false;
         player.TogglePCamera(true);
         trainCamera.SetActive(false);
     }
-
     public IEnumerator DestroyTrain()
     {
         // Load Lose Scene

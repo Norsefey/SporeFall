@@ -119,7 +119,7 @@ public class PlayerHP : Damageable
         pMan.pAnime.ToggleUnscaledUpdateMode(false);
         deathVFX.SetActive(false);
         DepleteLife();
-        pMan.StartRespawn(3);
+        pMan.StartRespawn(3, true);
     }
     public override void ResetHealth()
     {
