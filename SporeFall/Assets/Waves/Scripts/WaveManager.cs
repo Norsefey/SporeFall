@@ -116,7 +116,8 @@ public class WaveManager : MonoBehaviour
         train.ToggleForceField(true);
 
         wUI.DisplayWaveStart();
-        Tutorial.Instance.StartFinalWaveTutorial();
+        if(Tutorial.Instance != null)
+            Tutorial.Instance.StartFinalWaveTutorial();
 
         // Spawn boss and initial squad instead of payload
         isBossDefeated = false;

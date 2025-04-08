@@ -138,7 +138,7 @@ public class TrainHandler : MonoBehaviour
                     bounds.center,
                     bounds.extents,
                     structure.transform.rotation,
-                    obstructionLayer
+                    structure.collisionOverlapLayer
                 );
 
                 structureCollider.isTrigger = wasIsTrigger;
@@ -155,7 +155,6 @@ public class TrainHandler : MonoBehaviour
 
                 if (hasOverlap) break;
             }
-
             if (hasOverlap)
             {
                 GameManager.Instance.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
