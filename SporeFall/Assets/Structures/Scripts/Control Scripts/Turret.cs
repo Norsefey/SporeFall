@@ -62,7 +62,7 @@ public class Turret : MonoBehaviour
             FindTarget();
         }
 
-        if (hasTarget)
+        if (hasTarget && Time.timeScale == 1)
         {
            // debugStatus += "Has target... ";
             TrackTarget();

@@ -56,7 +56,6 @@ public class TrainUI : MonoBehaviour
         {
             //Debug.Log("DelayedHP is greater than current HP");
             StartCoroutine(HPDelayCooldown());
-
         }
     }
 

@@ -215,6 +215,7 @@ public class PlayerMovement : MonoBehaviour
     public void SetAimState()
     {
         currentState = PlayerState.Aiming;
+        pMan.pAnime.ToggleIKAim(false);
         if (moveSpeed == sprintSpeed)
         {
             SetSprintSpeed(false);
@@ -222,6 +223,8 @@ public class PlayerMovement : MonoBehaviour
     }
     public void SetDefaultState()
     {
+        pMan.pAnime.ToggleIKAim(true);
+
         currentState = PlayerState.Default;
     }
     public void SetManager(PlayerManager pManager)

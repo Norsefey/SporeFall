@@ -23,15 +23,18 @@ public class EnemyHP : Damageable
             manager.CheckDamageThreshold(maxHP - currentHP);
             manager.recentDamage.Enqueue(new BaseEnemy.DamageInstance(damage, Time.time));
 
-            // Calculate flinch probability (higher HP = higher chance to flinch)
-            float healthRatio = currentHP / maxHP; // 1 at full HP, 0 at 0 HP
-            float flinchChance = healthRatio * flinchModifier; // Apply the modifier
-            
-            flinchChance = Mathf.Clamp01(flinchChance);
-
-            if (!flinching && Random.value < flinchChance)
+            if (flinchable)
             {
-                StartCoroutine(Flinch());
+                // Calculate flinch probability (higher HP = higher chance to flinch)
+                float healthRatio = currentHP / maxHP; // 1 at full HP, 0 at 0 HP
+                float flinchChance = healthRatio * flinchModifier; // Apply the modifier
+
+                flinchChance = Mathf.Clamp01(flinchChance);
+
+                if (!flinching && Random.value < flinchChance)
+                {
+                    StartCoroutine(Flinch());
+                }
             }
         }
     }

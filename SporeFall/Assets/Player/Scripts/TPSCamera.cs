@@ -87,7 +87,6 @@ public class TPSCamera : MonoBehaviour
             UpdateCameraRotation();
             // Check for obstructions between camera and player
             HandleCameraCollision();
-
             MoveRigTarget();
         }
     }
@@ -193,16 +192,23 @@ public class TPSCamera : MonoBehaviour
     private void MoveRigTarget()
     {
         Vector3 shootDirection = myCamera.transform.forward;
-        
-        Ray ray = new(transform.position, shootDirection);
-        if (Physics.Raycast(ray, out RaycastHit hit, 100, obstructions)) // Range of the hitscan weapon
-        {
-            rigLookAtTarget.position = hit.point;
-        }
-        else
+
+
+        if(pMan.pController.currentState == PlayerMovement.PlayerState.Aiming)
         {
             rigLookAtTarget.position = shootDirection * 100;
         }
+        else
+        {
+            Ray ray = new(transform.position, shootDirection);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100, targetMask)) // Range of the hitscan weapon
+            {
+                rigLookAtTarget.position = hit.point;
+            }
+        }
+
+        
+      
     }
     private void LookAtPlayer()
     {

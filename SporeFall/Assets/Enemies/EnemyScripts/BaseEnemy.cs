@@ -19,6 +19,7 @@ public abstract class BaseEnemy : MonoBehaviour
     // Public events
     public delegate void EnemyDeath(BaseEnemy enemy); // Modified to pass the enemy instance
     public event EnemyDeath OnEnemyDeath;
+    [SerializeField] protected GameObject deathVFXPrefab;
 
     [SerializeField] protected Attack[] attacks;
     [SerializeField] protected Animator animator;
@@ -616,6 +617,7 @@ public abstract class BaseEnemy : MonoBehaviour
     public virtual void Die()
     {
         OnEnemyDeath?.Invoke(this); // Pass 'this' to the event
+        SpawnDeathVFX(transform.position, Quaternion.Euler(-90,0,0));
         gameObject.SetActive(false); // Deactivate instead of destroy
     }
     public void AssignDefaultTarget(TrainHandler train, Transform target)
@@ -648,6 +650,23 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             agent.ResetPath();
             agent.isStopped = true;
+        }
+    }
+    protected virtual void SpawnDeathVFX(Vector3 position, Quaternion rotation)
+    {
+        if (deathVFXPrefab != null && PoolManager.Instance != null)
+        {
+            // Get VFX from pool
+            if (!PoolManager.Instance.vfxPool.TryGetValue(deathVFXPrefab, out VFXPool pool))
+            {
+                Debug.LogError($"No pool found for VFX prefab: {deathVFXPrefab.name}");
+                return;
+            }
+            VFXPoolingBehavior vfx = pool.Get(position, rotation);
+            vfx.Initialize(pool);
+
+            /*GameObject vfx = Instantiate(attackVFXPrefab, position, rotation);
+            Destroy(vfx, 2f); // Incase it doesnt auto destroy*/
         }
     }
     public void CheckDamageThreshold(float damageTaken)
