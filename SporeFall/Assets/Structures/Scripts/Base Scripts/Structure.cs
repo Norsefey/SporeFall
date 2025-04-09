@@ -139,6 +139,8 @@ public class Structure : MonoBehaviour
     public void ReturnToPool()
     {
         Debug.Log("Returning To Pool");
+        DisableStructureControls();
+
         SpawnDeathVFX();
         if(onPlatform && myPlatform != null)
         {
@@ -150,8 +152,7 @@ public class Structure : MonoBehaviour
         if (train != null)
             train.RemoveStructure(this);
 
-        healthComponent.ResetHealth();
-        DisableStructureControls();
+        //healthComponent.ResetHealth();
 
         Debug.Log("Control object is: " + controlScriptObject.activeSelf);
 
@@ -160,9 +161,12 @@ public class Structure : MonoBehaviour
 
     public void DisableStructureControls()
     {
-        controlScriptObject.gameObject.SetActive(false);
+        controlScriptObject.SetActive(false);
     }
-
+    private void OnDisable()
+    {
+        controlScriptObject.SetActive(false);
+    }
     private void SpawnDeathVFX()
     {
         VFXPoolingBehavior vfx = null;

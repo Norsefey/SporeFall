@@ -134,7 +134,7 @@ public class Turret : MonoBehaviour
             return;
         }
         Vector3 targetDirection = targetEnemy.parent.position - transform.position;
-        targetDirection.y = 0; // Keep rotation only on Y axis
+        //targetDirection.y = 0; // Keep rotation only on Y axis
 
         if (targetDirection != Vector3.zero)
         {

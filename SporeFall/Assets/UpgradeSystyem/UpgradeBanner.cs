@@ -33,7 +33,7 @@ public class UpgradeBanner : MonoBehaviour
         {
             costText.text = "Max Level";
             //select The scroll bar
-            upgradeButton.FindSelectableOnRight().Select();
+            //upgradeButton.FindSelectableOnRight().Select();
             upgradeButton.interactable = false;
             descriptionText.text = "This structure is fully upgraded.";
         }

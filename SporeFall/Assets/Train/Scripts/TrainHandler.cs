@@ -46,6 +46,7 @@ public class TrainHandler : MonoBehaviour
     public TrainUI tUI;
     public TrainHP trainHP;
 
+    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask obstructionLayer;
     [SerializeField] private Vector3 structureCheckSize = Vector3.one; // Size of the overlap check box
     private void Awake()
@@ -165,7 +166,7 @@ public class TrainHandler : MonoBehaviour
                     totalMoved += moveDownStep;
 
                     // Check again for ground contact
-                    if (Physics.Raycast(lowestPoint - new Vector3(0, totalMoved, 0), Vector3.down, out hit, 0.2f, obstructionLayer))
+                    if (Physics.Raycast(lowestPoint - new Vector3(0, totalMoved, 0), Vector3.down, out hit, 0.2f, groundLayer))
                     {
                         isGrounded = true;
                         Debug.Log($"{structure.name} moved down {totalMoved} units to contact ground");

@@ -533,13 +533,18 @@ public class BuildGun : Weapon
         {
             //SetStructureToOpaque();
             RestoreOriginalColors();
-            selectedStructure.ToggleStructureBehavior(true);
+            if (isEditing)
+            {
+                selectedStructure.ToggleStructureBehavior(true);
+                player.pUI.EnableControls(editModeText);
+            }
+
+
             selectedStructure.ShowRadius(false);
 
             selectedStructure = null;
             originalMaterials = null;
-            if(isEditing)
-                player.pUI.EnableControls(editModeText);
+       
         }
     }
     public void RotateStructure(float direction)
@@ -558,8 +563,16 @@ public class BuildGun : Weapon
                 selectedStructure.ReturnToPool();
             else
                 Destroy(selectedStructure.gameObject);
-           
-            DeselectStructure();
+
+            RestoreOriginalColors();
+            selectedStructure.ShowRadius(false);
+
+            selectedStructure = null;
+            originalMaterials = null;
+
+            player.pUI.EnableControls(editModeText);
+
+
             if (GameManager.Instance.trainHandler != null)
             {
                 GameManager.Instance.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));
