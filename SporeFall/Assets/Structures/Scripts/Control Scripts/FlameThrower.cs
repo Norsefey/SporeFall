@@ -38,7 +38,7 @@ public class FlameThrower : MonoBehaviour
             tickTimer = 0f; // Reset timer
 
             // Play or stop the flame sound based on enemies being in range
-            if (enemiesInRange && !flameAudioSource.isPlaying)
+            if (enemiesInRange && !flameAudioSource.isPlaying && Time.timeScale ==1)
             {
                 flameAudioSource.Play();
             }

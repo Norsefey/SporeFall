@@ -145,12 +145,14 @@ public class BuildGun : Weapon
                     }
                     selectedStructure = pool.Get(firePoint.position, Quaternion.identity).GetComponent<Structure>();
                     selectedStructure.poolBehavior.Initialize(pool);
+                    selectedStructure.DisableStructureControls();
                 }
                 else
                 {
                     selectedStructure = Instantiate(buildableStructures[currentBuildIndex], firePoint.position, Quaternion.identity).GetComponent<Structure>();
+                    selectedStructure.DisableStructureControls();
                 }
-               
+
 
                 selectedStructure.ShowRadius(showRadius);
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
@@ -286,7 +288,10 @@ public class BuildGun : Weapon
         if (selectedStructure != null)
         {
             if (PoolManager.Instance != null)
+            {
+                selectedStructure.DisableStructureControls();
                 selectedStructure.poolBehavior.ReturnObject();
+            }
             else
                 Destroy(selectedStructure.gameObject);
 
@@ -550,16 +555,17 @@ public class BuildGun : Weapon
         {
             Structure toDelet = selectedStructure;
             if (PoolManager.Instance != null)
-                selectedStructure.poolBehavior.ReturnObject();
+                selectedStructure.ReturnToPool();
             else
                 Destroy(selectedStructure.gameObject);
+           
             DeselectStructure();
             if (GameManager.Instance.trainHandler != null)
             {
                 GameManager.Instance.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));
                 GameManager.Instance.trainHandler.RemoveStructure(toDelet);
             }
-            Debug.Log("Structure Deleted");
+            Debug.Log("Structure Sold");
             player.pUI.EnableControls(editModeText);
         }
     }

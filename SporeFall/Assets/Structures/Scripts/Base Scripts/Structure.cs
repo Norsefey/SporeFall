@@ -25,9 +25,7 @@ public class Structure : MonoBehaviour
     private int currentLevel = 0;
 
 
-    [HideInInspector]
     public bool onPlatform = false;
-    [HideInInspector]
     public PlatformStructure myPlatform;
     private void Awake()
     {
@@ -140,18 +138,31 @@ public class Structure : MonoBehaviour
     }
     public void ReturnToPool()
     {
+        Debug.Log("Returning To Pool");
         SpawnDeathVFX();
-        if (train != null)
-            train.RemoveStructure(this);
         if(onPlatform && myPlatform != null)
         {
+            Debug.Log("On Platform");
+
             myPlatform.RemoveStructure();
         }
 
+        if (train != null)
+            train.RemoveStructure(this);
+
         healthComponent.ResetHealth();
-        controlScriptObject.SetActive(false);
+        DisableStructureControls();
+
+        Debug.Log("Control object is: " + controlScriptObject.activeSelf);
+
         poolBehavior.ReturnObject();
     }
+
+    public void DisableStructureControls()
+    {
+        controlScriptObject.gameObject.SetActive(false);
+    }
+
     private void SpawnDeathVFX()
     {
         VFXPoolingBehavior vfx = null;
