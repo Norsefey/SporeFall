@@ -30,6 +30,8 @@ public abstract class Interactables : DropsPoolBehavior
             player = other.transform.parent.GetComponent<PlayerManager>();
             player.pInput.AssignInteraction(this);
             ItemPrompt();
+
+            Debug.Log("Prompting Player");
         }
     }
     private void OnTriggerExit(Collider other)
@@ -39,10 +41,18 @@ public abstract class Interactables : DropsPoolBehavior
             RemoveIntractable();
         }
     }
-
+    private void OnDisable()
+    {
+        RemoveIntractable();
+    }
     public void RemoveIntractable()
     {
-        player.pInput.RemoveInteraction(this);
-        RemovePrompt();
+        Debug.Log("Removing Interaction" + gameObject.name);
+
+        if (player != null)
+        {
+            player.pInput.RemoveInteraction(this);
+            RemovePrompt();
+        }
     }
 }

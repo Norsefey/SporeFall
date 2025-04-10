@@ -44,6 +44,7 @@ public class WaveButton : Interactables
                 break;
             default:
                 Debug.Log("No Action");
+                RemoveIntractable();
                 break;
         }
     }

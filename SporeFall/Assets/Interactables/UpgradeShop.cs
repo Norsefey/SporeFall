@@ -14,14 +14,15 @@ public class UpgradeShop : Interactables
             {
                 player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to Open Upgrade Shop");
             }
+            else
+            {
+                RemoveIntractable();
+            }
         }
         else
         {
             player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to Open Upgrade Shop");
-
         }
-
-
     }
     // what it does once player interacts
     public override void Interact(InputAction.CallbackContext context)

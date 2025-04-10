@@ -200,6 +200,7 @@ public class PlayerInputOrganizer : MonoBehaviour
 
         interactAction.performed -= interaction.Interact;
         pMan.interactable = null;
+        Debug.Log("Interaction Removed");
     }
     private void OnDropWeapon(InputAction.CallbackContext context)
     {
@@ -326,9 +327,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             // return to default pause menu interactions
             pauseGame.performed -= OnCloseUpgradeMenu;
             pauseGame.performed += OnPause;
-
             GameManager.Instance.gameUI.ToggleUpgradeMenu(false, pMan);
-
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
