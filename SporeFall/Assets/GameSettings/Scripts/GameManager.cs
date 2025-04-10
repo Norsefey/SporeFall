@@ -127,6 +127,8 @@ public class GameManager : MonoBehaviour
     public void DecreaseMycelia(float amount)
     {
         mycelia -= amount;
+        if(mycelia < 0)
+            mycelia = 0;
         gameUI.DisplayMycelia(mycelia);
     }
     // Called when object is destroyed (including scene changes)

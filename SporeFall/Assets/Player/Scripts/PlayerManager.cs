@@ -68,6 +68,7 @@ public class PlayerManager : MonoBehaviour
 
     public Coroutine respawnCoroutine;
 
+    private bool godMode = false;
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -106,13 +107,31 @@ public class PlayerManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.J) && (Input.GetKeyDown(KeyCode.K)))
         {
-            defaultWeapon.damage = 1000;
-            defaultWeapon.hitScanDistance = 500;
-            defaultWeapon.bulletCount = 99999;
-            pHealth.canTakeDamage = false;
-            pHealth.canHoldCorruption = false;
-            GameManager.Instance.IncreaseMycelia(9999);
-            GameManager.Instance.trainHandler.trainHP.canTakeDamage = false;
+            if (!godMode)
+            {
+                defaultWeapon.damage = 1000;
+                defaultWeapon.hitScanDistance = 500;
+                defaultWeapon.bulletCount = 99999;
+                pHealth.canTakeDamage = false;
+                pHealth.canHoldCorruption = false;
+                GameManager.Instance.IncreaseMycelia(9999);
+                GameManager.Instance.trainHandler.trainHP.canTakeDamage = false;
+                GameManager.Instance.trainHandler.tUI.ChangeHPDisplay("DOGMODE");
+                godMode = true;
+            }
+            else
+            {
+                defaultWeapon.damage = 10;
+                defaultWeapon.hitScanDistance = 50;
+                defaultWeapon.bulletCount = 15;
+                pHealth.canTakeDamage = true;
+                pHealth.canHoldCorruption = true;
+                GameManager.Instance.DecreaseMycelia(9999);
+                GameManager.Instance.trainHandler.trainHP.canTakeDamage = true;
+                GameManager.Instance.trainHandler.trainHP.TakeDamage(0);
+               godMode = false;
+            }
+           
         }
 
        /* // For Testing

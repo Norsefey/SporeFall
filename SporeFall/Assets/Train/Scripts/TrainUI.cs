@@ -58,7 +58,10 @@ public class TrainUI : MonoBehaviour
             StartCoroutine(HPDelayCooldown());
         }
     }
-
+    public void ChangeHPDisplay(string newText)
+    {
+        HPText.text = newText;
+    }
     IEnumerator HPDelayCooldown()
     {
         yield return new WaitForSeconds(1f);
