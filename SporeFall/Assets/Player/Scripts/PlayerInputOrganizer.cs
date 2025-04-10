@@ -79,8 +79,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         interactAction = playerInputMap.FindAction("Interact");
         flipCameraSide = playerInputMap.FindAction("FlipCamera");
         tutorialAction = playerInputMap.FindAction("ProgressTutorial");
+        jumpAction = playerInputMap.FindAction("Jump");
         // shoot action map
-        jumpAction = shootInputMap.FindAction("Jump");
         reloadAction = shootInputMap.FindAction("Reload");
         dropAction = shootInputMap.FindAction("Drop");
         fireAction = shootInputMap.FindAction("Fire");
@@ -138,7 +138,10 @@ public class PlayerInputOrganizer : MonoBehaviour
         placeStructAction.performed += OnPlaceStructure;
         // Edit Actions
         moveStructAcion.started += OnEditStructureMoveStarted;
-        moveStructAcion.canceled += OnEditMoveStructureCancled;
+        moveStructAcion.canceled += OnEditMoveStructureCanceled;
+        
+        destroyStructAction.started += OnEditSellStarted;
+        destroyStructAction.canceled += OnEditSellCanceled;
         destroyStructAction.performed += OnEditDestroy;
     }
     private void OnDisable()
@@ -172,7 +175,9 @@ public class PlayerInputOrganizer : MonoBehaviour
 
         // edit Actions
         moveStructAcion.started -= OnEditStructureMoveStarted;
-        moveStructAcion.canceled -= OnEditMoveStructureCancled;
+        moveStructAcion.canceled -= OnEditMoveStructureCanceled;
+        destroyStructAction.started -= OnEditSellStarted;
+        destroyStructAction.canceled -= OnEditSellCanceled;
         destroyStructAction.performed -= OnEditDestroy;
         // disable Input map
         gameInputMap.Disable();
@@ -556,7 +561,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             buildGun.Fire();
         }
     }
-    private void OnEditMoveStructureCancled(InputAction.CallbackContext context)
+    private void OnEditMoveStructureCanceled(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
@@ -564,12 +569,33 @@ public class PlayerInputOrganizer : MonoBehaviour
             pMan.isFiring = false;
         }
     }
+    private float holdDuration = 0.6f; // Use duration of hold from InputAction asset
+    private float currentHoldTime = 0f;
+    private bool holdingSell = false;
+    private void OnEditSellStarted(InputAction.CallbackContext context)
+    {
+        if(pMan.bGun.selectedStructure == null)
+            return;
+        holdingSell = true;
+        pMan.pUI.chargeGunSlider.value = 0;
+        pMan.pUI.chargeGunSlider.maxValue = 1;
+
+        currentHoldTime = 0;
+        StartCoroutine(HoldRoutine());
+    }
+    private void OnEditSellCanceled(InputAction.CallbackContext context)
+    {
+        holdingSell = false;
+        currentHoldTime = 0;
+        pMan.pUI.chargeGunSlider.value = 0;
+    }
     private void OnEditDestroy(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon is BuildGun buildGun)
         {
             buildGun.SellStructure();
         }
+        holdingSell = false;
     }
     private void OnRotateStarted(InputAction.CallbackContext context)
     {
@@ -604,4 +630,18 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
 
     #endregion
+
+    private IEnumerator HoldRoutine()
+    {
+        while (holdingSell)
+        {
+            currentHoldTime += Time.deltaTime;
+            // Calculate how far to fill the slider
+            float sliderValue = Mathf.Clamp01(currentHoldTime / holdDuration);
+            pMan.pUI.chargeGunSlider.value = sliderValue;
+            yield return null;
+        }
+        yield return new WaitForSeconds(1);
+        pMan.pUI.chargeGunSlider.value = 0;
+    }
 }

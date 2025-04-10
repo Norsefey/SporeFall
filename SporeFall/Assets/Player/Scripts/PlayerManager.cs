@@ -214,11 +214,19 @@ public class PlayerManager : MonoBehaviour
                 currentWeapon.Fire();
                 pUI.AmmoDisplay(currentWeapon);
             }
-            else if (isCharging && (currentWeapon is ChargeGun gun))
+            else if (currentWeapon is ChargeGun gun)
             {
-                // Charge weapons handle firing when the fire button is held
-                gun.Charge();
-                pUI.UpdateChargeGunSlider(gun.chargeAmount);
+                if (isCharging)
+                {
+                    // Charge weapons handle firing when the fire button is held
+                    gun.Charge();
+                    pUI.UpdateChargeGunSlider(gun.chargeAmount);
+                }
+                else
+                {
+                    pUI.UpdateChargeGunSlider(0);
+                }
+
             }
         }
     }

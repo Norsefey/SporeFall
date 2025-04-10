@@ -16,8 +16,8 @@ public class PlayerUI : MonoBehaviour
     [Space(5)]
     [SerializeField] private TMP_Text ammoIndicator;
     [SerializeField] private GameObject promptHolder;
-    [SerializeField] public GameObject controlsHolder;
-    [SerializeField] public TMP_Text textPrompt;
+    public GameObject controlsHolder;
+    public TMP_Text textPrompt;
     [SerializeField] private TMP_Text textControls;
     [SerializeField] private Slider HPBar;
     [SerializeField] private Slider HPDelayBar;

@@ -110,7 +110,7 @@ public class ChargeGun : Weapon
         {
             Vector3 shootDirection = GetSpreadDirection(baseDirection, currentProjectileCount, i);
 
-            ProjectileBehavior projectile = null;
+            ProjectileBehavior projectile;
 
             if (pool != null)
             {
@@ -146,8 +146,6 @@ public class ChargeGun : Weapon
             }
         }
     }
-
-
     // Fire hitscan with charge multiplier affecting its damage
     private void FireHitscan(float chargeMultiplier)
     {
@@ -180,7 +178,6 @@ public class ChargeGun : Weapon
             }
         }
     }
-
     private Vector3 GetSpreadDirection(Vector3 baseDirection, int projectileCount, int projectileIndex)
     {
         if (projectileCount <= 1)

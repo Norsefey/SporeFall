@@ -314,6 +314,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""4409d0b8-d537-464a-93c0-59478f57fb68"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -536,6 +545,28 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""ProgressTutorial"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c05efe9-63d9-41c1-8650-475bcaba8201"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b2d2143-f341-4d3c-ab87-b911a0e913fd"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -568,15 +599,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=1)"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""aaa4de88-c19b-4eb8-bf20-e39be8397915"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],
@@ -644,28 +666,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Fire"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9d8619c4-96b4-4ced-85db-2ce182564f80"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e2e78eda-bc51-4acd-8779-a48dc717ae87"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1058,12 +1058,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_FlipCamera = m_Player.FindAction("FlipCamera", throwIfNotFound: true);
         m_Player_ProgressTutorial = m_Player.FindAction("ProgressTutorial", throwIfNotFound: true);
+        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         // Shoot
         m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
         m_Shoot_Reload = m_Shoot.FindAction("Reload", throwIfNotFound: true);
         m_Shoot_Fire = m_Shoot.FindAction("Fire", throwIfNotFound: true);
         m_Shoot_Drop = m_Shoot.FindAction("Drop", throwIfNotFound: true);
-        m_Shoot_Jump = m_Shoot.FindAction("Jump", throwIfNotFound: true);
         // Build
         m_Build = asset.FindActionMap("Build", throwIfNotFound: true);
         m_Build_Rotate = m_Build.FindAction("Rotate", throwIfNotFound: true);
@@ -1233,6 +1233,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_FlipCamera;
     private readonly InputAction m_Player_ProgressTutorial;
+    private readonly InputAction m_Player_Jump;
     public struct PlayerActions
     {
         private @GameInputs m_Wrapper;
@@ -1245,6 +1246,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @FlipCamera => m_Wrapper.m_Player_FlipCamera;
         public InputAction @ProgressTutorial => m_Wrapper.m_Player_ProgressTutorial;
+        public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1278,6 +1280,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @ProgressTutorial.started += instance.OnProgressTutorial;
             @ProgressTutorial.performed += instance.OnProgressTutorial;
             @ProgressTutorial.canceled += instance.OnProgressTutorial;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1306,6 +1311,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @ProgressTutorial.started -= instance.OnProgressTutorial;
             @ProgressTutorial.performed -= instance.OnProgressTutorial;
             @ProgressTutorial.canceled -= instance.OnProgressTutorial;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1330,7 +1338,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Shoot_Reload;
     private readonly InputAction m_Shoot_Fire;
     private readonly InputAction m_Shoot_Drop;
-    private readonly InputAction m_Shoot_Jump;
     public struct ShootActions
     {
         private @GameInputs m_Wrapper;
@@ -1338,7 +1345,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Reload => m_Wrapper.m_Shoot_Reload;
         public InputAction @Fire => m_Wrapper.m_Shoot_Fire;
         public InputAction @Drop => m_Wrapper.m_Shoot_Drop;
-        public InputAction @Jump => m_Wrapper.m_Shoot_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Shoot; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1357,9 +1363,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Drop.started += instance.OnDrop;
             @Drop.performed += instance.OnDrop;
             @Drop.canceled += instance.OnDrop;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
         }
 
         private void UnregisterCallbacks(IShootActions instance)
@@ -1373,9 +1376,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Drop.started -= instance.OnDrop;
             @Drop.performed -= instance.OnDrop;
             @Drop.canceled -= instance.OnDrop;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
         }
 
         public void RemoveCallbacks(IShootActions instance)
@@ -1608,13 +1608,13 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnFlipCamera(InputAction.CallbackContext context);
         void OnProgressTutorial(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
     public interface IShootActions
     {
         void OnReload(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnDrop(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
     }
     public interface IBuildActions
     {

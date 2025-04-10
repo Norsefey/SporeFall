@@ -166,7 +166,7 @@ public class TrainHandler : MonoBehaviour
                     totalMoved += moveDownStep;
 
                     // Check again for ground contact
-                    if (Physics.Raycast(lowestPoint - new Vector3(0, totalMoved, 0), Vector3.down, out hit, 0.2f, groundLayer))
+                    if (Physics.Raycast(lowestPoint - new Vector3(0, totalMoved, 0), Vector3.down, 0.2f, groundLayer))
                     {
                         isGrounded = true;
                         Debug.Log($"{structure.name} moved down {totalMoved} units to contact ground");
