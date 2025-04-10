@@ -20,8 +20,8 @@ public class FlameThrower : MonoBehaviour
     {
         pp = GetComponent<PlayParticles>();
 
-        // Set up the AudioSource for the flame sound
-        flameAudioSource = gameObject.AddComponent<AudioSource>();
+        flameAudioSource = GetComponent<AudioSource>();
+
         flameAudioSource.clip = flameSound;
         flameAudioSource.volume = flameVolume;
         flameAudioSource.loop = true; // Loop the sound while enemies are in range
