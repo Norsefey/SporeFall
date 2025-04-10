@@ -58,6 +58,8 @@ public class WaveManager : MonoBehaviour
 
     private Coroutine movingCoroutine;
 
+    private List<BaseEnemy> activeEnemies = new List<BaseEnemy>();
+
     private void Start()
     {
         InitializePools();
@@ -321,6 +323,7 @@ public class WaveManager : MonoBehaviour
         if(spawnIndex > 2)
             enemy.TriggerRiseAnimation();
 
+        activeEnemies.Add(enemy);
         enemiesAlive++;
         enemiesSpawned++;
     }
@@ -423,7 +426,6 @@ public class WaveManager : MonoBehaviour
     {
         enemiesAlive--;
         deadEnemies++;
-
         if (!(currentWave.isFinalWave))
         {
             wUI.DisplayWaveProgress(deadEnemies);
@@ -478,5 +480,14 @@ public class WaveManager : MonoBehaviour
     }
     #endregion
 
-
+    public void KillALLEnemies()
+    {
+        enemiesSpawned = 9999;
+        foreach (BaseEnemy enemy in activeEnemies)
+        {
+            enemy.Die();
+        }
+        activeEnemies.Clear();
+        WaveCleared();
+    }
 }

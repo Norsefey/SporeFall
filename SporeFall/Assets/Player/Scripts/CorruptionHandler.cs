@@ -38,7 +38,7 @@ public class CorruptionHandler : MonoBehaviour
             return;
         }
 
-        if (pMan.holdingCorruption)
+        if (pMan.holdingCorruption && pMan.pHealth.canHoldCorruption)
         {
             // Reset timer when holding corruption
             timer = corruptionRecoveryDelay;

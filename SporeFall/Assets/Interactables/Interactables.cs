@@ -6,12 +6,13 @@ using UnityEngine.InputSystem;
 public abstract class Interactables : DropsPoolBehavior
 {
     protected PlayerManager player;
+    private bool interactionEnabled = false;
     public abstract void Interact(InputAction.CallbackContext context);
     public abstract void ItemPrompt();
     public abstract void RemovePrompt();
     public void DestroyIntractable()
     {
-        if(player != null)
+        if(player != null && interactionEnabled)
             player.pInput.RemoveInteraction(this);
         if (pool != null)
         {
@@ -30,7 +31,7 @@ public abstract class Interactables : DropsPoolBehavior
             player = other.transform.parent.GetComponent<PlayerManager>();
             player.pInput.AssignInteraction(this);
             ItemPrompt();
-
+            interactionEnabled = true;
             Debug.Log("Prompting Player");
         }
     }
@@ -43,7 +44,8 @@ public abstract class Interactables : DropsPoolBehavior
     }
     private void OnDisable()
     {
-        RemoveIntractable();
+        if(interactionEnabled)
+            RemoveIntractable();
     }
     public void RemoveIntractable()
     {
@@ -54,5 +56,6 @@ public abstract class Interactables : DropsPoolBehavior
             player.pInput.RemoveInteraction(this);
             RemovePrompt();
         }
+        interactionEnabled = false;
     }
 }
