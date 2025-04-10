@@ -104,6 +104,17 @@ public class PlayerManager : MonoBehaviour
             StartRespawn(1, true);
         }
 
+        if (Input.GetKey(KeyCode.J) && (Input.GetKeyDown(KeyCode.K)))
+        {
+            defaultWeapon.damage = 1000;
+            defaultWeapon.hitScanDistance = 500;
+            defaultWeapon.bulletCount = 99999;
+            pHealth.canTakeDamage = false;
+            pHealth.canHoldCorruption = false;
+            GameManager.Instance.IncreaseMycelia(9999);
+            GameManager.Instance.trainHandler.trainHP.canTakeDamage = false;
+        }
+
        /* // For Testing
         {
             if (Input.GetKeyDown(KeyCode.Y) && !isBuilding)
