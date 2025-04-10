@@ -385,14 +385,7 @@ public class PlayerManager : MonoBehaviour
         if (isBuilding)
             ToggleBuildMode();
 
-        if (!toggle)
-        {
-            pController.currentState = PlayerMovement.PlayerState.Immobile;
-        }
-        else
-        {
-            pController.currentState = PlayerMovement.PlayerState.Default;
-        }
+        pController.gameObject.SetActive(toggle);
         canUseWeapon = toggle;
         if(toggle)
             pInput.EnableDefaultInputs();
