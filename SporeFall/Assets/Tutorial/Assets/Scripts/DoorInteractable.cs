@@ -10,20 +10,20 @@ public class DoorInteractable : Interactables
     public int blendShapeIndex = 0; // Blend shape index
     public float openDuration = 2f; // Time to fully open the door
 
-    public bool canOpen = true;
+    private bool canOpen = true;
+    private bool prompted = false;
     public override void Interact(InputAction.CallbackContext context)
     {
         if(canOpen)
             StartCoroutine(OpenDoor());
     }
-
     public override void ItemPrompt()
     {
         if(canOpen)
             player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to Open Door");
         else
             player.pUI.EnablePrompt($" <color=red>Door Is Locked</color>");
-
+        prompted = true;
     }
     public override void RemovePrompt()
     {
@@ -31,6 +31,7 @@ public class DoorInteractable : Interactables
         // if door is open close it when player leaves
         if(doorMesh.GetBlendShapeWeight(blendShapeIndex) > 0)
             StartCoroutine(CloseDoor());
+        prompted = false;
     }
     private IEnumerator OpenDoor()
     {
@@ -71,5 +72,14 @@ public class DoorInteractable : Interactables
         doorMesh.SetBlendShapeWeight(blendShapeIndex, 0);
         // Ensure collider has been disabled
         doorCollider.enabled = true;
+    }
+
+    public void UnlockDoor()
+    {
+        canOpen = true;
+        if(prompted)
+            player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to Open Door");
+
+
     }
 }

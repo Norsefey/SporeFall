@@ -63,6 +63,7 @@ public abstract class Weapon : MonoBehaviour
         }
         else
         {
+            bulletCount--;
             if (isHitScan)
             {
                 FireHitscan(player.pCamera.transform);
@@ -71,7 +72,6 @@ public abstract class Weapon : MonoBehaviour
             {
                 FireProjectile(firePoint, player.pCamera.myCamera);
             }
-            bulletCount--;
         }
     }
     protected void FireProjectile(Transform firePoint, Camera playerCamera)
@@ -85,32 +85,68 @@ public abstract class Weapon : MonoBehaviour
             player.pController.RotateOnFire();
         }
         transform.forward = playerCamera.transform.forward;
-
-        if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
+        ProjectileBehavior projectile;
+        if (PoolManager.Instance != null)
         {
-            Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
-            return;
-        }
-        // Get projectile from pool and initialize it
-        ProjectileBehavior projectile = pool.Get(
-            firePoint.position,
-            Quaternion.LookRotation(shootDirection));
-
-        if (projectile != null)
-        {
-            ProjectileData data = new()
+            if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
             {
-                Direction = shootDirection,
-                Speed = projectileSpeed,
-                Damage = damage,
-                Lifetime = projectileLifetime,
-                UseGravity = useGravity,
-                ArcHeight = projectileArcHeight,
-                CanBounce = canBounce,
-                MaxBounces = maxBounces,
-                BounceDamageMultiplier = bounceDamageMultiplier
-            };
-            projectile.Initialize(data, pool);
+                Debug.LogError($"No pool found for enemy prefab: {bulletPrefab.name}");
+                return;
+            }
+            // Get projectile from pool and initialize it
+            projectile = pool.Get(
+                firePoint.position,
+                Quaternion.LookRotation(shootDirection));
+
+            if (projectile != null)
+            {
+                ProjectileData data = new()
+                {
+                    Direction = shootDirection,
+                    Speed = projectileSpeed,
+                    Damage = damage,
+                    Lifetime = projectileLifetime,
+                    UseGravity = useGravity,
+                    ArcHeight = projectileArcHeight,
+                    CanBounce = canBounce,
+                    MaxBounces = maxBounces,
+                    BounceDamageMultiplier = bounceDamageMultiplier
+                };
+                projectile.Initialize(data, pool);
+            }
+        }
+        else
+        {
+            projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity).GetComponent<ProjectileBehavior>();
+
+            if (projectile != null)
+            {
+                ProjectileData data = new()
+                {
+                    Direction = shootDirection,
+                    Speed = projectileSpeed,
+                    Damage = damage,
+                    Lifetime = projectileLifetime,
+                    UseGravity = useGravity,
+                    ArcHeight = projectileArcHeight,
+                    CanBounce = canBounce,
+                    MaxBounces = maxBounces,
+                    BounceDamageMultiplier = bounceDamageMultiplier
+                };
+                projectile.Initialize(data, null);
+            }
+        }
+
+
+        if (bulletCount <= 0 && !IsReloading)
+        {// auto reload if player tries shooting at 0 ammo clip
+            PlaySFX(reloadSound, false);
+            StartReload();
+        }
+
+        if(limitedAmmo && bulletCount <= 0 && totalAmmo <= 0)
+        {
+            player.DestroyCurrentWeapon();
         }
     }
     protected void FireHitscan(Transform playerCamera)
@@ -166,6 +202,12 @@ public abstract class Weapon : MonoBehaviour
         else
         {
             vfx.MoveForward();
+        }
+
+        if (bulletCount <= 0 && !IsReloading)
+        {// auto reload if player tries shooting at 0 ammo clip
+            PlaySFX(reloadSound, false);
+            StartReload();
         }
     }
     // Method to calculate a bullet spread direction

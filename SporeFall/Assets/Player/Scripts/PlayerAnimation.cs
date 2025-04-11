@@ -40,10 +40,9 @@ public class PlayerAnimation : MonoBehaviour
         WeaponPosition();
         WalkCheck();
 
-        if (isAiming)
+        if (isAiming && pMan.currentWeapon != null)
         {
             pMan.currentWeapon.transform.forward = pMan.pCamera.myCamera.transform.forward;
-
         }
     }
     private void WeaponPosition()
@@ -80,7 +79,10 @@ public class PlayerAnimation : MonoBehaviour
     public void ToggleAimSightAnime(bool toggle)
     {
         if(pMan.currentWeapon == null)
+        {
+            anime.SetBool("IsAiming", false);
             return;
+        }
         anime.SetBool("IsAiming", toggle);
         isAiming = toggle;
     }

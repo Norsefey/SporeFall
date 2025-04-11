@@ -169,7 +169,7 @@ public class MovementRoomTutorial : MonoBehaviour
         tutorialText.text = "You are ready to move on";
         yield return new WaitForSeconds(1.5f);
         tutorialText.text = "Proceed to the Door across the room.";
-        exitDoor.canOpen = true;
+        exitDoor.UnlockDoor();
     }
     private void ToggleStartDetectingInput()
     {
@@ -183,7 +183,7 @@ public class MovementRoomTutorial : MonoBehaviour
             if (!isJumpCompleted)
             {
                 tutorialText.text = "Quite skilled I see, then lets move on.";
-                exitDoor.canOpen = true;
+                exitDoor.UnlockDoor();
                 Destroy(gameObject);
             }
         }

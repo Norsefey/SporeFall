@@ -104,7 +104,7 @@ public class PickUpWeapon : Interactables
         // Hide the weapon's visuals immediately
         weapon.gameObject.SetActive(false);
         transform.GetChild(0).gameObject.SetActive(false);
-
+        RemoveIntractable();
         // Delay the destruction of the GameObject to allow the sound to finish playing
         Invoke(nameof(DestroyIntractable), pickupSound.length);
         Debug.Log("Picked up: " + weapon.name);

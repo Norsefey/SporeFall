@@ -195,7 +195,7 @@ public class BuildRoom : MonoBehaviour
     {
         yield return new WaitForSeconds(nextPromptDelay);
         tutorialText.text = "That completes Aegis Training 101";
-        exitDoor.canOpen = true;
+        exitDoor.UnlockDoor();
         yield return new WaitForSeconds(nextPromptDelay);
         tutorialText.text = "Please proceed to the next room";
     }

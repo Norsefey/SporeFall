@@ -102,7 +102,7 @@ public class ShootingRoomTutorial : MonoBehaviour
     private void RoomComplete()
     {
         tutorialText.text = "That does it for basic weapon training, Proceed to the Next Room";
-        exitDoor.canOpen = true;
+        exitDoor.UnlockDoor();
     }
 
     private void OnTriggerEnter(Collider other)

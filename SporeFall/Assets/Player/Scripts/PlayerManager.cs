@@ -235,7 +235,7 @@ public class PlayerManager : MonoBehaviour
         if (nearByWeapon == null)
             return;
         // Avoid getting Stuck in reload
-        if(currentWeapon.IsReloading)
+        if(currentWeapon != null && currentWeapon.IsReloading)
             currentWeapon.CancelReload();
 
         // deactivate the default weapon
@@ -280,6 +280,27 @@ public class PlayerManager : MonoBehaviour
         }
         pUI.ToggleWeaponUI(true);
     }
+    public void DestroyCurrentWeapon()
+    {
+        if (currentWeapon != null)
+        {
+            if (currentWeapon.IsReloading)
+                currentWeapon.CancelReload();
+
+            if (currentWeapon is ChargeGun)
+            {
+                pUI.ToggleChargeGunSlider(false);
+            }
+            Destroy(currentWeapon.gameObject); // Drop the current weapon
+        }
+
+        currentWeapon = null;
+        equippedWeapon = null;
+        // reactivate the default weapon
+        pUI.AmmoDisplay(currentWeapon);
+        pUI.SwitchWeaponIcon();
+        pAnime.SetWeaponHoldAnimation(0);
+    }
     public void DropWeapon()
     {
         if (equippedWeapon == null || currentWeapon == bGun)
@@ -295,13 +316,6 @@ public class PlayerManager : MonoBehaviour
                 pUI.ToggleChargeGunSlider(false);
             }
             Destroy(currentWeapon.gameObject); // Drop the current weapon
-            /*if(Tutorial.Instance != null)
-            {
-                if (Tutorial.Instance.currentScene == "Tutorial")
-                {
-                    Tutorial.Instance.ProgressTutorial();
-                }
-            }*/
         }
 
         currentWeapon = defaultWeapon;
@@ -317,6 +331,7 @@ public class PlayerManager : MonoBehaviour
     {
         currentWeapon = defaultWeapon;
         currentWeapon.gameObject.SetActive(true);
+        pUI.SwitchWeaponIcon();
         pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
         pUI.ToggleWeaponUI(true);
 

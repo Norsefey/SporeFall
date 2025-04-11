@@ -9,7 +9,7 @@ public class MeleeWeapon : Weapon
     [SerializeField] private float attackArc = 90f; // Attack arc in degrees
     //[SerializeField] private float comboWindow = 1.5f; // Time window to perform next combo
     [SerializeField] private float attackCooldown = 0.2f; // Cooldown between attacks
-
+    [SerializeField] private bool freeflow = true;
     [Header("Combo System")]
     [SerializeField] private List<ComboAttack> comboAttacks;
     private int currentComboIndex = 0;
@@ -28,6 +28,8 @@ public class MeleeWeapon : Weapon
         public string animationTrigger;
         public float animationDuration; // Duration of this attack's animation
     }
+
+
 
     private void Start()
     {
@@ -74,6 +76,7 @@ public class MeleeWeapon : Weapon
     {
         while (player.isFiring && currentComboIndex < comboAttacks.Count)
         {
+            player.TogglePControl(false);
             if (canAttack)
             {
                 ComboAttack currentAttack = comboAttacks[currentComboIndex];
@@ -89,6 +92,7 @@ public class MeleeWeapon : Weapon
         }
 
         // Reset combo when sequence ends or player releases button
+        player.TogglePControl(true);
         isComboInProgress = false;
         currentComboIndex = 0;
     }

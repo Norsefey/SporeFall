@@ -54,7 +54,7 @@ public class GunPickupRoom : MonoBehaviour
     private void EndTutorial()
     {
         tutorialText.text = "Now Lets go practice your aim in the room";
-        exitDoor.canOpen = true;
+        exitDoor.UnlockDoor();
     }
 
     private void OnTriggerEnter(Collider other)

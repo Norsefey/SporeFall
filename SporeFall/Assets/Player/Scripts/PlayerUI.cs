@@ -124,6 +124,12 @@ public class PlayerUI : MonoBehaviour
      }*/
     public void AmmoDisplay(Weapon currentWeapon)
     {
+        if(currentWeapon == null)
+        {
+            ammoIndicator.text = "";
+            return;
+        }
+
         if (currentWeapon.IsReloading)
             ammoIndicator.text = "Reloading";
         else if (currentWeapon.limitedAmmo)
@@ -135,6 +141,12 @@ public class PlayerUI : MonoBehaviour
     }
     public void SwitchWeaponIcon()
     {
+        if(pMan.currentWeapon == null)
+        {
+            pMan.pUI.weaponUI.SetActive(false);
+            return;
+        }
+        
         weaponIcon.sprite = pMan.currentWeapon.weaponSprite;
     }
     public void UpdateHPDisplay(Damageable hpScript, float value)
