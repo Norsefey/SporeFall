@@ -51,10 +51,11 @@ public class EnemyHP : Damageable
     }
     public IEnumerator Flinch()
     {
-        manager.Animator.SetTrigger("Flinch");
 
-        if (!flinchable || flinching)
+        if (!flinchable || flinching || manager.Animator == null)
             yield break;
+
+        manager.Animator.SetTrigger("Flinch");
 
         Debug.Log("Flinching");
         flinching = true;

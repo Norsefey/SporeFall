@@ -55,7 +55,7 @@ public class BillboardUIUpdater : MonoBehaviour
     IEnumerator HideUI()
     {
         if (groupAlpha == null)
-            yield return null;
+            yield break;
 
         yield return new WaitForSeconds(1);
 

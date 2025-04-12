@@ -449,6 +449,7 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
+  damageModifier: 0
   mainHP: {fileID: 3385096694661518225}
   damageMultiplier: 2
 --- !u!1 &2788214750070292311
@@ -536,6 +537,7 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
+  damageModifier: 0
   mainHP: {fileID: 3385096694661518225}
   damageMultiplier: 1
 --- !u!136 &5894028391559828656
@@ -1093,7 +1095,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1345321642050182800
 Transform:
   m_ObjectHideFlags: 0
@@ -1460,8 +1462,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHoldCorruption: 0
   canTakeDamage: 1
-  maxHP: 45
+  maxHP: 85
   isDead: 0
+  damageModifier: 0
   manager: {fileID: 2846332542822177288}
   flinchModifier: 0.1
   flinchable: 1
