@@ -7,19 +7,20 @@ public class DamageOverTimeZone : MonoBehaviour
     protected float duration;
     protected float tickRate;
     protected float damagePerTick;
+    protected float corruptionPerTick;
     protected float radius;
     private float nextTickTime;
     private float endTime;
     protected LayerMask hitTarget;
     public LayerMask targetToDamage;
-    public virtual void Initialize(float duration, float tickRate, float damagePerTick, float radius, LayerMask hitTarget)
+    public virtual void Initialize(float duration, float tickRate, float damagePerTick,float corruptPerTick, float radius, LayerMask hitTarget)
     {
         this.duration = duration;
         this.tickRate = tickRate;
         this.damagePerTick = damagePerTick;
         this.radius = radius;
         this.hitTarget = hitTarget;
-
+        corruptionPerTick = corruptPerTick;
         nextTickTime = Time.time;
         endTime = Time.time + duration;
 
@@ -55,6 +56,7 @@ public class DamageOverTimeZone : MonoBehaviour
             if (hitCollider.TryGetComponent<Damageable>(out var damageable))
             {
                 damageable.TakeDamage(damagePerTick);
+                damageable.IncreaseCorruption(corruptionPerTick);
             }
         }
     }

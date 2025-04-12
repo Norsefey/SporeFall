@@ -9,7 +9,6 @@ public class MeleeWeapon : Weapon
     [SerializeField] private float attackArc = 90f; // Attack arc in degrees
     //[SerializeField] private float comboWindow = 1.5f; // Time window to perform next combo
     [SerializeField] private float attackCooldown = 0.2f; // Cooldown between attacks
-    [SerializeField] private bool freeflow = true;
     [Header("Combo System")]
     [SerializeField] private List<ComboAttack> comboAttacks;
     private int currentComboIndex = 0;

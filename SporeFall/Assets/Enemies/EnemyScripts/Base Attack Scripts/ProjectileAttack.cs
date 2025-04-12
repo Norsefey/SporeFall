@@ -1,8 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
+public enum ProjectileTrajectoryType
+{
+    Standard,
+    Arc,
+    RandomDirections
+}
 [CreateAssetMenu(fileName = "New Projectile Attack", menuName = "Enemy/Attacks/Projectile Attack")]
 public class ProjectileAttack : RangedAttack
 {
@@ -11,100 +16,40 @@ public class ProjectileAttack : RangedAttack
     [SerializeField] private float projectileSpeed = 20f;
     [SerializeField] private float projectileLifetime = 5f;
     [SerializeField] private bool useGravity = false;
-    [SerializeField] private float projectileArcHeight = 0f; // For arcing projectiles
+
+    [Header("Trajectory Settings")]
+    [SerializeField] private ProjectileTrajectoryType trajectoryType = ProjectileTrajectoryType.Standard;
+
+    [SerializeField] private float maxArchHeight, minArchHeight;
+    private float projectileArcHeight = 2f; // For arcing projectiles
+
+    [SerializeField] private float randomDirectionConeAngle = 45f; // For random directions (cone spread)
+
     [SerializeField] private bool canBounce = false;
     [SerializeField] private int maxBounces = 3;
     [SerializeField] private float bounceDamageMultiplier = 0.7f; // Reduce damage with each bounce
 
     [Header("Multiple Projectile Settings")]
     [SerializeField] private int projectileCount = 1;
+    [SerializeField] private float timeBetweenProjectiles = 0.1f; // Delay between each projectile
     [SerializeField] private float spreadAngle = 0f;
-
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
     {
         enemy.SetIsAttacking(true);
-        if(enemy.Animator != null)
+
+        if (enemy.Animator != null)
             enemy.Animator.SetTrigger(animationTrigger);
 
         Coroutine trackingCoroutine = enemy.StartCoroutine(TrackTarget(enemy, target));
-
         yield return new WaitForSeconds(attackDelay);
 
-        // Stop tracking once the delay is complete
-        if (trackingCoroutine != null)
-        {
-            enemy.StopCoroutine(trackingCoroutine);
-        }
-
         if (target != null)
-        {
-            Vector3 spawnPosition = enemy.firePoint.position + enemy.transform.forward;
-            Vector3 targetPosition = GetPredictedTargetPosition(target, spawnPosition);
+            enemy.StartCoroutine(FireProjectiles(enemy, target));
 
-            // Calculate spread angles for multiple projectiles
-            float startAngle = -spreadAngle * 0.5f;
-            float angleStep = projectileCount > 1 ? spreadAngle / (projectileCount - 1) : 0;
+        yield return new WaitForSeconds(timeBetweenProjectiles * projectileCount);
 
-            for (int i = 0; i < projectileCount; i++)
-            {
-                Vector3 direction = (targetPosition - spawnPosition).normalized;
-                if (spreadAngle > 0)
-                {
-                    float currentAngle = startAngle + (angleStep * i);
-                    direction = Quaternion.Euler(0, currentAngle, 0) * direction;
-                }
-
-                ProjectileBehavior projectile = null;
-                if (PoolManager.Instance != null)
-                {
-                    if (!PoolManager.Instance.projectilePool.TryGetValue(projectilePrefab, out ProjectilePool pool))
-                    {
-                        Debug.LogError($"No pool found for enemy prefab: {projectilePrefab.name}");
-
-                        yield return null;
-                    }
-
-                     projectile = pool.Get(spawnPosition, Quaternion.LookRotation(direction));
-
-                    if (projectile)
-                    {
-                        ProjectileData data = new()
-                        {
-                            Direction = direction,
-                            Speed = projectileSpeed,
-                            Damage = damage,
-                            Lifetime = projectileLifetime,
-                            UseGravity = useGravity,
-                            ArcHeight = projectileArcHeight,
-                            CanBounce = canBounce,
-                            MaxBounces = maxBounces,
-                            BounceDamageMultiplier = bounceDamageMultiplier
-                        };
-
-                        projectile.Initialize(data, pool);
-                    }
-                }
-                else
-                {
-                    // If Pool Is missing Simply Spawn A projectile
-                    projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<ProjectileBehavior>();
-
-                    ProjectileData data = new()
-                    {
-                        Direction = direction,
-                        Speed = projectileSpeed,
-                        Damage = damage,
-                        Lifetime = projectileLifetime,
-                        UseGravity = useGravity,
-                        ArcHeight = projectileArcHeight,
-                        CanBounce = canBounce,
-                        MaxBounces = maxBounces,
-                        BounceDamageMultiplier = bounceDamageMultiplier
-                    };
-                    projectile.Initialize(data, null);
-                }
-            }
-        }
+        if (trackingCoroutine != null)
+            enemy.StopCoroutine(trackingCoroutine);
 
         SpawnVFX(enemy.firePoint.position, enemy.transform.rotation);
         PlaySFX(enemy.AudioSource);
@@ -113,7 +58,88 @@ public class ProjectileAttack : RangedAttack
         yield return new WaitForSeconds(recoveryTime);
         enemy.SetIsAttacking(false);
     }
+    private IEnumerator FireProjectiles(BaseEnemy enemy, Transform target)
+    {
 
+        float startAngle = -spreadAngle * 0.5f;
+        float angleStep = projectileCount > 1 ? spreadAngle / (projectileCount - 1) : 0;
+
+        for (int i = 0; i < projectileCount; i++)
+        {
+            if (target == null) yield break;
+            Vector3 spawnPosition = enemy.firePoint.position + enemy.transform.forward;
+
+            // Recalculate direction and position each time
+            Vector3 dynamicTargetPosition = GetPredictedTargetPosition(target, spawnPosition);
+            Vector3 baseDirection = (dynamicTargetPosition - spawnPosition).normalized;
+
+            float currentAngle = startAngle + (angleStep * i);
+            Vector3 direction = CalculateDirection(baseDirection, currentAngle, spawnPosition, dynamicTargetPosition, out Vector3 adjustedTarget);
+
+            SpawnProjectile(spawnPosition, direction, adjustedTarget);
+
+            if (timeBetweenProjectiles > 0 && i < projectileCount - 1)
+                yield return new WaitForSeconds(timeBetweenProjectiles);
+        }
+    }
+    private Vector3 CalculateDirection(Vector3 baseDirection, float currentAngle, Vector3 spawnPosition, Vector3 targetPosition, out Vector3 adjustedTarget)
+    {
+        Vector3 direction = baseDirection;
+        adjustedTarget = targetPosition;
+
+        switch (trajectoryType)
+        {
+            case ProjectileTrajectoryType.Standard:
+            case ProjectileTrajectoryType.Arc:
+                direction = Quaternion.Euler(0, currentAngle, 0) * baseDirection;
+                float distance = Vector3.Distance(spawnPosition, targetPosition);
+                adjustedTarget = spawnPosition + direction * distance;
+                if (trajectoryType == ProjectileTrajectoryType.Arc) useGravity = true;
+                break;
+
+            case ProjectileTrajectoryType.RandomDirections:
+                direction = Random.insideUnitSphere;
+                direction.y = Mathf.Abs(direction.y);
+                direction = Vector3.Slerp(baseDirection, direction.normalized, randomDirectionConeAngle / 180f);
+                adjustedTarget = spawnPosition + direction * Vector3.Distance(spawnPosition, targetPosition);
+                break;
+        }
+
+        return direction.normalized;
+    }
+    private void SpawnProjectile(Vector3 spawnPosition, Vector3 direction, Vector3 targetPosition)
+    {
+        float arcHeight = trajectoryType == ProjectileTrajectoryType.Arc ? projectileArcHeight : 0f;
+
+        ProjectileBehavior projectile = null;
+        if (PoolManager.Instance != null &&
+            PoolManager.Instance.projectilePool.TryGetValue(projectilePrefab, out ProjectilePool pool))
+        {
+            projectile = pool.Get(spawnPosition, Quaternion.LookRotation(direction));
+            projectile?.Initialize(CreateProjectileData(direction, targetPosition, arcHeight), pool);
+        }
+        else
+        {
+            projectile = GameObject.Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<ProjectileBehavior>();
+            projectile?.Initialize(CreateProjectileData(direction, targetPosition, arcHeight), null);
+        }
+    }
+    private ProjectileData CreateProjectileData(Vector3 direction, Vector3 target, float arcHeight)
+    {
+        return new ProjectileData
+        {
+            Direction = direction,
+            Speed = projectileSpeed,
+            Damage = damage,
+            Lifetime = projectileLifetime,
+            UseGravity = trajectoryType == ProjectileTrajectoryType.Arc || useGravity,
+            ArcHeight = arcHeight,
+            CanBounce = canBounce,
+            MaxBounces = maxBounces,
+            BounceDamageMultiplier = bounceDamageMultiplier,
+            TargetPosition = target
+        };
+    }
     // track the target during attack charge-up
     private IEnumerator TrackTarget(BaseEnemy enemy, Transform target)
     {

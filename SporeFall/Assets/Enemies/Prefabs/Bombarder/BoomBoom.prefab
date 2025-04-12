@@ -164,7 +164,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 2
 --- !u!114 &-2714352750953574547
 MonoBehaviour:
@@ -186,9 +186,9 @@ MonoBehaviour:
   audioPlayer: {fileID: 0}
   bulletSound: {fileID: 0}
   bulletSoundVolume: 0.5
-  explosionEffectPrefab: {fileID: 7889514328668069788, guid: eddc8639d2dbda5498b8e20ecc2c5cc3,
+  explosionEffectPrefab: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5,
     type: 3}
-  explosionRadius: 10
+  explosionRadius: 5
   damageFalloff:
     serializedVersion: 2
     m_Curve:
@@ -196,16 +196,25 @@ MonoBehaviour:
       time: 0
       value: 1
       inSlope: 0
-      outSlope: -1
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
+      time: 0.6143549
+      value: 0.5115071
+      inSlope: -0.41014013
+      outSlope: -0.41014013
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.0994948
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
       value: 0
       inSlope: -1
-      outSlope: 0
+      outSlope: -1
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -222,3 +231,4 @@ MonoBehaviour:
   dOTRadius: 5
   corruptionAmount: 0
   entitiesToSpawn: []
+  collisionCheckRadius: 0.5

@@ -15,6 +15,7 @@ public struct ProjectileData
     public bool CanBounce;
     public int MaxBounces;
     public float BounceDamageMultiplier;
+    public Vector3 TargetPosition; // Added target position for arc calculations
 }
 public enum ProjectileType
 {
@@ -55,6 +56,7 @@ public class ProjectileBehavior : MonoBehaviour
     [SerializeField] private float dOTTickRate;
     [SerializeField] private float dOTDamagePerTick;
     [SerializeField] private float dOTRadius;
+    [SerializeField] private float dOTCorruptionPerTick;
 
     [Header("Corruption Settings")]
     [SerializeField] private float corruptionAmount;
@@ -62,11 +64,154 @@ public class ProjectileBehavior : MonoBehaviour
     [Header("Spawner Settings")]
     [SerializeField] private GameObject[] entitiesToSpawn;
 
+    private Vector3 initialPosition;
+    private float arcProgress = 0;
+    private float arcDistance;
+
+    // Added for collision detection in arc mode
+    [SerializeField] private float collisionCheckRadius = 0.5f;
+    private Vector3 previousPosition;
+    private bool isArcMode = false;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        if(audioPlayer != null)
+        if (audioPlayer != null)
             audioPlayer.volume = bulletSoundVolume;
+    }
+
+    private void Update()
+    {
+        // Store previous position for collision detection
+        previousPosition = transform.position;
+
+        // For arcing projectiles
+        if (isArcMode)
+        {
+            arcProgress += data.Speed * Time.deltaTime / arcDistance;
+
+            // Calculate position along the arc
+            Vector3 linearPosition = Vector3.Lerp(initialPosition, data.TargetPosition, arcProgress);
+
+            // Add arc height (parabolic motion)
+            float heightOffset = data.ArcHeight * Mathf.Sin(arcProgress * Mathf.PI);
+            transform.position = linearPosition + Vector3.up * heightOffset;
+
+            // Rotate to face the direction of movement
+            if (arcProgress < 1)
+            {
+                Vector3 nextPosition = Vector3.Lerp(initialPosition, data.TargetPosition, arcProgress + 0.01f);
+                nextPosition += Vector3.up * (data.ArcHeight * Mathf.Sin((arcProgress + 0.01f) * Mathf.PI));
+                transform.LookAt(nextPosition);
+            }
+
+            // Check for collisions manually for arc trajectories
+            CheckForCollisions();
+
+            /*// Terminate at end of arc
+            if (arcProgress >= 1)
+            {
+                ReturnToPool();
+            }*/
+        }
+        else
+        {
+            // Only use direct position updates for non-gravity projectiles
+            // For projectiles with gravity, we use the rigidbody velocity
+            transform.position += data.Direction * data.Speed * Time.deltaTime;
+
+            // Also check for collisions if we're manually updating position
+            //CheckForCollisions();
+        }
+    }
+
+    // Added method to check for collisions when using kinematic movement
+    private void CheckForCollisions()
+    {
+        // Calculate movement direction
+        Vector3 movementDirection = (transform.position - previousPosition).normalized;
+        float movementDistance = Vector3.Distance(previousPosition, transform.position);
+
+        // Cast a sphere in the direction of movement
+        RaycastHit hit;
+        if (Physics.SphereCast(previousPosition, collisionCheckRadius, movementDirection,
+                              out hit, movementDistance, hitLayers))
+        {
+            // Handle the collision similar to OnCollisionEnter
+            Debug.Log("Projectile " + gameObject.name + " Hit: " + hit.collider.gameObject.name);
+
+            // Create a fake collision for compatibility with existing code
+            Collision fakeCollision = CreateFakeCollision(hit);
+
+            switch (type)
+            {
+                case ProjectileType.Standard:
+                    HandleStandardAttack(fakeCollision);
+                    break;
+                case ProjectileType.Explosive:
+                    HandleExplosiveAttack();
+                    break;
+                case ProjectileType.DOT:
+                    HandleDOTAttack();
+                    break;
+                case ProjectileType.Corrupted:
+                    HandleCorruptionAttack(fakeCollision);
+                    break;
+                case ProjectileType.Spawner:
+                    HandleSpawnerBehavior();
+                    break;
+            }
+
+            HandleCollision(fakeCollision);
+        }
+    }
+
+    // Helper method to create a fake collision from a raycast hit
+    private Collision CreateFakeCollision(RaycastHit hit)
+    {
+        GameObject hitObject = hit.collider.gameObject;
+
+        // Create a new Collision
+        Collision collision = new Collision();
+
+        // Use reflection to set private fields (this is a workaround since Collision is not normally constructable)
+        System.Reflection.FieldInfo contactPointsField = typeof(Collision).GetField("m_ContactPoints",
+                                                                                  System.Reflection.BindingFlags.Instance |
+                                                                                  System.Reflection.BindingFlags.NonPublic);
+
+        if (contactPointsField != null)
+        {
+            // Create a contact point
+            ContactPoint contact = new ContactPoint();
+
+            // Set contact point fields via reflection
+            typeof(ContactPoint).GetField("m_Point", System.Reflection.BindingFlags.Instance |
+                                         System.Reflection.BindingFlags.NonPublic)?.SetValue(contact, hit.point);
+
+            typeof(ContactPoint).GetField("m_Normal", System.Reflection.BindingFlags.Instance |
+                                         System.Reflection.BindingFlags.NonPublic)?.SetValue(contact, hit.normal);
+
+            typeof(ContactPoint).GetField("m_ThisCollider", System.Reflection.BindingFlags.Instance |
+                                         System.Reflection.BindingFlags.NonPublic)?.SetValue(contact, GetComponent<Collider>());
+
+            typeof(ContactPoint).GetField("m_OtherCollider", System.Reflection.BindingFlags.Instance |
+                                         System.Reflection.BindingFlags.NonPublic)?.SetValue(contact, hit.collider);
+
+            // Set the contact points
+            contactPointsField.SetValue(collision, new ContactPoint[] { contact });
+        }
+
+        // Set the transform and gameObject fields
+        typeof(Collision).GetField("m_Transform", System.Reflection.BindingFlags.Instance |
+                                 System.Reflection.BindingFlags.NonPublic)?.SetValue(collision, hit.transform);
+
+        typeof(Collision).GetField("m_Rigidbody", System.Reflection.BindingFlags.Instance |
+                                 System.Reflection.BindingFlags.NonPublic)?.SetValue(collision, hit.rigidbody);
+
+        typeof(Collision).GetField("m_GameObject", System.Reflection.BindingFlags.Instance |
+                                 System.Reflection.BindingFlags.NonPublic)?.SetValue(collision, hitObject);
+
+        return collision;
     }
 
     public void Initialize(ProjectileData projectileData, ProjectilePool pool)
@@ -75,24 +220,37 @@ public class ProjectileBehavior : MonoBehaviour
         damage = data.Damage;
         this.pool = pool;
         elapsedTime = 0f;
+        bounceCount = 0;
 
-        if (rb != null)
+        initialPosition = transform.position;
+        isArcMode = data.ArcHeight > 0;
+
+        if (isArcMode)
         {
-            rb.useGravity = data.UseGravity;
+            arcDistance = Vector3.Distance(initialPosition, data.TargetPosition);
+            arcProgress = 0f;
 
-            if (data.UseGravity && data.ArcHeight > 0)
+            // Disable rigidbody physics for arc trajectories but keep collider active
+            if (rb != null)
             {
-                // Calculate velocity for arcing projectile
-                Vector3 velocity = data.Direction * data.Speed;
-                velocity.y += data.ArcHeight;
-                rb.velocity = velocity;
+                rb.useGravity = false;
+                rb.isKinematic = true;
             }
-            else
+
+            // Store initial position for collision detection
+            previousPosition = transform.position;
+        }
+        else
+        {
+            if (rb != null)
             {
+                rb.isKinematic = false;
+                rb.useGravity = data.UseGravity;
                 rb.velocity = data.Direction * data.Speed;
             }
         }
-        if(gameObject.activeSelf)
+
+        if (gameObject.activeSelf)
             StartCoroutine(LifetimeCounter());
     }
     private IEnumerator LifetimeCounter()
@@ -104,6 +262,7 @@ public class ProjectileBehavior : MonoBehaviour
         }
         ReturnToPool();
     }
+
     private void ReturnToPool()
     {
         //Debug.Log($"Returning to pool {name}");
@@ -123,7 +282,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-       // Debug.Log("Projectile Hit" + collision.gameObject.name);
+        Debug.Log("Projectile " + gameObject.name + " Hit: " + collision.gameObject.name);
 
         // Check if the collision object's layer is in our hitLayers mask
         if (hitLayers == (hitLayers | (1 << collision.gameObject.layer)))
@@ -149,11 +308,10 @@ public class ProjectileBehavior : MonoBehaviour
         }
 
         HandleCollision(collision);
-
     }
     protected void ApplyDamage(Damageable target)
     {
-            target.TakeDamage(damage);
+        target.TakeDamage(damage);
     }
     protected void HandleCollision(Collision collision)
     {
@@ -185,10 +343,28 @@ public class ProjectileBehavior : MonoBehaviour
     }
     protected void Bounce(Collider surface)
     {
-        if (rb != null)
+        if (rb != null && !isArcMode)
         {
             Vector3 reflection = Vector3.Reflect(rb.velocity, surface.transform.up);
             rb.velocity = reflection;
+            damage *= data.BounceDamageMultiplier;
+            bounceCount++;
+        }
+        else if (isArcMode)
+        {
+            // Handle bouncing for arc trajectories
+            Vector3 currentDirection = (data.TargetPosition - initialPosition).normalized;
+            Vector3 reflection = Vector3.Reflect(currentDirection, surface.transform.up);
+
+            // Update target position based on reflection
+            float remainingDistance = arcDistance * (1 - arcProgress);
+            data.TargetPosition = transform.position + (reflection * remainingDistance);
+
+            // Reset arc parameters for the bounce
+            initialPosition = transform.position;
+            arcDistance = Vector3.Distance(initialPosition, data.TargetPosition);
+            arcProgress = 0;
+
             damage *= data.BounceDamageMultiplier;
             bounceCount++;
         }
@@ -240,7 +416,7 @@ public class ProjectileBehavior : MonoBehaviour
             if (zoneObject.TryGetComponent<DamageOverTimeZone>(out var dotZone))
             {
                 // Pass the hitLayers instead of hitTag
-                dotZone.Initialize(dOTDuration, dOTTickRate, dOTDamagePerTick, dOTRadius, hitLayers);
+                dotZone.Initialize(dOTDuration, dOTTickRate, dOTDamagePerTick, dOTCorruptionPerTick, dOTRadius, hitLayers);
             }
         }
 
@@ -261,7 +437,6 @@ public class ProjectileBehavior : MonoBehaviour
     {
         int index = Random.Range(0, entitiesToSpawn.Length);
 
-        GameManager.Instance.waveManager.SpawnEnemy(entitiesToSpawn[index], transform, 0);
-
+        GameManager.Instance.waveManager.SpawnEnemy(entitiesToSpawn[index], transform.position, true);
     }
 }

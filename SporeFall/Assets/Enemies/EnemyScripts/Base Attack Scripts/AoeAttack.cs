@@ -12,15 +12,15 @@ public class AoeAttack : Attack
     [SerializeField] private float dotDuration = 3f;
     [SerializeField] private float dotTickRate = 0.5f;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy boss, Transform target)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
     {
-        boss.SetIsAttacking(true);
-        if (boss.Animator != null)
-            boss.Animator.SetTrigger(animationTrigger);
+        enemy.SetIsAttacking(true);
+        if (enemy.Animator != null)
+            enemy.Animator.SetTrigger(animationTrigger);
 
         yield return new WaitForSeconds(attackDelay);
 
-        Vector3 aoeCenter = boss.transform.position;
+        Vector3 aoeCenter = enemy.transform.position;
         Collider[] hits = Physics.OverlapSphere(aoeCenter, aoeRadius, targetLayers);
 
         foreach (Collider hit in hits)
@@ -32,7 +32,7 @@ public class AoeAttack : Attack
 
                 if (damageOverTime)
                 {
-                    boss.StartDOTEffect(damageable, damage * damageMultiplier, dotDuration, dotTickRate);
+                    enemy.StartDOTEffect(damageable, damage * damageMultiplier, dotDuration, dotTickRate);
                 }
                 else
                 {
@@ -41,12 +41,12 @@ public class AoeAttack : Attack
             }
         }
 
-        SpawnVFX(aoeCenter, boss.transform.rotation);
-        PlaySFX(boss.AudioSource);
+        SpawnVFX(aoeCenter, enemy.transform.rotation);
+        PlaySFX(enemy.AudioSource);
         StartCooldown();
 
         yield return new WaitForSeconds(recoveryTime);
-        boss.SetIsAttacking(false);
+        enemy.SetIsAttacking(false);
     }
 
     private IEnumerator ApplyDOTDamage(Damageable target, float totalDamage)

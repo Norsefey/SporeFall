@@ -89,7 +89,7 @@ public abstract class BaseEnemy : MonoBehaviour
     private bool isInitialized = false;
     private bool isRising = false;
     [Header("Animations")]
-    [SerializeField] private float risingAnimationLength = 2;
+    [SerializeField] protected float risingAnimationLength = 2;
 
     protected virtual void Awake()
     {
@@ -538,7 +538,7 @@ public abstract class BaseEnemy : MonoBehaviour
             elapsedTime += tickRate;
         }
     }
-    void DetectTargets()
+    public virtual void DetectTargets()
     {
         int detectedCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRange, detectedColliders, targetsLayerMask);
 
@@ -673,10 +673,13 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         passedThreshold = damageTaken >= targetSwitchThreshold;
     }
-    public void TriggerRiseAnimation()
+    public virtual void TriggerRiseAnimation()
     {
-        animator.SetTrigger("Rise");
-        StartCoroutine(RisingFromGround());
+        if(animator != null)
+        {
+            animator.SetTrigger("Rise");
+            StartCoroutine(RisingFromGround());
+        }
     } 
     private IEnumerator RisingFromGround()
     {

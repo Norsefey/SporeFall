@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 public class WaveManager : MonoBehaviour
@@ -17,8 +19,10 @@ public class WaveManager : MonoBehaviour
     public Transform[] payloadPath;
     [HideInInspector]
     public List<GameObject> roberts = new();
-    
+
     [Header("Waves")]
+    [Range(0, 1)]
+    [SerializeField] private float outsideSpawnChance = .45f;
     public List<Wave> waves = new();
     private Wave currentWave;
     public Wave CurrentWave {  get { return currentWave; } }
@@ -248,29 +252,74 @@ public class WaveManager : MonoBehaviour
         int enemyIndex = Random.Range(0, availableEnemies.Count);
         var selectedEnemy = availableEnemies[enemyIndex];
 
-        Transform[] spawnPoints = currentWave.spawnLocations;
-        int spawnPointIndex = Random.Range(0, spawnPoints.Length);
-        Transform spawnPoint = spawnPoints[spawnPointIndex];
+
+        
+        Vector3 spawnPoint;
 
         if (selectedEnemy.spawnAsGroup)
         {
+            bool spawningOutside = false;
+            if (selectedEnemy.mustSpawnOutside)
+            {
+                spawnPoint = GetSpawnPointWithinZone();
+                spawningOutside = true;
+            }
+            else
+            {
+                if (Random.value < outsideSpawnChance)
+                {
+                    spawnPoint = GetSpawnPointWithinZone();
+                    spawningOutside = true;
+                }
+                else
+                {
+                    Transform[] spawnPoints = currentWave.presetSpawnPoints;
+                    int spawnPointIndex = Random.Range(0, spawnPoints.Length);
+                    if (spawnPointIndex > 3)
+                        spawningOutside = true;
+
+                    spawnPoint = spawnPoints[spawnPointIndex].position;
+                }
+            }
+
             // Spawn as a group
             for (int i = 0; i < selectedEnemy.groupSize; i++)
             {
                 if (selectedEnemy.SpawnedCount < selectedEnemy.totalToSpawn)
                 {
-                    Vector3 spawnPointOffset = new Vector3(spawnPoint.position.x + (i * 2), spawnPoint.position.y, spawnPoint.position.z + Random.Range(-1, 1));
-                    Transform finalSpawnPoint = spawnPoint;
-                    finalSpawnPoint.position = spawnPointOffset;
-                    SpawnEnemy(selectedEnemy.EnemyToSpawn, finalSpawnPoint, spawnPointIndex);
-                    selectedEnemy.SpawnedCount++; 
+                    Vector3 spawnPointOffset = new Vector3(spawnPoint.x + (i * 2), spawnPoint.y, spawnPoint.z + Random.Range(-1, 1));
+                    
+                    SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPointOffset, spawningOutside);
+                    selectedEnemy.SpawnedCount++;
                 }
             }
         }
         else
         {
+            if (selectedEnemy.mustSpawnOutside)
+            {
+                spawnPoint = GetSpawnPointWithinZone();
+                SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint, true);
+            }
+            else
+            {
+                bool spawningOutside = false;
+                if(Random.value < outsideSpawnChance)
+                {
+                    spawnPoint = GetSpawnPointWithinZone();
+                    spawningOutside = true;
+                }
+                else
+                {
+                    Transform[] spawnPoints = currentWave.presetSpawnPoints;
+                    int spawnPointIndex = Random.Range(0, spawnPoints.Length);
+                    if (spawnPointIndex > 3)
+                        spawningOutside = true;
+                    spawnPoint = spawnPoints[spawnPointIndex].position;
+                }
+                SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint, spawningOutside);
+            }
             // Spawn single enemy
-            SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint, spawnPointIndex);
             selectedEnemy.SpawnedCount++;
         }
     }
@@ -305,7 +354,7 @@ public class WaveManager : MonoBehaviour
             bossPool = new EnemyObjectPool(bossPrefab, poolParent.transform, 1); // Usually only need one boss
         }
     }
-    public void SpawnEnemy(GameObject enemyPrefab, Transform spawnPoint, int spawnIndex)
+    public void SpawnEnemy(GameObject enemyPrefab, Vector3 spawnPoint, bool spawningOutside)
     {
         if (enemyPools == null)
             return;
@@ -316,21 +365,53 @@ public class WaveManager : MonoBehaviour
             return;
         }
 
-        BaseEnemy enemy = pool.Get(spawnPoint.position, spawnPoint.rotation);
+        BaseEnemy enemy = pool.Get(spawnPoint, Quaternion.identity);
         enemy.OnEnemyDeath += OnEnemyDeath;
         enemy.AssignDefaultTarget(train, train.transform);
         // enemy is spawning outside the pod, play rise from ground animation
-        if(spawnIndex > 2)
+        if(spawningOutside)
             enemy.TriggerRiseAnimation();
 
         activeEnemies.Add(enemy);
         enemiesAlive++;
         enemiesSpawned++;
     }
+
+    protected Vector3 GetSpawnPointWithinZone()
+    {
+        Bounds zoneBounds = currentWave.outSideSpawnZone.bounds;
+
+        // Maximum attempts to find a valid position
+        int maxAttempts = 30;
+
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            // Generate a random position within the zone bounds
+            float offsetX = Random.Range(-zoneBounds.extents.x, zoneBounds.extents.x);
+            float offsetZ = Random.Range(-zoneBounds.extents.z, zoneBounds.extents.z);
+            Vector3 randomPoint = zoneBounds.center + new Vector3(offsetX, 0, offsetZ);
+
+            // Check if the point is on the NavMesh
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+            {
+                // Check if the position is clear of obstacles
+                if (!Physics.CheckSphere(hit.position, 0.5f, LayerMask.GetMask("Obstacle")))
+                {
+                    return hit.position;
+                }
+            }
+        }
+
+        // Fallback if no valid position found after max attempts
+        Debug.LogWarning("Could not find valid spawn position within " + maxAttempts + " attempts");
+        int index = Random.Range(4, currentWave.presetSpawnPoints.Length);
+        return currentWave.presetSpawnPoints[index].position;
+    }
     private void SpawnBossAndSquad()
     {
         // Spawn the boss
-        Transform spawnPoint = currentWave.spawnLocations[0];
+        Transform spawnPoint = currentWave.presetSpawnPoints[0];
         BaseEnemy boss = bossPool.Get(spawnPoint.position, spawnPoint.rotation);
         boss.AssignDefaultTarget(train, GameManager.Instance.players[0].transform);
         boss.transform.SetParent(transform);
@@ -355,10 +436,10 @@ public class WaveManager : MonoBehaviour
 
             for (int i = 0; i < countToSpawn; i++)
             {
-                int randomSpawnPoint = Random.Range(0, currentWave.spawnLocations.Length);
-                Transform squadSpawnPoint = currentWave.spawnLocations[randomSpawnPoint];
+                int randomSpawnPoint = Random.Range(0, currentWave.presetSpawnPoints.Length);
+                Transform squadSpawnPoint = currentWave.presetSpawnPoints[randomSpawnPoint];
 
-                SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint, randomSpawnPoint);
+                //SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint, randomSpawnPoint);
 
                 yield return new WaitForSeconds(0.1f); // Prevent overlap
             }
@@ -381,11 +462,19 @@ public class WaveManager : MonoBehaviour
 
             // Pick a random enemy type from the horde configuration
             var randomEnemyData = finalSettings.hordeEnemyTypes[
-                Random.Range(0, finalSettings.hordeEnemyTypes.Count)];
+            Random.Range(0, finalSettings.hordeEnemyTypes.Count)];
 
-            int randomSpawnPoint = Random.Range(0, currentWave.spawnLocations.Length);
-            Transform spawnPoint = currentWave.spawnLocations[randomSpawnPoint];
+            int randomSpawnPoint = Random.Range(0, currentWave.presetSpawnPoints.Length);
+            bool spawnOutside = false;
+            if(randomSpawnPoint > 3)
+                spawnOutside = true;
+            Vector3 spawnPoint = currentWave.presetSpawnPoints[randomSpawnPoint].position;
 
+            if (randomEnemyData.mustSpawnOutside)
+            {
+                spawnOutside = true;
+                spawnPoint = GetSpawnPointWithinZone();
+            }
             if (randomEnemyData.spawnAsGroup)
             {
                 // Spawn as a group
@@ -393,14 +482,14 @@ public class WaveManager : MonoBehaviour
                 {
                     if (randomEnemyData.SpawnedCount < randomEnemyData.totalToSpawn)
                     {
-                        SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint, randomSpawnPoint);
+                        SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint, spawnOutside);
                     }
                 }
             }
             else
             {
                 // Spawn single enemy
-                SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint, randomSpawnPoint);
+                SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint, spawnOutside);
             }
             // horde is endless
             //hordeSpawned++;

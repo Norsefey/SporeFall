@@ -55,7 +55,7 @@ public class EnemyRushSpawner : MonoBehaviour
             if (enemyToSpawn != null)
             {
                 // Select a spawn location
-                Transform spawnLocation = spawnSettings.spawnLocations[Random.Range(0, spawnSettings.spawnLocations.Length)];
+                Transform spawnLocation = spawnSettings.presetSpawnPoints[Random.Range(0, spawnSettings.presetSpawnPoints.Length)];
 
                 // Spawn the enemy
                 if (enemyToSpawn.spawnAsGroup)

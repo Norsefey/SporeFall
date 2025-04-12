@@ -9,11 +9,13 @@ using UnityEngine;
 public class EnemySpawnData
 {
     public string name;
-    public GameObject[] enemyVariants;
-    public int totalToSpawn;     // Total number of this enemy type to spawn
+    public bool mustSpawnOutside;
     public bool spawnAsGroup;    // Whether to spawn as a group
+    public int totalToSpawn;     // Total number of this enemy type to spawn
     public int groupSize;        // How many enemies per group (if spawning as group)
     private int spawnedCount;
+    [Header("Variants To Spawn")]
+    public GameObject[] enemyVariants;
     public GameObject EnemyToSpawn
     {
         get { return enemyVariants[Random.Range(0, enemyVariants.Length)]; }
@@ -36,7 +38,8 @@ public class Wave
 
     [Header("Enemy Settings")]
     public GameObject ShroomPod;
-    public Transform[] spawnLocations;
+    public Transform[] presetSpawnPoints;
+    public BoxCollider outSideSpawnZone;
 
     [Header("Regular Wave Enemies")]
     public List<EnemySpawnData> enemySpawnData = new();
