@@ -65,6 +65,9 @@ public class Structure : MonoBehaviour
                 case LilyLevel lily:
                     scale = lily.patrolRange * 2;
                     break;
+                case WallLevel wall:
+                    scale = wall.protectionRange * 2;
+                    break;
 
             }
             radiusIndicator.transform.localScale = new Vector3(scale, 0.3f, scale);

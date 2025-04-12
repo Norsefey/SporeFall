@@ -143,13 +143,13 @@ public class BuildGun : Weapon
                         Debug.LogError($"No pool found for Structure prefab: {buildableStructures[currentBuildIndex].name}");
                         return;
                     }
-                    selectedStructure = pool.Get(firePoint.position, Quaternion.identity).GetComponent<Structure>();
+                    selectedStructure = pool.Get(hit.point, Quaternion.identity).GetComponent<Structure>();
                     selectedStructure.poolBehavior.Initialize(pool);
                     selectedStructure.DisableStructureControls();
                 }
                 else
                 {
-                    selectedStructure = Instantiate(buildableStructures[currentBuildIndex], firePoint.position, Quaternion.identity).GetComponent<Structure>();
+                    selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
                     selectedStructure.DisableStructureControls();
                 }
 
