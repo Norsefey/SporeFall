@@ -435,6 +435,7 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void HandleSpawnerBehavior()
     {
+        Debug.Log("Spawn Egg Spawning Enemy");
         int index = Random.Range(0, entitiesToSpawn.Length);
 
         GameManager.Instance.waveManager.SpawnEnemy(entitiesToSpawn[index], transform.position, true);

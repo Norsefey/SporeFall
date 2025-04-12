@@ -436,10 +436,10 @@ public class WaveManager : MonoBehaviour
 
             for (int i = 0; i < countToSpawn; i++)
             {
-                int randomSpawnPoint = Random.Range(0, currentWave.presetSpawnPoints.Length);
-                Transform squadSpawnPoint = currentWave.presetSpawnPoints[randomSpawnPoint];
+                int randomSpawnPoint = Random.Range(0, 3);
+                Vector3 squadSpawnPoint = currentWave.presetSpawnPoints[randomSpawnPoint].position;
 
-                //SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint, randomSpawnPoint);
+                SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint, false);
 
                 yield return new WaitForSeconds(0.1f); // Prevent overlap
             }

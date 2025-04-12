@@ -37,11 +37,11 @@ public class WaveButton : Interactables
                 GameManager.Instance.waveManager.OnStartWave();
                 player.pUI.DisablePrompt();
                 break;
-        /*    case WaveManager.WavePhase.Departing:
+            case WaveManager.WavePhase.Departing:
                 GameManager.Instance.waveManager.SkipDepartTime();
                 player.pInput.RemoveInteraction(this);
                 RemovePrompt();
-                break;*/
+                break;
             default:
                 Debug.Log("No Action");
                 RemoveIntractable();
