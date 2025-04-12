@@ -15,9 +15,9 @@ public class WaveButton : Interactables
             case WaveManager.WavePhase.NotStarted:
                 player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()}  to Start Wave");
                 break;
-           /* case WaveManager.WavePhase.Departing:
+            case WaveManager.WavePhase.Departing:
                 player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to go to next Area");
-                break;*/
+                break;
         }
     }
 
