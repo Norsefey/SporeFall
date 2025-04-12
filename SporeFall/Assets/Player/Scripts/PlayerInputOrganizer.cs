@@ -42,6 +42,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     public InputAction editModeAction;
     private InputAction rotateStructAction;
     // Placement Actions
+    private InputAction hotKeySelection;
     public InputAction changeStructAction;
     private InputAction placeStructAction;
     // Edit Actions
@@ -49,6 +50,9 @@ public class PlayerInputOrganizer : MonoBehaviour
     public InputAction destroyStructAction;
     // have to store this, since Hold needs to be check first, and after that, release value is just zero
     private float rotationDirection = 0;
+    private float holdDuration = 0.6f; // Use duration of hold from InputAction asset
+    private float currentHoldTime = 0f;
+    private bool holdingSell = false;
 
     private void Awake()
     {
@@ -89,6 +93,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         rotateStructAction = buildInputMap.FindAction("Rotate");
         editModeAction = buildInputMap.FindAction("EditMode");
         // Placement Action map
+        hotKeySelection = placementInputMap.FindAction("HotKey");
         changeStructAction = placementInputMap.FindAction("Change");
         placeStructAction = placementInputMap.FindAction("Place");
         // Edit Action Maps
@@ -134,6 +139,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         rotateStructAction.started += OnRotateStarted;
         rotateStructAction.performed += OnRotate;
         // Placement Actions
+        hotKeySelection.performed += OnHotKeyPressed;
         changeStructAction.performed += OnCycleBuildStrcuture;
         placeStructAction.performed += OnPlaceStructure;
         // Edit Actions
@@ -172,6 +178,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         editModeAction.started -= OnToggleEditMode;
         rotateStructAction.started -= OnRotateStarted;
         rotateStructAction.performed -= OnRotate;
+        hotKeySelection.performed -= OnHotKeyPressed;
 
         // edit Actions
         moveStructAcion.started -= OnEditStructureMoveStarted;
@@ -253,9 +260,10 @@ public class PlayerInputOrganizer : MonoBehaviour
                 fireAction.started += OnFireStarted;
                 fireAction.canceled += OnFireCanceled;
 
-                pMan.ToggleBuildMode();
+                pMan.ToggleBuildMode(false);
 
                 editInputMap.Disable();
+                placementInputMap.Disable();
                 buildInputMap.Disable();
                 shootInputMap.Enable();
                 // After Shoot map is enabled re enable fire action
@@ -305,9 +313,10 @@ public class PlayerInputOrganizer : MonoBehaviour
                 fireAction.started += OnFireStarted;
                 fireAction.canceled += OnFireCanceled;
 
-                pMan.ToggleBuildMode();
+                pMan.ToggleBuildMode(false);
 
                 editInputMap.Disable();
+                placementInputMap.Disable();
                 buildInputMap.Disable();
                 shootInputMap.Enable();
                 // After Shoot map is enabled re enable fire action
@@ -459,6 +468,11 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
 
     // building stuff
+    private void OnHotKeyPressed(InputAction.CallbackContext context)
+    {
+        Debug.LogWarning(context.ReadValue<float>());
+        pMan.bGun.SelectStructureHotKey((int)context.ReadValue<float>());
+    }
     private void OnBuildMode(InputAction.CallbackContext context)
     {
         if (pMan.currentWeapon == null || !pMan.canBuild)
@@ -475,7 +489,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             fireAction.started += OnFireStarted;
             fireAction.canceled += OnFireCanceled;
             
-            pMan.ToggleBuildMode();
+            pMan.ToggleBuildMode(true);
 
             shootInputMap.Disable();
             editInputMap.Disable();
@@ -495,7 +509,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             fireAction.started += OnFireStarted;
             fireAction.canceled += OnFireCanceled;
 
-            pMan.ToggleBuildMode();
+            pMan.ToggleBuildMode(false);
 
             editInputMap.Disable();
             placementInputMap.Disable();
@@ -569,9 +583,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             pMan.isFiring = false;
         }
     }
-    private float holdDuration = 0.6f; // Use duration of hold from InputAction asset
-    private float currentHoldTime = 0f;
-    private bool holdingSell = false;
+
     private void OnEditSellStarted(InputAction.CallbackContext context)
     {
         if(pMan.bGun.selectedStructure == null)

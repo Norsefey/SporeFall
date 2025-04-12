@@ -186,7 +186,7 @@ public class BuildRoom : MonoBehaviour
             {
                 tutorialText.text = "You can pause at any time with <b>Esc</b> to review the controls if needed.";
             }
-            manager.player.ToggleBuildMode();
+            manager.player.ToggleBuildMode(false);
             StartCoroutine(TutorialComplete());
         }
     }

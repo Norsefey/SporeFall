@@ -824,6 +824,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""HotKey"",
+                    ""type"": ""Value"",
+                    ""id"": ""3b323f53-ce40-4f02-a240-e43e37cca424"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -936,6 +945,105 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Change"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a604267e-a815-4e09-a288-543cf40a36a3"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=0)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4e1bd09-8d0a-4bac-bb08-624f621256f7"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53c5d6e8-c8d4-4cb6-9d56-89d08598f9ed"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=2)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f7c081c-d1c5-4313-b0f3-c0432ca1ce65"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=3)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb5d429b-4a3f-456f-b33f-cec12bc8fe82"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=4)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3836cf75-6abf-442f-b7eb-ba16c1e44fb4"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=5)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e50fc47-c0ed-4e64-b5b3-2b63f4442659"",
+                    ""path"": ""<Keyboard>/7"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=6)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a7db820-80c3-44b0-8286-9be1e9fd4308"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=7)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1fc112e9-290d-4ecc-931a-e4b9892284bf"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=8)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HotKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1074,6 +1182,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_BuildPlacement_WideView = m_BuildPlacement.FindAction("WideView", throwIfNotFound: true);
         m_BuildPlacement_Place = m_BuildPlacement.FindAction("Place", throwIfNotFound: true);
         m_BuildPlacement_Change = m_BuildPlacement.FindAction("Change", throwIfNotFound: true);
+        m_BuildPlacement_HotKey = m_BuildPlacement.FindAction("HotKey", throwIfNotFound: true);
         // BuildEdit
         m_BuildEdit = asset.FindActionMap("BuildEdit", throwIfNotFound: true);
         m_BuildEdit_Move = m_BuildEdit.FindAction("Move", throwIfNotFound: true);
@@ -1462,6 +1571,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_BuildPlacement_WideView;
     private readonly InputAction m_BuildPlacement_Place;
     private readonly InputAction m_BuildPlacement_Change;
+    private readonly InputAction m_BuildPlacement_HotKey;
     public struct BuildPlacementActions
     {
         private @GameInputs m_Wrapper;
@@ -1469,6 +1579,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @WideView => m_Wrapper.m_BuildPlacement_WideView;
         public InputAction @Place => m_Wrapper.m_BuildPlacement_Place;
         public InputAction @Change => m_Wrapper.m_BuildPlacement_Change;
+        public InputAction @HotKey => m_Wrapper.m_BuildPlacement_HotKey;
         public InputActionMap Get() { return m_Wrapper.m_BuildPlacement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1487,6 +1598,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Change.started += instance.OnChange;
             @Change.performed += instance.OnChange;
             @Change.canceled += instance.OnChange;
+            @HotKey.started += instance.OnHotKey;
+            @HotKey.performed += instance.OnHotKey;
+            @HotKey.canceled += instance.OnHotKey;
         }
 
         private void UnregisterCallbacks(IBuildPlacementActions instance)
@@ -1500,6 +1614,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Change.started -= instance.OnChange;
             @Change.performed -= instance.OnChange;
             @Change.canceled -= instance.OnChange;
+            @HotKey.started -= instance.OnHotKey;
+            @HotKey.performed -= instance.OnHotKey;
+            @HotKey.canceled -= instance.OnHotKey;
         }
 
         public void RemoveCallbacks(IBuildPlacementActions instance)
@@ -1627,6 +1744,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnWideView(InputAction.CallbackContext context);
         void OnPlace(InputAction.CallbackContext context);
         void OnChange(InputAction.CallbackContext context);
+        void OnHotKey(InputAction.CallbackContext context);
     }
     public interface IBuildEditActions
     {

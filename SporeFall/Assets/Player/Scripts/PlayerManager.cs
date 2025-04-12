@@ -337,12 +337,12 @@ public class PlayerManager : MonoBehaviour
 
     }
     #region Toggle Switches
-    public void ToggleBuildMode()
+    public void ToggleBuildMode(bool toggle)
     {
         if(currentWeapon == null)
             return;
 
-        if (!isBuilding && canBuild)
+        if (toggle && canBuild)
         {// Enter Build mode
          // Avoid getting Stuck in reload
             if (currentWeapon.IsReloading)
@@ -362,7 +362,7 @@ public class PlayerManager : MonoBehaviour
                 Tutorial.Instance.ProgressTutorial();
             }
         }
-        else
+        else if(!toggle)
         {// Exit Build Mode
             if (bGun.isEditing)
             {
@@ -398,7 +398,7 @@ public class PlayerManager : MonoBehaviour
     public void TogglePControl(bool toggle)
     {
         if (isBuilding)
-            ToggleBuildMode();
+            ToggleBuildMode(false);
 
         pController.gameObject.SetActive(toggle);
         canUseWeapon = toggle;
@@ -452,13 +452,12 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("Starting Player Respawn");
 
-        // Clean up current state
-        DropWeapon();
         if (isBuilding)
         {
-            ToggleBuildMode();
+            ToggleBuildMode(false);
         }
-
+        // Clean up current state
+        DropWeapon();
         // Disable player control during respawn
         TogglePControl(false);
 

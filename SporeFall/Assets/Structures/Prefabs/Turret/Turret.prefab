@@ -222,6 +222,7 @@ MonoBehaviour:
     CanBounce: 0
     MaxBounces: 0
     BounceDamageMultiplier: 0
+    TargetPosition: {x: 0, y: 0, z: 0}
   minimumFireRange: 4
   turretGuns: {fileID: 7386922474431716262}
   firePoint: {fileID: 8771439348193518876}
@@ -788,6 +789,7 @@ GameObject:
   - component: {fileID: 3218984382985230232}
   - component: {fileID: 6081240762546597935}
   - component: {fileID: 4098067293238010729}
+  - component: {fileID: 7068259949843871092}
   m_Layer: 16
   m_Name: Canvas_PlayerTwo
   m_TagString: Untagged
@@ -892,6 +894,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpDisplay: {fileID: 1041246014903278183}
   hpManager: {fileID: 7830201162772373882}
+  groupAlpha: {fileID: 7068259949843871092}
+--- !u!225 &7068259949843871092
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7506181264882908505}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7803891679004859852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,6 +1140,7 @@ GameObject:
   - component: {fileID: 5270682931492514626}
   - component: {fileID: 5709022887672907816}
   - component: {fileID: 60285776059258508}
+  - component: {fileID: 2241055970194085425}
   m_Layer: 15
   m_Name: Canvas_PlayerOne
   m_TagString: Untagged
@@ -1229,6 +1245,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpDisplay: {fileID: 7430450782423788366}
   hpManager: {fileID: 7830201162772373882}
+  groupAlpha: {fileID: 7068259949843871092}
+--- !u!225 &2241055970194085425
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8469349313426547676}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &8824594066713120071
 GameObject:
   m_ObjectHideFlags: 0

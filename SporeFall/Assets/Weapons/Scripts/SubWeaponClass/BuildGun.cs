@@ -466,6 +466,21 @@ public class BuildGun : Weapon
     }*/
     #endregion
 
+    public void SelectStructureHotKey(int index)
+    {
+        if (index >= buildableStructures.Count || index < 0)
+            return;
+        currentBuildIndex = index;
+        placeableLayerMask = buildableStructures[currentBuildIndex].GetComponent<Structure>().placeableLayer;
+        structureOverlapMask = buildableStructures[currentBuildIndex].GetComponent<Structure>().collisionOverlapLayer;
+
+        if (selectedStructure != null)
+        {
+            RemovePreview();
+        }
+        selectedStructure = null;
+        PreviewStructure();
+    }
 
     #region EditMode
     public void EnterEditMode()
