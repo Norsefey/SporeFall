@@ -1,80 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7431310137357161719
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
-  m_Name: Bloom
-  m_EditorClassIdentifier: 
-  active: 1
-  skipIterations:
-    m_OverrideState: 0
-    m_Value: 1
-  threshold:
-    m_OverrideState: 1
-    m_Value: 15.09
-  intensity:
-    m_OverrideState: 1
-    m_Value: 2.15
-  scatter:
-    m_OverrideState: 0
-    m_Value: 0.7
-  clamp:
-    m_OverrideState: 1
-    m_Value: 217.35
-  tint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-  highQualityFiltering:
-    m_OverrideState: 0
-    m_Value: 0
-  downscale:
-    m_OverrideState: 0
-    m_Value: 0
-  maxIterations:
-    m_OverrideState: 0
-    m_Value: 6
-  dirtTexture:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
-    dimension: 1
-  dirtIntensity:
-    m_OverrideState: 0
-    m_Value: 0
---- !u!114 &-6960707511402544986
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
-  m_Name: ColorAdjustments
-  m_EditorClassIdentifier: 
-  active: 1
-  postExposure:
-    m_OverrideState: 0
-    m_Value: 0
-  contrast:
-    m_OverrideState: 0
-    m_Value: 0
-  colorFilter:
-    m_OverrideState: 1
-    m_Value: {r: 0.8962264, g: 0.89553094, b: 0.6468049, a: 1}
-  hueShift:
-    m_OverrideState: 1
-    m_Value: -8
-  saturation:
-    m_OverrideState: 1
-    m_Value: -11
 --- !u!114 &-6285597347802958511
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -271,8 +196,8 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.29032257
-          value: 0.4375
+          time: 0.23310024
+          value: 0.38235295
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -349,6 +274,34 @@ MonoBehaviour:
   maxNits:
     m_OverrideState: 0
     m_Value: 1000
+--- !u!114 &-3215099393010667477
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
+  m_Name: ColorAdjustments
+  m_EditorClassIdentifier: 
+  active: 1
+  postExposure:
+    m_OverrideState: 1
+    m_Value: 0.19
+  contrast:
+    m_OverrideState: 0
+    m_Value: 0
+  colorFilter:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0.9735405, b: 0.759434, a: 1}
+  hueShift:
+    m_OverrideState: 1
+    m_Value: -60
+  saturation:
+    m_OverrideState: 1
+    m_Value: 59
 --- !u!114 &-676316312335946664
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -370,7 +323,7 @@ MonoBehaviour:
     m_Value: {x: 0.6858127, y: 0.9054421, z: 1, w: 0.13597034}
   highlights:
     m_OverrideState: 0
-    m_Value: {x: 1, y: 0.9652591, z: 0.8892115, w: 0}
+    m_Value: {x: 1, y: 0.9652591, z: 0.8892115, w: 0.052356016}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
@@ -393,7 +346,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: TW_Default_Volume
+  m_Name: TW_Boss_VolumeProfile
   m_EditorClassIdentifier: 
   components:
   - {fileID: 8112656758820985040}
@@ -402,9 +355,33 @@ MonoBehaviour:
   - {fileID: -676316312335946664}
   - {fileID: -6285597347802958511}
   - {fileID: 2920046915590935499}
-  - {fileID: 5559807153606192319}
-  - {fileID: -7431310137357161719}
-  - {fileID: -6960707511402544986}
+  - {fileID: 2890488130320397889}
+  - {fileID: -3215099393010667477}
+--- !u!114 &2890488130320397889
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fa0085f50d5e54f8144f766051a691, type: 3}
+  m_Name: FilmGrain
+  m_EditorClassIdentifier: 
+  active: 1
+  type:
+    m_OverrideState: 1
+    m_Value: 5
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.17
+  response:
+    m_OverrideState: 1
+    m_Value: 0.604
+  texture:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
 --- !u!114 &2920046915590935499
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -423,7 +400,7 @@ MonoBehaviour:
     m_Value: 1
   gaussianStart:
     m_OverrideState: 1
-    m_Value: 125.7
+    m_Value: 2059.6
   gaussianEnd:
     m_OverrideState: 0
     m_Value: 30
@@ -466,32 +443,13 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.96765095, z: 0.8708352, w: 0}
+    m_Value: {x: 0.9938946, y: 1, z: 0.8712267, w: 0}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 0.83785534, y: 1, z: 0.85437447, w: 0.038314834}
+    m_Value: {x: 0.89552987, y: 0.9656107, z: 1, w: 0.060125083}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 0.95226765, y: 0.9579896, z: 1, w: 0.3707742}
---- !u!114 &5559807153606192319
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 221518ef91623a7438a71fef23660601, type: 3}
-  m_Name: WhiteBalance
-  m_EditorClassIdentifier: 
-  active: 1
-  temperature:
-    m_OverrideState: 1
-    m_Value: -69
-  tint:
-    m_OverrideState: 1
-    m_Value: 79
+    m_Value: {x: 0.6494288, y: 0.8763929, z: 1, w: 0}
 --- !u!114 &8112656758820985040
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -507,13 +465,13 @@ MonoBehaviour:
   active: 1
   color:
     m_OverrideState: 1
-    m_Value: {r: 0, g: 0.23584908, b: 0.04641656, a: 1}
+    m_Value: {r: 0.1882353, g: 0.18770252, b: 0.039215684, a: 1}
   center:
     m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.533
+    m_Value: 0.25
   smoothness:
     m_OverrideState: 1
     m_Value: 0.231
