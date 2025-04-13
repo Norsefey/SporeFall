@@ -207,7 +207,14 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene(tutorialName);
     }
-
+    public void SetDifficulty(bool easyMode)
+    {
+        if (PersistentGameManager.Instance != null)
+        {
+            PersistentGameManager.Instance.SetEasyMode(easyMode);
+            Debug.Log("Easy Mode: " + easyMode);
+        }
+    }
     public void StartLevel(int index)
     {
         LoadingScreen.SetActive(true);
@@ -253,7 +260,7 @@ public class MainMenu : MonoBehaviour
 
         while (!operation.isDone)
         {
-            Debug.Log(operation.progress);
+            //Debug.Log(operation.progress);
             // Update progress bar (normalized 0 to 1)
             progressBar.value = Mathf.Clamp01(operation.progress / 0.9f);
 

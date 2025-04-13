@@ -24,19 +24,19 @@ public class ApplyColors : MonoBehaviour
     // Called on player join by game Manager
     public void SetColors(int index)
     {
-        if (PlayerColorManager.Instance != null)
+        if (PersistentGameManager.Instance != null)
         {
             Color primaryColor;
             Color secondaryColor;
             if (index == 2)
             {
-                primaryColor = PlayerColorManager.Instance.GetColor(ColorPickerMode.Player2Primary);
-                secondaryColor = PlayerColorManager.Instance.GetColor(ColorPickerMode.Player2Secondary);
+                primaryColor = PersistentGameManager.Instance.GetColor(ColorPickerMode.Player2Primary);
+                secondaryColor = PersistentGameManager.Instance.GetColor(ColorPickerMode.Player2Secondary);
             }
             else
             {
-                primaryColor = PlayerColorManager.Instance.GetColor(ColorPickerMode.Player1Primary);
-                secondaryColor = PlayerColorManager.Instance.GetColor(ColorPickerMode.Player1Secondary); 
+                primaryColor = PersistentGameManager.Instance.GetColor(ColorPickerMode.Player1Primary);
+                secondaryColor = PersistentGameManager.Instance.GetColor(ColorPickerMode.Player1Secondary); 
             }
            
 

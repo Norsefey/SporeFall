@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerColorManager : MonoBehaviour
+public class PersistentGameManager : MonoBehaviour
 {
-    public static PlayerColorManager Instance { get; private set; }
+    public static PersistentGameManager Instance { get; private set; }
 
-    private Color player1Primary = Color.white;
-    private Color player1Secondary = Color.blue;
-    private Color player2Primary = Color.black;
-    private Color player2Secondary = Color.red;
+    [SerializeField] private Color player1Primary = Color.white;
+    [SerializeField] private Color player1Secondary = Color.blue;
+    [SerializeField] private Color player2Primary = Color.black;
+    [SerializeField] private Color player2Secondary = Color.red;
 
+    private bool easyMode = false;
     private void Awake()
     {
         if (Instance == null)
@@ -41,7 +42,6 @@ public class PlayerColorManager : MonoBehaviour
                 break;
         }
     }
-
     public Color GetColor(ColorPickerMode mode)
     {
         return mode switch
@@ -53,4 +53,6 @@ public class PlayerColorManager : MonoBehaviour
             _ => Color.white
         };
     }
+    public bool GetEasyMode() { return easyMode;}
+    public void SetEasyMode(bool toggle) { easyMode = toggle;}
 }

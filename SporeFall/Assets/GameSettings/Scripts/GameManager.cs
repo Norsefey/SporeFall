@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Build System")]
     public List<GameObject> availableStructures;
-    [SerializeField] private float mycelia = 200;
+    private float mycelia;
     public float Mycelia { get { return mycelia; } }
     private bool tutorialMycelia = true;
 
@@ -31,6 +31,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] BackUpPlayerSpawner backUpPlayerSpawner;
     public static event Action<int> OnPlayerJoin;
     public static event Action OnPlayerLeave;
+
+    [Header("Difficulty Adjustments")]
+    [Space(5)]
+    [Header("Normal Difficulty")]
+    [SerializeField] private float maxTrainHP_N = 1000;
+    [SerializeField] private float trainDamageReduction_N = 0;
+    [SerializeField] private float startingMycelia_N = 150;
+    [Header("Easy Difficulty")]
+    [SerializeField] private float maxTrainHP_E = 2000;
+    [SerializeField] private float trainDamageReduction_E = .25f;
+    [SerializeField] private float startingMycelia_E = 200;
+
+
     [Space(25)]
     public bool isTesting = false;
     private void Awake()
@@ -43,6 +56,22 @@ public class GameManager : MonoBehaviour
         }
         //Debug.Log("Setting Game Manager Instance");
         Instance = this;
+
+        if(PersistentGameManager.Instance != null)
+        {
+            if (PersistentGameManager.Instance.GetEasyMode())
+            {// Easy Difficulty settings
+                trainHandler.trainHP.SetMaxHP(maxTrainHP_E);
+                trainHandler.trainHP.damageModifier = trainDamageReduction_E;
+                mycelia = startingMycelia_E;
+            }
+            else // Normal Difficulty settings
+            {
+                trainHandler.trainHP.SetMaxHP(maxTrainHP_N);
+                trainHandler.trainHP.damageModifier = trainDamageReduction_N;
+                mycelia = startingMycelia_N;
+            }
+        }
     }
     private void Start()
     {

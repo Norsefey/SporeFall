@@ -198,9 +198,9 @@ public class ColorPickerControl : MonoBehaviour
     private void SetInitialColor()
     {
 
-        if (PlayerColorManager.Instance != null)
+        if (PersistentGameManager.Instance != null)
         {
-            Color currentColor = PlayerColorManager.Instance.GetColor(currentMode);
+            Color currentColor = PersistentGameManager.Instance.GetColor(currentMode);
             materialToChange.SetColor("_BaseColor", currentColor);
             Color.RGBToHSV(currentColor, out currentHue, out currentSat, out currentVal);
             Debug.Log(currentColor.ToString());
@@ -238,9 +238,9 @@ public class ColorPickerControl : MonoBehaviour
         materialToChange.SetColor("_BaseColor", currentColor);
 
         // Store the selected color in ColorManager
-        if (PlayerColorManager.Instance != null)
+        if (PersistentGameManager.Instance != null)
         {
-            PlayerColorManager.Instance.SetColor(currentMode, currentColor);
+            PersistentGameManager.Instance.SetColor(currentMode, currentColor);
         }
     }
     public void SetSV(float s, float v)
