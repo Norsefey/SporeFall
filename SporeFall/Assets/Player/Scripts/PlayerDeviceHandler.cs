@@ -53,6 +53,11 @@ public class PlayerDeviceHandler : MonoBehaviour
 
     private void Start()
     {
+        
+    }
+
+    private void Update()
+    {
         if (Tutorial.Instance != null)
         {
             if (Tutorial.Instance.playerActive == true && tutorialNeeded == true)
@@ -114,29 +119,31 @@ public class PlayerDeviceHandler : MonoBehaviour
         //Debug.Log($"Player {playerInput.playerIndex} joined with device {playerInput.devices[0].displayName}");
         players.Add(playerInput);
 
-        if (singlePlayer && players.Count == 1)
+        if (players.Count == 1)
         {
-            // In single player, disable joining after first player
-            inputManager.DisableJoining();
-
             if (playerInput.devices[0].displayName == "Xbox Controller")
             {
-                //Debug.Log("Setting usingXbox to true");
+                Debug.Log("Setting usingXbox to true");
                 usingXbox = true;
             }
 
             else if (playerInput.devices[0].displayName == "PlayStation Controller")
             {
-               // Debug.Log("Setting usingPlaystation to true");
+                Debug.Log("Setting usingPlaystation to true");
                 usingPlaystation = true;
             }
 
             else if (playerInput.devices[0].displayName == "Keyboard" || playerInput.devices[0].displayName == "Mouse")
             {
-               // Debug.Log("Setting usingKeyboard to true");
+                Debug.Log("Setting usingKeyboard to true");
                 usingKeyboard = true;
             }
 
+            if (singlePlayer)
+            {
+                // In single player, disable joining after first player
+                inputManager.DisableJoining();
+            }
         }
         else if(players.Count > 1)
         {

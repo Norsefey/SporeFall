@@ -81,6 +81,7 @@ public class PlayerManager : MonoBehaviour
 
         if(Tutorial.Instance != null)
             Tutorial.Instance.playerActive = true;
+            Debug.Log("Telling tutorial player is active");
     }
     private void Start()
     {
@@ -361,7 +362,7 @@ public class PlayerManager : MonoBehaviour
             pUI.SwitchWeaponIcon();
             pAnime.SetWeaponHoldAnimation(1);
             isBuilding = true;
-            if (Tutorial.Instance != null && Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 15)
+            if (Tutorial.Instance != null && SavedSettings.currentLevel == "Tutorial" && Tutorial.Instance.tutorialPrompt == 15)
             {
                 Tutorial.Instance.ProgressTutorial();
             }

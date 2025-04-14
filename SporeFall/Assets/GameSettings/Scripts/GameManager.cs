@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
     {
         if (Tutorial.Instance != null)
         {
-            if (Tutorial.Instance.currentScene == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
+            if (SavedSettings.currentLevel == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
             {
                 tutorialMycelia = false;
                 IncreaseMycelia(25);

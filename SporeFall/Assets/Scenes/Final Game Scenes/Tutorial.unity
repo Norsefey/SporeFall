@@ -3256,6 +3256,7 @@ MonoBehaviour:
   canTakeDamage: 0
   maxHP: 100
   isDead: 0
+  damageModifier: 0
   weaponPickUp: {fileID: 6532063570002770165}
   shootingRoomTutorial: {fileID: 441556096}
 --- !u!65 &250067694
@@ -18735,6 +18736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpDisplay: {fileID: 1352636152}
   hpManager: {fileID: 250067693}
+  groupAlpha: {fileID: 0}
 --- !u!114 &1079458459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21782,6 +21784,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpDisplay: {fileID: 1934942365}
   hpManager: {fileID: 250067693}
+  groupAlpha: {fileID: 0}
 --- !u!114 &1260969455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50147,6 +50150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpDisplay: {fileID: 8293907464833138600}
   hpManager: {fileID: 4879674826133495315}
+  groupAlpha: {fileID: 0}
 --- !u!114 &4246884996535591455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50983,6 +50987,7 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 100
   isDead: 0
+  damageModifier: 0
   weaponPickUp: {fileID: 6532063570002770165}
   shootingRoomTutorial: {fileID: 441556096}
 --- !u!198 &4880530760563608947
@@ -56418,6 +56423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpDisplay: {fileID: 4220357971476296559}
   hpManager: {fileID: 4879674826133495315}
+  groupAlpha: {fileID: 0}
 --- !u!1 &5460505455086603136
 GameObject:
   m_ObjectHideFlags: 0
@@ -57053,7 +57059,6 @@ MonoBehaviour:
   - {fileID: 2143417820075499101, guid: 877219f937a427a4889d673a029d294d, type: 3}
   - {fileID: 1083017409998067897, guid: 32bb110230eb1c844bbcf862215db098, type: 3}
   - {fileID: 3745370869290195764, guid: 49278954c29530a47a63cd420176d3be, type: 3}
-  mycelia: 470
   players: []
   playerOneUI:
     serializedVersion: 2
@@ -57062,6 +57067,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   backUpPlayerSpawner: {fileID: 344367097}
+  maxTrainHP_N: 1000
+  trainDamageReduction_N: 0
+  startingMycelia_N: 150
+  maxTrainHP_E: 2000
+  trainDamageReduction_E: 0.25
+  startingMycelia_E: 200
   isTesting: 1
 --- !u!223 &6170230897045590387
 Canvas:
