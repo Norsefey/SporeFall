@@ -158,6 +158,7 @@ public class PauseMenu : MonoBehaviour
         mainConfirmScreen.SetActive(false);
         retryConfirmScreen.SetActive(false);
         quitConfirmScreen.SetActive(false);
+        savedFirstButton = firstPausedButton;
     }
 
     public void Back()
