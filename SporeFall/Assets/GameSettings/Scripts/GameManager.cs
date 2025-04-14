@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
                 players[i].pCamera.SetMouseP1();
             }
 
-            else if (i == 1)
+            else if (i > 0)
             {
                 players[i].pCamera.SetMouseP2();
             }
@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
                 players[i].pCamera.SetGamepadP1();
             }
 
-            else if (i == 1)
+            else if (i > 0)
             {
                 players[i].pCamera.SetGamepadP2();
             }

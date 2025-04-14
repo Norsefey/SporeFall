@@ -236,6 +236,17 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""SkipCutscene"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f2049e8c-623f-408b-a9e4-7b9ea73110e0"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SkipCutscene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },

@@ -626,7 +626,7 @@ public class Tutorial : MonoBehaviour
     IEnumerator InitialCooldown()
     {
         //Delay for main level tutorial so tutorial pops up once train has stopped moving
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(20);
         Debug.Log("Showing first prompt");
         tutorialPopup.SetActive(true);
         bgImage.SetActive(true);
