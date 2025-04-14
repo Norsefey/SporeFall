@@ -66,6 +66,7 @@ public class PlayerManager : MonoBehaviour
     public float slowDownMultiplier = .25f;
     public bool inToxicWater;
 
+    [HideInInspector] public string playerDevice;
     public Coroutine respawnCoroutine;
 
     private bool godMode = false;
@@ -184,6 +185,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void SetDeviceSettings()
     {
+        Debug.Log("Setting device settings");
         PlayerInput playerInput = GetComponent<PlayerInput>();
         if (playerInput.devices.Count > 0)
         {
@@ -191,6 +193,7 @@ public class PlayerManager : MonoBehaviour
             myDevice = device;
             if (device is Gamepad)
             {
+                playerDevice = "Gamepad";
                 Debug.Log("I am using a gamepad");
                 pCamera.SetGamepadSettings();
                 bGun.structRotSpeed = 50;
@@ -198,6 +201,7 @@ public class PlayerManager : MonoBehaviour
             }
             else if (device is Keyboard || device is Mouse)
             {
+                playerDevice = "Mouse";
                 Debug.Log("I am using a keyboard");
                 pCamera.SetMouseSettings();
                 bGun.structRotSpeed = 25;

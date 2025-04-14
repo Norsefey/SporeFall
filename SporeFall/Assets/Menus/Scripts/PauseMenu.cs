@@ -14,6 +14,7 @@ public class PauseMenu : MonoBehaviour
 
     [SerializeField] string level1Name;
     [SerializeField] SettingsMenu settings;
+    [SerializeField] GameManager manager;
     public AudioMixer audioMixer;
 
     [Header("Menus")]
@@ -119,6 +120,7 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenPauseMenu()
     {
+        Debug.Log("Player count is: " + GameManager.Instance.players.Count);
         pauseMenuBG.SetActive(true);
         defaultScreen.SetActive(true);
         settingsScreen.SetActive(false);

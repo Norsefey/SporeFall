@@ -54,12 +54,11 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-
+        SavedSettings.currentLevel = "MainMenu";
         if (SavedSettings.firstOpenedGame)
         {
             //Set audio mixer volumes to given numbers
             Debug.Log("Game first started, setting volumes");
-            SavedSettings.firstOpenedGame = false;
 
             audioMixer.SetFloat("masterVolume", masterVolume);
             audioMixer.SetFloat("musicVolume", musicVolume);
@@ -181,20 +180,31 @@ public class MainMenu : MonoBehaviour
 
     public void TutorialQuestion()
     {
-        tutorialQuestionScreen.SetActive(true);
-        mainScreen.SetActive(false);
-        if (isControllerConnected)
+        if (SavedSettings.firstOpenedGame)
         {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(firstTutorialButton);
+            tutorialQuestionScreen.SetActive(true);
+            mainScreen.SetActive(false);
+            if (isControllerConnected)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(firstTutorialButton);
+            }
+            savedFirstButton = firstTutorialButton;
+            SavedSettings.firstOpenedGame = false;
         }
-        savedFirstButton = firstTutorialButton;
+
+        else
+        {
+            LevelSelect();
+        }
+        
     }
 
     public void LevelSelect()
     {
         levelSelectScreen.SetActive(true);
         tutorialQuestionScreen.SetActive(false);
+        mainScreen.SetActive(false);
         if (isControllerConnected)
         {
             EventSystem.current.SetSelectedGameObject(null);
@@ -206,6 +216,7 @@ public class MainMenu : MonoBehaviour
     public void StartTutorial()
     {
         SceneManager.LoadScene(tutorialName);
+        SavedSettings.currentLevel = "Tutorial";
     }
     public void SetDifficulty(bool easyMode)
     {

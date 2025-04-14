@@ -43,11 +43,27 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float trainDamageReduction_E = .25f;
     [SerializeField] private float startingMycelia_E = 200;
 
+    private int sceneIndex;
+
 
     [Space(25)]
     public bool isTesting = false;
     private void Awake()
     {
+        sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (sceneIndex == 1)
+        {
+            SavedSettings.currentLevel = "GlowingForest";
+        }
+        else if (sceneIndex == 5)
+        {
+            SavedSettings.currentLevel = "Tutorial";
+        }
+        else if (sceneIndex == 7)
+        {
+            SavedSettings.currentLevel = "ToxicSwamp";
+        }
+
         Time.timeScale = 1.0f;
         if (Instance != null && Instance != this)
         {
@@ -75,6 +91,8 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        
+        Debug.Log("Player count is: " + players.Count);
         gameUI.DisplayMycelia(mycelia);
     }
     private void Update()
@@ -185,6 +203,35 @@ public class GameManager : MonoBehaviour
         if (Instance == this)
         {
             Instance = null;
+        }
+    }
+
+    public void UpdatePlayerSensitivity(int i)
+    {
+        if (players[i].playerDevice == "Mouse")
+        {
+            if (i == 0)
+            {
+                players[i].pCamera.SetMouseP1();
+            }
+
+            else if (i == 1)
+            {
+                players[i].pCamera.SetMouseP2();
+            }
+        }
+
+        else if (players[i].playerDevice == "Gamepad")
+        {
+            if (i == 0)
+            {
+                players[i].pCamera.SetGamepadP1();
+            }
+
+            else if (i == 1)
+            {
+                players[i].pCamera.SetGamepadP2();
+            }
         }
     }
 }

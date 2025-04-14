@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class SettingsMenu : MonoBehaviour
 {
@@ -230,6 +231,11 @@ public class SettingsMenu : MonoBehaviour
         SavedSettings.mouseCamSensitivity = sensitivity;
         SavedSettings.gamepadHorCamSensitivity = sensitivity * 10;
         SavedSettings.gamepadVertCamSensitivity = sensitivity * 8;
+
+        if (SavedSettings.currentLevel != "MainMenu")
+        {
+            GameManager.Instance.UpdatePlayerSensitivity(0);
+        }
     }
 
     public void SetSensitivity2(float sensitivity)
@@ -239,6 +245,11 @@ public class SettingsMenu : MonoBehaviour
         SavedSettings.mouseCamSensitivity2 = sensitivity;
         SavedSettings.gamepadHorCamSensitivity2 = sensitivity * 10;
         SavedSettings.gamepadVertCamSensitivity2 = sensitivity * 8;
+
+        if (SavedSettings.currentLevel != "MainMenu" && GameManager.Instance.players.Count > 1)
+        {
+            GameManager.Instance.UpdatePlayerSensitivity(1);
+        }
     }
 
     public void FullscreenToggle()

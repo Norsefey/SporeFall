@@ -18,6 +18,6 @@ public static class SavedSettings
 
     public static bool firstOpenedGame = true;
 
-    public static string currentLevel = "GlowingForest";
+    public static string currentLevel;
 
 }
