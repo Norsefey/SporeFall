@@ -64,14 +64,7 @@ public class MovementRoomTutorial : MonoBehaviour
     {
         // allow time for players to read tutorial even if they are doing the action
         detectInput = false;
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Use Right STICK to Look around";
-        }
-        else
-        {
-            tutorialText.text = "Use Mouse to Look around";
-        }
+        tutorialText.text = "Use " + TutorialControls.Instance.lookInput + " to Look around";
         // start listening for action input
         Invoke(nameof(ToggleStartDetectingInput), nextPromptDelay);
     }
@@ -89,14 +82,7 @@ public class MovementRoomTutorial : MonoBehaviour
     private void StartMovementTutorial()
     {
         detectInput = false;
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Use LEFT STICK to walk around";
-        }
-        else
-        {
-            tutorialText.text = "Use WASD to walk around";
-        }
+        tutorialText.text = "Use " + TutorialControls.Instance.moveInput + " to walk around";
         Invoke(nameof(ToggleStartDetectingInput), nextPromptDelay);
     }
     private void WaitForMovementInput()
@@ -114,15 +100,8 @@ public class MovementRoomTutorial : MonoBehaviour
     private void StartSprintTutorial()
     {
         detectInput = false;
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Hold Down on LEFT STICK to Sprint";
-        }
-        else
-        {
-            tutorialText.text = "Hold SHIFT to Sprint";
-        }
-        
+        tutorialText.text = "Hold down " + TutorialControls.Instance.sprintInput + " to Sprint";
+
         Invoke(nameof(ToggleStartDetectingInput), nextPromptDelay);
     }
     private void WaitForSprintInput()
@@ -139,14 +118,7 @@ public class MovementRoomTutorial : MonoBehaviour
     private void StartJumpTutorial()
     {
         detectInput = false;
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Press <b>SOUTH Button</b> to Look around";
-        }
-        else
-        {
-            tutorialText.text = "Press <b>SPACEBAR</b> to Jump";
-        }
+        tutorialText.text = "Press <b>" + TutorialControls.Instance.jumpInput + "</b> to Jump";
         Invoke(nameof(ToggleStartDetectingInput), nextPromptDelay);
     }
     private void WaitForJumpInput()

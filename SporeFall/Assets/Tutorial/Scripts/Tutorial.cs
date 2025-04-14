@@ -9,6 +9,7 @@ using UnityEngine.Rendering;
 public class Tutorial : MonoBehaviour
 {
     public static Tutorial Instance;
+    //[SerializeField] private TutorialControls tControl;
 
     [Header("Game Objects")]
     [SerializeField] GameObject tutorialPopup;
@@ -20,38 +21,16 @@ public class Tutorial : MonoBehaviour
 
     [Header("Main Variables")]
     public int tutorialPrompt = 0;
-    private bool tutorialActive = false;
+    //private bool tutorialActive = false;
     private bool mainLevelTutorial = false;
     public bool tutorialStarted = false;
-    public bool playerActive = false;
-
-    public bool usingKeyboard = false;
-    public bool usingGamepad = false;
-    public bool usingXbox = false;
-    public bool usingPlaystation = false;
+    
     private bool canProgress = false;
     public bool clickNeeded = false;
 
     [HideInInspector] public float timer = 0f;
     private bool timerStarted = false;
     private bool timerNeeded = false;
-
-    //Shows different controls based on what device is being used
-    private string continueInput;
-    private string moveInput;
-    private string sprintInput;
-    private string jumpInput;
-    private string lookInput;
-    private string aimInput;
-    private string shootInput;
-    private string reloadInput;
-    private string pickupInput;
-    private string dropInput;
-    private string buildInput;
-    private string scrollInput;
-    private string destroyInput;
-    private string pauseInput;
-    private string skipInput;
 
     private void Awake()
     {
@@ -103,58 +82,37 @@ public class Tutorial : MonoBehaviour
             tutorialStarted = true;
         }
 
-        if (playerActive == true && tutorialStarted == true)
+        if (TutorialControls.Instance != null && TutorialControls.Instance.playerActive == true && tutorialStarted == true && TutorialControls.Instance.controlsSet)
         {
             if (SavedSettings.currentLevel == "Tutorial")
             {
                 //Tutorial displays different controls depending on what device player is using
-
-                if (usingKeyboard == true)
+                
+                if (tutorialStarted == true)
                 {
-                    Debug.Log("Starting keyboard tutorial");
                     tutorialStarted = false;
-                    SetKeyboardInputs();
-                    StartTutorial();
-                }
-
-                else if (usingXbox == true)
-                {
-                    Debug.Log("Starting xbox tutorial");
-                    tutorialStarted = false;
-                    SetXboxInputs();
-                    StartTutorial();
-                }
-
-                else if (usingPlaystation == true)
-                {
-                    Debug.Log("Starting PS tutorial");
-                    tutorialStarted = false;
-                    SetPlaystationInputs();
                     StartTutorial();
                 }
             }
             else
             {
                 Debug.Log("Starting main level tutorial");
-                if (usingKeyboard == true)
+                if (TutorialControls.Instance.usingKeyboard == true)
                 {
-                    SetKeyboardInputs();
                     mainLevelTutorial = true;
                     tutorialStarted = false;
                     canProgress = true;
                 }
 
-                else if (usingXbox == true)
+                else if (TutorialControls.Instance.usingXbox == true)
                 {
-                    SetXboxInputs();
                     mainLevelTutorial = true;
                     tutorialStarted = false;
                     canProgress = true;
                 }
                 
-                else if (usingPlaystation == true)
+                else if (TutorialControls.Instance.usingPlaystation == true)
                 {
-                    SetPlaystationInputs();
                     mainLevelTutorial = true;
                     tutorialStarted = false;
                     canProgress = true;
@@ -164,214 +122,215 @@ public class Tutorial : MonoBehaviour
 
         }
 
+        //this doesn't seem to be being used right now?
         #region first Tutorial
-        if (tutorialActive == true)
-        {
-            if (canProgress == true)
-            {
-                if (tutorialPrompt == 1)
-                {
-                    tutorialText.text = "Pick up your weapon.";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //if (tutorialActive == true)
+        //{
+        //    if (canProgress == true)
+        //    {
+        //        if (tutorialPrompt == 1)
+        //        {
+        //            tutorialText.text = "Pick up your weapon.";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 2)
-                {
-                    tutorialText.text = "This is your default weapon. Your active weapon and its ammo are in the bottom right.";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 2)
+        //        {
+        //            tutorialText.text = "This is your default weapon. Your active weapon and its ammo are in the bottom right.";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 3)
-                {
-                    tutorialText.text = aimInput + " to aim," + "\n " + shootInput + " to shoot," + "\n " + reloadInput + " to reload.";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 3)
+        //        {
+        //            tutorialText.text = aimInput + " to aim," + "\n " + shootInput + " to shoot," + "\n " + reloadInput + " to reload.";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 4)
-                {
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 4)
+        //        {
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 5)
-                {
-                    tutorialText.text = "Destroy the dummy.";
-                    continueText.text = " ";
+        //        else if (tutorialPrompt == 5)
+        //        {
+        //            tutorialText.text = "Destroy the dummy.";
+        //            continueText.text = " ";
                     
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 6)
-                {
-                    tutorialText.text = "Enemies will sometimes drop weapons, which you can pick up with " + pickupInput + ".";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 6)
+        //        {
+        //            tutorialText.text = "Enemies will sometimes drop weapons, which you can pick up with " + pickupInput + ".";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 7)
-                {
-                    tutorialText.text = "Some weapons, like this one, can be charged by holding " + shootInput + "." + "\n Try charging it now.";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 7)
+        //        {
+        //            tutorialText.text = "Some weapons, like this one, can be charged by holding " + shootInput + "." + "\n Try charging it now.";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 8)
-                {
-                    tutorialText.text = "Weapons dropped by enemies, like this one, are what we call 'corrupted'.";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 8)
+        //        {
+        //            tutorialText.text = "Weapons dropped by enemies, like this one, are what we call 'corrupted'.";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 9)
-                {
-                    tutorialText.text = "Corrupted weapons are powerful, but fill your corruption meter over time as you hold them.";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 9)
+        //        {
+        //            tutorialText.text = "Corrupted weapons are powerful, but fill your corruption meter over time as you hold them.";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 10)
-                {
-                    tutorialText.text = "The bottom left shows your extra lives (blue), HP bar (green), and corruption meter (red).";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 10)
+        //        {
+        //            tutorialText.text = "The bottom left shows your extra lives (blue), HP bar (green), and corruption meter (red).";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 11)
-                {
-                    tutorialText.text = "Something bad might happen if your corruption maxes out... To drop a weapon, hold " + dropInput + ".";
-                    continueText.text = " ";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 11)
+        //        {
+        //            tutorialText.text = "Something bad might happen if your corruption maxes out... To drop a weapon, hold " + dropInput + ".";
+        //            continueText.text = " ";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 12)
-                {
-                    tutorialText.text = "Your corruption decreases gradually when you aren't holding a corrupted weapon.";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 12)
+        //        {
+        //            tutorialText.text = "Your corruption decreases gradually when you aren't holding a corrupted weapon.";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 13)
-                {
-                    tutorialText.text = "Continue to the next room.";
-                    continueText.text = " ";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 13)
+        //        {
+        //            tutorialText.text = "Continue to the next room.";
+        //            continueText.text = " ";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 14)
-                {
-                    tutorialText.text = "Along with your weapons, you can build structures to help you fight.";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 14)
+        //        {
+        //            tutorialText.text = "Along with your weapons, you can build structures to help you fight.";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 15)
-                {
-                    tutorialText.text = "Press " + buildInput + " to toggle Build Mode.";
-                    continueText.text = " ";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 15)
+        //        {
+        //            tutorialText.text = "Press " + buildInput + " to toggle Build Mode.";
+        //            continueText.text = " ";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 16)
-                {
-                    tutorialText.text = "Use the " + scrollInput + " to view each structure. " + aimInput + " to preview placement at a greater distance.";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 16)
+        //        {
+        //            tutorialText.text = "Use the " + scrollInput + " to view each structure. " + aimInput + " to preview placement at a greater distance.";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 17)
-                {
-                    tutorialText.text = "Structures cost Mycelia, which is dropped by enemies, and shown in the top left.";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 17)
+        //        {
+        //            tutorialText.text = "Structures cost Mycelia, which is dropped by enemies, and shown in the top left.";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 18)
-                {
-                    tutorialText.text = "Try placing a turret with " + shootInput + ".";
-                    continueText.text = " ";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 18)
+        //        {
+        //            tutorialText.text = "Try placing a turret with " + shootInput + ".";
+        //            continueText.text = " ";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 19)
-                {
-                    tutorialText.text = "Press " + pickupInput + " to toggle Edit Mode, which allows you to edit placed structures.";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 19)
+        //        {
+        //            tutorialText.text = "Press " + pickupInput + " to toggle Edit Mode, which allows you to edit placed structures.";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 20)
-                {
-                    tutorialText.text = "Look at the turret, and move it by holding " + shootInput + " and dragging.";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 20)
+        //        {
+        //            tutorialText.text = "Look at the turret, and move it by holding " + shootInput + " and dragging.";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 21)
-                {
-                    tutorialText.text = "Structures can also be destroyed by holding " + destroyInput + " for a (partial if damaged) refund. Destroy the turret.";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 21)
+        //        {
+        //            tutorialText.text = "Structures can also be destroyed by holding " + destroyInput + " for a (partial if damaged) refund. Destroy the turret.";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 22)
-                {
-                    tutorialText.text = "You can pause at any time with " + pauseInput + " to review the controls if needed.";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 22)
+        //        {
+        //            tutorialText.text = "You can pause at any time with " + pauseInput + " to review the controls if needed.";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 23)
-                {
-                    tutorialText.text = "Great, that should be all you need to know for now. Are you ready for the real deal?";
-                    continueText.text = "(Press " + continueInput + " to continue)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
+        //        else if (tutorialPrompt == 23)
+        //        {
+        //            tutorialText.text = "Great, that should be all you need to know for now. Are you ready for the real deal?";
+        //            continueText.text = "(Press " + continueInput + " to continue)";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //            clickNeeded = true;
+        //        }
 
-                else if (tutorialPrompt == 24)
-                {
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 24)
+        //        {
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
 
-                else if (tutorialPrompt == 25)
-                {
-                    tutorialText.text = "You better be, we're under attack! Quick, get to the train!";
-                    continueText.text = " ";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                }
+        //        else if (tutorialPrompt == 25)
+        //        {
+        //            tutorialText.text = "You better be, we're under attack! Quick, get to the train!";
+        //            continueText.text = " ";
+        //            Debug.Log("Progressing tutorial");
+        //            canProgress = false;
+        //        }
                 
-            }
-        }
+        //    }
+        //}
         #endregion
 
         #region main Level Tutorial
@@ -382,7 +341,7 @@ public class Tutorial : MonoBehaviour
                 if (tutorialPrompt == 0)
                 {
                     tutorialText.text = "It's time to take the fight to our enemies. We have a weapon to destroy them from the source...";
-                    continueText.text = $"(Press {continueInput} to continue)";
+                    continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                     clickNeeded = true;
@@ -391,7 +350,7 @@ public class Tutorial : MonoBehaviour
                 else if (tutorialPrompt == 1)
                 {
                     tutorialText.text = "...but we need to reach that source, first. You must escort the train and defend if with your life.";
-                    continueText.text = $"(Press {continueInput} to continue)";
+                    continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                     clickNeeded = true;
@@ -400,7 +359,7 @@ public class Tutorial : MonoBehaviour
                 else if (tutorialPrompt == 2)
                 {
                     tutorialText.text = "Those giant red pods across from you are where they'll come from. There are more pods ahead.";
-                    continueText.text = $"(Press {continueInput} to continue)";
+                    continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                     clickNeeded = true;
@@ -409,7 +368,7 @@ public class Tutorial : MonoBehaviour
                 else if (tutorialPrompt == 3)
                 {
                     tutorialText.text = "The bar at the top shows you how many enemies and pods you have left to destroy.";
-                    continueText.text = $"(Press {continueInput} to continue)";
+                    continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                     clickNeeded = true;
@@ -418,7 +377,7 @@ public class Tutorial : MonoBehaviour
                 else if (tutorialPrompt == 4)
                 {
                     tutorialText.text = "Set up your defenses. They'll move with the train (and be refunded if they overlap with anything).";
-                    continueText.text = $"(Press {continueInput} to continue)";
+                    continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                     clickNeeded = true;
@@ -440,8 +399,8 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 7)
                 {
-                    tutorialText.text = "You can also hit the Main Button to go early. You can press " + skipInput + " to skip the cutscene.";
-                    continueText.text = "(Press " + continueInput + " to close)";
+                    tutorialText.text = "You can also hit the Main Button to go early. You can press " + TutorialControls.Instance.skipInput + " to skip the cutscene.";
+                    continueText.text = "(Press " + TutorialControls.Instance.continueInput + " to close)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                     clickNeeded = true;
@@ -471,77 +430,20 @@ public class Tutorial : MonoBehaviour
 
     }
 
-    #region set Inputs
-    private void SetKeyboardInputs()
-    {
-        continueInput = "C";
-        moveInput = "WASD";
-        sprintInput = "Shift";
-        jumpInput = "Space";
-        lookInput = "Mouse";
-        aimInput = "Right click";
-        shootInput = "Left click";
-        reloadInput = "R";
-        pickupInput = "F";
-        dropInput = "Q";
-        buildInput = "B";
-        scrollInput = "mousewheel";
-        destroyInput = "X";
-        pauseInput = "Esc";
-        skipInput = "Z";
-    }
 
-    private void SetXboxInputs()
-    {
-        continueInput = "A";
-        moveInput = "Left stick";
-        sprintInput = "Hold left stick";
-        jumpInput = "A";
-        lookInput = "Right stick";
-        aimInput = "Left trigger";
-        shootInput = "Right trigger";
-        reloadInput = "B";
-        pickupInput = "X";
-        dropInput = "B";
-        buildInput = "Y";
-        scrollInput = "left and right bumpers";
-        destroyInput = "B";
-        pauseInput = "Options";
-        skipInput = "down on the D-Pad";
-    }
-
-    private void SetPlaystationInputs()
-    {
-        continueInput = "X";
-        moveInput = "Left stick";
-        sprintInput = "Hold left stick";
-        jumpInput = "X";
-        lookInput = "Right stick";
-        aimInput = "Left trigger";
-        shootInput = "Right trigger";
-        reloadInput = "Circle";
-        pickupInput = "Square";
-        dropInput = "Circle";
-        buildInput = "Triangle";
-        scrollInput = "left and right bumpers";
-        destroyInput = "Circle";
-        pauseInput = "Options";
-        skipInput = "down on the D-Pad";
-    }
-    #endregion
 
     private void StartTutorial()
     {
         Debug.Log("Keyboard tutorial has started");
-        tutorialText.text = moveInput + " to move \n " + lookInput + " to look around" + "\n " + sprintInput + " to sprint" + "\n " + jumpInput + " to jump";
-        tutorialActive = true;
+        tutorialText.text = TutorialControls.Instance.moveInput + " to move \n " + TutorialControls.Instance.lookInput + " to look around" + "\n " + TutorialControls.Instance.sprintInput + " to sprint" + "\n " + TutorialControls.Instance.jumpInput + " to jump";
+        //tutorialActive = true;
     }
 
     public void StartBetweenWaveTutorial()
     {
         tutorialPopup.SetActive(true);
         tutorialText.text = "The train will move to the next area shortly, picking up any uncollected Mycelia.";
-        continueText.text = $"(Press {continueInput} to continue)";
+        continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
         clickNeeded = true;
     }
 
@@ -549,7 +451,7 @@ public class Tutorial : MonoBehaviour
     {
         tutorialPopup.SetActive(true);
         tutorialText.text = "This is it! Defeat the boss so we can deploy our payload and stop them for good.";
-        continueText.text = "(Press " + continueInput + " to close)";
+        continueText.text = "(Press " + TutorialControls.Instance.continueInput + " to close)";
         clickNeeded = true;
     }
 
@@ -557,7 +459,7 @@ public class Tutorial : MonoBehaviour
     {
         tutorialPopup.SetActive(true);
         tutorialText.text = "Payload deployed. Leave the train be, focus on defending the payload!";
-        continueText.text = "(Press " + continueInput + " to close)";
+        continueText.text = "(Press " + TutorialControls.Instance.continueInput + " to close)";
         clickNeeded = true;
     }
 

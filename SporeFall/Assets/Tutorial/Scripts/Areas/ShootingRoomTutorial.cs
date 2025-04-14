@@ -28,14 +28,7 @@ public class ShootingRoomTutorial : MonoBehaviour
     private void StartTutorial()
     {
         tutorialStarted = true;
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Hold Left Trigger to aim" + "\n Right Trigger to shoot" + "\n East Button to reload";
-        }
-        else
-        {
-            tutorialText.text = "Hold Right click to aim" + "\n Left click to shoot" + "\n R to reload";
-        }
+        tutorialText.text = "Hold " + TutorialControls.Instance.aimInput + " to aim" + "\n " + TutorialControls.Instance.shootInput + " to shoot" + "\n " + TutorialControls.Instance.reloadInput + " to reload";
 
         tutorialText.text += "\n Destroy the Target";
     }
@@ -78,14 +71,7 @@ public class ShootingRoomTutorial : MonoBehaviour
         waitingForWeaponDrop = true;
         tutorialText.text = "Something bad might happen if your corruption maxes out...";
 
-        if (manager.usingGamepad)
-        {
-            tutorialText.text += "\n To drop a weapon, hold <b>EAST Button</b>.";
-        }
-        else
-        {
-            tutorialText.text += "\n To drop a weapon, hold <b>Q</b>.";
-        }
+        tutorialText.text += "\n To drop a weapon, hold <b>" + TutorialControls.Instance.dropInput + "</b>.";
     }
 
     private void WaitForWeaponDrop()

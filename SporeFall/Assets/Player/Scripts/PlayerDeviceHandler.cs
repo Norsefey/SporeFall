@@ -58,39 +58,30 @@ public class PlayerDeviceHandler : MonoBehaviour
 
     private void Update()
     {
-        if (Tutorial.Instance != null)
+        if (TutorialControls.Instance != null)
         {
-            if (Tutorial.Instance.playerActive == true && tutorialNeeded == true)
+            if (TutorialControls.Instance.playerActive == true && tutorialNeeded == true)
             {
                 tutorialNeeded = false;
 
                 if (usingXbox == true)
                 {
                     Debug.Log("Telling Tutorial script xbox = true");
-                    if (Tutorial.Instance != null)
-                    {
-                        Tutorial.Instance.usingXbox = true;
-                    }
+                    TutorialControls.Instance.usingXbox = true;
                     usingXbox = false;
                 }
 
                 else if (usingPlaystation == true)
                 {
                     Debug.Log("Telling Tutorial script playstation = true");
-                    if (Tutorial.Instance != null)
-                    {
-                        Tutorial.Instance.usingPlaystation = true;
-                    }
+                    TutorialControls.Instance.usingPlaystation = true;
                     usingPlaystation = false;
                 }
 
                 else if (usingKeyboard == true)
                 {
                     Debug.Log("Telling Tutorial script keyboard = true");
-                    if (Tutorial.Instance != null)
-                    {
-                        Tutorial.Instance.usingKeyboard = true;
-                    }
+                    TutorialControls.Instance.usingKeyboard = true;
                     usingKeyboard = false;
                 }
             }

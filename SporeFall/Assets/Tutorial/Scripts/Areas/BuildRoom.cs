@@ -64,14 +64,7 @@ public class BuildRoom : MonoBehaviour
     }
     private void BuildModeToggleTutorial()
     {
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Press <b>NORTH Button</b> to toggle Build Mode";
-        }
-        else
-        {
-            tutorialText.text = "Press <b>B</b> to toggle Build Mode";
-        }
+        tutorialText.text = "Press " + TutorialControls.Instance.buildInput + " to toggle Build Mode";
         tutorialStarted = true;
     }
     private void WaitForBuildInput()
@@ -84,16 +77,8 @@ public class BuildRoom : MonoBehaviour
     }
     private void StructureSwitchTutotial()
     {
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Use the <b>R/L Shoulder</b> Buttons to view each structure." +
-                "\n Hold <b>Left Trigger</b> to preview placement at a greater distance.";
-        }
-        else
-        {
-            tutorialText.text = "Use the Mouse-Wheel to view each structure. " +
-                "\n Hold <b>Right click</b> to preview placement at a greater distance.";
-        }
+        tutorialText.text = "Use the <b>" + TutorialControls.Instance.scrollInput + "</b> to view each structure." +
+                "\n Hold <b>" + TutorialControls.Instance.aimInput + "</b> to preview placement at a greater distance.";
     }
     private void WaitForStructureSwitch()
     {
@@ -109,14 +94,7 @@ public class BuildRoom : MonoBehaviour
             "\n which is dropped by enemies, and shown in the top left.";
         yield return new WaitForSeconds(nextPromptDelay);
 
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Try placing a structure on the <b>Grassy</b> platform by pressing <b>Right Trigger</b>";
-        }
-        else
-        {
-            tutorialText.text = "Try placing a structure on the <b>Grassy</b>  platform by <b>left clicking</b>";
-        }
+        tutorialText.text = "Try placing a structure on the <b>Grassy</b> platform by pressing <b>" + TutorialControls.Instance.shootInput + "</b>";
         currentMycelia = GameManager.Instance.Mycelia;
     }
     private void WaitForStrucPlace()
@@ -130,28 +108,14 @@ public class BuildRoom : MonoBehaviour
     }
     private void StartEditModeTutorial()
     {
-        if (manager.usingGamepad)
-        {
-            tutorialText.text = "Press <b>WEST Button</b> to toggle Edit Mode, which allows you to edit placed structures.";
-        }
-        else
-        {
-            tutorialText.text = "Press <b>F</b> to toggle Edit Mode, which allows you to edit placed structures.";
-        }
+        tutorialText.text = "Press <b>" + TutorialControls.Instance.pickupInput + "</b> to toggle Edit Mode, which allows you to edit placed structures.";
     }
     private void WaitForEditToggle()
     {
         if (manager.player.pInput.editModeAction.WasPerformedThisFrame())
         {
             tutorialIndex++;
-            if (manager.usingGamepad)
-            {
-                tutorialText.text = "Look at the Structure, and move it by holding <b>Right Trigger</b>";
-            }
-            else
-            {
-                tutorialText.text = "Look at the Structure, and move it by <b>left clicking</b> and dragging.";
-            }
+            tutorialText.text = "Look at the Structure, and move it by holding <b>" + TutorialControls.Instance.shootInput + "</b> and dragging.";
         }
     }
     private void WaitForStrucMove()
@@ -159,16 +123,8 @@ public class BuildRoom : MonoBehaviour
         if (manager.player.bGun.movingStructure)
         {
             tutorialIndex++;
-            if (manager.usingGamepad)
-            {
-                tutorialText.text = "Structures can also be Recycled by holding <b>EAST Button</b> for a (partial if damaged) refund." +
+            tutorialText.text = "Structures can also be Recycled by holding <b>" + TutorialControls.Instance.destroyInput + "</b> for a (partial if damaged) refund." +
                    " \n Recycle the Structure.";
-            }
-            else
-            {
-                tutorialText.text = "Structures can also be Recycled by holding <b>X</b> for a (partial if damaged) refund." +
-                    " \n Recycle the Structure.";
-            }
         }
     }
 
@@ -177,15 +133,7 @@ public class BuildRoom : MonoBehaviour
         if (manager.player.pInput.destroyStructAction.WasPerformedThisFrame())
         {
             tutorialIndex++;
-            if (manager.usingGamepad)
-            {
-                tutorialText.text = "You can pause at any time with <b>Start Button</b> to review the controls if needed.";
-
-            }
-            else
-            {
-                tutorialText.text = "You can pause at any time with <b>Esc</b> to review the controls if needed.";
-            }
+            tutorialText.text = "You can pause at any time with <b>" + TutorialControls.Instance.pauseInput + "</b> to review the controls if needed.";
             manager.player.ToggleBuildMode(false);
             StartCoroutine(TutorialComplete());
         }

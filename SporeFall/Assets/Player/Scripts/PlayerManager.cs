@@ -79,8 +79,8 @@ public class PlayerManager : MonoBehaviour
         // To prevent player from seeing spawning stuff, or switching camera too soon
         TogglePCamera(false);
 
-        if(Tutorial.Instance != null)
-            Tutorial.Instance.playerActive = true;
+        if(TutorialControls.Instance != null)
+            TutorialControls.Instance.playerActive = true;
             Debug.Log("Telling tutorial player is active");
     }
     private void Start()
