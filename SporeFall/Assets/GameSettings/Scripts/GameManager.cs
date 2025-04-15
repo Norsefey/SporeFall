@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Build System")]
     public List<GameObject> availableStructures;
-    private float mycelia;
+    private float mycelia = 150;
     public float Mycelia { get { return mycelia; } }
     private bool tutorialMycelia = true;
 
@@ -208,6 +208,9 @@ public class GameManager : MonoBehaviour
 
     public void UpdatePlayerSensitivity(int i)
     {
+        if(players.Count == 0)
+            return;
+
         if (players[i].playerDevice == "Mouse")
         {
             if (i == 0)

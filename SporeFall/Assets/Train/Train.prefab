@@ -172,7 +172,7 @@ MonoBehaviour:
   wallVisual: {fileID: 8929263192370202921}
   alertDuration: 1
   transitionDuration: 1
-  alertColor: {r: 0.2627451, g: 0.011764706, b: 0.019607844, a: 1}
+  alertColor: {r: 0.5019608, g: 0, b: 0.015686275, a: 1}
 --- !u!1 &109650511160384269
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,8 +607,8 @@ Transform:
   m_Children:
   - {fileID: 5212496818681777942}
   - {fileID: 6505515262185853665}
-  - {fileID: 7465423319683143428}
   - {fileID: 6817517067611278022}
+  - {fileID: 7465423319683143428}
   - {fileID: 5055871984942462781}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7155,6 +7155,77 @@ Transform:
   - {fileID: 7173912025552234274}
   m_Father: {fileID: 6505515262185853665}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3269138543134602857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5251441054837642720}
+  - component: {fileID: 3999477908070098768}
+  - component: {fileID: 6037681596244232160}
+  m_Layer: 18
+  m_Name: TS_TrainCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5251441054837642720
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3269138543134602857}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.15100498, y: -0, z: -0, w: 0.9885331}
+  m_LocalPosition: {x: 0, y: -27.674936, z: 67.75211}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1504676359398877556}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &3999477908070098768
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3269138543134602857}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.8
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6037681596244232160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3269138543134602857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 0
+  priority: 0
+  blendDistance: 74.73
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 88e649af437575b4faa8b8a41ff4e2e1, type: 2}
 --- !u!1 &3340289328373323297
 GameObject:
   m_ObjectHideFlags: 0
@@ -7783,7 +7854,7 @@ MonoBehaviour:
   wallVisual: {fileID: 6589027436598431213}
   alertDuration: 1
   transitionDuration: 1
-  alertColor: {r: 0.2627451, g: 0.011764706, b: 0.019607844, a: 1}
+  alertColor: {r: 0.5019608, g: 0, b: 0.015686275, a: 1}
 --- !u!1 &4183803139160964812
 GameObject:
   m_ObjectHideFlags: 0
@@ -8969,7 +9040,7 @@ MonoBehaviour:
   wallVisual: {fileID: 779630550420807322}
   alertDuration: 1
   transitionDuration: 1
-  alertColor: {r: 0.2627451, g: 0.011764706, b: 0.019607844, a: 1}
+  alertColor: {r: 0.5019608, g: 0, b: 0.015686275, a: 1}
 --- !u!1 &5186112902346578992
 GameObject:
   m_ObjectHideFlags: 0
@@ -10396,7 +10467,7 @@ MonoBehaviour:
   wallVisual: {fileID: 3933386263838182025}
   alertDuration: 1
   transitionDuration: 1
-  alertColor: {r: 0.2627451, g: 0.011764706, b: 0.019607844, a: 1}
+  alertColor: {r: 0.5019608, g: 0, b: 0.015686275, a: 1}
 --- !u!1 &8571783766321177756
 GameObject:
   m_ObjectHideFlags: 0
@@ -10630,7 +10701,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 46.64, z: -56.40001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5251441054837642720}
   m_Father: {fileID: 6505515262185853665}
   m_LocalEulerAnglesHint: {x: 17.37, y: 0, z: 0}
 --- !u!20 &2500884114813070783
@@ -10816,7 +10888,7 @@ MonoBehaviour:
   wallVisual: {fileID: 2201587054380794054}
   alertDuration: 1
   transitionDuration: 1
-  alertColor: {r: 0.2627451, g: 0.011764706, b: 0.019607844, a: 1}
+  alertColor: {r: 0.5019608, g: 0, b: 0.015686275, a: 1}
 --- !u!1 &8817262831265431848
 GameObject:
   m_ObjectHideFlags: 0
