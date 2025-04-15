@@ -10,11 +10,11 @@ public class DoorInteractable : Interactables
     public int blendShapeIndex = 0; // Blend shape index
     public float openDuration = 2f; // Time to fully open the door
 
-    private bool canOpen = true;
+    [SerializeField]private bool canOpen = false;
     private bool prompted = false;
     public override void Interact(InputAction.CallbackContext context)
     {
-        if(canOpen)
+        if(canOpen && doorMesh.GetBlendShapeWeight(blendShapeIndex) <= 0)
             StartCoroutine(OpenDoor());
     }
     public override void ItemPrompt()
@@ -79,7 +79,5 @@ public class DoorInteractable : Interactables
         canOpen = true;
         if(prompted)
             player.pUI.EnablePrompt($"Press {player.pInput.GetInteractionKey()} to Open Door");
-
-
     }
 }
