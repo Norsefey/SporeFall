@@ -100,7 +100,8 @@ public class TrainHandler : MonoBehaviour
         UI.gameObject.SetActive(false);
         trainHP.canTakeDamage = false;
         Payload.StartMoving(path);
-        if(Tutorial.Instance != null)
+        if(Tutorial.Instance != null && SavedSettings.firstPayloadTutorial)
+            SavedSettings.firstPayloadTutorial = false;
             Tutorial.Instance.StartPayloadTutorial();
     }
     private void ToggleStructures(bool toggle)

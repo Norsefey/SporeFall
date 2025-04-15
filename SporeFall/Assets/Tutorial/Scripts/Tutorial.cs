@@ -31,6 +31,8 @@ public class Tutorial : MonoBehaviour
     [HideInInspector] public float timer = 0f;
     private bool timerStarted = false;
     private bool timerNeeded = false;
+    private float timerThreshold = 20f;
+    private int timerType = 1;
 
     private void Awake()
     {
@@ -60,27 +62,63 @@ public class Tutorial : MonoBehaviour
         }
         else
         {
-            timerNeeded = true;
+            if (SavedSettings.firstTimeTutorial)
+            {
+                timerNeeded = true;
+            }
         }
     }
 
     private void Update()
     {
-        if (timer < 20f && timerNeeded)
+        if (timer < timerThreshold && timerNeeded)
         {
             timer += Time.deltaTime;
         }
         
-        if (timer >= 20f && timerStarted == false)
+        if (timer >= timerThreshold && timerStarted == false)
         {
-            timerStarted = true;
-            Debug.Log("Showing first prompt");
-            tutorialPopup.SetActive(true);
-            bgImage.SetActive(true);
-            tutorialText.text = "Left click (keyboard) or Start Button (controller) to lock cursor and start the game";
-            continueText.text = " ";
-            tutorialStarted = true;
+            if (timerType == 1 && SavedSettings.firstTimeTutorial)
+            {
+                //Tutorial prompts when loading into level for first time
+                timerStarted = true;
+                Debug.Log("Showing first prompt");
+                tutorialPopup.SetActive(true);
+                bgImage.SetActive(true);
+                tutorialText.text = "Left click (keyboard) or Start Button (controller) to lock cursor and start the game";
+                continueText.text = " ";
+                tutorialStarted = true;
+                timerNeeded = false;
+            }
+            
+            else if (timerType == 2)
+            {
+                //Tutorial prompts between waves 1 and 2
+                if (timerThreshold == 5f)
+                {
+                    timerThreshold = 10f;
+                    tutorialText.text = "You can also hit the Main Button to go early.";
+                }
+
+                else if (timerThreshold == 10f)
+                {
+                    timerThreshold = 15f;
+                    tutorialText.text = "You can press " + TutorialControls.Instance.skipInput + " to skip the cutscene if you'd like.";
+                }
+
+                else if (timerThreshold == 15f)
+                {
+                    canProgress = false;
+                    tutorialPopup.SetActive(false);
+                    timerNeeded = false;
+                    timerStarted = true;
+                }
+                
+            }
+
         }
+
+
 
         if (TutorialControls.Instance != null && TutorialControls.Instance.playerActive == true && tutorialStarted == true && TutorialControls.Instance.controlsSet)
         {
@@ -395,34 +433,7 @@ public class Tutorial : MonoBehaviour
                 {
                     canProgress = false;
                     StartCoroutine(FinalPrompts());
-                }
-
-                else if (tutorialPrompt == 7)
-                {
-                    tutorialText.text = "You can also hit the Main Button to go early. You can press " + TutorialControls.Instance.skipInput + " to skip the cutscene.";
-                    continueText.text = "(Press " + TutorialControls.Instance.continueInput + " to close)";
-                    Debug.Log("Progressing tutorial");
-                    canProgress = false;
-                    clickNeeded = true;
-                }
-
-                else if (tutorialPrompt == 8)
-                {
-                    canProgress = false;
-                    tutorialPopup.SetActive(false);
-                }
-
-                else if (tutorialPrompt == 9)
-                {
-                    canProgress = false;
-                    tutorialPopup.SetActive(false);
-                }
-
-                else if (tutorialPrompt == 10)
-                {
-                    canProgress = false;
-                    tutorialPopup.SetActive(false);
-                    mainLevelTutorial = false;
+                    SavedSettings.firstTimeTutorial = false;
                 }
             }
         }
@@ -443,24 +454,30 @@ public class Tutorial : MonoBehaviour
     {
         tutorialPopup.SetActive(true);
         tutorialText.text = "The train will move to the next area shortly, picking up any uncollected Mycelia.";
-        continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
-        clickNeeded = true;
+        continueText.text = " ";
+        timerNeeded = true;
+        timerStarted = false;
+        timerThreshold = 5f;
+        timer = 0f;
+        timerType = 2;
     }
 
     public void StartFinalWaveTutorial()
     {
         tutorialPopup.SetActive(true);
         tutorialText.text = "This is it! Defeat the boss so we can deploy our payload and stop them for good.";
-        continueText.text = "(Press " + TutorialControls.Instance.continueInput + " to close)";
-        clickNeeded = true;
+        continueText.text = " ";
+        StartCoroutine(ClosePrompts());
     }
 
     public void StartPayloadTutorial()
     {
         tutorialPopup.SetActive(true);
         tutorialText.text = "Payload deployed. Leave the train be, focus on defending the payload!";
-        continueText.text = "(Press " + TutorialControls.Instance.continueInput + " to close)";
-        clickNeeded = true;
+        continueText.text = " ";
+        StartCoroutine(ClosePrompts());
+        mainLevelTutorial = false;
+        
     }
 
     public void ProgressTutorial()
@@ -485,6 +502,12 @@ public class Tutorial : MonoBehaviour
         yield return new WaitForSeconds(2.2f);
         tutorialText.text = "Good luck!";
         yield return new WaitForSeconds(2.2f);
+        tutorialPopup.SetActive(false);
+    }
+
+    IEnumerator ClosePrompts()
+    {
+        yield return new WaitForSeconds(10f);
         tutorialPopup.SetActive(false);
     }
 }

@@ -17,6 +17,10 @@ public static class SavedSettings
     public static float gamepadVertCamSensitivity2 = 200;
 
     public static bool firstOpenedGame = true;
+    public static bool firstTimeTutorial = true;
+    public static bool firstBetweenTutorial = true;
+    public static bool firstBossTutorial = true;
+    public static bool firstPayloadTutorial = true;
 
     public static string currentLevel;
 
