@@ -463,7 +463,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         if(Tutorial.Instance == null)
             return;
-        if (Tutorial.Instance.clickNeeded == true)
+        if (Tutorial.Instance.clickNeeded == true && Tutorial.Instance.tutorialPopup.activeInHierarchy)
         {
             shootInputMap.Disable();
             Tutorial.Instance.ProgressTutorial();
