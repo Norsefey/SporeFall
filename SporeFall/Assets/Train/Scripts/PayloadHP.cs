@@ -25,7 +25,10 @@ public class PayloadHP : Damageable
         currentHP = maxHP; // Initialize health
         audioSource = GetComponent<AudioSource>();
     }
-
+    private void OnEnable()
+    {
+        currentHP = maxHP; // Initialize health
+    }
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
@@ -33,7 +36,6 @@ public class PayloadHP : Damageable
         // moved it to only check when HP has changed
         PlayHPAudioClip(currentHP / maxHP);
     }
-
     private void PlayHPAudioClip(float healthPercentage)
     {
         if (healthPercentage <= 0.75f && !played75)
