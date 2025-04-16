@@ -427,7 +427,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1350483034459424369}
-  - component: {fileID: 8116082528419725163}
   m_Layer: 12
   m_Name: LV1
   m_TagString: Untagged
@@ -452,27 +451,6 @@ Transform:
   - {fileID: 5900334359844491001}
   m_Father: {fileID: 7386922474431716262}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8116082528419725163
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3435691037590750909}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 3840
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.17, y: 2.07, z: 2.5161638}
-  m_Center: {x: 0, y: 0.93999994, z: 0.40080783}
 --- !u!1 &4752562794795697157
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +526,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 713646678435014787}
-  - component: {fileID: 2499324499430344708}
   m_Layer: 12
   m_Name: LV3
   m_TagString: Untagged
@@ -573,27 +550,6 @@ Transform:
   - {fileID: 3276483119011147292}
   m_Father: {fileID: 7386922474431716262}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2499324499430344708
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6674513845478725581}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 3840
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.17, y: 2.07, z: 2.5161638}
-  m_Center: {x: 0, y: 0.93999994, z: 0.40080783}
 --- !u!1 &8296633759850404601
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +590,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7659875043710013097}
-  - component: {fileID: 8997020038163602107}
   m_Layer: 12
   m_Name: LV2
   m_TagString: Untagged
@@ -659,27 +614,6 @@ Transform:
   - {fileID: 5640195536994651653}
   m_Father: {fileID: 7386922474431716262}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8997020038163602107
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8301949692346867577}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 3840
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.17, y: 2.07, z: 2.5161638}
-  m_Center: {x: 0, y: 0.93999994, z: 0.40080783}
 --- !u!1 &8824594066713120071
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,6 +665,7 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 100
   isDead: 0
+  damageModifier: 0
   structure: {fileID: 5508907316869942239}
 --- !u!136 &3039057548810710203
 CapsuleCollider:

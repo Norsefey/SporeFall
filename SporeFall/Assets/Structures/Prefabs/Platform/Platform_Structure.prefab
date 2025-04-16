@@ -575,6 +575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallHP: {fileID: 8369055233404446379}
+  wall: {fileID: 0}
 --- !u!65 &5182074110228901928
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -823,7 +824,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7082967003534800636}
-  - component: {fileID: 719704676613905649}
   m_Layer: 12
   m_Name: Visual
   m_TagString: Untagged
@@ -849,27 +849,6 @@ Transform:
   - {fileID: 1008487380937660058}
   m_Father: {fileID: 7479918385746903016}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &719704676613905649
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7534823005202019788}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 3840
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 6.484418, y: 0.7985587, z: 5.2194757}
-  m_Center: {x: -0.03240204, y: 0.553704, z: 0.091489315}
 --- !u!1 &8415373684564498848
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,6 +984,7 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 500
   isDead: 0
+  damageModifier: 0
   structure: {fileID: 1280114967157046242}
 --- !u!65 &2223544650170576964
 BoxCollider:

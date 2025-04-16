@@ -206,9 +206,6 @@ public class TPSCamera : MonoBehaviour
                 rigLookAtTarget.position = hit.point;
             }
         }
-
-        
-      
     }
     private void LookAtPlayer()
     {
