@@ -31,6 +31,14 @@ public class GameUIManager : MonoBehaviour
     {
         ToggleGameUI(!toggle);
 
+        if (Tutorial.Instance != null)
+        {
+            if (Tutorial.Instance.tutorialOngoing)
+            {
+                Tutorial.Instance.tutorialPopup.SetActive(!toggle);
+            }
+        }
+
         upgradeMenu.SetActive(toggle);
 
         UpgradeUI upUI = upgradeMenu.GetComponent<UpgradeUI>();

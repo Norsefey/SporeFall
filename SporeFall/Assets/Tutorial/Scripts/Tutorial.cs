@@ -12,7 +12,7 @@ public class Tutorial : MonoBehaviour
     //[SerializeField] private TutorialControls tControl;
 
     [Header("Game Objects")]
-    [SerializeField] GameObject tutorialPopup;
+    public GameObject tutorialPopup;
     [SerializeField] GameObject bgImage;
     [SerializeField] TMP_Text tutorialText;
     [SerializeField] TMP_Text continueText;
@@ -24,6 +24,7 @@ public class Tutorial : MonoBehaviour
     //private bool tutorialActive = false;
     private bool mainLevelTutorial = false;
     public bool tutorialStarted = false;
+    public bool tutorialOngoing;
     
     private bool canProgress = false;
     public bool clickNeeded = false;
@@ -88,6 +89,7 @@ public class Tutorial : MonoBehaviour
                 tutorialText.text = "Left click (keyboard) or Start Button (controller) to lock cursor and start the game";
                 continueText.text = " ";
                 tutorialStarted = true;
+                tutorialOngoing = true;
                 timerNeeded = false;
             }
             
@@ -109,6 +111,7 @@ public class Tutorial : MonoBehaviour
                 else if (timerThreshold == 15f)
                 {
                     canProgress = false;
+                    tutorialOngoing = false;
                     tutorialPopup.SetActive(false);
                     timerNeeded = false;
                     timerStarted = true;
@@ -432,6 +435,7 @@ public class Tutorial : MonoBehaviour
                 else if (tutorialPrompt == 6)
                 {
                     canProgress = false;
+                    tutorialOngoing = false;
                     StartCoroutine(FinalPrompts());
                     SavedSettings.firstTimeTutorial = false;
                 }
@@ -453,6 +457,7 @@ public class Tutorial : MonoBehaviour
     public void StartBetweenWaveTutorial()
     {
         tutorialPopup.SetActive(true);
+        tutorialOngoing = true;
         tutorialText.text = "The train will move to the next area shortly, picking up any uncollected Mycelia.";
         continueText.text = " ";
         timerNeeded = true;
