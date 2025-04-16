@@ -289,16 +289,14 @@ public class TPSCamera : MonoBehaviour
             // Use smoothstep for more natural easing
             float smoothT = t * t * (3f - 2f * t);
 
-            transform.position = Vector3.Lerp(startPos, position, smoothT);
-            transform.rotation = Quaternion.Slerp(startRot, rotation, smoothT);
+            transform.SetPositionAndRotation(Vector3.Lerp(startPos, position, smoothT), Quaternion.Slerp(startRot, rotation, smoothT));
             currentCameraOffset = Vector3.Lerp(startOffset, offset, smoothT);
 
             yield return null;
         }
 
         // Ensure final values are set precisely
-        transform.position = position;
-        transform.rotation = rotation;
+        transform.SetPositionAndRotation(position, rotation);
         currentCameraOffset = offset;
         isColliding = wasColliding;
         isPanning = false;

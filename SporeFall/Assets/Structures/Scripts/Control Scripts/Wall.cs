@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    [HideInInspector]
     public float protectionRange = 5f;
-    [HideInInspector]
     public float damageReduction = 0.25f;
 
     [SerializeField] private LayerMask detectionLayer;
