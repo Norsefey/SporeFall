@@ -134,7 +134,8 @@ public class GameManager : MonoBehaviour
         {
             player.transform.SetParent(trainHandler.transform);
             player.transform.localPosition = new Vector3(0, 5, 10);
-
+            player.TogglePVisual(false);
+            player.TogglePControl(false);
             player.MovePlayerTo(trainHandler.playerSpawnPoint[player.GetPlayerIndex()].position);
             if (trainHandler.trainState == TrainState.Parked)
             {
