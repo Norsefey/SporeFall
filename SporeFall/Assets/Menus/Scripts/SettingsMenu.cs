@@ -90,6 +90,10 @@ public class SettingsMenu : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(lastSelected);
                 isSliderSelected = false;
+                if (MenuSounds.Instance != null)
+                {
+                    MenuSounds.Instance.PlayPressedSound();
+                }
                 //Debug.Log("Returning to button");
             }
         }
