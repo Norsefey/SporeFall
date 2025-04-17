@@ -274,6 +274,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             shootInputMap.Disable();
 
             pMan.pUI.gameObject.SetActive(false);
+            GameManager.Instance.gameUI.ToggleTutorialPrompts(true);
 
 
             Time.timeScale = 0;
@@ -288,7 +289,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             shootInputMap.Enable();
 
             pMan.pUI.gameObject.SetActive(true);
-
+            GameManager.Instance.gameUI.ToggleTutorialPrompts(false);
 
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
@@ -330,6 +331,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             pauseGame.performed += OnCloseUpgradeMenu;
 
             GameManager.Instance.gameUI.ToggleUpgradeMenu(true, pMan);
+            GameManager.Instance.gameUI.ToggleTutorialPrompts(true);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -342,6 +344,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             pauseGame.performed -= OnCloseUpgradeMenu;
             pauseGame.performed += OnPause;
             GameManager.Instance.gameUI.ToggleUpgradeMenu(false, pMan);
+            GameManager.Instance.gameUI.ToggleTutorialPrompts(false);
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

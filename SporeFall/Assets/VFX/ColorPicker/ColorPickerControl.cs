@@ -110,6 +110,10 @@ public class ColorPickerControl : MonoBehaviour
         // Button to confirm/exit color picker
         if (gamepad.buttonSouth.wasPressedThisFrame && ColorPickerUI.canSelectColor) 
         {
+            if (MenuSounds.Instance != null)
+            {
+                MenuSounds.Instance.PlayPressedSound();
+            }
             // Confirm color selection
             Debug.Log("Color confirmed: " + Color.HSVToRGB(currentHue, currentSat, currentVal));
             // Then do stuff to exit the selection

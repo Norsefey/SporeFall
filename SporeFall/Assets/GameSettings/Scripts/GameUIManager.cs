@@ -31,14 +31,6 @@ public class GameUIManager : MonoBehaviour
     {
         ToggleGameUI(!toggle);
 
-        if (Tutorial.Instance != null)
-        {
-            if (Tutorial.Instance.tutorialOngoing)
-            {
-                Tutorial.Instance.tutorialPopup.SetActive(!toggle);
-            }
-        }
-
         upgradeMenu.SetActive(toggle);
 
         UpgradeUI upUI = upgradeMenu.GetComponent<UpgradeUI>();
@@ -47,6 +39,17 @@ public class GameUIManager : MonoBehaviour
             upUI.activePlayer = player;
             if (upUI != null)
                 upUI.SetSelectable();
+        }
+    }
+
+    public void ToggleTutorialPrompts(bool toggle)
+    {
+        if (Tutorial.Instance != null)
+        {
+            if (Tutorial.Instance.tutorialOngoing)
+            {
+                Tutorial.Instance.tutorialPopup.SetActive(!toggle);
+            }
         }
     }
 }

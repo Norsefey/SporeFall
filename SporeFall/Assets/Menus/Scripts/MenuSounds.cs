@@ -7,48 +7,36 @@ public class MenuSounds : MonoBehaviour
 
     public static MenuSounds Instance;
 
-    [SerializeField] private AudioSource menuAudio;
+    [SerializeField] private AudioSource hoverAudio;
+    [SerializeField] private AudioSource pressedAudio;
     [SerializeField] private AudioClip buttonHoverSound;
     [SerializeField] private AudioClip buttonPressedSound;
-    private bool pressed = false;
 
     private void Awake()
     {
         Instance = this;
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        menuAudio = GetComponent<AudioSource>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void PlayPressedSound()
     {
-        pressed = true;
-        menuAudio.PlayOneShot(buttonPressedSound);
+        pressedAudio.PlayOneShot(buttonPressedSound);
+        hoverAudio.enabled = false;
         StartCoroutine(SoundDelay());
     }
 
     public void PlayHoverSound()
     {
-        if (pressed == false)
+        if (hoverAudio.isActiveAndEnabled)
         {
-            menuAudio.PlayOneShot(buttonHoverSound);
-        }
-        
+            hoverAudio.PlayOneShot(buttonHoverSound);
+        } 
     }
 
     
 
     IEnumerator SoundDelay()
     {
-        yield return new WaitForSeconds(.5f);
-        pressed = false;
+        yield return new WaitForSecondsRealtime(.5f);
+        hoverAudio.enabled = true;
     }
 }
