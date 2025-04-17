@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public class Turret : MonoBehaviour
 {
     // These public variables are set by TurretBehavior
-    //[HideInInspector]
+    [HideInInspector]
     public float 
         detectionRange, 
         rotationSpeed, 
@@ -25,11 +25,6 @@ public class Turret : MonoBehaviour
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private LayerMask obstructionMask;
 
-    //[Header("Debug")]
-    //[SerializeField] private bool showDebug = true;
-    //private bool canShoot = false;
-    // private string debugStatus = "";
-
     [Header("Audio")]
     [SerializeField] private AudioClip firingSound;
     [Range(0f, 1f)]
@@ -40,6 +35,8 @@ public class Turret : MonoBehaviour
     private AudioSource audioSource;
     private bool hasTarget;
     private float lastFireTime; // Track the last time we fired
+
+    public bool showFireDebug = false;
 
     void Start()
     {
@@ -54,23 +51,18 @@ public class Turret : MonoBehaviour
 
     void Update()
     {
-        //debugStatus = "Status: ";
-
         if (!hasTarget || !IsTargetValid())
         {
-           // debugStatus += "Searching for target... ";
             FindTarget();
         }
 
         if (hasTarget && Time.timeScale == 1)
         {
-           // debugStatus += "Has target... ";
             TrackTarget();
             TryShoot();
         }
         else
         {
-           // debugStatus += "No valid target found.";
             //canShoot = false;
         }
     }
@@ -95,11 +87,6 @@ public class Turret : MonoBehaviour
             }
         }
 
-      /*  if (targetEnemy != closestEnemy)
-        {
-           // debugStatus += $"New target found at distance {closestDistance:F1}... ";
-        }*/
-
         targetEnemy = closestEnemy;
         hasTarget = targetEnemy != null;
     }
@@ -108,19 +95,13 @@ public class Turret : MonoBehaviour
     private bool IsTargetValid()
     {
 
-        if (targetEnemy == null || !targetEnemy.gameObject.activeSelf)
+        if (targetEnemy == null || targetEnemy.GetComponent<EnemyHPRelay>().IsDead())
         {
-           // debugStatus += "Target is null... ";
             return false;
         }
 
         float distance = Vector3.Distance(transform.position, targetEnemy.position);
         bool isInRange = distance >= minimumFireRange && distance <= fireRange;
-
-     /*   if (!isInRange)
-        {
-           // debugStatus += $"Target out of range (distance: {distance:F1})... ";
-        }*/
 
         return isInRange;
     }
@@ -154,7 +135,6 @@ public class Turret : MonoBehaviour
 
         if (targetEnemy == null)
         {
-            //debugStatus += "Can't shoot: No target... ";
             return;
         }
 
@@ -163,33 +143,27 @@ public class Turret : MonoBehaviour
 
         if (timeSinceLastFire < (1f / fireRate))
         {
-            //debugStatus += $"Cooling down ({timeSinceLastFire:F1}s)... ";
             return;
         }
 
         float distanceToTarget = Vector3.Distance(transform.position, targetEnemy.position);
         if (distanceToTarget < minimumFireRange || distanceToTarget > fireRange)
         {
-            //debugStatus += $"Can't shoot: Target distance ({distanceToTarget:F1}) out of range... ";
             return;
         }
         Vector3 directionToTarget = (targetEnemy.position - firePoint.position).normalized;
-      /*  // Visualize the raycast in debug mode
-        if (showDebug)
+        // Visualize the raycast in debug mode
+        if (showFireDebug)
         {
             Debug.DrawRay(firePoint.position, directionToTarget * distanceToTarget, Color.red, 0.1f);
-        }*/
+        }
 
         if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit, distanceToTarget, enemyLayerMask))
         {
             if (hit.transform != targetEnemy)
             {
-              //  debugStatus += "Can't shoot: Line of sight blocked... ";
                 return;
             }
-
-            //canShoot = true;
-           // debugStatus += "Shooting! ";
             Shoot();
             lastFireTime = currentTime;
         }
@@ -207,7 +181,6 @@ public class Turret : MonoBehaviour
         {
             if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
             {
-                // Debug.LogError($"No pool found for projectile prefab: {bulletPrefab.name}");
                 return;
             }
             else

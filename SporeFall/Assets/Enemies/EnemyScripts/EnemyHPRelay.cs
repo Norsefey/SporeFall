@@ -15,4 +15,9 @@ public class EnemyHPRelay : Damageable
     {
        
     }
+
+    public bool IsDead()
+    {
+        return mainHP.isDead;
+    }
 }

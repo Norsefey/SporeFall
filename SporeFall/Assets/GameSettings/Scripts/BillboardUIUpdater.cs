@@ -7,11 +7,13 @@ public class BillboardUIUpdater : MonoBehaviour
     private Transform targetCamera = null;
     [SerializeField] private TMP_Text hpDisplay;
     [SerializeField] private Damageable hpManager;
-    [SerializeField] private CanvasGroup groupAlpha;
+    private CanvasGroup groupAlpha;
 
     private Coroutine hideUICoroutine;
     private void InitializeUI()
     {
+        if(groupAlpha == null)
+            groupAlpha = GetComponent<CanvasGroup>();
         hpDisplay.text = hpManager.CurrentHP + "/" + hpManager.MaxHP;
     }
     private void OnEnable()
