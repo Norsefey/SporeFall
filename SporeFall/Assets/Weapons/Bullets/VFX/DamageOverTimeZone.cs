@@ -30,7 +30,7 @@ public class DamageOverTimeZone : MonoBehaviour
             collider.radius = radius;
             collider.isTrigger = true;
         }
-        transform.GetChild(0).localScale *= (radius * 2);
+        transform.GetChild(0).localScale = new Vector3(radius,radius,radius) * 2;
     }
 
     protected virtual void Update()
