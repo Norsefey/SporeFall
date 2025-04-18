@@ -15,6 +15,7 @@ public struct ProjectileData
     public bool CanBounce;
     public int MaxBounces;
     public float BounceDamageMultiplier;
+    public bool targetedDirection;
     public Vector3 TargetPosition; // Added target position for arc calculations
 }
 public enum ProjectileType
@@ -71,7 +72,7 @@ public class ProjectileBehavior : MonoBehaviour
     // Added for collision detection in arc mode
     [SerializeField] private float collisionCheckRadius = 0.5f;
     private Vector3 previousPosition;
-    private bool isArcMode = false;
+    public bool targetedDirection = false;
 
     private void Awake()
     {
@@ -86,7 +87,7 @@ public class ProjectileBehavior : MonoBehaviour
         previousPosition = transform.position;
 
         // For arcing projectiles
-        if (isArcMode)
+        if (targetedDirection)
         {
             arcProgress += data.Speed * Time.deltaTime / arcDistance;
 
@@ -223,9 +224,9 @@ public class ProjectileBehavior : MonoBehaviour
         bounceCount = 0;
 
         initialPosition = transform.position;
-        isArcMode = data.ArcHeight > 0;
+        targetedDirection = data.targetedDirection;
 
-        if (isArcMode)
+        if (targetedDirection)
         {
             arcDistance = Vector3.Distance(initialPosition, data.TargetPosition);
             arcProgress = 0f;
@@ -343,14 +344,14 @@ public class ProjectileBehavior : MonoBehaviour
     }
     protected void Bounce(Collider surface)
     {
-        if (rb != null && !isArcMode)
+        if (rb != null && !targetedDirection)
         {
             Vector3 reflection = Vector3.Reflect(rb.velocity, surface.transform.up);
             rb.velocity = reflection;
             damage *= data.BounceDamageMultiplier;
             bounceCount++;
         }
-        else if (isArcMode)
+        else if (targetedDirection)
         {
             // Handle bouncing for arc trajectories
             Vector3 currentDirection = (data.TargetPosition - initialPosition).normalized;

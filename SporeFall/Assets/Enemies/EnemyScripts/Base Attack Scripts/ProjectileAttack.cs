@@ -19,7 +19,7 @@ public class ProjectileAttack : RangedAttack
 
     [Header("Trajectory Settings")]
     [SerializeField] private ProjectileTrajectoryType trajectoryType = ProjectileTrajectoryType.Standard;
-
+    [SerializeField] private bool targetedDirection;
     [SerializeField] private float maxArchHeight, minArchHeight;
     private float projectileArcHeight = 2f; // For arcing projectiles
 
@@ -137,7 +137,8 @@ public class ProjectileAttack : RangedAttack
             CanBounce = canBounce,
             MaxBounces = maxBounces,
             BounceDamageMultiplier = bounceDamageMultiplier,
-            TargetPosition = target
+            TargetPosition = target,
+            targetedDirection = targetedDirection
         };
     }
     // track the target during attack charge-up
