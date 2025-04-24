@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LodedShot
   m_EditorClassIdentifier: 
   range: 80
-  cooldown: 1.4
+  cooldown: 3
   damage: 10
   attackDelay: 2
   recoveryTime: 2
@@ -24,15 +24,17 @@ MonoBehaviour:
   predictionTime: 0.2
   projectilePrefab: {fileID: 7441200720383325235, guid: d90326f7d1c41f24da90509333ce2c61,
     type: 3}
-  projectileSpeed: 18
+  projectileSpeed: 30
   projectileLifetime: 10
   useGravity: 1
   trajectoryType: 1
-  maxArchHeight: 15
-  minArchHeight: 25
+  targetedDirection: 0
+  maxArchHeight: 500
+  minArchHeight: 1
   randomDirectionConeAngle: 25
   canBounce: 0
-  maxBounces: 3
+  maxBounces: 2
   bounceDamageMultiplier: 1
   projectileCount: 1
+  timeBetweenProjectiles: 0.1
   spreadAngle: 0
