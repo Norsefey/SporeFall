@@ -182,6 +182,10 @@ public class StanleyControlScript : MonoBehaviour
             Destroy(vfx, 2f); // Incase it doesnt auto destroy
         }
     }
+    private void OnDisable()
+    {
+        transform.localPosition = Vector3.zero;
+    }
     public void UpdateVisual(int index)
     {
         StanleyVisuals[index].SetActive(true);

@@ -49,7 +49,6 @@ public class UpgradeUI : MonoBehaviour
             StructureLevels structureLevels = upgradeManager.GetStructureLevelsForType(structure.GetStructureType());
             int currentLevel = upgradeManager.GetStructureLevel(structure.GetStructureType());
             StructureLevel nextLevel = upgradeManager.GetNextLevel(structure.GetStructureType());
-
             // Always show the banner, even if it's at max level
             banner.SetupBanner(structure.GetStructureType(), nextLevel ?? structureLevels.GetLevel(currentLevel), upgradeManager);
         }

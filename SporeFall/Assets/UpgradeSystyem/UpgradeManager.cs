@@ -17,14 +17,16 @@ public enum StructureType
 public class UpgradeManager : MonoBehaviour
 {
     public Dictionary<StructureType, int> currentStructureLevel = new Dictionary<StructureType, int>();
-    public List<StructureLevels> structureStats = new List<StructureLevels>();
+    private List<StructureLevels> structureStats = new List<StructureLevels>();
 
-    private void Awake()
+    private void Start()
     {
-        // Initialize all structure levels to 0
-        foreach (var stat in structureStats)
+        foreach(GameObject structureObj in GameManager.Instance.availableStructures)
         {
-            currentStructureLevel[stat.type] = 0;
+            Structure structure = structureObj.GetComponent<Structure>();
+            structureStats.Add(structure.structureStats);
+
+            currentStructureLevel[structure.structureStats.type] = 0;
         }
     }
     public bool CanUpgrade(StructureType type, float availableMycelia)
