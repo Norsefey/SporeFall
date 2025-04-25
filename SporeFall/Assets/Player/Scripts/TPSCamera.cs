@@ -2,6 +2,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 public class TPSCamera : MonoBehaviour
 {
 
@@ -65,6 +66,8 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private Transform rigLookAtTarget;
     private bool isPanning = false;
 
+    [SerializeField] private Camera overlaycamera;
+
     private void Start()
     {
         if (player == null)
@@ -72,7 +75,6 @@ public class TPSCamera : MonoBehaviour
         // Initialize the camera offset
         currentCameraOffset = defaultOffset;
     }
-
     private void LateUpdate()
     {
         if (player == null || pMan == null)
@@ -334,7 +336,6 @@ public class TPSCamera : MonoBehaviour
         }
 
     }
-
     public void SetMouseP1()
     {
         mHorSense = SavedSettings.mouseCamSensitivity;
@@ -344,7 +345,6 @@ public class TPSCamera : MonoBehaviour
         Debug.Log("Saved P1 Mouse settings are: " + SavedSettings.mouseCamSensitivity);
         Debug.Log("P1 Mouse settings are: " + mHorSense);
     }
-
     public void SetMouseP2()
     {
         mHorSense = SavedSettings.mouseCamSensitivity2;
@@ -354,7 +354,6 @@ public class TPSCamera : MonoBehaviour
         Debug.Log("Saved P2 Mouse settings are: " + SavedSettings.mouseCamSensitivity2);
         Debug.Log("P2 Mouse settings are: " + mHorSense);
     }
-
     public void SetGamepadP1()
     {
         gHorSense = SavedSettings.gamepadHorCamSensitivity;
@@ -364,7 +363,6 @@ public class TPSCamera : MonoBehaviour
         Debug.Log("Saved P1 gamepad settings are: " + SavedSettings.gamepadHorCamSensitivity + ", " + SavedSettings.gamepadVertCamSensitivity);
         Debug.Log("P1 Gamepad settings are: " + ", " + gHorSense);
     }
-
     public void SetGamepadP2()
     {
         gHorSense = SavedSettings.gamepadHorCamSensitivity2;
@@ -374,7 +372,6 @@ public class TPSCamera : MonoBehaviour
         Debug.Log("Saved P2 gamepad settings are: " + SavedSettings.gamepadHorCamSensitivity2 + ", " + SavedSettings.gamepadVertCamSensitivity2);
         Debug.Log("P2 Gamepad settings are: " + gHorSense + ", " + gvertSense);
     }
-
     public void FlipCameraSide()
     {
         flipSide = !flipSide;
@@ -431,4 +428,17 @@ public class TPSCamera : MonoBehaviour
 
         return new Vector3(yShake, xShake, zShake);
     }
+
+    public void SetOverlayIndex(int maskValue)
+    {
+        overlaycamera.cullingMask |= maskValue;
+    }
+
+
+    public void SetOverlayCamera()
+    {
+        var cameraData = myCamera.GetUniversalAdditionalCameraData();
+        cameraData.cameraStack.Add(overlaycamera);
+    }
+
 }
