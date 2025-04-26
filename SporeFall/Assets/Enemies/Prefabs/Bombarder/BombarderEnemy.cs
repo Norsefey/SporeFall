@@ -46,7 +46,6 @@ public class BombarderEnemy : BaseEnemy
         // Set initial last detection time
         lastDetectionTime = Time.time;
     }
-
     protected override void Initialize()
     {
         base.Initialize();
@@ -59,7 +58,6 @@ public class BombarderEnemy : BaseEnemy
             agent.updateRotation = false;
         }
     }
-
     protected override void Update()
     {
         base.Update();
@@ -71,7 +69,6 @@ public class BombarderEnemy : BaseEnemy
             StartCoroutine(RepositionCoroutine());
         }
     }
-
     protected override void UpdateIdleState()
     {
         // Don't perform idle behaviors while repositioning
@@ -104,7 +101,6 @@ public class BombarderEnemy : BaseEnemy
         // Listen for combat nearby
         CheckForCombatSounds();
     }
-
     protected override void UpdateChaseState(float distanceToTarget)
     {
         // Don't perform chase behaviors while repositioning
@@ -146,7 +142,6 @@ public class BombarderEnemy : BaseEnemy
             SetState(EnemyState.Idle);
         }
     }
-
     protected override void UpdateAttackState(float distanceToTarget)
     {
         // Don't perform attack behaviors while repositioning
@@ -191,7 +186,6 @@ public class BombarderEnemy : BaseEnemy
 
         
     }
-
     protected override void UpdateRetreatState()
     {
         // Stationary enemies don't retreat - they just focus on target rotation
@@ -203,7 +197,6 @@ public class BombarderEnemy : BaseEnemy
         // Stationary enemies don't strafe - they just focus on target rotation
         SetState(EnemyState.Attack);
     }
-
     protected override List<StateWeight> CalculateStateWeights()
     {
         // Don't calculate states while repositioning
@@ -250,7 +243,6 @@ public class BombarderEnemy : BaseEnemy
 
         return weights;
     }
-
     protected override float EvaluateAttackPriority(Attack attack, float distanceToTarget)
     {
         // Prioritize attacks based on distance
@@ -271,7 +263,6 @@ public class BombarderEnemy : BaseEnemy
 
         return priority;
     }
-
     private void CheckForCombatSounds()
     {
         // Detect nearby combat and become alerted
@@ -290,7 +281,6 @@ public class BombarderEnemy : BaseEnemy
             }
         }
     }
-
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -310,7 +300,6 @@ public class BombarderEnemy : BaseEnemy
             agent.updateRotation = false;
         }
     }
-
     public void SetAlerted(bool alerted)
     {
         isAlerted = alerted;
@@ -329,7 +318,6 @@ public class BombarderEnemy : BaseEnemy
             }
         }
     }
-
     private IEnumerator RepositionCoroutine()
     {
         // Start repositioning process
@@ -357,7 +345,6 @@ public class BombarderEnemy : BaseEnemy
         // Reset last detection time
         lastDetectionTime = Time.time;
     }
-
     private IEnumerator SinkIntoGround()
     {
         // Start sinking animation
@@ -407,7 +394,6 @@ public class BombarderEnemy : BaseEnemy
             col.enabled = false;
         }
     }
-
     private void FindNewPosition()
     {
         // Find a suitable new position within repositionRadius
@@ -445,7 +431,6 @@ public class BombarderEnemy : BaseEnemy
             targetRepositionPoint = originalPosition;
         }
     }
-
     private IEnumerator MoveUnderground()
     {
         // Enable agent while underground for path calculation
@@ -516,7 +501,6 @@ public class BombarderEnemy : BaseEnemy
             transform.position = new Vector3(targetRepositionPoint.x, startPos.y, targetRepositionPoint.z);
         }
     }
-
     private IEnumerator RiseFromGround()
     {
         // Prepare to rise
@@ -565,7 +549,6 @@ public class BombarderEnemy : BaseEnemy
         // Reset state
         isSinking = false;
     }
-
     // Override to handle our own rising animation
     public override void TriggerRiseAnimation()
     {
@@ -580,14 +563,12 @@ public class BombarderEnemy : BaseEnemy
             Invoke("ActivateAfterRising", risingAnimationLength);
         }
     }
-
     private void ActivateAfterRising()
     {
         DetectTargets();
         SetRandomState();
         lastDetectionTime = Time.time;
     }
-
     protected override void OnDisable()
     {
         base.OnDisable();
