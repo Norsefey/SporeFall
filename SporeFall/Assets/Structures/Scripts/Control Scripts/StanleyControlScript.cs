@@ -69,11 +69,8 @@ public class StanleyControlScript : MonoBehaviour
         // Check if it's time to generate money
         if (moneyGenerationTimer >= myceliaGenerationTickRate)
         {
-            // Calculate money to generate based on time passed
-            float moneyToAdd = myceliaGenerationRate * myceliaGenerationTickRate;
-
             // Add money
-            GameManager.Instance.IncreaseMycelia(moneyToAdd);
+            GameManager.Instance.IncreaseMycelia(myceliaGenerationRate);
 
             // Reset timer
             moneyGenerationTimer = 0f;
