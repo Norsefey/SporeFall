@@ -507,7 +507,7 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             if (attack.CanUse(distanceToTarget))
             {
-                float priority = EvaluateAttackPriority(attack, distanceToTarget);
+                float priority = attack.priority;
                 if (priority > bestPriority)
                 {
                     bestPriority = priority;
@@ -516,11 +516,6 @@ public abstract class BaseEnemy : MonoBehaviour
             }
         }
         return bestAttack;
-    }
-    protected virtual float EvaluateAttackPriority(Attack attack, float distanceToTarget)
-    {
-        // Override this to implement custom priority logic
-        return 1f;
     }
     public void StartDOTEffect(Damageable target, float totalDamage, float duration, float tickRate)
     {
