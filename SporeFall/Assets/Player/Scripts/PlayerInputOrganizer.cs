@@ -366,7 +366,9 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnSkipCutscene(InputAction.CallbackContext context)
     {
+        
         GameManager.Instance.waveManager.SkippParkingAnimation();
+        
         if (Tutorial.Instance != null)
         {
             Tutorial.Instance.timer = 20f;

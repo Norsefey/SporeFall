@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class WinLoseMenus : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class WinLoseMenus : MonoBehaviour
     [SerializeField] int gameSceneIndex;
     [SerializeField] GameObject firstButton;
 
+    [SerializeField] TMP_Text completionText;
+
     private void Start()
     {
         InputSystem.onDeviceChange += OnDeviceChange;
@@ -21,6 +24,12 @@ public class WinLoseMenus : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstButton);
+        }
+        if (PersistentGameManager.Instance != null)
+        {
+            int minutes = Mathf.FloorToInt(PersistentGameManager.Instance.completionTime / 60F);
+            int seconds = Mathf.FloorToInt(PersistentGameManager.Instance.completionTime - minutes * 60);
+            completionText.text = "Level Completion Time: " + string.Format("{0:0}:{1:00}", minutes, seconds);
         }
     }
 
