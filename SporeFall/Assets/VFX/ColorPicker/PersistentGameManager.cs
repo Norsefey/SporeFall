@@ -11,6 +11,8 @@ public class PersistentGameManager : MonoBehaviour
     [SerializeField] private Color player2Primary = Color.black;
     [SerializeField] private Color player2Secondary = Color.red;
 
+
+    public float completionTime;
     private bool easyMode = false;
     private void Awake()
     {
@@ -55,4 +57,9 @@ public class PersistentGameManager : MonoBehaviour
     }
     public bool GetEasyMode() { return easyMode;}
     public void SetEasyMode(bool toggle) { easyMode = toggle;}
+
+    public void ResetCompletionTimer()
+    {
+        completionTime = 0;
+    }
 }

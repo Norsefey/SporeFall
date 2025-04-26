@@ -91,12 +91,15 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        
         Debug.Log("Player count is: " + players.Count);
         gameUI.DisplayMycelia(mycelia);
+
+        PersistentGameManager.Instance.ResetCompletionTimer();
     }
     private void Update()
     {
+        PersistentGameManager.Instance.completionTime += Time.deltaTime;
+
         if (Tutorial.Instance != null)
         {
             if (SavedSettings.currentLevel == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)

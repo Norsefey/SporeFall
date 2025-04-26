@@ -64,6 +64,7 @@ public class WaveManager : MonoBehaviour
 
     private List<BaseEnemy> activeEnemies = new List<BaseEnemy>();
 
+    private bool skippingAnimation = false;
     private void Start()
     {
         InitializePools();
@@ -220,8 +221,10 @@ public class WaveManager : MonoBehaviour
     }
     public void SkippParkingAnimation()
     {
-        if (train.trainState == TrainHandler.TrainState.Moving)
+        if (train.trainState == TrainHandler.TrainState.Moving && !skippingAnimation)
         {
+            skippingAnimation = true;
+
             StopCoroutine(movingCoroutine);
             train.animations.SkipParkingAnimation();
             // Ensuring the final position is set precisely after the movement
@@ -234,6 +237,7 @@ public class WaveManager : MonoBehaviour
     {
         train.SetParkedState();
         wavePhase = WavePhase.NotStarted;
+        skippingAnimation = false;
     }
     public void SpawnExplosion(Vector3 pos)
     {

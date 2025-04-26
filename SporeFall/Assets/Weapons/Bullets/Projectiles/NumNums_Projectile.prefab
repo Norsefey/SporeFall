@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1755e229306f9a944b473b5aef203d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   hitLayers:
     serializedVersion: 2
     m_Bits: 448
@@ -82,8 +82,9 @@ MonoBehaviour:
   audioPlayer: {fileID: 0}
   bulletSound: {fileID: 0}
   bulletSoundVolume: 0.5
-  explosionEffectPrefab: {fileID: 0}
-  explosionRadius: 0
+  explosionEffectPrefab: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5,
+    type: 3}
+  explosionRadius: 1
   damageFalloff:
     serializedVersion: 2
     m_Curve:
@@ -114,8 +115,11 @@ MonoBehaviour:
   dOTTickRate: 0
   dOTDamagePerTick: 0
   dOTRadius: 0
+  dOTCorruptionPerTick: 0
   corruptionAmount: 0
   entitiesToSpawn: []
+  collisionCheckRadius: 0.5
+  targetedDirection: 0
 --- !u!65 &358951197454849710
 BoxCollider:
   m_ObjectHideFlags: 0
