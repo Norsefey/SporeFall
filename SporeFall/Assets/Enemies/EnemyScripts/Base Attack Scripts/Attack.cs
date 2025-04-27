@@ -8,6 +8,7 @@ public abstract class Attack : ScriptableObject
 {
     // Base ScriptableObject for all boss attacks
     [Header("Base Attack Settings")]
+    public float priority = 1f;
     [Tooltip("How close to target to do attack")]
     [SerializeField] protected float range = 5f;
     [Tooltip("How Long until Attack can be used again")]

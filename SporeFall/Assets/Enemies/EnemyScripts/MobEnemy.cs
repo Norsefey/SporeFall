@@ -20,17 +20,6 @@ public class MobEnemy : BaseEnemy
         SpawnMyceliaDrop();
         TrySpawnWeaponDrop();
     }
-    protected override float EvaluateAttackPriority(Attack attack, float distanceToTarget)
-    {
-        float priority = 1f;
-
-        if (attack is ExplosiveAttack && distanceToTarget <= attack.Range)
-        {
-            priority *= 2f;
-        }
-
-        return priority;
-    }
     private void SpawnMyceliaDrop()
     {
         if (myceliaDropPrefab == null || PoolManager.Instance == null)

@@ -6,7 +6,6 @@ using UnityEngine;
 [System.Serializable]
 public struct ProjectileData
 {
-    public Vector3 Direction;
     public float Speed;
     public float Damage;
     public float Lifetime;
@@ -16,6 +15,9 @@ public struct ProjectileData
     public int MaxBounces;
     public float BounceDamageMultiplier;
     public bool targetedDirection;
+    [HideInInspector]
+    public Vector3 Direction;
+    [HideInInspector]
     public Vector3 TargetPosition; // Added target position for arc calculations
 }
 public enum ProjectileType
@@ -83,7 +85,6 @@ public class ProjectileBehavior : MonoBehaviour
 
     private void Update()
     {
-        // Store previous position for collision detection
         previousPosition = transform.position;
 
         // For arcing projectiles
@@ -109,11 +110,35 @@ public class ProjectileBehavior : MonoBehaviour
             // Check for collisions manually for arc trajectories
             CheckForCollisions();
 
-            /*// Terminate at end of arc
+            // Terminate at end of arc
             if (arcProgress >= 1)
             {
+                // Create explosion at landing point
+                switch (type)
+                {
+                    case ProjectileType.Explosive:
+                        HandleExplosiveAttack();
+                        break;
+                    case ProjectileType.DOT:
+                        HandleDOTAttack();
+                        break;
+                    case ProjectileType.Spawner:
+                        HandleSpawnerBehavior();
+                        break;
+                    default:
+                        // For non-explosive projectiles, check for direct hits
+                        Collider[] hits = Physics.OverlapSphere(transform.position, collisionCheckRadius, hitLayers);
+                        foreach (var hit in hits)
+                        {
+                            if (hit.TryGetComponent<Damageable>(out var damageable))
+                            {
+                                ApplyDamage(damageable);
+                            }
+                        }
+                        break;
+                }
                 ReturnToPool();
-            }*/
+            }
         }
         else
         {
@@ -133,13 +158,15 @@ public class ProjectileBehavior : MonoBehaviour
         Vector3 movementDirection = (transform.position - previousPosition).normalized;
         float movementDistance = Vector3.Distance(previousPosition, transform.position);
 
+        if (movementDistance < 0.001f) return; // Skip if barely moving
+
         // Cast a sphere in the direction of movement
         RaycastHit hit;
         if (Physics.SphereCast(previousPosition, collisionCheckRadius, movementDirection,
                               out hit, movementDistance, hitLayers))
         {
             // Handle the collision similar to OnCollisionEnter
-            Debug.Log("Projectile " + gameObject.name + " Hit: " + hit.collider.gameObject.name);
+            Debug.Log("Projectile " + gameObject.name + " Hit: " + hit.collider.gameObject.name + " during arc");
 
             // Create a fake collision for compatibility with existing code
             Collision fakeCollision = CreateFakeCollision(hit);
@@ -163,6 +190,7 @@ public class ProjectileBehavior : MonoBehaviour
                     break;
             }
 
+            // Check if we should handle bounce or destroy
             HandleCollision(fakeCollision);
         }
     }
@@ -238,8 +266,20 @@ public class ProjectileBehavior : MonoBehaviour
                 rb.isKinematic = true;
             }
 
+            // Make sure the direction is normalized
+            if (data.Direction.magnitude > 0)
+            {
+                data.Direction = data.Direction.normalized;
+            }
+            else
+            {
+                data.Direction = (data.TargetPosition - initialPosition).normalized;
+            }
+
             // Store initial position for collision detection
             previousPosition = transform.position;
+
+            Debug.Log($"Initialized mortar projectile targeting: {data.TargetPosition}, ArcHeight: {data.ArcHeight}");
         }
         else
         {
