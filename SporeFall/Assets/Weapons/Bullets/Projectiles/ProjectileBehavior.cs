@@ -465,6 +465,9 @@ public class ProjectileBehavior : MonoBehaviour
     }
     private void HandleCorruptionAttack(Collision collision)
     {
+        if(collision == null)
+            return;
+
         if (collision.transform.TryGetComponent<Damageable>(out var damageable))
         {
             if (damageable.canHoldCorruption)

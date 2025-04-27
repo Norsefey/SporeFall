@@ -7,7 +7,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hit
+  m_Name: Flinch
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -22,7 +22,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6a8ab1660bed8fc4199ee2ec145ec92e, type: 2}
+  m_Motion: {fileID: 7400000, guid: c052887dfc010dc4d85bbd9e51dfccce, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -49,7 +49,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 76d58c5988ca9e94c9eef6160724c1b4, type: 2}
+  m_Motion: {fileID: 7400000, guid: 36a7dcfb0f957a9449569460c45e655e, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -96,6 +96,18 @@ AnimatorStateMachine:
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 4077733753069610446}
+--- !u!114 &-5505265119140676528
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35651dd9bf275ad4e89971f2d8840ee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1101 &-4734190723768920432
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -134,7 +146,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 8452344340068047760}
   m_StateMachineBehaviours:
-  - {fileID: 3123468113042606337}
+  - {fileID: -5505265119140676528}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -143,8 +155,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: b76b95511d21ddc418dd869af7e5ba96, type: 2}
-  m_Tag: 
+  m_Motion: {fileID: 7400000, guid: dd63fed3394c7e74fb119f8b8ee67902, type: 2}
+  m_Tag: Walk
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -155,7 +167,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RedCapAnime
+  m_Name: GreyBackAnimator
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: RangedAttack
@@ -247,7 +259,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: b8ab45fdf29904244abd253cc4c05d9d, type: 2}
+  m_Motion: {fileID: 7400000, guid: 4ddd0583d2a8ca2438181ff7b3415177, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -325,18 +337,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!114 &3123468113042606337
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35651dd9bf275ad4e89971f2d8840ee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1102 &4077733753069610446
 AnimatorState:
   serializedVersion: 6
@@ -358,8 +358,8 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: df3359f9262b68d4598d5a2596136149, type: 2}
-  m_Tag: 
+  m_Motion: {fileID: 7400000, guid: 93af210de9fea784b8ccb5ca4751c3e6, type: 2}
+  m_Tag: Idle
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -410,7 +410,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 40c577b6aba37e94eab5b5ae83dc717f, type: 2}
+  m_Motion: {fileID: 7400000, guid: 883329c0f9e93284dad4a948277b614a, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
