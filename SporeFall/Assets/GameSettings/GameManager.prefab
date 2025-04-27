@@ -567,6 +567,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6600114411680066806}
   - {fileID: 7885028810017466839}
   - {fileID: 467369501731093252}
   m_Father: {fileID: 6590776842838827360}
@@ -576,6 +577,81 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1161232953620339193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6600114411680066806}
+  - component: {fileID: 6158701824914332330}
+  - component: {fileID: 7969248936260399958}
+  m_Layer: 0
+  m_Name: MycerliaIcon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6600114411680066806
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161232953620339193}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7837652341231528072}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -365.5, y: 195}
+  m_SizeDelta: {x: 107, y: 96}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &6158701824914332330
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161232953620339193}
+  m_CullTransparentMesh: 1
+--- !u!114 &7969248936260399958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161232953620339193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -523075489, guid: 657115bef3dd78a4082368f4620e8055, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1381048305980815557
 GameObject:
   m_ObjectHideFlags: 0
@@ -1760,8 +1836,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -230, y: 115}
-  m_SizeDelta: {x: 200, y: 100}
+  m_AnchoredPosition: {x: -227.7, y: 143.1}
+  m_SizeDelta: {x: 109.5239, y: 26.5086}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3132826913796550631
 CanvasRenderer:
@@ -1791,7 +1867,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Mycelia: 150'
+  m_text: 150
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d80a7fa5464eead48a84272337e4dae0, type: 2}
   m_sharedMaterial: {fileID: 3857178750074848860, guid: d80a7fa5464eead48a84272337e4dae0,
@@ -3020,13 +3096,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee889c738f3a6140970aceb6cda25f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  structureStats:
-  - {fileID: 11400000, guid: f3461c81cf02be04cb1dfa4e4ed077de, type: 2}
-  - {fileID: 11400000, guid: 3f1f210896a237a4b917acd32cbb1ab1, type: 2}
-  - {fileID: 11400000, guid: c89d5bf33b4e730409765b089932db32, type: 2}
-  - {fileID: 11400000, guid: ffe20105df6c9fd4ea830fc4d77261b5, type: 2}
-  - {fileID: 11400000, guid: 490f894373af6f644ae2dfc18d0959cb, type: 2}
-  - {fileID: 11400000, guid: 2cbf19241ade7924aad6700f793cf359, type: 2}
 --- !u!82 &4925389456346947674
 AudioSource:
   m_ObjectHideFlags: 0

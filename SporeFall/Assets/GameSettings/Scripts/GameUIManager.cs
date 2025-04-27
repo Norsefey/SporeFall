@@ -15,7 +15,7 @@ public class GameUIManager : MonoBehaviour
     public void DisplayMycelia(float value)
     {
         if (myceliaIndicator != null)
-            myceliaIndicator.text = "Mycelia: " + value.ToString();
+            myceliaIndicator.text = value.ToString();
     }
 
     public void ToggleGameUI(bool toggle)
