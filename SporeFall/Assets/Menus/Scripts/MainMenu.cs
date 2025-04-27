@@ -67,6 +67,7 @@ public class MainMenu : MonoBehaviour
             audioMixer.SetFloat("structureVolume", structureVolume);
             audioMixer.SetFloat("ambienceVolume", ambienceVolume);
             audioMixer.SetFloat("voiceVolume", voiceVolume);
+            SavedSettings.firstOpenedGame = false;
         }
 
         //Set default slider values to match audio volumes
@@ -180,7 +181,7 @@ public class MainMenu : MonoBehaviour
 
     public void TutorialQuestion()
     {
-        if (SavedSettings.firstOpenedGame)
+        if (SavedSettings.firstTutorialQuestion)
         {
             tutorialQuestionScreen.SetActive(true);
             mainScreen.SetActive(false);
@@ -190,7 +191,7 @@ public class MainMenu : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(firstTutorialButton);
             }
             savedFirstButton = firstTutorialButton;
-            SavedSettings.firstOpenedGame = false;
+            SavedSettings.firstTutorialQuestion = false;
         }
 
         else
