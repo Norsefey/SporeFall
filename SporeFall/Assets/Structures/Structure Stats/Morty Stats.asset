@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 8
   structureName: Morty
-  description: 
+  description: A morter that provides far range explosive damage
   icon: {fileID: 21300000, guid: 78359dbeda71f854c84b83d235a94f3a, type: 3}
   levels:
   - name: Lv1
@@ -28,6 +28,46 @@ MonoBehaviour:
     projectileStats:
       Speed: 8
       Damage: 10
+      Lifetime: 10
+      UseGravity: 1
+      ArcHeight: 45
+      CanBounce: 0
+      MaxBounces: 0
+      BounceDamageMultiplier: 0
+      targetedDirection: 1
+      Direction: {x: 0, y: 0, z: 0}
+      TargetPosition: {x: 0, y: 0, z: 0}
+  - name: Lv2
+    maxHealth: 125
+    cost: 30
+    energyCost: 5
+    upgradeDescription: +25 health, +10 damage
+    detectionRange: 50
+    fireRate: 0.2
+    fireRange: 50
+    projectileStats:
+      Speed: 8
+      Damage: 20
+      Lifetime: 10
+      UseGravity: 1
+      ArcHeight: 45
+      CanBounce: 0
+      MaxBounces: 0
+      BounceDamageMultiplier: 0
+      targetedDirection: 1
+      Direction: {x: 0, y: 0, z: 0}
+      TargetPosition: {x: 0, y: 0, z: 0}
+  - name: Lv3
+    maxHealth: 150
+    cost: 40
+    energyCost: 5
+    upgradeDescription: +25 health, +10 damage
+    detectionRange: 50
+    fireRate: 0.2
+    fireRange: 50
+    projectileStats:
+      Speed: 8
+      Damage: 30
       Lifetime: 10
       UseGravity: 1
       ArcHeight: 45

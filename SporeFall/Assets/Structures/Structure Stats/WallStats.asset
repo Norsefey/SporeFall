@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   structureName: Walter
-  description: Lures nearby enemies to target it
+  description: Lures nearby enemies to target it and provides damage reduction to
+    player
   icon: {fileID: 21300000, guid: 4e3fe66bcb3af5c46a5594e9985d84fc, type: 3}
   levels:
   - name: Wall LV1
@@ -28,13 +29,13 @@ MonoBehaviour:
     maxHealth: 600
     cost: 30
     energyCost: 5
-    upgradeDescription: +100 health
+    upgradeDescription: +100 health, +5% dmg reduction
     protectionRange: 10
-    damageReduction: 0.25
+    damageReduction: 0.2
   - name: Wall LV3
     maxHealth: 700
     cost: 35
     energyCost: 5
-    upgradeDescription: + 100 health
+    upgradeDescription: + 100 health, +5% damage reduction
     protectionRange: 15
     damageReduction: 0.25

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d946acd70ddf4646879bd435017a3d0, type: 3}
   m_Name: GB_Atk_Projectile
   m_EditorClassIdentifier: 
-  priority: 2
+  priority: 1
   range: 25
   cooldown: 5
   damage: 10
-  attackDelay: 0.4
-  recoveryTime: 1
+  attackDelay: 2
+  recoveryTime: 1.5
   animationTrigger: RangedAttack
   attackVFXPrefab: {fileID: 0}
   attackSFX: {fileID: 8300000, guid: 4a9558accb615124c8442867c1ff4bd7, type: 3}
@@ -26,15 +26,15 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7441200720383325235, guid: 1095d4ace6048a9469951fdd6f64bbe6,
     type: 3}
   projectileSpeed: 20
-  projectileLifetime: 10
-  useGravity: 1
-  trajectoryType: 1
-  targetedDirection: 1
-  maxArchHeight: 45
-  minArchHeight: 35
+  projectileLifetime: 5
+  useGravity: 0
+  trajectoryType: 0
+  targetedDirection: 0
+  maxArchHeight: 0
+  minArchHeight: 0
   randomDirectionConeAngle: 45
-  canBounce: 1
-  maxBounces: 1
+  canBounce: 0
+  maxBounces: 3
   bounceDamageMultiplier: 0.7
   projectileCount: 1
   timeBetweenProjectiles: 0.1
