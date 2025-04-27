@@ -243,26 +243,6 @@ public class BombarderEnemy : BaseEnemy
 
         return weights;
     }
-    protected override float EvaluateAttackPriority(Attack attack, float distanceToTarget)
-    {
-        // Prioritize attacks based on distance
-        // Higher priority for attacks that work well at the current distance
-        float priority = 1.0f;
-
-        // If we're at optimal range, give higher priority
-        if (Mathf.Abs(distanceToTarget - optimalRange) < 5f)
-        {
-            priority += 2.0f;
-        }
-
-        // For a stationary enemy, prioritize long-range attacks more
-        if (attack.Range > 15f)
-        {
-            priority += 1.5f;
-        }
-
-        return priority;
-    }
     private void CheckForCombatSounds()
     {
         // Detect nearby combat and become alerted

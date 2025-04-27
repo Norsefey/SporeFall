@@ -18,31 +18,6 @@ public class CorruptedPlayer : BaseEnemy
     {
         base.Awake();
     }
-    protected override float EvaluateAttackPriority(Attack attack, float distanceToTarget)
-    {
-        float priority = 1f;
-
-        // priority logic based on attack type and conditions
-        if (attack is MeleeAttack && distanceToTarget <= attack.Range)
-        {
-            priority *= 1.5f;
-        }
-        else if (attack is RangedAttack && distanceToTarget >= stoppingDistance)
-        {
-            priority *= 1.5f;
-        }
-        else if (attack is AoeAttack && currentTarget != null && train != null)
-        {
-            // if not attacking train, and target is near train, do an AOE attack to damage both
-            float distanceBetweenTargets = Vector3.Distance(train.transform.position, currentTarget.position);
-            if (distanceBetweenTargets <= 10)
-            {
-                priority *= 1.5f;
-            }
-        }
-
-        return priority;
-    }
     protected override void Update()
     {
         if (isAttacking)
