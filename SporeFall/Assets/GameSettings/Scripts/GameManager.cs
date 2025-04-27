@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log("Setting Game Manager Instance");
         Instance = this;
 
-        if(PersistentGameManager.Instance != null)
+        if(PersistentGameManager.Instance != null && trainHandler != null)
         {
             if (PersistentGameManager.Instance.GetEasyMode())
             {// Easy Difficulty settings
