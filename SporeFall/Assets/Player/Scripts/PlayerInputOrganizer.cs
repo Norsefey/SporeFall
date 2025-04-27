@@ -479,7 +479,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     // building stuff
     private void OnHotKeyPressed(InputAction.CallbackContext context)
     {
-        Debug.LogWarning(context.ReadValue<float>());
         pMan.bGun.SelectStructureHotKey((int)context.ReadValue<float>());
     }
     private void OnBuildMode(InputAction.CallbackContext context)
