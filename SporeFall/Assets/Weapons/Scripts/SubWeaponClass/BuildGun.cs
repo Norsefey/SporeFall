@@ -63,6 +63,11 @@ public class BuildGun : Weapon
                 }
                 else
                 {
+                    if (selectedStructure.onPlatform)
+                    {
+                        selectedStructure.myPlatform.RemoveStructure();
+                    }
+
                     movingStructure = true;
                 }
             }
@@ -96,6 +101,18 @@ public class BuildGun : Weapon
             }
             else
             {
+                if (placingOnPlatform)
+                {
+                    selectedPlatform.SetStructure(selectedStructure);
+                    selectedStructure.myPlatform = selectedPlatform;
+                    selectedStructure.onPlatform = true;
+                }
+                else if(selectedStructure.onPlatform)
+                {
+                    selectedStructure.myPlatform.RemoveStructure();
+                    selectedStructure.onPlatform = false;
+                }
+
                 // If placement is valid, restore original colors and place
                 RestoreOriginalColors();
                 //SetStructureToOpaque();
@@ -514,7 +531,6 @@ public class BuildGun : Weapon
             //Debug.Log(hit.collider.name);
             if (selectedStructure == null)// to prevent assigning the same structure
             {
-                
                 selectedStructure = hit.collider.transform.GetComponent<Structure>();
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
                 //SetStructureToTransparent(selectedStructure.gameObject);
