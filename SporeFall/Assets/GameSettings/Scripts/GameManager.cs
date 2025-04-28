@@ -114,22 +114,38 @@ public class GameManager : MonoBehaviour
     public void HandlePlayerJoining(PlayerManager player)
     {
         // keep track of active players
+        // keep track of active players
         players.Add(player);
 
-        if(players.Count == 1)
+        if (players.Count == 1)
         {
+            // Player 1 settings
+            player.pCamera.myCamera.rect = new Rect(0, 0, 1, 1); // Full screen
             player.pCamera.SetOverlayIndex(playerOneUI.value);
             player.coloring.SetColors(0);
         }
-        else if(players.Count == 2)
+        else if (players.Count == 2)
         {
+            // Player 2 settings
+            player.pCamera.myCamera.rect = new Rect(0.5f, 0, 0.5f, 1); // Right half
             player.pCamera.SetOverlayIndex(playerTwoUI.value);
             player.coloring.SetColors(2);
+
+            // Update Player 1's viewport when a second player joins
+            if (players[0] != null)
+            {
+                players[0].pCamera.myCamera.rect = new Rect(0, 0, 0.5f, 1); // Left half
+                                                                            // Re-adjust the overlay camera for player 1
+                players[0].pCamera.SetOverlayCamera();
+            }
         }
 
-
+        // Now set up the overlay camera to match the main camera's viewport
         player.pCamera.SetOverlayCamera();
-        
+
+
+
+
 
         Debug.Log("Player Added");
         if (!isTesting)
@@ -160,6 +176,7 @@ public class GameManager : MonoBehaviour
 
         OnPlayerJoin?.Invoke(player.GetPlayerIndex());
     }
+
     private void SpawnPlayer(PlayerManager player)
     {
         if(backUpPlayerSpawner == null)

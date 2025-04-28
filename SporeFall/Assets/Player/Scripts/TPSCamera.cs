@@ -66,7 +66,7 @@ public class TPSCamera : MonoBehaviour
     [SerializeField] private Transform rigLookAtTarget;
     private bool isPanning = false;
 
-    [SerializeField] private Camera overlaycamera;
+    public Camera overlaycamera;
 
     private void Start()
     {
@@ -437,8 +437,29 @@ public class TPSCamera : MonoBehaviour
 
     public void SetOverlayCamera()
     {
-        var cameraData = myCamera.GetUniversalAdditionalCameraData();
-        cameraData.cameraStack.Add(overlaycamera);
+        var mainCameraData = myCamera.GetUniversalAdditionalCameraData();
+        var overlayData = overlaycamera.GetUniversalAdditionalCameraData();
+
+        // Configure as overlay
+        overlayData.renderType = CameraRenderType.Overlay;
+
+        // Match rendering settings with main camera
+        overlaycamera.clearFlags = CameraClearFlags.Depth;
+
+        // Set the overlay camera's viewport rect to match the main camera
+        overlaycamera.rect = myCamera.rect;
+
+        // Ensure the overlay camera has the same rendering path
+        overlayData.renderPostProcessing = mainCameraData.renderPostProcessing;
+        overlayData.renderShadows = mainCameraData.renderShadows;
+        overlayData.requiresColorOption = mainCameraData.requiresColorOption;
+        overlayData.requiresDepthOption = mainCameraData.requiresDepthOption;
+
+        // Only add to the stack if it's not already there
+        if (!mainCameraData.cameraStack.Contains(overlaycamera))
+        {
+            mainCameraData.cameraStack.Add(overlaycamera);
+        }
     }
 
 }
