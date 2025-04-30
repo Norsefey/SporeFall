@@ -17,7 +17,7 @@ public class BackUpPlayerSpawner : MonoBehaviour
         player.MovePlayerTo(playerSpawnPoints[player.GetPlayerIndex()].position);
 
         yield return new WaitForSeconds(1);
-        if(tempCamera.activeSelf)
+        if(tempCamera != null && tempCamera.activeSelf)
             tempCamera.SetActive(false);
 
         player.TogglePControl(true);

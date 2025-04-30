@@ -10,10 +10,12 @@ public class PickUpWeapon : Interactables
     [SerializeField] private float rotSpeed = 45;
 
     [Header("Despawn Settings")]
-    [SerializeField] private bool shouldDespawn = true; // Mostly for testing, toggle despawning
+    [SerializeField] private bool despawnTimerActive = true; // Mostly for testing, toggle despawning
     [SerializeField] private float despawnTime = 30f;    // Time in seconds before weapon despawns
     [SerializeField] private float blinkStartTime = 5f;  // Time before despawn when weapon starts blinking
     [SerializeField] private float blinkRate = 0.5f;     // How fast the weapon blinks (in seconds)
+    [Space(10)]
+    [SerializeField] private bool despawnAfterPickup = true;
     private Coroutine blinkCoroutine; // assign the coroutine to be able to stop it after despawning
     private float despawnTimer;
     private bool isBlinking;
@@ -27,7 +29,7 @@ public class PickUpWeapon : Interactables
     {
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = pickupSound;
-        if (shouldDespawn)
+        if (despawnTimerActive)
         {
             // Start despawn timer
             despawnTimer = despawnTime;
@@ -105,8 +107,11 @@ public class PickUpWeapon : Interactables
         weapon.gameObject.SetActive(false);
         transform.GetChild(0).gameObject.SetActive(false);
         RemoveIntractable();
-        // Delay the destruction of the GameObject to allow the sound to finish playing
-        Invoke(nameof(DestroyIntractable), pickupSound.length);
+        if (despawnAfterPickup)
+        {
+            // Delay the destruction of the GameObject to allow the sound to finish playing
+            Invoke(nameof(DestroyIntractable), pickupSound.length);
+        }
         Debug.Log("Picked up: " + weapon.name);
     }
     public override void RemovePrompt()
