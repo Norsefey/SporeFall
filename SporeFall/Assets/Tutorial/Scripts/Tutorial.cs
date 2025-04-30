@@ -417,7 +417,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 4)
                 {
-                    tutorialText.text = "Set up your defenses. They'll move with the train (and be refunded if they overlap with anything).";
+                    tutorialText.text = "Set up your defenses. They'll be returned to you and refunded when the train moves.";
                     continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
@@ -426,7 +426,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 5)
                 {
-                    tutorialText.text = "When you're ready, press the Main Button in the middle of the train to lure out your enemies.";
+                    tutorialText.text = "When you're ready, press the Main Button near the middle of the train to lure out your enemies.";
                     continueText.text = " ";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
