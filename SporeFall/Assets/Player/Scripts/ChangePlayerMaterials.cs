@@ -6,7 +6,7 @@ public class ChangePlayerMaterials : MonoBehaviour
 {
 
     [SerializeField]private SkinnedMeshRenderer[] robotParts;
-    [SerializeField] private MeshRenderer[] gunMesh;
+    [SerializeField]private MeshRenderer[] gunMesh;
     [SerializeField]private Material[] altMaterials;
 
     public void ChangeMaterials()

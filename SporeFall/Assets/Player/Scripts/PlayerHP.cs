@@ -19,6 +19,14 @@ public class PlayerHP : Damageable
     public override void TakeDamage(float damage)
     {
         float previousHP = currentHP;
+        if (currentHP / maxHP <= .25f)
+        {
+            damageModifier = .25f;
+        }
+        else
+        {
+            damageModifier = 0;
+        }
         base.TakeDamage(damage);
 
         if (pMan != null && pMan.audioSource != null)
