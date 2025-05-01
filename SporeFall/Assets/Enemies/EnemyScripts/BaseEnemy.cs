@@ -9,8 +9,8 @@ public enum EnemyState
     Idle,
     Chase,
     Attack,
-    Retreat,
-    Strafe
+    Strafe,
+    Wander
 }
 
 // Abstract base class for all Enemies
@@ -33,14 +33,14 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected float retreatDistance = 15f;
     [SerializeField] protected float strafeSpeed = 5f;
     protected EnemyState currentState = EnemyState.Idle;
-    private float stateTimer;
-    private Vector3 strafeTarget;
-    private bool strafeDirectionRight = true;
+    protected float stateTimer;
+    protected Vector3 strafeTarget;
+    protected bool strafeDirectionRight = true;
     [Header("State Selection")]
     [SerializeField] protected float chasePriorityDistance = 25f; // Distance above which chase becomes high priority
     [SerializeField] protected float damagePriorityThreshold = 20f; // Amount of damage that triggers defensive priorities
     [SerializeField] protected float damageTrackingDuration = 3f; // How long to track damage for
-    private bool targetingStructure = false;
+    protected bool targetingStructure = false;
     public Queue<DamageInstance> recentDamage = new();
     public struct DamageInstance
     {
@@ -73,21 +73,21 @@ public abstract class BaseEnemy : MonoBehaviour
 
     [Header("Targeting")]
     public TrainHandler train; // if nothing is in range will move to Payload or train
-    private Transform trainWall;
+    protected Transform trainWall;
     public Transform currentTarget;
     // Array to hold multiple valid target tags
     public string[] priorityTags; // e.g., "Player", "Ally"
     public float detectionRange = 20;
     public LayerMask targetsLayerMask; // So we only detect what we need to
     [SerializeField] protected float targetSwitchThreshold = 100f;
-    private bool passedThreshold = false;
-    private Collider[] detectedColliders;      // Array to store detected colliders
-    private int maxDetectedObjects = 25; // Max number of objects the enemy can detect at once
+    protected bool passedThreshold = false;
+    protected Collider[] detectedColliders;      // Array to store detected colliders
+    protected int maxDetectedObjects = 25; // Max number of objects the enemy can detect at once
     public Animator Animator => animator;
     public AudioSource AudioSource => audioSource;
 
-    private bool isInitialized = false;
-    private bool isRising = false;
+    protected bool isInitialized = false;
+    protected bool isRising = false;
     [Header("Animations")]
     [SerializeField] protected float risingAnimationLength = 2;
 
@@ -144,13 +144,6 @@ public abstract class BaseEnemy : MonoBehaviour
             agent.isStopped = false;
             agent.velocity = Vector3.zero;
         }
-
-       /* // Reset animation
-        if (animator != null)
-        {
-            animator.Rebind();
-            animator.Update(0f);
-        }*/
 
         // do not want movement while rising from from ground
         if (!isRising)
@@ -215,9 +208,6 @@ public abstract class BaseEnemy : MonoBehaviour
         // Attack Priority
         float attackWeight = CalculateAttackWeight(distanceToTarget);
         weights.Add(new StateWeight(EnemyState.Attack, attackWeight));
-        // Defensive Priorities
-        float retreatWeight = CalculateRetreatWeight(recentDamageSum, distanceToTarget);
-        weights.Add(new StateWeight(EnemyState.Retreat, retreatWeight));
         float strafeWeight = CalculateStrafeWeight(recentDamageSum, distanceToTarget);
         weights.Add(new StateWeight(EnemyState.Strafe, strafeWeight));
 
@@ -240,17 +230,6 @@ public abstract class BaseEnemy : MonoBehaviour
         if (bestAttack != null)
             return 2.5f;
         return 0.5f;
-    }
-    protected virtual float CalculateRetreatWeight(float recentDamage, float distanceToTarget)
-    {
-        float weight = 0.1f;
-        if (recentDamage <= 0)
-            return 0;
-
-        if (recentDamage > damagePriorityThreshold && distanceToTarget < stoppingDistance * 1.5f)
-            weight += 2f;
-
-        return weight;
     }
     protected virtual float CalculateStrafeWeight(float recentDamage, float distanceToTarget)
     {
@@ -287,9 +266,6 @@ public abstract class BaseEnemy : MonoBehaviour
             case EnemyState.Strafe:
                 stateTimer = Random.Range(2f, 4f);
                 CalculateStrafePosition();
-                break;
-            case EnemyState.Retreat:
-                stateTimer = Random.Range(1f, 3f);
                 break;
             case EnemyState.Attack:
                 stateTimer = Random.Range(5f, 8f);
@@ -332,10 +308,6 @@ public abstract class BaseEnemy : MonoBehaviour
             case EnemyState.Attack:
                 //Debug.Log("Attacking");
                 UpdateAttackState(distanceToTarget);
-                break;
-            case EnemyState.Retreat:
-                // Debug.Log("Retreating");
-                UpdateRetreatState();
                 break;
             case EnemyState.Strafe:
                 // Debug.Log("Strafing");
@@ -426,22 +398,6 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             //Debug.Log("Cannot Attack");
             SetRandomState(); // Choose new state if we can't attack
-        }
-    }
-    protected virtual void UpdateRetreatState()
-    {
-        if (currentTarget != null)
-        {
-            agent.stoppingDistance = stoppingDistance / 2;
-
-            Vector3 retreatDirection = transform.position - currentTarget.position;
-            Vector3 retreatPosition = transform.position + retreatDirection.normalized * retreatDistance;
-
-            if (NavMesh.SamplePosition(retreatPosition, out NavMeshHit hit, retreatDistance, NavMesh.AllAreas))
-            {
-                agent.isStopped = false;
-                agent.SetDestination(hit.position);
-            }
         }
     }
     protected virtual void CalculateStrafePosition()
@@ -629,7 +585,6 @@ public abstract class BaseEnemy : MonoBehaviour
             trainWall = train.GetDamagePoint();
         }
     }
-    // Optional: Add method to clean up any persistent effects or coroutines when returned to pool
     protected virtual void OnDisable()
     {
         StopAllCoroutines();
@@ -676,7 +631,7 @@ public abstract class BaseEnemy : MonoBehaviour
             StartCoroutine(RisingFromGround());
         }
     } 
-    private IEnumerator RisingFromGround()
+    protected IEnumerator RisingFromGround()
     {
         SetState(EnemyState.Idle);
         agent.isStopped = true;

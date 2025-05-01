@@ -32,7 +32,6 @@ public class EnemyControls : MonoBehaviour
     private int maxDetectedObjects = 10;        // Max number of objects the enemy can detect at once
     [Header("Drops")]
     [SerializeField] GameObject myceliaDropPrefab;
-    [SerializeField] private float myceliaDropAmount = 5;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
     private bool isTargetingTrain = false;
@@ -257,7 +256,7 @@ public class EnemyControls : MonoBehaviour
         OnEnemyDeath?.Invoke();
         
         var mycelia = Instantiate(myceliaDropPrefab, transform.position, Quaternion.identity).GetComponent<MyceliaPickup>();
-        mycelia.Setup(myceliaDropAmount);
+        mycelia.Setup();
        
         if (train != null)
         {

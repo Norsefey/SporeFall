@@ -10,8 +10,6 @@ public class GlowBoss : BaseEnemy
     [Tooltip("How Many balls to drop")]
     [SerializeField] private int myceliaDropCount = 0;
     [Tooltip("How much each ball is worth")]
-    [SerializeField] private float myceliaWorth = 25;
-
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 5;
     private void SpawnDrop()
@@ -31,7 +29,7 @@ public class GlowBoss : BaseEnemy
             mycelia.Setup(myceliaDropAmount);*/
             if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
             {
-                mycelia.Setup(myceliaWorth);
+                mycelia.Setup();
             }
         }
         if (weaponDropPrefab.Length != 0)

@@ -11,7 +11,6 @@ public class CorruptedPlayer : BaseEnemy
 
     [Header("Drops")]
     [SerializeField] GameObject myceliaDropPrefab;
-    [SerializeField] private float myceliaDropAmount = 100;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
     protected override void Awake()
@@ -55,7 +54,7 @@ public class CorruptedPlayer : BaseEnemy
 
         if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
-            mycelia.Setup(myceliaDropAmount);  // Fixed to use the calculated worth instead of minMyceliaWorth
+            mycelia.Setup();
         }
 
         if (weaponDropPrefab.Length != 0)

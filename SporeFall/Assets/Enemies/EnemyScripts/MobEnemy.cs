@@ -37,7 +37,7 @@ public class MobEnemy : BaseEnemy
         if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
             float worth = Mathf.Round(Random.Range(minMyceliaWorth, maxMyceliaWorth));
-            mycelia.Setup(worth);  // Fixed to use the calculated worth instead of minMyceliaWorth
+            mycelia.Setup();
         }
     }
     private void TrySpawnWeaponDrop()

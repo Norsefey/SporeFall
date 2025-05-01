@@ -186,12 +186,6 @@ public class BombarderEnemy : BaseEnemy
 
         
     }
-    protected override void UpdateRetreatState()
-    {
-        // Stationary enemies don't retreat - they just focus on target rotation
-        SetState(EnemyState.Attack);
-    }
-
     protected override void UpdateStrafeState()
     {
         // Stationary enemies don't strafe - they just focus on target rotation
@@ -202,12 +196,14 @@ public class BombarderEnemy : BaseEnemy
         // Don't calculate states while repositioning
         if (isRepositioning || isSinking || isUnderground)
         {
-            List<StateWeight> idleOnly = new List<StateWeight>();
-            idleOnly.Add(new StateWeight(EnemyState.Idle, 1.0f));
+            List<StateWeight> idleOnly = new()
+            {
+                new StateWeight(EnemyState.Idle, 1.0f)
+            };
             return idleOnly;
         }
 
-        List<StateWeight> weights = new List<StateWeight>();
+        List<StateWeight> weights = new();
 
         float distanceToTarget = currentTarget ? Vector3.Distance(transform.position, currentTarget.position) : float.MaxValue;
 
@@ -236,9 +232,6 @@ public class BombarderEnemy : BaseEnemy
 
         // Idle state when nothing else to do
         weights.Add(new StateWeight(EnemyState.Idle, 0.5f));
-
-        // Minimal weights for retreat and strafe since they're not used
-        weights.Add(new StateWeight(EnemyState.Retreat, 0.01f));
         weights.Add(new StateWeight(EnemyState.Strafe, 0.01f));
 
         return weights;
@@ -351,7 +344,7 @@ public class BombarderEnemy : BaseEnemy
 
         // Gradually sink
         Vector3 startPos = transform.position;
-        Vector3 endPos = new Vector3(startPos.x, startPos.y - 2f, startPos.z); // Sink 2 units below ground
+        Vector3 endPos = new(startPos.x, startPos.y - 2f, startPos.z); // Sink 2 units below ground
 
         float elapsed = 0;
         while (elapsed < sinkingDuration)
@@ -424,8 +417,6 @@ public class BombarderEnemy : BaseEnemy
 
             // Move underground
             Vector3 startPos = transform.position;
-            Vector3 moveDirection = (targetRepositionPoint - startPos).normalized;
-
             float distanceToTarget = Vector3.Distance(transform.position, targetRepositionPoint);
             float totalMoveTime = distanceToTarget / movementSpeed;
             float elapsed = 0;
