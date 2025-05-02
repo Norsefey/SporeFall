@@ -24,6 +24,8 @@ public class MyceliaPickup : DropsPoolBehavior
             }else
             {
                 Debug.LogWarning("No pool for Mycelia Pick up");
+                GameManager.Instance.IncreaseMycelia(amountToGive);
+                Destroy(gameObject);
             }
         }
     }

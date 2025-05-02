@@ -120,7 +120,7 @@ public class PlayerManager : MonoBehaviour
                     pHealth.canHoldCorruption = false;
                     GameManager.Instance.IncreaseMycelia(9999);
                     GameManager.Instance.trainHandler.trainHP.canTakeDamage = false;
-                    GameManager.Instance.trainHandler.tUI.ChangeHPDisplay("DOGMODE");
+                    GameManager.Instance.trainHandler.UI.ChangeHPDisplay("DOGMODE");
                     godMode = true;
                 }
                 else

@@ -17,7 +17,7 @@ public class TrainUI : MonoBehaviour
     private void Start()
     {
         HPText.text = "Train HP: 100%";
-
+        if(trainHP != null)
         trainHP.OnHPChange += UpdateHPDisplay;
     }
 
