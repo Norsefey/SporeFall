@@ -1,5 +1,6 @@
 // Ignore Spelling: buildable
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BuildGun : Weapon
@@ -28,8 +29,8 @@ public class BuildGun : Weapon
     private Quaternion originalRotation; // Store original rotation for edit mode
     private bool showRadius = true; // player can toggle the radius display
     [Header("Prompt Text")]
-    [SerializeField] private string buildModeText = "<color=red>Build Mode</color> \n Mousewheel to change Structure \n Hold Right mouse to Preview \n F to enter Edit Mode";
-    [SerializeField] private string editModeText = "<color=green>Edit Mode</color> \n Left mouse to Move \n Hold X to Destroy \n F to return";
+    [SerializeField] private string buildModeText;
+    [SerializeField] private string editModeText;
 
     private PlatformStructure selectedPlatform;
     private bool placingOnPlatform = false;
@@ -37,6 +38,12 @@ public class BuildGun : Weapon
     private void Awake()
     {
         buildableStructures = GameManager.Instance.availableStructures;
+        if (TutorialControls.Instance != null )
+        {
+            buildModeText = "<color=red>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.pickupInput + " to enter Edit Mode";
+            editModeText = "<color=green>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.pickupInput + " to return";
+        }
+        
     }
 
     // To Store original colors for changing preview colors
