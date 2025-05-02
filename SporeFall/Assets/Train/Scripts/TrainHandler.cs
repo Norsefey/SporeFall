@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TrainHandler : MonoBehaviour
@@ -24,6 +25,7 @@ public class TrainHandler : MonoBehaviour
     private List<Structure> activeStructures = new();
     public float maxEnergy = 50;
     private float energyUsed = 0;
+    private float energyRemaining = 0;
     // train Variables
     [Header("Train Movement")]
     public float cannonFireTime = 2f;
@@ -59,6 +61,7 @@ public class TrainHandler : MonoBehaviour
             tUI.SetMaxHP(trainHP.MaxHP);
         }
         Debug.Log("Train Is awake");
+        tUI.DisplayEnergy(maxEnergy);
     }
     public void SetParkedState()
     {
@@ -261,6 +264,8 @@ public class TrainHandler : MonoBehaviour
         {
             energyUsed += structure.GetCurrentEnergyCost();
         }
+        energyRemaining = maxEnergy - energyUsed;
+        tUI.DisplayEnergy(energyRemaining);
     }
     public bool CheckEnergy(float eCost)
     {

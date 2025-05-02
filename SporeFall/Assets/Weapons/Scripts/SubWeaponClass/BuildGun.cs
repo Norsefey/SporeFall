@@ -174,7 +174,7 @@ public class BuildGun : Weapon
                 selectedStructure.ShowRadius(showRadius);
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
                 //SetStructureToTransparent(selectedStructure.GetCurrentVisual());
-                player.pUI.EnablePrompt(selectedStructure.GetStructureName() + "\n Cost: " + selectedStructure.GetCurrentMyceliaCost() + "\n" + selectedStructure.GetStructureDescription());
+                player.pUI.EnablePrompt(selectedStructure.GetStructureName() + "\n Cost: " + selectedStructure.GetCurrentMyceliaCost() + " Mycelia   " + selectedStructure.GetCurrentEnergyCost() + " Energy" + "\n" + selectedStructure.GetStructureDescription());
 
             }
             else if (selectedStructure != null)

@@ -11,6 +11,7 @@ public class TrainUI : MonoBehaviour
     [SerializeField] private Slider HPBar;
     [SerializeField] private TMP_Text HPText;
     [SerializeField] private Slider HPDelayBar;
+    [SerializeField] private TMP_Text energyText;
     private float delayedHP;
 
     private void Start()
@@ -61,6 +62,12 @@ public class TrainUI : MonoBehaviour
     public void ChangeHPDisplay(string newText)
     {
         HPText.text = newText;
+    }
+
+    public void DisplayEnergy(float value)
+    {
+        if (energyText != null)
+            energyText.text = value.ToString();
     }
     IEnumerator HPDelayCooldown()
     {
