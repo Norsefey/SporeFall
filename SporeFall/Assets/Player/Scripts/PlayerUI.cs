@@ -38,6 +38,10 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Sprite wallSprite;
     [SerializeField] private Sprite shermanSprite;
     [SerializeField] private Sprite repairTowerSprite;
+    [SerializeField] private Sprite buildPromptSprite;
+    [SerializeField] private Sprite editPromptSprite;
+    [SerializeField] private Image infoPanel;
+    [SerializeField] private Image controlsPanel;
     //[SerializeField] private Sprite lilySprite;
     private void Start()
     {
@@ -280,6 +284,19 @@ public class PlayerUI : MonoBehaviour
         pMan.pHealth.OnHPChange -= UpdateHPDisplay;
 
     }
+
+    public void DisplayBuildPanel()
+    {
+        infoPanel.sprite = buildPromptSprite;
+        controlsPanel.sprite = buildPromptSprite;
+    }
+
+    public void DisplayEditPanel()
+    {
+        infoPanel.sprite = editPromptSprite;
+        controlsPanel.sprite = editPromptSprite;
+    }
+
     IEnumerator HPDelayCooldown()
     {
         yield return new WaitForSeconds(1f);

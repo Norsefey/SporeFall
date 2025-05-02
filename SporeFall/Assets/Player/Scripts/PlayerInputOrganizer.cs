@@ -505,6 +505,8 @@ public class PlayerInputOrganizer : MonoBehaviour
             placementInputMap.Enable();
             // After Build map is enabled re enable fire action
             fireAction.Enable();
+
+            pMan.pUI.DisplayBuildPanel();
         }
         else
         {
@@ -558,7 +560,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         {
             buildGun.EnterEditMode();
 
-            pMan.pUI.EnableControls("<color=green>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.editInput + " to return");
+            pMan.pUI.EnableControls("<color=blue>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.editInput + " to return");
+            pMan.pUI.DisplayEditPanel();
             placementInputMap.Disable();
             editInputMap.Enable();
         }
@@ -569,7 +572,8 @@ public class PlayerInputOrganizer : MonoBehaviour
         {
             buildGun.ExitEditMode();
            
-            pMan.pUI.EnableControls("<color=red>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
+            pMan.pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
+            pMan.pUI.DisplayBuildPanel();
             editInputMap.Disable();
             placementInputMap.Enable();
         }

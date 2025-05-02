@@ -65,8 +65,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <color=red>Build Mode</color> \nUse Q/E to change Structure" + "\n F to
-    Select Structure" + "\n Hold Right mouse to Preview
+  m_text: <color=black>Build Mode</color> \nUse Q/E to change Structure" + "\n F
+    to Select Structure" + "\n Hold Right mouse to Preview
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d80a7fa5464eead48a84272337e4dae0, type: 2}
   m_sharedMaterial: {fileID: 3857178750074848860, guid: d80a7fa5464eead48a84272337e4dae0,
@@ -3986,14 +3986,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: df5a9d51f084e2e4eb13f7e1db6242c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108e4a956b1a0e64583c3d1e4a9e7115, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5025,6 +5025,10 @@ MonoBehaviour:
   wallSprite: {fileID: 21300000, guid: 4e3fe66bcb3af5c46a5594e9985d84fc, type: 3}
   shermanSprite: {fileID: 21300000, guid: 34675a83298b83b42b398f15fe5886c1, type: 3}
   repairTowerSprite: {fileID: 21300000, guid: c0a5b6c75b2be49408ab2ebd0396c256, type: 3}
+  buildPromptSprite: {fileID: 21300000, guid: 108e4a956b1a0e64583c3d1e4a9e7115, type: 3}
+  editPromptSprite: {fileID: 21300000, guid: 3ae3db8b72152364685bddaad6af5fbe, type: 3}
+  infoPanel: {fileID: 2293133683406893280}
+  controlsPanel: {fileID: 5425639545340535017}
 --- !u!1 &8119929185109521875
 GameObject:
   m_ObjectHideFlags: 0
@@ -5271,14 +5275,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: df5a9d51f084e2e4eb13f7e1db6242c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 108e4a956b1a0e64583c3d1e4a9e7115, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5424,7 +5428,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 86}
+  m_AnchoredPosition: {x: 0, y: 81}
   m_SizeDelta: {x: 362.9, y: 157.92}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8269633529058624385
