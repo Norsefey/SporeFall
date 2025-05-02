@@ -155,7 +155,7 @@ public class GameManager : MonoBehaviour
             player.TogglePVisual(false);
         }
 
-        if(trainHandler != null)
+        if(trainHandler != null && !isTesting)
         {
             player.transform.SetParent(trainHandler.transform);
             player.transform.localPosition = new Vector3(0, 5, 10);

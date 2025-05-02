@@ -7,7 +7,7 @@ public class TrainHandler : MonoBehaviour
 {
     [Header("References")]
     public WaveManager waveManager;
-    [SerializeField] private TrainUI UI;
+    public TrainUI UI;
     [SerializeField] private GameObject trainCamera;
     [SerializeField] private Transform trainVisual;
     [SerializeField] private GameObject forceField;
@@ -45,7 +45,6 @@ public class TrainHandler : MonoBehaviour
     [Header("Train Stats")]
     public Transform[] damagePoint;
 
-    public TrainUI tUI;
     public TrainHP trainHP;
 
     [SerializeField] private LayerMask groundLayer;
@@ -58,10 +57,10 @@ public class TrainHandler : MonoBehaviour
         if (transform.GetChild(0).TryGetComponent<TrainHP>(out trainHP))
         {// get and assign train HP
             trainHP.train = this;
-            tUI.SetMaxHP(trainHP.MaxHP);
+            UI.SetMaxHP(trainHP.MaxHP);
         }
         Debug.Log("Train Is awake");
-        tUI.DisplayEnergy(maxEnergy);
+        UI.DisplayEnergy(maxEnergy);
     }
     public void SetParkedState()
     {
@@ -265,7 +264,7 @@ public class TrainHandler : MonoBehaviour
             energyUsed += structure.GetCurrentEnergyCost();
         }
         energyRemaining = maxEnergy - energyUsed;
-        tUI.DisplayEnergy(energyRemaining);
+        UI.DisplayEnergy(energyRemaining);
     }
     public bool CheckEnergy(float eCost)
     {
