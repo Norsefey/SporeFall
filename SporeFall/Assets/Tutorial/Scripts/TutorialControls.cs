@@ -18,6 +18,7 @@ public class TutorialControls : MonoBehaviour
     public string pickupInput;
     public string dropInput;
     public string buildInput;
+    public string editInput;
     public string scrollInput;
     public string destroyInput;
     public string pauseInput;
@@ -83,6 +84,7 @@ public class TutorialControls : MonoBehaviour
         pickupInput = "F";
         dropInput = "Q";
         buildInput = "B";
+        editInput = "F";
         scrollInput = "mousewheel";
         destroyInput = "X";
         pauseInput = "Esc";
@@ -102,6 +104,7 @@ public class TutorialControls : MonoBehaviour
         pickupInput = "X";
         dropInput = "Y";
         buildInput = "B";
+        editInput = "Y";
         scrollInput = "left and right bumpers";
         destroyInput = "B";
         pauseInput = "Options";

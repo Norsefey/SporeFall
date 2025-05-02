@@ -357,7 +357,7 @@ public class PlayerManager : MonoBehaviour
             currentWeapon = bGun;
             pUI.buildUI.SetActive(true);
             
-            pUI.EnableControls("<color=red>Build Mode</color> \n Mousewheel to change Structure \n Hold Right mouse to Preview \n F to enter Edit Mode");
+            pUI.EnableControls("<color=red>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
             pUI.AmmoDisplay(currentWeapon);
             pUI.SwitchWeaponIcon();
             pAnime.SetWeaponHoldAnimation(1);

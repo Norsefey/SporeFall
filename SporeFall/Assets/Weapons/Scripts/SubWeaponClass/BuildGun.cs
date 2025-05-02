@@ -34,17 +34,13 @@ public class BuildGun : Weapon
 
     private PlatformStructure selectedPlatform;
     private bool placingOnPlatform = false;
+    private bool controlsSet = false;
 
     private void Awake()
     {
         buildableStructures = GameManager.Instance.availableStructures;
-        if (TutorialControls.Instance != null )
-        {
-            buildModeText = "<color=red>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.pickupInput + " to enter Edit Mode";
-            editModeText = "<color=green>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.pickupInput + " to return";
-        }
-        
     }
+
 
     // To Store original colors for changing preview colors
     private class MaterialData
@@ -91,6 +87,13 @@ public class BuildGun : Weapon
             PreviewStructure();
         else if(!movingStructure)
             SelectStructure();
+
+        if (TutorialControls.Instance != null && TutorialControls.Instance.controlsSet == true && controlsSet == false)
+        {
+            buildModeText = "<color=red>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode";
+            editModeText = "<color=green>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.editInput + " to return";
+            controlsSet = true;
+        }
     }
     public void OnFireReleased()
     {
