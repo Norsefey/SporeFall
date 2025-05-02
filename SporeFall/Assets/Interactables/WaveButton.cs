@@ -51,6 +51,8 @@ public class WaveButton : Interactables
 
     public override void RemovePrompt()
     {
+        if (player == null)
+            return;
         player.pUI.DisablePrompt();
     }
 }

@@ -41,7 +41,6 @@ public class PickUpWeapon : Interactables
     {
         weapon.transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0));
     }
-
     private IEnumerator DespawnCountdown()
     {
         while (despawnTimer > 0)
@@ -103,14 +102,18 @@ public class PickUpWeapon : Interactables
         {
             audioSource.Play();
         }
-        // Hide the weapon's visuals immediately
-        weapon.gameObject.SetActive(false);
-        transform.GetChild(0).gameObject.SetActive(false);
         RemoveIntractable();
         if (despawnAfterPickup)
         {
+            // Hide the weapon's visuals immediately
+            weapon.gameObject.SetActive(false);
+            transform.GetChild(0).gameObject.SetActive(false);
             // Delay the destruction of the GameObject to allow the sound to finish playing
             Invoke(nameof(DestroyIntractable), pickupSound.length);
+        }
+        else
+        {
+            weapon.gameObject.SetActive(true);
         }
         Debug.Log("Picked up: " + weapon.name);
     }

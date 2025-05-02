@@ -10,12 +10,14 @@ public class TrainingLevelManager : MonoBehaviour
     [SerializeField] private DummyBehavior[] shootingRangeEnemies;
     [SerializeField] private Transform[] srSpawnPoints;
 
+    [SerializeField] private MyceliaPickup myceliaToPickUp;
+
     // Start is called before the first frame update
     void Start()
     {
         GameManager.OnPlayerJoin += GetPlayerDevice;
-
-        foreach(DummyBehavior dummy in shootingRangeEnemies)
+        myceliaToPickUp.Setup();
+        foreach (DummyBehavior dummy in shootingRangeEnemies)
         {
             dummy.OnEnemyDeath += RespawnEnemy;
         }
