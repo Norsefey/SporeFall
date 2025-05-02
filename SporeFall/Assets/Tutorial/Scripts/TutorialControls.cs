@@ -98,10 +98,10 @@ public class TutorialControls : MonoBehaviour
         lookInput = "Right stick";
         aimInput = "Left trigger";
         shootInput = "Right trigger";
-        reloadInput = "B";
+        reloadInput = "Y";
         pickupInput = "X";
-        dropInput = "B";
-        buildInput = "Y";
+        dropInput = "Y";
+        buildInput = "B";
         scrollInput = "left and right bumpers";
         destroyInput = "B";
         pauseInput = "Options";
