@@ -527,6 +527,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             shootInputMap.Enable();
             // After Shoot map is enabled re enable fire action
             fireAction.Enable();
+            pMan.pUI.DisplayDefaultPanel();
         }
 
     }

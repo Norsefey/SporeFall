@@ -38,6 +38,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Sprite wallSprite;
     [SerializeField] private Sprite shermanSprite;
     [SerializeField] private Sprite repairTowerSprite;
+    [SerializeField] private Sprite defaultPromptSprite;
     [SerializeField] private Sprite buildPromptSprite;
     [SerializeField] private Sprite editPromptSprite;
     [SerializeField] private Image infoPanel;
@@ -52,6 +53,7 @@ public class PlayerUI : MonoBehaviour
         corruptedVisionHolder.SetActive(false);
 
         pMan.pHealth.OnHPChange += UpdateHPDisplay;
+        infoPanel.sprite = defaultPromptSprite;
     }
     public void UpdateCorruptionDisplay(float value)
     {
@@ -283,6 +285,11 @@ public class PlayerUI : MonoBehaviour
         if(pMan != null)
         pMan.pHealth.OnHPChange -= UpdateHPDisplay;
 
+    }
+
+    public void DisplayDefaultPanel()
+    {
+        infoPanel.sprite = defaultPromptSprite;
     }
 
     public void DisplayBuildPanel()
