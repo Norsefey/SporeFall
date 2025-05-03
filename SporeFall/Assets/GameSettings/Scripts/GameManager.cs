@@ -77,14 +77,20 @@ public class GameManager : MonoBehaviour
         {
             if (PersistentGameManager.Instance.GetEasyMode())
             {// Easy Difficulty settings
-                trainHandler.trainHP.SetMaxHP(maxTrainHP_E);
-                trainHandler.trainHP.damageModifier = trainDamageReduction_E;
+                if (trainHandler.trainHP != null)
+                {
+                    trainHandler.trainHP.SetMaxHP(maxTrainHP_E);
+                    trainHandler.trainHP.damageModifier = trainDamageReduction_E;
+                }
                 mycelia = startingMycelia_E;
             }
             else // Normal Difficulty settings
             {
-                trainHandler.trainHP.SetMaxHP(maxTrainHP_N);
-                trainHandler.trainHP.damageModifier = trainDamageReduction_N;
+                if(trainHandler.trainHP != null)
+                {
+                    trainHandler.trainHP.SetMaxHP(maxTrainHP_N);
+                    trainHandler.trainHP.damageModifier = trainDamageReduction_N;
+                }
                 mycelia = startingMycelia_N;
             }
         }
