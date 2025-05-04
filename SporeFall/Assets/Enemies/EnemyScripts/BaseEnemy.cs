@@ -74,7 +74,7 @@ public abstract class BaseEnemy : MonoBehaviour
     [Header("Targeting")]
     public TrainHandler train; // if nothing is in range will move to Payload or train
     protected Transform trainWall;
-    public Transform currentTarget;
+    protected Transform currentTarget;
     // Array to hold multiple valid target tags
     public string[] priorityTags; // e.g., "Player", "Ally"
     public float detectionRange = 20;
@@ -98,19 +98,10 @@ public abstract class BaseEnemy : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         detectedColliders = new Collider[maxDetectedObjects];
     }
-    protected virtual void OnEnable()
+    public virtual void Initialize()
     {
-        if (!isInitialized)
-        {
-            Initialize();
-            isInitialized = true;
-        }
-        StartCoroutine(PeriodicTargetDetection());
         ResetState();
-    }
-    protected virtual void Initialize()
-    {
-        agent.stoppingDistance = stoppingDistance;
+        StartCoroutine(PeriodicTargetDetection());
     }
     protected virtual void ResetState()
     {
@@ -143,6 +134,7 @@ public abstract class BaseEnemy : MonoBehaviour
             agent.ResetPath();
             agent.isStopped = false;
             agent.velocity = Vector3.zero;
+            agent.stoppingDistance = stoppingDistance;
         }
 
         // do not want movement while rising from from ground
@@ -501,19 +493,28 @@ public abstract class BaseEnemy : MonoBehaviour
         .Select(c => c.transform)
         .FirstOrDefault();
         targetingStructure = true;
+        
+        Debug.Log("My Target is: " + currentTarget);
+
 
         if (train != null && (currentTarget == null || currentTarget.CompareTag("Train")))
         {
             targetingStructure = false;
             if (train.Payload != null)
+            {
                 currentTarget = train.Payload.transform;
+                Debug.Log("Switching To Payload: " + currentTarget);
+            }
             else
+            {
                 currentTarget = trainWall;
+                Debug.Log("Switching To Train: " + currentTarget);
+            }
         }
     }
     private IEnumerator PeriodicTargetDetection()
     {
-        WaitForSeconds waitTime = new(4f); // Adjust interval as needed
+        WaitForSeconds waitTime = new(5); // Adjust interval as needed
 
         while (gameObject.activeInHierarchy)
         {
@@ -571,11 +572,9 @@ public abstract class BaseEnemy : MonoBehaviour
         SpawnDeathVFX(transform.position, Quaternion.Euler(-90,0,0));
         gameObject.SetActive(false); // Deactivate instead of destroy
     }
-    public void AssignDefaultTarget(TrainHandler train, Transform target)
+    public virtual void AssignTrain(TrainHandler train)
     {
         this.train = train;
-        currentTarget = target;
-
         ChooseTrainWall();
     }
     private void ChooseTrainWall()

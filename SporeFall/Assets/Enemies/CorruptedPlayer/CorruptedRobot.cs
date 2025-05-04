@@ -38,6 +38,11 @@ public class CorruptedPlayer : BaseEnemy
         GameManager.Instance.waveManager.RemoveRobert(gameObject);
         base.Die();
     }
+    public void AssignDefaultTargets(TrainHandler train, Transform playerTarget)
+    {
+        base.AssignTrain(train);
+        currentTarget = playerTarget;
+    }
     private void SpawnDrop()
     {
         if (myceliaDropPrefab == null || PoolManager.Instance == null)

@@ -62,7 +62,7 @@ public class TentaclePart : MonoBehaviour
             return;
 
         // Get target from main body
-        currentTarget = mainBody.currentTarget;
+        currentTarget = mainBody.CurrentTarget;
         if (currentTarget == null)
             return;
 

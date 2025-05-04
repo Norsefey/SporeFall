@@ -371,8 +371,9 @@ public class WaveManager : MonoBehaviour
         }
 
         BaseEnemy enemy = pool.Get(spawnPoint, Quaternion.identity);
+        enemy.AssignTrain(train);
+
         enemy.OnEnemyDeath += OnEnemyDeath;
-        enemy.AssignDefaultTarget(train, train.transform);
         // enemy is spawning outside the pod, play rise from ground animation
         if(spawningOutside)
             enemy.TriggerRiseAnimation();
@@ -418,11 +419,9 @@ public class WaveManager : MonoBehaviour
         // Spawn the boss
         Transform spawnPoint = currentWave.presetSpawnPoints[0];
         BaseEnemy boss = bossPool.Get(spawnPoint.position, spawnPoint.rotation);
-        boss.AssignDefaultTarget(train, GameManager.Instance.players[0].transform);
         boss.transform.SetParent(transform);
-
         boss.OnEnemyDeath += OnBossDeath;
-        boss.AssignDefaultTarget(train, train.transform);
+        boss.AssignTrain(train);
 
         enemiesAlive++;
         enemiesSpawned++;

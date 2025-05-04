@@ -43,6 +43,7 @@ public class EnemySpawnPool
         enemy.transform.position = position;
         enemy.transform.rotation = rotation;
         enemy.gameObject.SetActive(true);
+        enemy.Initialize();
         return enemy;
     }
 
