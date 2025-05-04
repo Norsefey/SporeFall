@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 public class UpgradeBanner : MonoBehaviour
 {
+
+    [SerializeField] private ButtonTextMovement textMove;
+    Color DarkRed = new Color(0.3886792f, 0.1283374f, 0.1283374f);
+
+    [SerializeField] private TMP_Text buttonText;
     public TMP_Text typeText;
     public TMP_Text costText;
     public TMP_Text descriptionText;
@@ -35,6 +40,8 @@ public class UpgradeBanner : MonoBehaviour
             //select The scroll bar
             //upgradeButton.FindSelectableOnRight().Select();
             upgradeButton.interactable = false;
+            textMove.canMove = false;
+            buttonText.color = DarkRed;
             descriptionText.text = "This structure is fully upgraded.";
         }
         else if (level != null)
