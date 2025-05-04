@@ -8,26 +8,48 @@ public class ButtonTextMovement : MonoBehaviour
     public int offsetX = 2, offsetY = 2;
     public RectTransform textRect;
     Vector3 pos;
+    public bool canMove = true;
+    private bool textLocked = false;
 
     void Start()
     {
         pos = textRect.localPosition;
     }
 
+    private void Update()
+    {
+        if (!canMove && textLocked == false)
+        {
+            textLocked = true;
+            textRect.localPosition = new Vector3(pos.x + (float)offsetX, pos.y - (float)offsetY, pos.z);
+        }
+    }
     public void Down()
     {
-        textRect.localPosition = new Vector3(pos.x + (float)offsetX, pos.y - (float)offsetY, pos.z);
+        if (canMove)
+        {
+            textRect.localPosition = new Vector3(pos.x + (float)offsetX, pos.y - (float)offsetY, pos.z);
+        }
+        
     }
 
     public void Up()
     {
-        textRect.localPosition = pos;
+        if (canMove)
+        {
+            textRect.localPosition = pos;
+        }
+        
     }
 
     public void ControllerPressed()
     {
-        textRect.localPosition = new Vector3(pos.x + (float)offsetX, pos.y - (float)offsetY, pos.z);
-        StartCoroutine(TextMoveDelay());
+        if (canMove)
+        {
+            textRect.localPosition = new Vector3(pos.x + (float)offsetX, pos.y - (float)offsetY, pos.z);
+            StartCoroutine(TextMoveDelay());
+        }
+        
     }
 
     IEnumerator TextMoveDelay()
