@@ -8,7 +8,6 @@ public class StanleyControlScript : MonoBehaviour
     [HideInInspector]
     public float
         moveSpeed,
-        turnSpeed,
         changeDirectionInterval,
         detectionRadius,
         randomMovementWeight,
@@ -16,7 +15,7 @@ public class StanleyControlScript : MonoBehaviour
         myceliaGenerationTickRate;
 
     private float moneyGenerationTimer = 0f;
-
+    private float turnSpeed = 5;
     [SerializeField] GameObject[] StanleyVisuals;
     [SerializeField] private GameObject parentStructure;
     [Header("Enemy Avoidance")]

@@ -28,7 +28,6 @@ public class StanleyStatUpdater : MonoBehaviour, IStructureStats
         stanley.UpdateVisual(currentLevel);
 
         stanley.moveSpeed = levelData.moveSpeed;
-        stanley.turnSpeed = levelData.turnSpeed;
         stanley.changeDirectionInterval = levelData.changeDirectionInterval;
         stanley.detectionRadius = levelData.detectionRadius;
         stanley.randomMovementWeight = levelData.randomMovementWeight;

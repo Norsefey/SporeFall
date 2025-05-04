@@ -77,7 +77,7 @@ public class Turret : MonoBehaviour
 
         foreach (Collider enemyCollider in enemiesInRange)
         {
-            if (enemyCollider == null || enemyCollider.transform == null) continue;
+            if (enemyCollider == null || enemyCollider.transform == null || enemyCollider.CompareTag("HeadShot")) continue;
 
             float distance = Vector3.Distance(transform.position, enemyCollider.transform.position);
             if (distance >= minimumFireRange && distance <= fireRange && distance < closestDistance)
