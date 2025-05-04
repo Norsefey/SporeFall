@@ -48,7 +48,7 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
-        settings.buttonGroup.interactable = false;
+        settings.buttons.SetActive(false);
         savedFirstButton = firstPausedButton;
 
         InputSystem.onDeviceChange += OnDeviceChange;
@@ -201,7 +201,7 @@ public class PauseMenu : MonoBehaviour
         defaultScreen.SetActive(false);
         if (isControllerConnected && isPaused)
         {
-            settings.buttonGroup.interactable = true;
+            settings.buttons.SetActive(true);
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstSettingsButton);
         }
@@ -332,7 +332,7 @@ public class PauseMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(savedFirstButton);
             if (savedFirstButton = firstSettingsButton)
             {
-                settings.buttonGroup.interactable = true;
+                settings.buttons.SetActive(true);
             }
         }
         else if (change == InputDeviceChange.Disconnected && isPaused)
@@ -343,7 +343,7 @@ public class PauseMenu : MonoBehaviour
 
             if (savedFirstButton = firstSettingsButton)
             {
-                settings.buttonGroup.interactable = false;
+                settings.buttons.SetActive(false);
             }
         }
     }

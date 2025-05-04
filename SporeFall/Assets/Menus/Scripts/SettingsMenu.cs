@@ -25,6 +25,7 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private GameObject aimSensitivity2;
     [SerializeField] private GameObject fullscreen;
 
+    public GameObject buttons;
     public CanvasGroup buttonGroup;
 
     [Header("Interactables")]
@@ -73,6 +74,17 @@ public class SettingsMenu : MonoBehaviour
         checkedState.highlightedSprite = fullscreenToggleSelectedChecked;
         checkedState.selectedSprite = fullscreenToggleSelectedChecked;
         checkedState.pressedSprite = fullscreenTogglePressedChecked;
+
+        if (Screen.fullScreen)
+        {
+            fullscreenToggle.image.sprite = fullscreenToggleSourceChecked;
+            fullscreenToggle.spriteState = checkedState;
+        }
+        else
+        {
+            fullscreenToggle.image.sprite = fullscreenToggleSourceUnchecked;
+            fullscreenToggle.spriteState = uncheckedState;
+        }
     }
 
     // Update is called once per frame

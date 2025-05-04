@@ -165,14 +165,14 @@ public class MainMenu : MonoBehaviour
         mainScreen.SetActive(false);
         if (isControllerConnected)
         {
-            settings.buttonGroup.interactable = true;
+            settings.buttons.SetActive(true);
             Debug.Log("Controller detected, enabling buttons");
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstSettingsButton);
         }
         else if (!isControllerConnected)
         {
-            settings.buttonGroup.interactable = false;
+            settings.buttons.SetActive(false);
             Debug.Log("Controller not detected, disabling buttons");
             EventSystem.current.SetSelectedGameObject(null);
         }
@@ -298,7 +298,7 @@ public class MainMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(savedFirstButton);
             if (savedFirstButton = firstSettingsButton)
             {
-                settings.buttonGroup.interactable = true;
+                settings.buttons.SetActive(true);
             }
         }
         else if (change == InputDeviceChange.Disconnected)
@@ -309,7 +309,7 @@ public class MainMenu : MonoBehaviour
 
             if (savedFirstButton = firstSettingsButton)
             {
-                settings.buttonGroup.interactable = false;
+                settings.buttons.SetActive(false);
             }
         }
     }
