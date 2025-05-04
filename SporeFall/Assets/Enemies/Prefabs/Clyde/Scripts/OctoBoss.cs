@@ -13,8 +13,11 @@ public class OctoBoss : BaseEnemy
     private int initialTentacleCount;
 
     [Header("Stationary Settings")]
+    [SerializeField] private Transform mainBody;
     [SerializeField] private bool rotateToFaceTarget = true;
     [SerializeField] private float rotationSpeed = 2f;
+
+    public Transform CurrentTarget => currentTarget;
 
     protected override void Awake()
     {
@@ -27,12 +30,15 @@ public class OctoBoss : BaseEnemy
             tentacle.Initialize(this);
         }
     }
-    protected override void Initialize()
+    public override void Initialize()
     {
         base.Initialize();
         // Since this is stationary, disable NavMesh movement
         if (agent != null)
         {
+            agent.isStopped = true;
+            agent.updatePosition = false;
+            agent.updateRotation = false;
             agent.enabled = false;
         }
     }
@@ -56,7 +62,6 @@ public class OctoBoss : BaseEnemy
             RotateTowardsTarget();
         }
     }
-
     private void RotateTowardsTarget()
     {
         Vector3 direction = (currentTarget.position - transform.position).normalized;
@@ -65,10 +70,9 @@ public class OctoBoss : BaseEnemy
         if (direction != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            mainBody.transform.rotation = Quaternion.Slerp(mainBody.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
     }
-
     private void CheckVulnerabilityState()
     {
         int activeTentacles = 0;
@@ -87,7 +91,6 @@ public class OctoBoss : BaseEnemy
             OnVulnerabilityStateChanged();
         }
     }
-
     private void OnVulnerabilityStateChanged()
     {
         if (isVulnerable)
@@ -123,7 +126,6 @@ public class OctoBoss : BaseEnemy
             RotateTowardsTarget();
         }
     }
-
     protected override void UpdateChaseState(float distanceToTarget)
     {
         // Can't chase since we're stationary, so just go to attack state if in range
@@ -137,13 +139,11 @@ public class OctoBoss : BaseEnemy
             SetState(EnemyState.Idle);
         }
     }
-
     protected override void UpdateStrafeState()
     {
         // Can't strafe since we're stationary
         SetState(EnemyState.Idle);
     }
-
     protected override List<StateWeight> CalculateStateWeights()
     {
         List<StateWeight> weights = new();

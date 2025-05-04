@@ -102,7 +102,7 @@ public class EnemyRushSpawner : MonoBehaviour
         if (enemy != null)
         {
             // Assign default target (train)
-            enemy.AssignDefaultTarget(train, player);
+            enemy.AssignTrain(train);
 
             // Subscribe to death event
             enemy.OnEnemyDeath += OnEnemyDeath;

@@ -30,18 +30,6 @@ public class OctoHP : Damageable
         }
     }
 
-    private void Update()
-    {
-        // Check if vulnerability state changed
-        bool isVulnerable = mainBody.CalculateDamageMultiplier() > 1.0f;
-
-        if (isVulnerable != wasVulnerable)
-        {
-            wasVulnerable = isVulnerable;
-            UpdateVisuals(isVulnerable);
-        }
-    }
-
     private void UpdateVisuals(bool isVulnerable)
     {
         // Change material based on vulnerability state

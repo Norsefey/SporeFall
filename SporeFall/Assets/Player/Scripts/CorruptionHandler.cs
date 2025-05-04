@@ -149,7 +149,7 @@ public class CorruptionHandler : MonoBehaviour
         CorruptedPlayer robert = Instantiate(corruptedRobot, pMan.pController.transform.position, Quaternion.identity).GetComponent<CorruptedPlayer>();
         // corrupted player will prioritize attacking the player
         robert.myPlayer = pMan;
-        robert.AssignDefaultTarget(GameManager.Instance.trainHandler, pMan.pController.transform);
+        robert.AssignDefaultTargets(GameManager.Instance.trainHandler, pMan.pController.transform);
         robert.transform.SetParent(GameManager.Instance.trainHandler.dropsHolder, true);
 
         GameManager.Instance.waveManager.AddRobert(robert.gameObject);

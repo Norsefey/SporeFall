@@ -46,11 +46,18 @@ public class BombarderEnemy : BaseEnemy
         // Set initial last detection time
         lastDetectionTime = Time.time;
     }
-    protected override void Initialize()
+    public override void Initialize()
     {
         base.Initialize();
 
-        // Disable NavMeshAgent movement normally
+        // Reset states when reactivated
+        isAlerted = false;
+        isRepositioning = false;
+        isSinking = false;
+        isUnderground = false;
+        lastDetectionTime = Time.time;
+
+        // Disable NavMeshAgent movement upon enabling
         if (agent != null)
         {
             agent.isStopped = true;
@@ -252,25 +259,6 @@ public class BombarderEnemy : BaseEnemy
                     break;
                 }
             }
-        }
-    }
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-
-        // Reset states when reactivated
-        isAlerted = false;
-        isRepositioning = false;
-        isSinking = false;
-        isUnderground = false;
-        lastDetectionTime = Time.time;
-
-        // Disable NavMeshAgent movement upon enabling
-        if (agent != null)
-        {
-            agent.isStopped = true;
-            agent.updatePosition = false;
-            agent.updateRotation = false;
         }
     }
     public void SetAlerted(bool alerted)
