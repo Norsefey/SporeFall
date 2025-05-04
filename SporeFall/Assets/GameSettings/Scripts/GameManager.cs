@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         }
         else if (sceneIndex == 5)
         {
-            SavedSettings.currentLevel = "Tutorial";
+            SavedSettings.currentLevel = "TrainingLevel";
         }
         else if (sceneIndex == 7)
         {
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
 
         if (Tutorial.Instance != null)
         {
-            if (SavedSettings.currentLevel == "Tutorial" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
+            if (SavedSettings.currentLevel == "TrainingLevel" && Tutorial.Instance.tutorialPrompt == 18 && tutorialMycelia == true)
             {
                 tutorialMycelia = false;
                 IncreaseMycelia(25);
@@ -148,10 +148,6 @@ public class GameManager : MonoBehaviour
 
         // Now set up the overlay camera to match the main camera's viewport
         player.pCamera.SetOverlayCamera();
-
-
-
-
 
         Debug.Log("Player Added");
         if (!isTesting)
