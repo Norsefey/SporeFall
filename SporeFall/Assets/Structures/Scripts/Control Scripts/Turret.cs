@@ -185,7 +185,8 @@ public class Turret : MonoBehaviour
             }
             else
             {
-                ProjectileBehavior projectile = pool.Get(firePoint.position, Quaternion.LookRotation(firePoint.forward));
+                BaseProjectile projectile = 
+                    pool.Get(firePoint.position, Quaternion.LookRotation(firePoint.forward));
 
                 if (projectile != null)
                 {
@@ -196,7 +197,9 @@ public class Turret : MonoBehaviour
         }
         else
         {
-            ProjectileBehavior projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(firePoint.forward)).GetComponent<ProjectileBehavior>();
+            BaseProjectile projectile = 
+                Instantiate(bulletPrefab, firePoint.position,
+                Quaternion.LookRotation(firePoint.forward)).GetComponent<BaseProjectile>();
 
             bulletData.Direction = firePoint.forward;
             projectile.Initialize(bulletData, null);

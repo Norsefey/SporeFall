@@ -6,7 +6,7 @@ public class ProjectilePool
 {
     private GameObject prefab;
     private Transform parent;
-    private Queue<ProjectileBehavior> pool;
+    private Queue<BaseProjectile> pool;
     private int initialSize;
 
     public ProjectilePool(GameObject prefab, Transform parent, int initialSize)
@@ -14,7 +14,7 @@ public class ProjectilePool
         this.prefab = prefab;
         this.parent = parent;
         this.initialSize = initialSize;
-        pool = new Queue<ProjectileBehavior>();
+        pool = new Queue<BaseProjectile>();
         InitializePool();
     }
     private void InitializePool()
@@ -28,26 +28,26 @@ public class ProjectilePool
     private void CreateNewProjectile()
     {
         GameObject obj = GameObject.Instantiate(prefab, parent);
-        ProjectileBehavior projectile = obj.GetComponent<ProjectileBehavior>();
+        BaseProjectile projectile = obj.GetComponent<BaseProjectile>();
         obj.SetActive(false);
         pool.Enqueue(projectile);
     }
 
-    public ProjectileBehavior Get(Vector3 position, Quaternion rotation)
+    public BaseProjectile Get(Vector3 position, Quaternion rotation)
     {
         if (pool.Count == 0)
         {
             CreateNewProjectile();
         }
 
-        ProjectileBehavior projectile = pool.Dequeue();
+        BaseProjectile projectile = pool.Dequeue();
         projectile.transform.position = position;
         projectile.transform.rotation = rotation;
         projectile.gameObject.SetActive(true);
         return projectile;
     }
 
-    public void Return(ProjectileBehavior projectile)
+    public void Return(BaseProjectile projectile)
     {
         projectile.gameObject.SetActive(false);
         pool.Enqueue(projectile);

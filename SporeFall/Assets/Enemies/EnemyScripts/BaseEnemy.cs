@@ -101,13 +101,14 @@ public abstract class BaseEnemy : MonoBehaviour
     public virtual void Initialize()
     {
         ResetState();
-        StartCoroutine(PeriodicTargetDetection());
+        StartCoroutine(PeriodicTargetDetection(4));
     }
     protected virtual void ResetState()
     {
         // Reset all state when object is reused from pool
         foreach (var att in attacks)
         {
+            Debug.LogWarning("Reseting Attack: " + att);
             att.ResetCooldown();
         }
 
@@ -388,7 +389,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
         else
         {
-            //Debug.Log("Cannot Attack");
+            Debug.Log("Cannot Attack");
             SetRandomState(); // Choose new state if we can't attack
         }
     }
@@ -512,9 +513,9 @@ public abstract class BaseEnemy : MonoBehaviour
             }
         }
     }
-    private IEnumerator PeriodicTargetDetection()
+    protected IEnumerator PeriodicTargetDetection(float interval)
     {
-        WaitForSeconds waitTime = new(5); // Adjust interval as needed
+        WaitForSeconds waitTime = new(interval); // Adjust interval as needed
 
         while (gameObject.activeInHierarchy)
         {

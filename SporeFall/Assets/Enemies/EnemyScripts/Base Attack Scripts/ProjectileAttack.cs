@@ -19,7 +19,6 @@ public class ProjectileAttack : RangedAttack
 
     [Header("Trajectory Settings")]
     [SerializeField] private ProjectileTrajectoryType trajectoryType = ProjectileTrajectoryType.Standard;
-    [SerializeField] private bool targetedDirection;
     [SerializeField] private float maxArchHeight, minArchHeight;
     private float projectileArcHeight = 2f; // For arcing projectiles
 
@@ -111,7 +110,7 @@ public class ProjectileAttack : RangedAttack
     {
         float arcHeight = trajectoryType == ProjectileTrajectoryType.Arc ? projectileArcHeight : 0f;
 
-        ProjectileBehavior projectile = null;
+        BaseProjectile projectile = null;
         if (PoolManager.Instance != null &&
             PoolManager.Instance.projectilePool.TryGetValue(projectilePrefab, out ProjectilePool pool))
         {
@@ -120,7 +119,7 @@ public class ProjectileAttack : RangedAttack
         }
         else
         {
-            projectile = GameObject.Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<ProjectileBehavior>();
+            projectile = GameObject.Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<BaseProjectile>();
             projectile?.Initialize(CreateProjectileData(direction, targetPosition, arcHeight), null);
         }
     }
@@ -138,7 +137,6 @@ public class ProjectileAttack : RangedAttack
             MaxBounces = maxBounces,
             BounceDamageMultiplier = bounceDamageMultiplier,
             TargetPosition = target,
-            targetedDirection = targetedDirection
         };
     }
     // track the target during attack charge-up

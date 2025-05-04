@@ -110,7 +110,7 @@ public class ChargeGun : Weapon
         {
             Vector3 shootDirection = GetSpreadDirection(baseDirection, currentProjectileCount, i);
 
-            ProjectileBehavior projectile;
+            BaseProjectile projectile;
 
             if (pool != null)
             {
@@ -119,7 +119,7 @@ public class ChargeGun : Weapon
             }
             else
             {
-                projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection)).GetComponent<ProjectileBehavior>();
+                projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(shootDirection)).GetComponent<BaseProjectile>();
             }
           
 
@@ -136,7 +136,6 @@ public class ChargeGun : Weapon
                     CanBounce = canBounce,
                     MaxBounces = maxBounces,
                     BounceDamageMultiplier = bounceDamageMultiplier,
-                    targetedDirection = targetedDirection
                 };
                 projectile.Initialize(data, pool);
                 Debug.Log($"{weaponName} fired a charged projectile with power: {chargeMultiplier}, Projectile: {i + 1}/{currentProjectileCount}");

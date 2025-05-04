@@ -70,7 +70,7 @@ public class TentaclePart : MonoBehaviour
         float distanceToTarget = Vector3.Distance(attackPoint.position, currentTarget.position);
 
         // Check if in range based on tentacle type
-        bool inRange = false;
+        bool inRange;
 
         if (tentacleType == TentacleType.Melee)
         {
@@ -172,7 +172,7 @@ public class TentaclePart : MonoBehaviour
         }
 
         // Notify main body
-        mainBody.OnTentacleDestroyed(this);
+        mainBody.OnTentacleDestroyed();
 
         // Disable colliders
         Collider[] colliders = GetComponentsInChildren<Collider>();

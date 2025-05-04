@@ -139,7 +139,7 @@ public class MortyControlScript : MonoBehaviour
 
         lastFireTime = Time.unscaledTime; // Set the last fire time
 
-        ProjectileBehavior projectile;
+        BaseProjectile projectile;
         if (PoolManager.Instance != null)
         {
             if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
@@ -157,7 +157,6 @@ public class MortyControlScript : MonoBehaviour
                 // Set up the ProjectileData for arcing trajectory
                 ProjectileData data = bulletData;
                 data.Direction = shootDirection;
-                data.targetedDirection = true; // Enable targeted direction for mortars
                 data.TargetPosition = targetPosition; // Set the target position
                 data.ArcHeight = Vector3.Distance(firePoint.position, targetPosition) * 0.5f; // Dynamic arc height
 
@@ -167,14 +166,13 @@ public class MortyControlScript : MonoBehaviour
         }
         else
         {
-            projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity).GetComponent<ProjectileBehavior>();
+            projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity).GetComponent<BaseProjectile>();
 
             if (projectile != null)
             {
                 // Set up the ProjectileData for arcing trajectory
                 ProjectileData data = bulletData;
                 data.Direction = shootDirection;
-                data.targetedDirection = true; // Enable targeted direction for mortars
                 data.TargetPosition = targetPosition; // Set the target position
                 data.ArcHeight = Vector3.Distance(firePoint.position, targetPosition) * 0.5f; // Dynamic arc height
 

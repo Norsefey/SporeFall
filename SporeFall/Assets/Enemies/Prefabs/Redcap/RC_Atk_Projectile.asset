@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d946acd70ddf4646879bd435017a3d0, type: 3}
   m_Name: RC_Atk_Projectile
   m_EditorClassIdentifier: 
+  priority: 1
   range: 25
   cooldown: 5
   damage: 10
@@ -22,14 +23,18 @@ MonoBehaviour:
   attackSFX: {fileID: 8300000, guid: 4a9558accb615124c8442867c1ff4bd7, type: 3}
   predictTargetPosition: 1
   predictionTime: 0.5
-  projectilePrefab: {fileID: 7441200720383325235, guid: 0d1af68ac54f4b84e8580e47f5c49ff8,
+  projectilePrefab: {fileID: 7441200720383325235, guid: c68f72cd39628eb45b471b8f79246228,
     type: 3}
-  projectileSpeed: 20
+  projectileSpeed: 25
   projectileLifetime: 5
   useGravity: 0
-  projectileArcHeight: 2.8
+  trajectoryType: 0
+  maxArchHeight: 0
+  minArchHeight: 0
+  randomDirectionConeAngle: 45
   canBounce: 0
   maxBounces: 3
   bounceDamageMultiplier: 0.7
   projectileCount: 1
+  timeBetweenProjectiles: 0.1
   spreadAngle: 0

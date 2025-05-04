@@ -62,7 +62,7 @@ Transform:
   m_GameObject: {fileID: 409577957984264963}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.5200076, y: 9.79, z: 7.520009}
+  m_LocalPosition: {x: -0.31, y: 10.08, z: 8.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -324,12 +324,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9bf5d993e196d34782acd2b8d9eb226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathVFXPrefab: {fileID: 0}
+  deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
+    type: 3}
   attacks:
-  - {fileID: 11400000, guid: b1e4113e03421f440a72081724c35932, type: 2}
+  - {fileID: 11400000, guid: 81645bb66e85a17458b8e78076af8547, type: 2}
+  - {fileID: 11400000, guid: 9ef009adda2010f46a4ef07715147ac1, type: 2}
   animator: {fileID: 0}
   health: {fileID: 8906374424419757216}
-  agent: {fileID: 0}
+  agent: {fileID: 922571848823213579}
   firePoint: {fileID: 6782527278556759517}
   strafeRadius: 10
   retreatDistance: 15
@@ -337,8 +339,8 @@ MonoBehaviour:
   chasePriorityDistance: 25
   damagePriorityThreshold: 20
   damageTrackingDuration: 3
-  stoppingDistance: 20
-  aggressionFactor: 0.6
+  stoppingDistance: 500
+  aggressionFactor: 0.8
   train: {fileID: 0}
   priorityTags:
   - Player
@@ -350,9 +352,7 @@ MonoBehaviour:
     m_Bits: 10752
   targetSwitchThreshold: 50
   risingAnimationLength: 2
-  tentacles:
-  - {fileID: 8370906689160903172}
-  - {fileID: 869414870087416179}
+  tentacles: []
   damageReductionMultiplier: 0.25
   bodyVulnerableMultiplier: 1.5
   mainBody: {fileID: 8171854307382169660}
@@ -462,7 +462,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3826539829372264166}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 8
   m_Speed: 0
@@ -1092,22 +1092,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 27b936e2f1ee9814babdb0c16143dbe4,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.9467587
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 27b936e2f1ee9814babdb0c16143dbe4,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 27b936e2f1ee9814babdb0c16143dbe4,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.32194436
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 27b936e2f1ee9814babdb0c16143dbe4,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 27b936e2f1ee9814babdb0c16143dbe4,
         type: 3}
@@ -1117,7 +1117,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 27b936e2f1ee9814babdb0c16143dbe4,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 184.284
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 27b936e2f1ee9814babdb0c16143dbe4,
         type: 3}
@@ -1163,6 +1163,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tentacle_Melee (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099197300540430708, guid: 34e62d6f28c522f43a32e2b2122b6fea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1099197300540430708, guid: 34e62d6f28c522f43a32e2b2122b6fea,
         type: 3}
@@ -1245,6 +1250,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1099197300540430708, guid: 34e62d6f28c522f43a32e2b2122b6fea,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099197300540430708, guid: 34e62d6f28c522f43a32e2b2122b6fea,
+        type: 3}
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
@@ -1309,18 +1319,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2952990036812778257}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8370906689160903172 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6687932869062308117, guid: 34e62d6f28c522f43a32e2b2122b6fea,
-    type: 3}
-  m_PrefabInstance: {fileID: 2952990036812778257}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69748cd789336b14a94ccf2f9ca6de00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3745595311666584420
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1333,6 +1331,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tentacle_Melee (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1099197300540430708, guid: 34e62d6f28c522f43a32e2b2122b6fea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1099197300540430708, guid: 34e62d6f28c522f43a32e2b2122b6fea,
         type: 3}
@@ -1470,6 +1473,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6403080466642378860, guid: 899b3b2b22242f4428b6aec253fbf853,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6403080466642378860, guid: 899b3b2b22242f4428b6aec253fbf853,
+        type: 3}
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
@@ -1549,6 +1557,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6403080466642378860, guid: 899b3b2b22242f4428b6aec253fbf853,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6403080466642378860, guid: 899b3b2b22242f4428b6aec253fbf853,
+        type: 3}
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
@@ -1563,18 +1576,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6462046299571323392}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &869414870087416179 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6178099660684737395, guid: 899b3b2b22242f4428b6aec253fbf853,
-    type: 3}
-  m_PrefabInstance: {fileID: 6462046299571323392}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69748cd789336b14a94ccf2f9ca6de00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7192737296640923102
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1637,6 +1638,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tentacle_Ranged (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6403080466642378860, guid: 899b3b2b22242f4428b6aec253fbf853,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6403080466642378860, guid: 899b3b2b22242f4428b6aec253fbf853,
         type: 3}

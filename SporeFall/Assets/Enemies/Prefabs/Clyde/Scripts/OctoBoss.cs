@@ -14,9 +14,6 @@ public class OctoBoss : BaseEnemy
 
     [Header("Stationary Settings")]
     [SerializeField] private Transform mainBody;
-    [SerializeField] private bool rotateToFaceTarget = true;
-    [SerializeField] private float rotationSpeed = 2f;
-
     public Transform CurrentTarget => currentTarget;
 
     protected override void Awake()
@@ -32,45 +29,27 @@ public class OctoBoss : BaseEnemy
     }
     public override void Initialize()
     {
-        base.Initialize();
+        Debug.LogWarning("Reseting Attack: ");
+
+        ResetState();
+        StartCoroutine(PeriodicTargetDetection(4));
         // Since this is stationary, disable NavMesh movement
         if (agent != null)
         {
             agent.isStopped = true;
             agent.updatePosition = false;
             agent.updateRotation = false;
-            agent.enabled = false;
         }
     }
-
     protected override void Update()
     {
-        // Don't call base.Update() as we're overriding movement behavior
         UpdateStateTimer();
 
         if (!isAttacking)
         {
             UpdateCurrentState();
-        }
-
-        // Check vulnerability state
-        CheckVulnerabilityState();
-
-        // Handle rotation instead of movement
-        if (rotateToFaceTarget && currentTarget != null)
-        {
-            RotateTowardsTarget();
-        }
-    }
-    private void RotateTowardsTarget()
-    {
-        Vector3 direction = (currentTarget.position - transform.position).normalized;
-        direction.y = 0; // Keep rotation on y-axis only
-
-        if (direction != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            mainBody.transform.rotation = Quaternion.Slerp(mainBody.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            // Check vulnerability state
+            CheckVulnerabilityState();
         }
     }
     private void CheckVulnerabilityState()
@@ -120,10 +99,12 @@ public class OctoBoss : BaseEnemy
     // Overriding as we don't need movement-related behavior
     protected override void UpdateIdleState()
     {
-        // Just look at target or play idle animations
-        if (currentTarget != null && rotateToFaceTarget)
+        base.UpdateIdleState();
+        
+        // for when current target is destroyed find a new target
+        if (currentTarget == trainWall)
         {
-            RotateTowardsTarget();
+            DetectTargets();
         }
     }
     protected override void UpdateChaseState(float distanceToTarget)
@@ -155,19 +136,15 @@ public class OctoBoss : BaseEnemy
 
         // Lower priority for other states
         weights.Add(new StateWeight(EnemyState.Idle, 1.0f));
-        weights.Add(new StateWeight(EnemyState.Chase, 0.01f)); // Almost never chase
-        weights.Add(new StateWeight(EnemyState.Strafe, 0.01f)); // Almost never strafe
+        weights.Add(new StateWeight(EnemyState.Chase, 0)); // never chase
+        weights.Add(new StateWeight(EnemyState.Strafe, 0)); // never strafe
 
         return weights;
     }
-    // Tentacles can call this when they're destroyed
-    public void OnTentacleDestroyed(TentaclePart tentacle)
+    public void OnTentacleDestroyed()
     {
-        // Could trigger special effects, sound, etc.
         CheckVulnerabilityState();
     }
-
-    // Override Die to handle any special death logic
     public override void Die()
     {
         // Destroy any remaining tentacles first

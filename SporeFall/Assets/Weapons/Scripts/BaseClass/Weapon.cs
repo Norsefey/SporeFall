@@ -45,7 +45,6 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected float projectileSpeed = 20f;
     [SerializeField] protected float projectileLifetime = 5f;
     [SerializeField] protected bool useGravity = false;
-    [SerializeField] protected bool targetedDirection = false;
     [SerializeField] protected float projectileArcHeight = 0f; // For arcing projectiles
     [SerializeField] protected bool canBounce = false;
     [SerializeField] protected int maxBounces = 3;
@@ -86,7 +85,7 @@ public abstract class Weapon : MonoBehaviour
             player.pController.RotateOnFire();
         }
         transform.forward = playerCamera.transform.forward;
-        ProjectileBehavior projectile;
+        BaseProjectile projectile;
         if (PoolManager.Instance != null)
         {
             if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
@@ -118,7 +117,7 @@ public abstract class Weapon : MonoBehaviour
         }
         else
         {
-            projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity).GetComponent<ProjectileBehavior>();
+            projectile = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity).GetComponent<BaseProjectile>();
 
             if (projectile != null)
             {
@@ -133,7 +132,6 @@ public abstract class Weapon : MonoBehaviour
                     CanBounce = canBounce,
                     MaxBounces = maxBounces,
                     BounceDamageMultiplier = bounceDamageMultiplier,
-                    targetedDirection = targetedDirection
                 };
                 projectile.Initialize(data, null);
             }

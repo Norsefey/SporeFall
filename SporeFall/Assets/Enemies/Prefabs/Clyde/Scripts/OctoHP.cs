@@ -41,6 +41,15 @@ public class OctoHP : Damageable
 
     public override void TakeDamage(float damage)
     {
+        // Check if vulnerability state changed
+        bool isVulnerable = mainBody.CalculateDamageMultiplier() > 1.0f;
+
+        if (isVulnerable != wasVulnerable)
+        {
+            wasVulnerable = isVulnerable;
+            UpdateVisuals(isVulnerable);
+        }
+
         // Apply damage multiplier based on vulnerability
         float damageMultiplier = mainBody.CalculateDamageMultiplier();
         float modifiedDamage = damage * damageMultiplier;

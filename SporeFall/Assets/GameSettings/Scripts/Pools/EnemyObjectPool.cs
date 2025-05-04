@@ -42,6 +42,7 @@ public class EnemyObjectPool
         enemy.transform.position = position;
         enemy.transform.rotation = rotation;
         enemy.gameObject.SetActive(true);
+        enemy.Initialize();
         return enemy;
     }
     public void Return(BaseEnemy enemy)

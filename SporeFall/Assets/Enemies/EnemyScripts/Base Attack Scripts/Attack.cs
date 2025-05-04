@@ -32,11 +32,11 @@ public abstract class Attack : ScriptableObject
     public float Damage => damage;
     public float AttackDelay => attackDelay;
     public float RecoveryTime => recoveryTime;
-    private float lastUseTime;
+    private float lastUseTime = 0;
     public bool CanUse(float distanceToTarget)
     {
-        //Debug.Log("Last Use Time: " + lastUseTime + "Current Time: " + Time.time);
-        // Are we in range, and is the current time greater then the the time stamp of when it was last used plus the cooldown time
+        Debug.Log("Last Use Time: " + lastUseTime + "Current Time: " + Time.time + (Time.time >= lastUseTime + cooldown));
+        Debug.Log("In Range: " + (distanceToTarget <= range));
         return distanceToTarget <= range && Time.time >= lastUseTime + cooldown;
     }
 
@@ -44,7 +44,6 @@ public abstract class Attack : ScriptableObject
 
     protected void StartCooldown()
     {
-        //Debug.Log("Starting Cooldown");
         lastUseTime = Time.time;
     }
     public void ResetCooldown()
