@@ -306,9 +306,13 @@ public class TrainHandler : MonoBehaviour
     public void DisembarkSinglePlayer(PlayerManager player)
     {
         // correct player position
-        //player.MovePlayerTo(playerSpawnPoint[player.GetPlayerIndex()].position);
-        player.StartRespawn(.5f, false);
+        player.StartRespawn(0, false);
 
+        if (player.pHealth.CurrentLives <= 0)
+        {
+            player.pHealth.IncreaseLife();
+            player.StartRespawn(.5f, true);
+        }
         StartCoroutine(DelayCameraToggle(player));
     }
     private IEnumerator DelayCameraToggle(PlayerManager player)
