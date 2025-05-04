@@ -573,7 +573,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         {
             buildGun.ExitEditMode();
            
-            pMan.pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " or Number Keys to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
+            pMan.pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
             pMan.pUI.DisplayBuildPanel();
             editInputMap.Disable();
             placementInputMap.Enable();

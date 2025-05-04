@@ -90,7 +90,7 @@ public class BuildGun : Weapon
 
         if (TutorialControls.Instance != null && TutorialControls.Instance.controlsSet == true && controlsSet == false)
         {
-            buildModeText = "<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " or Number Keys to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode";
+            buildModeText = "<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode";
             editModeText = "<color=blue>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.editInput + " to return";
             controlsSet = true;
         }

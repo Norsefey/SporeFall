@@ -32,7 +32,7 @@ public class ButtonTextMovement : MonoBehaviour
 
     IEnumerator textMoveDelay()
     {
-        yield return new WaitForSecondsRealtime(.045f);
+        yield return new WaitForSecondsRealtime(.035f);
         textRect.localPosition = pos;
     }
 }

@@ -85,7 +85,7 @@ public class TutorialControls : MonoBehaviour
         dropInput = "Q";
         buildInput = "B";
         editInput = "F";
-        scrollInput = "mousewheel";
+        scrollInput = "mousewheel or number keys";
         destroyInput = "X";
         pauseInput = "Esc";
         skipInput = "Z";
