@@ -166,6 +166,7 @@ public class MainMenu : MonoBehaviour
         if (isControllerConnected)
         {
             settings.buttons.SetActive(true);
+            settings.noGamepadText.SetActive(false);
             Debug.Log("Controller detected, enabling buttons");
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstSettingsButton);
@@ -173,6 +174,7 @@ public class MainMenu : MonoBehaviour
         else if (!isControllerConnected)
         {
             settings.buttons.SetActive(false);
+            settings.noGamepadText.SetActive(true);
             Debug.Log("Controller not detected, disabling buttons");
             EventSystem.current.SetSelectedGameObject(null);
         }

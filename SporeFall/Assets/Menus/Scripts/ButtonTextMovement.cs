@@ -27,12 +27,14 @@ public class ButtonTextMovement : MonoBehaviour
     public void ControllerPressed()
     {
         textRect.localPosition = new Vector3(pos.x + (float)offsetX, pos.y - (float)offsetY, pos.z);
-        StartCoroutine(textMoveDelay());
+        StartCoroutine(TextMoveDelay());
     }
 
-    IEnumerator textMoveDelay()
+    IEnumerator TextMoveDelay()
     {
+        Debug.Log("Starting delay timer");
         yield return new WaitForSecondsRealtime(.035f);
         textRect.localPosition = pos;
+        Debug.Log("Text position reset");
     }
 }

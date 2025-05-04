@@ -26,7 +26,7 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private GameObject fullscreen;
 
     public GameObject buttons;
-    public CanvasGroup buttonGroup;
+    public GameObject noGamepadText;
 
     [Header("Interactables")]
     //Two copies of the same button/slider, a GameObject for navigation settings, and a Slider/Button for settings specific to those
