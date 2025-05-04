@@ -70,6 +70,8 @@ public class PlayerManager : MonoBehaviour
     public Coroutine respawnCoroutine;
 
     private bool godMode = false;
+    private bool p1ControlsSet = false;
+    private bool p2ControlsSet = false;
     private void Awake()
     {
         pInput = GetComponent<PlayerInputOrganizer>();
@@ -198,7 +200,25 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("I am using a gamepad");
                 pCamera.SetGamepadSettings();
                 bGun.structRotSpeed = 50;
-                
+
+                int playerIndex = GetPlayerIndex();
+                if (TutorialControls.Instance != null)
+                {
+                    if (playerIndex == 0 && p1ControlsSet == false)
+                    {
+                        Debug.Log("Setting xbox controls p1");
+                        TutorialControls.Instance.SetXboxInputsP1();
+                        p1ControlsSet = true;
+                    }
+
+                    else if (playerIndex == 1 && p2ControlsSet == false)
+                    {
+                        Debug.Log("Setting xbox controls p2");
+                        TutorialControls.Instance.SetXboxInputsP2();
+                        p2ControlsSet = true;
+                    }
+                }
+
             }
             else if (device is Keyboard || device is Mouse)
             {
@@ -206,10 +226,29 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("I am using a keyboard");
                 pCamera.SetMouseSettings();
                 bGun.structRotSpeed = 25;
-                
+
+                int playerIndex = GetPlayerIndex();
+                if (TutorialControls.Instance != null)
+                {
+                    if (playerIndex == 0 && p1ControlsSet == false)
+                    {
+                        Debug.Log("Setting keyboard controls p1");
+                        TutorialControls.Instance.SetKeyboardInputsP1();
+                        p1ControlsSet = true;
+                    }
+
+                    else if (playerIndex == 1 && p2ControlsSet == false)
+                    {
+                        Debug.Log("Setting keyboard controls p2");
+                        TutorialControls.Instance.SetKeyboardInputsP2();
+                        p2ControlsSet = true;
+                    }
+                    
+                }
             }
         }
     }
+
     private void WeaponBehavior()
     {
         if (currentWeapon != null)
@@ -356,8 +395,19 @@ public class PlayerManager : MonoBehaviour
             bGun.gameObject.SetActive(true);
             currentWeapon = bGun;
             pUI.buildUI.SetActive(true);
+
+            int playerIndex = GetPlayerIndex();
+            Debug.Log("Player index = " + playerIndex);
+            if (playerIndex == 0)
+            {
+                pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
+            }
+
+            else if (playerIndex == 1)
+            {
+                pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput2 + " to change Structure \n Hold " + TutorialControls.Instance.aimInput2 + " to Preview \n " + TutorialControls.Instance.editInput2 + " to enter Edit Mode");
+            }
             
-            pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
             pUI.AmmoDisplay(currentWeapon);
             pUI.SwitchWeaponIcon();
             pAnime.SetWeaponHoldAnimation(1);

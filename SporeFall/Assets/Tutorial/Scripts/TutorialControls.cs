@@ -24,6 +24,23 @@ public class TutorialControls : MonoBehaviour
     public string pauseInput;
     public string skipInput;
 
+    public string continueInput2;
+    public string moveInput2;
+    public string sprintInput2;
+    public string jumpInput2;
+    public string lookInput2;
+    public string aimInput2;
+    public string shootInput2;
+    public string reloadInput2;
+    public string pickupInput2;
+    public string dropInput2;
+    public string buildInput2;
+    public string editInput2;
+    public string scrollInput2;
+    public string destroyInput2;
+    public string pauseInput2;
+    public string skipInput2;
+
     public bool usingKeyboard = false;
     public bool usingXbox = false;
     public bool usingPlaystation = false;
@@ -50,28 +67,21 @@ public class TutorialControls : MonoBehaviour
             if (usingKeyboard == true)
             {
                 Debug.Log("Starting keyboard tutorial");
-                SetKeyboardInputs();
+                //SetKeyboardInputs();
                 controlsSet = true;
             }
 
             else if (usingXbox == true)
             {
                 Debug.Log("Starting xbox tutorial");
-                SetXboxInputs();
-                controlsSet = true;
-            }
-
-            else if (usingPlaystation == true)
-            {
-                Debug.Log("Starting PS tutorial");
-                SetPlaystationInputs();
+                //SetXboxInputs();
                 controlsSet = true;
             }
         }
     }
 
     #region set Inputs
-    private void SetKeyboardInputs()
+    public void SetKeyboardInputsP1()
     {
         continueInput = "C";
         moveInput = "WASD";
@@ -91,7 +101,16 @@ public class TutorialControls : MonoBehaviour
         skipInput = "Z";
     }
 
-    private void SetXboxInputs()
+    public void SetKeyboardInputsP2()
+    {
+        aimInput2 = "Right click";
+        shootInput2 = "Left click";
+        editInput2 = "F";
+        scrollInput2 = "mousewheel or number keys";
+        destroyInput2 = "X";
+    }
+
+    public void SetXboxInputsP1()
     {
         continueInput = "A";
         moveInput = "Left stick";
@@ -111,23 +130,14 @@ public class TutorialControls : MonoBehaviour
         skipInput = "down on the D-Pad";
     }
 
-    private void SetPlaystationInputs()
+    public void SetXboxInputsP2()
     {
-        continueInput = "X";
-        moveInput = "Left stick";
-        sprintInput = "Hold left stick";
-        jumpInput = "X";
-        lookInput = "Right stick";
-        aimInput = "Left trigger";
-        shootInput = "Right trigger";
-        reloadInput = "Circle";
-        pickupInput = "Square";
-        dropInput = "Circle";
-        buildInput = "Triangle";
-        scrollInput = "left and right bumpers";
-        destroyInput = "Circle";
-        pauseInput = "Options";
-        skipInput = "down on the D-Pad";
+        aimInput2 = "Left trigger";
+        shootInput2 = "Right trigger";
+        editInput2 = "Y";
+        scrollInput2 = "left and right bumpers";
+        destroyInput2 = "B";
     }
+
     #endregion
 }

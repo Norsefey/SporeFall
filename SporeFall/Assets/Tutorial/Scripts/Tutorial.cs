@@ -417,7 +417,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 4)
                 {
-                    tutorialText.text = "Set up your defenses. They'll be returned to you and refunded when the train moves.";
+                    tutorialText.text = "Structures cost energy and mycelia to build. Both are shown in the top left.";
                     continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
@@ -426,13 +426,40 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 5)
                 {
+                    tutorialText.text = "The train provides energy to structures, but it only has so much energy to spare.";
+                    continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 6)
+                {
+                    tutorialText.text = "Your enemies drop mycelia upon death, dense spores that can be used for construction.";
+                    continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 7)
+                {
+                    tutorialText.text = "Set up your defenses. They'll be returned to you and refunded when the train moves.";
+                    continueText.text = $"(Press {TutorialControls.Instance.continueInput} to continue)";
+                    Debug.Log("Progressing tutorial");
+                    canProgress = false;
+                    clickNeeded = true;
+                }
+
+                else if (tutorialPrompt == 8)
+                {
                     tutorialText.text = "When you're ready, press the Main Button near the middle of the train to lure out your enemies.";
                     continueText.text = " ";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
                 }
 
-                else if (tutorialPrompt == 6)
+                else if (tutorialPrompt == 9)
                 {
                     canProgress = false;
                     tutorialOngoing = false;

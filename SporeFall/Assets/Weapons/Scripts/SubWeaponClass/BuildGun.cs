@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class BuildGun : Weapon
 {
+
+    [SerializeField] PlayerManager pMan;
+
     public List<GameObject> buildableStructures = new();
     [Header("Build Gun Settings")]
     public Structure selectedStructure; // The currently selected object (for placing, moving or deleting)
@@ -90,9 +93,22 @@ public class BuildGun : Weapon
 
         if (TutorialControls.Instance != null && TutorialControls.Instance.controlsSet == true && controlsSet == false)
         {
-            buildModeText = "<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode";
-            editModeText = "<color=blue>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.editInput + " to return";
-            controlsSet = true;
+            int playerIndex = pMan.GetPlayerIndex();
+            Debug.Log("Player index = " + playerIndex);
+            if (playerIndex == 0)
+            {
+                buildModeText = "<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode";
+                editModeText = "<color=blue>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move Structure \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.editInput + " to return";
+                controlsSet = true;
+            }
+
+            else if (playerIndex == 1)
+            {
+                buildModeText = "<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput2 + " to change Structure \n Hold " + TutorialControls.Instance.aimInput2 + " to Preview \n " + TutorialControls.Instance.editInput2 + " to enter Edit Mode";
+                editModeText = "<color=blue>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput2 + " to Move Structure \n Hold " + TutorialControls.Instance.destroyInput2 + " to Destroy \n " + TutorialControls.Instance.editInput2 + " to return";
+                controlsSet = true;
+            }
+            
         }
     }
     public void OnFireReleased()
@@ -184,7 +200,7 @@ public class BuildGun : Weapon
                 selectedStructure.ShowRadius(showRadius);
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
                 //SetStructureToTransparent(selectedStructure.GetCurrentVisual());
-                player.pUI.EnablePrompt(selectedStructure.GetStructureName() + "\n Cost: " + selectedStructure.GetCurrentMyceliaCost() + " Mycelia   " + selectedStructure.GetCurrentEnergyCost() + " Energy" + "\n" + selectedStructure.GetStructureDescription());
+                player.pUI.EnablePrompt(selectedStructure.GetStructureName() + "\n Cost: " + selectedStructure.GetCurrentEnergyCost() + " Energy  " + selectedStructure.GetCurrentMyceliaCost() + " Mycelia" + "\n" + selectedStructure.GetStructureDescription());
 
             }
             else if (selectedStructure != null)

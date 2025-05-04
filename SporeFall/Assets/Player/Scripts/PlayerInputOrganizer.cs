@@ -560,8 +560,17 @@ public class PlayerInputOrganizer : MonoBehaviour
         if (pMan.currentWeapon is BuildGun buildGun)
         {
             buildGun.EnterEditMode();
+            int playerIndex = pMan.GetPlayerIndex();
+            if (playerIndex == 0)
+            {
+                pMan.pUI.EnableControls("<color=blue>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move Structure \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.editInput + " to return");
+            }
 
-            pMan.pUI.EnableControls("<color=blue>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput + " to Move \n Hold " + TutorialControls.Instance.destroyInput + " to Destroy \n " + TutorialControls.Instance.editInput + " to return");
+            else if (playerIndex == 1)
+            {
+                pMan.pUI.EnableControls("<color=blue>Edit Mode</color> \n Hold " + TutorialControls.Instance.shootInput2 + " to Move Structure \n Hold " + TutorialControls.Instance.destroyInput2 + " to Destroy \n " + TutorialControls.Instance.editInput2 + " to return");
+            }
+
             pMan.pUI.DisplayEditPanel();
             placementInputMap.Disable();
             editInputMap.Enable();
@@ -572,8 +581,18 @@ public class PlayerInputOrganizer : MonoBehaviour
         if (pMan.currentWeapon is BuildGun buildGun)
         {
             buildGun.ExitEditMode();
-           
-            pMan.pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
+            int playerIndex = pMan.GetPlayerIndex();
+            Debug.Log("Player index = " + playerIndex);
+            if (playerIndex == 0)
+            {
+                pMan.pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
+            }
+
+            else if (playerIndex == 1)
+            {
+                pMan.pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput2 + " to change Structure \n Hold " + TutorialControls.Instance.aimInput2 + " to Preview \n " + TutorialControls.Instance.editInput2 + " to enter Edit Mode");
+            }
+            
             pMan.pUI.DisplayBuildPanel();
             editInputMap.Disable();
             placementInputMap.Enable();
