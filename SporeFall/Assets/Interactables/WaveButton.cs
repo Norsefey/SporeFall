@@ -30,7 +30,7 @@ public class WaveButton : Interactables
                 
                 if (Tutorial.Instance != null && buttonPress == 1)
                 {
-                    Tutorial.Instance.tutorialPrompt = 5;
+                    Tutorial.Instance.tutorialPrompt = 8;
                     Tutorial.Instance.ProgressTutorial();
                 }
 
