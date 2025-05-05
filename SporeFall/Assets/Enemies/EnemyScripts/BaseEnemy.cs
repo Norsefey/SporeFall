@@ -388,7 +388,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
         else
         {
-            Debug.Log("Cannot Attack");
+            //Debug.Log("Cannot Attack");
             SetRandomState(); // Choose new state if we can't attack
         }
     }
