@@ -17,7 +17,6 @@ public class ProjectileMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-
     public void Initialize(ProjectileData projectileData)
     {
         data = projectileData;
@@ -33,7 +32,6 @@ public class ProjectileMovement : MonoBehaviour
             SetupDirectTrajectory();
         }
     }
-
     private void SetupArcTrajectory()
     {
         arcDistance = Vector3.Distance(initialPosition, data.TargetPosition);
@@ -52,7 +50,6 @@ public class ProjectileMovement : MonoBehaviour
             data.Direction = (data.TargetPosition - initialPosition).normalized;
         }
     }
-
     private void SetupDirectTrajectory()
     {
         if (rb != null)
@@ -62,7 +59,6 @@ public class ProjectileMovement : MonoBehaviour
             rb.velocity = data.Direction * data.Speed;
         }
     }
-
     private void Update()
     {
         previousPosition = transform.position;
@@ -77,7 +73,6 @@ public class ProjectileMovement : MonoBehaviour
             transform.position += data.Direction * data.Speed * Time.deltaTime;
         }
     }
-
     private void UpdateArcMovement()
     {
         // Add constant distance each frame based on speed
@@ -95,7 +90,7 @@ public class ProjectileMovement : MonoBehaviour
         transform.position = linearPosition + Vector3.up * heightOffset;
 
         // Rotate to face the direction of movement
-        if (arcProgress < 1)
+        if (arcProgress <= 1)
         {
             // Calculate the next position for orientation
             float nextProgress = Mathf.Clamp01((arcTraveledDistance + 0.1f) / arcDistance);
@@ -107,16 +102,19 @@ public class ProjectileMovement : MonoBehaviour
             {
                 transform.LookAt(nextPosition);
             }
+
+            Debug.Log("arch Progress-" + arcProgress);
+
         }
 
         // Check if arc is completed
-        if (arcProgress >= 1)
+        if (arcProgress > 1)
         {
+            Debug.Log("arch Complete- Sending Message");
             // Notify listeners that we've reached the target position
             SendMessage("OnArcComplete", SendMessageOptions.DontRequireReceiver);
         }
     }
-
     public void Bounce(Collider surface)
     {
         if (data.UseArcTrajectory)
@@ -141,7 +139,6 @@ public class ProjectileMovement : MonoBehaviour
             rb.velocity = reflection;
         }
     }
-
     public Vector3 GetPreviousPosition()
     {
         return previousPosition;

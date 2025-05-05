@@ -495,7 +495,7 @@ public abstract class BaseEnemy : MonoBehaviour
         .FirstOrDefault();
         targetingStructure = true;
         
-        Debug.Log("My Target is: " + currentTarget);
+        //Debug.Log("My Target is: " + currentTarget);
 
 
         if (train != null && (currentTarget == null || currentTarget.CompareTag("Train")))
@@ -504,12 +504,12 @@ public abstract class BaseEnemy : MonoBehaviour
             if (train.Payload != null)
             {
                 currentTarget = train.Payload.transform;
-                Debug.Log("Switching To Payload: " + currentTarget);
+                //Debug.Log("Switching To Payload: " + currentTarget);
             }
             else
             {
                 currentTarget = trainWall;
-                Debug.Log("Switching To Train: " + currentTarget);
+                //Debug.Log("Switching To Train: " + currentTarget);
             }
         }
     }

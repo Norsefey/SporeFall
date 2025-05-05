@@ -88,6 +88,11 @@ public abstract class BaseProjectile : MonoBehaviour
             ReturnToPool();
         }
     }
+    public void OnArcComplete()
+    {
+        Debug.LogWarning("Arch Complete Returning");
+        ReturnToPool();
+    }
     protected virtual void Bounce(Collider surface)
     {
         if (movement != null)

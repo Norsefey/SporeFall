@@ -35,8 +35,8 @@ public abstract class Attack : ScriptableObject
     private float lastUseTime = 0;
     public bool CanUse(float distanceToTarget)
     {
-        Debug.Log("Last Use Time: " + lastUseTime + "Current Time: " + Time.time + (Time.time >= lastUseTime + cooldown));
-        Debug.Log("In Range: " + (distanceToTarget <= range));
+        //Debug.Log("Last Use Time: " + lastUseTime + "Current Time: " + Time.time + (Time.time >= lastUseTime + cooldown));
+        //Debug.Log("In Range: " + (distanceToTarget <= range));
         return distanceToTarget <= range && Time.time >= lastUseTime + cooldown;
     }
 
