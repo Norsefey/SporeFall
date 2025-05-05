@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public bool paused = false;
 
     [Header("Build System")]
+    // structures
+    public Transform structureHolder;
     public List<GameObject> availableStructures;
     private float mycelia = 150;
     public float Mycelia { get { return mycelia; } }
@@ -44,7 +46,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float startingMycelia_E = 200;
 
     private int sceneIndex;
-
 
     [Space(25)]
     public bool isTesting = false;
@@ -194,6 +195,13 @@ public class GameManager : MonoBehaviour
         players.Remove(player);
 
         Destroy(player.gameObject);
+    }
+    public void ApplyUpgradeToStructures()
+    {
+        foreach (Transform structure in structureHolder)
+        {
+            structure.GetComponent<Structure>().Upgrade();
+        }
     }
     public void IncreaseMycelia(float amount)
     {

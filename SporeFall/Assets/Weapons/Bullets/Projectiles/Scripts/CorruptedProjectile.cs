@@ -7,12 +7,12 @@ public class CorruptedProjectile : BaseProjectile
     [Header("Corruption Settings")]
     [SerializeField] private float corruptionAmount = 10f;
 
-    protected override void HandleImpact(Collision collision)
+    protected override void HandleImpact(Collider collider)
     {
-        if (collision == null)
+        if (collider == null)
             return;
 
-        if (collision.transform.TryGetComponent<Damageable>(out var damageable))
+        if (collider.transform.TryGetComponent<Damageable>(out var damageable))
         {
             if (damageable == null)
                 return;

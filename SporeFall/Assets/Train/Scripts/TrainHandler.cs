@@ -20,8 +20,7 @@ public class TrainHandler : MonoBehaviour
     public Payload Payload { get; private set; }
     public Transform[] playerSpawnPoint;
     [Header("Structures")]
-    // structures
-    [SerializeField] private Transform structureHolder;
+
     private List<Structure> activeStructures = new();
     public float maxEnergy = 50;
     private float energyUsed = 0;
@@ -108,17 +107,10 @@ public class TrainHandler : MonoBehaviour
     }
     private void ToggleStructures(bool toggle)
     {
-        structureHolder.gameObject.SetActive(toggle);
+        GameManager.Instance.structureHolder.gameObject.SetActive(toggle);
         if (!toggle)
         {
             CheckStructureObstructions();
-        }
-    }
-    public void ApplyUpgradeToStructures()
-    {
-        foreach(Transform structure in structureHolder)
-        {
-            structure.GetComponent<Structure>().Upgrade();
         }
     }
     public void ToggleForceField(bool toggle)
@@ -246,7 +238,7 @@ public class TrainHandler : MonoBehaviour
         // give the structure a reference to the train, so it can remove itself on when destroyed
         structure.SetTrainHandler(this);
         // set the parent of the structure to the structure holder, to hide structures when moving
-        structure.transform.SetParent(structureHolder, true);
+        structure.transform.SetParent(GameManager.Instance.structureHolder, true);
         // add energy cost of structure to energy usage
         UpdateEnergyUsage();
     }

@@ -36,7 +36,7 @@ public class ProjectileCollisionHandler : MonoBehaviour
         if (hitLayers == (hitLayers | (1 << collision.gameObject.layer)))
         {
             if (projectile != null)
-                projectile.OnHit(collision);
+                projectile.OnHit(collision.collider);
         }
     }
 
@@ -56,59 +56,14 @@ public class ProjectileCollisionHandler : MonoBehaviour
         if (Physics.SphereCast(previousPosition, collisionCheckRadius, movementDirection,
                                out hit, movementDistance, hitLayers))
         {
-            // Handle the collision
-            Collision fakeCollision = CreateFakeCollision(hit);
-
             if (projectile != null)
-                projectile.OnHit(fakeCollision);
+                projectile.OnHit(hit.collider);
         }
     }
 
-    // Helper method to create a fake collision from a raycast hit
-    private Collision CreateFakeCollision(RaycastHit hit)
+    private void OnDrawGizmosSelected()
     {
-        GameObject hitObject = hit.collider.gameObject;
-
-        // Create a new Collision
-        Collision collision = new Collision();
-
-        // Use reflection to set private fields (this is a workaround since Collision is not normally constructable)
-        System.Reflection.FieldInfo contactPointsField = typeof(Collision).GetField("m_ContactPoints",
-                                                                                   System.Reflection.BindingFlags.Instance |
-                                                                                   System.Reflection.BindingFlags.NonPublic);
-
-        if (contactPointsField != null)
-        {
-            // Create a contact point
-            ContactPoint contact = new ContactPoint();
-
-            // Set contact point fields via reflection
-            typeof(ContactPoint).GetField("m_Point", System.Reflection.BindingFlags.Instance |
-                                         System.Reflection.BindingFlags.NonPublic)?.SetValue(contact, hit.point);
-
-            typeof(ContactPoint).GetField("m_Normal", System.Reflection.BindingFlags.Instance |
-                                         System.Reflection.BindingFlags.NonPublic)?.SetValue(contact, hit.normal);
-
-            typeof(ContactPoint).GetField("m_ThisCollider", System.Reflection.BindingFlags.Instance |
-                                         System.Reflection.BindingFlags.NonPublic)?.SetValue(contact, GetComponent<Collider>());
-
-            typeof(ContactPoint).GetField("m_OtherCollider", System.Reflection.BindingFlags.Instance |
-                                         System.Reflection.BindingFlags.NonPublic)?.SetValue(contact, hit.collider);
-
-            // Set the contact points
-            contactPointsField.SetValue(collision, new[] { contact });
-        }
-
-        // Set the transform and gameObject fields
-        typeof(Collision).GetField("m_Transform", System.Reflection.BindingFlags.Instance |
-                                 System.Reflection.BindingFlags.NonPublic)?.SetValue(collision, hit.transform);
-
-        typeof(Collision).GetField("m_Rigidbody", System.Reflection.BindingFlags.Instance |
-                                 System.Reflection.BindingFlags.NonPublic)?.SetValue(collision, hit.rigidbody);
-
-        typeof(Collision).GetField("m_GameObject", System.Reflection.BindingFlags.Instance |
-                                 System.Reflection.BindingFlags.NonPublic)?.SetValue(collision, hitObject);
-
-        return collision;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, collisionCheckRadius);
     }
 }

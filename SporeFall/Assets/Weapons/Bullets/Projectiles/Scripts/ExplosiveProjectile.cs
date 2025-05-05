@@ -9,7 +9,7 @@ public class ExplosiveProjectile : BaseProjectile
     [SerializeField] private float explosionRadius = 5f;
     [SerializeField] private AnimationCurve damageFalloff = AnimationCurve.Linear(0f, 1f, 1f, 0f);
 
-    protected override void HandleImpact(Collision collision)
+    protected override void HandleImpact(Collider hitCollider)
     {
         // Create explosion effect
         CreateExplosionEffect();
@@ -17,7 +17,6 @@ public class ExplosiveProjectile : BaseProjectile
         // Apply area damage
         ApplyExplosionDamage();
     }
-
     private void CreateExplosionEffect()
     {
         if (PoolManager.Instance != null && explosionEffectPrefab != null)
@@ -33,7 +32,6 @@ public class ExplosiveProjectile : BaseProjectile
             }
         }
     }
-
     private void ApplyExplosionDamage()
     {
         // Get all colliders in explosion radius
@@ -50,7 +48,6 @@ public class ExplosiveProjectile : BaseProjectile
             }
         }
     }
-
     // Visualize explosion radius in editor
     private void OnDrawGizmosSelected()
     {

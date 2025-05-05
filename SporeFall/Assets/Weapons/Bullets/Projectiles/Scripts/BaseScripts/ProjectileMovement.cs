@@ -9,8 +9,8 @@ public class ProjectileMovement : MonoBehaviour
 
     // Arc trajectory variables
     private Vector3 initialPosition;
-    private float arcProgress = 0;
     private float arcDistance;
+    private float arcTraveledDistance = 0;
     private Vector3 previousPosition;
 
     private void Awake()
@@ -37,7 +37,7 @@ public class ProjectileMovement : MonoBehaviour
     private void SetupArcTrajectory()
     {
         arcDistance = Vector3.Distance(initialPosition, data.TargetPosition);
-        arcProgress = 0f;
+        arcTraveledDistance = 0f;
 
         // Disable rigidbody physics for arc trajectories
         if (rb != null)
@@ -80,7 +80,12 @@ public class ProjectileMovement : MonoBehaviour
 
     private void UpdateArcMovement()
     {
-        arcProgress += data.Speed * Time.deltaTime / arcDistance;
+        // Add constant distance each frame based on speed
+        float distanceThisFrame = data.Speed * Time.deltaTime;
+        arcTraveledDistance += distanceThisFrame;
+
+        // Calculate arc progress (0 to 1) based on traveled distance
+        float arcProgress = Mathf.Clamp01(arcTraveledDistance / arcDistance);
 
         // Calculate position along the arc
         Vector3 linearPosition = Vector3.Lerp(initialPosition, data.TargetPosition, arcProgress);
@@ -92,9 +97,16 @@ public class ProjectileMovement : MonoBehaviour
         // Rotate to face the direction of movement
         if (arcProgress < 1)
         {
-            Vector3 nextPosition = Vector3.Lerp(initialPosition, data.TargetPosition, arcProgress + 0.01f);
-            nextPosition += Vector3.up * (data.ArcHeight * Mathf.Sin((arcProgress + 0.01f) * Mathf.PI));
-            transform.LookAt(nextPosition);
+            // Calculate the next position for orientation
+            float nextProgress = Mathf.Clamp01((arcTraveledDistance + 0.1f) / arcDistance);
+            Vector3 nextPosition = Vector3.Lerp(initialPosition, data.TargetPosition, nextProgress);
+            nextPosition += Vector3.up * (data.ArcHeight * Mathf.Sin(nextProgress * Mathf.PI));
+
+            // Only update rotation if there's a meaningful difference in position
+            if (Vector3.Distance(transform.position, nextPosition) > 0.001f)
+            {
+                transform.LookAt(nextPosition);
+            }
         }
 
         // Check if arc is completed
@@ -114,13 +126,13 @@ public class ProjectileMovement : MonoBehaviour
             Vector3 reflection = Vector3.Reflect(currentDirection, surface.transform.up);
 
             // Update target position based on reflection
-            float remainingDistance = arcDistance * (1 - arcProgress);
+            float remainingDistance = arcDistance * (1 - (arcTraveledDistance / arcDistance));
             data.TargetPosition = transform.position + (reflection * remainingDistance);
 
             // Reset arc parameters for the bounce
             initialPosition = transform.position;
             arcDistance = Vector3.Distance(initialPosition, data.TargetPosition);
-            arcProgress = 0;
+            arcTraveledDistance = 0;
         }
         else if (rb != null && !rb.isKinematic)
         {
@@ -134,4 +146,5 @@ public class ProjectileMovement : MonoBehaviour
     {
         return previousPosition;
     }
+
 }

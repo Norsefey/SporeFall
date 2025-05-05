@@ -12,10 +12,10 @@ public class DOTProjectile : BaseProjectile
     [SerializeField] private float dotRadius = 3f;
     [SerializeField] private float dotCorruptionPerTick = 0f;
 
-    protected override void HandleImpact(Collision collision)
+    protected override void HandleImpact(Collider collider)
     {
         // Apply initial damage if needed
-        if (collision.collider.TryGetComponent<Damageable>(out var damageable))
+        if (collider.TryGetComponent<Damageable>(out var damageable))
         {
             ApplyDamage(damageable, currentDamage);
         }

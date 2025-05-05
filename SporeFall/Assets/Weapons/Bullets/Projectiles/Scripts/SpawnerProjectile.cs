@@ -7,7 +7,7 @@ public class SpawnerProjectile : BaseProjectile
     [Header("Spawner Settings")]
     [SerializeField] private GameObject[] entitiesToSpawn;
 
-    protected override void HandleImpact(Collision collision)
+    protected override void HandleImpact(Collider collider)
     {
         SpawnEntity();
     }
