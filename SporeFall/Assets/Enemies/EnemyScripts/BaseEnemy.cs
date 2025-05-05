@@ -594,8 +594,6 @@ public abstract class BaseEnemy : MonoBehaviour
 
         // Reset any ongoing effects or states
         SetIsAttacking(false);
-        
-        ResetState();
     }
     protected virtual void SpawnDeathVFX(Vector3 position, Quaternion rotation)
     {
