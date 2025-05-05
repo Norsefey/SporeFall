@@ -144,7 +144,7 @@ MonoBehaviour:
   weaponName: Boom Puff
   weaponSprite: {fileID: 21300000, guid: e8f504df438eff54bbf4737e69adabbe, type: 3}
   player: {fileID: 0}
-  bulletPrefab: {fileID: 7441200720383325235, guid: 3e711a0f05cb84c488a7194747c20a2a,
+  bulletPrefab: {fileID: 7441200720383325235, guid: ba85123127330214b8a0d86a42373f88,
     type: 3}
   firePoint: {fileID: 55093186013470132}
   hitLayers:
@@ -168,14 +168,18 @@ MonoBehaviour:
   limitedAmmo: 0
   isHitScan: 0
   hitScanDistance: 50
-  projectileSpeed: 35
-  projectileLifetime: 10
-  useGravity: 1
-  targetedDirection: 0
-  projectileArcHeight: 0
-  canBounce: 0
-  maxBounces: 3
-  bounceDamageMultiplier: 0.7
+  projectileData:
+    Speed: 15
+    Lifetime: 15
+    Damage: 31
+    UseGravity: 1
+    UseArcTrajectory: 0
+    ArcHeight: 0
+    CanBounce: 0
+    MaxBounces: 0
+    BounceDamageMultiplier: 0
+    Direction: {x: 0, y: 0, z: 0}
+    TargetPosition: {x: 0, y: 0, z: 0}
   maxChargeTime: 1.5
   minChargeMultiplier: 1
   maxChargeMultiplier: 2

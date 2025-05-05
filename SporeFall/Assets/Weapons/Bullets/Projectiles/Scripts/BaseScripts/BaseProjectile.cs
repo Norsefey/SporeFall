@@ -17,6 +17,7 @@ public abstract class BaseProjectile : MonoBehaviour
     protected float elapsedTime;
     protected float currentDamage;
     protected int bounceCount;
+    protected bool arcCompletedPhysicsStarted = false;
 
     protected virtual void Awake()
     {
@@ -32,6 +33,7 @@ public abstract class BaseProjectile : MonoBehaviour
         currentDamage = data.Damage;
         elapsedTime = 0f;
         bounceCount = 0;
+        arcCompletedPhysicsStarted = false;
 
         // Initialize movement
         if (movement != null)
@@ -87,11 +89,6 @@ public abstract class BaseProjectile : MonoBehaviour
         {
             ReturnToPool();
         }
-    }
-    public void OnArcComplete()
-    {
-        Debug.LogWarning("Arch Complete Returning");
-        ReturnToPool();
     }
     protected virtual void Bounce(Collider surface)
     {

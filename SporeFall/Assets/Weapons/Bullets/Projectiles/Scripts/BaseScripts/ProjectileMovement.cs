@@ -80,19 +80,19 @@ public class ProjectileMovement : MonoBehaviour
         arcTraveledDistance += distanceThisFrame;
 
         // Calculate arc progress (0 to 1) based on traveled distance
-        float arcProgress = Mathf.Clamp01(arcTraveledDistance / arcDistance);
+        float arcProgress = arcTraveledDistance / arcDistance;
 
-        // Calculate position along the arc
-        Vector3 linearPosition = Vector3.Lerp(initialPosition, data.TargetPosition, arcProgress);
-
-        // Add arc height (parabolic motion)
-        float heightOffset = data.ArcHeight * Mathf.Sin(arcProgress * Mathf.PI);
-        transform.position = linearPosition + Vector3.up * heightOffset;
-
-        // Rotate to face the direction of movement
-        if (arcProgress <= 1)
+        if (arcProgress <= 1.0f)
         {
-            // Calculate the next position for orientation
+            // Still in the arc phase
+            // Calculate position along the arc
+            Vector3 linearPosition = Vector3.Lerp(initialPosition, data.TargetPosition, arcProgress);
+
+            // Add arc height (parabolic motion)
+            float heightOffset = data.ArcHeight * Mathf.Sin(arcProgress * Mathf.PI);
+            transform.position = linearPosition + Vector3.up * heightOffset;
+
+            // Rotate to face the direction of movement
             float nextProgress = Mathf.Clamp01((arcTraveledDistance + 0.1f) / arcDistance);
             Vector3 nextPosition = Vector3.Lerp(initialPosition, data.TargetPosition, nextProgress);
             nextPosition += Vector3.up * (data.ArcHeight * Mathf.Sin(nextProgress * Mathf.PI));
@@ -102,17 +102,23 @@ public class ProjectileMovement : MonoBehaviour
             {
                 transform.LookAt(nextPosition);
             }
-
-            Debug.Log("arch Progress-" + arcProgress);
-
         }
-
-        // Check if arc is completed
-        if (arcProgress > 1)
+        else
         {
-            Debug.Log("arch Complete- Sending Message");
-            // Notify listeners that we've reached the target position
-            SendMessage("OnArcComplete", SendMessageOptions.DontRequireReceiver);
+            // After completing the arc, switch to gravity-based movement
+            if (rb != null && rb.isKinematic)
+            {
+                // Switch to physics-based movement after reaching target
+                rb.isKinematic = false;
+                rb.useGravity = true;
+
+                // Calculate velocity direction based on last movement direction
+                Vector3 direction = (transform.position - previousPosition).normalized;
+                // Maintain momentum from arc movement
+                rb.velocity = direction * data.Speed;
+
+                Debug.Log("Arc Complete - Switching to physics movement");
+            }
         }
     }
     public void Bounce(Collider surface)

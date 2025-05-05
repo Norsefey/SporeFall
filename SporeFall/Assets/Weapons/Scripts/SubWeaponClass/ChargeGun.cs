@@ -128,14 +128,14 @@ public class ChargeGun : Weapon
                 ProjectileData data = new()
                 {
                     Direction = shootDirection,
-                    Speed = projectileSpeed,
                     Damage = damage * chargeMultiplier / currentProjectileCount, // Spread damage across projectiles
-                    Lifetime = projectileLifetime,
-                    UseGravity = useGravity,
-                    ArcHeight = projectileArcHeight,
-                    CanBounce = canBounce,
-                    MaxBounces = maxBounces,
-                    BounceDamageMultiplier = bounceDamageMultiplier,
+                    Speed = projectileData.Speed,
+                    Lifetime = projectileData.Lifetime,
+                    UseGravity = projectileData.UseGravity,
+                    ArcHeight = projectileData.ArcHeight,
+                    CanBounce = projectileData.CanBounce,
+                    MaxBounces = projectileData.MaxBounces,
+                    BounceDamageMultiplier = projectileData.BounceDamageMultiplier,
                 };
                 projectile.Initialize(data, pool);
                 Debug.Log($"{weaponName} fired a charged projectile with power: {chargeMultiplier}, Projectile: {i + 1}/{currentProjectileCount}");

@@ -102,6 +102,13 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         ResetState();
         StartCoroutine(PeriodicTargetDetection(4));
+        // do not want movement while rising from from ground
+        if (!isRising)
+        {
+            // Start behavior
+            DetectTargets();
+            SetRandomState();
+        }
     }
     protected virtual void ResetState()
     {
@@ -136,14 +143,6 @@ public abstract class BaseEnemy : MonoBehaviour
             agent.isStopped = false;
             agent.velocity = Vector3.zero;
             agent.stoppingDistance = stoppingDistance;
-        }
-
-        // do not want movement while rising from from ground
-        if (!isRising)
-        {
-            // Start behavior
-            DetectTargets();
-            SetRandomState();
         }
     }
     protected virtual void Update()
@@ -595,12 +594,8 @@ public abstract class BaseEnemy : MonoBehaviour
 
         // Reset any ongoing effects or states
         SetIsAttacking(false);
-
-        if (agent.isActiveAndEnabled)
-        {
-            agent.ResetPath();
-            agent.isStopped = true;
-        }
+        
+        ResetState();
     }
     protected virtual void SpawnDeathVFX(Vector3 position, Quaternion rotation)
     {

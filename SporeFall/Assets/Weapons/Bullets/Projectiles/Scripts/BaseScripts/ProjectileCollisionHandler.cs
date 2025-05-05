@@ -20,7 +20,6 @@ public class ProjectileCollisionHandler : MonoBehaviour
         hitLayers = layers;
         projectile = owner;
     }
-
     private void Update()
     {
         // For arc or kinematic projectiles, we need to manually check for collisions
@@ -29,7 +28,6 @@ public class ProjectileCollisionHandler : MonoBehaviour
             CheckForCollisions();
         }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         // Check if the collision object's layer is in our hitLayers mask
@@ -39,7 +37,6 @@ public class ProjectileCollisionHandler : MonoBehaviour
                 projectile.OnHit(collision.collider);
         }
     }
-
     private void CheckForCollisions()
     {
         if (movement == null) return;
@@ -60,7 +57,6 @@ public class ProjectileCollisionHandler : MonoBehaviour
                 projectile.OnHit(hit.collider);
         }
     }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
