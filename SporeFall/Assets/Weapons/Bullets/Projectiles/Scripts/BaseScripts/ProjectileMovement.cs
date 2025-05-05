@@ -92,15 +92,31 @@ public class ProjectileMovement : MonoBehaviour
             float heightOffset = data.ArcHeight * Mathf.Sin(arcProgress * Mathf.PI);
             transform.position = linearPosition + Vector3.up * heightOffset;
 
-            // Rotate to face the direction of movement
-            float nextProgress = Mathf.Clamp01((arcTraveledDistance + 0.1f) / arcDistance);
+            // Store the previous position for velocity calculation
+            Vector3 currentPos = transform.position;
+
+            // Calculate the next position for orientation and to prepare for physics transition
+            float nextProgress = Mathf.Clamp01(arcProgress + 0.05f);
             Vector3 nextPosition = Vector3.Lerp(initialPosition, data.TargetPosition, nextProgress);
             nextPosition += Vector3.up * (data.ArcHeight * Mathf.Sin(nextProgress * Mathf.PI));
 
             // Only update rotation if there's a meaningful difference in position
-            if (Vector3.Distance(transform.position, nextPosition) > 0.001f)
+            if (Vector3.Distance(currentPos, nextPosition) > 0.001f)
             {
                 transform.LookAt(nextPosition);
+            }
+
+            // If we're about to complete the arc, prepare velocity data for physics transition
+            if (arcProgress > 0.95f)
+            {
+                // Calculate the actual velocity vector at this point in the arc
+                // This accurately captures both direction and speed
+                float nextArcProgress = Mathf.Min(arcProgress + 0.01f, 1.0f);
+                Vector3 nextPosInArc = Vector3.Lerp(initialPosition, data.TargetPosition, nextArcProgress);
+                nextPosInArc += Vector3.up * (data.ArcHeight * Mathf.Sin(nextArcProgress * Mathf.PI));
+
+                // Store this for physics transition
+                data.Direction = (nextPosInArc - currentPos).normalized;
             }
         }
         else
@@ -108,16 +124,15 @@ public class ProjectileMovement : MonoBehaviour
             // After completing the arc, switch to gravity-based movement
             if (rb != null && rb.isKinematic)
             {
-                // Switch to physics-based movement after reaching target
+                // Switch to physics-based movement
                 rb.isKinematic = false;
                 rb.useGravity = true;
 
-                // Calculate velocity direction based on last movement direction
-                Vector3 direction = (transform.position - previousPosition).normalized;
-                // Maintain momentum from arc movement
-                rb.velocity = direction * data.Speed;
+                // Use the direction we calculated near the end of the arc
+                // This captures both horizontal and vertical components
+                rb.velocity = data.Direction * data.Speed;
 
-                Debug.Log("Arc Complete - Switching to physics movement");
+                Debug.Log("Arc Complete - Switching to physics with actual trajectory: " + rb.velocity);
             }
         }
     }

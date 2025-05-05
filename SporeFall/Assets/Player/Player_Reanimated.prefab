@@ -450,7 +450,6 @@ GameObject:
   - component: {fileID: 6683595764723553207}
   - component: {fileID: 2254434701692111643}
   - component: {fileID: 746317971838825568}
-  - component: {fileID: 1580905039524685324}
   m_Layer: 9
   m_Name: PlayerCamera
   m_TagString: MainCamera
@@ -596,7 +595,7 @@ MonoBehaviour:
   mvertSense: 25
   gHorSense: 250
   gvertSense: 200
-  minVertRot: -35
+  minVertRot: -55
   maxVertRot: 75
   invertVertRot: 0
   invertHorRot: 0
@@ -625,25 +624,6 @@ MonoBehaviour:
   shoulderOffset: 0.25
   rigLookAtTarget: {fileID: 7818593497225325337}
   overlaycamera: {fileID: 8390127863674532336}
---- !u!114 &1580905039524685324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 526708695916142077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6363bba448bf64e60a763433f9ddf81b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _threshold: 0.8
-  _softKnee: 0.5
-  _radius: 2.5
-  _intensity: 0.8
-  _highQuality: 1
-  _antiFlicker: 1
-  _shader: {fileID: 4800000, guid: 5a711a01011934ebcb58ef5ad52159d6, type: 3}
 --- !u!1 &993211833765828788
 GameObject:
   m_ObjectHideFlags: 0
@@ -2042,13 +2022,18 @@ MonoBehaviour:
   limitedAmmo: 0
   isHitScan: 0
   hitScanDistance: 50
-  projectileSpeed: 20
-  projectileLifetime: 5
-  useGravity: 0
-  projectileArcHeight: 0
-  canBounce: 0
-  maxBounces: 3
-  bounceDamageMultiplier: 0.7
+  projectileData:
+    Speed: 0
+    Lifetime: 0
+    Damage: 0
+    UseGravity: 0
+    UseArcTrajectory: 0
+    ArcHeight: 0
+    CanBounce: 0
+    MaxBounces: 0
+    BounceDamageMultiplier: 0
+    Direction: {x: 0, y: 0, z: 0}
+    TargetPosition: {x: 0, y: 0, z: 0}
   attackRange: 2
   attackArc: 90
   attackCooldown: 0.2
@@ -2573,13 +2558,18 @@ MonoBehaviour:
   limitedAmmo: 0
   isHitScan: 0
   hitScanDistance: 50
-  projectileSpeed: 20
-  projectileLifetime: 5
-  useGravity: 0
-  projectileArcHeight: 0
-  canBounce: 0
-  maxBounces: 3
-  bounceDamageMultiplier: 0.7
+  projectileData:
+    Speed: 0
+    Lifetime: 0
+    Damage: 0
+    UseGravity: 0
+    UseArcTrajectory: 0
+    ArcHeight: 0
+    CanBounce: 0
+    MaxBounces: 0
+    BounceDamageMultiplier: 0
+    Direction: {x: 0, y: 0, z: 0}
+    TargetPosition: {x: 0, y: 0, z: 0}
   pMan: {fileID: 858334148213403371}
   buildableStructures:
   - {fileID: 2143417820075499101, guid: 877219f937a427a4889d673a029d294d, type: 3}
