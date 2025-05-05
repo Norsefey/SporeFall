@@ -65,25 +65,23 @@ public abstract class BaseProjectile : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     protected virtual void OnDisable()
     {
         StopAllCoroutines();
     }
-
-    public virtual void OnHit(Collision collision)
+    public virtual void OnHit(Collider hitCollider)
     {
         // Play sound and visual effects
         if (effects != null)
-            effects.PlayImpactEffects(collision.contacts[0].point);
+            effects.PlayImpactEffects(hitCollider.transform.position);
 
         // Handle damage application
-        HandleImpact(collision);
+        HandleImpact(hitCollider);
 
         // Handle collision physics (bounce or destroy)
         if (data.CanBounce && bounceCount < data.MaxBounces)
         {
-            Bounce(collision.collider);
+            Bounce(hitCollider);
         }
         else
         {
@@ -99,7 +97,7 @@ public abstract class BaseProjectile : MonoBehaviour
         bounceCount++;
     }
     /// Apply damage based on projectile type
-    protected abstract void HandleImpact(Collision collision);
+    protected abstract void HandleImpact(Collider hitCollider);
     /// Apply damage to a damageable target
     protected void ApplyDamage(Damageable target, float damageAmount)
     {

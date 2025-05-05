@@ -94,7 +94,10 @@ GameObject:
   - component: {fileID: 245749814222732102}
   - component: {fileID: 2952297644193773456}
   - component: {fileID: 1427754023516810167}
-  - component: {fileID: 3306381464641036855}
+  - component: {fileID: 3283441201389902043}
+  - component: {fileID: 2752609911762311134}
+  - component: {fileID: 797573665054818282}
+  - component: {fileID: 6029162775368933418}
   m_Layer: 10
   m_Name: MotarProjectile
   m_TagString: Untagged
@@ -164,9 +167,9 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3306381464641036855
+--- !u!114 &3283441201389902043
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,20 +178,56 @@ MonoBehaviour:
   m_GameObject: {fileID: 7441200720383325235}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1755e229306f9a944b473b5aef203d01, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ce7de3aaaeec5b4f84ededc26701da5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  collisionCheckRadius: 0.5
+--- !u!114 &2752609911762311134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431347646c55b7f41914c5ba79fb33ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  impactVFXPrefab: {fileID: 0}
+  audioSource: {fileID: 0}
+  impactSound: {fileID: 0}
+  soundVolume: 0.5
+--- !u!114 &797573665054818282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2e61aadacdea8a46807912e05029fe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6029162775368933418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 927ca62e5139f8d4ba1aa2d785ca341f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   hitLayers:
     serializedVersion: 2
-    m_Bits: 4416
-  vfxPrefab: {fileID: 0}
-  audioPlayer: {fileID: 0}
-  bulletSound: {fileID: 0}
-  bulletSoundVolume: 0.5
-  explosionEffectPrefab: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5,
+    m_Bits: 256
+  explosionEffectPrefab: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312,
     type: 3}
-  explosionRadius: 7
+  explosionRadius: 5
   damageFalloff:
     serializedVersion: 2
     m_Curve:
@@ -202,25 +241,23 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1.0045166
-      value: 0.25001526
-      inSlope: -1.8821002
-      outSlope: -1.8821002
+      time: 0.67128986
+      value: 0.59435964
+      inSlope: -0.9999999
+      outSlope: -0.9999999
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.04365379
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  createsDOTZone: 0
-  dotZonePrefab: {fileID: 0}
-  dOTDuration: 0
-  dOTTickRate: 0
-  dOTDamagePerTick: 0
-  dOTRadius: 0
-  dOTCorruptionPerTick: 0
-  corruptionAmount: 0
-  entitiesToSpawn: []
-  collisionCheckRadius: 0.5
-  targetedDirection: 0

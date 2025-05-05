@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class StandardProjectile : BaseProjectile
 {
-    protected override void HandleImpact(Collision collision)
+    protected override void HandleImpact(Collider collider)
     {
-        if (collision.collider.TryGetComponent<Damageable>(out var damageable))
+        if (collider.TryGetComponent<Damageable>(out var damageable))
         {
             ApplyDamage(damageable, currentDamage);
         }

@@ -10,8 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 245749814222732102}
   - component: {fileID: 2952297644193773456}
-  - component: {fileID: -2714352750953574547}
   - component: {fileID: 9210089886436148083}
+  - component: {fileID: 4465901392144458127}
+  - component: {fileID: 6589588329320517255}
+  - component: {fileID: 9020246245635887377}
+  - component: {fileID: 1791254482872599284}
   m_Layer: 10
   m_Name: SpawnEgg
   m_TagString: Untagged
@@ -62,66 +65,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &-2714352750953574547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7441200720383325235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1755e229306f9a944b473b5aef203d01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 4
-  hitLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  vfxPrefab: {fileID: 0}
-  audioPlayer: {fileID: 0}
-  bulletSound: {fileID: 0}
-  bulletSoundVolume: 0.5
-  explosionEffectPrefab: {fileID: 0}
-  explosionRadius: 0
-  damageFalloff:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: -1
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -1
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  createsDOTZone: 0
-  dotZonePrefab: {fileID: 0}
-  dOTDuration: 4
-  dOTTickRate: 1
-  dOTDamagePerTick: 3
-  dOTRadius: 5
-  dOTCorruptionPerTick: 0
-  corruptionAmount: 0
-  entitiesToSpawn:
-  - {fileID: 6566074402847298207, guid: 5d85f1f8220c04a48821c4565089ab3f, type: 3}
-  - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
-  - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
-  collisionCheckRadius: 0.84
-  targetedDirection: 0
 --- !u!135 &9210089886436148083
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -143,6 +86,68 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4465901392144458127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce7de3aaaeec5b4f84ededc26701da5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionCheckRadius: 0.52
+--- !u!114 &6589588329320517255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431347646c55b7f41914c5ba79fb33ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  impactVFXPrefab: {fileID: 0}
+  audioSource: {fileID: 0}
+  impactSound: {fileID: 0}
+  soundVolume: 0.5
+--- !u!114 &9020246245635887377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2e61aadacdea8a46807912e05029fe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1791254482872599284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41cb5836b7082e74398276aeb97c852f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 4160
+  entitiesToSpawn:
+  - {fileID: 6566074402847298207, guid: 5d85f1f8220c04a48821c4565089ab3f, type: 3}
+  - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
+  - {fileID: 4494384243789253112, guid: 5cd45932f7a7495408869adefadf383b, type: 3}
+  - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
+  - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
 --- !u!1001 &9113619224698366043
 PrefabInstance:
   m_ObjectHideFlags: 0

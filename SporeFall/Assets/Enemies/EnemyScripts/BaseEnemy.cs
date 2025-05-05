@@ -108,7 +108,7 @@ public abstract class BaseEnemy : MonoBehaviour
         // Reset all state when object is reused from pool
         foreach (var att in attacks)
         {
-            Debug.LogWarning("Reseting Attack: " + att);
+            //Debug.LogWarning("Reseting Attack: " + att);
             att.ResetCooldown();
         }
 
