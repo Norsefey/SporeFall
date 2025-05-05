@@ -27,7 +27,7 @@ public class PickUpWeapon : Interactables
 
     private void Start()
     {
-        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         audioSource.clip = pickupSound;
         if (despawnTimerActive)
         {
