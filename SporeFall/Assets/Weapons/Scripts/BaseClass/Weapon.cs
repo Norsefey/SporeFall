@@ -94,7 +94,18 @@ public abstract class Weapon : MonoBehaviour
 
             if (projectile != null)
             {
-                ProjectileData data = projectileData;
+                ProjectileData data = new()
+                {
+                    Direction = shootDirection,
+                    Damage = damage,
+                    Speed = projectileData.Speed,
+                    Lifetime = projectileData.Lifetime,
+                    UseGravity = projectileData.UseGravity,
+                    ArcHeight = projectileData.ArcHeight,
+                    CanBounce = projectileData.CanBounce,
+                    MaxBounces = projectileData.MaxBounces,
+                    BounceDamageMultiplier = projectileData.BounceDamageMultiplier
+                };
                 projectile.Initialize(data, pool);
             }
         }
@@ -104,7 +115,18 @@ public abstract class Weapon : MonoBehaviour
 
             if (projectile != null)
             {
-                ProjectileData data = projectileData;
+                ProjectileData data = new()
+                {
+                    Direction = shootDirection,
+                    Damage = damage,
+                    Speed = projectileData.Speed,
+                    Lifetime = projectileData.Lifetime,
+                    UseGravity = projectileData.UseGravity,
+                    ArcHeight = projectileData.ArcHeight,
+                    CanBounce = projectileData.CanBounce,
+                    MaxBounces = projectileData.MaxBounces,
+                    BounceDamageMultiplier = projectileData.BounceDamageMultiplier
+                };
                 projectile.Initialize(data, null);
             }
         }

@@ -137,7 +137,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
 
         // Reset NavMeshAgent
-        if (agent != null)
+        if (agent != null && agent.isActiveAndEnabled)
         {
             agent.ResetPath();
             agent.isStopped = false;
