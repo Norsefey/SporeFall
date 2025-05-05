@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UpgradeBanner : MonoBehaviour
@@ -40,6 +41,13 @@ public class UpgradeBanner : MonoBehaviour
             //select The scroll bar
             //upgradeButton.FindSelectableOnRight().Select();
             upgradeButton.interactable = false;
+
+            if (TutorialControls.Instance != null && TutorialControls.Instance.gamepadActive)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GameManager.Instance.maxUpgradeButton);
+            }
+
             textMove.canMove = false;
             buttonText.color = DarkRed;
             descriptionText.text = "This structure is fully upgraded.";

@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     private float mycelia = 150;
     public float Mycelia { get { return mycelia; } }
     private bool tutorialMycelia = true;
+    public GameObject maxUpgradeButton;
 
     [Header("Coop Manager")]
     public List<PlayerManager> players = new();
