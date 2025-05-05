@@ -202,6 +202,8 @@ public class GameManager : MonoBehaviour
         {
             structure.GetComponent<Structure>().Upgrade();
         }
+
+        trainHandler.UpdateEnergyUsage();
     }
     public void IncreaseMycelia(float amount)
     {

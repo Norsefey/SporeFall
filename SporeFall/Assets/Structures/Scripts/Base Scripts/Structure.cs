@@ -158,10 +158,6 @@ public class Structure : MonoBehaviour
         if (train != null)
             train.RemoveStructure(this);
 
-        //healthComponent.ResetHealth();
-
-        //Debug.Log("Control object is: " + controlScriptObject.activeSelf);
-
         poolBehavior.ReturnObject();
     }
 
