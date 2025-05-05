@@ -65,10 +65,10 @@ public class UpgradeBanner : MonoBehaviour
         if (upgradeManager.CanUpgrade(currentType, currentMycelia))
         {
             upgradeManager.UpgradeStructure(currentType, currentMycelia);
-            GameManager.Instance.trainHandler.ApplyUpgradeToStructures();
-
-
+            
+            GameManager.Instance.ApplyUpgradeToStructures();
             GameManager.Instance.DecreaseMycelia(currentLevel.cost);
+            
             upgradeUI.UpdateMyceliaAmount();
 
             currentLevel = upgradeManager.GetNextLevel(currentType);
