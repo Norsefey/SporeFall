@@ -77,10 +77,13 @@ public class GameManager : MonoBehaviour
 
         if(PersistentGameManager.Instance != null && trainHandler != null)
         {
+            Debug.Log("Persistent manager and train handler are not null");
             if (PersistentGameManager.Instance.GetEasyMode())
             {// Easy Difficulty settings
+                Debug.Log("Easy mode");
                 if (trainHandler.trainHP != null)
                 {
+                    Debug.Log("Setting max HP");
                     trainHandler.trainHP.SetMaxHP(maxTrainHP_E);
                     trainHandler.trainHP.damageModifier = trainDamageReduction_E;
                 }

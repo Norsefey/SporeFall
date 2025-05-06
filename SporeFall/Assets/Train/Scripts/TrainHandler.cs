@@ -53,13 +53,18 @@ public class TrainHandler : MonoBehaviour
     {
         audioPlayer = GetComponent<AudioSource>();
         // make sure HP is always the first child of train
+        
+        Debug.Log("Train Is awake");
+        UI.DisplayEnergy(maxEnergy);
+    }
+
+    private void Start()
+    {
         if (transform.GetChild(0).TryGetComponent<TrainHP>(out trainHP))
         {// get and assign train HP
             trainHP.train = this;
             UI.SetMaxHP(trainHP.MaxHP);
         }
-        Debug.Log("Train Is awake");
-        UI.DisplayEnergy(maxEnergy);
     }
     public void SetParkedState()
     {

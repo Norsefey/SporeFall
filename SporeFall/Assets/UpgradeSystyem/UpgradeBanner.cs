@@ -31,7 +31,7 @@ public class UpgradeBanner : MonoBehaviour
     private void UpdateBannerVisuals(StructureType type, StructureLevel level)
     {
 
-        typeText.text = $"{type.ToString()} : \n Current Lv {upgradeManager.GetStructureLevel(type) + 1}";
+        typeText.text = $"{type} : \n Current Lv {upgradeManager.GetStructureLevel(type) + 1}";
 
         bool isMaxLevel = upgradeManager.IsMaxLevel(type);
 

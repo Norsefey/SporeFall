@@ -4,13 +4,13 @@ using UnityEngine;
 
 public enum StructureType
 {// Structures will be upgraded across the board based on their type
-    Turret,
-    FlameThrower,
+    Terry,
+    Frankie,
     Sherman,
-    RepairStation,
-    Wall,
+    Ricardo,
+    Walter,
     Lily,
-    Platform,
+    John,
     Stanley,
     Morty
 }
