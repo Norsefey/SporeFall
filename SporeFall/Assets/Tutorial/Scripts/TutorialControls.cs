@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class TutorialControls : MonoBehaviour
 {
@@ -46,6 +48,7 @@ public class TutorialControls : MonoBehaviour
     public bool usingPlaystation = false;
     public bool controlsSet = false;
     public bool playerActive = false;
+    public bool gamepadActive = false;
 
 
     private void Awake()
@@ -56,12 +59,16 @@ public class TutorialControls : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        InputSystem.onDeviceChange += OnDeviceChange;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Check for gamepad input
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad == null) return;
+
         if (playerActive == true && controlsSet == false)
         {
             if (usingKeyboard == true)
@@ -78,6 +85,11 @@ public class TutorialControls : MonoBehaviour
                 controlsSet = true;
             }
         }
+    }
+
+    private void OnDisable()
+    {
+        InputSystem.onDeviceChange -= OnDeviceChange;
     }
 
     #region set Inputs
@@ -112,6 +124,7 @@ public class TutorialControls : MonoBehaviour
 
     public void SetXboxInputsP1()
     {
+        gamepadActive = true;
         continueInput = "A";
         moveInput = "Left stick";
         sprintInput = "Hold left stick";
@@ -132,6 +145,7 @@ public class TutorialControls : MonoBehaviour
 
     public void SetXboxInputsP2()
     {
+        gamepadActive = true;
         aimInput2 = "Left trigger";
         shootInput2 = "Right trigger";
         editInput2 = "Y";
@@ -140,4 +154,16 @@ public class TutorialControls : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (change == InputDeviceChange.Added)
+        {
+            gamepadActive = true;
+        }
+        else if (change == InputDeviceChange.Disconnected)
+        {
+            gamepadActive = false;
+        }
+    }
 }
