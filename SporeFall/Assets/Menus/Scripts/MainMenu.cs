@@ -219,7 +219,7 @@ public class MainMenu : MonoBehaviour
     public void StartTutorial()
     {
         SceneManager.LoadScene(tutorialName);
-        SavedSettings.currentLevel = "Tutorial";
+        SavedSettings.currentLevel = "Training";
     }
     public void SetDifficulty(bool easyMode)
     {

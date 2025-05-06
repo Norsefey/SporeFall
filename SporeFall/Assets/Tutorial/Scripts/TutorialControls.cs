@@ -95,6 +95,7 @@ public class TutorialControls : MonoBehaviour
     #region set Inputs
     public void SetKeyboardInputsP1()
     {
+        controlsSet = true;
         continueInput = "C";
         moveInput = "WASD";
         sprintInput = "Shift";
@@ -115,6 +116,7 @@ public class TutorialControls : MonoBehaviour
 
     public void SetKeyboardInputsP2()
     {
+        controlsSet = true;
         aimInput2 = "Right click";
         shootInput2 = "Left click";
         editInput2 = "F";
@@ -124,6 +126,7 @@ public class TutorialControls : MonoBehaviour
 
     public void SetXboxInputsP1()
     {
+        controlsSet = true;
         gamepadActive = true;
         continueInput = "A";
         moveInput = "Left stick";
@@ -145,6 +148,7 @@ public class TutorialControls : MonoBehaviour
 
     public void SetXboxInputsP2()
     {
+        controlsSet = true;
         gamepadActive = true;
         aimInput2 = "Left trigger";
         shootInput2 = "Right trigger";

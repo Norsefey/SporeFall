@@ -5,7 +5,7 @@ using UnityEngine;
 public enum StructureType
 {// Structures will be upgraded across the board based on their type
     Turret,
-    FlameThower,
+    FlameThrower,
     Sherman,
     RepairStation,
     Wall,
