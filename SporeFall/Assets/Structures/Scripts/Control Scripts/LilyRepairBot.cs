@@ -202,8 +202,8 @@ public class LilyRepairBot : MonoBehaviour
     public void DeactivateBot()
     {
         isActive = false;
-        transform.GetChild(0).gameObject.SetActive(false);
-
+        //transform.GetChild(0).gameObject.SetActive(false);
+        transform.localPosition = Vector3.zero;
         // Stop movement
         if (navAgent.isActiveAndEnabled)
         {

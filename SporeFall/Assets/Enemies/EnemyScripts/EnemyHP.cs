@@ -31,7 +31,7 @@ public class EnemyHP : Damageable
 
                 flinchChance = Mathf.Clamp01(flinchChance);
 
-                if (!flinching && Random.value < flinchChance)
+                if (isActiveAndEnabled && !flinching && Random.value < flinchChance)
                 {
                     StartCoroutine(Flinch());
                 }

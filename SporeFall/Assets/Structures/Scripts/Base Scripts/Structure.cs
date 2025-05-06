@@ -144,23 +144,19 @@ public class Structure : MonoBehaviour
     }
     public void ReturnToPool()
     {
-        Debug.Log("Returning To Pool");
+        //Debug.Log("Returning To Pool");
         DisableStructureControls();
 
         SpawnDeathVFX();
         if(onPlatform && myPlatform != null)
         {
-            Debug.Log("On Platform");
+            //Debug.Log("On Platform");
 
             myPlatform.RemoveStructure();
         }
 
         if (train != null)
             train.RemoveStructure(this);
-
-        //healthComponent.ResetHealth();
-
-        Debug.Log("Control object is: " + controlScriptObject.activeSelf);
 
         poolBehavior.ReturnObject();
     }

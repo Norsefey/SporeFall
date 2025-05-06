@@ -38,13 +38,17 @@ public class TrainingLevelManager : MonoBehaviour
 
     private void RespawnEnemy(BaseEnemy enemy)
     {
-        StartCoroutine(SpawnEnemy(enemy.gameObject));
+        StartCoroutine(SpawnEnemy(enemy));
     }
 
-    private IEnumerator SpawnEnemy(GameObject enemy)
+    private IEnumerator SpawnEnemy(BaseEnemy enemy)
     {
+        // move to spawn point
         enemy.transform.position = srSpawnPoints[Random.Range(0, srSpawnPoints.Length)].position;
         yield return new WaitForSeconds(2);
-        enemy.SetActive(true);
+        // enable first to have active navmesh
+        enemy.gameObject.SetActive(true);
+        // Initialize all values
+        enemy.Initialize();
     }
 }

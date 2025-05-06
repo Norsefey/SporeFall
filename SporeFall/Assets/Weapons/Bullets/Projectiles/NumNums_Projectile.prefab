@@ -10,8 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 245749814222732102}
   - component: {fileID: 2952297644193773456}
-  - component: {fileID: 3306381464641036855}
   - component: {fileID: 358951197454849710}
+  - component: {fileID: -3315618040320814402}
+  - component: {fileID: 3306381464641036855}
+  - component: {fileID: -5897514140570935640}
   m_Layer: 10
   m_Name: NumNums_Projectile
   m_TagString: Untagged
@@ -62,6 +64,39 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!65 &358951197454849710
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.8, y: 0.84, z: 0.32}
+  m_Center: {x: 0, y: 0.3, z: 0}
+--- !u!114 &-3315618040320814402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441200720383325235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2e61aadacdea8a46807912e05029fe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3306381464641036855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,14 +111,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitLayers:
     serializedVersion: 2
-    m_Bits: 256
-  vfxPrefab: {fileID: 4593184484909914552, guid: 2e1e9506f5904a64b81744324fb7cd50,
+    m_Bits: 4416
+  explosionEffectPrefab: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312,
     type: 3}
-  collisionCheckRadius: 0.5
-  audioPlayer: {fileID: 0}
-  impactSound: {fileID: 0}
-  soundVolume: 0.5
-  explosionEffectPrefab: {fileID: 0}
   explosionRadius: 2.3
   damageFalloff:
     serializedVersion: 2
@@ -118,27 +148,19 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!65 &358951197454849710
-BoxCollider:
+--- !u!114 &-5897514140570935640
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7441200720383325235}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.8, y: 0.84, z: 0.32}
-  m_Center: {x: 0, y: 0.3, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce7de3aaaeec5b4f84ededc26701da5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionCheckRadius: 0.65
 --- !u!1001 &6951317706822052566
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -175,7 +197,7 @@ PrefabInstance:
     - target: {fileID: 5475845221982982043, guid: 652617c0c17b7be4cb740e2b736020e9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.12
+      value: -0.4
       objectReference: {fileID: 0}
     - target: {fileID: 5475845221982982043, guid: 652617c0c17b7be4cb740e2b736020e9,
         type: 3}

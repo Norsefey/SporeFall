@@ -19,7 +19,7 @@ public class LilyRepairShop : MonoBehaviour
     }
     private void OnEnable()
     {
-        //StartCoroutine(ActivateLilyBots());
+        StartCoroutine(ActivateLilyBots());
     }
     private void OnDisable()
     {

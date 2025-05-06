@@ -42,13 +42,7 @@ public abstract class Weapon : MonoBehaviour
     public bool isHitScan;
     public float hitScanDistance = 50;
     [Header("Projectile Settings"), Tooltip("If Bullet is not a Hitscan")]
-    [SerializeField] protected float projectileSpeed = 20f;
-    [SerializeField] protected float projectileLifetime = 5f;
-    [SerializeField] protected bool useGravity = false;
-    [SerializeField] protected float projectileArcHeight = 0f; // For arcing projectiles
-    [SerializeField] protected bool canBounce = false;
-    [SerializeField] protected int maxBounces = 3;
-    [SerializeField] protected float bounceDamageMultiplier = 0.7f; // Reduce damage with each bounce
+    [SerializeField]protected ProjectileData projectileData;
     private bool isReloading;
     public bool IsReloading { get { return isReloading; } }
 
@@ -103,14 +97,14 @@ public abstract class Weapon : MonoBehaviour
                 ProjectileData data = new()
                 {
                     Direction = shootDirection,
-                    Speed = projectileSpeed,
                     Damage = damage,
-                    Lifetime = projectileLifetime,
-                    UseGravity = useGravity,
-                    ArcHeight = projectileArcHeight,
-                    CanBounce = canBounce,
-                    MaxBounces = maxBounces,
-                    BounceDamageMultiplier = bounceDamageMultiplier
+                    Speed = projectileData.Speed,
+                    Lifetime = projectileData.Lifetime,
+                    UseGravity = projectileData.UseGravity,
+                    ArcHeight = projectileData.ArcHeight,
+                    CanBounce = projectileData.CanBounce,
+                    MaxBounces = projectileData.MaxBounces,
+                    BounceDamageMultiplier = projectileData.BounceDamageMultiplier
                 };
                 projectile.Initialize(data, pool);
             }
@@ -124,14 +118,14 @@ public abstract class Weapon : MonoBehaviour
                 ProjectileData data = new()
                 {
                     Direction = shootDirection,
-                    Speed = projectileSpeed,
                     Damage = damage,
-                    Lifetime = projectileLifetime,
-                    UseGravity = useGravity,
-                    ArcHeight = projectileArcHeight,
-                    CanBounce = canBounce,
-                    MaxBounces = maxBounces,
-                    BounceDamageMultiplier = bounceDamageMultiplier,
+                    Speed = projectileData.Speed,
+                    Lifetime = projectileData.Lifetime,
+                    UseGravity = projectileData.UseGravity,
+                    ArcHeight = projectileData.ArcHeight,
+                    CanBounce = projectileData.CanBounce,
+                    MaxBounces = projectileData.MaxBounces,
+                    BounceDamageMultiplier = projectileData.BounceDamageMultiplier
                 };
                 projectile.Initialize(data, null);
             }

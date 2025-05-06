@@ -102,6 +102,13 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         ResetState();
         StartCoroutine(PeriodicTargetDetection(4));
+        // do not want movement while rising from from ground
+        if (!isRising)
+        {
+            // Start behavior
+            DetectTargets();
+            SetRandomState();
+        }
     }
     protected virtual void ResetState()
     {
@@ -130,20 +137,12 @@ public abstract class BaseEnemy : MonoBehaviour
         }
 
         // Reset NavMeshAgent
-        if (agent != null)
+        if (agent != null && agent.isActiveAndEnabled)
         {
             agent.ResetPath();
             agent.isStopped = false;
             agent.velocity = Vector3.zero;
             agent.stoppingDistance = stoppingDistance;
-        }
-
-        // do not want movement while rising from from ground
-        if (!isRising)
-        {
-            // Start behavior
-            DetectTargets();
-            SetRandomState();
         }
     }
     protected virtual void Update()
@@ -389,7 +388,7 @@ public abstract class BaseEnemy : MonoBehaviour
         }
         else
         {
-            Debug.Log("Cannot Attack");
+            //Debug.Log("Cannot Attack");
             SetRandomState(); // Choose new state if we can't attack
         }
     }
@@ -495,7 +494,7 @@ public abstract class BaseEnemy : MonoBehaviour
         .FirstOrDefault();
         targetingStructure = true;
         
-        Debug.Log("My Target is: " + currentTarget);
+        //Debug.Log("My Target is: " + currentTarget);
 
 
         if (train != null && (currentTarget == null || currentTarget.CompareTag("Train")))
@@ -504,12 +503,12 @@ public abstract class BaseEnemy : MonoBehaviour
             if (train.Payload != null)
             {
                 currentTarget = train.Payload.transform;
-                Debug.Log("Switching To Payload: " + currentTarget);
+                //Debug.Log("Switching To Payload: " + currentTarget);
             }
             else
             {
                 currentTarget = trainWall;
-                Debug.Log("Switching To Train: " + currentTarget);
+                //Debug.Log("Switching To Train: " + currentTarget);
             }
         }
     }
@@ -595,12 +594,6 @@ public abstract class BaseEnemy : MonoBehaviour
 
         // Reset any ongoing effects or states
         SetIsAttacking(false);
-
-        if (agent.isActiveAndEnabled)
-        {
-            agent.ResetPath();
-            agent.isStopped = true;
-        }
     }
     protected virtual void SpawnDeathVFX(Vector3 position, Quaternion rotation)
     {

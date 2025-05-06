@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d946acd70ddf4646879bd435017a3d0, type: 3}
   m_Name: FF_Atk_cProjectile2
   m_EditorClassIdentifier: 
+  priority: 1
   range: 15
   cooldown: 5
   damage: 6
@@ -22,14 +23,18 @@ MonoBehaviour:
   attackSFX: {fileID: 8300000, guid: bf04edfd29a0e8c40bb91f6b4b7a2395, type: 3}
   predictTargetPosition: 0
   predictionTime: 0.5
-  projectilePrefab: {fileID: 7441200720383325235, guid: 0d1af68ac54f4b84e8580e47f5c49ff8,
+  projectilePrefab: {fileID: 7441200720383325235, guid: a186699fd89b6144a8980932711a04db,
     type: 3}
   projectileSpeed: 25
   projectileLifetime: 5
-  useGravity: 0
-  projectileArcHeight: 2.8
+  useGravity: 1
+  trajectoryType: 0
+  maxArchHeight: 0
+  minArchHeight: 0
+  randomDirectionConeAngle: 45
   canBounce: 0
   maxBounces: 1
   bounceDamageMultiplier: 0.7
   projectileCount: 3
+  timeBetweenProjectiles: 0.1
   spreadAngle: 45
