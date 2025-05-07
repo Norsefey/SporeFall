@@ -108,6 +108,8 @@ public class ProjectileAttack : RangedAttack
     }
     private void SpawnProjectile(Vector3 spawnPosition, Vector3 direction, Vector3 targetPosition)
     {
+        projectileArcHeight = Random.Range(minArchHeight, maxArchHeight);
+
         float arcHeight = trajectoryType == ProjectileTrajectoryType.Arc ? projectileArcHeight : 0f;
 
         BaseProjectile projectile = null;

@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public List<PlayerManager> players = new();
     [SerializeField] LayerMask playerOneUI;
     [SerializeField] LayerMask playerTwoUI;
-    [SerializeField] BackUpPlayerSpawner backUpPlayerSpawner;
+    public BackUpPlayerSpawner backUpPlayerSpawner;
     public static event Action<int> OnPlayerJoin;
     public static event Action OnPlayerLeave;
 
@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
         OnPlayerJoin?.Invoke(player.GetPlayerIndex());
     }
 
-    private void SpawnPlayer(PlayerManager player)
+    public void SpawnPlayer(PlayerManager player)
     {
         if(backUpPlayerSpawner == null)
             return;

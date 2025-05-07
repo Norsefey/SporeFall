@@ -55,7 +55,6 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Respawn")]
     [SerializeField] private float respawnTime;
-    [SerializeField] private Transform fallbackSpawnPoint;
     public bool isRespawning = false;
 
     public bool holdingCorruption = false;
@@ -550,7 +549,7 @@ public class PlayerManager : MonoBehaviour
             else
             {
                 Debug.LogWarning("Train spawn point not available, using fallback");
-                spawnPosition = fallbackSpawnPoint != null ? fallbackSpawnPoint.position : transform.position;
+                spawnPosition = GameManager.Instance.backUpPlayerSpawner.playerSpawnPoints[0].position;
             }
 
             // Move player to spawn position

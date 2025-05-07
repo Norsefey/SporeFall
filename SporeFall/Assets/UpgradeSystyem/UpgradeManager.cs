@@ -47,9 +47,11 @@ public class UpgradeManager : MonoBehaviour
             return false;
         }
     }
-    public void UpgradeStructure(StructureType type, float availableMycelia)
+    public void UpgradeStructure(StructureType type)
     {
+        Debug.Log("current Level: " + currentStructureLevel[type]);
         currentStructureLevel[type]++;
+        Debug.Log("New Level: " + currentStructureLevel[type]);
     }
     public StructureLevel GetCurrentLevel(StructureType type)
     {

@@ -168,14 +168,18 @@ MonoBehaviour:
   limitedAmmo: 0
   isHitScan: 1
   hitScanDistance: 80
-  projectileSpeed: 20
-  projectileLifetime: 5
-  useGravity: 0
-  targetedDirection: 0
-  projectileArcHeight: 0
-  canBounce: 0
-  maxBounces: 3
-  bounceDamageMultiplier: 0.7
+  projectileData:
+    Speed: 0
+    Lifetime: 0
+    Damage: 0
+    UseGravity: 0
+    UseArcTrajectory: 0
+    ArcHeight: 0
+    CanBounce: 0
+    MaxBounces: 0
+    BounceDamageMultiplier: 0
+    Direction: {x: 0, y: 0, z: 0}
+    TargetPosition: {x: 0, y: 0, z: 0}
   fireRate: 8
 --- !u!1001 &2869428294819953249
 PrefabInstance:
@@ -254,7 +258,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 69a1ebd63224048479e4670868870c75, type: 2}
+      objectReference: {fileID: 2100000, guid: 6a3ec298e6983a74faae0be49d57c379, type: 2}
     - target: {fileID: 919132149155446097, guid: 4cf936a215681254ba7c7f18454be637,
         type: 3}
       propertyPath: m_Name
