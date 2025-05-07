@@ -22,14 +22,21 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject settingsScreen;
     [SerializeField] GameObject levelSelectScreen;
     [SerializeField] GameObject tutorialQuestionScreen;
+    [SerializeField] GameObject[] compendium;
+    [SerializeField] GameObject[] pages;
+    private int activePage;
+    [SerializeField] CompendiumPage[] tabs;
+    private int activeTab;
 
-    [Header("First Buttons")]
+    [Header("Buttons")]
     [SerializeField] GameObject firstTitleButton;
     [SerializeField] GameObject firstMainButton;
     [SerializeField] GameObject firstSettingsButton;
     [SerializeField] GameObject firstTutorialButton;
     [SerializeField] GameObject firstLevelSelectButton;
+    [SerializeField] GameObject[] firstCompendiumButtons;
     private GameObject savedFirstButton;
+    [SerializeField] GameObject[] compendiumListButtons;
 
     [Header("Level Names")]
     [SerializeField] string tutorialName;
@@ -181,6 +188,105 @@ public class MainMenu : MonoBehaviour
         savedFirstButton = firstSettingsButton;
     }
 
+    public void OpenCompendium()
+    {
+        compendium[0].SetActive(true);
+        mainScreen.SetActive(false);
+
+        if (SavedSettings.firstCompendiumQuestion)
+        {
+            SavedSettings.firstCompendiumQuestion = false;
+            compendium[1].SetActive(true);
+            if (isControllerConnected)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(firstCompendiumButtons[0]);
+            }
+            savedFirstButton = firstCompendiumButtons[0];
+        }
+        else
+        {
+            compendium[1].SetActive(false);
+            compendium[2].SetActive(true);
+            if (isControllerConnected)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(firstCompendiumButtons[1]);
+            }
+            savedFirstButton = firstCompendiumButtons[1];
+        }
+        
+    }
+
+    public void OpenCompendiumPage(int i)
+    {
+        compendium[2].SetActive(false);
+        compendium[3].SetActive(true);
+        if (isControllerConnected)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstCompendiumButtons[2]);
+        }
+        //savedFirstButton = firstCompendiumButtons[2];
+        pages[i].SetActive(true);
+        tabs[i].tabs[0].SetActive(true);
+        activePage = i;
+        activeTab = i;
+    }
+
+    public void NextPage()
+    {
+        Debug.Log("Active page = " + activePage);
+        int i = activePage + 1;
+        Debug.Log("i = " + i);
+        if (i > pages.Length - 1)
+        {
+            i = 0;
+            Debug.Log("i = " + i);
+        }
+        pages[i].SetActive(true);
+        pages[activePage].SetActive(false);
+        tabs[i].tabs[activeTab].SetActive(true);
+        tabs[activePage].tabs[activeTab].SetActive(false);
+        activePage++;
+        if (activePage > pages.Length - 1)
+        {
+            activePage = 0;
+        }
+    }
+
+    public void PreviousPage()
+    {
+        int i = activePage - 1;
+        if (i < 0)
+        {
+            i = pages.Length - 1;
+        }
+        pages[i].SetActive(true);
+        pages[activePage].SetActive(false);
+        tabs[i].tabs[activeTab].SetActive(true);
+        tabs[activePage].tabs[activeTab].SetActive(false);
+        activePage--;
+        if (activePage < 0)
+        {
+            activePage = pages.Length - 1;
+        }
+    }
+    public void BackToList()
+    {
+        compendium[2].SetActive(true);
+        compendium[3].SetActive(false);
+        pages[activePage].SetActive(false);
+        tabs[activePage].tabs[activeTab].SetActive(false);
+
+        if (isControllerConnected)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstCompendiumButtons[1]);
+        }
+        savedFirstButton = firstCompendiumButtons[1];
+    }
+
     public void TutorialQuestion()
     {
         if (SavedSettings.firstTutorialQuestion)
@@ -203,6 +309,7 @@ public class MainMenu : MonoBehaviour
         
     }
 
+    
     public void LevelSelect()
     {
         levelSelectScreen.SetActive(true);
@@ -250,6 +357,8 @@ public class MainMenu : MonoBehaviour
         mainScreen.SetActive(true);
         levelSelectScreen.SetActive(false);
         settingsScreen.SetActive(false);
+        compendium[0].SetActive(false);
+        
         if (isControllerConnected)
         {
             EventSystem.current.SetSelectedGameObject(null);

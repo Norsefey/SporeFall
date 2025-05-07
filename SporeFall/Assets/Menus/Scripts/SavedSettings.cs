@@ -22,6 +22,7 @@ public static class SavedSettings
     public static bool firstBetweenTutorial = true;
     public static bool firstBossTutorial = true;
     public static bool firstPayloadTutorial = true;
+    public static bool firstCompendiumQuestion = true;
 
     public static string currentLevel;
 
