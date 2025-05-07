@@ -7,7 +7,6 @@ public class MeleeWeapon : Weapon
     [Header("Melee Settings")]
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackArc = 90f; // Attack arc in degrees
-    //[SerializeField] private float comboWindow = 1.5f; // Time window to perform next combo
     [SerializeField] private float attackCooldown = 0.2f; // Cooldown between attacks
     [Header("Combo System")]
     [SerializeField] private List<ComboAttack> comboAttacks;
