@@ -36,7 +36,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject firstLevelSelectButton;
     [SerializeField] GameObject[] firstCompendiumButtons;
     private GameObject savedFirstButton;
-    [SerializeField] GameObject[] compendiumListButtons;
 
     [Header("Level Names")]
     [SerializeField] string tutorialName;
@@ -188,6 +187,7 @@ public class MainMenu : MonoBehaviour
         savedFirstButton = firstSettingsButton;
     }
 
+    #region
     public void OpenCompendium()
     {
         compendium[0].SetActive(true);
@@ -272,6 +272,44 @@ public class MainMenu : MonoBehaviour
             activePage = pages.Length - 1;
         }
     }
+
+    public void NextTab()
+    {
+        Debug.Log("Active tab = " + activeTab);
+        int i = activeTab + 1;
+        Debug.Log("i = " + i);
+        if (i > tabs[activePage].tabs.Length - 1)
+        {
+            i = 0;
+            Debug.Log("i = " + i);
+        }
+        tabs[activePage].tabs[i].SetActive(true);
+        tabs[activePage].tabs[activeTab].SetActive(false);
+        activeTab++;
+        if (activeTab > tabs[activePage].tabs.Length - 1)
+        {
+            activeTab = 0;
+        }
+    }
+
+    public void PreviousTab()
+    {
+        Debug.Log("Active tab = " + activeTab);
+        int i = activeTab - 1;
+        Debug.Log("i = " + i);
+        if (i < 0)
+        {
+            i = tabs[activePage].tabs.Length - 1;
+            Debug.Log("i = " + i);
+        }
+        tabs[activePage].tabs[i].SetActive(true);
+        tabs[activePage].tabs[activeTab].SetActive(false);
+        activeTab--;
+        if (activeTab < 0)
+        {
+            activeTab = tabs[activePage].tabs.Length - 1;
+        }
+    }
     public void BackToList()
     {
         compendium[2].SetActive(true);
@@ -286,6 +324,7 @@ public class MainMenu : MonoBehaviour
         }
         savedFirstButton = firstCompendiumButtons[1];
     }
+    #endregion
 
     public void TutorialQuestion()
     {
