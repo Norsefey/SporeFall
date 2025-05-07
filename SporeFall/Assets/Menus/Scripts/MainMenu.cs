@@ -227,11 +227,11 @@ public class MainMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstCompendiumButtons[2]);
         }
-        //savedFirstButton = firstCompendiumButtons[2];
+        savedFirstButton = firstCompendiumButtons[2];
         pages[i].SetActive(true);
         tabs[i].tabs[0].SetActive(true);
         activePage = i;
-        activeTab = i;
+        activeTab = 0;
     }
 
     public void NextPage()
@@ -246,9 +246,10 @@ public class MainMenu : MonoBehaviour
         }
         pages[i].SetActive(true);
         pages[activePage].SetActive(false);
-        tabs[i].tabs[activeTab].SetActive(true);
+        tabs[i].tabs[0].SetActive(true);
         tabs[activePage].tabs[activeTab].SetActive(false);
         activePage++;
+        activeTab = 0;
         if (activePage > pages.Length - 1)
         {
             activePage = 0;
@@ -264,9 +265,10 @@ public class MainMenu : MonoBehaviour
         }
         pages[i].SetActive(true);
         pages[activePage].SetActive(false);
-        tabs[i].tabs[activeTab].SetActive(true);
+        tabs[i].tabs[0].SetActive(true);
         tabs[activePage].tabs[activeTab].SetActive(false);
         activePage--;
+        activeTab = 0;
         if (activePage < 0)
         {
             activePage = pages.Length - 1;
@@ -275,40 +277,49 @@ public class MainMenu : MonoBehaviour
 
     public void NextTab()
     {
-        Debug.Log("Active tab = " + activeTab);
-        int i = activeTab + 1;
-        Debug.Log("i = " + i);
-        if (i > tabs[activePage].tabs.Length - 1)
+        
+        if (tabs[activePage].tabs.Length > 1)
         {
-            i = 0;
+            Debug.Log("Active tab = " + activeTab);
+            int i = activeTab + 1;
             Debug.Log("i = " + i);
+            if (i > tabs[activePage].tabs.Length - 1)
+            {
+                i = 0;
+                Debug.Log("i = " + i);
+            }
+            tabs[activePage].tabs[i].SetActive(true);
+            tabs[activePage].tabs[activeTab].SetActive(false);
+            activeTab++;
+            if (activeTab > tabs[activePage].tabs.Length - 1)
+            {
+                activeTab = 0;
+            }
         }
-        tabs[activePage].tabs[i].SetActive(true);
-        tabs[activePage].tabs[activeTab].SetActive(false);
-        activeTab++;
-        if (activeTab > tabs[activePage].tabs.Length - 1)
-        {
-            activeTab = 0;
-        }
+        
     }
 
     public void PreviousTab()
     {
-        Debug.Log("Active tab = " + activeTab);
-        int i = activeTab - 1;
-        Debug.Log("i = " + i);
-        if (i < 0)
+        if (tabs[activePage].tabs.Length > 1)
         {
-            i = tabs[activePage].tabs.Length - 1;
+            Debug.Log("Active tab = " + activeTab);
+            int i = activeTab - 1;
             Debug.Log("i = " + i);
+            if (i < 0)
+            {
+                i = tabs[activePage].tabs.Length - 1;
+                Debug.Log("i = " + i);
+            }
+            tabs[activePage].tabs[i].SetActive(true);
+            tabs[activePage].tabs[activeTab].SetActive(false);
+            activeTab--;
+            if (activeTab < 0)
+            {
+                activeTab = tabs[activePage].tabs.Length - 1;
+            }
         }
-        tabs[activePage].tabs[i].SetActive(true);
-        tabs[activePage].tabs[activeTab].SetActive(false);
-        activeTab--;
-        if (activeTab < 0)
-        {
-            activeTab = tabs[activePage].tabs.Length - 1;
-        }
+        
     }
     public void BackToList()
     {
