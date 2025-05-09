@@ -196,17 +196,17 @@ public class PlayerUI : MonoBehaviour
     public void SwitchStructureIcon()
     {
         // A more modular way to set the sprites for each structure
-        int leftIndex = bGun.currentBuildIndex - 1;
-        if (leftIndex < 0)
+        int leftIndex = bGun.currentBuildIndex + 1;
+        if (leftIndex >= bGun.buildableStructures.Count)
         {
-            leftIndex = bGun.buildableStructures.Count - 1;
+            leftIndex = 0;
         }
          rightStructureIcon.sprite = bGun.buildableStructures[leftIndex].GetComponent<Structure>().structureStats.icon;       
 
-        int rightIndex = bGun.currentBuildIndex + 1;
-        if(rightIndex >= bGun.buildableStructures.Count)
+        int rightIndex = bGun.currentBuildIndex - 1;
+        if(rightIndex < 0)
         {
-            rightIndex = 0;
+            rightIndex = bGun.buildableStructures.Count - 1; ;
         }
         leftStructureIcon.sprite = bGun.buildableStructures[rightIndex].GetComponent<Structure>().structureStats.icon;
 
