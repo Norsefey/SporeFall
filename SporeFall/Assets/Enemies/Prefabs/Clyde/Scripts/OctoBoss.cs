@@ -1,20 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class OctoBoss : BaseEnemy
 {
     [Header("Tentacle Settings")]
     [SerializeField] private List<TentacleEnemy> tentacles = new();
+    [Header("Main Body Visuals")]
+    [SerializeField] private Renderer bodyRenderer;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip shieldedHitSound;
+    [Header("Phase Damage")]
     [SerializeField] private float damageReductionMultiplier = 0.25f; // 75% damage reduction when more than half tentacles alive
     [SerializeField] private float bodyVulnerableMultiplier = 1.5f;   // 50% more damage when vulnerable
 
     private bool isVulnerable = false;
+    private bool isDying = false; // Flag to prevent tentacles from modifying the list during boss death
+
 
     [Header("Stationary Settings")]
     [SerializeField] private Transform mainBody;
     public Transform CurrentTarget => currentTarget;
-
     private float initialTentacleCount = 0;
 
     protected override void Awake()
@@ -40,26 +49,31 @@ public class OctoBoss : BaseEnemy
         if (!isAttacking)
         {
             UpdateCurrentState();
-            // Check vulnerability state
-            CheckVulnerabilityState();
         }
     }
     private void CheckVulnerabilityState()
     {
-        if(isVulnerable)
-            return;
-
         if(tentacles.Count <= initialTentacleCount / 2)
         {
-            isVulnerable=true;
-            OnVulnerabilityStateChanged();
+            isVulnerable = true;
+            RemoveShield();
+        }
+        else
+        {
+            isVulnerable = false;
         }
     }
-    private void OnVulnerabilityStateChanged()
+    private void RemoveShield()
     {
-        health.damageReduction = 0;
+        // Change material based on vulnerability state
+        if (bodyRenderer != null)
+        {
+            Material[] materials = bodyRenderer.materials;
+            Destroy(materials[1]);
+            materials[1] = null;
+            bodyRenderer.materials = materials;
+        }
     }
-
     // Modify damage taking based on vulnerability
     public float CalculateDamageMultiplier()
     {
@@ -114,25 +128,51 @@ public class OctoBoss : BaseEnemy
 
         return weights;
     }
-
+    public void PlayHitSoundFX()
+    {
+        if (isVulnerable && hitSound != null)
+            audioSource.PlayOneShot(hitSound);
+        else if (shieldedHitSound != null)
+            audioSource.PlayOneShot(shieldedHitSound);
+    }
     public void AddTentacle(TentacleEnemy tentacle)
     {
-        tentacles.Add(tentacle);
-        initialTentacleCount++;
+        // Prevent Duplicates
+        if (!tentacles.Contains(tentacle))
+        {
+            tentacles.Add(tentacle);
+            initialTentacleCount++;
+        }
     }
     public void RemoveTentacle(TentacleEnemy tentacle)
     {
+        // Skip removal if the boss is already in its death sequence
+        if (isDying)
+            return;
+
         tentacles.Remove(tentacle);
         CheckVulnerabilityState();
-    }
 
+    }
     public override void Die()
     {
+        isDying = true;
+
+        // Clean up any null references first
+        tentacles.RemoveAll(item => item == null);
+
+        // Create a copy of the tentacles list to avoid modification during iteration
+        List<TentacleEnemy> tentaclesToDestroy = new List<TentacleEnemy>(tentacles);
+
         // Destroy any remaining tentacles first
-        foreach (var tentacle in tentacles)
+        foreach (var tentacle in tentaclesToDestroy)
         {
-            tentacle.Die();
+            if (tentacle != null)
+                tentacle.Die();
         }
+
+        // Clear the original list
+        tentacles.Clear();
 
         // Then handle the boss death
         base.Die();

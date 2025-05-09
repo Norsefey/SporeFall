@@ -16,6 +16,7 @@ public class BillboardUIUpdater : MonoBehaviour
     {
         if(groupAlpha == null)
             groupAlpha = GetComponent<CanvasGroup>();
+        groupAlpha.alpha = 0.5f;
         hpText.text = hpManager.CurrentHP + "/" + hpManager.MaxHP;
         hpDisplay.maxValue = hpManager.MaxHP;
         hpDisplay.value = hpManager.MaxHP;
@@ -24,8 +25,8 @@ public class BillboardUIUpdater : MonoBehaviour
     {
         InitializeUI();
         hpManager.OnHPChange += HandleHPChange;
-
-        hideUICoroutine = StartCoroutine(HideUI());
+        if (hideUICoroutine != null)
+            hideUICoroutine = StartCoroutine(HideUI());
     }
     private void OnDisable()
     {
@@ -58,7 +59,6 @@ public class BillboardUIUpdater : MonoBehaviour
     {
         targetCamera = target;
     }
-
     IEnumerator HideUI()
     {
         if (groupAlpha == null)

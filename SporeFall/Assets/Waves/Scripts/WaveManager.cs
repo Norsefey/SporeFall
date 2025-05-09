@@ -380,7 +380,6 @@ public class WaveManager : MonoBehaviour
 
         BaseEnemy enemy = pool.Get(spawnPoint, rotation);
         enemy.AssignTrain(train);
-
         enemy.OnEnemyDeath += OnEnemyDeath;
         // enemy is spawning outside the pod, play rise from ground animation
         if(spawningOutside)
