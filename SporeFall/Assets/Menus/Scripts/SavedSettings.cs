@@ -19,10 +19,12 @@ public static class SavedSettings
     public static bool firstOpenedGame = true;
     public static bool firstTutorialQuestion = true;
     //public static bool firstTimeTutorial = true;
-    //public static bool firstBetweenTutorial = true;
+    public static bool firstBetweenTutorial = true;
     //public static bool firstBossTutorial = true;
     //public static bool firstPayloadTutorial = true;
     public static bool firstCompendiumQuestion = true;
+    public static bool robertSpawned = false;
+    public static bool firstRobertKill = false;
 
     public static string currentLevel;
 

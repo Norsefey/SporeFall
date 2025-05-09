@@ -35,6 +35,11 @@ public class CorruptedPlayer : BaseEnemy
         // return life to player
         myPlayer.pHealth.IncreaseLife();
         SpawnDrop();
+        if (SavedSettings.firstRobertKill == false && Tutorial.Instance != null)
+        {
+            Tutorial.Instance.RobertKillPrompts();
+            SavedSettings.firstRobertKill = true;
+        }
         GameManager.Instance.waveManager.RemoveRobert(gameObject);
         base.Die();
     }

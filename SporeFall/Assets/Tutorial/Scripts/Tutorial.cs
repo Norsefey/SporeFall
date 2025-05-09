@@ -29,6 +29,8 @@ public class Tutorial : MonoBehaviour
     private bool canProgress = false;
     public bool clickNeeded = false;
 
+    public bool isRobertSpawned = false;
+
     [HideInInspector] public float timer = 0f;
     private bool timerStarted = false;
     private bool timerNeeded = false;
@@ -38,7 +40,10 @@ public class Tutorial : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        
+        //These get reset for playtesting/showcase purposes
+        SavedSettings.firstBetweenTutorial = true;
+        SavedSettings.robertSpawned = false;
+        SavedSettings.firstRobertKill = false;
         bgImage.SetActive(false);
         tutorialText.text = " ";
         continueText.text = " ";
@@ -101,6 +106,28 @@ public class Tutorial : MonoBehaviour
                 
             }
 
+            else if (timerType == 3 && timerThreshold == 10f)
+            {
+                timerStarted = true;
+                timerNeeded = false;
+                tutorialPopup.SetActive(false);
+                bgImage.SetActive(false);
+            }
+
+        }
+
+        if (isRobertSpawned && SavedSettings.robertSpawned == false)
+        {
+            SavedSettings.robertSpawned = true;
+            timerType = 3;
+            timer = 0f;
+            timerThreshold = 15f;
+            timerStarted = false;
+            timerNeeded = true;
+            tutorialPopup.SetActive(true);
+            bgImage.SetActive(true);
+            tutorialText.text = "The train won't move with that thing around! Take it down, or hit the Main Button to leave it behind.";
+            continueText.text = " ";
         }
 
 
@@ -242,7 +269,9 @@ public class Tutorial : MonoBehaviour
 
     public void StartBetweenWaveTutorial()
     {
+        Debug.Log("Starting between wave tutorial");
         tutorialPopup.SetActive(true);
+        bgImage.SetActive(true);
         tutorialOngoing = true;
         tutorialText.text = "The train will move to the next area shortly, picking up any uncollected Mycelia.";
         continueText.text = " ";
@@ -258,7 +287,7 @@ public class Tutorial : MonoBehaviour
         tutorialPopup.SetActive(true);
         tutorialText.text = "This is it! Defeat the boss so we can deploy our payload and stop them for good.";
         continueText.text = " ";
-        StartCoroutine(ClosePrompts());
+        StartCoroutine(ClosePrompts(10f));
     }
 
     public void StartPayloadTutorial()
@@ -266,7 +295,7 @@ public class Tutorial : MonoBehaviour
         tutorialPopup.SetActive(true);
         tutorialText.text = "Payload deployed. Leave the train be, focus on defending the payload!";
         continueText.text = " ";
-        StartCoroutine(ClosePrompts());
+        StartCoroutine(ClosePrompts(10f));
         mainLevelTutorial = false;
         
     }
@@ -274,6 +303,15 @@ public class Tutorial : MonoBehaviour
     public void ProgressTutorial()
     {
         StartCoroutine(NextPrompt());
+    }
+
+    public void RobertKillPrompts()
+    {
+        tutorialPopup.SetActive(true);
+        bgImage.SetActive(true);
+        tutorialText.text = "Nice work! When you're ready to move on, hit the Main Button.";
+        continueText.text = " ";
+        StartCoroutine(ClosePrompts(15f));
     }
     
     IEnumerator NextPrompt()
@@ -296,9 +334,9 @@ public class Tutorial : MonoBehaviour
         tutorialPopup.SetActive(false);
     }
 
-    IEnumerator ClosePrompts()
+    IEnumerator ClosePrompts(float waitTime)
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(waitTime);
         tutorialPopup.SetActive(false);
     }
 }

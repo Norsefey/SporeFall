@@ -142,6 +142,32 @@ public class WaveManager : MonoBehaviour
         timer = departTime;
         wavePhase = WavePhase.Departing;
         Invoke(nameof(TrainAutoDepartCall), departTime);
+        if (Tutorial.Instance != null)
+        {
+            if (isRobertSpawned)
+            {
+                Debug.Log("Robert is spawned");
+                if (SavedSettings.robertSpawned == false)
+                {
+                    Debug.Log("Setting robert spawned to true in tutorial script");
+                    Tutorial.Instance.isRobertSpawned = true;
+                }
+            }
+
+            else if (currentWaveIndex == 0 && isRobertSpawned == false) //&& SavedSettings.firstBetweenTutorial
+            {
+                Tutorial.Instance.StartBetweenWaveTutorial();
+                SavedSettings.firstBetweenTutorial = false;
+            }
+
+            else if (SavedSettings.robertSpawned && currentWaveIndex > 0 && SavedSettings.firstBetweenTutorial)
+            {
+                Debug.Log("Robert spawned wave 1, starting between wave tutorial");
+                Tutorial.Instance.StartBetweenWaveTutorial();
+                SavedSettings.firstBetweenTutorial = false;
+            }
+        }
+        
     }
     private void Depart()
     {
@@ -161,7 +187,10 @@ public class WaveManager : MonoBehaviour
     {
         // Train will Not Auto leave while Robert is present
         if (isRobertSpawned)
+        {
             return;
+        }
+            
         // since we are skipping, we no longer need to invoke, prevents repeat
         CancelInvoke(nameof(Depart));
         //player.RemoveButtonAction();
