@@ -187,7 +187,7 @@ public class MainMenu : MonoBehaviour
         savedFirstButton = firstSettingsButton;
     }
 
-    #region
+    #region compendium
     public void OpenCompendium()
     {
         compendium[0].SetActive(true);
@@ -335,28 +335,38 @@ public class MainMenu : MonoBehaviour
         }
         savedFirstButton = firstCompendiumButtons[1];
     }
-    #endregion
+    #endregion 
 
     public void TutorialQuestion()
     {
-        if (SavedSettings.firstTutorialQuestion)
-        {
-            tutorialQuestionScreen.SetActive(true);
-            mainScreen.SetActive(false);
-            if (isControllerConnected)
-            {
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(firstTutorialButton);
-            }
-            savedFirstButton = firstTutorialButton;
-            SavedSettings.firstTutorialQuestion = false;
-        }
 
-        else
+        tutorialQuestionScreen.SetActive(true);
+        mainScreen.SetActive(false);
+        if (isControllerConnected)
         {
-            LevelSelect();
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstTutorialButton);
         }
-        
+        savedFirstButton = firstTutorialButton;
+
+        //if (SavedSettings.firstTutorialQuestion)
+        //{
+        //    tutorialQuestionScreen.SetActive(true);
+        //    mainScreen.SetActive(false);
+        //    if (isControllerConnected)
+        //    {
+        //        EventSystem.current.SetSelectedGameObject(null);
+        //        EventSystem.current.SetSelectedGameObject(firstTutorialButton);
+        //    }
+        //    savedFirstButton = firstTutorialButton;
+        //    SavedSettings.firstTutorialQuestion = false;
+        //}
+
+        //else
+        //{
+        //    LevelSelect();
+        //}
+
     }
 
     

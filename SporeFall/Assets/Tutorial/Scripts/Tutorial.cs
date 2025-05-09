@@ -46,7 +46,7 @@ public class Tutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (SavedSettings.firstTimeTutorial && SavedSettings.currentLevel != "Training")
+        if ( SavedSettings.currentLevel != "Training")
         {
             timerNeeded = true;
         }
@@ -61,7 +61,7 @@ public class Tutorial : MonoBehaviour
         
         if (timer >= timerThreshold && timerStarted == false)
         {
-            if (timerType == 1 && SavedSettings.firstTimeTutorial)
+            if (timerType == 1)
             {
                 //Tutorial prompts when loading into level for first time
                 timerStarted = true;
@@ -232,7 +232,6 @@ public class Tutorial : MonoBehaviour
                     canProgress = false;
                     tutorialOngoing = false;
                     StartCoroutine(FinalPrompts());
-                    SavedSettings.firstTimeTutorial = false;
                 }
             }
         }
