@@ -20,9 +20,6 @@ public class OctoBoss : BaseEnemy
     private bool isVulnerable = false;
     private bool isDying = false; // Flag to prevent tentacles from modifying the list during boss death
 
-
-    [Header("Stationary Settings")]
-    [SerializeField] private Transform mainBody;
     public Transform CurrentTarget => currentTarget;
     private float initialTentacleCount = 0;
 
