@@ -10,6 +10,7 @@ public class EnemySpawnData
 {
     public string name;
     public bool mustSpawnOutside;
+    public int spawnPointIndex; // -1 = random
     public bool spawnAsGroup;    // Whether to spawn as a group
     public int totalToSpawn;     // Total number of this enemy type to spawn
     public int groupSize;        // How many enemies per group (if spawning as group)

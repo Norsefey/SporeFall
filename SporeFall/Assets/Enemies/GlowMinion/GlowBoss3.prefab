@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4747032926892417397
 Transform:
   m_ObjectHideFlags: 0
@@ -90,6 +90,7 @@ MonoBehaviour:
   damageTrackingDuration: 50
   stoppingDistance: 10
   aggressionFactor: 0.95
+  trackingSpeed: 5
   train: {fileID: 0}
   priorityTags:
   - Player
@@ -253,7 +254,7 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 400
   isDead: 0
-  damageModifier: 0
+  damageReduction: 0
   manager: {fileID: 6396919194862041732}
   flinchModifier: 1
   flinchable: 0
@@ -358,9 +359,9 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageModifier: 0
-  mainHP: {fileID: 8705147953746396791}
+  damageReduction: 0
   damageMultiplier: 1
+  mainHP: {fileID: 8705147953746396791}
 --- !u!1 &8995781070502602872
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,9 +432,9 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageModifier: 0
-  mainHP: {fileID: 8705147953746396791}
+  damageReduction: 0
   damageMultiplier: 2
+  mainHP: {fileID: 8705147953746396791}
 --- !u!1001 &2700117756208484796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -542,6 +543,11 @@ PrefabInstance:
       propertyPath: hpManager
       value: 
       objectReference: {fileID: 8705147953746396791}
+    - target: {fileID: 6816246057718039066, guid: f2e00eab23348204dbbe56ee49356963,
+        type: 3}
+      propertyPath: hpManager
+      value: 
+      objectReference: {fileID: 8705147953746396791}
     - target: {fileID: 6829341353066260006, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_Name
@@ -572,6 +578,16 @@ PrefabInstance:
       propertyPath: hpManager
       value: 
       objectReference: {fileID: 8705147953746396791}
+    - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2945,9 +2961,9 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageModifier: 0
-  mainHP: {fileID: 8705147953746396791}
+  damageReduction: 0
   damageMultiplier: 0.5
+  mainHP: {fileID: 8705147953746396791}
 --- !u!4 &1148732733207451941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5442161107249868093, guid: 75ee3dd62bac1eb40972cfaca4b7a23c,
@@ -3566,9 +3582,9 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageModifier: 0
-  mainHP: {fileID: 8705147953746396791}
+  damageReduction: 0
   damageMultiplier: 0.5
+  mainHP: {fileID: 8705147953746396791}
 --- !u!4 &6919506753097210737 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6597658693512974487, guid: 75ee3dd62bac1eb40972cfaca4b7a23c,

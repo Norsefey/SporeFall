@@ -124,9 +124,9 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageModifier: 0
-  mainHP: {fileID: 9127932510335788813}
+  damageReduction: 0
   damageMultiplier: 1
+  mainHP: {fileID: 0}
 --- !u!1 &3350781854524454634
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +169,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7380140970952015500}
-  - component: {fileID: 9127932510335788813}
   m_Layer: 0
   m_Name: MainHP
   m_TagString: Untagged
@@ -192,25 +191,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5930765316222477441}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9127932510335788813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3510961630352241932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e760656dfa265b34b80e4e5cf25daf7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canHoldCorruption: 0
-  canTakeDamage: 1
-  maxHP: 250
-  isDead: 0
-  damageModifier: 0
-  tentacle: {fileID: 6178099660684737395}
-  hitSound: {fileID: 0}
 --- !u!1 &6008570162452953611
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,14 +231,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5930765316222477441}
-  - component: {fileID: 6178099660684737395}
+  - component: {fileID: 9195135053389023940}
+  - component: {fileID: 3091366730240887150}
   m_Layer: 0
   m_Name: Tentacle_Ranged
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5930765316222477441
 Transform:
   m_ObjectHideFlags: 0
@@ -278,7 +259,29 @@ Transform:
   - {fileID: 282315050775922040}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6178099660684737395
+--- !u!195 &9195135053389023940
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6403080466642378860}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 0
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &3091366730240887150
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,20 +290,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 6403080466642378860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69748cd789336b14a94ccf2f9ca6de00, type: 3}
+  m_Script: {fileID: 11500000, guid: a729adb8c97a9a44eb55d8ed721012e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tentacleType: 1
-  health: {fileID: 9127932510335788813}
-  tentacleAnimator: {fileID: 0}
-  attackPoint: {fileID: 282315050775922040}
-  tentacleAttacks:
-  - {fileID: 11400000, guid: b1e4113e03421f440a72081724c35932, type: 2}
-  - {fileID: 11400000, guid: d9c161f329501474ba42f2968ad01265, type: 2}
-  attackRange: 100
-  attackCooldown: 3
-  meleeAttackSpeed: 1.5
-  rangedAttackSpeed: 2
+  deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
+    type: 3}
+  attacks:
+  - {fileID: 11400000, guid: 095d1ecb83f2e3a45965a6981889363c, type: 2}
+  animator: {fileID: 0}
+  health: {fileID: 0}
+  agent: {fileID: 9195135053389023940}
+  firePoint: {fileID: 282315050775922040}
+  strafeRadius: 10
+  retreatDistance: 15
+  strafeSpeed: 5
+  chasePriorityDistance: 25
+  damagePriorityThreshold: 20
+  damageTrackingDuration: 3
+  stoppingDistance: 20
+  aggressionFactor: 0.6
+  trackingSpeed: 5
+  train: {fileID: 0}
+  priorityTags:
+  - Player
+  - Structure
+  - WallStructure
+  detectionRange: 20
+  targetsLayerMask:
+    serializedVersion: 2
+    m_Bits: 10752
+  targetSwitchThreshold: 100
+  risingAnimationLength: 2
+  myceliaDropPrefab: {fileID: 0}
+  minMyceliaWorth: 5
+  maxMyceliaWorth: 10
+  weaponDropPrefab: []
+  dropChance: 20
 --- !u!1 &7522990518233863556
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,9 +450,9 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageModifier: 0
-  mainHP: {fileID: 9127932510335788813}
+  damageReduction: 0
   damageMultiplier: 1
+  mainHP: {fileID: 0}
 --- !u!1001 &5861218185856142078
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -486,21 +511,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5842356199413138010, guid: f2e00eab23348204dbbe56ee49356963,
-        type: 3}
-      propertyPath: hpManager
-      value: 
-      objectReference: {fileID: 9127932510335788813}
     - target: {fileID: 6829341353066260006, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_Name
       value: Billboard_UI
       objectReference: {fileID: 0}
-    - target: {fileID: 7574306801333450687, guid: f2e00eab23348204dbbe56ee49356963,
-        type: 3}
-      propertyPath: hpManager
-      value: 
-      objectReference: {fileID: 9127932510335788813}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

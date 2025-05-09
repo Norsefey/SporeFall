@@ -58,7 +58,7 @@ public class Wall : MonoBehaviour
                 // Apply damage reduction if not already protected
                 if (!damageablesProtecting.Contains(hpComponent))
                 {
-                    hpComponent.damageModifier = damageReduction;
+                    hpComponent.damageReduction = damageReduction;
                     damageablesProtecting.Add(hpComponent);
                 }
             }
@@ -73,7 +73,7 @@ public class Wall : MonoBehaviour
                 // Reset damage modifier to default (0) and remove from our list
                 if (damageable != null)
                 {
-                    damageable.damageModifier = 0f;
+                    damageable.damageReduction = 0f;
                 }
                 damageablesProtecting.RemoveAt(i);
             }
@@ -87,7 +87,7 @@ public class Wall : MonoBehaviour
         {
             if (damageable != null)
             {
-                damageable.damageModifier = 0f;
+                damageable.damageReduction = 0f;
             }
         }
         damageablesProtecting.Clear();

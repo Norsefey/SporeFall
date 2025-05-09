@@ -22,6 +22,14 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected GameObject deathVFXPrefab;
 
     [SerializeField] protected Attack[] attacks;
+    [HideInInspector]
+    public Attack[] AvailableAttacks
+    {
+        get
+        {
+            return attacks;
+        }
+    }
     [SerializeField] protected Animator animator;
     [SerializeField] protected Damageable health;
     protected AudioSource audioSource;
@@ -66,12 +74,11 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     [Header("Attack Stats")]
     [SerializeField] protected float stoppingDistance = 20f;
-/*    [SerializeField] protected float minAttackInterval = 5;
-    [SerializeField] protected float maxAttackInterval = 8;*/
     [SerializeField] protected float aggressionFactor = 0.6f; // Chance to choose aggressive actions
     protected bool isAttacking;
 
     [Header("Targeting")]
+    public float trackingSpeed = 5;
     public TrainHandler train; // if nothing is in range will move to Payload or train
     protected Transform trainWall;
     protected Transform currentTarget;

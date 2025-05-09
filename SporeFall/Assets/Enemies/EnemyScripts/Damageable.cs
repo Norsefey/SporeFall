@@ -12,7 +12,8 @@ public abstract class Damageable : MonoBehaviour
     public float MaxHP {  get { return maxHP; } }
     public float CurrentHP {  get { return currentHP; } }
     public bool isDead = false;
-    public float damageModifier = 0f;
+    [Range(0, 1)]
+    public float damageReduction = 0f;
     // Event that will be triggered when enemy takes damage
     public event Action<Damageable, float> OnHPChange;
     protected abstract void Die();
@@ -31,7 +32,7 @@ public abstract class Damageable : MonoBehaviour
             return; 
         }
 
-        currentHP -= damage - (damage * damageModifier);
+        currentHP -= damage - (damage * damageReduction);
         // Trigger the event After damage is taken
         OnHPChange?.Invoke(this, damage);
 

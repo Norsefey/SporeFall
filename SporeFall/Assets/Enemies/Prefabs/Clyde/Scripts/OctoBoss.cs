@@ -5,32 +5,24 @@ using UnityEngine;
 public class OctoBoss : BaseEnemy
 {
     [Header("Tentacle Settings")]
-    [SerializeField] private TentaclePart[] tentacles;
+    [SerializeField] private List<TentacleEnemy> tentacles = new();
     [SerializeField] private float damageReductionMultiplier = 0.25f; // 75% damage reduction when more than half tentacles alive
     [SerializeField] private float bodyVulnerableMultiplier = 1.5f;   // 50% more damage when vulnerable
 
     private bool isVulnerable = false;
-    private int initialTentacleCount;
 
     [Header("Stationary Settings")]
     [SerializeField] private Transform mainBody;
     public Transform CurrentTarget => currentTarget;
 
+    private float initialTentacleCount = 0;
+
     protected override void Awake()
     {
         base.Awake();
-        initialTentacleCount = tentacles.Length;
-
-        // Initialize tentacles
-        foreach (var tentacle in tentacles)
-        {
-            tentacle.Initialize(this);
-        }
     }
     public override void Initialize()
     {
-        Debug.LogWarning("Reseting Attack: ");
-
         ResetState();
         StartCoroutine(PeriodicTargetDetection(4));
         // Since this is stationary, disable NavMesh movement
@@ -54,37 +46,18 @@ public class OctoBoss : BaseEnemy
     }
     private void CheckVulnerabilityState()
     {
-        int activeTentacles = 0;
-        foreach (var tentacle in tentacles)
-        {
-            if (tentacle.IsActive())
-                activeTentacles++;
-        }
+        if(isVulnerable)
+            return;
 
-        // More than half tentacles destroyed = vulnerable
-        bool newVulnerableState = activeTentacles <= (initialTentacleCount / 2);
-
-        if (newVulnerableState != isVulnerable)
+        if(tentacles.Count <= initialTentacleCount / 2)
         {
-            isVulnerable = newVulnerableState;
+            isVulnerable=true;
             OnVulnerabilityStateChanged();
         }
     }
     private void OnVulnerabilityStateChanged()
     {
-        if (isVulnerable)
-        {
-            if (animator != null)
-                animator.SetBool("Vulnerable", true);
-
-            // Could play effects, change materials, etc.
-            Debug.Log("Boss is now vulnerable!");
-        }
-        else
-        {
-            if (animator != null)
-                animator.SetBool("Vulnerable", false);
-        }
+        health.damageReduction = 0;
     }
 
     // Modify damage taking based on vulnerability
@@ -141,17 +114,24 @@ public class OctoBoss : BaseEnemy
 
         return weights;
     }
-    public void OnTentacleDestroyed()
+
+    public void AddTentacle(TentacleEnemy tentacle)
     {
+        tentacles.Add(tentacle);
+        initialTentacleCount++;
+    }
+    public void RemoveTentacle(TentacleEnemy tentacle)
+    {
+        tentacles.Remove(tentacle);
         CheckVulnerabilityState();
     }
+
     public override void Die()
     {
         // Destroy any remaining tentacles first
         foreach (var tentacle in tentacles)
         {
-            if (tentacle.IsActive())
-                tentacle.DestroyTentacle();
+            tentacle.Die();
         }
 
         // Then handle the boss death

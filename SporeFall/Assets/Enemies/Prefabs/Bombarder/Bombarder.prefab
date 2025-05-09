@@ -101,9 +101,9 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageModifier: 0
-  mainHP: {fileID: 3385096694661518225}
+  damageReduction: 0
   damageMultiplier: 2
+  mainHP: {fileID: 3385096694661518225}
 --- !u!1 &3402815863331268922
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,9 +153,9 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageModifier: 0
-  mainHP: {fileID: 3385096694661518225}
+  damageReduction: 0
   damageMultiplier: 1
+  mainHP: {fileID: 3385096694661518225}
 --- !u!136 &5894028391559828656
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -197,7 +197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1345321642050182800
 Transform:
   m_ObjectHideFlags: 0
@@ -366,6 +366,7 @@ MonoBehaviour:
   damageTrackingDuration: 3
   stoppingDistance: 50
   aggressionFactor: 0.6
+  trackingSpeed: 5
   train: {fileID: 0}
   priorityTags:
   - Player
@@ -433,7 +434,7 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 85
   isDead: 0
-  damageModifier: 0
+  damageReduction: 0
   manager: {fileID: 2846332542822177288}
   flinchModifier: 0.1
   flinchable: 1
@@ -591,6 +592,11 @@ PrefabInstance:
       propertyPath: hpManager
       value: 
       objectReference: {fileID: 3385096694661518225}
+    - target: {fileID: 6816246057718039066, guid: f2e00eab23348204dbbe56ee49356963,
+        type: 3}
+      propertyPath: hpManager
+      value: 
+      objectReference: {fileID: 3385096694661518225}
     - target: {fileID: 6829341353066260006, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_Name
@@ -601,6 +607,16 @@ PrefabInstance:
       propertyPath: hpManager
       value: 
       objectReference: {fileID: 3385096694661518225}
+    - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

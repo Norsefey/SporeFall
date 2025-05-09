@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EnemyHPRelay : Damageable
 {
-    [SerializeField] Damageable mainHP;
     [SerializeField] float damageMultiplier = 1;
+    [SerializeField] Damageable mainHP;
 
     public override void TakeDamage(float damage)
     {

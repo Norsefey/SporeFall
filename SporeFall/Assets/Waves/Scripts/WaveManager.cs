@@ -65,6 +65,9 @@ public class WaveManager : MonoBehaviour
     private List<BaseEnemy> activeEnemies = new List<BaseEnemy>();
 
     private bool skippingAnimation = false;
+
+    public BaseEnemy BossEnemy;
+
     private void Start()
     {
         InitializePools();
@@ -269,6 +272,10 @@ public class WaveManager : MonoBehaviour
                 spawnPoint = GetSpawnPointWithinZone();
                 spawningOutside = true;
             }
+            else if (selectedEnemy.spawnPointIndex != -1)
+            {
+                spawnPoint = currentWave.presetSpawnPoints[selectedEnemy.spawnPointIndex].position;
+            }
             else
             {
                 if (Random.value < outsideSpawnChance)
@@ -369,8 +376,9 @@ public class WaveManager : MonoBehaviour
             Debug.LogError($"No pool found for enemy prefab: {enemyPrefab.name}");
             return;
         }
+        Quaternion rotation = Quaternion.LookRotation(-Vector3.forward); // face backwards from world forward
 
-        BaseEnemy enemy = pool.Get(spawnPoint, Quaternion.identity);
+        BaseEnemy enemy = pool.Get(spawnPoint, rotation);
         enemy.AssignTrain(train);
 
         enemy.OnEnemyDeath += OnEnemyDeath;
@@ -423,6 +431,8 @@ public class WaveManager : MonoBehaviour
         boss.OnEnemyDeath += OnBossDeath;
         boss.AssignTrain(train);
 
+        BossEnemy = boss;
+
         enemiesAlive++;
         enemiesSpawned++;
 
@@ -431,6 +441,8 @@ public class WaveManager : MonoBehaviour
     }
     private IEnumerator SpawnSquadSequence()
     {
+        yield return new WaitForSeconds(0.3f); // Allow Boss to spawn first
+
         var finalSettings = currentWave.finalWaveSettings;
 
         for (int typeIndex = 0; typeIndex < finalSettings.bossSquadComposition.Length; typeIndex++)
@@ -440,9 +452,17 @@ public class WaveManager : MonoBehaviour
 
             for (int i = 0; i < countToSpawn; i++)
             {
-                int randomSpawnPoint = Random.Range(0, 3);
-                Vector3 squadSpawnPoint = currentWave.presetSpawnPoints[randomSpawnPoint].position;
-
+                Vector3 squadSpawnPoint;
+                if (squadType.spawnPointIndex != -1)
+                {
+                    squadSpawnPoint = currentWave.presetSpawnPoints[squadType.spawnPointIndex].position;
+                    Debug.Log("Spawning at Location Index is: " + squadType.spawnPointIndex);
+                }
+                else
+                {
+                    int randomSpawnPoint = Random.Range(0, 3);
+                    squadSpawnPoint = currentWave.presetSpawnPoints[randomSpawnPoint].position;
+                }
                 SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint, false);
 
                 yield return new WaitForSeconds(0.1f); // Prevent overlap

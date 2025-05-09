@@ -21,11 +21,11 @@ public class PlayerHP : Damageable
         float previousHP = currentHP;
         if (currentHP / maxHP <= .25f)
         {
-            damageModifier = .25f;
+            damageReduction = .25f;
         }
         else
         {
-            damageModifier = 0;
+            damageReduction = 0;
         }
         base.TakeDamage(damage);
 

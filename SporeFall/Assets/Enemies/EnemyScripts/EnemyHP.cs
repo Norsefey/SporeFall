@@ -7,7 +7,7 @@ public class EnemyHP : Damageable
     [SerializeField] private BaseEnemy manager;
     [SerializeField] private float flinchModifier = 1.0f;
     public bool flinchable = true;
-    private bool flinching = false;
+    private bool isFlinching = false;
 
     private void Start()
     {
@@ -31,7 +31,7 @@ public class EnemyHP : Damageable
 
                 flinchChance = Mathf.Clamp01(flinchChance);
 
-                if (isActiveAndEnabled && !flinching && Random.value < flinchChance)
+                if (isActiveAndEnabled && !isFlinching && Random.value < flinchChance)
                 {
                     StartCoroutine(Flinch());
                 }
@@ -52,13 +52,13 @@ public class EnemyHP : Damageable
     public IEnumerator Flinch()
     {
 
-        if (!flinchable || flinching || manager.Animator == null)
+        if (!flinchable || isFlinching || manager.Animator == null)
             yield break;
 
         manager.Animator.SetTrigger("Flinch");
 
         Debug.Log("Flinching");
-        flinching = true;
+        isFlinching = true;
 
         // Disable NavMeshAgent during knockback
         manager.SetState(EnemyState.Idle);
@@ -70,6 +70,6 @@ public class EnemyHP : Damageable
         /* manager.agent.isStopped = false;
          manager.agent.ResetPath();*/
         manager.Animator.ResetTrigger("Flinch");
-        flinching = false;
+        isFlinching = false;
     }
 }

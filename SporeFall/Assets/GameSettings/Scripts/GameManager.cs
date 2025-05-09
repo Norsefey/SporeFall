@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log("Setting max HP");
                     trainHandler.trainHP.SetMaxHP(maxTrainHP_E);
-                    trainHandler.trainHP.damageModifier = trainDamageReduction_E;
+                    trainHandler.trainHP.damageReduction = trainDamageReduction_E;
                 }
                 mycelia = startingMycelia_E;
             }
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
                 if(trainHandler.trainHP != null)
                 {
                     trainHandler.trainHP.SetMaxHP(maxTrainHP_N);
-                    trainHandler.trainHP.damageModifier = trainDamageReduction_N;
+                    trainHandler.trainHP.damageReduction = trainDamageReduction_N;
                 }
                 mycelia = startingMycelia_N;
             }
