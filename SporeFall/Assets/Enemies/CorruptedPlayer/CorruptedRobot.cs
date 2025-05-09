@@ -35,7 +35,7 @@ public class CorruptedPlayer : BaseEnemy
         // return life to player
         myPlayer.pHealth.IncreaseLife();
         SpawnDrop();
-        if (SavedSettings.firstRobertKill == false && Tutorial.Instance != null)
+        if (SavedSettings.firstRobertKill == false && Tutorial.Instance != null && Tutorial.Instance.isRobertDeadFast == false)
         {
             Tutorial.Instance.RobertKillPrompts();
             SavedSettings.firstRobertKill = true;
