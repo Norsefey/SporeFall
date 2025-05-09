@@ -163,6 +163,7 @@ public class ColorPickerUI : MonoBehaviour
         // activates Hue controls, no need to deactivate SV control as this is handled in color picker
         EventSystem.current.sendNavigationEvents = false;
         p1PC.isHueSelected = true;
+        p1PC.selected = true;
         hueButton1p1.GetComponent<Image>().color = shroomRed;
         StartCoroutine(SelectionColdown());
     }
@@ -203,6 +204,7 @@ public class ColorPickerUI : MonoBehaviour
     {
         EventSystem.current.sendNavigationEvents = false;
         p1SC.isHueSelected = true;
+        p1SC.selected = true;
         hueButton2p1.GetComponent<Image>().color = shroomRed;
         StartCoroutine(SelectionColdown());
     }
@@ -244,6 +246,7 @@ public class ColorPickerUI : MonoBehaviour
     {
         EventSystem.current.sendNavigationEvents = false;
         p2PC.isHueSelected = true;
+        p2PC.selected = true;
         hueButton1p2.GetComponent<Image>().color = shroomRed;
         StartCoroutine(SelectionColdown());
     }
@@ -287,6 +290,7 @@ public class ColorPickerUI : MonoBehaviour
     {
         EventSystem.current.sendNavigationEvents = false;
         p2SC.isHueSelected = true;
+        p2SC.selected = true;
         hueButton2p2.GetComponent<Image>().color = shroomRed;
         StartCoroutine(SelectionColdown());
     }

@@ -63,6 +63,7 @@ public class ColorPickerControl : MonoBehaviour
         if (gamepad.leftShoulder.wasPressedThisFrame || gamepad.rightShoulder.wasPressedThisFrame)
         {
             isHueSelected = !isHueSelected;
+            isSVSelected = !isSVSelected;
             // We can put the highlight functionality here??
             Debug.Log(isHueSelected ? "Hue slider selected" : "SV picker selected");
             //Changes color to show what is currently selected when the bumpers are hit
