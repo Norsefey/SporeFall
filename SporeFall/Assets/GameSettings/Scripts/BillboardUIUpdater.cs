@@ -50,7 +50,7 @@ public class BillboardUIUpdater : MonoBehaviour
             if(hideUICoroutine != null)
                 StopCoroutine(hideUICoroutine);
             
-            groupAlpha.alpha = 1f;
+            groupAlpha.alpha = .5f;
             if(hideUI)
                 hideUICoroutine = StartCoroutine(HideUI());
         }
