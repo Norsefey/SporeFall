@@ -903,7 +903,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""positive"",
+                    ""name"": ""negative"",
                     ""id"": ""7c6f1ba8-3ad5-4b8c-825f-e024e66f971e"",
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
@@ -914,7 +914,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""negative"",
+                    ""name"": ""positive"",
                     ""id"": ""7b2e3a5f-aa8e-46ed-aeb8-0dd1b13962ad"",
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
@@ -936,7 +936,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
+                    ""name"": ""positive"",
                     ""id"": ""8d3bca56-7e6d-4aa3-af15-e529f96b2777"",
                     ""path"": ""<Mouse>/scroll/down"",
                     ""interactions"": """",
@@ -947,7 +947,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
+                    ""name"": ""negative"",
                     ""id"": ""feb13a1e-4ff3-403a-8be5-94819b1e216d"",
                     ""path"": ""<Mouse>/scroll/up"",
                     ""interactions"": """",
