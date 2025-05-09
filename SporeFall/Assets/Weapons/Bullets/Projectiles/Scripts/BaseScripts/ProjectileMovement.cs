@@ -132,7 +132,7 @@ public class ProjectileMovement : MonoBehaviour
                 // This captures both horizontal and vertical components
                 rb.velocity = data.Direction * data.Speed;
 
-                Debug.Log("Arc Complete - Switching to physics with actual trajectory: " + rb.velocity);
+                //Debug.Log("Arc Complete - Switching to physics with actual trajectory: " + rb.velocity);
             }
         }
     }

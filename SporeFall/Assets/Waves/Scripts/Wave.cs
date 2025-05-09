@@ -26,6 +26,9 @@ public class EnemySpawnData
         get { return spawnedCount; }
         set { spawnedCount = value; }
     }
+    // Additional properties for endless waves
+    public float minDifficultyToSpawn = 1.0f; // Minimum difficulty level required to spawn this enemy
+    public float spawnWeight = 1.0f; // Base weight for spawn probability calculation
 }
 [System.Serializable]
 public class Wave

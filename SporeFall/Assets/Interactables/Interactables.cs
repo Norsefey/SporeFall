@@ -32,7 +32,7 @@ public abstract class Interactables : DropsPoolBehavior
             player.pInput.AssignInteraction(this);
             ItemPrompt();
             interactionEnabled = true;
-            Debug.Log("Prompting Player");
+            //Debug.Log("Prompting Player");
         }
     }
     private void OnTriggerExit(Collider other)
@@ -49,7 +49,7 @@ public abstract class Interactables : DropsPoolBehavior
     }
     public void RemoveIntractable()
     {
-        Debug.Log("Removing Interaction" + gameObject.name);
+        //Debug.Log("Removing Interaction" + gameObject.name);
 
         if (player != null)
         {
