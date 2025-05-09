@@ -10,7 +10,7 @@ using UnityEngine.AI;
 public class WaveManager : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private WaveUI wUI;
+    public WaveUI wUI;
 
 
     [Header("References")]

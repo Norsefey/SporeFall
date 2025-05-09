@@ -15,6 +15,7 @@ public class TrainingLevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SavedSettings.currentLevel = "Training";
         GameManager.OnPlayerJoin += GetPlayerDevice;
         myceliaToPickUp.Setup();
         foreach (DummyBehavior dummy in shootingRangeEnemies)
