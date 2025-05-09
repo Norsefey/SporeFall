@@ -30,6 +30,7 @@ public class Tutorial : MonoBehaviour
     public bool clickNeeded = false;
 
     public bool isRobertSpawned = false;
+    public bool isRobertDeadFast = false;
 
     [HideInInspector] public float timer = 0f;
     private bool timerStarted = false;
@@ -309,9 +310,20 @@ public class Tutorial : MonoBehaviour
     {
         tutorialPopup.SetActive(true);
         bgImage.SetActive(true);
-        tutorialText.text = "Nice work! When you're ready to move on, hit the Main Button.";
         continueText.text = " ";
-        StartCoroutine(ClosePrompts(15f));
+        if (GameManager.Instance.waveManager.skipWindow)
+        {
+            tutorialText.text = "Nice work! The train will move on shortly.";
+            StartCoroutine(ClosePrompts(5f));
+        }
+
+        else
+        {
+            tutorialText.text = "Nice work! When you're ready to move on, hit the Main Button.";
+            StartCoroutine(ClosePrompts(15f));
+        }
+
+        
     }
     
     IEnumerator NextPrompt()

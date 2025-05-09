@@ -53,6 +53,7 @@ public class WaveManager : MonoBehaviour
     private bool skipped = false;
     public float departTime = 30;
     private float timer = 0;
+    public bool skipWindow = false;
 
     [Header("Object Pooling")]
     [SerializeField] private int initialPoolSize = 50;
@@ -142,6 +143,8 @@ public class WaveManager : MonoBehaviour
         timer = departTime;
         wavePhase = WavePhase.Departing;
         Invoke(nameof(TrainAutoDepartCall), departTime);
+        skipWindow = true;
+        StartCoroutine(SkipWindow());
         if (Tutorial.Instance != null)
         {
             if (isRobertSpawned)
@@ -169,6 +172,12 @@ public class WaveManager : MonoBehaviour
         }
         
     }
+
+    private IEnumerator SkipWindow()
+    {
+        yield return new WaitForSeconds(departTime);
+        skipWindow = false;
+    }
     private void Depart()
     {
         if(isRobertSpawned)
@@ -190,7 +199,7 @@ public class WaveManager : MonoBehaviour
         {
             return;
         }
-            
+
         // since we are skipping, we no longer need to invoke, prevents repeat
         CancelInvoke(nameof(Depart));
         //player.RemoveButtonAction();
