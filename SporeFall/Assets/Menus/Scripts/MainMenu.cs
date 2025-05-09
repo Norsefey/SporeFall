@@ -22,6 +22,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject settingsScreen;
     [SerializeField] GameObject levelSelectScreen;
     [SerializeField] GameObject tutorialQuestionScreen;
+    [SerializeField] GameObject creditsScreen;
     [SerializeField] GameObject[] compendium;
     [SerializeField] GameObject[] pages;
     private int activePage;
@@ -34,6 +35,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject firstSettingsButton;
     [SerializeField] GameObject firstTutorialButton;
     [SerializeField] GameObject firstLevelSelectButton;
+    [SerializeField] GameObject firstCreditsButton;
     [SerializeField] GameObject[] firstCompendiumButtons;
     private GameObject savedFirstButton;
 
@@ -349,6 +351,7 @@ public class MainMenu : MonoBehaviour
         }
         savedFirstButton = firstTutorialButton;
 
+        //Removed check that makes training room question only show up once
         //if (SavedSettings.firstTutorialQuestion)
         //{
         //    tutorialQuestionScreen.SetActive(true);
@@ -412,12 +415,25 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public void OpenCredits()
+    {
+        creditsScreen.SetActive(true);
+        mainScreen.SetActive(false);
+        if (isControllerConnected)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstCreditsButton);
+        }
+        savedFirstButton = firstCreditsButton;
+    }
+
     public void BackToMain()
     {
         mainScreen.SetActive(true);
         levelSelectScreen.SetActive(false);
         settingsScreen.SetActive(false);
         compendium[0].SetActive(false);
+        creditsScreen.SetActive(false);
         
         if (isControllerConnected)
         {
