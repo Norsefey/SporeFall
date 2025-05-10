@@ -13,33 +13,6 @@ public class DummyBehavior : BaseEnemy
     [SerializeField] protected float idleChance = 0.3f; // Chance to idle when no target is present
     private Vector3 wanderTarget;
     private float wanderDestinationThreshold = 2f;
-
-    protected override void SetRandomState()
-    {
-        List<StateWeight> stateWeights = CalculateStateWeights();
-
-        // Normalize weights
-        float totalWeight = stateWeights.Sum(sw => sw.weight);
-        if (totalWeight > 0)
-        {
-            float randomValue = Random.value * totalWeight;
-            float currentSum = 0;
-
-            foreach (var stateWeight in stateWeights)
-            {
-                currentSum += stateWeight.weight;
-                if (randomValue <= currentSum)
-                {
-                    SetState(stateWeight.state);
-                    return;
-                }
-            }
-        }
-
-        // Fallback to idle if something goes wrong
-        SetState(EnemyState.Idle);
-    }
-
     protected override List<StateWeight> CalculateStateWeights()
     {
         List<StateWeight> weights = new();
@@ -170,20 +143,6 @@ public class DummyBehavior : BaseEnemy
                 break;
         }
     }
-    protected override void UpdateIdleState()
-    {
-        agent.isStopped = true;
-
-        // If there's a target, look at it
-        if (currentTarget != null)
-        {
-            Vector3 lookDirection = (currentTarget.position - transform.position).normalized;
-            lookDirection.y = 0;
-            transform.rotation = Quaternion.Lerp(transform.rotation,
-                Quaternion.LookRotation(lookDirection), Time.deltaTime * 2f);
-        }
-    }
-
     protected virtual void FindWanderDestination()
     {
         // Find a random point on the NavMesh within wanderRadius
@@ -215,7 +174,6 @@ public class DummyBehavior : BaseEnemy
             }
         }
     }
-
     protected virtual void UpdateWanderState()
     {
         if (agent.remainingDistance <= wanderDestinationThreshold)

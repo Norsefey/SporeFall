@@ -12,7 +12,7 @@ PrefabInstance:
         type: 3}
       propertyPath: manager
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1974045734086840964}
     - target: {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01,
         type: 3}
       propertyPath: m_Name
@@ -139,7 +139,7 @@ MonoBehaviour:
   chasePriorityDistance: 25
   damagePriorityThreshold: 20
   damageTrackingDuration: 3
-  stoppingDistance: 20
+  stoppingDistance: 5
   aggressionFactor: 0.6
   trackingSpeed: 5
   train: {fileID: 0}
@@ -154,6 +154,11 @@ MonoBehaviour:
     m_Bits: 10752
   targetSwitchThreshold: 100
   risingAnimationLength: 2
+  playerTarget: {fileID: 0}
+  wanderRadius: 15
+  minWanderTime: 5
+  maxWanderTime: 10
+  idleChance: 0.3
 --- !u!195 &6294939854208413914 stripped
 NavMeshAgent:
   m_CorrespondingSourceObject: {fileID: 6700846432238513998, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01,

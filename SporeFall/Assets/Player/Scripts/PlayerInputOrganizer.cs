@@ -347,15 +347,18 @@ public class PlayerInputOrganizer : MonoBehaviour
             pauseGame.performed += OnCloseUpgradeMenu;
 
             GameManager.Instance.gameUI.ToggleUpgradeMenu(true, pMan);
+            GameManager.Instance.gameUI.ToggleTutorialPrompts(true);
+            GameManager.Instance.gameUI.gameplayUI.SetActive(false);
 
             pMan.pUI.gameObject.SetActive(false);
-            GameManager.Instance.gameUI.ToggleTutorialPrompts(true);
-            GameManager.Instance.trainHandler.UI.gameObject.SetActive(false);
-            if (SavedSettings.currentLevel != "Training")
+            
+            if (GameManager.Instance.trainHandler != null)
+                GameManager.Instance.trainHandler.UI.gameObject.SetActive(false);
+
+            if (GameManager.Instance.waveManager != null && SavedSettings.currentLevel != "Training")
             {
                 GameManager.Instance.waveManager.wUI.gameObject.SetActive(false);
             }
-            GameManager.Instance.gameUI.gameplayUI.SetActive(false);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -367,16 +370,19 @@ public class PlayerInputOrganizer : MonoBehaviour
             // return to default pause menu interactions
             pauseGame.performed -= OnCloseUpgradeMenu;
             pauseGame.performed += OnPause;
+
             GameManager.Instance.gameUI.ToggleUpgradeMenu(false, pMan);
+            GameManager.Instance.gameUI.ToggleTutorialPrompts(false);
+            GameManager.Instance.gameUI.gameplayUI.SetActive(true);
 
             pMan.pUI.gameObject.SetActive(true);
-            GameManager.Instance.gameUI.ToggleTutorialPrompts(false);
-            GameManager.Instance.trainHandler.UI.gameObject.SetActive(true);
-            if (SavedSettings.currentLevel != "Training")
+            if(GameManager.Instance.trainHandler != null)
+                GameManager.Instance.trainHandler.UI.gameObject.SetActive(true);
+            
+            if (GameManager.Instance.waveManager != null && SavedSettings.currentLevel != "Training")
             {
                 GameManager.Instance.waveManager.wUI.gameObject.SetActive(true);
             }
-            GameManager.Instance.gameUI.gameplayUI.SetActive(true);
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -398,7 +404,6 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnSkipCutscene(InputAction.CallbackContext context)
     {
-        
         GameManager.Instance.waveManager.SkippParkingAnimation();
         
         if (Tutorial.Instance != null)

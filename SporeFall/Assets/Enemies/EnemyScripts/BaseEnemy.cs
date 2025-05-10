@@ -183,10 +183,8 @@ public abstract class BaseEnemy : MonoBehaviour
             foreach (var stateWeight in stateWeights)
             {
                 currentSum += stateWeight.weight;
-                //Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
                 if (randomValue <= currentSum)
                 {
-                    //Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
                     SetState(stateWeight.state);
                     return;
                 }

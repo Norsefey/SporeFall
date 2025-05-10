@@ -14,6 +14,7 @@ public class PlayerHP : Damageable
     // Start is called before the first frame update
     private void Start()
     {
+        currentLives = defaultMaxLives;
         currentHP = maxHP;
     }
     public override void TakeDamage(float damage)

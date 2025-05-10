@@ -6,148 +6,49 @@ using UnityEngine.AI;
 
 public class EndlessEnemy : BaseEnemy
 {
-    protected override void Awake()
-    {
-        // Get component references once
-        agent = GetComponent<NavMeshAgent>();
-        audioSource = GetComponent<AudioSource>();
-        detectedColliders = new Collider[maxDetectedObjects];
-    }
-    public override void Initialize()
-    {
-        ResetState();
-        StartCoroutine(PeriodicTargetDetection(4));
-        // do not want movement while rising from from ground
-        if (!isRising)
-        {
-            // Start behavior
-            DetectTargets();
-            SetRandomState();
-        }
-    }
-    protected override void ResetState()
-    {
-        // Reset all state when object is reused from pool
-        foreach (var att in attacks)
-        {
-            //Debug.LogWarning("Reseting Attack: " + att);
-            att.ResetCooldown();
-        }
-
-        // Reset variables
-        currentState = EnemyState.Idle;
-        isAttacking = false;
-        passedThreshold = false;
-        targetingStructure = false;
-        strafeDirectionRight = true;
-        stateTimer = 0f;
-
-        // Reset queues and collections
-        recentDamage.Clear();
-
-        // Reset health
-        if (health != null)
-        {
-            health.ResetHealth();
-        }
-
-        // Reset NavMeshAgent
-        if (agent != null && agent.isActiveAndEnabled)
-        {
-            agent.ResetPath();
-            agent.isStopped = false;
-            agent.velocity = Vector3.zero;
-            agent.stoppingDistance = stoppingDistance;
-        }
-    }
-    protected override void Update()
-    {
-        UpdateStateTimer();
-
-        if (!isAttacking)
-        {
-            UpdateCurrentState();
-        }
-    }
-    protected override void UpdateStateTimer()
-    {
-        stateTimer -= Time.deltaTime;
-        if (stateTimer <= 0)
-        {
-            SetRandomState();
-        }
-    }
-    protected override void SetRandomState()
-    {
-        List<StateWeight> stateWeights = CalculateStateWeights();
-
-        // Normalize weights
-        float totalWeight = stateWeights.Sum(sw => sw.weight);
-        if (totalWeight > 0)
-        {
-            float randomValue = Random.value * totalWeight;
-            float currentSum = 0;
-
-            foreach (var stateWeight in stateWeights)
-            {
-                currentSum += stateWeight.weight;
-                //Debug.Log($"{stateWeight.state} State - Weight: {stateWeight.weight}");
-                if (randomValue <= currentSum)
-                {
-                    //Debug.Log($"Entering {stateWeight.state} State - Weight: {stateWeight.weight}");
-                    SetState(stateWeight.state);
-                    return;
-                }
-            }
-        }
-
-        // Fallback to idle if something goes wrong
-        SetState(EnemyState.Idle);
-    }
+    public Transform playerTarget;
+    [Header("Wander Behavior")]
+    [SerializeField] protected float wanderRadius = 15f;
+    [SerializeField] protected float minWanderTime = 5f;
+    [SerializeField] protected float maxWanderTime = 10f;
+    [SerializeField] protected float idleChance = 0.3f; // Chance to idle when no target is present
+    private Vector3 wanderTarget;
+    private float wanderDestinationThreshold = 2f;
     protected override List<StateWeight> CalculateStateWeights()
     {
         List<StateWeight> weights = new();
-        float distanceToTarget = currentTarget ? Vector3.Distance(transform.position, currentTarget.position) : float.MaxValue;
         float recentDamageSum = CalculateRecentDamage();
-        // Chase Priority
-        float chaseWeight = CalculateChaseWeight(distanceToTarget);
-        weights.Add(new StateWeight(EnemyState.Chase, chaseWeight));
-        // Attack Priority
-        float attackWeight = CalculateAttackWeight(distanceToTarget);
-        weights.Add(new StateWeight(EnemyState.Attack, attackWeight));
-        float strafeWeight = CalculateStrafeWeight(recentDamageSum, distanceToTarget);
-        weights.Add(new StateWeight(EnemyState.Strafe, strafeWeight));
 
-        // Idle is lowest priority
+        // If we have a target, consider combat states
+        if (currentTarget != null)
+        {
+            float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
+
+            // Chase Priority
+            float chaseWeight = CalculateChaseWeight(distanceToTarget);
+            weights.Add(new StateWeight(EnemyState.Chase, chaseWeight));
+
+            // Attack Priority
+            float attackWeight = CalculateAttackWeight(distanceToTarget);
+            weights.Add(new StateWeight(EnemyState.Attack, attackWeight));
+
+            float strafeWeight = CalculateStrafeWeight(recentDamageSum, distanceToTarget);
+            weights.Add(new StateWeight(EnemyState.Strafe, strafeWeight));
+
+            // Add small chance to wander even with target
+            weights.Add(new StateWeight(EnemyState.Wander, 0.05f));
+        }
+        else
+        {
+            // No target - decide between idle and wandering
+            weights.Add(new StateWeight(EnemyState.Idle, idleChance));
+            weights.Add(new StateWeight(EnemyState.Wander, 1 - idleChance));
+        }
+
+        // Idle is lowest priority but always an option
         weights.Add(new StateWeight(EnemyState.Idle, 0.01f));
 
         return weights;
-    }
-    protected override float CalculateChaseWeight(float distanceToTarget)
-    {
-        if (distanceToTarget > chasePriorityDistance)
-            return 3f;
-        else if (distanceToTarget > stoppingDistance)
-            return 1.5f;
-        return 0.1f;
-    }
-    protected override float CalculateAttackWeight(float distanceToTarget)
-    {
-        Attack bestAttack = ChooseBestAttack(distanceToTarget);
-        if (bestAttack != null)
-            return 2.5f;
-        return 0.5f;
-    }
-    protected override float CalculateStrafeWeight(float recentDamage, float distanceToTarget)
-    {
-        float weight = 0.01f; // Base weight for strafing
-
-        if (recentDamage > damagePriorityThreshold * 0.5f)
-            weight += 1.5f;
-        else if (recentDamage <= 0)
-            return 0;
-
-        return weight;
     }
     public override void SetState(EnemyState newState)
     {
@@ -158,18 +59,28 @@ public class EndlessEnemy : BaseEnemy
         {
             case EnemyState.Idle:
                 stateTimer = Random.Range(2f, 4f);
+                agent.isStopped = true;
                 break;
+
             case EnemyState.Strafe:
                 stateTimer = Random.Range(2f, 4f);
                 CalculateStrafePosition();
                 break;
+
             case EnemyState.Attack:
                 stateTimer = Random.Range(5f, 8f);
                 break;
+
             case EnemyState.Chase:
                 DetectTargets();
                 stateTimer = Random.Range(1f, 4f);
                 break;
+
+            case EnemyState.Wander:
+                stateTimer = Random.Range(minWanderTime, maxWanderTime);
+                FindWanderDestination();
+                break;
+
             default:
                 stateTimer = Random.Range(2f, 4f);
                 break;
@@ -180,49 +91,57 @@ public class EndlessEnemy : BaseEnemy
     }
     protected override void UpdateCurrentState()
     {
-        // for when current target is destroyed find a new target
-        if (currentTarget == null)
+        // Periodically check for targets
+        if (currentTarget == null || !currentTarget.gameObject.activeSelf)
         {
             DetectTargets();
         }
-        else if (currentTarget.gameObject.activeSelf == false)
-        {
-            DetectTargets();
-        }
-        // alot of behavior relies on distance to current target
-        float distanceToTarget = currentTarget != null ?
-            Vector3.Distance(transform.position, currentTarget.position) : float.MaxValue;
 
         switch (currentState)
         {
             case EnemyState.Idle:
-                // Debug.Log("Idling");
                 UpdateIdleState();
                 break;
+
+            case EnemyState.Wander:
+                UpdateWanderState();
+                break;
+
             case EnemyState.Chase:
-                // Debug.Log("Chasing");
-                UpdateChaseState(distanceToTarget);
+                if (currentTarget != null)
+                {
+                    float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
+                    UpdateChaseState(distanceToTarget);
+                }
+                else
+                {
+                    // No target available, switch to wandering or idle
+                    if (Random.value < idleChance)
+                        SetState(EnemyState.Idle);
+                    else
+                        SetState(EnemyState.Wander);
+                }
                 break;
+
             case EnemyState.Attack:
-                //Debug.Log("Attacking");
-                UpdateAttackState(distanceToTarget);
+                if (currentTarget != null)
+                {
+                    float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
+                    UpdateAttackState(distanceToTarget);
+                }
+                else
+                {
+                    // No target available, switch to wandering or idle
+                    if (Random.value < idleChance)
+                        SetState(EnemyState.Idle);
+                    else
+                        SetState(EnemyState.Wander);
+                }
                 break;
+
             case EnemyState.Strafe:
-                // Debug.Log("Strafing");
                 UpdateStrafeState();
                 break;
-        }
-    }
-    protected override void UpdateIdleState()
-    {
-        agent.isStopped = true;
-        // Possibly look at target or play idle animation
-        if (currentTarget != null)
-        {
-            Vector3 lookDirection = (currentTarget.position - transform.position).normalized;
-            lookDirection.y = 0;
-            transform.rotation = Quaternion.Lerp(transform.rotation,
-                Quaternion.LookRotation(lookDirection), Time.deltaTime * 2f);
         }
     }
     protected override void UpdateChaseState(float distanceToTarget)
@@ -270,6 +189,57 @@ public class EndlessEnemy : BaseEnemy
             // We're within attack range, transition to attack state
             agent.isStopped = true;
             SetState(EnemyState.Attack);
+        }
+    }
+    protected virtual void FindWanderDestination()
+    {
+        // Find a random point on the NavMesh within wanderRadius
+        Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
+        randomDirection += transform.position;
+
+        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
+        {
+            wanderTarget = hit.position;
+            agent.isStopped = false;
+            agent.SetDestination(wanderTarget);
+        }
+        else
+        {
+            // If we couldn't find a valid position, try again with a smaller radius
+            randomDirection = Random.insideUnitSphere * (wanderRadius * 0.5f);
+            randomDirection += transform.position;
+
+            if (NavMesh.SamplePosition(randomDirection, out hit, wanderRadius * 0.5f, NavMesh.AllAreas))
+            {
+                wanderTarget = hit.position;
+                agent.isStopped = false;
+                agent.SetDestination(wanderTarget);
+            }
+            else
+            {
+                // If still no valid position, just idle
+                SetState(EnemyState.Idle);
+            }
+        }
+    }
+    protected virtual void UpdateWanderState()
+    {
+        if (agent.remainingDistance <= wanderDestinationThreshold)
+        {
+            // Reached destination, pause briefly
+            agent.isStopped = true;
+
+            // Choose a new wander destination after a short pause
+            if (stateTimer <= 1.0f)
+            {
+                FindWanderDestination();
+            }
+        }
+
+        // Check if we found a target during wandering
+        if (currentTarget != null && Random.value > 0.7f) // 30% chance per frame to notice the target
+        {
+            SetState(EnemyState.Chase);
         }
     }
     protected override void UpdateAttackState(float distanceToTarget)
@@ -335,6 +305,14 @@ public class EndlessEnemy : BaseEnemy
                 strafeTarget = hit.position;
             }
         }
+        else
+        {
+            // No target to strafe around, switch to wander or idle
+            if (Random.value < idleChance)
+                SetState(EnemyState.Idle);
+            else
+                SetState(EnemyState.Wander);
+        }
     }
     protected override void UpdateStrafeState()
     {
@@ -357,8 +335,15 @@ public class EndlessEnemy : BaseEnemy
                 CalculateStrafePosition();
             }
         }
+        else
+        {
+            // No target to strafe around, switch to wander or idle
+            if (Random.value < idleChance)
+                SetState(EnemyState.Idle);
+            else
+                SetState(EnemyState.Wander);
+        }
     }
-
     protected override Attack ChooseBestAttack(float distanceToTarget)
     {
         Attack bestAttack = null;
@@ -398,6 +383,7 @@ public class EndlessEnemy : BaseEnemy
         }
         else
         {
+            currentTarget = playerTarget;
             targetingStructure = false;
         }
     }
@@ -407,48 +393,9 @@ public class EndlessEnemy : BaseEnemy
     {
         if (target != null)
         {
+            playerTarget = target;
             currentTarget = target;
             targetingStructure = target.CompareTag("Structure");
-        }
-    }
-
-    protected override void OnDisable()
-    {
-        StopAllCoroutines();
-
-        // Clean up any references
-        currentTarget = null;
-
-        // Reset any ongoing effects or states
-        SetIsAttacking(false);
-    }
-    protected override void SpawnDeathVFX(Vector3 position, Quaternion rotation)
-    {
-        if (deathVFXPrefab != null && PoolManager.Instance != null)
-        {
-            // Get VFX from pool
-            if (!PoolManager.Instance.vfxPool.TryGetValue(deathVFXPrefab, out VFXPool pool))
-            {
-                Debug.LogError($"No pool found for VFX prefab: {deathVFXPrefab.name}");
-                return;
-            }
-            VFXPoolingBehavior vfx = pool.Get(position, rotation);
-            vfx.Initialize(pool);
-        }
-    }
-    public override void SetHealthMultiplier(float multiplier)
-    {
-        // Access the enemy's health component
-        if (health != null)
-        {
-            // Store original max health if not already stored
-            if (!health.HasStoredOriginalHealth())
-            {
-                health.StoreOriginalMaxHealth();
-            }
-
-            // Apply multiplier to max health
-            health.SetMaxHealthWithMultiplier(multiplier);
         }
     }
 }

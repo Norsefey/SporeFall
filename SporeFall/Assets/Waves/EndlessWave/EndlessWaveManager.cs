@@ -218,7 +218,6 @@ public class EndlessWaveManager : MonoBehaviour
             yield return new WaitForSeconds(enemySpawnInterval);
         }
     }
-
     private void SpawnRandomEnemy()
     {
         // Weight enemy selection based on difficulty
@@ -276,7 +275,6 @@ public class EndlessWaveManager : MonoBehaviour
             selectedEnemy.SpawnedCount++;
         }
     }
-
     private List<EnemySpawnData> GetAvailableEnemies()
     {
         List<EnemySpawnData> available = new List<EnemySpawnData>();
@@ -292,7 +290,6 @@ public class EndlessWaveManager : MonoBehaviour
 
         return available;
     }
-
     private EnemySpawnData GetEnemyBasedOnDifficulty(List<EnemySpawnData> availableEnemies)
     {
         // Calculate total weight
@@ -321,14 +318,12 @@ public class EndlessWaveManager : MonoBehaviour
         // Fallback
         return availableEnemies[0];
     }
-
     private float CalculateSpawnWeight(EnemySpawnData enemy)
     {
         // Higher difficulty enemies become more common as difficulty increases
         float difficultyFactor = currentDifficulty - enemy.minDifficultyToSpawn + 1f;
         return enemy.spawnWeight * difficultyFactor;
     }
-
     private void SpawnBoss()
     {
         if (isBossActive) return;
@@ -393,7 +388,6 @@ public class EndlessWaveManager : MonoBehaviour
         // Spawn boss squad
         StartCoroutine(SpawnBossSquad());
     }
-
     private IEnumerator SpawnBossSquad()
     {
         // Get stronger enemies for the boss squad
@@ -424,7 +418,6 @@ public class EndlessWaveManager : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
     }
-
     private void SpawnEnemy(GameObject enemyPrefab, Vector3 spawnPoint, bool spawningOutside)
     {
         if (enemyPools == null) return;
@@ -478,9 +471,9 @@ public class EndlessWaveManager : MonoBehaviour
         enemiesAlive++;
         enemiesSpawned++;
     }
-
     private void OnEnemyDeath(BaseEnemy enemy)
     {
+        Debug.LogWarning("Enemy Has Died");
         enemiesAlive--;
         deadEnemies++;
 
@@ -527,7 +520,6 @@ public class EndlessWaveManager : MonoBehaviour
         // Increase wave number
         NextWave();
     }
-
     protected Vector3 GetSpawnPointWithinZone()
     {
         Bounds zoneBounds = outsideSpawnZone.bounds;
@@ -584,12 +576,11 @@ public class EndlessWaveManager : MonoBehaviour
         Debug.LogWarning("EndlessWaveManager: Failed to find valid spawn point - using player position with offset");
         return (playerTransform != null ? playerTransform.position : transform.position) + new Vector3(5f, 0f, 5f);
     }
-
     private void SetRandomPlayerTarget()
     {
         int index = Random.Range(0, GameManager.Instance.players.Count);
 
-        playerTransform = GameManager.Instance.players[index].transform;
+        playerTransform = GameManager.Instance.players[index].pController.transform;
     }
     #endregion
 
