@@ -275,8 +275,10 @@ public class PlayerInputOrganizer : MonoBehaviour
 
             pMan.pUI.gameObject.SetActive(false);
             GameManager.Instance.gameUI.ToggleTutorialPrompts(true);
-            GameManager.Instance.trainHandler.UI.gameObject.SetActive(false);
-            if (SavedSettings.currentLevel != "Training")
+            if (GameManager.Instance.trainHandler != null)
+                GameManager.Instance.trainHandler.UI.gameObject.SetActive(false);
+            
+            if (GameManager.Instance.waveManager != null && SavedSettings.currentLevel != "Training")
             {
                 GameManager.Instance.waveManager.wUI.gameObject.SetActive(false);
             }
@@ -296,8 +298,10 @@ public class PlayerInputOrganizer : MonoBehaviour
 
             pMan.pUI.gameObject.SetActive(true);
             GameManager.Instance.gameUI.ToggleTutorialPrompts(false);
-            GameManager.Instance.trainHandler.UI.gameObject.SetActive(true);
-            if (SavedSettings.currentLevel != "Training")
+            if (GameManager.Instance.trainHandler != null)
+                GameManager.Instance.trainHandler.UI.gameObject.SetActive(true);
+
+            if (GameManager.Instance.waveManager != null && SavedSettings.currentLevel != "Training")
             {
                 GameManager.Instance.waveManager.wUI.gameObject.SetActive(true);
             }

@@ -51,11 +51,6 @@ public class PlayerDeviceHandler : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        
-    }
-
     private void Update()
     {
         if (TutorialControls.Instance != null)

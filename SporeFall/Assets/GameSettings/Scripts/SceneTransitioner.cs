@@ -10,6 +10,7 @@ public class SceneTransitioner : MonoBehaviour
     [SerializeField] private int gameSceneIndex;
     [SerializeField] private int winSceneIndex;
     [SerializeField] private int loseSceneIndex;
+    [SerializeField] private int survivalGameOverSceneIndex;
     private void Awake()
     {
         Instance = this;
@@ -34,9 +35,9 @@ public class SceneTransitioner : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
         SceneManager.LoadScene(loseSceneIndex);
     }
-
     public void UseIndexToLoadScene(int index)
     {
         SceneManager.LoadScene(index);

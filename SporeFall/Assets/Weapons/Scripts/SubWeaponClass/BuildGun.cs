@@ -257,7 +257,7 @@ public class BuildGun : Weapon
             return;
         }
         // some test scenes do not have a train to reference off of, so check if a train is valid to do an energy check
-        if (GameManager.Instance != null && GameManager.Instance.trainHandler != null && selectedStructure != null)
+        if (GameManager.Instance != null && selectedStructure != null)
         {
             if (GameManager.Instance.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= GameManager.Instance.Mycelia)
             {
@@ -305,7 +305,7 @@ public class BuildGun : Weapon
                 }
             }
         }
-        else if(selectedStructure != null)
+        /*else if(selectedStructure != null)
         {
             Debug.Log("Train less Placement");
 
@@ -324,7 +324,7 @@ public class BuildGun : Weapon
                 player.pUI.EnableControls(buildModeText);
 
             }
-        }
+        }*/
     }
     public void RemovePreview()
     {

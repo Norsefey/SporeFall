@@ -143,7 +143,15 @@ public class GameManager : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            SceneTransitioner.Instance.LoadLoseScene();
+
+            if(sceneIndex == 8)
+            {
+                // Pause Game Show UI
+            }
+            else
+            {
+                SceneTransitioner.Instance.LoadLoseScene();
+            }
         }
     }
     #region Player Management
@@ -345,9 +353,6 @@ public class GameManager : MonoBehaviour
         gameUI.DisplayMycelia(mycelia);
     }
     #endregion
-    // Called when object is destroyed (including scene changes)
-
-   
     private void OnDestroy()
     {
         // Clear static instance if this is the current instance

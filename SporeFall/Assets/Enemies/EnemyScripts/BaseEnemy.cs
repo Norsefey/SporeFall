@@ -529,8 +529,8 @@ public abstract class BaseEnemy : MonoBehaviour
             yield return waitTime;
         }
     }
-    // Add this helper method to check if a target position is accessible via NavMesh
-    private bool IsTargetAccessible(Transform target)
+    // helper method to check if a target position is accessible via NavMesh
+    protected bool IsTargetAccessible(Transform target)
     {
         if (target == null) return false;
 
@@ -562,7 +562,7 @@ public abstract class BaseEnemy : MonoBehaviour
         return false;
     }
     // Get the priority index of the tag, lower numbers mean higher priority
-    int GetPriorityIndex(string tag)
+    protected int GetPriorityIndex(string tag)
     {
         for (int i = 0; i < priorityTags.Length; i++)
         {
@@ -614,9 +614,6 @@ public abstract class BaseEnemy : MonoBehaviour
             }
             VFXPoolingBehavior vfx = pool.Get(position, rotation);
             vfx.Initialize(pool);
-
-            /*GameObject vfx = Instantiate(attackVFXPrefab, position, rotation);
-            Destroy(vfx, 2f); // Incase it doesnt auto destroy*/
         }
     }
     public void CheckDamageThreshold(float damageTaken)
@@ -649,8 +646,15 @@ public abstract class BaseEnemy : MonoBehaviour
         DetectTargets();
         SetRandomState();
     }
-
-    public void SetHealthMultiplier(float multiplier)
+    public virtual void SetTarget(Transform target)
+    {
+        if (target != null)
+        {
+            currentTarget = target;
+            targetingStructure = target.CompareTag("Structure") || target.CompareTag("Destructible");
+        }
+    }
+    public virtual void SetHealthMultiplier(float multiplier)
     {
         // Access the enemy's health component
         if (health != null)
