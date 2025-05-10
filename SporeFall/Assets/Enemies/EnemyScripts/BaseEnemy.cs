@@ -79,6 +79,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
     [Header("Targeting")]
     public float trackingSpeed = 5;
+    [HideInInspector]
     public TrainHandler train; // if nothing is in range will move to Payload or train
     protected Transform trainWall;
     protected Transform currentTarget;
@@ -649,7 +650,7 @@ public abstract class BaseEnemy : MonoBehaviour
         if (target != null)
         {
             currentTarget = target;
-            targetingStructure = target.CompareTag("Structure") || target.CompareTag("Destructible");
+            targetingStructure = target.CompareTag("Structure");
         }
     }
     public virtual void SetHealthMultiplier(float multiplier)

@@ -47,7 +47,8 @@ public class CorruptedPlayer : BaseEnemy
     }
     public void AssignDefaultTargets(TrainHandler train, Transform playerTarget)
     {
-        base.AssignTrain(train);
+        if(train != null)
+            base.AssignTrain(train);
         currentTarget = playerTarget;
     }
     private void SpawnDrop()

@@ -120,8 +120,11 @@ public class PlayerManager : MonoBehaviour
                     pHealth.canTakeDamage = false;
                     pHealth.canHoldCorruption = false;
                     GameManager.Instance.IncreaseMycelia(9999);
-                    GameManager.Instance.trainHandler.trainHP.canTakeDamage = false;
-                    GameManager.Instance.trainHandler.UI.ChangeHPDisplay("DOGMODE");
+                    if(GameManager.Instance.trainHandler != null)
+                    {
+                        GameManager.Instance.trainHandler.trainHP.canTakeDamage = false;
+                        GameManager.Instance.trainHandler.UI.ChangeHPDisplay("DOGMODE");
+                    }
                     godMode = true;
                 }
                 else
@@ -132,8 +135,11 @@ public class PlayerManager : MonoBehaviour
                     pHealth.canTakeDamage = true;
                     pHealth.canHoldCorruption = true;
                     GameManager.Instance.DecreaseMycelia(9999);
-                    GameManager.Instance.trainHandler.trainHP.canTakeDamage = true;
-                    GameManager.Instance.trainHandler.trainHP.TakeDamage(0);
+                    if (GameManager.Instance.trainHandler != null)
+                    {
+                        GameManager.Instance.trainHandler.trainHP.canTakeDamage = true;
+                        GameManager.Instance.trainHandler.trainHP.TakeDamage(0);
+                    }
                     godMode = false;
                 }
             }
@@ -247,7 +253,6 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-
     private void WeaponBehavior()
     {
         if (currentWeapon != null)

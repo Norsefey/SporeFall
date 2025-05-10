@@ -152,8 +152,14 @@ public class PlayerUI : MonoBehaviour
             pMan.pUI.weaponUI.SetActive(false);
             return;
         }
-        
-        weaponIcon.sprite = pMan.currentWeapon.weaponSprite;
+        weaponIcon.enabled = true;
+
+        if (pMan.currentWeapon.weaponSprite != null)
+            weaponIcon.sprite = pMan.currentWeapon.weaponSprite;
+        else
+        {
+            weaponIcon.enabled = false;
+        }
     }
     public void UpdateHPDisplay(Damageable hpScript, float value)
     {

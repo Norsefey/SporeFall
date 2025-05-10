@@ -51,11 +51,19 @@ public class StanleyControlScript : MonoBehaviour
         {
             transform.Translate(moveSpeed * Time.deltaTime * currentDirection, Space.World);
         }
-        // Generate money if Stanley is active
-        if (GameManager.Instance.waveManager.wavePhase == WaveManager.WavePhase.Started)
+        if(GameManager.Instance.waveManager != null)
+        {
+            // Generate money if Stanley is active
+            if (GameManager.Instance.waveManager.wavePhase == WaveManager.WavePhase.Started)
+            {
+                GenerateMycelia();
+            }
+        }
+        else
         {
             GenerateMycelia();
         }
+
         // Smooth rotation towards movement direction
         Quaternion targetRotation = Quaternion.LookRotation(currentDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);

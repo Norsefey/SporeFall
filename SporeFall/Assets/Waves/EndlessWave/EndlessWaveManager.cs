@@ -475,6 +475,8 @@ public class EndlessWaveManager : MonoBehaviour
     {
         enemiesAlive--;
         deadEnemies++;
+        Debug.Log("Removing Dead Enemy: " +enemy.name);
+        activeEnemies.Remove(enemy);
 
         // Notify listeners about enemy defeated
         onEnemyDefeated?.Invoke(deadEnemies);
@@ -483,8 +485,6 @@ public class EndlessWaveManager : MonoBehaviour
         {
             pool.Return(enemy);
         }
-
-        activeEnemies.Remove(enemy);
 
         // Check if we've reached the spawn count for this wave
         if (!isBossActive && deadEnemies >= totalSpawnCountForCurrentWave)
