@@ -70,7 +70,7 @@ public class ProjectileMovement : MonoBehaviour
         else if (!data.UseGravity && rb.isKinematic)
         {
             // Direct movement for non-physics projectiles
-            transform.position += data.Direction * data.Speed * Time.deltaTime;
+            transform.position += data.Speed * Time.deltaTime * data.Direction;
         }
     }
     private void UpdateArcMovement()
@@ -132,7 +132,7 @@ public class ProjectileMovement : MonoBehaviour
                 // This captures both horizontal and vertical components
                 rb.velocity = data.Direction * data.Speed;
 
-                Debug.Log("Arc Complete - Switching to physics with actual trajectory: " + rb.velocity);
+                //Debug.Log("Arc Complete - Switching to physics with actual trajectory: " + rb.velocity);
             }
         }
     }

@@ -119,7 +119,7 @@ public class MortyControlScript : MonoBehaviour
         Vector3 directionToTarget = (targetEnemy.position - firePoint.position).normalized;
 
         // Rotate to face target (only y-axis since it's a mortar)
-        Vector3 flatDirection = new Vector3(directionToTarget.x, 0, directionToTarget.z);
+        Vector3 flatDirection = new(directionToTarget.x, 0, directionToTarget.z);
         if (flatDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(flatDirection);

@@ -9,6 +9,9 @@ public abstract class Damageable : MonoBehaviour
     public bool canTakeDamage = true;
     [SerializeField] protected float maxHP;
     protected float currentHP;
+    // Variable to store original max health for difficulty scaling
+    private float originalMaxHealth;
+    private bool hasStoredOriginalHealth = false;
     public float MaxHP {  get { return maxHP; } }
     public float CurrentHP {  get { return currentHP; } }
     public bool isDead = false;
@@ -24,6 +27,7 @@ public abstract class Damageable : MonoBehaviour
     private void Start()
     {
         ResetHealth();
+        StoreOriginalMaxHealth();
     }
     public virtual void TakeDamage(float damage)
     {
@@ -63,5 +67,34 @@ public abstract class Damageable : MonoBehaviour
     {
         maxHP = value;
         ResetHealth();
+    }
+
+    // Methods for difficulty scaling in endless waves
+    public void StoreOriginalMaxHealth()
+    {
+        if (!hasStoredOriginalHealth)
+        {
+            originalMaxHealth = maxHP;
+            hasStoredOriginalHealth = true;
+        }
+    }
+
+    public bool HasStoredOriginalHealth()
+    {
+        return hasStoredOriginalHealth;
+    }
+
+    public void SetMaxHealthWithMultiplier(float multiplier)
+    {
+        float newMaxHealth = originalMaxHealth * multiplier;
+        SetMaxHP(newMaxHealth);
+    }
+
+    public void ResetToOriginalHealth()
+    {
+        if (hasStoredOriginalHealth)
+        {
+            SetMaxHP(originalMaxHealth);
+        }
     }
 }

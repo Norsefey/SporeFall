@@ -649,4 +649,20 @@ public abstract class BaseEnemy : MonoBehaviour
         DetectTargets();
         SetRandomState();
     }
+
+    public void SetHealthMultiplier(float multiplier)
+    {
+        // Access the enemy's health component
+        if (health != null)
+        {
+            // Store original max health if not already stored
+            if (!health.HasStoredOriginalHealth())
+            {
+                health.StoreOriginalMaxHealth();
+            }
+
+            // Apply multiplier to max health
+            health.SetMaxHealthWithMultiplier(multiplier);
+        }
+    }
 }

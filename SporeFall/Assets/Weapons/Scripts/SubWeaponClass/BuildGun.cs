@@ -259,7 +259,7 @@ public class BuildGun : Weapon
         // some test scenes do not have a train to reference off of, so check if a train is valid to do an energy check
         if (GameManager.Instance != null && GameManager.Instance.trainHandler != null && selectedStructure != null)
         {
-            if (GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= GameManager.Instance.Mycelia)
+            if (GameManager.Instance.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= GameManager.Instance.Mycelia)
             {
                 GameManager.Instance.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
                 selectedStructure.Initialize();
@@ -286,7 +286,7 @@ public class BuildGun : Weapon
 
                 RestoreOriginalColors(); // Restore original colors when placing
                 // for moving train stores all active structures
-                GameManager.Instance.trainHandler.AddStructure(selectedStructure);
+                GameManager.Instance.AddStructure(selectedStructure);
                 selectedStructure = null;
                 // show build controls
                 player.pUI.EnableControls(buildModeText);
@@ -299,7 +299,7 @@ public class BuildGun : Weapon
                 {
                     player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
                 }
-                else if (!GameManager.Instance.trainHandler.CheckEnergy(selectedStructure.GetCurrentEnergyCost()))
+                else if (!GameManager.Instance.CheckEnergy(selectedStructure.GetCurrentEnergyCost()))
                 {
                     player.pUI.EnablePrompt("<color=red>Too many Active Structures</color>");
                 }
@@ -630,11 +630,9 @@ public class BuildGun : Weapon
             player.pUI.EnableControls(editModeText);
 
 
-            if (GameManager.Instance.trainHandler != null)
-            {
-                GameManager.Instance.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));
-                GameManager.Instance.trainHandler.RemoveStructure(toDelet);
-            }
+            GameManager.Instance.IncreaseMycelia(toDelet.CalculateStructureRefund(minimumRefundPercent));
+            GameManager.Instance.RemoveStructure(toDelet);
+
             Debug.Log("Structure Sold");
             player.pUI.EnableControls(editModeText);
         }

@@ -77,134 +77,309 @@ public class Turret : MonoBehaviour
 
         foreach (Collider enemyCollider in enemiesInRange)
         {
-            if (enemyCollider == null || enemyCollider.transform == null || enemyCollider.CompareTag("HeadShot")) continue;
+            // Skip null or invalid colliders
+            if (enemyCollider == null || enemyCollider.transform == null || enemyCollider.CompareTag("HeadShot"))
+                continue;
 
-            float distance = Vector3.Distance(transform.position, enemyCollider.transform.position);
+            // Get the closest point on the enemy collider to the turret
+            Vector3 closestPoint = enemyCollider.ClosestPoint(transform.position);
+            float distance = Vector3.Distance(transform.position, closestPoint);
+
+            // Check if the enemy is within valid firing range
             if (distance >= minimumFireRange && distance <= fireRange && distance < closestDistance)
             {
-                closestDistance = distance;
-                closestEnemy = enemyCollider.transform;
+                // Check line of sight to the closest point
+                Vector3 directionToTarget = (closestPoint - transform.position).normalized;
+                if (!Physics.Raycast(transform.position, directionToTarget, distance, obstructionMask))
+                {
+                    closestDistance = distance;
+                    closestEnemy = enemyCollider.transform;
+
+                    if (showFireDebug)
+                    {
+                        Debug.DrawLine(transform.position, closestPoint, Color.green, 0.1f);
+                        Debug.Log($"Valid target: {enemyCollider.name}, Distance: {distance:F2}");
+                    }
+                }
+                else if (showFireDebug)
+                {
+                    Debug.DrawLine(transform.position, closestPoint, Color.yellow, 0.1f);
+                    Debug.Log($"Target obstructed: {enemyCollider.name}");
+                }
+            }
+            else if (showFireDebug)
+            {
+                Debug.DrawLine(transform.position, closestPoint, Color.red, 0.1f);
+                Debug.Log($"Target out of range: {enemyCollider.name}, Distance: {distance:F2}");
             }
         }
 
         targetEnemy = closestEnemy;
         hasTarget = targetEnemy != null;
-    }
 
-    // Check if the current enemy is within detection range
+        if (hasTarget && showFireDebug)
+            Debug.Log($"New target acquired: {targetEnemy.name}");
+    }
+    // Check if the current enemy is still within detection range and valid
     private bool IsTargetValid()
     {
-
-        if (targetEnemy == null || targetEnemy.GetComponent<EnemyHPRelay>().IsDead())
+        if (targetEnemy == null)
         {
+            if (showFireDebug)
+                Debug.Log("Target is null");
             return false;
         }
 
-        float distance = Vector3.Distance(transform.position, targetEnemy.position);
+        EnemyHPRelay hpRelay = targetEnemy.GetComponent<EnemyHPRelay>();
+        if (hpRelay == null || hpRelay.IsDead())
+        {
+            if (showFireDebug)
+                Debug.Log($"Target {targetEnemy.name} is no longer valid (missing HP relay or dead)");
+            return false;
+        }
+
+        // Get collider component from the target
+        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
+        {
+            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
+            if (targetCollider == null)
+            {
+                if (showFireDebug)
+                    Debug.Log($"Target {targetEnemy.name} has no collider");
+                return false;
+            }
+        }
+
+        // Get closest point on the collider to measure accurate distance
+        Vector3 closestPoint = targetCollider.ClosestPoint(transform.position);
+        float distance = Vector3.Distance(transform.position, closestPoint);
+
+        // Check if target is within valid firing range
         bool isInRange = distance >= minimumFireRange && distance <= fireRange;
 
-        return isInRange;
+        if (!isInRange)
+        {
+            if (showFireDebug)
+                Debug.Log($"Target {targetEnemy.name} out of range: {distance:F2}");
+            return false;
+        }
+
+        // Check line of sight to the closest point
+        Vector3 directionToTarget = (closestPoint - transform.position).normalized;
+        bool lineOfSight = !Physics.Raycast(transform.position, directionToTarget, distance, obstructionMask);
+
+        if (showFireDebug)
+        {
+            if (lineOfSight)
+                Debug.DrawLine(transform.position, closestPoint, Color.green, 0.1f);
+            else
+                Debug.DrawLine(transform.position, closestPoint, Color.yellow, 0.1f);
+
+            Debug.Log($"Target {targetEnemy.name} visibility check: {(lineOfSight ? "Visible" : "Obstructed")}");
+        }
+
+        return isInRange && lineOfSight;
     }
 
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
     private void TrackTarget()
     {
-        if (!targetEnemy.parent.gameObject.activeSelf)
+        if (targetEnemy == null || !targetEnemy.gameObject.activeSelf)
         {
             hasTarget = false;
             return;
         }
-        Vector3 targetDirection = targetEnemy.parent.position - transform.position;
-        //targetDirection.y = 0; // Keep rotation only on Y axis
 
-        if (targetDirection != Vector3.zero)
+        // Get the collider component from the target
+        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
         {
+            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
+            if (targetCollider == null)
+            {
+                hasTarget = false;
+                return;
+            }
+        }
+
+        // Find the closest point on the target collider
+        Vector3 closestPoint = targetCollider.ClosestPoint(transform.position);
+        Vector3 targetDirection = closestPoint - transform.position;
+
+        // Only rotate if we have a valid direction
+        if (targetDirection.magnitude > 0.1f)
+        {
+            // Create the target rotation based on the direction to the closest point
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            turretGuns.transform.rotation = Quaternion.Slerp(
-                turretGuns.transform.rotation,
+
+            // Smoothly rotate towards the target point
+            turretGuns.rotation = Quaternion.Slerp(
+                turretGuns.rotation,
                 targetRotation,
                 rotationSpeed * Time.deltaTime
             );
+
+            if (showFireDebug)
+            {
+                Debug.DrawLine(firePoint.position, closestPoint, Color.blue, 0.1f);
+                Debug.DrawRay(firePoint.position, firePoint.forward * 2f, Color.magenta, 0.1f);
+            }
         }
     }
 
     // Check line of sight using raycasting and fire at the enemy if visible
     private void TryShoot()
     {
-        //canShoot = false;
-
+        // Early return if no target
         if (targetEnemy == null)
         {
             return;
         }
 
+        // Respect fire rate limit
         float currentTime = Time.unscaledTime;
         float timeSinceLastFire = currentTime - lastFireTime;
-
         if (timeSinceLastFire < (1f / fireRate))
         {
             return;
         }
 
-        float distanceToTarget = Vector3.Distance(transform.position, targetEnemy.position);
-        if (distanceToTarget < minimumFireRange || distanceToTarget > fireRange)
+        // Get the collider component from the target
+        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
         {
-            return;
-        }
-        Vector3 directionToTarget = (targetEnemy.position - firePoint.position).normalized;
-        // Visualize the raycast in debug mode
-        if (showFireDebug)
-        {
-            Debug.DrawRay(firePoint.position, directionToTarget * distanceToTarget, Color.red, 0.1f);
-        }
-
-        if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit, distanceToTarget, enemyLayerMask))
-        {
-            if (hit.transform != targetEnemy)
+            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
+            if (targetCollider == null)
             {
                 return;
             }
+        }
+
+        // Find the closest point on the target collider
+        Vector3 closestPoint = targetCollider.ClosestPoint(firePoint.position);
+        float distanceToTarget = Vector3.Distance(firePoint.position, closestPoint);
+
+        // Check if target is within valid firing range
+        if (distanceToTarget < minimumFireRange || distanceToTarget > fireRange)
+        {
+            if (showFireDebug)
+            {
+                Debug.DrawLine(firePoint.position, closestPoint, Color.red, 0.1f);
+                Debug.Log($"Can't shoot: Target out of range ({distanceToTarget:F2})");
+            }
+            return;
+        }
+
+        // Calculate direction to the closest point
+        Vector3 directionToTarget = (closestPoint - firePoint.position).normalized;
+
+        // Check alignment - don't shoot unless turret is facing the target
+        float aimAccuracy = Vector3.Dot(firePoint.forward, directionToTarget);
+        if (aimAccuracy < 0.95f) // About 18 degrees off-center
+        {
+            if (showFireDebug)
+            {
+                Debug.DrawRay(firePoint.position, firePoint.forward * distanceToTarget, Color.yellow, 0.1f);
+                Debug.DrawRay(firePoint.position, directionToTarget * distanceToTarget, Color.cyan, 0.1f);
+                Debug.Log($"Can't shoot: Turret not aligned with target (accuracy: {aimAccuracy:F2})");
+            }
+            return;
+        }
+
+        // Perform final raycast to ensure nothing is blocking the shot
+        if (showFireDebug)
+        {
+            Debug.DrawRay(firePoint.position, directionToTarget * distanceToTarget, Color.green, 0.1f);
+        }
+
+        if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit, distanceToTarget))
+        {
+            // Check if we hit the target or something else
+            if (hit.collider != targetCollider && !hit.transform.IsChildOf(targetEnemy.transform) &&
+                !targetEnemy.transform.IsChildOf(hit.transform))
+            {
+                if (showFireDebug)
+                {
+                    Debug.Log($"Can't shoot: Hit something else ({hit.transform.name})");
+                    Debug.DrawLine(firePoint.position, hit.point, Color.red, 0.1f);
+                }
+                return;
+            }
+
+            // All checks passed, we can shoot
             Shoot();
             lastFireTime = currentTime;
+
+            if (showFireDebug)
+            {
+                Debug.Log($"Shot fired at {targetEnemy.name}!");
+                Debug.DrawLine(firePoint.position, hit.point, Color.green, 0.2f);
+            }
         }
     }
 
     // Fire a bullet towards the enemy and play the firing sound
     private void Shoot()
     {
+        // Play firing sound if available
         if (audioSource != null && firingSound != null)
         {
             audioSource.PlayOneShot(firingSound);
         }
 
-        if(PoolManager.Instance != null)
+        // Get target's collider for aiming
+        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
+        {
+            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
+        }
+
+        // Get aim direction - by default use firePoint's forward direction
+        Vector3 aimDirection = firePoint.forward;
+
+        // If we have a valid collider, aim at the closest point for better accuracy
+        if (targetCollider != null)
+        {
+            Vector3 closestPoint = targetCollider.ClosestPoint(firePoint.position);
+            aimDirection = (closestPoint - firePoint.position).normalized;
+        }
+
+        // Use object pooling if available
+        if (PoolManager.Instance != null)
         {
             if (!PoolManager.Instance.projectilePool.TryGetValue(bulletPrefab, out ProjectilePool pool))
             {
+                if (showFireDebug)
+                    Debug.LogWarning($"No projectile pool found for {bulletPrefab.name}");
                 return;
             }
             else
             {
-                BaseProjectile projectile = 
-                    pool.Get(firePoint.position, Quaternion.LookRotation(firePoint.forward));
+                BaseProjectile projectile = pool.Get(firePoint.position, Quaternion.LookRotation(aimDirection));
 
                 if (projectile != null)
                 {
-                    bulletData.Direction = firePoint.forward;
+                    bulletData.Direction = aimDirection;
                     projectile.Initialize(bulletData, pool);
+
+                    if (showFireDebug)
+                        Debug.Log($"Fired pooled projectile in direction {aimDirection}");
                 }
             }
         }
+        // Otherwise instantiate new projectile
         else
         {
-            BaseProjectile projectile = 
-                Instantiate(bulletPrefab, firePoint.position,
-                Quaternion.LookRotation(firePoint.forward)).GetComponent<BaseProjectile>();
+            BaseProjectile projectile = Instantiate(
+                bulletPrefab,
+                firePoint.position,
+                Quaternion.LookRotation(aimDirection)
+            ).GetComponent<BaseProjectile>();
 
-            bulletData.Direction = firePoint.forward;
+            bulletData.Direction = aimDirection;
             projectile.Initialize(bulletData, null);
+
+            if (showFireDebug)
+                Debug.Log($"Fired instantiated projectile in direction {aimDirection}");
         }
-       
+
     }
 
 }

@@ -19,12 +19,7 @@ public class TrainHandler : MonoBehaviour
     public Transform dropsHolder;
     public Payload Payload { get; private set; }
     public Transform[] playerSpawnPoint;
-    [Header("Structures")]
-
-    private List<Structure> activeStructures = new();
-    public float maxEnergy = 50;
-    private float energyUsed = 0;
-    private float energyRemaining = 0;
+    
     // train Variables
     [Header("Train Movement")]
     public float cannonFireTime = 2f;
@@ -43,21 +38,14 @@ public class TrainHandler : MonoBehaviour
     public TrainState trainState;
     [Header("Train Stats")]
     public Transform[] damagePoint;
-
     public TrainHP trainHP;
-
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask obstructionLayer;
     [SerializeField] private Vector3 structureCheckSize = Vector3.one; // Size of the overlap check box
     private void Awake()
     {
         audioPlayer = GetComponent<AudioSource>();
-        // make sure HP is always the first child of train
-        
-        Debug.Log("Train Is awake");
-        UI.DisplayEnergy(maxEnergy);
     }
-
     private void Start()
     {
         if (transform.GetChild(0).TryGetComponent<TrainHP>(out trainHP))
@@ -69,7 +57,6 @@ public class TrainHandler : MonoBehaviour
     public void SetParkedState()
     {
         trainState = TrainState.Parked;
-        ToggleStructures(true);
         if(GameManager.Instance.players.Count != 0)
         {
             DisembarkTrain();
@@ -80,7 +67,7 @@ public class TrainHandler : MonoBehaviour
     {
         trainState = TrainState.Firing;
         animations.FireCannon();
-        ToggleStructures(false);
+        GameManager.Instance.ReturnAllStructures();
 
         trainCamera.SetActive(true);
         ClearDrops();
@@ -110,87 +97,9 @@ public class TrainHandler : MonoBehaviour
             //SavedSettings.firstPayloadTutorial = false;
             Tutorial.Instance.StartPayloadTutorial();
     }
-    private void ToggleStructures(bool toggle)
-    {
-        GameManager.Instance.structureHolder.gameObject.SetActive(toggle);
-        if (!toggle)
-        {
-            CheckStructureObstructions();
-        }
-    }
     public void ToggleForceField(bool toggle)
     {
         forceField.SetActive(toggle);
-    }
-    private void CheckStructureObstructions()
-    {
-        List<Structure> structuresToRemove = new();
-        foreach (Structure structure in activeStructures)
-        {
-            Debug.Log("Checking Obstructions");
-
-            GameManager.Instance.IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
-            Debug.Log($"{structure.name} Refunded Due to No Ground Contact");
-            structuresToRemove.Add(structure);
-            continue;
-        }
-        // Remove all the marked structures
-        for (int i = 0; i < structuresToRemove.Count; i++)
-        {
-            RemoveStructure(structuresToRemove[i]);
-            structuresToRemove[i].ReturnToPool();
-        }
-        structuresToRemove.Clear();
-    }
-    public void AddStructure(Structure structure)
-    {
-        // track active structures
-        activeStructures.Add(structure);
-        // give the structure a reference to the train, so it can remove itself on when destroyed
-        structure.SetTrainHandler(this);
-        // set the parent of the structure to the structure holder, to hide structures when moving
-        structure.transform.SetParent(GameManager.Instance.structureHolder, true);
-        // add energy cost of structure to energy usage
-        UpdateEnergyUsage();
-    }
-    public void RemoveStructure(Structure structure)
-    {
-        activeStructures.Remove(structure);
-        UpdateEnergyUsage();
-    }
-    public void UpdateEnergyUsage()
-    {
-        // since structures can be upgrades and that changes energy usage check all for their current usage
-        energyUsed = 0;
-
-        List<Structure> structuresToRemove = new();
-
-        foreach (var structure in activeStructures)
-        {
-            energyUsed += structure.GetCurrentEnergyCost();
-
-            if(energyUsed > maxEnergy)
-            {
-                GivePlayersMycelia(structure.CalculateStructureRefund(0.5f));
-                structuresToRemove.Add(structure);
-            }
-        }
-        // Remove all the marked structures
-        for (int i = 0; i < structuresToRemove.Count; i++)
-        {
-            Debug.Log("Structure Removed Due to Energy Limit");
-            RemoveStructure(structuresToRemove[i]);
-            structuresToRemove[i].ReturnToPool();
-        }
-        structuresToRemove.Clear();
-
-
-        energyRemaining = maxEnergy - energyUsed;
-        UI.DisplayEnergy(energyRemaining);
-    }
-    public bool CheckEnergy(float eCost)
-    {
-        return energyUsed + eCost <= maxEnergy;
     }
     public void BoardTrain()
     {
@@ -271,10 +180,6 @@ public class TrainHandler : MonoBehaviour
     {
         int index = Random.Range(0, damagePoint.Length);
         return damagePoint[index];
-    }
-    public void GivePlayersMycelia(float amount)
-    {
-        GameManager.Instance.IncreaseMycelia(amount);
     }
     private void ClearDrops()
     {

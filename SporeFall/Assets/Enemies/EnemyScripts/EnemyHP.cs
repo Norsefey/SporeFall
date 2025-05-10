@@ -9,7 +9,7 @@ public class EnemyHP : Damageable
     public bool flinchable = true;
     private bool isFlinching = false;
 
-    private void Start()
+    private void Awake()
     {
         currentHP = maxHP;
     }

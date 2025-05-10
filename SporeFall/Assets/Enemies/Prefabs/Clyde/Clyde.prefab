@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7208100304185676686}
   - component: {fileID: 3972616678562869860}
   m_Layer: 8
-  m_Name: BodyCollider
+  m_Name: Clyde_BodyCollider
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 8.39
+  m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3826539829372264166
 GameObject:
@@ -117,9 +117,9 @@ GameObject:
   - component: {fileID: 8115185731011462411}
   - component: {fileID: 922571848823213579}
   - component: {fileID: 1035060087821480095}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Clyde
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -161,8 +161,6 @@ MonoBehaviour:
   attacks:
   - {fileID: 11400000, guid: 81645bb66e85a17458b8e78076af8547, type: 2}
   - {fileID: 11400000, guid: d9c161f329501474ba42f2968ad01265, type: 2}
-  - {fileID: 11400000, guid: df68e02e90c59ee4cb8afbbad26b725a, type: 2}
-  - {fileID: 11400000, guid: b1e4113e03421f440a72081724c35932, type: 2}
   - {fileID: 11400000, guid: d0b0b7f8126b7544689ae67a1f122771, type: 2}
   - {fileID: 11400000, guid: 7a5d5ceaf6f52b74d940dab5f6ea07d5, type: 2}
   animator: {fileID: 5602427181946575396}
@@ -560,12 +558,12 @@ PrefabInstance:
     - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
