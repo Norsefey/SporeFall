@@ -15,7 +15,7 @@ public class TrainUI : MonoBehaviour
 
     private void Start()
     {
-        HPText.text = "Barrier Integrity: 100%";
+        HPText.text = "Integrity: 100%";
         if(trainHP != null)
             trainHP.OnHPChange += UpdateHPDisplay;
     }
