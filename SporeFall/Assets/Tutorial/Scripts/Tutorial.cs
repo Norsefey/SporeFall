@@ -87,7 +87,7 @@ public class Tutorial : MonoBehaviour
                 if (timerThreshold == 5f)
                 {
                     timerThreshold = 10f;
-                    tutorialText.text = "You can also hit the Main Button to go early.";
+                    tutorialText.text = "You can also hit the Train Button to go early.";
                 }
 
                 else if (timerThreshold == 10f)
@@ -127,7 +127,7 @@ public class Tutorial : MonoBehaviour
             timerNeeded = true;
             tutorialPopup.SetActive(true);
             bgImage.SetActive(true);
-            tutorialText.text = "The train won't move with that thing around! Take it down, or hit the Main Button to leave it behind.";
+            tutorialText.text = "The train won't move with that thing around! Take it down, or hit the Train Button to leave it behind.";
             continueText.text = " ";
         }
 
@@ -249,7 +249,7 @@ public class Tutorial : MonoBehaviour
 
                 else if (tutorialPrompt == 8)
                 {
-                    tutorialText.text = "When you're ready, press the Main Button near the middle of the train to lure out your enemies.";
+                    tutorialText.text = "When you're ready, press the button near the middle of the train to lure out your enemies.";
                     continueText.text = " ";
                     Debug.Log("Progressing tutorial");
                     canProgress = false;
@@ -319,7 +319,7 @@ public class Tutorial : MonoBehaviour
 
         else
         {
-            tutorialText.text = "Nice work! When you're ready to move on, hit the Main Button.";
+            tutorialText.text = "Nice work! When you're ready to move on, hit the Train Button.";
             StartCoroutine(ClosePrompts(15f));
         }
 
