@@ -280,7 +280,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             {
                 GameManager.Instance.waveManager.wUI.gameObject.SetActive(false);
             }
-            GameManager.Instance.gameUI.gameObject.SetActive(false);
+            GameManager.Instance.gameUI.gameplayUI.SetActive(false);
 
 
             Time.timeScale = 0;
@@ -301,7 +301,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             {
                 GameManager.Instance.waveManager.wUI.gameObject.SetActive(true);
             }
-            GameManager.Instance.gameUI.gameObject.SetActive(true);
+            GameManager.Instance.gameUI.gameplayUI.SetActive(true);
 
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
@@ -343,7 +343,15 @@ public class PlayerInputOrganizer : MonoBehaviour
             pauseGame.performed += OnCloseUpgradeMenu;
 
             GameManager.Instance.gameUI.ToggleUpgradeMenu(true, pMan);
+
+            pMan.pUI.gameObject.SetActive(false);
             GameManager.Instance.gameUI.ToggleTutorialPrompts(true);
+            GameManager.Instance.trainHandler.UI.gameObject.SetActive(false);
+            if (SavedSettings.currentLevel != "Training")
+            {
+                GameManager.Instance.waveManager.wUI.gameObject.SetActive(false);
+            }
+            GameManager.Instance.gameUI.gameplayUI.SetActive(false);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -356,7 +364,15 @@ public class PlayerInputOrganizer : MonoBehaviour
             pauseGame.performed -= OnCloseUpgradeMenu;
             pauseGame.performed += OnPause;
             GameManager.Instance.gameUI.ToggleUpgradeMenu(false, pMan);
+
+            pMan.pUI.gameObject.SetActive(true);
             GameManager.Instance.gameUI.ToggleTutorialPrompts(false);
+            GameManager.Instance.trainHandler.UI.gameObject.SetActive(true);
+            if (SavedSettings.currentLevel != "Training")
+            {
+                GameManager.Instance.waveManager.wUI.gameObject.SetActive(true);
+            }
+            GameManager.Instance.gameUI.gameplayUI.SetActive(true);
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

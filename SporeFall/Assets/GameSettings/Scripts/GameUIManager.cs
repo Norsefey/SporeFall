@@ -9,9 +9,10 @@ public class GameUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject trainUI;
     [SerializeField] private GameObject waveUI;
-    [SerializeField] private GameObject gameplayUI;
+    public GameObject gameplayUI;
     [SerializeField] private GameObject upgradeMenu;
     [SerializeField] private TMP_Text myceliaIndicator;
+    public TMP_Text departText;
     public void DisplayMycelia(float value)
     {
         if (myceliaIndicator != null)
