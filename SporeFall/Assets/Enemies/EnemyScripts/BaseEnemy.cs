@@ -33,7 +33,7 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected Animator animator;
     [SerializeField] protected Damageable health;
     protected AudioSource audioSource;
-    public NavMeshAgent agent;
+    protected NavMeshAgent agent;
     public Transform firePoint;
 
     [Header("Strafe Behavior")]

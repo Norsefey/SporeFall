@@ -11,11 +11,15 @@ public class EnemyHP : Damageable
 
     private void Awake()
     {
+        if(manager == null)
+            manager = transform.parent.GetComponent<BaseEnemy>();
+
+        if (manager == null)
+            Debug.LogError(transform.parent.name + " Main HP has no Manager Reference");
         currentHP = maxHP;
     }
     public override void TakeDamage(float damage)
     {
-        Debug.Log("Base took damage");
         base.TakeDamage(damage);
 
         if (manager != null)
@@ -55,20 +59,14 @@ public class EnemyHP : Damageable
         if (!flinchable || isFlinching || manager.Animator == null)
             yield break;
 
-        manager.Animator.SetTrigger("Flinch");
-
-        Debug.Log("Flinching");
         isFlinching = true;
-
-        // Disable NavMeshAgent during knockback
+        manager.Animator.SetTrigger("Flinch");
         manager.SetState(EnemyState.Idle);
 
         yield return new WaitForSeconds(1);
 
         // Re-enable NavMeshAgent
         manager.SetState(EnemyState.Chase);
-        /* manager.agent.isStopped = false;
-         manager.agent.ResetPath();*/
         manager.Animator.ResetTrigger("Flinch");
         isFlinching = false;
     }

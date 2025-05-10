@@ -71,7 +71,6 @@ public class EndlessWaveManager : MonoBehaviour
     [SerializeField] private int initialPoolSize = 50;
     private Dictionary<GameObject, EnemyObjectPool> enemyPools;
     private Dictionary<GameObject, EnemyObjectPool> bossPools;
-    public GameObject explosionPrefab;
 
     private List<BaseEnemy> activeEnemies = new List<BaseEnemy>();
     private Coroutine spawnCoroutine;
@@ -622,12 +621,6 @@ public class EndlessWaveManager : MonoBehaviour
     #endregion
 
     #region Public Methods
-
-    public void SpawnExplosion(Vector3 position)
-    {
-        Instantiate(explosionPrefab, position, Quaternion.identity);
-    }
-
     public void PauseWaves()
     {
         if (spawnCoroutine != null)
