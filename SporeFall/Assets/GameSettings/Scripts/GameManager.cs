@@ -22,11 +22,16 @@ public class GameManager : MonoBehaviour
     // structures
     public Transform structureHolder;
     public List<GameObject> availableStructures;
+    [Header("Energy Usage")]
+    private List<Structure> activeStructures = new();
+    public float maxEnergy = 50;
+    private float energyUsed = 0;
+    private float energyRemaining = 0;
+    [Header("Mycelia")]
     private float mycelia = 150;
     public float Mycelia { get { return mycelia; } }
     private bool tutorialMycelia = true;
     public GameObject maxUpgradeButton;
-
     [Header("Coop Manager")]
     public List<PlayerManager> players = new();
     [SerializeField] LayerMask playerOneUI;
@@ -104,8 +109,9 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Player count is: " + players.Count);
         gameUI.DisplayMycelia(mycelia);
-
-        if(PersistentGameManager.Instance != null)
+        gameUI.DisplayEnergy(maxEnergy);
+        
+        if (PersistentGameManager.Instance != null)
             PersistentGameManager.Instance.ResetCompletionTimer();
     }
     private void Update()
@@ -122,6 +128,25 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    public void GameOver()
+    {
+        Debug.Log("No Life No Game");
+        // check if all players are dead
+        bool allPlayersDead = true;
+        foreach (var player in players)
+        {
+            if (player.pHealth.CurrentLives > 0)
+                allPlayersDead = false;
+        }
+
+        if (allPlayersDead)// if all dead load game over scene
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            SceneTransitioner.Instance.LoadLoseScene();
+        }
+    }
+    #region Player Management
     public void HandlePlayerJoining(PlayerManager player)
     {
         // keep track of active players
@@ -183,7 +208,6 @@ public class GameManager : MonoBehaviour
 
         OnPlayerJoin?.Invoke(player.GetPlayerIndex());
     }
-
     public void SpawnPlayer(PlayerManager player)
     {
         if(backUpPlayerSpawner == null)
@@ -200,58 +224,9 @@ public class GameManager : MonoBehaviour
 
         Destroy(player.gameObject);
     }
-    public void ApplyUpgradeToStructures()
-    {
-        foreach (Transform structure in structureHolder)
-        {
-            structure.GetComponent<Structure>().Upgrade();
-        }
-
-        trainHandler.UpdateEnergyUsage();
-    }
-    public void IncreaseMycelia(float amount)
-    {
-        mycelia += amount;
-        gameUI.DisplayMycelia(mycelia);
-    }
-    public void DecreaseMycelia(float amount)
-    {
-        mycelia -= amount;
-        if(mycelia < 0)
-            mycelia = 0;
-        gameUI.DisplayMycelia(mycelia);
-    }
-    // Called when object is destroyed (including scene changes)
-    public void GameOver()
-    {
-        Debug.Log("No Life No Game");
-        // check if all players are dead
-        bool allPlayersDead = true;
-        foreach (var player in players)
-        {
-            if(player.pHealth.CurrentLives > 0)
-                allPlayersDead = false;
-        }
-
-        if (allPlayersDead)// if all dead load game over scene
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            SceneTransitioner.Instance.LoadLoseScene();
-        }
-    }
-    private void OnDestroy()
-    {
-        // Clear static instance if this is the current instance
-        if (Instance == this)
-        {
-            Instance = null;
-        }
-    }
-
     public void UpdatePlayerSensitivity(int i)
     {
-        if(players.Count == 0)
+        if (players.Count == 0)
             return;
 
         if (players[i].playerDevice == "Mouse")
@@ -278,6 +253,107 @@ public class GameManager : MonoBehaviour
             {
                 players[i].pCamera.SetGamepadP2();
             }
+        }
+    }
+    #endregion
+
+    #region Structure Management
+    public void ReturnAllStructures()
+    {
+        List<Structure> structuresToRemove = new();
+        foreach (Structure structure in activeStructures)
+        {
+            IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
+            structuresToRemove.Add(structure);
+            continue;
+        }
+        // Remove all the marked structures
+        for (int i = 0; i < structuresToRemove.Count; i++)
+        {
+            RemoveStructure(structuresToRemove[i]);
+            structuresToRemove[i].ReturnToPool();
+        }
+        structuresToRemove.Clear();
+    }
+    public void AddStructure(Structure structure)
+    {
+        // track active structures
+        activeStructures.Add(structure);
+        // set the parent of the structure to the structure holder, to hide structures when moving
+        structure.transform.SetParent(structureHolder, true);
+        // add energy cost of structure to energy usage
+        UpdateEnergyUsage();
+    }
+    public void RemoveStructure(Structure structure)
+    {
+        activeStructures.Remove(structure);
+        UpdateEnergyUsage();
+    }
+    public void UpdateEnergyUsage()
+    {
+        // since structures can be upgrades and that changes energy usage check all for their current usage
+        energyUsed = 0;
+
+        List<Structure> structuresToRemove = new();
+
+        foreach (var structure in activeStructures)
+        {
+            energyUsed += structure.GetCurrentEnergyCost();
+
+            if (energyUsed > maxEnergy)
+            {
+                IncreaseMycelia(structure.CalculateStructureRefund(0.5f));
+                structuresToRemove.Add(structure);
+            }
+        }
+        // Remove all the marked structures
+        for (int i = 0; i < structuresToRemove.Count; i++)
+        {
+            Debug.Log("Structure Removed Due to Energy Limit");
+            RemoveStructure(structuresToRemove[i]);
+            structuresToRemove[i].ReturnToPool();
+        }
+        structuresToRemove.Clear();
+
+
+        energyRemaining = maxEnergy - energyUsed;
+        gameUI.DisplayEnergy(energyRemaining);
+    }
+    public bool CheckEnergy(float eCost)
+    {
+        return energyUsed + eCost <= maxEnergy;
+    }
+    public void ApplyUpgradeToStructures()
+    {
+        foreach (Transform structure in structureHolder)
+        {
+            structure.GetComponent<Structure>().Upgrade();
+        }
+
+        UpdateEnergyUsage();
+    }
+    public void IncreaseMycelia(float amount)
+    {
+        mycelia += amount;
+        gameUI.DisplayMycelia(mycelia);
+    }
+    public void DecreaseMycelia(float amount)
+    {
+        mycelia -= amount;
+        if(mycelia < 0)
+            mycelia = 0;
+        gameUI.DisplayMycelia(mycelia);
+    }
+    #endregion
+    // Called when object is destroyed (including scene changes)
+
+   
+    private void OnDestroy()
+    {
+        // Clear static instance if this is the current instance
+        if (Instance == this)
+        {
+            Instance = null;
         }
     }
 }

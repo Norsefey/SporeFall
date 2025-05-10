@@ -12,12 +12,17 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private GameObject gameplayUI;
     [SerializeField] private GameObject upgradeMenu;
     [SerializeField] private TMP_Text myceliaIndicator;
+    [SerializeField] private TMP_Text energyText;
     public void DisplayMycelia(float value)
     {
         if (myceliaIndicator != null)
             myceliaIndicator.text = value.ToString();
     }
-
+    public void DisplayEnergy(float value)
+    {
+        if (energyText != null)
+            energyText.text = value.ToString();
+    }
     public void ToggleGameUI(bool toggle)
     {
         if (trainUI != null)
@@ -41,7 +46,6 @@ public class GameUIManager : MonoBehaviour
                 upUI.SetSelectable();
         }
     }
-
     public void ToggleTutorialPrompts(bool toggle)
     {
         if (Tutorial.Instance != null)

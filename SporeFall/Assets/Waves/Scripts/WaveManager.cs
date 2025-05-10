@@ -443,8 +443,7 @@ public class WaveManager : MonoBehaviour
             Vector3 randomPoint = zoneBounds.center + new Vector3(offsetX, 0, offsetZ);
 
             // Check if the point is on the NavMesh
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
             {
                 // Check if the position is clear of obstacles
                 if (!Physics.CheckSphere(hit.position, 0.5f, LayerMask.GetMask("Obstacle")))

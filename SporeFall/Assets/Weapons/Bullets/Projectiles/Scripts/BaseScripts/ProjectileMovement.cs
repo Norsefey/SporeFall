@@ -70,7 +70,7 @@ public class ProjectileMovement : MonoBehaviour
         else if (!data.UseGravity && rb.isKinematic)
         {
             // Direct movement for non-physics projectiles
-            transform.position += data.Direction * data.Speed * Time.deltaTime;
+            transform.position += data.Speed * Time.deltaTime * data.Direction;
         }
     }
     private void UpdateArcMovement()

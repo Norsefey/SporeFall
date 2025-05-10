@@ -39,8 +39,7 @@ public class EnemyObjectPool
         }
 
         BaseEnemy enemy = pool.Dequeue();
-        enemy.transform.position = position;
-        enemy.transform.rotation = rotation;
+        enemy.transform.SetPositionAndRotation(position, rotation);
         enemy.gameObject.SetActive(true);
         enemy.Initialize();
         return enemy;

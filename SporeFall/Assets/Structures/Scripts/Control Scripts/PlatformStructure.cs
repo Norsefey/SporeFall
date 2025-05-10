@@ -19,20 +19,27 @@ public class PlatformStructure : MonoBehaviour
     private void CheckDeath(Damageable dam, float damageAmount)
     {
         if(healthComponent.CurrentHP <= 0 && myStructure != null)
-        {
-            myStructure.onPlatform = false;
-            myStructure.myPlatform = null;
-            myStructure.ReturnToPool();
+        {// remove holding structure on Death
+            DestroyMyStructure();
         }
     }
-
     public void SetStructure(Structure structure)
-    {
+    {// places structure to hold
         hasStructure = true;
         myStructure = structure;
     }
-    public void RemoveStructure()
+    private void DestroyMyStructure()
     {
+        if (myStructure != null)
+        {// removes holding structure
+            myStructure.myPlatform = null;
+            myStructure.onPlatform = false;
+            myStructure.ReturnToPool();
+        }
+    }
+    public void RemoveStructure()
+    {// Call to remove the structure it is holding
+        DestroyMyStructure();
         hasStructure = false;
         myStructure = null;
     }

@@ -20,7 +20,6 @@ public class Structure : MonoBehaviour
 
     [HideInInspector]
     public StructurePoolBehavior poolBehavior;
-    private TrainHandler train;
     private IStructureStats structureBehavior;
     private int currentLevel = 0;
 
@@ -125,10 +124,6 @@ public class Structure : MonoBehaviour
         // prevent structure from taking damage when not active
         healthComponent.canTakeDamage = toggle;
     }
-    public void SetTrainHandler(TrainHandler train)
-    {
-        this.train = train;
-    }
     public float CalculateStructureRefund(float minimumRefundPercent)
     {
         StructureHP structureHP = GetStructureHP();
@@ -150,17 +145,18 @@ public class Structure : MonoBehaviour
         SpawnDeathVFX();
         if(onPlatform && myPlatform != null)
         {
-            //Debug.Log("On Platform");
-
             myPlatform.RemoveStructure();
+        }else if (controlScriptObject.transform.GetChild(0).TryGetComponent(out PlatformStructure platform))
+        {
+            Debug.Log("Platform Removing Holding Structure");
+            platform.RemoveStructure();
         }
 
-        if (train != null)
-            train.RemoveStructure(this);
+        if (GameManager.Instance != null)
+            GameManager.Instance.RemoveStructure(this);
 
         poolBehavior.ReturnObject();
     }
-
     public void DisableStructureControls()
     {
         controlScriptObject.SetActive(false);
@@ -171,7 +167,7 @@ public class Structure : MonoBehaviour
     }
     private void SpawnDeathVFX()
     {
-        VFXPoolingBehavior vfx = null;
+        VFXPoolingBehavior vfx;
         if (PoolManager.Instance != null)
         {
             // Get VFX from pool
