@@ -652,7 +652,6 @@ public class PlayerInputOrganizer : MonoBehaviour
             pMan.isFiring = false;
         }
     }
-
     private void OnEditSellStarted(InputAction.CallbackContext context)
     {
         if(pMan.bGun.selectedStructure == null)
@@ -709,9 +708,6 @@ public class PlayerInputOrganizer : MonoBehaviour
 
         return key;
     }
-
-    #endregion
-
     private IEnumerator HoldRoutine()
     {
         while (holdingSell)
@@ -725,4 +721,5 @@ public class PlayerInputOrganizer : MonoBehaviour
         yield return new WaitForSeconds(1);
         pMan.pUI.chargeGunSlider.value = 0;
     }
+    #endregion
 }

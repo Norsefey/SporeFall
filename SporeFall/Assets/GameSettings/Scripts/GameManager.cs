@@ -137,7 +137,8 @@ public class GameManager : MonoBehaviour
         bool allPlayersDead = true;
         foreach (var player in players)
         {
-            if (player.pHealth.CurrentLives > 0)
+            // player still has lives or HP
+            if (player.pHealth.CurrentLives > 0 || !player.pHealth.isDead)
                 allPlayersDead = false;
         }
 

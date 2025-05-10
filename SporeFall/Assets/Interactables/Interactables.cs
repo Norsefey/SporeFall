@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public abstract class Interactables : DropsPoolBehavior
 {
     protected PlayerManager player;
-    private bool interactionEnabled = false;
+    protected bool interactionEnabled = false;
     public abstract void Interact(InputAction.CallbackContext context);
     public abstract void ItemPrompt();
     public abstract void RemovePrompt();
@@ -49,13 +49,10 @@ public abstract class Interactables : DropsPoolBehavior
     }
     public void RemoveIntractable()
     {
-        //Debug.Log("Removing Interaction" + gameObject.name);
+        Debug.Log("Removing Interaction" + gameObject.name);
+        player.pInput.RemoveInteraction(this);
+        RemovePrompt();
 
-        if (player != null)
-        {
-            player.pInput.RemoveInteraction(this);
-            RemovePrompt();
-        }
         interactionEnabled = false;
     }
 }

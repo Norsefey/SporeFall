@@ -32,19 +32,7 @@ public class PlayerHP : Damageable
 
         if (pMan != null && pMan.audioSource != null)
         {
-            // These have no audio clip so disabled them to prevent errors
-            /*if (previousHP > 75 && currentHP <= 75)
-            {
-                pMan.audioSource.Stop();
-                pMan.audioSource.PlayOneShot(pMan.health75Sound, 1.5f);
-            }
-            else if (previousHP > 50 && currentHP <= 50)
-            {
-                pMan.audioSource.Stop();
-                pMan.audioSource.PlayOneShot(pMan.health50Sound, 1.5f);
-
-            }*/
-           /* else*/ if (previousHP > 25 && currentHP <= 25)
+            if (previousHP > 25 && currentHP <= 25)
             {
                 pMan.audioSource.Stop(); // Stop previous audio before playing new one
                 pMan.audioSource.PlayOneShot(pMan.health25Sound, 1.5f);
@@ -66,8 +54,15 @@ public class PlayerHP : Damageable
     }
     public void IncreaseLife()
     {
-        currentLives++;
-        pMan.pUI.UpdateLifeDisplay(currentLives);
+        if (isDead)
+        {
+            pMan.StartRespawn(0, true);
+        }
+        else
+        {
+            currentLives++;
+            pMan.pUI.UpdateLifeDisplay(currentLives);
+        }
     }
     public void SetReducedLife()
     {
@@ -110,9 +105,9 @@ public class PlayerHP : Damageable
         pMan.pHealth.canTakeDamage = false;
         // Death effect
         deathVFX.SetActive(true);
+        pMan.pInput.DisableAllInputs();
         pMan.pAnime.ToggleIKAim(false);
         pMan.pAnime.ToggleUnscaledUpdateMode(true);
-        pMan.pInput.DisableAllInputs();
 
         // allow death animation to play abit
         yield return new WaitForSecondsRealtime(.5f);

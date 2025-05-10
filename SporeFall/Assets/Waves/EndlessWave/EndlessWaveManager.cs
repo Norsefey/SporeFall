@@ -141,7 +141,6 @@ public class EndlessWaveManager : MonoBehaviour
             spawnCoroutine = StartCoroutine(SpawnEnemiesEndlessly());
         }
     }
-
     private void ResetWaveParameters()
     {
         enemySpawnInterval = initialSpawnInterval;
@@ -154,7 +153,6 @@ public class EndlessWaveManager : MonoBehaviour
             enemyType.SpawnedCount = 0;
         }
     }
-
     private void NextWave()
     {
         currentWaveNumber++;
@@ -176,7 +174,6 @@ public class EndlessWaveManager : MonoBehaviour
             enemyType.SpawnedCount = 0;
         }
     }
-
     private void IncreaseDifficultyOverTime()
     {
         currentDifficulty += difficultyIncreaseOverTime;
@@ -186,7 +183,6 @@ public class EndlessWaveManager : MonoBehaviour
         maxEnemiesPerSpawnCurrent = Mathf.Min(maxEnemiesPerSpawn,
             initialMaxEnemiesPerSpawn + Mathf.FloorToInt(currentDifficulty / 2));
     }
-
     private void ResetBossSpawnTimer()
     {
         // Reduce time between boss spawns as game progresses
@@ -491,7 +487,6 @@ public class EndlessWaveManager : MonoBehaviour
             NextWave();
         }
     }
-
     private void OnBossDeath(BaseEnemy boss)
     {
         enemiesAlive--;
@@ -511,7 +506,7 @@ public class EndlessWaveManager : MonoBehaviour
         // Reset to normal wave
         currentState = WaveState.InProgress;
         ResetBossSpawnTimer();
-
+        
         // Increase difficulty after boss is defeated
         currentDifficulty += difficultyIncreasePerWave * 2;
 

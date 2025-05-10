@@ -60,6 +60,10 @@ public class EnemyHP : Damageable
             yield break;
 
         isFlinching = true;
+
+        if (manager.IsAttacking)
+            manager.CancelAttack();
+
         manager.Animator.SetTrigger("Flinch");
         manager.SetState(EnemyState.Idle);
 

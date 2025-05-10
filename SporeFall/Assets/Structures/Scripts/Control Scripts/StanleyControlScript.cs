@@ -18,11 +18,15 @@ public class StanleyControlScript : MonoBehaviour
     private float turnSpeed = 5;
     [SerializeField] GameObject[] StanleyVisuals;
     [SerializeField] private GameObject parentStructure;
+    
     [Header("Enemy Avoidance")]
     [SerializeField] private LayerMask enemyLayers; // Layer for walls/obstacles
     [SerializeField] private float enemyInfluenceWeight = 2;
     [SerializeField] private float panicDistance = 5f; // Distance at which Stanley panics and flees at maximum speed
     [SerializeField] private float panicSpeedMultiplier = 1.5f; // How much faster Stanley moves when panicking
+    [Header("Mycelia Seeking")]
+    [SerializeField] private LayerMask myceliaLayers; // Layer for mycelia
+    [SerializeField] private float myceliaInfluenceWeight = 3f; // Higher weight to prioritize seeking mycelia
 
 
     [Header("Boundary Settings")]
@@ -119,6 +123,7 @@ public class StanleyControlScript : MonoBehaviour
     private void UpdateDirection()
     {
         Vector3 enemyDirection = GetEnemyInfluenceDirection();
+        Vector3 myceliaDirection = GetMyceliaInfluenceDirection();
         Vector3 randomDirection = GetRandomDirection();
         Vector3 wallAvoidance = GetWallAvoidanceDirection();
 
@@ -128,6 +133,7 @@ public class StanleyControlScript : MonoBehaviour
         // Combine all influences with their weights
         currentDirection = (
             enemyDirection * (isPanicking ? enemyInfluenceWeight * 2 : enemyInfluenceWeight) +
+            myceliaDirection * myceliaInfluenceWeight +
             randomDirection * (isPanicking ? 0 : randomMovementWeight) + // No random movement when panicking
             wallAvoidance * wallAvoidanceWeight
         ).normalized;
@@ -162,7 +168,7 @@ public class StanleyControlScript : MonoBehaviour
         int numColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, nearbyColliders, enemyLayers);
 
         if (numColliders == 0)
-            return GetRandomDirection(); // If no enemies nearby, return random direction
+            return Vector3.zero; // If no enemies nearby, return zero vector (no influence)
 
         // Loop through only the colliders that were found
         for (int i = 0; i < numColliders; i++)
@@ -177,6 +183,33 @@ public class StanleyControlScript : MonoBehaviour
         }
 
         return enemyInfluence.normalized;
+    }
+    private Vector3 GetMyceliaInfluenceDirection()
+    {
+        Vector3 myceliaInfluence = Vector3.zero;
+
+        // Pre-allocate an array to store results
+        Collider[] nearbyColliders = new Collider[20];
+
+        // Use OverlapSphereNonAlloc to avoid allocating a new array each time
+        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, nearbyColliders, myceliaLayers);
+
+        if (numColliders == 0)
+            return Vector3.zero; // If no mycelia nearby, return zero vector (no influence)
+
+        // Loop through only the colliders that were found
+        for (int i = 0; i < numColliders; i++)
+        {
+            // Calculate direction TOWARDS mycelia (note the order of subtraction)
+            Vector3 directionTowardsMycelia = (nearbyColliders[i].transform.position - transform.position).normalized;
+            float distanceToMycelia = Vector3.Distance(transform.position, nearbyColliders[i].transform.position);
+
+            // Mycelia closer by have more influence
+            float influence = 1f - (distanceToMycelia / detectionRadius);
+            myceliaInfluence += directionTowardsMycelia * influence;
+        }
+
+        return myceliaInfluence.normalized;
     }
     protected virtual void SpawnVFX(Vector3 position, Quaternion rotation)
     {

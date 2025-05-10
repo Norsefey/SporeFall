@@ -27,6 +27,12 @@ public class UpgradeShop : Interactables
     // what it does once player interacts
     public override void Interact(InputAction.CallbackContext context)
     {
+        if (!interactionEnabled)
+        {
+            RemoveIntractable();
+            return;
+        }
+
         // Open Shop menu
         // ESC now closes Shop Menu instead of pause
         if(GameManager.Instance.waveManager != null)

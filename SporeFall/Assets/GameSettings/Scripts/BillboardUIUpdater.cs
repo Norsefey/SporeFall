@@ -17,7 +17,7 @@ public class BillboardUIUpdater : MonoBehaviour
         if(groupAlpha == null)
             groupAlpha = GetComponent<CanvasGroup>();
         groupAlpha.alpha = 0.5f;
-        hpText.text = hpManager.CurrentHP + "/" + hpManager.MaxHP;
+        hpText.text = hpManager.CurrentHP.ToString("F0") + "/" + hpManager.MaxHP.ToString("F0");
         hpDisplay.maxValue = hpManager.MaxHP;
         hpDisplay.value = hpManager.MaxHP;
     }
@@ -42,7 +42,7 @@ public class BillboardUIUpdater : MonoBehaviour
     public void HandleHPChange(Damageable damagedEnemy, float damage)
     {
         //Debug.Log("Updating Enemy HP UI");
-        hpText.text = damagedEnemy.CurrentHP.ToString("F0") + "/" + damagedEnemy.MaxHP;
+        hpText.text = damagedEnemy.CurrentHP.ToString("F0") + "/" + damagedEnemy.MaxHP.ToString("F0");
         hpDisplay.value = damagedEnemy.CurrentHP;
         
         if(hideUI && groupAlpha != null)

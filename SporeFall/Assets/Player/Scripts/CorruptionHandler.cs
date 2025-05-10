@@ -68,14 +68,8 @@ public class CorruptionHandler : MonoBehaviour
 
         if (pMan != null && pMan.audioSource != null)
         {
-           /* if (previousCorruption < 25 && corruptionLevel >= 25)
-                pMan.audioSource.PlayOneShot(pMan.corruption25Sound,1.5f);
-            else if (previousCorruption < 50 && corruptionLevel >= 50)
-                pMan.audioSource.PlayOneShot(pMan.corruption50Sound, 1.5f);
-            else */if (previousCorruption < 75 && corruptionLevel >= 75)
+           if (previousCorruption < 75 && corruptionLevel >= 75)
                 pMan.audioSource.PlayOneShot(pMan.corruption75Sound, 1.5f);
-          /*  else if (previousCorruption < 100 && corruptionLevel >= 100)
-                pMan.audioSource.PlayOneShot(pMan.corruption100Sound, 1.5f);*/
         }
 
         pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
@@ -130,6 +124,7 @@ public class CorruptionHandler : MonoBehaviour
             pMan.audioSource.PlayOneShot(pMan.corruption100Sound, 1.5f);
         }
         // player loses life and respawns
+        pMan.pHealth.isDead = true;
         pMan.pHealth.DepleteLife();
         pMan.TogglePControl(false);
         pMan.pAnime.ToggleIKAim(false);
@@ -149,10 +144,16 @@ public class CorruptionHandler : MonoBehaviour
         CorruptedPlayer robert = Instantiate(corruptedRobot, pMan.pController.transform.position, Quaternion.identity).GetComponent<CorruptedPlayer>();
         // corrupted player will prioritize attacking the player
         robert.myPlayer = pMan;
-        robert.AssignDefaultTargets(GameManager.Instance.trainHandler, pMan.pController.transform);
-        robert.transform.SetParent(GameManager.Instance.trainHandler.dropsHolder, true);
-
-        GameManager.Instance.waveManager.AddRobert(robert.gameObject);
+        if(GameManager.Instance.trainHandler != null)
+        {
+            robert.AssignDefaultTargets(GameManager.Instance.trainHandler, pMan.pController.transform);
+            robert.transform.SetParent(GameManager.Instance.trainHandler.dropsHolder, true);
+            GameManager.Instance.waveManager.AddRobert(robert.gameObject);
+        }
+        else
+        {
+            robert.SetTarget(pMan.pController.transform);
+        }
     }
     public void ResetCorruptionLevel()
     {

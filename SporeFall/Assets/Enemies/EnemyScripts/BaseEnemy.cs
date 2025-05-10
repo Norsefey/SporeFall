@@ -76,6 +76,8 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected float stoppingDistance = 20f;
     [SerializeField] protected float aggressionFactor = 0.6f; // Chance to choose aggressive actions
     protected bool isAttacking;
+    public bool IsAttacking { get { return isAttacking; } }
+    private Coroutine attackCoroutine;
 
     [Header("Targeting")]
     public float trackingSpeed = 5;
@@ -389,7 +391,7 @@ public abstract class BaseEnemy : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
 
-            StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
+            attackCoroutine = StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
             return;
         }
         else
@@ -451,6 +453,11 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             agent.isStopped = false;
         }
+    }
+    public void CancelAttack()
+    {
+        if (attackCoroutine != null)
+            StopCoroutine(attackCoroutine);
     }
     protected virtual Attack ChooseBestAttack(float distanceToTarget)
     {

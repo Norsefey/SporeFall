@@ -8,15 +8,18 @@ public class MyceliaPickup : DropsPoolBehavior
     public float maxMyceliaAmount;
     private float amountToGive;
 
+    [SerializeField] private bool despawn = false;
+    [SerializeField] private float despawnTime = 5;
+
     public void Setup()
     {
         amountToGive = Mathf.RoundToInt(Random.Range(minMyceliaAmount, maxMyceliaAmount));
-       /* Rigidbody rb = GetComponent<Rigidbody>();
-        rb.AddForce(Vector3.up * 10, ForceMode.Impulse);*/
+        if(despawn)
+            Invoke(nameof(ReturnObject), despawnTime);
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Stanley"))
         {
             if (pool != null)
             {

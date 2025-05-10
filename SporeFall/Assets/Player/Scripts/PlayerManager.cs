@@ -501,7 +501,7 @@ public class PlayerManager : MonoBehaviour
     }
     public void StartRespawn(float waitTime, bool resetStats)
     {
-        if (!isRespawning) // Add a flag to prevent multiple respawn processes
+        if (!isRespawning) // to prevent multiple respawn processes
         {
             isRespawning = true;
             respawnCoroutine = StartCoroutine(Respawn(waitTime, resetStats));
@@ -559,12 +559,12 @@ public class PlayerManager : MonoBehaviour
 
             // Move player to spawn position
             MovePlayerTo(spawnPosition);
-            TogglePVisual(true);
 
             yield return new WaitForSecondsRealtime(.2f);
 
             // Reset player state
             Debug.Log("Resetting player state and returning control");
+            TogglePVisual(true);
 
             TogglePControl(true);
             TogglePCorruption(true);
