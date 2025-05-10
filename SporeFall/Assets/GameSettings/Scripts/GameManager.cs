@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour
 
     [Space(25)]
     public bool isTesting = false;
+
+
     private void Awake()
     {
         sceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -147,6 +149,9 @@ public class GameManager : MonoBehaviour
             if(sceneIndex == 8)
             {
                 // Pause Game Show UI
+                Time.timeScale = 0;
+                // Load GameOver UI
+                gameUI.EnableEndlessGameOver();
             }
             else
             {

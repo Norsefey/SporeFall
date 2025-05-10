@@ -473,7 +473,6 @@ public class EndlessWaveManager : MonoBehaviour
     }
     private void OnEnemyDeath(BaseEnemy enemy)
     {
-        Debug.LogWarning("Enemy Has Died");
         enemiesAlive--;
         deadEnemies++;
 

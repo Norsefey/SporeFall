@@ -14,6 +14,9 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private TMP_Text myceliaIndicator;
     [SerializeField] private TMP_Text energyText;
     public TMP_Text departText;
+
+    [SerializeField] private EndlessWaveUI endlessUI;
+
     public void DisplayMycelia(float value)
     {
         if (myceliaIndicator != null)
@@ -56,5 +59,12 @@ public class GameUIManager : MonoBehaviour
                 Tutorial.Instance.tutorialPopup.SetActive(!toggle);
             }
         }
+    }
+
+    public void EnableEndlessGameOver()
+    {
+        ToggleGameUI(false);
+        upgradeMenu.SetActive(false);
+        endlessUI.ShowGameOverPanel();
     }
 }
