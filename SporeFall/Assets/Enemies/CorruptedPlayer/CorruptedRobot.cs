@@ -40,6 +40,8 @@ public class CorruptedPlayer : BaseEnemy
             Tutorial.Instance.RobertKillPrompts();
             SavedSettings.firstRobertKill = true;
         }
+        GameManager.Instance.gameUI.departText.color = Color.white;
+        GameManager.Instance.gameUI.departText.text = "MANUAL DEPART REQUIRED";
         GameManager.Instance.waveManager.RemoveRobert(gameObject);
         base.Die();
     }

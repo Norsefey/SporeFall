@@ -53,7 +53,9 @@ public class WaveManager : MonoBehaviour
     private bool skipped = false;
     public float departTime = 30;
     private float timer = 0;
+    private bool timerActive = false;
     public bool skipWindow = false;
+    
 
     [Header("Object Pooling")]
     [SerializeField] private int initialPoolSize = 50;
@@ -76,6 +78,26 @@ public class WaveManager : MonoBehaviour
         currentWaveIndex = 0;
         currentWave = waves[currentWaveIndex];
         movingCoroutine = StartCoroutine(MoveToWaveLocation(0));
+
+        GameManager.Instance.gameUI.departText.text = " ";
+    }
+
+    private void Update()
+    {
+        if (timer <= 0 && timerActive)
+        {
+            timerActive = false;
+            if (isRobertSpawned)
+            {
+                GameManager.Instance.gameUI.departText.color = Color.red;
+                GameManager.Instance.gameUI.departText.text = "DEPART FAILED";
+            }
+
+            else
+            {
+                GameManager.Instance.gameUI.departText.text = " ";
+            }
+        }
     }
     #region Wave State Transitions
     public void OnStartWave()
@@ -140,7 +162,7 @@ public class WaveManager : MonoBehaviour
     private void WaveCleared()
     {  
         deadEnemies = 0;
-        timer = departTime;
+        StartCoroutine(DisplayDepartTimer());
         wavePhase = WavePhase.Departing;
         Invoke(nameof(TrainAutoDepartCall), departTime);
         skipWindow = true;
@@ -173,6 +195,21 @@ public class WaveManager : MonoBehaviour
         
     }
 
+    IEnumerator DisplayDepartTimer()
+    {
+        timer = departTime;
+        timerActive = true;
+        GameManager.Instance.gameUI.departText.text = "Departing:" + departTime;
+
+        while (timer > 0)
+        {
+            Debug.Log("Timer is: " + timer);
+            yield return new WaitForSeconds(1.0f);
+            timer = timer - 1;
+            GameManager.Instance.gameUI.departText.text = "Departing:" + timer;
+        }
+    }
+
     private IEnumerator SkipWindow()
     {
         yield return new WaitForSeconds(departTime);
@@ -184,6 +221,8 @@ public class WaveManager : MonoBehaviour
             return;
         train.ToggleForceField(false);
         movingCoroutine = StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
+        GameManager.Instance.gameUI.departText.text = " ";
+        Tutorial.Instance.tutorialPopup.SetActive(false);
     }
     #endregion
     public IEnumerator DestroyShroomPod(float waitTime)

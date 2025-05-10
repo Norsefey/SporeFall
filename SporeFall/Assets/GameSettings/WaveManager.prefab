@@ -735,14 +735,14 @@ RectTransform:
   m_GameObject: {fileID: 1565447202019467854}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7329466694707466920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1}
+  m_AnchoredPosition: {x: -3.0999923, y: 1}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7114245041959113639
@@ -809,7 +809,7 @@ RectTransform:
   m_GameObject: {fileID: 1712816059536905430}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3977462284255025874}
@@ -898,7 +898,7 @@ RectTransform:
   m_GameObject: {fileID: 1865395539848900309}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3679285515953805611}
@@ -1079,14 +1079,14 @@ RectTransform:
   m_GameObject: {fileID: 2923556741592293955}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7329466694707466920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 84.5, y: 1}
+  m_AnchoredPosition: {x: 81.4, y: 1}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7816446196405728016
@@ -1312,14 +1312,14 @@ RectTransform:
   m_GameObject: {fileID: 3322896348923457604}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7329466694707466920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 178.1, y: 1}
+  m_AnchoredPosition: {x: 175.00002, y: 1}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4782245289112972959
@@ -1461,7 +1461,7 @@ RectTransform:
   m_GameObject: {fileID: 3698096182703521633}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6390710195490112614}
@@ -1593,6 +1593,7 @@ MonoBehaviour:
     enemySpawnData:
     - name: RedCaps
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 0
       totalToSpawn: 25
       groupSize: 3
@@ -1600,6 +1601,8 @@ MonoBehaviour:
       - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
       - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
       - {fileID: 6566074402847298207, guid: 5d85f1f8220c04a48821c4565089ab3f, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     minIntervalTime: 5
     maxIntervalTime: 8
     minToSpawnAtOnce: 3
@@ -1617,20 +1620,26 @@ MonoBehaviour:
     enemySpawnData:
     - name: RedCaps
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 0
       totalToSpawn: 25
       groupSize: 0
       enemyVariants:
       - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
       - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     - name: Fungals
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 1
       totalToSpawn: 24
       groupSize: 3
       enemyVariants:
       - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
       - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     minIntervalTime: 5
     maxIntervalTime: 8
     minToSpawnAtOnce: 3
@@ -1648,28 +1657,37 @@ MonoBehaviour:
     enemySpawnData:
     - name: RedCaps
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 0
       totalToSpawn: 25
       groupSize: 0
       enemyVariants:
       - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
       - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     - name: Fungals
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 1
       totalToSpawn: 15
       groupSize: 3
       enemyVariants:
       - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
       - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     - name: Puffbooms
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 0
       totalToSpawn: 10
       groupSize: 1
       enemyVariants:
       - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
       - {fileID: 4494384243789253112, guid: 5cd45932f7a7495408869adefadf383b, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     minIntervalTime: 3
     maxIntervalTime: 8
     minToSpawnAtOnce: 5
@@ -1687,22 +1705,29 @@ MonoBehaviour:
     enemySpawnData:
     - name: 
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 0
       totalToSpawn: 30
       groupSize: 0
       enemyVariants:
       - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
       - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     - name: 
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 1
       totalToSpawn: 1
       groupSize: 15
       enemyVariants:
       - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
       - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     - name: 
       mustSpawnOutside: 0
+      spawnPointIndex: 0
       spawnAsGroup: 1
       totalToSpawn: 5
       groupSize: 5
@@ -1710,6 +1735,8 @@ MonoBehaviour:
       - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
       - {fileID: 4494384243789253112, guid: 5cd45932f7a7495408869adefadf383b, type: 3}
       - {fileID: 4494384243789253112, guid: 492cafc948c617947bd6f6179d56d66a, type: 3}
+      minDifficultyToSpawn: 1
+      spawnWeight: 1
     minIntervalTime: 3
     maxIntervalTime: 8
     minToSpawnAtOnce: 5
@@ -1718,51 +1745,69 @@ MonoBehaviour:
       bossSquadComposition:
       - name: PuffBooms
         mustSpawnOutside: 0
+        spawnPointIndex: 0
         spawnAsGroup: 0
         totalToSpawn: 6
         groupSize: 0
         enemyVariants:
         - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
         - {fileID: 4494384243789253112, guid: 5cd45932f7a7495408869adefadf383b, type: 3}
+        minDifficultyToSpawn: 1
+        spawnWeight: 1
       - name: Redcaps
         mustSpawnOutside: 0
+        spawnPointIndex: 0
         spawnAsGroup: 0
         totalToSpawn: 10
         groupSize: 0
         enemyVariants:
         - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
         - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
+        minDifficultyToSpawn: 1
+        spawnWeight: 1
       - name: Fungals
         mustSpawnOutside: 0
+        spawnPointIndex: 0
         spawnAsGroup: 0
         totalToSpawn: 18
         groupSize: 0
         enemyVariants:
         - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
         - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
+        minDifficultyToSpawn: 1
+        spawnWeight: 1
       postBossHordeSize: 999
       hordeEnemyTypes:
       - name: PuffBooms
         mustSpawnOutside: 0
+        spawnPointIndex: 0
         spawnAsGroup: 1
         totalToSpawn: 1
         groupSize: 1
         enemyVariants:
         - {fileID: 4494384243789253112, guid: 492cafc948c617947bd6f6179d56d66a, type: 3}
+        minDifficultyToSpawn: 1
+        spawnWeight: 1
       - name: Redcaps
         mustSpawnOutside: 0
+        spawnPointIndex: 0
         spawnAsGroup: 1
         totalToSpawn: 1
         groupSize: 4
         enemyVariants:
         - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
+        minDifficultyToSpawn: 1
+        spawnWeight: 1
       - name: Fungals
         mustSpawnOutside: 0
+        spawnPointIndex: 0
         spawnAsGroup: 1
         totalToSpawn: 3
         groupSize: 3
         enemyVariants:
         - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
+        minDifficultyToSpawn: 1
+        spawnWeight: 1
   currentWaveIndex: 0
   maxEnemiesOnField: 30
   isRobertSpawned: 0
@@ -1770,9 +1815,11 @@ MonoBehaviour:
   wavePhase: 0
   trainDisembarkDelay: 16
   departTime: 10
+  skipWindow: 0
   initialPoolSize: 15
   explosionPrefab: {fileID: 4393267779352202006, guid: b0de2be7093171f439ca9cfa7964dbfe,
     type: 3}
+  BossEnemy: {fileID: 0}
 --- !u!114 &1491938789419388046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2270,7 +2317,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -12.1}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4615300009798660700
@@ -2561,14 +2608,14 @@ RectTransform:
   m_GameObject: {fileID: 5969745744288160408}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7329466694707466920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 133.4, y: 4.7}
+  m_AnchoredPosition: {x: 130.3, y: 4.7}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4862206576428823347
@@ -3189,7 +3236,7 @@ RectTransform:
   m_GameObject: {fileID: 7269493154006242233}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5996587318124495031}
@@ -3453,14 +3500,14 @@ RectTransform:
   m_GameObject: {fileID: 7756587501152383062}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7329466694707466920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -86, y: 1}
+  m_AnchoredPosition: {x: -89.1, y: 1}
   m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &615128109237477382
@@ -3527,7 +3574,7 @@ RectTransform:
   m_GameObject: {fileID: 8084163435207263637}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4208863678696657042}
