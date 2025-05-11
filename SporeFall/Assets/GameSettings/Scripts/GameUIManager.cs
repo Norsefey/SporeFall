@@ -15,7 +15,7 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private TMP_Text energyText;
     public TMP_Text departText;
 
-    [SerializeField] private EndlessWaveUI endlessUI;
+    public EndlessWaveUI endlessUI;
 
     public void DisplayMycelia(float value)
     {
@@ -60,7 +60,6 @@ public class GameUIManager : MonoBehaviour
             }
         }
     }
-
     public void EnableEndlessGameOver()
     {
         ToggleGameUI(false);

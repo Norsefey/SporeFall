@@ -10,15 +10,14 @@ public class UpgradeUI : MonoBehaviour
     public GameObject upgradeBannerPrefab;
     public TMP_Text myceliaText;
     public Transform scrollViewContent;
-
-    [SerializeField] private GameObject structBannerHolder;
-    [SerializeField] private GameObject playerBannerHolder;
     private static readonly Color DefaultColor = Color.white;
     private static readonly Color NoMyceliaColor = Color.red;
-
     [SerializeField] GameObject firstUpgradeButton;
-
     public PlayerManager activePlayer;
+
+    [Header("Banner Holders")]
+    [SerializeField] private GameObject structBannerHolder;
+    [SerializeField] private GameObject gunsBannerHolder;
 
     private void OnEnable()
     {
@@ -33,7 +32,10 @@ public class UpgradeUI : MonoBehaviour
     }
     public void ShowStructureUpgrades()
     {
-        playerBannerHolder.SetActive(false);
+        Debug.Log("Showing Structure Upgrades");
+        if(gunsBannerHolder != null)
+            gunsBannerHolder.SetActive(false);
+        
         structBannerHolder.SetActive(true);
         ClearBanners();
 
@@ -42,8 +44,6 @@ public class UpgradeUI : MonoBehaviour
             GameObject bannerObj = Instantiate(upgradeBannerPrefab, scrollViewContent);
             UpgradeBanner banner = bannerObj.GetComponent<UpgradeBanner>();
             banner.upgradeUI = this;
-            //upgradeButtons.Add(banner.upgradeButton);
-
             // Get structure levels and current upgrade level
             Structure structure = structureObj.GetComponent<Structure>();
             StructureLevels structureLevels = upgradeManager.GetStructureLevelsForType(structure.GetStructureType());
@@ -65,10 +65,12 @@ public class UpgradeUI : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-    public void ShowPlayerUpgrades()
+    public void ShowGunStore()
     {
         structBannerHolder.SetActive(false);
-        playerBannerHolder.SetActive(true);
+        gunsBannerHolder.SetActive(true);
+        Debug.Log("Showing Gun Store");
+
     }
     public void UpdateMyceliaAmount()
     {

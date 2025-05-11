@@ -135,8 +135,9 @@ public class PlayerUI : MonoBehaviour
             ammoIndicator.text = "";
             return;
         }
-
-        if (currentWeapon.IsReloading)
+        if (currentWeapon.limitedAmmo && currentWeapon.totalAmmo <= 0 && currentWeapon.bulletCount <= 0)
+            ammoIndicator.text = "<color=red> No Ammo </color>";
+        else if (currentWeapon.IsReloading)
             ammoIndicator.text = "Reloading";
         else if (currentWeapon.limitedAmmo)
             ammoIndicator.text = currentWeapon.bulletCount + "/" + currentWeapon.totalAmmo;

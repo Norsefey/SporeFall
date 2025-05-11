@@ -51,7 +51,6 @@ public class UpgradeShop : Interactables
             player.pInput.ToggleUpgradeMenu(true);
             player.pUI.DisablePrompt();
         }
-      
     }
     // remove prompt and anything else
     public override void RemovePrompt()

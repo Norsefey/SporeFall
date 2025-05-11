@@ -113,8 +113,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // Assign Calls to each action
         // basic player actions
-        if (GameManager.Instance.waveManager != null)
-            skipCutscene.performed += OnSkipCutscene;
+        skipCutscene.performed += OnSkipCutscene;
 
         leaveGame.performed += OnLeaveGame;
         jumpAction.started += OnJumpCall;
@@ -362,6 +361,9 @@ public class PlayerInputOrganizer : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            // Pause Game when In Menu
+            Time.timeScale = 0;
         }
         else
         {
@@ -386,6 +388,9 @@ public class PlayerInputOrganizer : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            // Unpause Game When out of menu
+            Time.timeScale = 1;
         }
     }
     private void OnCloseUpgradeMenu(InputAction.CallbackContext context)
@@ -404,8 +409,9 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnSkipCutscene(InputAction.CallbackContext context)
     {
-        GameManager.Instance.waveManager.SkippParkingAnimation();
-        
+        if (GameManager.Instance.waveManager != null)
+            GameManager.Instance.waveManager.SkippParkingAnimation();
+
         if (Tutorial.Instance != null)
         {
             Tutorial.Instance.timer = 20f;

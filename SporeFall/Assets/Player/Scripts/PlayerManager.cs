@@ -282,51 +282,11 @@ public class PlayerManager : MonoBehaviour
     {
         if (nearByWeapon == null)
             return;
-        // Avoid getting Stuck in reload
-        if(currentWeapon != null && currentWeapon.IsReloading)
-            currentWeapon.CancelReload();
+        EquipNewGun(nearByWeapon);
 
-        // deactivate the default weapon
-        if (currentWeapon == defaultWeapon || currentWeapon == bGun)
-        {
-            currentWeapon.gameObject.SetActive(false);
-        }
-        else if (equippedWeapon != null)
-        {
-            Destroy(currentWeapon.gameObject); // Drop the current weapon
-            equippedWeapon = null;
-        }
-        // Equip the new weapon
-        currentWeapon = Instantiate(nearByWeapon, weaponHolder).GetComponent<Weapon>();
-        // set the transforms of the new weapon
-        currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-        currentWeapon.gameObject.SetActive(true);
+        // disable pick up
         nearByWeapon.SetActive(false);
-        // set References
-        currentWeapon.player = this;
-        equippedWeapon = currentWeapon;
-        // destroy pick up platform
-        // disable pick up prompt
-        pUI.DisablePrompt();
-        // update UI to display new ammo capacities
-        pUI.AmmoDisplay(currentWeapon);
-        // update weapon icon
-        pUI.SwitchWeaponIcon();
-
-        if(currentWeapon is ChargeGun)
-        {
-            pUI.ToggleChargeGunSlider(true);
-        }
-
-        // Animation switch depending on weapon type
-        pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
-
-        // if weapon is corrupted start corruption increase
-        if (currentWeapon.isCorrupted)
-        {
-            holdingCorruption = true;
-        }
-        pUI.ToggleWeaponUI(true);
+        pUI.DisablePrompt(); 
     }
     public void DestroyCurrentWeapon()
     {
@@ -374,6 +334,49 @@ public class PlayerManager : MonoBehaviour
         pUI.AmmoDisplay(currentWeapon);
         pUI.SwitchWeaponIcon();
         pAnime.SetWeaponHoldAnimation(1);
+    }
+    public void EquipNewGun(GameObject newWeapon)
+    {
+        // Avoid getting Stuck in reload
+        if (currentWeapon != null && currentWeapon.IsReloading)
+            currentWeapon.CancelReload();
+        if (currentWeapon == defaultWeapon || currentWeapon == bGun)
+        {
+            currentWeapon.gameObject.SetActive(false);
+        }
+        else if (equippedWeapon != null)
+        {
+            Destroy(currentWeapon.gameObject); // Drop the current weapon
+            equippedWeapon = null;
+        }
+        // Equip the new weapon
+        currentWeapon = Instantiate(newWeapon, weaponHolder).GetComponent<Weapon>();
+        // set the transforms of the new weapon
+        currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        currentWeapon.gameObject.SetActive(true);
+
+        // set References
+        currentWeapon.player = this;
+        equippedWeapon = currentWeapon;
+        // update UI to display new ammo capacities
+        pUI.AmmoDisplay(currentWeapon);
+        // update weapon icon
+        pUI.SwitchWeaponIcon();
+
+        // Charge Guns use an additional UI Element
+        if (currentWeapon is ChargeGun)
+        {
+            pUI.ToggleChargeGunSlider(true);
+        }
+        // Animation switch depending on weapon type
+        pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
+
+        // if weapon is corrupted start corruption increase
+        if (currentWeapon.isCorrupted)
+        {
+            holdingCorruption = true;
+        }
+        pUI.ToggleWeaponUI(true);
     }
     public void EquipDefaultGun()
     {

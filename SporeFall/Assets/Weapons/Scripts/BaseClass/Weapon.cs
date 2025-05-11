@@ -223,7 +223,7 @@ public abstract class Weapon : MonoBehaviour
     }
     public virtual void StartReload()
     {
-        if (!IsReloading && bulletCount < bulletCapacity )
+        if (!IsReloading && bulletCount < bulletCapacity)
         {
             StartCoroutine(ReloadCoroutine());
         }

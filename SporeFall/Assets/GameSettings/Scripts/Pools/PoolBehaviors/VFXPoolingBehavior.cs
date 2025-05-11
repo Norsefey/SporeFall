@@ -56,6 +56,7 @@ public class VFXPoolingBehavior : MonoBehaviour
     private void ReturnBullet()
     {
         targetPos = Vector3.zero;
+        transform.localScale = Vector3.one;
         shouldMove = false;
         // return to pool if a pool is available
         if (pool != null)
