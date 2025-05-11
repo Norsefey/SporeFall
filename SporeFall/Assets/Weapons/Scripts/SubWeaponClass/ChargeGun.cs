@@ -128,7 +128,7 @@ public class ChargeGun : Weapon
                 ProjectileData data = new()
                 {
                     Direction = shootDirection,
-                    Damage = damage * chargeMultiplier / currentProjectileCount, // Spread damage across projectiles
+                    Damage = damage * chargeMultiplier, // Spread damage across projectiles
                     Speed = projectileData.Speed,
                     Lifetime = projectileData.Lifetime,
                     UseGravity = projectileData.UseGravity,

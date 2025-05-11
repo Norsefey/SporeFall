@@ -76,7 +76,9 @@ public class EndlessWaveUI : MonoBehaviour
     }
     public void ShowGameOverPanel()
     {
-        finalTimeText.text = $"Survival Time:  {survivalTimerText.text}";
+        int minutes = Mathf.FloorToInt(timer / 60F);
+        int seconds = Mathf.FloorToInt(timer - minutes * 60);
+        finalTimeText.text = $"Survival Time:  {string.Format("{0:0}:{1:00}", minutes, seconds)}";
         EnemiesDefeatedText.text = $"Enemies Defeated: {totalDeadEnemies} \n Bosses Defeated: {totalDeadBosses}";
         gameOverPanel.SetActive(true);
     }

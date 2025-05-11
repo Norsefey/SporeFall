@@ -11,6 +11,11 @@ public class ExplosiveProjectile : BaseProjectile
 
     protected override void HandleImpact(Collider hitCollider)
     {
+        // do damage on direct impact
+        if (hitCollider.TryGetComponent<Damageable>(out var damageable))
+        {
+            ApplyDamage(damageable, currentDamage);
+        }
         // Create explosion effect
         CreateExplosionEffect();
 

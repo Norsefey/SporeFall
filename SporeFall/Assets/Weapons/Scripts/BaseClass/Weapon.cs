@@ -305,6 +305,7 @@ public abstract class Weapon : MonoBehaviour
             return;
         }
 
+        parentAudioSource.Stop();
         parentAudioSource.volume = fireSoundVolume;
         parentAudioSource.loop = loop;
 

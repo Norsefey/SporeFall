@@ -41,7 +41,13 @@ public class BillboardUIUpdater : MonoBehaviour
     }
     public void HandleHPChange(Damageable damagedEnemy, float damage)
     {
-        //Debug.Log("Updating Enemy HP UI");
+        // make sure slider is accurate
+        if (hpDisplay.maxValue != damagedEnemy.MaxHP)
+        {
+            hpDisplay.maxValue = damagedEnemy.MaxHP;
+            hpDisplay.value = hpManager.CurrentHP;
+        }
+
         hpText.text = damagedEnemy.CurrentHP.ToString("F0") + "/" + damagedEnemy.MaxHP.ToString("F0");
         hpDisplay.value = damagedEnemy.CurrentHP;
         
