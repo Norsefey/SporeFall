@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class EndlessWaveUI : MonoBehaviour
 {
 
     [SerializeField] EndlessWaveManager waveManager;
-    
+
+    [SerializeField] private GameObject startPrompt;
+
     [Header("During game UI")]
     [SerializeField] private TMP_Text timerText;
 
@@ -23,6 +26,8 @@ public class EndlessWaveUI : MonoBehaviour
     private void Start()
     {
         timerText.text = string.Format("{0:0}:{1:00}", 0, 0);
+
+        waveManager.inputManager.onPlayerJoined += DisableStartPrompt;
     }
     private void Update()
     {
@@ -49,5 +54,10 @@ public class EndlessWaveUI : MonoBehaviour
     {
         totalDeadBosses++;
     }
-  
+    
+    private void DisableStartPrompt(PlayerInput playerInput)
+    {
+        startPrompt.SetActive(false);
+        waveManager.inputManager.onPlayerJoined -= DisableStartPrompt;
+    }
 }

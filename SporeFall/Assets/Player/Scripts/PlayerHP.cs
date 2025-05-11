@@ -89,7 +89,7 @@ public class PlayerHP : Damageable
     }
     protected override void Die()
     {
-        if (pMan.audioSource != null)
+        if (pMan.audioSource != null && CurrentLives > 0)
         {
             pMan.audioSource.Stop(); // Stop previous audio before playing new one
             pMan.audioSource.PlayOneShot(pMan.deathSound, 1.5f);

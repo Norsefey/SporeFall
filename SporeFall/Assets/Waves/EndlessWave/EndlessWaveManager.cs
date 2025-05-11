@@ -9,8 +9,7 @@ using UnityEngine.InputSystem;
 
 public class EndlessWaveManager : MonoBehaviour
 {
-    [SerializeField] private PlayerInputManager inputManager;
-
+    public PlayerInputManager inputManager;
 
     [Header("Events")]
     public UnityEvent<int> onWaveNumberChanged;
@@ -124,6 +123,8 @@ public class EndlessWaveManager : MonoBehaviour
     {
         if (currentState == WaveState.NotStarted && currentWaveNumber == 0)
             Invoke(nameof(StartEndlessWaves), 2f);
+
+        inputManager.onPlayerJoined -= OnPlayerJoined;
     }
 
     #region Wave Management

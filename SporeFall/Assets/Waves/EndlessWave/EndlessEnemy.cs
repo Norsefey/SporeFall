@@ -18,8 +18,6 @@ public class EndlessEnemy : BaseEnemy
     [Space(15)]
     [Header("Drops")]
     [SerializeField] GameObject myceliaDropPrefab;
-    [SerializeField] private float minMyceliaWorth = 5;
-    [SerializeField] private float maxMyceliaWorth = 10;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
 
@@ -433,7 +431,6 @@ public class EndlessEnemy : BaseEnemy
 
         if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
-            float worth = Mathf.Round(Random.Range(minMyceliaWorth, maxMyceliaWorth));
             mycelia.Setup();
         }
     }
