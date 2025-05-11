@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class EndlessWaveUI : MonoBehaviour
 {
@@ -12,22 +13,44 @@ public class EndlessWaveUI : MonoBehaviour
     [SerializeField] private GameObject startPrompt;
 
     [Header("During game UI")]
-    [SerializeField] private TMP_Text timerText;
-
-
+    [SerializeField] private GameObject survivalPrompt;
+    [SerializeField] private TMP_Text survivalTimerText;
     [Header("Game Over Panel")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text finalTimeText;
     [SerializeField] private TMP_Text EnemiesDefeatedText;
+
+    [Header("Downtime UI")]
+    [SerializeField] private GameObject downtimePanel;
+    [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField] private TextMeshProUGUI waveCompleteText;
+    [SerializeField] private TextMeshProUGUI nextWaveText;
+    [SerializeField] private Slider countdownSlider;
+
+    [Header("Downtime Settings")]
+    private string waveCompleteMessage = "WAVE COMPLETE";
+    private string nextWaveFormat = "NEXT WAVE: {0}";
+
     private float timer = 0;
     private int totalDeadEnemies = 0;
     private int totalDeadBosses = 0;
+    private int currentWaveNumber;
+    private bool isDowntimeActive = false;
+
+
 
     private void Start()
     {
-        timerText.text = string.Format("{0:0}:{1:00}", 0, 0);
+        survivalTimerText.text = "Survive \n" + string.Format("{0:0}:{1:00}", 0, 0);
+        if (waveManager != null)
+        {
+            waveManager.inputManager.onPlayerJoined += DisableStartPrompt;
 
-        waveManager.inputManager.onPlayerJoined += DisableStartPrompt;
+            waveManager.onWaveNumberChanged.AddListener(OnWaveNumberChanged);
+            waveManager.onWaveDowntimeStarted.AddListener(OnWaveDowntimeStarted);
+            waveManager.onWaveDowntimeProgress.AddListener(OnWaveDowntimeProgress);
+            waveManager.onWaveDowntimeEnded.AddListener(OnWaveDowntimeEnded);
+        }
     }
     private void Update()
     {
@@ -37,12 +60,23 @@ public class EndlessWaveUI : MonoBehaviour
 
             int minutes = Mathf.FloorToInt(timer / 60F);
             int seconds = Mathf.FloorToInt(timer - minutes * 60);
-            timerText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
+            survivalTimerText.text = "Survive \n" + string.Format("{0:0}:{1:00}", minutes, seconds);
+        }
+    }
+    private void OnDestroy()
+    {
+        // Unsubscribe from events when destroyed
+        if (waveManager != null)
+        {
+            waveManager.onWaveNumberChanged.RemoveListener(OnWaveNumberChanged);
+            waveManager.onWaveDowntimeStarted.RemoveListener(OnWaveDowntimeStarted);
+            waveManager.onWaveDowntimeProgress.RemoveListener(OnWaveDowntimeProgress);
+            waveManager.onWaveDowntimeEnded.RemoveListener(OnWaveDowntimeEnded);
         }
     }
     public void ShowGameOverPanel()
     {
-        finalTimeText.text = $"Survival Time:  {timerText.text}";
+        finalTimeText.text = $"Survival Time:  {survivalTimerText.text}";
         EnemiesDefeatedText.text = $"Enemies Defeated: {totalDeadEnemies} \n Bosses Defeated: {totalDeadBosses}";
         gameOverPanel.SetActive(true);
     }
@@ -54,10 +88,82 @@ public class EndlessWaveUI : MonoBehaviour
     {
         totalDeadBosses++;
     }
-    
     private void DisableStartPrompt(PlayerInput playerInput)
     {
         startPrompt.SetActive(false);
         waveManager.inputManager.onPlayerJoined -= DisableStartPrompt;
     }
+
+    #region DownTime
+    private void OnWaveNumberChanged(int waveNumber)
+    {
+        currentWaveNumber = waveNumber;
+
+        // Update the next wave text
+        if (nextWaveText != null)
+        {
+            nextWaveText.text = string.Format(nextWaveFormat, currentWaveNumber);
+        }
+    }
+    private void OnWaveDowntimeStarted()
+    {
+        isDowntimeActive = true;
+        survivalPrompt.SetActive(false);
+        SetDowntimeUIVisible(true);
+
+        // Display wave complete message
+        if (waveCompleteText != null)
+        {
+            waveCompleteText.text = waveCompleteMessage;
+        }
+        // Set next wave text
+        if (nextWaveText != null)
+        {
+            nextWaveText.text = string.Format(nextWaveFormat, currentWaveNumber);
+        }
+    }
+
+    private void OnWaveDowntimeProgress(float progress)
+    {
+        if (!isDowntimeActive) return;
+
+        // Convert progress (0-1) to remaining time
+        float remainingTime = waveManager.DowntimeDuration * (1 - progress);
+
+        // Update the countdown text
+        if (countdownText != null)
+        {
+            countdownText.text = Mathf.CeilToInt(remainingTime).ToString();
+        }
+
+        // Update slider if available
+        if (countdownSlider != null)
+        {
+            countdownSlider.value = progress;
+        }
+    }
+    private void OnWaveDowntimeEnded()
+    {
+        isDowntimeActive = false;
+        SetDowntimeUIVisible(false);
+        survivalPrompt.SetActive(true);
+
+    }
+
+    private void SetDowntimeUIVisible(bool visible)
+    {
+        if (downtimePanel != null)
+        {
+            downtimePanel.SetActive(visible);
+        }
+    }
+
+    public void SkipDowntime()
+    {
+        if (isDowntimeActive && waveManager != null)
+        {
+            waveManager.SkipDowntime();
+        }
+    }
+    #endregion
 }

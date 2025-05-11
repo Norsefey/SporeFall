@@ -16,6 +16,10 @@ public class EndlessWaveManager : MonoBehaviour
     public UnityEvent<int> onEnemyDefeated;
     public UnityEvent onBossSpawned;
     public UnityEvent<int> onBossDefeated;
+    public UnityEvent onWaveDowntimeStarted; // for downtime start
+    public UnityEvent<float> onWaveDowntimeProgress; // for downtime progress
+    public UnityEvent onWaveDowntimeEnded;
+
 
     [Header("References")]
     [SerializeField] private List<GameObject> bossPrefabs; // Multiple boss prefabs for variety
@@ -28,7 +32,11 @@ public class EndlessWaveManager : MonoBehaviour
     [SerializeField] private float difficultyIncreasePerWave = 0.1f;
     [SerializeField] private float difficultyIncreaseOverTime = 0.05f;
     [SerializeField] private float difficultyTimeInterval = 60f; // Increase difficulty every minute
-
+    
+    [Header("Wave Downtime Settings")]
+    [SerializeField] private float waveDowntimeDuration = 10f; // Duration of downtime between waves in seconds
+    [SerializeField] private bool enableWaveDowntime = true; // Toggle for enabling/disabling downtime
+    public float DowntimeDuration => waveDowntimeDuration;
     [Header("NavMesh Settings")]
     [SerializeField] private float navMeshSampleDistance = 5f; // Distance to sample when finding valid NavMesh positions
     [SerializeField] private LayerMask groundLayer; // Layer for the ground
@@ -65,7 +73,11 @@ public class EndlessWaveManager : MonoBehaviour
     private bool isBossActive = false;
     private BaseEnemy activeBoss = null;
     private float difficultyTimer = 0f;
+    private float downtimeTimer = 0f;
 
+    // Track wave-specific enemies
+    private int enemiesSpawnedThisWave = 0;
+    private bool waveSpawningComplete = false;
     // Object Pooling
     [SerializeField] private int initialPoolSize = 50;
     private Dictionary<GameObject, EnemyObjectPool> enemyPools;
@@ -73,12 +85,14 @@ public class EndlessWaveManager : MonoBehaviour
 
     private List<BaseEnemy> activeEnemies = new List<BaseEnemy>();
     private Coroutine spawnCoroutine;
+    private Coroutine downtimeCoroutine;
 
     public enum WaveState
     {
         NotStarted,
         InProgress,
-        BossFight
+        BossFight,
+        Downtime
     }
 
     public WaveState currentState = WaveState.NotStarted;
@@ -99,7 +113,7 @@ public class EndlessWaveManager : MonoBehaviour
         if (currentState != WaveState.NotStarted)
         {
             // Update boss spawn timer
-            if (!isBossActive)
+            if (!isBossActive && currentState != WaveState.Downtime)
             {
                 bossSpawnTimer -= Time.deltaTime;
                 if (bossSpawnTimer <= 0)
@@ -109,12 +123,28 @@ public class EndlessWaveManager : MonoBehaviour
                 }
             }
 
-            // Update difficulty over time
-            difficultyTimer += Time.deltaTime;
-            if (difficultyTimer >= difficultyTimeInterval)
+            // Update difficulty over time (not during downtime)
+            if (currentState != WaveState.Downtime)
             {
-                IncreaseDifficultyOverTime();
-                difficultyTimer = 0;
+                difficultyTimer += Time.deltaTime;
+                if (difficultyTimer >= difficultyTimeInterval)
+                {
+                    IncreaseDifficultyOverTime();
+                    difficultyTimer = 0;
+                }
+            }
+
+            // Update downtime progress for UI
+            if (currentState == WaveState.Downtime)
+            {
+                float progress = 1f - (downtimeTimer / waveDowntimeDuration);
+                onWaveDowntimeProgress?.Invoke(progress);
+            }
+            // Check if wave is complete
+            if (currentState == WaveState.InProgress && waveSpawningComplete && enemiesAlive == 0)
+            {
+                // All enemies have been defeated, move to next wave
+                NextWave();
             }
         }
     }
@@ -122,7 +152,7 @@ public class EndlessWaveManager : MonoBehaviour
     private void OnPlayerJoined(PlayerInput playerInput)
     {
         if (currentState == WaveState.NotStarted && currentWaveNumber == 0)
-            Invoke(nameof(StartEndlessWaves), 2f);
+            Invoke(nameof(StartEndlessWaves), 3);
 
         inputManager.onPlayerJoined -= OnPlayerJoined;
     }
@@ -137,9 +167,11 @@ public class EndlessWaveManager : MonoBehaviour
             currentWaveNumber = 1;
 
             deadEnemies = 0;
+            enemiesSpawnedThisWave = 0;
+            waveSpawningComplete = false;
             onWaveNumberChanged?.Invoke(currentWaveNumber);
 
-            spawnCoroutine = StartCoroutine(SpawnEnemiesEndlessly());
+            spawnCoroutine = StartCoroutine(SpawnEnemiesForWave());
         }
     }
     private void ResetWaveParameters()
@@ -147,7 +179,8 @@ public class EndlessWaveManager : MonoBehaviour
         enemySpawnInterval = initialSpawnInterval;
         maxEnemiesPerSpawnCurrent = initialMaxEnemiesPerSpawn;
         totalSpawnCountForCurrentWave = initialSpawnCount;
-
+        enemiesSpawnedThisWave = 0;
+        waveSpawningComplete = false;
         // Reset spawn counts for all enemy types
         foreach (var enemyType in enemyTypes)
         {
@@ -155,6 +188,52 @@ public class EndlessWaveManager : MonoBehaviour
         }
     }
     private void NextWave()
+    {
+        if (enableWaveDowntime)
+        {
+            StartDowntime();
+        }
+        else
+        {
+            AdvanceToNextWave();
+        }
+    }
+    private void StartDowntime()
+    {
+        // Stop enemy spawning during downtime
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
+        }
+
+        // Set state to downtime
+        currentState = WaveState.Downtime;
+        downtimeTimer = waveDowntimeDuration;
+
+        // Notify listeners about downtime start
+        onWaveDowntimeStarted?.Invoke();
+
+        // Start downtime coroutine
+        downtimeCoroutine = StartCoroutine(DowntimeCoroutine());
+    }
+
+    private IEnumerator DowntimeCoroutine()
+    {
+        while (downtimeTimer > 0)
+        {
+            downtimeTimer -= Time.deltaTime;
+            yield return null;
+        }
+
+        // End downtime
+        onWaveDowntimeEnded?.Invoke();
+
+        // Advance to next wave
+        AdvanceToNextWave();
+    }
+
+    private void AdvanceToNextWave()
     {
         currentWaveNumber++;
         currentDifficulty += difficultyIncreasePerWave;
@@ -167,12 +246,22 @@ public class EndlessWaveManager : MonoBehaviour
 
         // Reset enemy count for new wave
         deadEnemies = 0;
+        enemiesSpawnedThisWave = 0;
+        waveSpawningComplete = false;
+
         onWaveNumberChanged?.Invoke(currentWaveNumber);
 
         // Reset enemy type spawn counts
         foreach (var enemyType in enemyTypes)
         {
             enemyType.SpawnedCount = 0;
+        }
+
+        // Restart enemy spawning if we were in downtime
+        if (currentState == WaveState.Downtime)
+        {
+            currentState = WaveState.InProgress;
+            spawnCoroutine = StartCoroutine(SpawnEnemiesForWave());
         }
     }
     private void IncreaseDifficultyOverTime()
@@ -190,28 +279,61 @@ public class EndlessWaveManager : MonoBehaviour
         float newTime = timeBetweenBossSpawns - (bossesDefeated * bossSpawnTimeReduction);
         bossSpawnTimer = Mathf.Max(minTimeBetweenBossSpawns, newTime);
     }
+    public void SkipDowntime()
+    {
+        if (currentState == WaveState.Downtime)
+        {
+            if (downtimeCoroutine != null)
+            {
+                StopCoroutine(downtimeCoroutine);
+                downtimeCoroutine = null;
+            }
+
+            // End downtime immediately
+            onWaveDowntimeEnded?.Invoke();
+
+            // Advance to next wave
+            AdvanceToNextWave();
+        }
+    }
 
     #endregion
 
     #region Enemy Spawning
-
-    private IEnumerator SpawnEnemiesEndlessly()
+    private IEnumerator SpawnEnemiesForWave()
     {
-        while (currentState == WaveState.InProgress)
+        waveSpawningComplete = false;
+        enemiesSpawnedThisWave = 0;
+
+        while (currentState == WaveState.InProgress && enemiesSpawnedThisWave < totalSpawnCountForCurrentWave)
         {
             if (enemiesAlive < maxEnemiesOnField)
             {
-                int spawnCount = Random.Range(1, maxEnemiesPerSpawnCurrent + 1);
+                int spawnCount = Mathf.Min(
+                    Random.Range(1, maxEnemiesPerSpawnCurrent + 1),
+                    totalSpawnCountForCurrentWave - enemiesSpawnedThisWave
+                );
+
                 for (int i = 0; i < spawnCount; i++)
                 {
-                    if (enemiesAlive < maxEnemiesOnField)
+                    if (enemiesAlive < maxEnemiesOnField && enemiesSpawnedThisWave < totalSpawnCountForCurrentWave)
                     {
                         SpawnRandomEnemy();
+                        enemiesSpawnedThisWave++;
                     }
                 }
             }
 
             yield return new WaitForSeconds(enemySpawnInterval);
+        }
+
+        // Mark wave spawning as complete
+        waveSpawningComplete = true;
+
+        // Check if all enemies are already defeated
+        if (enemiesAlive == 0)
+        {
+            NextWave();
         }
     }
     private void SpawnRandomEnemy()
@@ -482,8 +604,8 @@ public class EndlessWaveManager : MonoBehaviour
             pool.Return(enemy);
         }
 
-        // Check if we've reached the spawn count for this wave
-        if (!isBossActive && deadEnemies >= totalSpawnCountForCurrentWave)
+        // Check if we should move to next wave (all enemies spawned and none alive)
+        if (currentState == WaveState.InProgress && waveSpawningComplete && enemiesAlive == 0)
         {
             NextWave();
         }
@@ -511,8 +633,16 @@ public class EndlessWaveManager : MonoBehaviour
         // Increase difficulty after boss is defeated
         currentDifficulty += difficultyIncreasePerWave * 2;
 
-        // Increase wave number
-        NextWave();
+        // Check if all regular enemies are dead before advancing to next wave
+        if (enemiesAlive == 0)
+        {
+            NextWave();
+        }
+        else
+        {
+            // Wait for remaining enemies to be defeated before starting next wave
+            waveSpawningComplete = true;
+        }
     }
     protected Vector3 GetSpawnPointWithinZone()
     {
@@ -624,15 +754,13 @@ public class EndlessWaveManager : MonoBehaviour
             StopCoroutine(spawnCoroutine);
         }
     }
-
     public void ResumeWaves()
     {
-        if (currentState == WaveState.InProgress)
+        if (currentState == WaveState.InProgress && !waveSpawningComplete)
         {
-            spawnCoroutine = StartCoroutine(SpawnEnemiesEndlessly());
+            spawnCoroutine = StartCoroutine(SpawnEnemiesForWave());
         }
     }
-
     public void KillAllEnemies()
     {
         // Kill all active enemies
@@ -654,7 +782,17 @@ public class EndlessWaveManager : MonoBehaviour
             activeBoss.Die();
         }
     }
+    // Method to adjust downtime duration at runtime
+    public void SetDowntimeDuration(float duration)
+    {
+        waveDowntimeDuration = Mathf.Max(0f, duration);
+    }
 
+    // Method to toggle downtime feature
+    public void ToggleDowntime(bool enable)
+    {
+        enableWaveDowntime = enable;
+    }
     #endregion
 }
 

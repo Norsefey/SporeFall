@@ -1,3 +1,5 @@
+// Ignore Spelling: flinchable
+
 using System.Collections;
 using UnityEngine;
 
