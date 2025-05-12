@@ -598,12 +598,13 @@ public class EndlessWaveManager : MonoBehaviour
             }
         }
 
-        // Set target instead of train
+        // Set target player instead of train
         enemy.SetTarget(playerTransform);
         enemy.OnEnemyDeath += OnEnemyDeath;
 
         // Scale enemy health based on difficulty
         enemy.SetHealthMultiplier(Mathf.Sqrt(currentDifficulty));
+        enemy.SetDamageMultiplier(Mathf.Sqrt(currentDifficulty));
 
         // Play rise animation for enemies spawning outside
         if (spawningOutside)

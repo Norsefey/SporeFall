@@ -22,8 +22,10 @@ public class HitscanAttack : RangedAttack
         [SerializeField] private float beamDuration = 0.1f;
 
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
+        damage *= damageModifier;
+
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
             enemy.Animator.SetTrigger(animationTrigger);

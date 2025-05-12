@@ -23,8 +23,9 @@ public class MeleeAttack : Attack
     private Quaternion lastAttackRotation;
     private float lastAttackTime;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
+        damage *= damageModifier;
         // Begin attack sequence
         enemy.SetIsAttacking(true);
         if(enemy.Animator != null)

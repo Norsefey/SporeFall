@@ -12,8 +12,9 @@ public class AoeAttack : Attack
     [SerializeField] private float dotDuration = 3f;
     [SerializeField] private float dotTickRate = 0.5f;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
+        damage *= damageModifier;
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
             enemy.Animator.SetTrigger(animationTrigger);

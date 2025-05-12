@@ -73,6 +73,8 @@ public abstract class BaseEnemy : MonoBehaviour
         }
     }
     [Header("Attack Stats")]
+    [SerializeField] protected float damageModifier = 1;
+    private float originalDamageModifier;
     [SerializeField] protected float stoppingDistance = 20f;
     [SerializeField] protected float aggressionFactor = 0.6f; // Chance to choose aggressive actions
     protected bool isAttacking;
@@ -107,6 +109,8 @@ public abstract class BaseEnemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
         detectedColliders = new Collider[maxDetectedObjects];
+
+        originalDamageModifier = damageModifier;
     }
     public virtual void Initialize()
     {
@@ -391,7 +395,7 @@ public abstract class BaseEnemy : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
 
-            attackCoroutine = StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
+            attackCoroutine = StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier));
             return;
         }
         else
@@ -674,5 +678,11 @@ public abstract class BaseEnemy : MonoBehaviour
             // Apply multiplier to max health
             health.SetMaxHealthWithMultiplier(multiplier);
         }
+    }
+    public virtual void SetDamageMultiplier(float multiplier)
+    {
+        float newDamage = originalDamageModifier * multiplier;
+
+        damageModifier = newDamage;
     }
 }

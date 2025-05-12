@@ -187,7 +187,7 @@ public class BombarderEnemy : BaseEnemy
             Attack bestAttack = ChooseBestAttack(distanceToTarget);
             if (bestAttack != null && currentTarget.gameObject.activeSelf)
             {
-                StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget));
+                StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier));
             }
         }
 

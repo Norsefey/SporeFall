@@ -29,7 +29,7 @@ public class PulsarRange : MonoBehaviour
         banner.upgradeName.text = "Pulsar Range";
 
         currentRange = banner.upgradeMenu.activePlayer.defaultWeapon.hitScanDistance;
-        float newRange = Mathf.RoundToInt(currentRange * rangeIncreaseMultiplier);
+        float newRange = Mathf.RoundToInt(currentRange + rangeIncreaseMultiplier);
         banner.descriptionText.text = $"Current Range {currentRange} -> New Range {newRange}";
 
 
