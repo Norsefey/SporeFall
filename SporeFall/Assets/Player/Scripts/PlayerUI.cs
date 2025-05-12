@@ -157,6 +157,7 @@ public class PlayerUI : MonoBehaviour
             {
                 HPDelayBar.maxValue = hpScript.MaxHP;
                 HPBar.maxValue = hpScript.MaxHP;
+                HPDelayBar.value = hpScript.CurrentHP;
             }
         }
         if (HPText != null)
