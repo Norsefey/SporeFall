@@ -40,6 +40,10 @@ public class PickUpWeapon : Interactables
     private void LateUpdate()
     {
         weapon.transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0));
+
+        if(despawnTimerActive && despawnTimer >= despawnTime)
+            StartCoroutine(DespawnCountdown());
+
     }
     private IEnumerator DespawnCountdown()
     {

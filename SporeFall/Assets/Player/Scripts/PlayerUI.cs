@@ -182,8 +182,9 @@ public class PlayerUI : MonoBehaviour
     public void DisablePrompt()
     {
         if(promptHolder != null)
-        promptHolder.SetActive(false);
-        controlsHolder.SetActive(false);
+            promptHolder.SetActive(false);
+        if(controlsHolder != null)
+            controlsHolder.SetActive(false);
     }
     public void SetManager(PlayerManager player)
     {
