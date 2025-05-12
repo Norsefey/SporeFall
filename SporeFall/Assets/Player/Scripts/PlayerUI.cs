@@ -19,12 +19,15 @@ public class PlayerUI : MonoBehaviour
     public GameObject controlsHolder;
     public TMP_Text textPrompt;
     [SerializeField] private TMP_Text textControls;
+    [Header("HP UI")]
     [SerializeField] private Slider HPBar;
     [SerializeField] private Slider HPDelayBar;
+    [SerializeField] private TMP_Text HPText;
     private float delayedHP;
     [SerializeField] private GameObject[] lifeIcons;
     [Header("Corruption UI")]
     [SerializeField] private Slider corruptionBar;
+    [SerializeField] private TMP_Text corruptionText;
     [SerializeField] private GameObject corruptedVisionHolder;
     [SerializeField] private Image corruptedVisionImage;
     [SerializeField] private Sprite[] corruptionSprites; // Array of corruption vision sprites
@@ -33,11 +36,6 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Image selectedStructureIcon;
     [SerializeField] private Image rightStructureIcon;
     [SerializeField] private Image leftStructureIcon;
-    [SerializeField] private Sprite turretSprite;
-    [SerializeField] private Sprite flamethrowerSprite;
-    [SerializeField] private Sprite wallSprite;
-    [SerializeField] private Sprite shermanSprite;
-    [SerializeField] private Sprite repairTowerSprite;
     [SerializeField] private Sprite defaultPromptSprite;
     [SerializeField] private Sprite buildPromptSprite;
     [SerializeField] private Sprite editPromptSprite;
@@ -46,7 +44,7 @@ public class PlayerUI : MonoBehaviour
     //[SerializeField] private Sprite lilySprite;
     private void Start()
     {
-        corruptionBar.maxValue = pMan.pCorruption.maxCorruption;
+        corruptionBar.maxValue = pMan.pCorruption.MaxCorruption;
         HPBar.maxValue = pMan.pHealth.MaxHP;
         HPDelayBar.maxValue = pMan.pHealth.MaxHP;
         delayedHP = pMan.pHealth.MaxHP;
@@ -55,11 +53,20 @@ public class PlayerUI : MonoBehaviour
         pMan.pHealth.OnHPChange += UpdateHPDisplay;
         infoPanel.sprite = defaultPromptSprite;
     }
+
     public void UpdateCorruptionDisplay(float value)
     {
         if (corruptionBar != null)
         {
+            if(corruptionBar.maxValue != pMan.pCorruption.MaxCorruption)
+            {
+                corruptionBar.maxValue = pMan.pCorruption.MaxCorruption;
+            }
             corruptionBar.value = value;
+        }
+        if(corruptionText != null)
+        {
+            corruptionText.text = $"{value.ToString("F0")} / {pMan.pCorruption.MaxCorruption}";
         }
     }
     public void UpdateCorruptedVision(int corruptionStage)
@@ -76,7 +83,6 @@ public class PlayerUI : MonoBehaviour
         int spriteIndex = Mathf.Clamp(corruptionStage - 1, 0, corruptionSprites.Length - 1);
         corruptedVisionImage.sprite = corruptionSprites[spriteIndex];
 
-        // Optional: Adjust opacity based on corruption level
         float alpha = Mathf.Lerp(0.3f, 1f, (float)corruptionStage / 3f);
         Color imageColor = corruptedVisionImage.color;
         imageColor.a = alpha;
@@ -107,27 +113,6 @@ public class PlayerUI : MonoBehaviour
             textPrompt.gameObject.SetActive(isActive);
         }
     }
-    /* public void DisplayCorruptedVision(float value)
-     {
-         if (value < 60)
-         {
-             corruptedVisionHolder.SetActive(false);
-         }
-         else if (value >= 60 && value < 75)
-         {
-             corruptedVisionHolder.SetActive(true);
-             corruptedVisionImage.sprite = corruptionSpread1;
-         }
-         else if (value >= 75 && value < 90)
-         {
-             corruptedVisionImage.sprite = corruptionSpread2;
-         }
-         else if (value >= 90)
-         {
-             corruptedVisionImage.sprite = corruptionSpread3;
-         }
-
-     }*/
     public void AmmoDisplay(Weapon currentWeapon)
     {
         if(currentWeapon == null)
@@ -165,15 +150,18 @@ public class PlayerUI : MonoBehaviour
     public void UpdateHPDisplay(Damageable hpScript, float value)
     {
         if (HPBar != null)
-            HPBar.value = pMan.pHealth.CurrentHP;
-        if (delayedHP < pMan.pHealth.CurrentHP)
+            HPBar.value = hpScript.CurrentHP;
+        if (HPText != null)
+            HPText.text = $"{hpScript.CurrentHP} / {hpScript.MaxHP}";
+
+        if (delayedHP < hpScript.CurrentHP)
         {
             //Debug.Log("DelayedHP is less than current HP");
-            delayedHP = pMan.pHealth.CurrentHP;
+            delayedHP = hpScript.CurrentHP;
             HPDelayBar.value = delayedHP;
             //Debug.Log("Raising delayedHP to equal current HP");
         }
-        else if (delayedHP > pMan.pHealth.CurrentHP)
+        else if (delayedHP > hpScript.CurrentHP)
         {
             //Debug.Log("DelayedHP is greater than current HP");
             if(isActiveAndEnabled)
@@ -193,6 +181,7 @@ public class PlayerUI : MonoBehaviour
     }
     public void DisablePrompt()
     {
+        if(promptHolder != null)
         promptHolder.SetActive(false);
         controlsHolder.SetActive(false);
     }
@@ -218,42 +207,6 @@ public class PlayerUI : MonoBehaviour
         leftStructureIcon.sprite = bGun.buildableStructures[rightIndex].GetComponent<Structure>().structureStats.icon;
 
         selectedStructureIcon.sprite = bGun.buildableStructures[bGun.currentBuildIndex].GetComponent<Structure>().structureStats.icon;
-        
-
-       /* if (bGun.currentBuildIndex == 0)
-        {
-            selectedStructureIcon.sprite = turretSprite;
-            leftStructureIcon.sprite = shermanSprite;
-            rightStructureIcon.sprite = flamethrowerSprite;
-        }
-
-       else if (bGun.currentBuildIndex == 1)
-        {
-            selectedStructureIcon.sprite = flamethrowerSprite;
-            leftStructureIcon.sprite = turretSprite;
-            rightStructureIcon.sprite = wallSprite;
-        }
-
-        else if (bGun.currentBuildIndex == 2)
-        {
-            selectedStructureIcon.sprite = wallSprite;
-            leftStructureIcon.sprite = flamethrowerSprite;
-            rightStructureIcon.sprite = repairTowerSprite;
-        }
-
-        else if(bGun.currentBuildIndex == 3)
-        {
-            selectedStructureIcon.sprite = repairTowerSprite;
-            leftStructureIcon.sprite = wallSprite;
-            rightStructureIcon.sprite = shermanSprite;
-        }
-
-        else if (bGun.currentBuildIndex == 4)
-        {
-            selectedStructureIcon.sprite = shermanSprite;
-            leftStructureIcon.sprite = repairTowerSprite;
-            rightStructureIcon.sprite = turretSprite;
-        }*/
     }
     public void ToggleChargeGunSlider(bool enable)
     {

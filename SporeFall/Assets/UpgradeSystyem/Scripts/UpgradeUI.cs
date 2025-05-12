@@ -18,6 +18,7 @@ public class UpgradeUI : MonoBehaviour
     [Header("Banner Holders")]
     [SerializeField] private GameObject structBannerHolder;
     [SerializeField] private GameObject gunsBannerHolder;
+    [SerializeField] private GameObject generalBannerHolder;
 
     private void OnEnable()
     {
@@ -32,12 +33,9 @@ public class UpgradeUI : MonoBehaviour
     }
     public void ShowStructureUpgrades()
     {
-        Debug.Log("Showing Structure Upgrades");
-        if(gunsBannerHolder != null)
-            gunsBannerHolder.SetActive(false);
-        
+        HideBannerHolders();
         structBannerHolder.SetActive(true);
-        ClearBanners();
+        ClearUpgradeBanners();
 
         foreach(GameObject structureObj in GameManager.Instance.availableStructures)
         {
@@ -57,7 +55,19 @@ public class UpgradeUI : MonoBehaviour
         SetSelectable();
         UpdateMyceliaAmount();
     }
-    private void ClearBanners()
+    public void ShowGunStore()
+    {
+        HideBannerHolders();
+        gunsBannerHolder.SetActive(true);
+        Debug.Log("Showing Gun Store");
+
+    }
+    public void ShowGeneralStore()
+    {
+        HideBannerHolders();
+        generalBannerHolder.SetActive(true);
+    }
+    private void ClearUpgradeBanners()
     {
         // Clear existing banners before adding new ones
         foreach (Transform child in scrollViewContent)
@@ -65,13 +75,17 @@ public class UpgradeUI : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-    public void ShowGunStore()
+    private void HideBannerHolders()
     {
-        structBannerHolder.SetActive(false);
-        gunsBannerHolder.SetActive(true);
-        Debug.Log("Showing Gun Store");
+        if (gunsBannerHolder != null)
+            gunsBannerHolder.SetActive(false);
+        if (generalBannerHolder != null)
+            generalBannerHolder.SetActive(false);
+        if(structBannerHolder != null)
+            structBannerHolder.SetActive(false);
 
     }
+ 
     public void UpdateMyceliaAmount()
     {
         myceliaText.color = GameManager.Instance.Mycelia > 0 ? DefaultColor : NoMyceliaColor;

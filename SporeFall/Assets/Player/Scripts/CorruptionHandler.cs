@@ -7,8 +7,9 @@ public class CorruptionHandler : MonoBehaviour
     private PlayerManager pMan;
     [SerializeField] private GameObject corruptedRobot;
     [Header("Corruption Variables")]
-    public float maxCorruption = 100;
-    public float corruptionLevel = 0;
+    [SerializeField] private float maxCorruption = 100;
+    public float MaxCorruption => maxCorruption;
+    public float corruptionAmount = 0;
 
     [Header("Large Reduction Purchase")]
     public float corruptionReductionAmount = 25f; // Amount reduced per purchase
@@ -27,12 +28,13 @@ public class CorruptionHandler : MonoBehaviour
 
     private void Start()
     {
+        pMan.pUI.UpdateCorruptionDisplay(corruptionAmount);
         UpdateCorruptionVision();
     }
     // Update is called once per frame
     void Update()
     {
-        if (corruptionLevel >= maxCorruption && !preventFullCorruption)
+        if (corruptionAmount >= maxCorruption && !preventFullCorruption)
         {
             CorruptPlayer();
             return;
@@ -42,18 +44,18 @@ public class CorruptionHandler : MonoBehaviour
         {
             // Reset timer when holding corruption
             timer = corruptionRecoveryDelay;
-            corruptionLevel = Mathf.Min(corruptionLevel + pMan.currentWeapon.corruptionRate * Time.deltaTime, maxCorruption);
+            corruptionAmount = Mathf.Min(corruptionAmount + pMan.currentWeapon.corruptionRate * Time.deltaTime, maxCorruption);
             UpdateCorruptionVision();
-            pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
+            pMan.pUI.UpdateCorruptionDisplay(corruptionAmount);
         }
-        else if (corruptionLevel > 0 && timer <= 0)
+        else if (corruptionAmount > 0 && timer <= 0)
         {
             // Decrease corruption level over time
-            corruptionLevel = Mathf.Max(0, corruptionLevel - corruptionDecreaseRate * Time.deltaTime);
+            corruptionAmount = Mathf.Max(0, corruptionAmount - corruptionDecreaseRate * Time.deltaTime);
             UpdateCorruptionVision();
-            pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
+            pMan.pUI.UpdateCorruptionDisplay(corruptionAmount);
         }
-        else if(corruptionLevel > 0)
+        else if(corruptionAmount > 0)
         {
             timer -= Time.deltaTime;
         }
@@ -61,26 +63,50 @@ public class CorruptionHandler : MonoBehaviour
     }
     public void IncreaseCorruption(float value)
     {
-        float previousCorruption = corruptionLevel;
+        float previousCorruption = corruptionAmount;
         // Reset timer when corrupted
         timer = corruptionRecoveryDelay;
-        corruptionLevel += value;
+        corruptionAmount += value;
 
         if (pMan != null && pMan.audioSource != null)
         {
-           if (previousCorruption < 75 && corruptionLevel >= 75)
+           if (previousCorruption < 75 && corruptionAmount >= 75)
                 pMan.audioSource.PlayOneShot(pMan.corruption75Sound, 1.5f);
         }
 
-        pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
+        pMan.pUI.UpdateCorruptionDisplay(corruptionAmount);
     }
     private void UpdateCorruptionVision()
     {
-        // Calculate current corruption stage based on thresholds
+        float corruptionPercentage = (corruptionAmount / maxCorruption) * 100;
+        Debug.Log(corruptionPercentage + "% Corruption");
+        
+        if(corruptionPercentage >= corruptionThresholds[0])
+        {
+            for (int i = 0; i < corruptionThresholds.Length; i++)
+            {
+                if (corruptionPercentage >= corruptionThresholds[i] && currentCorruptionStage > i + 1)
+                {
+                    if (i + 1 != currentCorruptionStage)
+                    {
+                        pMan.pUI.UpdateCorruptedVision(i + 1);
+                        currentCorruptionStage = i + 1;
+                        break;
+                    }
+                }
+            }
+        }
+        else if(currentCorruptionStage != 0)
+        {
+            currentCorruptionStage = 0;
+            pMan.pUI.UpdateCorruptedVision(currentCorruptionStage);
+
+        }
+        /* // Calculate current corruption stage based on thresholds
         int newStage = 0;
         for (int i = 0; i < corruptionThresholds.Length; i++)
         {
-            if (corruptionLevel >= corruptionThresholds[i])
+            if (corruptionAmount / maxCorruption >= corruptionThresholds[i])
             {
                 newStage = i + 1;
             }
@@ -91,14 +117,14 @@ public class CorruptionHandler : MonoBehaviour
         {
             currentCorruptionStage = newStage;
             pMan.pUI.UpdateCorruptedVision(currentCorruptionStage);
-        }
+        }*/
     }
     public bool TryPurchaseCorruptionReduction()
     {
         // Check if player has enough currency (you'll need to implement this check)
         if (GameManager.Instance.Mycelia >= corruptionReductionCost)
         {
-            if(corruptionLevel > 0)
+            if(corruptionAmount > 0)
             {
                 return false;
             }
@@ -106,15 +132,20 @@ public class CorruptionHandler : MonoBehaviour
             GameManager.Instance.DecreaseMycelia(corruptionReductionCost);
 
             // Reduce corruption
-            corruptionLevel = Mathf.Max(0, corruptionLevel - corruptionReductionAmount);
+            corruptionAmount = Mathf.Max(0, corruptionAmount - corruptionReductionAmount);
 
             // Update visuals
             UpdateCorruptionVision();
-            pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
+            pMan.pUI.UpdateCorruptionDisplay(corruptionAmount);
 
             return true;
         }
         return false;
+    }
+    public void SetMaxCorruption(float value)
+    {
+        maxCorruption = value;
+        pMan.pUI.UpdateCorruptionDisplay(corruptionAmount);
     }
     private void CorruptPlayer()
     {
@@ -131,8 +162,8 @@ public class CorruptionHandler : MonoBehaviour
         pMan.pAnime.ActivateATrigger("Corrupted");
         pMan.StartRespawn(3, true);
 
-        corruptionLevel = 0;
-        pMan.pUI.UpdateCorruptionDisplay(corruptionLevel);
+        corruptionAmount = 0;
+        pMan.pUI.UpdateCorruptionDisplay(corruptionAmount);
         // Reset Corruption Vision
         pMan.pUI.UpdateCorruptedVision(0);
         // add a delay to corrupted robot spawning
@@ -157,7 +188,7 @@ public class CorruptionHandler : MonoBehaviour
     }
     public void ResetCorruptionLevel()
     {
-        corruptionLevel = 0;
+        corruptionAmount = 0;
         pMan.pUI.UpdateCorruptionDisplay(0);
         pMan.pUI.UpdateCorruptedVision(0);
     }
