@@ -525,12 +525,38 @@ public class EndlessWaveManager : MonoBehaviour
         for (int i = 0; i < squadSize; i++)
         {
             EnemySpawnData squadMember = squadEnemies[Random.Range(0, squadEnemies.Count)];
-            int spawnPointIndex = Random.Range(1, 4); // Use points 1-3 for squad
+            Vector3 spawnPoint;
+            bool spawningOutside = false;
+
+            // Determine spawn location
+            if (squadMember.mustSpawnOutside)
+            {
+                spawnPoint = GetSpawnPointWithinZone();
+                spawningOutside = true;
+            }
+            else if (squadMember.spawnPointIndex != -1)
+            {
+                spawnPoint = presetSpawnPoints[squadMember.spawnPointIndex].position;
+            }
+            else
+            {
+                if (Random.value < outsideSpawnChance)
+                {
+                    spawnPoint = GetSpawnPointWithinZone();
+                    spawningOutside = true;
+                }
+                else
+                {
+                    int spawnPointIndex = Random.Range(0, presetSpawnPoints.Length);
+                    if (spawnPointIndex > 3) spawningOutside = true;
+                    spawnPoint = presetSpawnPoints[spawnPointIndex].position;
+                }
+            }
 
             SpawnEnemy(
                 squadMember.EnemyToSpawn,
-                presetSpawnPoints[spawnPointIndex].position,
-                false
+                spawnPoint,
+                spawningOutside
             );
 
             yield return new WaitForSeconds(0.2f);

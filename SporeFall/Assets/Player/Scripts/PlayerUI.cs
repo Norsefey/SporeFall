@@ -150,7 +150,15 @@ public class PlayerUI : MonoBehaviour
     public void UpdateHPDisplay(Damageable hpScript, float value)
     {
         if (HPBar != null)
+        {
             HPBar.value = hpScript.CurrentHP;
+
+            if (HPBar.maxValue != hpScript.MaxHP)
+            {
+                HPDelayBar.maxValue = hpScript.MaxHP;
+                HPBar.maxValue = hpScript.MaxHP;
+            }
+        }
         if (HPText != null)
             HPText.text = $"{hpScript.CurrentHP.ToString("F0") } / {hpScript.MaxHP.ToString("F0")}";
 

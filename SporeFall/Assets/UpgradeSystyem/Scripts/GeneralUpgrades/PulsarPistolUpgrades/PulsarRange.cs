@@ -48,7 +48,7 @@ public class PulsarRange : MonoBehaviour
             return;
         }
 
-        float newRange = Mathf.RoundToInt(currentRange * rangeIncreaseMultiplier);
+        float newRange = Mathf.RoundToInt(currentRange + rangeIncreaseMultiplier);
         banner.upgradeMenu.activePlayer.defaultWeapon.hitScanDistance = newRange;
 
         rangeCost = banner.Purchase(rangeCost, rangeCostIncreaseMultiplier);
