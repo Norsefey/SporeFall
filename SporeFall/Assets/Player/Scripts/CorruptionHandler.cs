@@ -85,7 +85,7 @@ public class CorruptionHandler : MonoBehaviour
         {
             for (int i = 0; i < corruptionThresholds.Length; i++)
             {
-                if (corruptionPercentage >= corruptionThresholds[i] && currentCorruptionStage > i + 1)
+                if (corruptionPercentage >= corruptionThresholds[i] && currentCorruptionStage < i + 1)
                 {
                     if (i + 1 != currentCorruptionStage)
                     {

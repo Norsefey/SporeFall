@@ -149,37 +149,6 @@ public class PlayerManager : MonoBehaviour
             }
            
         }
-
-       /* // For Testing
-        {
-            if (Input.GetKeyDown(KeyCode.Y) && !isBuilding)
-            {
-                if(defaultSword == null)
-                    return;
-
-                if (!meleeActive)
-                {
-                    meleeActive = true;
-
-                    currentWeapon.gameObject.SetActive(false);
-
-                    currentWeapon = defaultSword;
-                    currentWeapon.gameObject.SetActive(true);
-                    pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
-                    pUI.ToggleWeaponUI(false);
-                }
-                else
-                {
-                    meleeActive = false;
-
-                    currentWeapon.gameObject.SetActive(false);
-
-                    EquipDefaultGun();
-                }
-
-             
-            }
-        }*/
     }
     private void SetManager()
     {

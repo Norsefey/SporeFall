@@ -16,7 +16,7 @@ public class UpgradeMaxEnergy : MonoBehaviour
     private void Awake()
     {
         if (banner == null)
-            banner = new UpgradeBannerUIElements();
+            banner = GetComponent<UpgradeBannerUIElements>();
     }
     private void OnEnable()
     {

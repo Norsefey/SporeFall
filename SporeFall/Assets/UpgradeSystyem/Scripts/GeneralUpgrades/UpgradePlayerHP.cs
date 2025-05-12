@@ -18,7 +18,7 @@ public class UpgradePlayerHP : MonoBehaviour
     private void Awake()
     {
         if(banner == null)
-            banner = new UpgradeBannerUIElements();
+            banner = GetComponent<UpgradeBannerUIElements>();
     }
     private void OnEnable()
     {

@@ -64,31 +64,94 @@ public class MortyControlScript : MonoBehaviour
 
         foreach (Collider enemyCollider in enemiesInRange)
         {
-            if (enemyCollider == null || enemyCollider.transform == null) continue;
+            // Skip null or invalid colliders
+            if (enemyCollider == null || enemyCollider.transform == null || enemyCollider.CompareTag("HeadShot"))
+                continue;
 
-            float distance = Vector3.Distance(transform.position, enemyCollider.transform.position);
+            // Get the closest point on the enemy collider to the turret
+            Vector3 closestPoint = enemyCollider.ClosestPoint(transform.position);
+            float distance = Vector3.Distance(transform.position, closestPoint);
+
+            // Check if the enemy is within valid firing range
             if (distance <= fireRange && distance < closestDistance)
             {
-                closestDistance = distance;
-                closestEnemy = enemyCollider.transform;
+                // Check line of sight to the closest point
+                Vector3 directionToTarget = (closestPoint - transform.position).normalized;
+                if (!Physics.Raycast(transform.position, directionToTarget, distance, obstructionMask))
+                {
+                    closestDistance = distance;
+                    closestEnemy = enemyCollider.transform;
+
+                    if (showFireDebug)
+                    {
+                        Debug.DrawLine(transform.position, closestPoint, Color.green, 0.1f);
+                        Debug.Log($"Valid target: {enemyCollider.name}, Distance: {distance:F2}");
+                    }
+                }
+                else if (showFireDebug)
+                {
+                    Debug.DrawLine(transform.position, closestPoint, Color.yellow, 0.1f);
+                    Debug.Log($"Target obstructed: {enemyCollider.name}");
+                }
+            }
+            else if (showFireDebug)
+            {
+                Debug.DrawLine(transform.position, closestPoint, Color.red, 0.1f);
+                Debug.Log($"Target out of range: {enemyCollider.name}, Distance: {distance:F2}");
             }
         }
 
         targetEnemy = closestEnemy;
         hasTarget = targetEnemy != null;
+
+        if (hasTarget && showFireDebug)
+            Debug.Log($"New target acquired: {targetEnemy.name}");
     }
 
     // Check if the current enemy is within detection range
     private bool IsTargetValid()
     {
 
-        if (targetEnemy == null || targetEnemy.GetComponent<EnemyHPRelay>().IsDead())
+        if (targetEnemy == null)
         {
+            if (showFireDebug)
+                Debug.Log("Target is null");
             return false;
         }
 
-        float distance = Vector3.Distance(transform.position, targetEnemy.position);
+        EnemyHPRelay hpRelay = targetEnemy.GetComponent<EnemyHPRelay>();
+        if (hpRelay == null || hpRelay.IsDead())
+        {
+            if (showFireDebug)
+                Debug.Log($"Target {targetEnemy.name} is no longer valid (missing HP relay or dead)");
+            return false;
+        }
+
+        // Get collider component from the target
+        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
+        {
+            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
+            if (targetCollider == null)
+            {
+                if (showFireDebug)
+                    Debug.Log($"Target {targetEnemy.name} has no collider");
+                return false;
+            }
+        }
+
+        // Get closest point on the collider to measure accurate distance
+        Vector3 closestPoint = targetCollider.ClosestPoint(transform.position);
+        float distance = Vector3.Distance(transform.position, closestPoint);
+
+        // Check if target is within valid firing range
         bool isInRange = distance <= fireRange;
+
+        if (!isInRange)
+        {
+            if (showFireDebug)
+                Debug.Log($"Target {targetEnemy.name} out of range: {distance:F2}");
+            return false;
+        }
 
         return isInRange;
     }

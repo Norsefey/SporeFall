@@ -15,7 +15,7 @@ public class UpgradePlayerCorruption : MonoBehaviour
     private void Awake()
     {
         if (banner == null)
-            banner = new UpgradeBannerUIElements();
+            banner = GetComponent<UpgradeBannerUIElements>();
     }
     private void OnEnable()
     {
@@ -36,15 +36,6 @@ public class UpgradePlayerCorruption : MonoBehaviour
 
         banner.upgradeMenu.UpdateMyceliaAmount();
     }
-    private void Purchase()
-    {
-        GameManager.Instance.DecreaseMycelia(cost);
-
-        cost *= costIncreaseMultiplier;
-        cost = Mathf.RoundToInt(cost);
-
-        UpdateUIElements();
-    }
     public void UpgradeMaxPlayerCorruption()
     {
         if (GameManager.Instance.Mycelia < cost)
@@ -56,6 +47,7 @@ public class UpgradePlayerCorruption : MonoBehaviour
         float newMaxCorruption = Mathf.RoundToInt(currentMaxCorruption * corruptionIncreaseMultiplier);
         banner.upgradeMenu.activePlayer.pCorruption.SetMaxCorruption(newMaxCorruption);
 
-        Purchase();
+        cost = banner.Purchase(cost, costIncreaseMultiplier);
+        UpdateUIElements();
     }
 }

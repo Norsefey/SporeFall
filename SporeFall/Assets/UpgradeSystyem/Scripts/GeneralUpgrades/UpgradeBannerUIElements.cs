@@ -16,4 +16,14 @@ public class UpgradeBannerUIElements : MonoBehaviour
     public TMP_Text upgradeName;
     public TMP_Text costText;
     public TMP_Text descriptionText;
+
+    public float Purchase(float cost, float costIncreaseMultiplier)
+    {
+        GameManager.Instance.DecreaseMycelia(cost);
+
+        cost *= costIncreaseMultiplier;
+        cost = Mathf.RoundToInt(cost);
+
+        return cost;
+    }
 }

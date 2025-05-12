@@ -283,7 +283,7 @@ public class PauseMenu : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        SceneTransitioner.Instance.LoadMainMenuScene();
+        SceneManager.LoadScene(0);
     }
 
     public void RetryConfirmScreen()

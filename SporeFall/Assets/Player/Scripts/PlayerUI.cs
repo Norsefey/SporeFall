@@ -152,7 +152,7 @@ public class PlayerUI : MonoBehaviour
         if (HPBar != null)
             HPBar.value = hpScript.CurrentHP;
         if (HPText != null)
-            HPText.text = $"{hpScript.CurrentHP} / {hpScript.MaxHP}";
+            HPText.text = $"{hpScript.CurrentHP.ToString("F0") } / {hpScript.MaxHP.ToString("F0")}";
 
         if (delayedHP < hpScript.CurrentHP)
         {

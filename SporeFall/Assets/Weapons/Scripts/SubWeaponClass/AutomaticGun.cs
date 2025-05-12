@@ -9,7 +9,7 @@ public class AutomaticGun : Weapon
     private bool isInBurst = false;      // Track if we have been firing to apply spread
     private const float burstResetTime = 0.5f;  // Time after which we consider firing to have reset
     [Header("Automatic Variables")]
-    public float fireRate; // how fast the bullets come out
+    public float fireRate = 5; // how fast the bullets come out
 
     public override void Fire()
     {
