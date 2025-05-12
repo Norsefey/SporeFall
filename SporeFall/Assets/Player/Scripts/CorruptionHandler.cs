@@ -70,7 +70,8 @@ public class CorruptionHandler : MonoBehaviour
 
         if (pMan != null && pMan.audioSource != null)
         {
-           if (previousCorruption < 75 && corruptionAmount >= 75)
+            float threshold = 0.75f * maxCorruption;
+           if (previousCorruption < threshold && corruptionAmount >= threshold)
                 pMan.audioSource.PlayOneShot(pMan.corruption75Sound, 1.5f);
         }
 
