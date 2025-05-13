@@ -13,7 +13,7 @@ public class ExplosiveAttack : Attack
     [SerializeField] private bool destroySelfOnExplode = true;
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
-        damage *= damageModifier;
+        float finalDamage = damage * damageModifier;
         // Start the attack cooldown
         StartCooldown();
 
@@ -44,8 +44,8 @@ public class ExplosiveAttack : Attack
             Damageable damageable = hit.GetComponent<Damageable>();
             if (damageable != null)
             {
-                Debug.Log("Eplosive Damage Amount: " + (damage * damageMultiplier));
-                damageable.TakeDamage((damage * damageMultiplier));
+                Debug.Log("Eplosive Damage Amount: " + (finalDamage * damageMultiplier));
+                damageable.TakeDamage(finalDamage * damageMultiplier);
             }
         }
 

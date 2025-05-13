@@ -32,9 +32,12 @@ public class ProjectileAttack : RangedAttack
     [SerializeField] private int projectileCount = 1;
     [SerializeField] private float timeBetweenProjectiles = 0.1f; // Delay between each projectile
     [SerializeField] private float spreadAngle = 0f;
+
+    private float damageMod = 1;
+
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
-        damage *= damageModifier;
+        damageMod = damageModifier;
         enemy.SetIsAttacking(true);
 
         if (enemy.Animator != null)
@@ -132,7 +135,7 @@ public class ProjectileAttack : RangedAttack
         {
             Direction = direction,
             Speed = projectileSpeed,
-            Damage = damage,
+            Damage = damage * damageMod,
             Lifetime = projectileLifetime,
             UseArcTrajectory = trajectoryType == ProjectileTrajectoryType.Arc,
             UseGravity = useGravity,

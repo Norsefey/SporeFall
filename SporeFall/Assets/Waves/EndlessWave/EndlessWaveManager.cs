@@ -495,7 +495,9 @@ public class EndlessWaveManager : MonoBehaviour
 
         // Scale boss health based on number of bosses defeated
         float healthMultiplier = 1f + (bossHealthMultiplier * bossesDefeated);
+        float damageMultiplier = 1f + (0.05f * bossesDefeated);
         boss.SetHealthMultiplier(healthMultiplier);
+        boss.SetDamageMultiplier(damageMultiplier);
 
         activeBoss = boss;
         enemiesAlive++;

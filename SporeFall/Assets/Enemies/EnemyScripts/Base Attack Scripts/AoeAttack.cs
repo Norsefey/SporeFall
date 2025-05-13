@@ -14,7 +14,8 @@ public class AoeAttack : Attack
 
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
-        damage *= damageModifier;
+        float finalDamage = damage * damageModifier;
+        
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
             enemy.Animator.SetTrigger(animationTrigger);
@@ -33,11 +34,11 @@ public class AoeAttack : Attack
 
                 if (damageOverTime)
                 {
-                    enemy.StartDOTEffect(damageable, damage * damageMultiplier, dotDuration, dotTickRate);
+                    enemy.StartDOTEffect(damageable, finalDamage * damageMultiplier, dotDuration, dotTickRate);
                 }
                 else
                 {
-                    damageable.TakeDamage(damage * damageMultiplier);
+                    damageable.TakeDamage(finalDamage * damageMultiplier);
                 }
             }
         }

@@ -25,7 +25,7 @@ public class MeleeAttack : Attack
 
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
-        damage *= damageModifier;
+        float finalDamage = damage * damageModifier;
         // Begin attack sequence
         enemy.SetIsAttacking(true);
         if(enemy.Animator != null)
@@ -62,7 +62,7 @@ public class MeleeAttack : Attack
             {
                 if (hit.TryGetComponent<Damageable>(out var damageable))
                 {
-                    damageable.TakeDamage(damage);
+                    damageable.TakeDamage(finalDamage);
                     SpawnVFX(hit.transform.position, enemy.transform.rotation);
                     hitPositions.Add(hit.transform.position);
                     hitTarget = true;
