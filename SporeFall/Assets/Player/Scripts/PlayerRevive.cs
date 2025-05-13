@@ -66,6 +66,7 @@ public class PlayerRevive : Interactables
     {
         if(player == downedPlayer)
         {
+            player.pInput.RemoveInteraction(this);
             player = null;
             return;
         }
