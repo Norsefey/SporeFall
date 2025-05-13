@@ -458,8 +458,6 @@ public class EndlessEnemy : BaseEnemy
         DropsPoolBehavior weaponDrop = weaponPool.Get(dropPosition, transform.rotation);
         weaponDrop.Initialize(weaponPool);  // Initialize with the correct weapon pool
 
-        weaponDrop.GetComponent<PickUpWeapon>().damageModifier = damageModifier;
-
         Debug.Log(weaponDrop.name + " Damage Modifier: " + weaponDrop.GetComponent<PickUpWeapon>().damageModifier);
 
         //Debug.Log($"{gameObject.name} spawned weapon: {selectedWeaponPrefab.name}");

@@ -327,6 +327,8 @@ public class PlayerManager : MonoBehaviour
         currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         currentWeapon.gameObject.SetActive(true);
 
+        currentWeapon.damageModifier = (Mathf.Sqrt(GameManager.Instance.endlessWaveManager.CurrentDifficulty));
+
         // set References
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
