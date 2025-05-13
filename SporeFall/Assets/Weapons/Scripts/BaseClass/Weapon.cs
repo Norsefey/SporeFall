@@ -138,11 +138,6 @@ public abstract class Weapon : MonoBehaviour
             PlaySFX(reloadSound, false);
             StartReload();
         }
-
-        if(limitedAmmo && bulletCount <= 0 && totalAmmo <= 0)
-        {
-            player.DestroyCurrentWeapon();
-        }
     }
     protected void FireHitscan(Transform playerCamera)
     {

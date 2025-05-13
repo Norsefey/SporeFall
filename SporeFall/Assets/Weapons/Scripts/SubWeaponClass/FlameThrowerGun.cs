@@ -10,7 +10,6 @@ public class FlameThrowerGun : Weapon
     [SerializeField] private float maxFlameDistance = 8f;
     [SerializeField] private float flameRadius = 1.5f;
     [SerializeField] private float fuelConsumptionRate = 5f; // Units of ammo used per second
-    [SerializeField] private float heatDamageMultiplier = 1.2f; // Increased damage to burnable enemies
 
     private bool isFiring = false;
     private List<Damageable> currentTargets = new List<Damageable>();
