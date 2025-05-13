@@ -46,10 +46,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float maxTrainHP_N = 1000;
     [SerializeField] private float trainDamageReduction_N = 0;
     [SerializeField] private float startingMycelia_N = 150;
+    [SerializeField] private float maxEnergy_N = 100;
     [Header("Easy Difficulty")]
     [SerializeField] private float maxTrainHP_E = 2000;
     [SerializeField] private float trainDamageReduction_E = .25f;
     [SerializeField] private float startingMycelia_E = 200;
+    [SerializeField] private float maxEnergy_E = 150;
+
 
     private int sceneIndex;
 
@@ -95,6 +98,7 @@ public class GameManager : MonoBehaviour
                     trainHandler.trainHP.damageReduction = trainDamageReduction_E;
                 }
                 mycelia = startingMycelia_E;
+                GameManager.Instance.maxEnergy = maxEnergy_E;
             }
             else // Normal Difficulty settings
             {
@@ -104,6 +108,7 @@ public class GameManager : MonoBehaviour
                     trainHandler.trainHP.damageReduction = trainDamageReduction_N;
                 }
                 mycelia = startingMycelia_N;
+                GameManager.Instance.maxEnergy = maxEnergy_N;
             }
         }
     }

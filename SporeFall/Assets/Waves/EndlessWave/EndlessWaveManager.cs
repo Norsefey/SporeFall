@@ -495,7 +495,9 @@ public class EndlessWaveManager : MonoBehaviour
 
         // Scale boss health based on number of bosses defeated
         float healthMultiplier = 1f + (bossHealthMultiplier * bossesDefeated);
+        float damageMultiplier = 1f + (0.05f * bossesDefeated);
         boss.SetHealthMultiplier(healthMultiplier);
+        boss.SetDamageMultiplier(damageMultiplier);
 
         activeBoss = boss;
         enemiesAlive++;
@@ -525,12 +527,38 @@ public class EndlessWaveManager : MonoBehaviour
         for (int i = 0; i < squadSize; i++)
         {
             EnemySpawnData squadMember = squadEnemies[Random.Range(0, squadEnemies.Count)];
-            int spawnPointIndex = Random.Range(1, 4); // Use points 1-3 for squad
+            Vector3 spawnPoint;
+            bool spawningOutside = false;
+
+            // Determine spawn location
+            if (squadMember.mustSpawnOutside)
+            {
+                spawnPoint = GetSpawnPointWithinZone();
+                spawningOutside = true;
+            }
+            else if (squadMember.spawnPointIndex != -1)
+            {
+                spawnPoint = presetSpawnPoints[squadMember.spawnPointIndex].position;
+            }
+            else
+            {
+                if (Random.value < outsideSpawnChance)
+                {
+                    spawnPoint = GetSpawnPointWithinZone();
+                    spawningOutside = true;
+                }
+                else
+                {
+                    int spawnPointIndex = Random.Range(0, presetSpawnPoints.Length);
+                    if (spawnPointIndex > 3) spawningOutside = true;
+                    spawnPoint = presetSpawnPoints[spawnPointIndex].position;
+                }
+            }
 
             SpawnEnemy(
                 squadMember.EnemyToSpawn,
-                presetSpawnPoints[spawnPointIndex].position,
-                false
+                spawnPoint,
+                spawningOutside
             );
 
             yield return new WaitForSeconds(0.2f);
@@ -572,12 +600,13 @@ public class EndlessWaveManager : MonoBehaviour
             }
         }
 
-        // Set target instead of train
+        // Set target player instead of train
         enemy.SetTarget(playerTransform);
         enemy.OnEnemyDeath += OnEnemyDeath;
 
         // Scale enemy health based on difficulty
         enemy.SetHealthMultiplier(Mathf.Sqrt(currentDifficulty));
+        enemy.SetDamageMultiplier(Mathf.Sqrt(currentDifficulty));
 
         // Play rise animation for enemies spawning outside
         if (spawningOutside)

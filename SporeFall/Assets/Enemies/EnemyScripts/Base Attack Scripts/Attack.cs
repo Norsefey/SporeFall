@@ -40,7 +40,7 @@ public abstract class Attack : ScriptableObject
         return distanceToTarget <= range && Time.time >= lastUseTime + cooldown;
     }
 
-    public abstract IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target);
+    public abstract IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier);
 
     protected void StartCooldown()
     {

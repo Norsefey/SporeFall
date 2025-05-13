@@ -32,7 +32,8 @@ public class PlayerHP : Damageable
 
         if (pMan != null && pMan.audioSource != null)
         {
-            if (previousHP > 25 && currentHP <= 25)
+            float threshhold = 0.25f * maxHP;
+            if (previousHP > threshhold && currentHP <= threshhold)
             {
                 pMan.audioSource.Stop(); // Stop previous audio before playing new one
                 pMan.audioSource.PlayOneShot(pMan.health25Sound, 1.5f);

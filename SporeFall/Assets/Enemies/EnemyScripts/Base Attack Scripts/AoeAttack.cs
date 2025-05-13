@@ -12,8 +12,10 @@ public class AoeAttack : Attack
     [SerializeField] private float dotDuration = 3f;
     [SerializeField] private float dotTickRate = 0.5f;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
+        float finalDamage = damage * damageModifier;
+        
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
             enemy.Animator.SetTrigger(animationTrigger);
@@ -32,11 +34,11 @@ public class AoeAttack : Attack
 
                 if (damageOverTime)
                 {
-                    enemy.StartDOTEffect(damageable, damage * damageMultiplier, dotDuration, dotTickRate);
+                    enemy.StartDOTEffect(damageable, finalDamage * damageMultiplier, dotDuration, dotTickRate);
                 }
                 else
                 {
-                    damageable.TakeDamage(damage * damageMultiplier);
+                    damageable.TakeDamage(finalDamage * damageMultiplier);
                 }
             }
         }

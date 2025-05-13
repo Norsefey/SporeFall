@@ -7,23 +7,26 @@ using UnityEngine;
 public class HitscanAttack : RangedAttack
 {
     
-        [Header("Hitscan Settings")]
-        [SerializeField] private LayerMask targetLayers;
-        [SerializeField] private bool penetratingShot = false;
-        [SerializeField] private int maxPenetrations = 3;
-        [SerializeField] private float penetrationDamageMultiplier = 0.7f;
+    [Header("Hitscan Settings")]
+    [SerializeField] private LayerMask targetLayers;
+    [SerializeField] private bool penetratingShot = false;
+    [SerializeField] private int maxPenetrations = 3;
+    [SerializeField] private float penetrationDamageMultiplier = 0.7f;
 
-        [Header("Multiple Shot Settings")]
-        [SerializeField] private int shotCount = 1;
-        [SerializeField] private float spreadAngle = 0f;
+    [Header("Multiple Shot Settings")]
+    [SerializeField] private int shotCount = 1;
+    [SerializeField] private float spreadAngle = 0f;
 
-        [Header("Beam Effects")]
-        [SerializeField] private GameObject beamVFXPrefab;
-        [SerializeField] private float beamDuration = 0.1f;
+    [Header("Beam Effects")]
+    [SerializeField] private GameObject beamVFXPrefab;
+    [SerializeField] private float beamDuration = 0.1f;
 
+    private float damageMod = 1;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
     {
+        damageMod = damageModifier;
+
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
             enemy.Animator.SetTrigger(animationTrigger);
@@ -82,7 +85,7 @@ public class HitscanAttack : RangedAttack
         {
             if (hit.collider.TryGetComponent<Damageable>(out var damageable))
             {
-                damageable.TakeDamage(damage);
+                damageable.TakeDamage(damage * damageMod);
             }
 
             SpawnBeamEffect(origin, hit.point);
@@ -100,7 +103,7 @@ public class HitscanAttack : RangedAttack
             .ToArray();
 
         Vector3 lastHitPoint = origin;
-        float currentDamage = damage;
+        float currentDamage = damage * damageMod;
         int penetrations = 0;
 
         foreach (RaycastHit hit in hits)

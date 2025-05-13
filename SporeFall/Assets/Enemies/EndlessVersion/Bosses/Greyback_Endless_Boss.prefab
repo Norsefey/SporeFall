@@ -101,6 +101,11 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 1803670989465652651}
+    - target: {fileID: 731574464148815496, guid: 227fb5192f76a7348b487c62a54ccd3d,
+        type: 3}
+      propertyPath: flinchable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1657974298613798786, guid: 227fb5192f76a7348b487c62a54ccd3d,
         type: 3}
       propertyPath: m_Name
@@ -151,18 +156,28 @@ PrefabInstance:
     - target: {fileID: 5448763845804158965, guid: 227fb5192f76a7348b487c62a54ccd3d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5448763845804158965, guid: 227fb5192f76a7348b487c62a54ccd3d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6075659555076767514, guid: 227fb5192f76a7348b487c62a54ccd3d,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f19f62e5775650f458c64e01db966f3b, type: 2}
+    - target: {fileID: 6700846432238513998, guid: 227fb5192f76a7348b487c62a54ccd3d,
+        type: 3}
+      propertyPath: m_Height
+      value: 5.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 6700846432238513998, guid: 227fb5192f76a7348b487c62a54ccd3d,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1.61
+      objectReference: {fileID: 0}
     - target: {fileID: 6723776635264665680, guid: 227fb5192f76a7348b487c62a54ccd3d,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -243,6 +258,11 @@ PrefabInstance:
       propertyPath: hideUI
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8961610249997544806, guid: 227fb5192f76a7348b487c62a54ccd3d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.67
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5473082876605746802, guid: 227fb5192f76a7348b487c62a54ccd3d, type: 3}
     - {fileID: 9009785512476672233, guid: 227fb5192f76a7348b487c62a54ccd3d, type: 3}
@@ -257,6 +277,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1803670989465652651}
+    - targetCorrespondingSourceObject: {fileID: 1657974298613798786, guid: 227fb5192f76a7348b487c62a54ccd3d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5683016741943530713}
   m_SourcePrefab: {fileID: 100100000, guid: 227fb5192f76a7348b487c62a54ccd3d, type: 3}
 --- !u!4 &1481344829591429822 stripped
 Transform:
@@ -291,8 +315,9 @@ MonoBehaviour:
   deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
     type: 3}
   attacks:
-  - {fileID: 11400000, guid: 82a1ed65f46f5354aa57446d065ef3f5, type: 2}
+  - {fileID: 11400000, guid: 0019944a873aac947ae58c575446bf47, type: 2}
   - {fileID: 11400000, guid: 7cfb7c9fb86a36b4488907773db86486, type: 2}
+  - {fileID: 11400000, guid: f5e2c5b591015984aba57f56c5d3e7d2, type: 2}
   animator: {fileID: 5425238161870126276}
   health: {fileID: 6707049753658159994}
   firePoint: {fileID: 3129192658730623124}
@@ -302,6 +327,7 @@ MonoBehaviour:
   chasePriorityDistance: 25
   damagePriorityThreshold: 20
   damageTrackingDuration: 3
+  damageModifier: 1
   stoppingDistance: 5
   aggressionFactor: 0.6
   trackingSpeed: 5
@@ -327,6 +353,18 @@ MonoBehaviour:
   weaponDropPrefab:
   - {fileID: 7980376292701781228, guid: 91084f473834f5a42b7fb726c7dc2314, type: 3}
   dropChance: 20
+--- !u!114 &5683016741943530713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4625592613249358448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f50f4efd875a8499ded66bc5700e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &5425238161870126276 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 2051803541698588982, guid: 227fb5192f76a7348b487c62a54ccd3d,
