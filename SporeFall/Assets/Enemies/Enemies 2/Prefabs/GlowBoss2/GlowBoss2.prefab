@@ -83,7 +83,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df68e02e90c59ee4cb8afbbad26b725a, type: 2}
   animator: {fileID: 7701723478874781303}
   health: {fileID: 8705147953746396791}
-  agent: {fileID: 2331465295812251874}
   firePoint: {fileID: 8637544824667225467}
   strafeRadius: 20
   retreatDistance: 15
@@ -91,6 +90,7 @@ MonoBehaviour:
   chasePriorityDistance: 40
   damagePriorityThreshold: 500
   damageTrackingDuration: 50
+  damageModifier: 1
   stoppingDistance: 10
   aggressionFactor: 0.95
   trackingSpeed: 5
@@ -624,12 +624,12 @@ PrefabInstance:
     - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
