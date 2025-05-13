@@ -4449,7 +4449,7 @@ MonoBehaviour:
   - {fileID: 7970686666634383871, guid: 7d1215081ba4a6e44bd268cd0154dbcb, type: 3}
   outsideSpawnChance: 0.45
   maxEnemiesOnField: 50
-  baseDifficulty: 2
+  baseDifficulty: 1
   difficultyIncreasePerWave: 0.1
   difficultyIncreaseOverTime: 0.05
   difficultyTimeInterval: 60
@@ -35349,27 +35349,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!65 &400758978736958159
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2964775984866184693}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 17.803226, y: 39.057285, z: 50.121532}
-  m_Center: {x: -5.0956824e-16, y: -4.86327, z: 1.9641418}
 --- !u!1 &409536074364556194
 GameObject:
   m_ObjectHideFlags: 0
@@ -38229,7 +38208,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4715069244027280359}
   - component: {fileID: 3947372317762806637}
-  - component: {fileID: 400758978736958159}
+  - component: {fileID: 4715069244027280360}
   m_Layer: 12
   m_Name: FrontCar
   m_TagString: Untagged
@@ -45207,7 +45186,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2964775984866184693}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.12460773, y: 0.1394219, z: 0.6546304, w: 0.73245716}
+  m_LocalRotation: {x: 0.22548105, y: 0.25228786, z: 0.6270777, w: 0.7016287}
   m_LocalPosition: {x: 19.6, y: 2, z: 17.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -45215,7 +45194,29 @@ Transform:
   - {fileID: 2385956840580556468}
   - {fileID: 6260353374037081966}
   m_Father: {fileID: 7482610305381009074}
-  m_LocalEulerAnglesHint: {x: 0, y: 21.554, z: 83.577}
+  m_LocalEulerAnglesHint: {x: 0, y: 39.555, z: 83.577}
+--- !u!64 &4715069244027280360
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2964775984866184693}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!108 &4751302881133169997
 Light:
   m_ObjectHideFlags: 0
