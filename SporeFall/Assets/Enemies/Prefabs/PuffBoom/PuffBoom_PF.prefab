@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6723776635264665680
 Transform:
   m_ObjectHideFlags: 0
@@ -155,7 +155,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8fd94c99272d2cd4f9a71750a641e3fe, type: 2}
   animator: {fileID: 546171183360639718}
   health: {fileID: 1049953242552480228}
-  agent: {fileID: 0}
   firePoint: {fileID: 649384524154093143}
   strafeRadius: 10
   retreatDistance: 15
@@ -163,6 +162,7 @@ MonoBehaviour:
   chasePriorityDistance: 25
   damagePriorityThreshold: 20
   damageTrackingDuration: 100
+  damageModifier: 1
   stoppingDistance: 5
   aggressionFactor: 0.8
   trackingSpeed: 5
@@ -5294,7 +5294,7 @@ Transform:
   m_GameObject: {fileID: 8548387528039298855}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.52, z: 3.59}
+  m_LocalPosition: {x: 0, y: 2, z: 0.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

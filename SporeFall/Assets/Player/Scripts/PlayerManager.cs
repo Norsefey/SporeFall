@@ -543,7 +543,12 @@ public class PlayerManager : MonoBehaviour
 
             pAnime.ToggleIKAim(true);
             pAnime.ToggleRespawn(false);
-            pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
+            if(currentWeapon != null)
+                pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
+            else 
+                pAnime.SetWeaponHoldAnimation(0);
+
+
 
             if (resetStats)
             {
