@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     [Header("References")]
     public WaveManager waveManager;
+    public EndlessWaveManager endlessWaveManager;
     public TrainHandler trainHandler;
     public UpgradeManager upgradeManager;
     public GameUIManager gameUI;

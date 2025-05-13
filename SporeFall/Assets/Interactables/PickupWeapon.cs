@@ -99,11 +99,10 @@ public class PickUpWeapon : Interactables
     {
         // Stop all coroutines when picked up
         StopAllCoroutines();
+        weapon.damageModifier = damageModifier;
 
         player.PickUpWeapon();
         RemovePrompt();
-
-        weapon.damageModifier = damageModifier;
 
         if (pickupSound != null && audioSource != null)
         {

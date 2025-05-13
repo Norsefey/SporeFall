@@ -28,13 +28,33 @@ public class DOTProjectile : BaseProjectile
     {
         if (dotZonePrefab != null)
         {
-            GameObject zoneObject = Instantiate(dotZonePrefab, transform.position, Quaternion.identity);
 
-            if (zoneObject.TryGetComponent<DamageOverTimeZone>(out var dotZone))
+            if (!PoolManager.Instance.dropsPool.TryGetValue(dotZonePrefab, out DropsPool dotZonePool))
+            {
+                Debug.LogError($"No pool found for weapon prefab: {dotZonePrefab.name}");
+                return;
+            }
+
+            // Spawn the weapon drop slightly above the enemy position to prevent clipping
+            Vector3 dropPosition = transform.position;
+            DropsPoolBehavior dotDrop = dotZonePool.Get(dropPosition, transform.rotation);
+            dotDrop.Initialize(dotZonePool);  // Initialize with the correct weapon pool
+
+            if (dotDrop.TryGetComponent<DamageOverTimeZone>(out var dotZone))
             {
                 dotZone.Initialize(dotDuration, dotTickRate, dotDamagePerTick,
                                   dotCorruptionPerTick, dotRadius, hitLayers);
             }
+
+
+
+            /*    GameObject zoneObject = Instantiate(dotZonePrefab, transform.position, Quaternion.identity);
+
+                if (zoneObject.TryGetComponent<DamageOverTimeZone>(out var dotZone))
+                {
+                    dotZone.Initialize(dotDuration, dotTickRate, dotDamagePerTick,
+                                      dotCorruptionPerTick, dotRadius, hitLayers);
+                }*/
         }
     }
 
