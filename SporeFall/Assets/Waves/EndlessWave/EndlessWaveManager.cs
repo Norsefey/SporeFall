@@ -54,6 +54,7 @@ public class EndlessWaveManager : MonoBehaviour
     [SerializeField] private float minTimeBetweenBossSpawns = 180f; // 3 minutes
     [SerializeField] private float bossSpawnTimeReduction = 10f; // Reduce boss spawn time by 10 seconds per wave
     [SerializeField] private float bossHealthMultiplier = 1.5f; // Boss health multiplier for each subsequent boss
+    [SerializeField] private float bossDamageMultiplier = 1.25f;
 
     [Header("Spawn Zones")]
     [SerializeField] private Transform[] presetSpawnPoints;
@@ -61,6 +62,8 @@ public class EndlessWaveManager : MonoBehaviour
 
     // Wave State
     private float currentDifficulty;
+    public float CurrentDifficulty { get { return currentDifficulty; } }
+
     private int currentWaveNumber = 0;
     private float enemySpawnInterval;
     private int maxEnemiesPerSpawnCurrent;
@@ -217,7 +220,6 @@ public class EndlessWaveManager : MonoBehaviour
         // Start downtime coroutine
         downtimeCoroutine = StartCoroutine(DowntimeCoroutine());
     }
-
     private IEnumerator DowntimeCoroutine()
     {
         while (downtimeTimer > 0)
@@ -232,7 +234,6 @@ public class EndlessWaveManager : MonoBehaviour
         // Advance to next wave
         AdvanceToNextWave();
     }
-
     private void AdvanceToNextWave()
     {
         currentWaveNumber++;
@@ -255,6 +256,11 @@ public class EndlessWaveManager : MonoBehaviour
         foreach (var enemyType in enemyTypes)
         {
             enemyType.SpawnedCount = 0;
+        }
+
+        foreach(Structure structure in GameManager.Instance.activeStructures)
+        {
+            structure.UpdateEndlessStats();
         }
 
         // Restart enemy spawning if we were in downtime
@@ -495,7 +501,7 @@ public class EndlessWaveManager : MonoBehaviour
 
         // Scale boss health based on number of bosses defeated
         float healthMultiplier = 1f + (bossHealthMultiplier * bossesDefeated);
-        float damageMultiplier = 1f + (0.05f * bossesDefeated);
+        float damageMultiplier = 1f + (bossDamageMultiplier * bossesDefeated);
         boss.SetHealthMultiplier(healthMultiplier);
         boss.SetDamageMultiplier(damageMultiplier);
 

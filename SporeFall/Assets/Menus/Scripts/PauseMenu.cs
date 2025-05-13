@@ -120,7 +120,7 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenPauseMenu()
     {
-        Debug.Log("Player count is: " + GameManager.Instance.players.Count);
+        //Debug.Log("Player count is: " + GameManager.Instance.players.Count);
         pauseMenuBG.SetActive(true);
         defaultScreen.SetActive(true);
         settingsScreen.SetActive(false);
@@ -326,7 +326,7 @@ public class PauseMenu : MonoBehaviour
     {
         if (change == InputDeviceChange.Added && isPaused)
         {
-            Debug.Log($"Device Connected: {device.displayName}");
+            //Debug.Log($"Device Connected: {device.displayName}");
             isControllerConnected = true;
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(savedFirstButton);
@@ -337,7 +337,7 @@ public class PauseMenu : MonoBehaviour
         }
         else if (change == InputDeviceChange.Disconnected && isPaused)
         {
-            Debug.Log($"Device Disconnected: {device.displayName}");
+            //Debug.Log($"Device Disconnected: {device.displayName}");
             isControllerConnected = false;
             EventSystem.current.SetSelectedGameObject(null);
 

@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public Transform structureHolder;
     public List<GameObject> availableStructures;
     [Header("Energy Usage")]
-    private List<Structure> activeStructures = new();
+    public List<Structure> activeStructures = new();
     public float maxEnergy = 50;
     private float energyUsed = 0;
     private float energyRemaining = 0;
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        Debug.Log("Player count is: " + players.Count);
+        //Debug.Log("Player count is: " + players.Count);
         gameUI.DisplayMycelia(mycelia);
         gameUI.DisplayEnergy(maxEnergy);
         

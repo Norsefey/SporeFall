@@ -5,23 +5,23 @@ using UnityEngine;
 public class ShermanStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private ShermanStructureControls ShermanStation;
-    public void Initialize(StructureLevels levels, int level)
+    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
     {
         if (levels is ShermanLevels shermanLevels)
         {
-            UpdateShermanStats(shermanLevels, level);
+            UpdateShermanStats(shermanLevels, level, waveMultiplier);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level)
+    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
     {
         if(levels is ShermanLevels shermanLevels)
         {
-            UpdateShermanStats(shermanLevels, level);
+            UpdateShermanStats(shermanLevels, level, waveMultiplier);
         }
     }
 
-    private void UpdateShermanStats(ShermanLevels levels, int level)
+    private void UpdateShermanStats(ShermanLevels levels, int level, float waveMultiplier)
     {
         var levelData = levels.levels[level];
 
@@ -32,7 +32,7 @@ public class ShermanStatUpdater : MonoBehaviour, IStructureStats
             sherman.moveSpeed = levelData.moveSpeed;
             sherman.turnSpeed = levelData.turnSpeed;
             sherman.changeDirectionInterval = levelData.changeDirectionInterval;
-            sherman.damage = levelData.damage;
+            sherman.damage = levelData.damage * waveMultiplier;
             sherman.detectionRadius = levelData.detectionRadius;
             sherman.randomMovementWeight = levelData.enemyInfluenceWeight;
             sherman.randomMovementWeight = levelData.randomMovementWeight;

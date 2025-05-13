@@ -21,13 +21,13 @@ public class PlayerAnimation : MonoBehaviour
 
         if (pMan.currentWeapon == null)
         {
-            Debug.Log("No Weapon");
+            //Debug.Log("No Weapon");
             SetWeaponHoldAnimation(0);
             pMan.pUI.ToggleWeaponUI(false);
         }
         else
         {
-            Debug.Log("Yes Weapon");
+            //Debug.Log("Yes Weapon");
             SetWeaponHoldAnimation(pMan.currentWeapon.holdType);
 
             pMan.pUI.AmmoDisplay(pMan.currentWeapon);

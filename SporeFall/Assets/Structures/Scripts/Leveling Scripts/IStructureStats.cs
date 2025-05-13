@@ -6,6 +6,6 @@ using UnityEngine;
 // Base structure behavior interface
 public interface IStructureStats
 {
-    void Initialize(StructureLevels levels, int level);
-    void UpdateStats(StructureLevels levels, int level);
+    void Initialize(StructureLevels levels, int level, float waveMultiplier);
+    void UpdateStats(StructureLevels levels, int level, float waveMultiplier);
 }

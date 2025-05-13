@@ -7,22 +7,22 @@ public class MortyStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private MortyControlScript morty;
 
-    public void Initialize(StructureLevels levels, int level)
+    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
     {
         if (levels is MortyLevels turretLevels)
         {
-            UpdateMortyStats(turretLevels, level);
+            UpdateMortyStats(turretLevels, level, waveMultiplier);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level)
+    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
     {
         if (levels is MortyLevels turretLevels)
         {
-            UpdateMortyStats(turretLevels, level);
+            UpdateMortyStats(turretLevels, level, waveMultiplier);
         }
     }
-    private void UpdateMortyStats(MortyLevels levels, int level)
+    private void UpdateMortyStats(MortyLevels levels, int level, float waveMultiplier)
     {
         var levelData = levels.levels[level];
         morty.detectionRange = levelData.detectionRange;
@@ -30,5 +30,6 @@ public class MortyStatUpdater : MonoBehaviour, IStructureStats
         morty.fireRange = levelData.fireRange;
         // Set up bullet data
         morty.bulletData = levelData.projectileStats;
+        morty.bulletData.Damage = levelData.projectileStats.Damage * waveMultiplier;
     }
 }

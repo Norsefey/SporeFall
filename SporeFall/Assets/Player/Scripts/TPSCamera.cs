@@ -342,8 +342,8 @@ public class TPSCamera : MonoBehaviour
         mvertSense = SavedSettings.mouseCamSensitivity;
         horSense = mHorSense;
         verSense = mvertSense;
-        Debug.Log("Saved P1 Mouse settings are: " + SavedSettings.mouseCamSensitivity);
-        Debug.Log("P1 Mouse settings are: " + mHorSense);
+        //Debug.Log("Saved P1 Mouse settings are: " + SavedSettings.mouseCamSensitivity);
+        //Debug.Log("P1 Mouse settings are: " + mHorSense);
     }
     public void SetMouseP2()
     {

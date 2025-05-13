@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class PlatformStatUpdater : MonoBehaviour, IStructureStats
 {
-    public void Initialize(StructureLevels levels, int level)
-    {/*
-        if (levels is PlatformLevels wallLevels)
-        {
-            //UpdateWallStats(wallLevels, level);
-        }*/
+    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    {
     }
 
-    public void UpdateStats(StructureLevels levels, int level)
+    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
     {
-        throw new System.NotImplementedException();
     }
 }

@@ -5,22 +5,22 @@ using UnityEngine;
 public class TurretStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private Turret turret;
-    public void Initialize(StructureLevels levels, int level)
+    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
     {
         if (levels is TurretLevels turretLevels)
         {
-            UpdateTurretStats(turretLevels, level);
+            UpdateTurretStats(turretLevels, level, waveMultiplier);
+        }
+    }
+    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    {
+        if (levels is TurretLevels turretLevels)
+        {
+            UpdateTurretStats(turretLevels, level, waveMultiplier);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level)
-    {
-        if (levels is TurretLevels turretLevels)
-        {
-            UpdateTurretStats(turretLevels, level);
-        }
-    }
-    private void UpdateTurretStats(TurretLevels levels, int level)
+    private void UpdateTurretStats(TurretLevels levels, int level, float waveMultiplier)
     {
         var levelData = levels.levels[level];
         turret.rotationSpeed = levelData.rotationSpeed;
@@ -31,7 +31,7 @@ public class TurretStatUpdater : MonoBehaviour, IStructureStats
         turret.bulletData = new ProjectileData 
         {
             Speed = levelData.speed,
-            Damage = levelData.damage,
+            Damage = levelData.damage * waveMultiplier,
             Lifetime = levelData.lifetime,
             UseGravity = levelData.useGravity,
             ArcHeight = levelData.arcHeight,
@@ -40,4 +40,6 @@ public class TurretStatUpdater : MonoBehaviour, IStructureStats
             BounceDamageMultiplier = levelData.bounceDamageMultiplier
         };
     }
+
+ 
 }

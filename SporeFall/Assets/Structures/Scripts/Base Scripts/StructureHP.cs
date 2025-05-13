@@ -6,7 +6,8 @@ public class StructureHP : Damageable
     public Structure structure;
     void Start()
     {
-        currentHP = maxHP;
+        ResetHealth();
+        StoreOriginalMaxHealth();
     }
 
     public override void TakeDamage(float damage)
@@ -19,5 +20,11 @@ public class StructureHP : Damageable
     {
         //Debug.Log(gameObject.name + " has died.");
         structure.ReturnToPool();
+    }
+    public void SetMaxHPNoReset(float multiplier)
+    {
+        float newMaxHealth = originalMaxHealth * multiplier;
+        maxHP = newMaxHealth;
+        TakeDamage(0);
     }
 }

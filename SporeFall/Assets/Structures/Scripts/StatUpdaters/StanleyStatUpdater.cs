@@ -6,23 +6,23 @@ public class StanleyStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private StanleyControlScript stanley;
 
-    public void Initialize(StructureLevels levels, int level)
+    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
     {
         if(levels is StanleyLevels stanley)
         {
-            UpdateStanleyStats(stanley, level);
+            UpdateStanleyStats(stanley, level, waveMultiplier);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level)
+    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
     {
         if (levels is StanleyLevels stanley)
         {
-            UpdateStanleyStats(stanley, level);
+            UpdateStanleyStats(stanley, level, waveMultiplier);
         }
     }
 
-    private void UpdateStanleyStats(StanleyLevels levels, int currentLevel)
+    private void UpdateStanleyStats(StanleyLevels levels, int currentLevel, float waveMultiplier)
     {
         var levelData = levels.levels[currentLevel];
         stanley.UpdateVisual(currentLevel);
@@ -32,7 +32,7 @@ public class StanleyStatUpdater : MonoBehaviour, IStructureStats
         stanley.detectionRadius = levelData.detectionRadius;
         stanley.randomMovementWeight = levelData.randomMovementWeight;
 
-        stanley.myceliaGenerationRate = levelData.myceliaGenerationRate;
+        stanley.myceliaGenerationRate = levelData.myceliaGenerationRate * (waveMultiplier /2);
         stanley.myceliaGenerationTickRate = levelData.myceliaGenerationTickRate;
     }
 }

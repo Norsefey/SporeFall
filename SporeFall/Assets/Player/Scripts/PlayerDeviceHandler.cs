@@ -61,14 +61,14 @@ public class PlayerDeviceHandler : MonoBehaviour
 
                 if (usingXbox == true)
                 {
-                    Debug.Log("Telling Tutorial script xbox = true");
+                    //Debug.Log("Telling Tutorial script xbox = true");
                     TutorialControls.Instance.usingXbox = true;
                     usingXbox = false;
                 }
 
                 else if (usingKeyboard == true)
                 {
-                    Debug.Log("Telling Tutorial script keyboard = true");
+                    //Debug.Log("Telling Tutorial script keyboard = true");
                     TutorialControls.Instance.usingKeyboard = true;
                     usingKeyboard = false;
                 }
@@ -102,19 +102,19 @@ public class PlayerDeviceHandler : MonoBehaviour
         {
             if (playerInput.devices[0].displayName == "Xbox Controller")
             {
-                Debug.Log("Setting usingXbox to true");
+                //Debug.Log("Setting usingXbox to true");
                 usingXbox = true;
             }
 
             else if (playerInput.devices[0].displayName == "PlayStation Controller")
             {
-                Debug.Log("Setting usingPlaystation to true");
+                //Debug.Log("Setting usingPlaystation to true");
                 //usingPlaystation = true;
             }
 
             else if (playerInput.devices[0].displayName == "Keyboard" || playerInput.devices[0].displayName == "Mouse")
             {
-                Debug.Log("Setting usingKeyboard to true");
+               // Debug.Log("Setting usingKeyboard to true");
                 usingKeyboard = true;
             }
 

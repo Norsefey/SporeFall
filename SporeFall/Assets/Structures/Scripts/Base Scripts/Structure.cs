@@ -22,10 +22,11 @@ public class Structure : MonoBehaviour
     public StructurePoolBehavior poolBehavior;
     private IStructureStats structureBehavior;
     private int currentLevel = 0;
-
-
     public bool onPlatform = false;
     public PlatformStructure myPlatform;
+
+    private float waveMultiplier = 1;
+
     private void Awake()
     {
         poolBehavior = GetComponent<StructurePoolBehavior>();
@@ -40,9 +41,12 @@ public class Structure : MonoBehaviour
             return;
         }
 
+        waveMultiplier = 1 * Mathf.Sqrt(GameManager.Instance.endlessWaveManager.CurrentDifficulty);
+        Debug.Log("Difficulty Modifier: " + waveMultiplier);
+
         UpdateVisuals();
         UpdateStats();
-        structureBehavior?.Initialize(structureStats, currentLevel);
+        structureBehavior?.Initialize(structureStats, currentLevel, waveMultiplier);
     }
     public void UpdateRadiusVisual(StructureLevel level)
     {
@@ -95,7 +99,6 @@ public class Structure : MonoBehaviour
         currentLevel = GameManager.Instance.upgradeManager.GetStructureLevel(structureStats.type);
         UpdateVisuals();
         UpdateStats();
-        structureBehavior?.UpdateStats(structureStats, currentLevel);
     }
     private void UpdateVisuals()
     {
@@ -113,10 +116,17 @@ public class Structure : MonoBehaviour
     private void UpdateStats()
     {
         var levelData = structureStats.GetLevel(currentLevel);
+        
         // Set the new HP value
-        healthComponent.SetMaxHP(levelData.maxHealth);
-
+        healthComponent.SetMaxHP(levelData.maxHealth * waveMultiplier);
+        
+        structureBehavior?.UpdateStats(structureStats, currentLevel, waveMultiplier);
         UpdateRadiusVisual(levelData);
+    }
+    public void UpdateEndlessStats()
+    {
+        healthComponent.SetMaxHPNoReset(waveMultiplier);
+        structureBehavior?.UpdateStats(structureStats, currentLevel, waveMultiplier);
     }
     public void ToggleStructureBehavior(bool toggle)
     {
@@ -197,5 +207,6 @@ public class Structure : MonoBehaviour
     public string GetStructureName() => structureStats.GetLevel(currentLevel).name;
     public string GetStructureDescription() => structureStats.description;
     public StructureType GetStructureType() => structureStats.type;
+    public float SetMultiplier { get { return waveMultiplier; } set { waveMultiplier = value; } }
 
 }

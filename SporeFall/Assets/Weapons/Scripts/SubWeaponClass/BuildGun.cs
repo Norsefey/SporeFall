@@ -94,7 +94,7 @@ public class BuildGun : Weapon
         if (TutorialControls.Instance != null && TutorialControls.Instance.controlsSet == true && controlsSet == false)
         {
             int playerIndex = pMan.GetPlayerIndex();
-            Debug.Log("Player index = " + playerIndex);
+            //Debug.Log("Player index = " + playerIndex);
             if (playerIndex == 0)
             {
                 buildModeText = "<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode";

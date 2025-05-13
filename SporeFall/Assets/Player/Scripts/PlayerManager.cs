@@ -82,7 +82,7 @@ public class PlayerManager : MonoBehaviour
 
         if(TutorialControls.Instance != null)
             TutorialControls.Instance.playerActive = true;
-            Debug.Log("Telling tutorial player is active");
+            //Debug.Log("Telling tutorial player is active");
     }
     private void Start()
     {
@@ -197,7 +197,7 @@ public class PlayerManager : MonoBehaviour
             else if (device is Keyboard || device is Mouse)
             {
                 playerDevice = "Mouse";
-                Debug.Log("I am using a keyboard");
+                //Debug.Log("I am using a keyboard");
                 pCamera.SetMouseSettings();
                 bGun.structRotSpeed = 25;
 
@@ -206,14 +206,14 @@ public class PlayerManager : MonoBehaviour
                 {
                     if (playerIndex == 0 && p1ControlsSet == false)
                     {
-                        Debug.Log("Setting keyboard controls p1");
+                        //Debug.Log("Setting keyboard controls p1");
                         TutorialControls.Instance.SetKeyboardInputsP1();
                         p1ControlsSet = true;
                     }
 
                     else if (playerIndex == 1 && p2ControlsSet == false)
                     {
-                        Debug.Log("Setting keyboard controls p2");
+                        //Debug.Log("Setting keyboard controls p2");
                         TutorialControls.Instance.SetKeyboardInputsP2();
                         p2ControlsSet = true;
                     }
@@ -373,7 +373,7 @@ public class PlayerManager : MonoBehaviour
             pUI.buildUI.SetActive(true);
 
             int playerIndex = GetPlayerIndex();
-            Debug.Log("Player index = " + playerIndex);
+            //Debug.Log("Player index = " + playerIndex);
             if (playerIndex == 0)
             {
                 pUI.EnableControls("<color=yellow>Build Mode</color> \n " + TutorialControls.Instance.scrollInput + " to change Structure \n Hold " + TutorialControls.Instance.aimInput + " to Preview \n " + TutorialControls.Instance.editInput + " to enter Edit Mode");
@@ -457,10 +457,10 @@ public class PlayerManager : MonoBehaviour
     #endregion
     public void MovePlayerTo(Vector3 position)
     {
-        Debug.Log("Moving player to: " + position);
+        //Debug.Log("Moving player to: " + position);
         pController.transform.position = position;
 
-        Debug.Log("Player At: " + pController.transform.position);
+        //Debug.Log("Player At: " + pController.transform.position);
 
 
         // Verify the move was successful
@@ -481,7 +481,7 @@ public class PlayerManager : MonoBehaviour
     }
     private IEnumerator Respawn(float waitTime, bool resetStats)
     {
-        Debug.Log("Starting Player Respawn");
+        //Debug.Log("Starting Player Respawn");
 
         if (isBuilding)
         {
@@ -502,7 +502,7 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Continuing respawn process");
+            //Debug.Log("Continuing respawn process");
             pAnime.ToggleRespawn(true);
 
             // Determine spawn position with fallback
