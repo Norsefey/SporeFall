@@ -105,11 +105,11 @@ public class EndlessWaveUI : MonoBehaviour
     {
         float finalBossScore = bossPoints * totalDeadBosses;
         float finalEnemyScore = mobPoints * totalDeadEnemies;
-        float finalTimeScore = timePoints * timer;
+        float finalTimeScore = Mathf.FloorToInt(timePoints * timer);
 
         finalScore = finalBossScore + finalEnemyScore + finalTimeScore;
 
-        finalScoreText.text = $"Final Score: {finalScore}";
+        finalScoreText.text = $"Final Score: {finalScore.ToString("F0")}";
     }
     #region DownTime
     private void OnWaveNumberChanged(int waveNumber)
