@@ -466,7 +466,6 @@ public class WaveManager : MonoBehaviour
         enemiesAlive++;
         enemiesSpawned++;
     }
-
     protected Vector3 GetSpawnPointWithinZone()
     {
         Bounds zoneBounds = currentWave.outSideSpawnZone.bounds;
@@ -614,6 +613,7 @@ public class WaveManager : MonoBehaviour
     {
         enemiesAlive--;
         deadEnemies++;
+        activeEnemies.Remove(enemy);
         if (!(currentWave.isFinalWave))
         {
             wUI.DisplayWaveProgress(deadEnemies);

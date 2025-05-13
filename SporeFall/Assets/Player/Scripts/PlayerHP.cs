@@ -28,14 +28,6 @@ public class PlayerHP : Damageable
     public override void TakeDamage(float damage)
     {
         float previousHP = currentHP;
-        if (currentHP / maxHP <= .25f)
-        {
-            damageReduction = .25f;
-        }
-        else
-        {
-            damageReduction = 0;
-        }
         base.TakeDamage(damage);
 
         if (pMan != null && pMan.audioSource != null)
@@ -117,13 +109,14 @@ public class PlayerHP : Damageable
         pMan.pAnime.ToggleUnscaledUpdateMode(true);
 
         pMan.pAnime.ActivateATrigger("Dead");
+
         // allow death animation to play abit
         yield return new WaitForSecondsRealtime(.5f);
         // Freeze the game
         Time.timeScale = 0.1f;
         // pan camera around player
         StartCoroutine(pMan.pCamera.PanAroundPlayer(transform, 3, 90));
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(1);
 
         // Unfreeze game and Start Death Save if in Coop
         Time.timeScale = 1f;

@@ -33,9 +33,6 @@ public class FlameThrowerGun : Weapon
         isHitScan = false; // We'll handle our own custom hit detection
         useSpread = true;
         bulletSpreadAngle = 5f; // Wider spread for flames
-
-        // Flamethrower always has limited ammo (fuel)
-        limitedAmmo = true;
     }
 
     public override void Fire()
@@ -47,10 +44,6 @@ public class FlameThrowerGun : Weapon
             {
                 PlaySFX(reloadSound, false);
                 StartReload();
-            }
-            else if (bulletCount <= 0 && totalAmmo <= 0)
-            {
-                player.DestroyCurrentWeapon();
             }
             return;
         }
@@ -172,21 +165,18 @@ public class FlameThrowerGun : Weapon
                 player.pUI.AmmoDisplay(this);
 
             // Check if we need to stop or reload
-            if (bulletCount <= 0)
+            if (bulletCount <= 0 && !IsReloading)
             {
-                if (totalAmmo > 0 && !IsReloading)
-                {
-                    PlaySFX(reloadSound, false);
-                    StartReload();
-                    StopFiring();
-                }
-                else if (totalAmmo <= 0)
-                {
-                    StopFiring();
-                    player.DestroyCurrentWeapon();
-                }
+                PlaySFX(reloadSound, false);
+                StartReload();
+                StopFiring();
             }
 
+            if (limitedAmmo && bulletCount <= 0 && totalAmmo <= 0)
+            {
+                StopFiring();
+                player.DestroyCurrentWeapon();
+            }
             yield return null;
         }
     }
