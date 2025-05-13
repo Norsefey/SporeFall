@@ -80,7 +80,7 @@ public class CorruptionHandler : MonoBehaviour
     private void UpdateCorruptionVision()
     {
         float corruptionPercentage = (corruptionAmount / maxCorruption) * 100;
-        Debug.Log(corruptionPercentage + "% Corruption");
+        //Debug.Log(corruptionPercentage + "% Corruption");
         
         if(corruptionPercentage >= corruptionThresholds[0])
         {

@@ -155,9 +155,12 @@ public class PlayerUI : MonoBehaviour
 
             if (HPBar.maxValue != hpScript.MaxHP)
             {
-                HPDelayBar.maxValue = hpScript.MaxHP;
                 HPBar.maxValue = hpScript.MaxHP;
-                HPDelayBar.value = hpScript.CurrentHP;
+                HPBar.value = hpScript.MaxHP;
+                HPDelayBar.maxValue = hpScript.MaxHP;
+                HPDelayBar.value = hpScript.MaxHP;
+                delayedHP = hpScript.MaxHP;
+
             }
         }
         if (HPText != null)
@@ -175,7 +178,6 @@ public class PlayerUI : MonoBehaviour
             //Debug.Log("DelayedHP is greater than current HP");
             if(isActiveAndEnabled)
                 StartCoroutine(HPDelayCooldown());
-            
         }
     }
     public void EnablePrompt(string text)
@@ -280,7 +282,7 @@ public class PlayerUI : MonoBehaviour
         while (delayedHP > pMan.pHealth.CurrentHP)
         {
             //Debug.Log("Reducing delayedHP");
-            delayedHP = delayedHP - .5f;
+            delayedHP -= .5f;
             HPDelayBar.value = delayedHP;
         }
         if (delayedHP < pMan.pHealth.CurrentHP)

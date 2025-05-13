@@ -15,10 +15,12 @@ public class EndlessWaveUI : MonoBehaviour
     [Header("During game UI")]
     [SerializeField] private GameObject survivalPrompt;
     [SerializeField] private TMP_Text survivalTimerText;
+    
     [Header("Game Over Panel")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text finalTimeText;
     [SerializeField] private TMP_Text EnemiesDefeatedText;
+    [SerializeField] private TMP_Text finalScoreText;
 
     [Header("Downtime UI")]
     [SerializeField] private GameObject downtimePanel;
@@ -37,7 +39,10 @@ public class EndlessWaveUI : MonoBehaviour
     private int currentWaveNumber;
     private bool isDowntimeActive = false;
 
-
+    float bossPoints = 101;
+    float mobPoints = 13;
+    float timePoints = 2;
+    float finalScore = 0;
 
     private void Start()
     {
@@ -80,6 +85,7 @@ public class EndlessWaveUI : MonoBehaviour
         int seconds = Mathf.FloorToInt(timer - minutes * 60);
         finalTimeText.text = $"Survival Time:  {string.Format("{0:0}:{1:00}", minutes, seconds)}";
         EnemiesDefeatedText.text = $"Enemies Defeated: {totalDeadEnemies} \n Bosses Defeated: {totalDeadBosses}";
+        CalculateFinalScore();
         gameOverPanel.SetActive(true);
     }
     public void IncreaseDeadEnemies()
@@ -95,7 +101,16 @@ public class EndlessWaveUI : MonoBehaviour
         startPrompt.SetActive(false);
         waveManager.inputManager.onPlayerJoined -= DisableStartPrompt;
     }
+    private void CalculateFinalScore()
+    {
+        float finalBossScore = bossPoints * totalDeadBosses;
+        float finalEnemyScore = mobPoints * totalDeadEnemies;
+        float finalTimeScore = timePoints * timer;
 
+        finalScore = finalBossScore + finalEnemyScore + finalTimeScore;
+
+        finalScoreText.text = $"Final Score: {finalScore}";
+    }
     #region DownTime
     private void OnWaveNumberChanged(int waveNumber)
     {
