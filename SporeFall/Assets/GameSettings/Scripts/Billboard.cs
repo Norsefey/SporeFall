@@ -47,6 +47,7 @@ public class Billboard : MonoBehaviour
             //Debug.Log("Setting Up Player Two");
 
             uiContainerPlayerTwo.gameObject.SetActive(true);
+            uiContainerPlayerOne.SetupTarget(GameManager.Instance.players[0].pCamera.transform);
             uiContainerPlayerTwo.SetupTarget(GameManager.Instance.players[1].pCamera.transform);
         }
         else

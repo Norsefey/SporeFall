@@ -12,6 +12,9 @@ public class BillboardUIUpdater : MonoBehaviour
     [SerializeField] private bool hideUI = true;
     private CanvasGroup groupAlpha;
     private Coroutine hideUICoroutine;
+
+    public bool lockYAxisOnly = false;
+
     private void InitializeUI()
     {
         if(groupAlpha == null)
@@ -34,9 +37,22 @@ public class BillboardUIUpdater : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (lookAtTarget != null)
+        // Billboard the UI to face the camera
+        if (lockYAxisOnly)
         {
-            transform.LookAt(lookAtTarget);
+            // Only rotate around Y axis (good for character-attached UI)
+            Vector3 directionToCamera = lookAtTarget.position - transform.position;
+            directionToCamera.y = 0; // Zero out the Y component
+
+            if (directionToCamera != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(-directionToCamera);
+            }
+        }
+        else
+        {
+            // Full billboarding - always face camera directly
+            transform.rotation = lookAtTarget.rotation;
         }
     }
     public void HandleHPChange(Damageable damagedEnemy, float damage)
