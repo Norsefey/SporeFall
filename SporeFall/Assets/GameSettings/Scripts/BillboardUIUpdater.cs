@@ -37,22 +37,25 @@ public class BillboardUIUpdater : MonoBehaviour
     }
     private void LateUpdate()
     {
-        // Billboard the UI to face the camera
-        if (lockYAxisOnly)
+        if(lookAtTarget != null)
         {
-            // Only rotate around Y axis (good for character-attached UI)
-            Vector3 directionToCamera = lookAtTarget.position - transform.position;
-            directionToCamera.y = 0; // Zero out the Y component
-
-            if (directionToCamera != Vector3.zero)
+            // Billboard the UI to face the camera
+            if (lockYAxisOnly)
             {
-                transform.rotation = Quaternion.LookRotation(-directionToCamera);
+                // Only rotate around Y axis (good for character-attached UI)
+                Vector3 directionToCamera = lookAtTarget.position - transform.position;
+                directionToCamera.y = 0; // Zero out the Y component
+
+                if (directionToCamera != Vector3.zero)
+                {
+                    transform.rotation = Quaternion.LookRotation(-directionToCamera);
+                }
             }
-        }
-        else
-        {
-            // Full billboarding - always face camera directly
-            transform.rotation = lookAtTarget.rotation;
+            else
+            {
+                // Full billboarding - always face camera directly
+                transform.rotation = lookAtTarget.rotation;
+            }
         }
     }
     public void HandleHPChange(Damageable damagedEnemy, float damage)

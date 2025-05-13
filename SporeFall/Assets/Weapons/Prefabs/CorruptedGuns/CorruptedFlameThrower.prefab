@@ -357,7 +357,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3744167784608782542}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -379,7 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0787e749932a08d4397a66023d33120f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponName: 
+  weaponName: Flame
   weaponSprite: {fileID: 0}
   player: {fileID: 0}
   bulletPrefab: {fileID: 0}
@@ -387,22 +387,22 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 256
-  fireSoundVolume: 0.5
+  fireSoundVolume: 0.3
   fireSound: {fileID: 8300000, guid: d09a75ae5db5bf14ea200c9c0a649414, type: 3}
-  reloadSound: {fileID: 0}
+  reloadSound: {fileID: 8300000, guid: d67d21e25ea5a2d438c2d3b131d1af7a, type: 3}
   isCorrupted: 0
   corruptionRate: 1.2
   holdType: 2
   secondHandHold: {fileID: 7947739557659610252}
   damage: 5
   damageModifier: 1
-  useSpread: 1
+  useSpread: 0
   bulletSpreadAngle: 2
   reloadTime: 2
   knockBackForce: 0
-  bulletCount: 0
-  bulletCapacity: 0
-  totalAmmo: 0
+  bulletCount: 250
+  bulletCapacity: 250
+  totalAmmo: 100
   limitedAmmo: 0
   isHitScan: 0
   hitScanDistance: 50
@@ -424,9 +424,6 @@ MonoBehaviour:
   flameRadius: 1.5
   fuelConsumptionRate: 5
   heatDamageMultiplier: 1.2
-  burnableLayers:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!1 &4430473442343255778
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,7 +964,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800012, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19800012, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: scalingMode
@@ -975,7 +972,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19816632, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: looping
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19816632, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: lengthInSec
@@ -983,7 +980,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19816632, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19816632, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: scalingMode
@@ -999,7 +996,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19832966, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: looping
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19832966, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: lengthInSec
@@ -1007,7 +1004,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19832966, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19832966, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: scalingMode
@@ -1019,7 +1016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19845216, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: looping
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19845216, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: lengthInSec
@@ -1027,7 +1024,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19845216, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19845216, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: scalingMode
@@ -1035,7 +1032,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19858668, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: looping
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19858668, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: lengthInSec
@@ -1043,7 +1040,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19858668, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: playOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19858668, guid: 4f8a3a0b449257842b03d9918aefd150, type: 3}
       propertyPath: scalingMode

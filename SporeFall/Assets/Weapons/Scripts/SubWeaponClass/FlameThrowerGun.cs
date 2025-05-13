@@ -11,7 +11,6 @@ public class FlameThrowerGun : Weapon
     [SerializeField] private float flameRadius = 1.5f;
     [SerializeField] private float fuelConsumptionRate = 5f; // Units of ammo used per second
     [SerializeField] private float heatDamageMultiplier = 1.2f; // Increased damage to burnable enemies
-    [SerializeField] private LayerMask burnableLayers;
 
     private bool isFiring = false;
     private List<Damageable> currentTargets = new List<Damageable>();
@@ -125,12 +124,6 @@ public class FlameThrowerGun : Weapon
                 if (target != null)
                 {
                     float appliedDamage = damage * damageModifier;
-
-                    // Apply extra damage to burnable enemies
-                    if (target.gameObject.layer == LayerMask.NameToLayer("BurnableEnemy"))
-                    {
-                        appliedDamage *= heatDamageMultiplier;
-                    }
 
                     target.TakeDamage(appliedDamage);
 
