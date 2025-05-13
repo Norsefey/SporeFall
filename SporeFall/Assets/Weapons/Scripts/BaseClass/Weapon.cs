@@ -28,6 +28,7 @@ public abstract class Weapon : MonoBehaviour
   
     [Header("Base Stats")]
     public float damage;
+    public float damageModifier = 1;
     public bool useSpread = true;
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
     public float reloadTime = 2f; // Time it takes to reload
@@ -97,7 +98,7 @@ public abstract class Weapon : MonoBehaviour
                 ProjectileData data = new()
                 {
                     Direction = shootDirection,
-                    Damage = damage,
+                    Damage = damage * damageModifier,
                     Speed = projectileData.Speed,
                     Lifetime = projectileData.Lifetime,
                     UseGravity = projectileData.UseGravity,
@@ -118,7 +119,7 @@ public abstract class Weapon : MonoBehaviour
                 ProjectileData data = new()
                 {
                     Direction = shootDirection,
-                    Damage = damage,
+                    Damage = damage * damageModifier,
                     Speed = projectileData.Speed,
                     Lifetime = projectileData.Lifetime,
                     UseGravity = projectileData.UseGravity,
@@ -188,7 +189,7 @@ public abstract class Weapon : MonoBehaviour
             {
                 if (hit.transform.TryGetComponent<Damageable>(out var damageable))
                 {
-                    damageable.TakeDamage(damage);
+                    damageable.TakeDamage(damage * damageModifier);
                 }
             }
             vfx.MoveToLocation(hit.point, 50);
