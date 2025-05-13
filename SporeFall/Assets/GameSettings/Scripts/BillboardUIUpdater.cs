@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BillboardUIUpdater : MonoBehaviour
 {
-    private Transform targetCamera = null;
+    private Transform lookAtTarget = null;
     [SerializeField] private Slider hpDisplay;
     [SerializeField] private TMP_Text hpText;
     [SerializeField] private Damageable hpManager;
@@ -34,9 +34,9 @@ public class BillboardUIUpdater : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (targetCamera != null)
+        if (lookAtTarget != null)
         {
-            transform.LookAt(transform.position + targetCamera.forward);
+            transform.LookAt(lookAtTarget);
         }
     }
     public void HandleHPChange(Damageable damagedEnemy, float damage)
@@ -63,7 +63,7 @@ public class BillboardUIUpdater : MonoBehaviour
     }
     public void SetupTarget(Transform target)
     {
-        targetCamera = target;
+        lookAtTarget = target;
     }
     IEnumerator HideUI()
     {

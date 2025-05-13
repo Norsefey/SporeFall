@@ -59,6 +59,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (transform.position.y <= -5)
+            pMan.StartRespawn(0, false);
+
         switch (currentState)
         {
             case PlayerState.Default:

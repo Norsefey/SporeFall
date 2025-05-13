@@ -4361,7 +4361,19 @@ MonoBehaviour:
   inputManager: {fileID: 1789183343}
   onWaveNumberChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 292759205}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onEnemyDefeated:
     m_PersistentCalls:
       m_Calls:
@@ -4437,7 +4449,7 @@ MonoBehaviour:
   - {fileID: 7970686666634383871, guid: 7d1215081ba4a6e44bd268cd0154dbcb, type: 3}
   outsideSpawnChance: 0.45
   maxEnemiesOnField: 50
-  baseDifficulty: 1
+  baseDifficulty: 2
   difficultyIncreasePerWave: 0.1
   difficultyIncreaseOverTime: 0.05
   difficultyTimeInterval: 60
@@ -4527,6 +4539,7 @@ MonoBehaviour:
   minTimeBetweenBossSpawns: 10
   bossSpawnTimeReduction: 10
   bossHealthMultiplier: 1.5
+  bossDamageMultiplier: 1.25
   presetSpawnPoints:
   - {fileID: 1433091167349107087}
   - {fileID: 5656475364596222927}

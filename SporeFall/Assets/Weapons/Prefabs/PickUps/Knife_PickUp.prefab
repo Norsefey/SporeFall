@@ -137,6 +137,7 @@ MonoBehaviour:
   blinkRate: 0.5
   despawnAfterPickup: 1
   pickupSound: {fileID: 8300000, guid: c847b153fd2ff6a4d8d4ef7226bbb8a5, type: 3}
+  damageModifier: 1
 --- !u!82 &2323873237666640931
 AudioSource:
   m_ObjectHideFlags: 0
@@ -540,13 +541,14 @@ MonoBehaviour:
   corruptionRate: 1.3
   holdType: 1
   secondHandHold: {fileID: 3413146058837546858}
-  damage: 25
+  damage: 69
+  damageModifier: 1
   useSpread: 0
   bulletSpreadAngle: 15
   reloadTime: 0.7
   knockBackForce: 0
   bulletCount: 1
-  bulletCapacity: 3
+  bulletCapacity: 1
   totalAmmo: 100
   limitedAmmo: 0
   isHitScan: 0
@@ -563,8 +565,8 @@ MonoBehaviour:
     BounceDamageMultiplier: 1.2
     Direction: {x: 0, y: 0, z: 0}
     TargetPosition: {x: 0, y: 0, z: 0}
-  burstCount: 1
-  betweenShotInterval: 0
+  burstCount: 3
+  betweenShotInterval: 0.2
 --- !u!1001 &964069780232316686
 PrefabInstance:
   m_ObjectHideFlags: 0

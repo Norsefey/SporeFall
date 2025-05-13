@@ -80,7 +80,7 @@ public class MeleeAttack : Attack
         // Log attack result
         if (showDebugGizmos)
         {
-            Debug.Log($"Melee Attack! Hit target: {hitTarget}, Hits: {hitPositions.Count}");
+            //Debug.Log($"Melee Attack! Hit target: {hitTarget}, Hits: {hitPositions.Count}");
         }
 
         StartCooldown();

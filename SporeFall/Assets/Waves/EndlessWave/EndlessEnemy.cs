@@ -287,7 +287,7 @@ public class EndlessEnemy : BaseEnemy
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
 
             StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier));
-            Debug.Log(gameObject.name + " : Attacked For : " + bestAttack.Damage * damageModifier);
+            //Debug.Log(gameObject.name + " : Attacked For : " + bestAttack.Damage * damageModifier);
             return;
         }
         else

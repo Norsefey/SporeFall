@@ -19,6 +19,7 @@ public class Billboard : MonoBehaviour
     {
         //Debug.Log("Removing Event Listener To On player join");
         GameManager.OnPlayerJoin -= SetPlayer;
+        GameManager.OnPlayerLeave -= RemovePlayer;
     }
     private void InitialSetup()
     {
@@ -26,6 +27,7 @@ public class Billboard : MonoBehaviour
         {
             //Debug.Log("Listening To On player join");
             GameManager.OnPlayerJoin += SetPlayer;
+            GameManager.OnPlayerLeave += RemovePlayer;
         }
     }
     // Call this to set which player this UI belongs to

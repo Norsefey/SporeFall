@@ -11,6 +11,14 @@ public class PlayerHP : Damageable
     private int currentLives = 3;
     public int CurrentLives => currentLives;
     [SerializeField] GameObject deathVFX;
+
+    [Header("Revival")]
+    [SerializeField] private GameObject reviveZone;
+    
+    public float deathTime = 10;
+    public float deathTimeCounter = 0;
+    public bool isDieing = false;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -40,7 +48,6 @@ public class PlayerHP : Damageable
             }
         }
     }
-
     public void DepleteLife()
     {
         currentLives--;
@@ -115,22 +122,63 @@ public class PlayerHP : Damageable
         // Freeze the game
         Time.timeScale = 0.1f;
         // pan camera around player
-        StartCoroutine( pMan.pCamera.PanAroundPlayer(transform, 3, 90));
+        StartCoroutine(pMan.pCamera.PanAroundPlayer(transform, 3, 90));
         yield return new WaitForSecondsRealtime(3f);
 
-        // Unfreeze game and respawn
+        // Unfreeze game and Start Death Save if in Coop
         Time.timeScale = 1f;
 
-        pMan.pAnime.ToggleUnscaledUpdateMode(false);
-        deathVFX.SetActive(false);
-        DepleteLife();
-        pMan.StartRespawn(3, true);
+        if (GameManager.Instance.players.Count > 1)
+        {
+            // Set the dying state and activate revive zone
+            isDieing = true;
+            reviveZone.SetActive(true);
+
+            // Wait for either revival or timeout
+            deathTimeCounter = 0;
+            while (isDieing && deathTimeCounter < deathTime)
+            {
+                deathTimeCounter += Time.deltaTime;
+                yield return null;
+            }
+
+            // Disable revive zone
+            reviveZone.SetActive(false);
+
+            // If player was not revived (still dying), deplete life and respawn
+            if (isDieing)
+            {
+                isDieing = false;
+                pMan.pAnime.ToggleUnscaledUpdateMode(false);
+                deathVFX.SetActive(false);
+                DepleteLife();
+                pMan.StartRespawn(3, true);
+            }
+            // If player was revived, the revival process would have been handled by PlayerRevive
+            // The isDieing flag would have been set to false by PlayerRevive
+        }
+        else
+        {
+            // Single player - proceed directly to life depletion and respawn
+            pMan.pAnime.ToggleUnscaledUpdateMode(false);
+            deathVFX.SetActive(false);
+            DepleteLife();
+            pMan.StartRespawn(3, true);
+        }
+
     }
     public override void ResetHealth()
     {
         base.ResetHealth();
         pMan.pHealth.canHoldCorruption = true;
         pMan.pHealth.canTakeDamage = true;
+    }
+    public void Revive()
+    {
+        isDieing = false;
+        isDead = false;
+        canHoldCorruption = true;
+        canTakeDamage = true;
     }
     public override void IncreaseCorruption(float amount)
     {
