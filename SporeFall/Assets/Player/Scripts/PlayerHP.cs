@@ -103,7 +103,6 @@ public class PlayerHP : Damageable
             pMan.audioSource.PlayOneShot(pMan.deathSound, 1.5f);
         }
 
-        pMan.pAnime.ActivateATrigger("Dead");
         StartCoroutine(DeathEffectRoutine());
     }
     private IEnumerator DeathEffectRoutine()
@@ -117,6 +116,7 @@ public class PlayerHP : Damageable
         pMan.pAnime.ToggleIKAim(false);
         pMan.pAnime.ToggleUnscaledUpdateMode(true);
 
+        pMan.pAnime.ActivateATrigger("Dead");
         // allow death animation to play abit
         yield return new WaitForSecondsRealtime(.5f);
         // Freeze the game

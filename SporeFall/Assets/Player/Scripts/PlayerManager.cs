@@ -502,7 +502,6 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            //Debug.Log("Continuing respawn process");
             pAnime.ToggleRespawn(true);
 
             // Determine spawn position with fallback
