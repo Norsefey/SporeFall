@@ -158,13 +158,15 @@ MonoBehaviour:
   projectileInitialSize: 20
   projectiles:
   - {fileID: 7441200720383325235, guid: c68f72cd39628eb45b471b8f79246228, type: 3}
+  - {fileID: 7441200720383325235, guid: a186699fd89b6144a8980932711a04db, type: 3}
   - {fileID: 7441200720383325235, guid: 97c5ef2b74bf8b44f96b7effa39ecbb9, type: 3}
-  - {fileID: 7441200720383325235, guid: 35ce948b26c2ac149953beb86bbc49b8, type: 3}
   - {fileID: 7441200720383325235, guid: e494b65960b98204aa186d88077d617d, type: 3}
+  - {fileID: 7441200720383325235, guid: 35ce948b26c2ac149953beb86bbc49b8, type: 3}
   - {fileID: 7441200720383325235, guid: d699fbd2ff7578d4ea53313e1b6d3f98, type: 3}
   - {fileID: 7441200720383325235, guid: 692fb5847d0f2d948959db249caa8d66, type: 3}
   - {fileID: 7441200720383325235, guid: ba85123127330214b8a0d86a42373f88, type: 3}
   - {fileID: 7441200720383325235, guid: 88af8017715471c4393966630d5606e4, type: 3}
+  - {fileID: 7441200720383325235, guid: f8f5f71f0ffc0e14dac05b62fafcca37, type: 3}
   projectileParent: {fileID: 5705331931506501456}
   VFXInitialSize: 20
   visualEffects:
@@ -184,15 +186,18 @@ MonoBehaviour:
   - {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
   - {fileID: 4021103657954561961, guid: c16dac404ca161e4cb0c9f92420d308d, type: 3}
   - {fileID: 8791802859087666345, guid: ae07f2a45f14a82428409cfe410e6002, type: 3}
+  - {fileID: 5880797563127281583, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
   - {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
   - {fileID: 3432958286849152088, guid: 0b52e08a084ab92478a26b37a5056b61, type: 3}
-  - {fileID: 5880797563127281583, guid: 265d3a5ba69981a4698ceabcedf368b0, type: 3}
+  - {fileID: 7441200720383325235, guid: f8f5f71f0ffc0e14dac05b62fafcca37, type: 3}
   VFXParent: {fileID: 7254711234041655557}
   weaponInitialSize: 10
   weaponDrops:
   - {fileID: 6532063568776282634, guid: ff0048dd2ef887a44bc159c3cde6d637, type: 3}
   - {fileID: 7980376292701781228, guid: d1265d45f28525a4dbe6c66028d75875, type: 3}
   - {fileID: 9060537162651975904, guid: 913ccd0c1fb98f046b9540bbdc94922d, type: 3}
+  - {fileID: 7980376292701781228, guid: 91084f473834f5a42b7fb726c7dc2314, type: 3}
+  - {fileID: 5036783195561497440, guid: 102afbd0b320e4d488a801a9386aa794, type: 3}
   weaponDropsParent: {fileID: 6356663214260859941}
   myceliaInitialSize: 30
   myceliaDrops:
@@ -1583,6 +1588,7 @@ MonoBehaviour:
   activePlayer: {fileID: 0}
   structBannerHolder: {fileID: 2108522160212411063}
   gunsBannerHolder: {fileID: 0}
+  generalBannerHolder: {fileID: 0}
 --- !u!1 &4969238280172556641
 GameObject:
   m_ObjectHideFlags: 0
@@ -3418,6 +3424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveManager: {fileID: 0}
+  endlessWaveManager: {fileID: 0}
   trainHandler: {fileID: 0}
   upgradeManager: {fileID: 2723002815391206906}
   gameUI: {fileID: 4323958132541929440}
@@ -3445,9 +3452,11 @@ MonoBehaviour:
   maxTrainHP_N: 1000
   trainDamageReduction_N: 0
   startingMycelia_N: 150
+  maxEnergy_N: 100
   maxTrainHP_E: 2000
   trainDamageReduction_E: 0.25
   startingMycelia_E: 200
+  maxEnergy_E: 150
   isTesting: 0
 --- !u!114 &2723002815391206906
 MonoBehaviour:

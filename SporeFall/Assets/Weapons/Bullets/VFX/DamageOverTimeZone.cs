@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DamageOverTimeZone : MonoBehaviour
 {
+    DropsPoolBehavior myPool;
     protected float duration;
     protected float tickRate;
     protected float damagePerTick;
@@ -31,14 +32,23 @@ public class DamageOverTimeZone : MonoBehaviour
             collider.isTrigger = true;
         }
         transform.GetChild(0).localScale = new Vector3(radius,radius,radius) * 2;
+
+        myPool = GetComponent<DropsPoolBehavior>();
     }
 
     protected virtual void Update()
     {
         if (Time.time >= endTime)
         {
-            Destroy(gameObject);
-            return;
+            if (myPool != null && myPool.pool != null)
+            {
+                myPool.pool.Return(myPool);
+            }
+            else
+            {
+                Debug.Log("No Pool Destroying");
+                Destroy(gameObject);
+            }
         }
 
         if (Time.time >= nextTickTime)

@@ -564,7 +564,7 @@ public class EndlessWaveManager : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
     }
-    private void SpawnEnemy(GameObject enemyPrefab, Vector3 spawnPoint, bool spawningOutside)
+    public void SpawnEnemy(GameObject enemyPrefab, Vector3 spawnPoint, bool spawningOutside)
     {
         if (enemyPools == null) return;
 
