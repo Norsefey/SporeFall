@@ -355,6 +355,7 @@ public class GameManager : MonoBehaviour
     public void IncreaseMycelia(float amount)
     {
         mycelia += amount;
+        mycelia = Mathf.RoundToInt(mycelia);
         gameUI.DisplayMycelia(mycelia);
     }
     public void DecreaseMycelia(float amount)
