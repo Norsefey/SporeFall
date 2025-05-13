@@ -20,10 +20,11 @@ public class PickUpWeapon : Interactables
     private float despawnTimer;
     private bool isBlinking;
 
-
     [Header("Audio Settings")]
     [SerializeField] private AudioClip pickupSound;
     private AudioSource audioSource;
+
+    public float damageModifier = 1;
 
     private void Start()
     {
@@ -101,6 +102,8 @@ public class PickUpWeapon : Interactables
 
         player.PickUpWeapon();
         RemovePrompt();
+
+        weapon.damageModifier = damageModifier;
 
         if (pickupSound != null && audioSource != null)
         {

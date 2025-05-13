@@ -128,7 +128,7 @@ public class ChargeGun : Weapon
                 ProjectileData data = new()
                 {
                     Direction = shootDirection,
-                    Damage = damage * chargeMultiplier, // Spread damage across projectiles
+                    Damage = (damage * damageModifier) * chargeMultiplier, // Spread damage across projectiles
                     Speed = projectileData.Speed,
                     Lifetime = projectileData.Lifetime,
                     UseGravity = projectileData.UseGravity,
@@ -194,7 +194,7 @@ public class ChargeGun : Weapon
             {
                 if (hit.transform.TryGetComponent<Damageable>(out var damageable))
                 {
-                    damageable.TakeDamage(damage * chargeMultiplier);
+                    damageable.TakeDamage((damage * damageModifier) * chargeMultiplier);
                 }
             }
             vfx.MoveToLocation(hit.point, 50);
