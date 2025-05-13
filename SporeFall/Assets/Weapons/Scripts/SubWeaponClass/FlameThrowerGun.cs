@@ -25,10 +25,6 @@ public class FlameThrowerGun : Weapon
             flameEffect = GetComponentInChildren<ParticleSystem>();
         }
 
-        // Set default values for a flamethrower
-        if (weaponName == "")
-            weaponName = "Flamethrower";
-
         isHitScan = false; // We'll handle our own custom hit detection
         useSpread = true;
         bulletSpreadAngle = 5f; // Wider spread for flames
