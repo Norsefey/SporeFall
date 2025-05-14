@@ -16,6 +16,8 @@ public class DefaultGunPickupTutorial : Interactables
         Debug.Log("Player Interacting");
         RemovePrompt();
         player.EquipDefaultGun();
+        if(doorToOpen != null)
+            doorToOpen.UnlockDoor();
         DestroyIntractable();
     }
     // prompting player

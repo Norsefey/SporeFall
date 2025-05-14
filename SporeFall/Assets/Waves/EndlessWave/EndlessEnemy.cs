@@ -65,36 +65,47 @@ public class EndlessEnemy : BaseEnemy
         switch (currentState)
         {
             case EnemyState.Idle:
+                if (animator != null)
+                    animator.SetInteger("State", 0);
                 stateTimer = Random.Range(2f, 4f);
                 agent.isStopped = true;
                 break;
 
             case EnemyState.Strafe:
+                if (animator != null)
+                    animator.SetInteger("State", 1);
                 stateTimer = Random.Range(2f, 4f);
                 CalculateStrafePosition();
                 break;
 
             case EnemyState.Attack:
+                if (animator != null)
+                    animator.SetInteger("State", 0);
                 stateTimer = Random.Range(5f, 8f);
                 break;
 
             case EnemyState.Chase:
+                
                 DetectTargets();
+                if (animator != null)
+                    animator.SetInteger("State", 1);
                 stateTimer = Random.Range(1f, 4f);
                 break;
 
             case EnemyState.Wander:
+
+                if (animator != null)
+                    animator.SetInteger("State", 1);
                 stateTimer = Random.Range(minWanderTime, maxWanderTime);
                 FindWanderDestination();
                 break;
 
             default:
+                if (animator != null)
+                    animator.SetInteger("State", 0);
                 stateTimer = Random.Range(2f, 4f);
                 break;
         }
-
-        if (animator != null)
-            animator.SetInteger("State", (int)currentState);
     }
     protected override void UpdateCurrentState()
     {

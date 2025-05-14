@@ -87,18 +87,14 @@ public class PlayerHP : Damageable
     {
         pMan = player;
     }
+    
     protected override void Die()
     {
-        if (pMan.audioSource != null && CurrentLives > 0)
+        if (pMan.audioSource != null && CurrentLives > 1)
         {
             pMan.audioSource.Stop(); // Stop previous audio before playing new one
             pMan.audioSource.PlayOneShot(pMan.deathSound, 1.5f);
         }
-
-        StartCoroutine(DeathEffectRoutine());
-    }
-    private IEnumerator DeathEffectRoutine()
-    {
         // prevent more damage
         pMan.pHealth.canHoldCorruption = false;
         pMan.pHealth.canTakeDamage = false;
@@ -107,16 +103,22 @@ public class PlayerHP : Damageable
         pMan.pInput.DisableAllInputs();
         pMan.pAnime.ToggleIKAim(false);
         pMan.pAnime.ToggleUnscaledUpdateMode(true);
+        pMan.pAnime.ToggleIsDead(true);
 
-        pMan.pAnime.ActivateATrigger("Dead");
-
-        // allow death animation to play abit
+        StartCoroutine(DeathEffectRoutine());
+    }
+    
+    
+    private IEnumerator DeathEffectRoutine()
+    {
+     
+        // allow death animation to play a bit
         yield return new WaitForSecondsRealtime(.5f);
         // Freeze the game
         Time.timeScale = 0.1f;
         // pan camera around player
         StartCoroutine(pMan.pCamera.PanAroundPlayer(transform, 3, 90));
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(3);
 
         // Unfreeze game and Start Death Save if in Coop
         Time.timeScale = 1f;
@@ -145,17 +147,18 @@ public class PlayerHP : Damageable
                 pMan.pAnime.ToggleUnscaledUpdateMode(false);
                 deathVFX.SetActive(false);
                 DepleteLife();
-                pMan.StartRespawn(3, true);
+                pMan.StartRespawn(1, true);
             }
             // If player was revived, the revival process would have been handled by PlayerRevive
             // The isDieing flag would have been set to false by PlayerRevive
         }
         else
         {
+            Debug.Log("Single PLayer Respawn");
             // Single player - proceed directly to life depletion and respawn
-            pMan.pAnime.ToggleUnscaledUpdateMode(false);
             deathVFX.SetActive(false);
             DepleteLife();
+            pMan.pAnime.ToggleUnscaledUpdateMode(false);
             pMan.StartRespawn(3, true);
         }
 

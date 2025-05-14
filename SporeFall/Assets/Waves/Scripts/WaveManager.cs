@@ -27,7 +27,10 @@ public class WaveManager : MonoBehaviour
     private Wave currentWave;
     public Wave CurrentWave {  get { return currentWave; } }
     private FinalWaveSettings finalWave; // Reference for when we're in the final wave
-    public int currentWaveIndex = 0;
+    
+    private int currentWaveIndex = 0;
+    public int CurrentWaveIndex { get { return currentWaveIndex; } }
+
     [SerializeField] private int maxEnemiesOnField = 300;
 
     [Header("Wave State")]
@@ -194,7 +197,6 @@ public class WaveManager : MonoBehaviour
         }
         
     }
-
     IEnumerator DisplayDepartTimer()
     {
         timer = departTime;
@@ -204,12 +206,11 @@ public class WaveManager : MonoBehaviour
         while (timer > 0)
         {
             Debug.Log("Timer is: " + timer);
-            yield return new WaitForSeconds(1.0f);
-            timer = timer - 1;
+            timer -= 1 * Time.deltaTime;
             GameManager.Instance.gameUI.departText.text = "Departing:" + timer;
+            yield return null;
         }
     }
-
     private IEnumerator SkipWindow()
     {
         yield return new WaitForSeconds(departTime);
@@ -217,7 +218,8 @@ public class WaveManager : MonoBehaviour
     }
     private void Depart()
     {
-        if(isRobertSpawned)
+        Debug.Log("Train Is Departing");
+        if(isRobertSpawned || wavePhase != WavePhase.Departing)
             return;
         train.ToggleForceField(false);
         movingCoroutine = StartCoroutine(MoveToWaveLocation(train.cannonFireTime));
@@ -249,6 +251,7 @@ public class WaveManager : MonoBehaviour
         // player can skip fight with Robert
         if(isRobertSpawned)
             RemoveAllRoberts();
+        timer = 0;
         // since we are skipping, we no longer need to invoke, prevents repeat
         CancelInvoke(nameof(TrainAutoDepartCall));
         //player.RemoveButtonAction();
@@ -667,15 +670,4 @@ public class WaveManager : MonoBehaviour
         isRobertSpawned = false;
     }
     #endregion
-
-    public void KillALLEnemies()
-    {
-        enemiesSpawned = 9999;
-        foreach (BaseEnemy enemy in activeEnemies)
-        {
-            enemy.Die();
-        }
-        activeEnemies.Clear();
-        WaveCleared();
-    }
 }

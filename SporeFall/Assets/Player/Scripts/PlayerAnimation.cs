@@ -102,10 +102,25 @@ public class PlayerAnimation : MonoBehaviour
     {
         bodyLook.weight = toggle ? 1 : 0;
     }
-     public void ActivateATrigger(string triggerName)
+    public void ActivateATrigger(string triggerName)
     {
+        if (anime.GetBool("IsFalling"))
+        {
+            anime.SetBool("IsFalling", false);
+        }
+
         anime.ResetTrigger(triggerName);
         anime.SetTrigger(triggerName);
+    }
+    public void ToggleIsDead(bool toggle)
+    {
+        anime.SetBool("IsDead", toggle);
+
+    }
+    public void ToggleIsCorrupted(bool toggle)
+    {
+        anime.SetBool("IsCorrupted", toggle);
+
     }
     public void ToggleRespawn(bool toggle)
     {

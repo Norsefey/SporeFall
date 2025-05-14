@@ -86,25 +86,25 @@ public class WaveUI : MonoBehaviour
         }*/
 
 
-        if (waveManager.currentWaveIndex == 0)
+        if (waveManager.CurrentWaveIndex == 0)
         {
             wave1Bar.value = value;
             //Debug.Log("Updating wave 1 bar");
         }
 
-        else if(waveManager.currentWaveIndex == 1)
+        else if(waveManager.CurrentWaveIndex == 1)
         {
             wave2Bar.value = value;
             //Debug.Log("Updating wave 2 bar");
         }
 
-        else if(waveManager.currentWaveIndex == 2)
+        else if(waveManager.CurrentWaveIndex == 2)
         {
             wave3Bar.value = value;
             //Debug.Log("Updating wave 3 bar");
         }
 
-        else if(waveManager.currentWaveIndex == 3)
+        else if(waveManager.CurrentWaveIndex == 3)
         {
             finalWaveBar.value = value;
             //Debug.Log("Updating final wave bar");
@@ -115,35 +115,32 @@ public class WaveUI : MonoBehaviour
     {
         bossBar.value = bossBar.maxValue;
     }
-
     public void DisplayWaveFlags()
     {
-        if (waveManager.currentWaveIndex == 0)
+        if (waveManager.CurrentWaveIndex == 0)
         {
             wave1Flag.sprite = podFlagSprite;
         }
 
-        else if(waveManager.currentWaveIndex == 1)
+        else if(waveManager.CurrentWaveIndex == 1)
         {
             wave2Flag.sprite = podFlagSprite;
         }
 
-        else if(waveManager.currentWaveIndex == 2)
+        else if(waveManager.CurrentWaveIndex == 2)
         {
             wave3Flag.sprite = podFlagSprite;
         }
 
-        else if(waveManager.currentWaveIndex == 3)
+        else if(waveManager.CurrentWaveIndex == 3)
         {
             finalWaveFlag.sprite = podFlagSprite;
         }
     }
-
     public void DisplayBossFlag()
     {
         bossFlag.sprite = bossFlagSprite;
     }
-
     public void DisplayWaveStart()
     {
         waveTextHolder.SetActive(true);
@@ -155,9 +152,9 @@ public class WaveUI : MonoBehaviour
         
         //waveText.text = $"{waveManager.CurrentWave.waveName} Start";
 
-        if (waveManager.currentWaveIndex <= 2)
+        if (waveManager.CurrentWaveIndex <= 2)
         {
-            waveText.text = "Wave " + (waveManager.currentWaveIndex + 1) + " Start";
+            waveText.text = "Wave " + (waveManager.CurrentWaveIndex + 1) + " Start";
         }
         else
         {
@@ -165,17 +162,15 @@ public class WaveUI : MonoBehaviour
         }
         StartCoroutine(WaveTextCooldown());
     }
-
     public void DisplayWaveClear()
     {
         waveTextHolder.SetActive(true);
-        if (waveManager.currentWaveIndex <= 2)
+        if (waveManager.CurrentWaveIndex <= 2)
         {
-            waveText.text = "Wave " + (waveManager.currentWaveIndex + 1) + " Clear";
+            waveText.text = "Wave " + (waveManager.CurrentWaveIndex + 1) + " Clear";
         }
         StartCoroutine(WaveTextCooldown());
     }
-
     IEnumerator WaveTextCooldown()
     {
         yield return new WaitForSeconds(3);

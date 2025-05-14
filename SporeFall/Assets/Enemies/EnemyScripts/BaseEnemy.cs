@@ -266,25 +266,34 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             case EnemyState.Idle:
                 stateTimer = Random.Range(2f, 4f);
+                if (animator != null)
+                    animator.SetInteger("State", 0);
                 break;
             case EnemyState.Strafe:
                 stateTimer = Random.Range(2f, 4f);
+                if (animator != null)
+                    animator.SetInteger("State", 1);
                 CalculateStrafePosition();
                 break;
             case EnemyState.Attack:
                 stateTimer = Random.Range(5f, 8f);
+                if (animator != null)
+                    animator.SetInteger("State", 0);
                 break;
             case EnemyState.Chase:
                 DetectTargets();
                 stateTimer = Random.Range(1f, 4f);
+                if (animator != null)
+                    animator.SetInteger("State", 1);
                 break;
             default:
                 stateTimer = Random.Range(2f, 4f);
+                if (animator != null)
+                    animator.SetInteger("State", 0);
                 break;
         }
 
-        if (animator != null)
-            animator.SetInteger("State", (int)currentState);
+      
     }
     protected virtual void UpdateCurrentState()
     {

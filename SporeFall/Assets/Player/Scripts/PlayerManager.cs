@@ -138,10 +138,6 @@ public class PlayerManager : MonoBehaviour
                     godMode = false;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                GameManager.Instance.waveManager.KillALLEnemies();
-            }
             if (Input.GetKeyDown(KeyCode.H))
             {
                 pHealth.TakeDamage(10);
@@ -465,10 +461,6 @@ public class PlayerManager : MonoBehaviour
     {
         //Debug.Log("Moving player to: " + position);
         pController.transform.position = position;
-
-        //Debug.Log("Player At: " + pController.transform.position);
-
-
         // Verify the move was successful
         if (Vector3.Distance(pController.transform.position, position) > 1f)
         {
@@ -477,6 +469,7 @@ public class PlayerManager : MonoBehaviour
             pController.transform.position = position;
         }
     }
+    
     public void StartRespawn(float waitTime, bool resetStats)
     {
         if (!isRespawning) // to prevent multiple respawn processes
@@ -487,7 +480,10 @@ public class PlayerManager : MonoBehaviour
     }
     private IEnumerator Respawn(float waitTime, bool resetStats)
     {
-        //Debug.Log("Starting Player Respawn");
+        Debug.Log("Starting Player Respawn");
+        pAnime.ToggleIsDead(false);
+        pAnime.ToggleIsCorrupted(false);
+
 
         if (isBuilding)
         {
@@ -508,8 +504,6 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            pAnime.ToggleRespawn(true);
-
             // Determine spawn position with fallback
             Vector3 spawnPosition;
             Transform spawnPoint = null;
@@ -533,16 +527,19 @@ public class PlayerManager : MonoBehaviour
                 Debug.LogWarning("Train spawn point not available, using fallback");
                 spawnPosition = GameManager.Instance.backUpPlayerSpawner.playerSpawnPoints[0].position;
             }
-
+            TogglePVisual(false);
+            TogglePControl(false);
+            TogglePCorruption(false);
             // Move player to spawn position
             MovePlayerTo(spawnPosition);
+
+            pAnime.ToggleRespawn(true);
 
             yield return new WaitForSecondsRealtime(.2f);
 
             // Reset player state
             Debug.Log("Resetting player state and returning control");
             TogglePVisual(true);
-
             TogglePControl(true);
             TogglePCorruption(true);
 
@@ -554,7 +551,6 @@ public class PlayerManager : MonoBehaviour
                 pAnime.SetWeaponHoldAnimation(0);
 
 
-
             if (resetStats)
             {
                 pCorruption.ResetCorruptionLevel();
@@ -564,6 +560,9 @@ public class PlayerManager : MonoBehaviour
         }
         isRespawning = false;
     }
+    
+    
+    
     public void SetupPlayerTwo()
     {
         pCamera.DisableAudioListener();

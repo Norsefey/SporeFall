@@ -23,6 +23,12 @@ public class WaveButton : Interactables
 
     public override void Interact(InputAction.CallbackContext context)
     {
+        if (!interactionEnabled)
+        {
+            RemoveIntractable();
+            return;
+        }
+
         switch (GameManager.Instance.waveManager.wavePhase)
         {
             case WaveManager.WavePhase.NotStarted:
@@ -37,11 +43,13 @@ public class WaveButton : Interactables
                 GameManager.Instance.waveManager.OnStartWave();
                 player.pUI.DisablePrompt();
                 break;
+            
             case WaveManager.WavePhase.Departing:
-                GameManager.Instance.waveManager.SkipDepartTime();
                 player.pInput.RemoveInteraction(this);
+                GameManager.Instance.waveManager.SkipDepartTime();
                 RemovePrompt();
                 break;
+            
             default:
                 Debug.Log("No Action");
                 RemoveIntractable();
