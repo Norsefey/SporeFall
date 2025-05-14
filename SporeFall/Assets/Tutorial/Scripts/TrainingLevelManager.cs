@@ -17,7 +17,7 @@ public class TrainingLevelManager : MonoBehaviour
     {
         SavedSettings.currentLevel = "Training";
         GameManager.OnPlayerJoin += GetPlayerDevice;
-        myceliaToPickUp.Setup();
+        myceliaToPickUp.Setup(1);
         foreach (DummyBehavior dummy in shootingRangeEnemies)
         {
             dummy.OnEnemyDeath += RespawnEnemy;

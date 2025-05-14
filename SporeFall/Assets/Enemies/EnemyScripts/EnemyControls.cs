@@ -256,7 +256,7 @@ public class EnemyControls : MonoBehaviour
         OnEnemyDeath?.Invoke();
         
         var mycelia = Instantiate(myceliaDropPrefab, transform.position, Quaternion.identity).GetComponent<MyceliaPickup>();
-        mycelia.Setup();
+        mycelia.Setup(1);
        
         if (train != null)
         {

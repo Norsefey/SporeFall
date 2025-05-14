@@ -11,9 +11,10 @@ public class MyceliaPickup : DropsPoolBehavior
     [SerializeField] private bool despawn = false;
     [SerializeField] private float despawnTime = 5;
 
-    public void Setup()
+    public void Setup(float multiplier)
     {
         amountToGive = Mathf.RoundToInt(Random.Range(minMyceliaAmount, maxMyceliaAmount));
+        amountToGive *= multiplier;
         if(despawn)
             Invoke(nameof(ReturnObject), despawnTime);
     }

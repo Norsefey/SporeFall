@@ -271,9 +271,9 @@ public class Turret : MonoBehaviour
         // Calculate direction to the closest point
         Vector3 directionToTarget = (closestPoint - firePoint.position).normalized;
 
-        // Check alignment - don't shoot unless turret is facing the target
+/*        // Check alignment - don't shoot unless turret is facing the target
         float aimAccuracy = Vector3.Dot(firePoint.forward, directionToTarget);
-        if (aimAccuracy < 0.95f) // About 18 degrees off-center
+        if (aimAccuracy < 0.50f) // About 18 degrees off-center
         {
             if (showFireDebug)
             {
@@ -282,7 +282,7 @@ public class Turret : MonoBehaviour
                 Debug.Log($"Can't shoot: Turret not aligned with target (accuracy: {aimAccuracy:F2})");
             }
             return;
-        }
+        }*/
 
         // Perform final raycast to ensure nothing is blocking the shot
         if (showFireDebug)

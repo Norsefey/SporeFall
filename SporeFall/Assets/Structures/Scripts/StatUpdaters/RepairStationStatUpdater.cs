@@ -25,7 +25,7 @@ public class RepairStationStatUpdater : MonoBehaviour, IStructureStats
         // get the data of the correct level of the structure
         var levelData = levels.levels[level];
 
-        repairStation.healAmount = levelData.healAmount * waveMultiplier;
+        repairStation.healAmount = levelData.healAmount * (waveMultiplier * 2);
         repairStation.healRate = levelData.healRate;
         repairStation.healRadius = levelData.healRange;
 

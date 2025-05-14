@@ -443,7 +443,7 @@ public class EndlessEnemy : BaseEnemy
 
         if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
-            mycelia.Setup();
+            mycelia.Setup(damageModifier);
         }
     }
     private void TrySpawnWeaponDrop()
