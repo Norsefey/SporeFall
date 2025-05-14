@@ -407,13 +407,17 @@ public class CorruptedPlayer : BaseEnemy
         // return life to player
         myPlayer.pHealth.IncreaseLife();
         SpawnDrop();
-        if (SavedSettings.firstRobertKill == false && Tutorial.Instance != null && Tutorial.Instance.isRobertDeadFast == false)
+        
+        if(GameManager.Instance.waveManager.wavePhase == WaveManager.WavePhase.Departing)
         {
-            Tutorial.Instance.RobertKillPrompts();
-            SavedSettings.firstRobertKill = true;
+            if (SavedSettings.firstRobertKill == false && Tutorial.Instance != null && Tutorial.Instance.isRobertDeadFast == false)
+            {
+                Tutorial.Instance.RobertKillPrompts();
+                SavedSettings.firstRobertKill = true;
+            }
+            GameManager.Instance.gameUI.departText.color = Color.white;
+            GameManager.Instance.gameUI.departText.text = "MANUAL DEPART REQUIRED";
         }
-        GameManager.Instance.gameUI.departText.color = Color.white;
-        GameManager.Instance.gameUI.departText.text = "MANUAL DEPART REQUIRED";
 
         if (GameManager.Instance.waveManager != null)
             GameManager.Instance.waveManager.RemoveRobert(gameObject);

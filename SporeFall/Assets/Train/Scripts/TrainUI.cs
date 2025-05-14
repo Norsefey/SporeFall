@@ -35,13 +35,13 @@ public class TrainUI : MonoBehaviour
 
         if (hpPercantage > 0)
         {
-            HPText.text = "Train HP: " + hpPercantage.ToString("F0") + "%";
+            HPText.text = "Integrity: " + hpPercantage.ToString("F0") + "%";
             //Debug.Log("Updating train HP bar");
         }
 
         else if (hpPercantage <= 0)
         {
-            HPText.text = "Train HP: 0%";
+            HPText.text = "Integrity: 0%";
             //Debug.Log("Updating train HP bar");
         }
 

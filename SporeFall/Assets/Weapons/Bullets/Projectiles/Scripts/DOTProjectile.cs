@@ -31,7 +31,7 @@ public class DOTProjectile : BaseProjectile
 
             if (!PoolManager.Instance.dropsPool.TryGetValue(dotZonePrefab, out DropsPool dotZonePool))
             {
-                Debug.LogError($"No pool found for weapon prefab: {dotZonePrefab.name}");
+                Debug.LogError($"No pool found for Weapons Pool prefab: {dotZonePrefab.name}");
                 return;
             }
 

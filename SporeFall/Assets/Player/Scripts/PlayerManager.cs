@@ -104,22 +104,13 @@ public class PlayerManager : MonoBehaviour
         }
 
         if (Input.GetKey(KeyCode.J))
-        {
-            if (Input.GetKeyDown(KeyCode.K))
+        { if (Input.GetKeyDown(KeyCode.P))
             {
                 if (!godMode)
                 {
                     defaultWeapon.damage = 1000;
                     defaultWeapon.hitScanDistance = 500;
                     defaultWeapon.bulletCount = 99999;
-                    pHealth.canTakeDamage = false;
-                    pHealth.canHoldCorruption = false;
-                    GameManager.Instance.IncreaseMycelia(9999);
-                    if (GameManager.Instance.trainHandler != null)
-                    {
-                        GameManager.Instance.trainHandler.trainHP.canTakeDamage = false;
-                        GameManager.Instance.trainHandler.UI.ChangeHPDisplay("DOGMODE");
-                    }
                     godMode = true;
                 }
                 else
@@ -127,20 +118,38 @@ public class PlayerManager : MonoBehaviour
                     defaultWeapon.damage = 10;
                     defaultWeapon.hitScanDistance = 50;
                     defaultWeapon.bulletCount = 15;
-                    pHealth.canTakeDamage = true;
-                    pHealth.canHoldCorruption = true;
-                    GameManager.Instance.DecreaseMycelia(9999);
-                    if (GameManager.Instance.trainHandler != null)
-                    {
-                        GameManager.Instance.trainHandler.trainHP.canTakeDamage = true;
-                        GameManager.Instance.trainHandler.trainHP.TakeDamage(0);
-                    }
                     godMode = false;
                 }
+
+            }
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                GameManager.Instance.IncreaseMycelia(100);
+            }
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                if (GameManager.Instance.trainHandler != null)
+                {
+                    GameManager.Instance.trainHandler.trainHP.canTakeDamage = !GameManager.Instance.trainHandler.trainHP.canTakeDamage;
+                    
+                    if (!GameManager.Instance.trainHandler.trainHP.canTakeDamage)
+                        GameManager.Instance.trainHandler.UI.ChangeHPDisplay("DOGMODE");
+                    else
+                        GameManager.Instance.trainHandler.trainHP.TakeDamage(0);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                pHealth.canTakeDamage = !pHealth.canTakeDamage;
+                pHealth.canHoldCorruption = !pHealth.canHoldCorruption;
             }
             if (Input.GetKeyDown(KeyCode.H))
             {
                 pHealth.TakeDamage(10);
+            }
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                pCorruption.IncreaseCorruption(10);
             }
         }
     }
