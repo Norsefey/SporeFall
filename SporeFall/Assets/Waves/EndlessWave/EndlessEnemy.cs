@@ -287,7 +287,7 @@ public class EndlessEnemy : BaseEnemy
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
 
             StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier));
-            Debug.Log(gameObject.name + " : Attacked For : " + bestAttack.Damage * damageModifier);
+            //Debug.Log(gameObject.name + " : Attacked For : " + bestAttack.Damage * damageModifier);
             return;
         }
         else
@@ -457,8 +457,6 @@ public class EndlessEnemy : BaseEnemy
         Vector3 dropPosition = transform.position;
         DropsPoolBehavior weaponDrop = weaponPool.Get(dropPosition, transform.rotation);
         weaponDrop.Initialize(weaponPool);  // Initialize with the correct weapon pool
-
-        weaponDrop.GetComponent<PickUpWeapon>().damageModifier = damageModifier;
 
         Debug.Log(weaponDrop.name + " Damage Modifier: " + weaponDrop.GetComponent<PickUpWeapon>().damageModifier);
 

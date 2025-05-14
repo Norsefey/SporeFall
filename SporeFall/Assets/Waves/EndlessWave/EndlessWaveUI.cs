@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class EndlessWaveUI : MonoBehaviour
 {
-
     [SerializeField] EndlessWaveManager waveManager;
+    [SerializeField] HighScoreManager highScoreManager;
 
     [SerializeField] private GameObject startPrompt;
 
@@ -20,7 +20,12 @@ public class EndlessWaveUI : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text finalTimeText;
     [SerializeField] private TMP_Text EnemiesDefeatedText;
+
+    [Header("ScoreBoard")]
     [SerializeField] private TMP_Text finalScoreText;
+    [SerializeField] private Transform scoreContainer;
+    [SerializeField] private GameObject scoreEntryPrefab;
+    [SerializeField] private GameObject firstPlaceEntryPrefab;
 
     [Header("Downtime UI")]
     [SerializeField] private GameObject downtimePanel;
@@ -109,8 +114,59 @@ public class EndlessWaveUI : MonoBehaviour
 
         finalScore = finalBossScore + finalEnemyScore + finalTimeScore;
 
-        finalScoreText.text = $"Final Score: {finalScore.ToString("F0")}";
+        // Add score to high scores list
+        bool isHighScore = highScoreManager.AddScore("lv3", (int)finalScore);
+
+        ShowHighScores("lv3");
+
+        // You might also want to show a special message for new high scores
+        if (isHighScore)
+        {
+            Debug.Log("New High Score!");
+            // Show high score animation or special UI effect
+            finalScoreText.text = $" <color=yellow>!!New High Score!! \n {finalScore.ToString("F0")}</color>";
+        }
+        else
+        {
+            finalScoreText.text = $"Final Score \n {finalScore.ToString("F0")}";
+        }
     }
+    public void ShowHighScores(string levelName)
+    {
+        // Clear previous entries
+        foreach (Transform child in scoreContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Get scores for the level
+        List<int> scores = highScoreManager.GetHighScores(levelName);
+
+        // Display scores
+        for (int i = 0; i < scores.Count; i++)
+        {
+            GameObject scoreEntryGO;
+            if (i == 0)
+            {
+                scoreEntryGO = Instantiate(firstPlaceEntryPrefab, scoreContainer);
+            }
+            else
+            {
+                scoreEntryGO = Instantiate(scoreEntryPrefab, scoreContainer);
+            }
+
+            // Find child text elements
+            TMP_Text rankText = scoreEntryGO.transform.Find("RankText")?.GetComponent<TMP_Text>();
+            TMP_Text scoreText = scoreEntryGO.transform.Find("ScoreText")?.GetComponent<TMP_Text>();
+
+            if (rankText != null)
+                rankText.text = (i + 1).ToString();
+
+            if (scoreText != null)
+                scoreText.text = scores[i].ToString("N0");
+        }
+    }
+
     #region DownTime
     private void OnWaveNumberChanged(int waveNumber)
     {

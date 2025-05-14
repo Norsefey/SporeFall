@@ -22,7 +22,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     private InputAction pauseGame;
     private InputAction leaveGame;
     private InputAction toggleFullscreen;
-    private InputAction skipCutscene;
+    private InputAction skipEventInput;
     // Player Actions
     public InputAction moveAction;
     public  InputAction lookAction;
@@ -72,7 +72,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         exitGame = gameInputMap.FindAction("ExitGame");
         pauseGame = gameInputMap.FindAction("Pause");
         toggleFullscreen = gameInputMap.FindAction("ToggleFullscreen");
-        skipCutscene = gameInputMap.FindAction("SkipCutscene");
+        skipEventInput = gameInputMap.FindAction("SkipCutscene");
         leaveGame = gameInputMap.FindAction("Leave");
         // player action map
         moveAction = playerInputMap.FindAction("Move");
@@ -113,7 +113,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // Assign Calls to each action
         // basic player actions
-        skipCutscene.performed += OnSkipCutscene;
+        skipEventInput.performed += OnSkipCutscene;
 
         leaveGame.performed += OnLeaveGame;
         jumpAction.started += OnJumpCall;
@@ -153,7 +153,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     {
         // remove calls
         leaveGame.performed -= OnLeaveGame;
-        skipCutscene.performed -= OnSkipCutscene;
+        skipEventInput.performed -= OnSkipCutscene;
         jumpAction.started -= OnJumpCall;
         sprintAction.started -= OnSprintStarted;
         sprintAction.canceled -= OnSprintCanceled;
@@ -199,9 +199,11 @@ public class PlayerInputOrganizer : MonoBehaviour
         if(pMan.interactable != null)
         {
             interactAction.performed -= pMan.interactable.Interact;
+            interactAction.canceled -= pMan.interactable.Interact;
         }
 
         interactAction.performed += interaction.Interact;
+        interactAction.canceled += interaction.Interact;
         pMan.interactable = interaction;
     }
     public void RemoveInteraction(Interactables interaction)
@@ -210,6 +212,7 @@ public class PlayerInputOrganizer : MonoBehaviour
             return;
 
         interactAction.performed -= interaction.Interact;
+        interactAction.canceled -= interaction.Interact;
         pMan.interactable = null;
         Debug.Log("Interaction Removed");
     }
@@ -392,6 +395,25 @@ public class PlayerInputOrganizer : MonoBehaviour
             // Unpause Game When out of menu
             Time.timeScale = 1;
         }
+    }
+    public void ToggleSkipDeathSave(bool toggle)
+    {
+        if (toggle)
+        {
+            skipEventInput.performed -= OnSkipCutscene;
+
+            skipEventInput.performed += OnSkipDeathSave;
+        }
+        else
+        {
+            skipEventInput.performed -= OnSkipDeathSave;
+
+            skipEventInput.performed += OnSkipCutscene;
+        }
+    }
+    private void OnSkipDeathSave(InputAction.CallbackContext context)
+    {
+        pMan.pHealth.isDieing = false;
     }
     private void OnCloseUpgradeMenu(InputAction.CallbackContext context)
     {
@@ -667,7 +689,7 @@ public class PlayerInputOrganizer : MonoBehaviour
         pMan.pUI.chargeGunSlider.maxValue = 1;
 
         currentHoldTime = 0;
-        StartCoroutine(HoldRoutine());
+        StartCoroutine(HoldRoutineSell());
     }
     private void OnEditSellCanceled(InputAction.CallbackContext context)
     {
@@ -714,7 +736,7 @@ public class PlayerInputOrganizer : MonoBehaviour
 
         return key;
     }
-    private IEnumerator HoldRoutine()
+    private IEnumerator HoldRoutineSell()
     {
         while (holdingSell)
         {

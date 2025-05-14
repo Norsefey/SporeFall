@@ -40,9 +40,15 @@ public class Structure : MonoBehaviour
             Debug.LogError($"No levels configured for structure: {gameObject.name}");
             return;
         }
-
-        waveMultiplier = 1 * Mathf.Sqrt(GameManager.Instance.endlessWaveManager.CurrentDifficulty);
-        Debug.Log("Difficulty Modifier: " + waveMultiplier);
+        if(GameManager.Instance.endlessWaveManager != null)
+        {
+            waveMultiplier = 1 * Mathf.Sqrt(GameManager.Instance.endlessWaveManager.CurrentDifficulty);
+            Debug.Log("Difficulty Modifier: " + waveMultiplier);
+        }
+        else
+        {
+            waveMultiplier = 1;
+        }
 
         UpdateVisuals();
         UpdateStats();

@@ -164,7 +164,11 @@ public class PlayerUI : MonoBehaviour
             }
         }
         if (HPText != null)
-            HPText.text = $"{hpScript.CurrentHP.ToString("F0") } / {hpScript.MaxHP.ToString("F0")}";
+        {
+            float currentHPInt = Mathf.CeilToInt(hpScript.CurrentHP);
+
+            HPText.text = $"{currentHPInt.ToString("F0")} / {hpScript.MaxHP.ToString("F0")}";
+        }
 
         if (delayedHP < hpScript.CurrentHP)
         {

@@ -50,7 +50,6 @@ public class MeleeAttack : Attack
         Vector3 attackOrigin = enemy.firePoint.position;
         Collider[] hits = Physics.OverlapSphere(attackOrigin, attackRange, targetLayers);
 
-        bool hitTarget = false;
 
         foreach (Collider hit in hits)
         {
@@ -65,7 +64,6 @@ public class MeleeAttack : Attack
                     damageable.TakeDamage(finalDamage);
                     SpawnVFX(hit.transform.position, enemy.transform.rotation);
                     hitPositions.Add(hit.transform.position);
-                    hitTarget = true;
 
                     // Draw debug line to hit target
                     if (showDebugGizmos)
@@ -80,7 +78,7 @@ public class MeleeAttack : Attack
         // Log attack result
         if (showDebugGizmos)
         {
-            Debug.Log($"Melee Attack! Hit target: {hitTarget}, Hits: {hitPositions.Count}");
+            //Debug.Log($"Melee Attack! Hit target: {hitTarget}, Hits: {hitPositions.Count}");
         }
 
         StartCooldown();

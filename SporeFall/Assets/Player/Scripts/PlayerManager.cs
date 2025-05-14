@@ -103,11 +103,6 @@ public class PlayerManager : MonoBehaviour
             pHealth.TakeDamage(toxicDamageRate * Time.deltaTime);
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            StartRespawn(1, true);
-        }
-
         if (Input.GetKey(KeyCode.J))
         {
             if (Input.GetKeyDown(KeyCode.K))
@@ -120,7 +115,7 @@ public class PlayerManager : MonoBehaviour
                     pHealth.canTakeDamage = false;
                     pHealth.canHoldCorruption = false;
                     GameManager.Instance.IncreaseMycelia(9999);
-                    if(GameManager.Instance.trainHandler != null)
+                    if (GameManager.Instance.trainHandler != null)
                     {
                         GameManager.Instance.trainHandler.trainHP.canTakeDamage = false;
                         GameManager.Instance.trainHandler.UI.ChangeHPDisplay("DOGMODE");
@@ -147,7 +142,10 @@ public class PlayerManager : MonoBehaviour
             {
                 GameManager.Instance.waveManager.KillALLEnemies();
             }
-           
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                pHealth.TakeDamage(10);
+            }
         }
     }
     private void SetManager()
@@ -245,6 +243,11 @@ public class PlayerManager : MonoBehaviour
                 }
 
             }
+            else if (currentWeapon is FlameThrowerGun flamethrower)
+            {
+                // Pass true when fire button is pressed, false when released
+                flamethrower.UpdateFiringState(isFiring);
+            }
         }
     }
     public void PickUpWeapon()
@@ -323,6 +326,9 @@ public class PlayerManager : MonoBehaviour
         // set the transforms of the new weapon
         currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         currentWeapon.gameObject.SetActive(true);
+
+        if(GameManager.Instance.endlessWaveManager != null)
+            currentWeapon.damageModifier = (Mathf.Sqrt(GameManager.Instance.endlessWaveManager.CurrentDifficulty));
 
         // set References
         currentWeapon.player = this;
@@ -502,7 +508,6 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            //Debug.Log("Continuing respawn process");
             pAnime.ToggleRespawn(true);
 
             // Determine spawn position with fallback

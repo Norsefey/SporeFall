@@ -161,7 +161,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7619541815717285705}
-  - component: {fileID: 5513447413048775376}
   - component: {fileID: 7923735744534123015}
   m_Layer: 7
   m_Name: ControlScript
@@ -185,22 +184,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5992522698283046421}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!208 &5513447413048775376
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7631706225286248583}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 2.455, y: 1.21, z: 0.285}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.04, z: 0.61}
-  m_TimeToStationary: 0.5
 --- !u!114 &7923735744534123015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,13 +213,14 @@ GameObject:
   - component: {fileID: 5992522698283046421}
   - component: {fileID: 3346339046060649887}
   - component: {fileID: 8926340626617740079}
+  - component: {fileID: 7913877254657177539}
   m_Layer: 13
   m_Name: WallControls
   m_TagString: Structure
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5992522698283046421
 Transform:
   m_ObjectHideFlags: 0
@@ -270,7 +254,6 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 500
   isDead: 0
-  damageReduction: 0
   structure: {fileID: 4587861469478724461}
 --- !u!65 &8926340626617740079
 BoxCollider:
@@ -293,6 +276,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.594743, y: 1.9936892, z: 0.57298255}
   m_Center: {x: 0.058050036, y: 0.58450073, z: 1.1535088}
+--- !u!208 &7913877254657177539
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770088602794142600}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.07, y: 0.95, z: 0.095}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.53, z: 1.18}
+  m_TimeToStationary: 0.5
 --- !u!1 &9178981773823493882
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,6 +872,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6385560159778423933, guid: 4c655c5207f54b64fb1a68c2ccd0fe20,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6385560159778423933, guid: 4c655c5207f54b64fb1a68c2ccd0fe20,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7979519667982622828, guid: 4c655c5207f54b64fb1a68c2ccd0fe20,
         type: 3}
