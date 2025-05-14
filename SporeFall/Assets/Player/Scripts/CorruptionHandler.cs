@@ -103,22 +103,6 @@ public class CorruptionHandler : MonoBehaviour
             pMan.pUI.UpdateCorruptedVision(currentCorruptionStage);
 
         }
-        /* // Calculate current corruption stage based on thresholds
-        int newStage = 0;
-        for (int i = 0; i < corruptionThresholds.Length; i++)
-        {
-            if (corruptionAmount / maxCorruption >= corruptionThresholds[i])
-            {
-                newStage = i + 1;
-            }
-        }
-
-        // Only update UI if stage has changed
-        if (newStage != currentCorruptionStage)
-        {
-            currentCorruptionStage = newStage;
-            pMan.pUI.UpdateCorruptedVision(currentCorruptionStage);
-        }*/
     }
     public bool TryPurchaseCorruptionReduction()
     {
@@ -160,7 +144,8 @@ public class CorruptionHandler : MonoBehaviour
         pMan.pHealth.DepleteLife();
         pMan.TogglePControl(false);
         pMan.pAnime.ToggleIKAim(false);
-        pMan.pAnime.ActivateATrigger("Corrupted");
+        
+        pMan.pAnime.ToggleIsCorrupted(true);
         pMan.StartRespawn(3, true);
 
         corruptionAmount = 0;

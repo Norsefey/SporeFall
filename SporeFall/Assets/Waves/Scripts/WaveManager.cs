@@ -207,7 +207,7 @@ public class WaveManager : MonoBehaviour
         {
             Debug.Log("Timer is: " + timer);
             timer -= 1 * Time.deltaTime;
-            GameManager.Instance.gameUI.departText.text = "Departing:" + timer;
+            GameManager.Instance.gameUI.departText.text = "Departing:" + timer.ToString("F0");
             yield return null;
         }
     }
