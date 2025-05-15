@@ -44,11 +44,16 @@ public class PulsarDamage : MonoBehaviour
             banner.buttonText.color = Color.red;
             return;
         }
-
         int newDamage = Mathf.RoundToInt(currentDamage * DamageIncreaseMultiplier);
-        Weapon pulsarPistol = banner.upgradeMenu.activePlayer.defaultWeapon;
-        pulsarPistol.damage = newDamage;
-        pulsarPistol.StartReload();
+
+        foreach (PlayerManager player in GameManager.Instance.players)
+        {
+            Weapon pulsarPistol = player.defaultWeapon;
+            pulsarPistol.damage = newDamage;
+            pulsarPistol.StartReload();
+        }
+
+        
 
         damageCost = banner.Purchase(damageCost, DamageCostIncreaseMultiplier);
         UpdateDamageUI();

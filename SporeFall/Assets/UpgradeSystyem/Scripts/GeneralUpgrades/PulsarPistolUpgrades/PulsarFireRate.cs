@@ -47,11 +47,14 @@ public class PulsarFireRate : MonoBehaviour
             banner.buttonText.color = Color.red;
             return;
         }
-        AutomaticGun pulsarPistol = (AutomaticGun)banner.upgradeMenu.activePlayer.defaultWeapon;
 
         float newFR = Mathf.RoundToInt(currentFireRate * fireRateIncreaseMultiplier);
-        pulsarPistol.fireRate = newFR;
 
+        foreach (PlayerManager player in GameManager.Instance.players)
+        {
+            AutomaticGun pulsarPistol = (AutomaticGun)player.defaultWeapon;
+            pulsarPistol.fireRate = newFR;
+        }
         fireRateCost = banner.Purchase(fireRateCost, fireRateCostIncreaseMultiplier);
         UpdateFireRateUI();
     }

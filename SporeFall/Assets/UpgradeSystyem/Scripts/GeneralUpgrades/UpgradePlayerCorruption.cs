@@ -45,7 +45,11 @@ public class UpgradePlayerCorruption : MonoBehaviour
         }
 
         float newMaxCorruption = Mathf.RoundToInt(currentMaxCorruption * corruptionIncreaseMultiplier);
-        banner.upgradeMenu.activePlayer.pCorruption.SetMaxCorruption(newMaxCorruption);
+        foreach (PlayerManager player in GameManager.Instance.players)
+        {
+            player.pCorruption.SetMaxCorruption(newMaxCorruption);
+        }
+        //banner.upgradeMenu.activePlayer.pCorruption.SetMaxCorruption(newMaxCorruption);
 
         cost = banner.Purchase(cost, costIncreaseMultiplier);
         UpdateUIElements();

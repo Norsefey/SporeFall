@@ -103,6 +103,8 @@ public class PlayerDeviceHandler : MonoBehaviour
             if (playerInput.devices[0].displayName == "Xbox Controller")
             {
                 //Debug.Log("Setting usingXbox to true");
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
                 usingXbox = true;
             }
 
@@ -110,6 +112,8 @@ public class PlayerDeviceHandler : MonoBehaviour
             {
                 //Debug.Log("Setting usingPlaystation to true");
                 //usingPlaystation = true;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
 
             else if (playerInput.devices[0].displayName == "Keyboard" || playerInput.devices[0].displayName == "Mouse")

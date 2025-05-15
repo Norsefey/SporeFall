@@ -47,9 +47,15 @@ public class PulsarBulletCapacity : MonoBehaviour
         }
         int newCapacity = Mathf.RoundToInt(currentBulletCapacity + bulletCapacityIncrease);
 
-        Weapon pulsarPistol = banner.upgradeMenu.activePlayer.defaultWeapon;
-        pulsarPistol.bulletCapacity = newCapacity;
-        pulsarPistol.StartReload();
+        foreach (PlayerManager player in GameManager.Instance.players)
+        {
+            Weapon pulsarPistol = player.defaultWeapon;
+            pulsarPistol.bulletCapacity = newCapacity;
+            pulsarPistol.StartReload();
+        }
+
+
+         
 
         bulletCost = banner.Purchase(bulletCost, bulletCostIncreaseMultiplier);
         UpdateBullectCapacityUI();

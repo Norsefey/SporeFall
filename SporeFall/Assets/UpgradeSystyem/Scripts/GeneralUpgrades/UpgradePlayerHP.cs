@@ -58,7 +58,11 @@ public class UpgradePlayerHP : MonoBehaviour
         }
 
         float newMaxHP = Mathf.RoundToInt(currentMaxHP * HPIncreaseMultiplier);
-        banner.upgradeMenu.activePlayer.pHealth.SetMaxHP(newMaxHP);
+        foreach(PlayerManager player in GameManager.Instance.players)
+        {
+            player.pHealth.SetMaxHP(newMaxHP);
+        }
+       /* banner.upgradeMenu.activePlayer.pHealth.SetMaxHP(newMaxHP);*/
 
         Purchase();
     }
