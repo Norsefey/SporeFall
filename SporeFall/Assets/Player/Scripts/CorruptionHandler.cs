@@ -38,6 +38,10 @@ public class CorruptionHandler : MonoBehaviour
         {
             CorruptPlayer();
             return;
+        }else if(corruptionAmount >= maxCorruption && preventFullCorruption)
+        {
+            pMan.pUI.UpdateCorruptionDisplay(99);
+            return;
         }
 
         if (pMan.holdingCorruption && pMan.pHealth.canHoldCorruption)
@@ -94,6 +98,11 @@ public class CorruptionHandler : MonoBehaviour
                         currentCorruptionStage = i + 1;
                         break;
                     }
+                }else if(corruptionPercentage < corruptionThresholds[i] && currentCorruptionStage > i + 1)
+                {
+                    pMan.pUI.UpdateCorruptedVision(i);
+                    currentCorruptionStage = i;
+                    break;
                 }
             }
         }
