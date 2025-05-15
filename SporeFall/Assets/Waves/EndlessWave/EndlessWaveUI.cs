@@ -49,6 +49,7 @@ public class EndlessWaveUI : MonoBehaviour
     float timePoints = 2;
     float finalScore = 0;
 
+    private float highestScore;
     private void Start()
     {
         survivalTimerText.text = "Survive \n" + string.Format("{0:0}:{1:00}", 0, 0);
@@ -120,11 +121,14 @@ public class EndlessWaveUI : MonoBehaviour
         ShowHighScores("lv3");
 
         // You might also want to show a special message for new high scores
-        if (isHighScore)
+        if (isHighScore && finalScore > highestScore)
         {
             Debug.Log("New High Score!");
             // Show high score animation or special UI effect
             finalScoreText.text = $" <color=yellow>!!New High Score!! \n {finalScore.ToString("F0")}</color>";
+        }else if (isHighScore)
+        {
+            finalScoreText.text = $" <color=yellow>!In Top 5! \n {finalScore.ToString("F0")}</color>";
         }
         else
         {
@@ -148,6 +152,7 @@ public class EndlessWaveUI : MonoBehaviour
             GameObject scoreEntryGO;
             if (i == 0)
             {
+                highestScore = scores[i];
                 scoreEntryGO = Instantiate(firstPlaceEntryPrefab, scoreContainer);
             }
             else

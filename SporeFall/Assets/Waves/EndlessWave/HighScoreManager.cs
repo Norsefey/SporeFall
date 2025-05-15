@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class HighScoreManager : MonoBehaviour
 {
-    public int maxScores = 5; // Store top 10 scores by default
-                               // Add a new score, returns true if it's a high score
+    private int maxScores = 5; // Store top 5 scores by default
     public bool AddScore(string levelName, int score)
     {
         // Get existing scores for this level

@@ -122,10 +122,6 @@ public class PlayerAnimation : MonoBehaviour
         anime.SetBool("IsCorrupted", toggle);
 
     }
-    public void ToggleRespawn(bool toggle)
-    {
-        anime.SetBool("Respawn", toggle);
-    }
     public void ToggleUnscaledUpdateMode(bool toggle)
     {
         if(toggle)

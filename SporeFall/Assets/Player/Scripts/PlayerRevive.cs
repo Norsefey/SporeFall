@@ -169,7 +169,7 @@ public class PlayerRevive : Interactables
         downedPlayer.TogglePControl(true);
         downedPlayer.TogglePCorruption(true);
         downedPlayer.pAnime.ToggleIKAim(true);
-        downedPlayer.pAnime.ToggleRespawn(true);
+        downedPlayer.pAnime.ActivateATrigger("Respawn");
 
         // Reset animation based on weapon
         if (downedPlayer.currentWeapon != null)

@@ -122,9 +122,36 @@ public class PlayerHP : Damageable
 
         // Unfreeze game and Start Death Save if in Coop
         Time.timeScale = 1f;
+        pMan.pAnime.ToggleIsDead(false);
 
+       
         if (GameManager.Instance.players.Count > 1)
         {
+            if (pMan.GetPlayerIndex() == 0)
+            {
+                if (GameManager.Instance.players[1].pHealth.isDead || GameManager.Instance.players[1].pHealth.isDieing)
+                {
+                    isDieing = false;
+                    pMan.pAnime.ToggleUnscaledUpdateMode(false);
+                    deathVFX.SetActive(false);
+                    DepleteLife();
+                    pMan.StartRespawn(1, true);
+                    yield break;
+                }
+            }
+            else 
+            {
+                if (GameManager.Instance.players[0].pHealth.isDead || GameManager.Instance.players[0].pHealth.isDieing)
+                {
+                    isDieing = false;
+                    pMan.pAnime.ToggleUnscaledUpdateMode(false);
+                    deathVFX.SetActive(false);
+                    DepleteLife();
+                    pMan.StartRespawn(1, true);
+                    yield break;
+                }
+            }
+
             // Set the dying state and activate revive zone
             isDieing = true;
             reviveZone.SetActive(true);

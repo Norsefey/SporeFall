@@ -542,7 +542,7 @@ public class PlayerManager : MonoBehaviour
             // Move player to spawn position
             MovePlayerTo(spawnPosition);
 
-            pAnime.ToggleRespawn(true);
+            pAnime.ActivateATrigger("Respawn");
 
             yield return new WaitForSecondsRealtime(.2f);
 
@@ -553,7 +553,6 @@ public class PlayerManager : MonoBehaviour
             TogglePCorruption(true);
 
             pAnime.ToggleIKAim(true);
-            pAnime.ToggleRespawn(false);
             if(currentWeapon != null)
                 pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
             else 
