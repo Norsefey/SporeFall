@@ -8,29 +8,35 @@ public class PlayerUI : MonoBehaviour
 {
     private PlayerManager pMan;
     [SerializeField] private BuildGun bGun;
+    
     [Header("Gameplay UI")]
-    [SerializeField] private GameObject weaponUI;
-    [SerializeField] private GameObject defaultUI;
-    public Image weaponIcon;
-    public Slider chargeGunSlider;
-    [Space(5)]
-    [SerializeField] private TMP_Text ammoIndicator;
-    [SerializeField] private GameObject promptHolder;
     public GameObject controlsHolder;
     public TMP_Text textPrompt;
     [SerializeField] private TMP_Text textControls;
+    [SerializeField] private GameObject connectionPrompt;
+    
+    [Header("Weapon UI")]
+    [SerializeField] private GameObject weaponUI;
+    [SerializeField] private GameObject defaultUI;
+    [SerializeField] private GameObject promptHolder;
+    [SerializeField] private TMP_Text ammoIndicator;
+    public Image weaponIcon;
+    public Slider chargeGunSlider;
+
     [Header("HP UI")]
     [SerializeField] private Slider HPBar;
     [SerializeField] private Slider HPDelayBar;
     [SerializeField] private TMP_Text HPText;
     private float delayedHP;
     [SerializeField] private GameObject[] lifeIcons;
+    
     [Header("Corruption UI")]
     [SerializeField] private Slider corruptionBar;
     [SerializeField] private TMP_Text corruptionText;
     [SerializeField] private GameObject corruptedVisionHolder;
     [SerializeField] private Image corruptedVisionImage;
     [SerializeField] private Sprite[] corruptionSprites; // Array of corruption vision sprites
+    
     [Header("Build/Structures UI")]
     public GameObject buildUI;
     [SerializeField] private Image selectedStructureIcon;
@@ -279,7 +285,10 @@ public class PlayerUI : MonoBehaviour
         infoPanel.sprite = editPromptSprite;
         controlsPanel.sprite = editPromptSprite;
     }
-
+    public void ToggleConnectionPrompt(bool toggle)
+    {
+        connectionPrompt.SetActive(toggle);
+    }
     IEnumerator HPDelayCooldown()
     {
         yield return new WaitForSeconds(1f);

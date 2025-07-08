@@ -55,15 +55,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Join"",
-                    ""type"": ""Button"",
-                    ""id"": ""80f5823f-7781-4bb0-93bd-d47c93c7f9ca"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Leave"",
                     ""type"": ""Button"",
                     ""id"": ""384290a2-9d21-4a2b-98f3-e349deab4124"",
@@ -168,50 +159,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""ExitGame"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""04622143-0b73-4f43-abc8-46e4dc305578"",
-                    ""path"": ""<Keyboard>/anyKey"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Join"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""24bd04d6-6577-41c4-9861-2cdb828a88a0"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Join"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2b204969-f55c-47ca-abe8-3363bcae4b4a"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Join"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ff6e1460-414d-4078-850b-ff622611dff1"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Join"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1164,7 +1111,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Game_Pause = m_Game.FindAction("Pause", throwIfNotFound: true);
         m_Game_ToggleFullscreen = m_Game.FindAction("ToggleFullscreen", throwIfNotFound: true);
         m_Game_ExitGame = m_Game.FindAction("ExitGame", throwIfNotFound: true);
-        m_Game_Join = m_Game.FindAction("Join", throwIfNotFound: true);
         m_Game_Leave = m_Game.FindAction("Leave", throwIfNotFound: true);
         m_Game_SkipCutscene = m_Game.FindAction("SkipCutscene", throwIfNotFound: true);
         // Player
@@ -1262,7 +1208,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Game_Pause;
     private readonly InputAction m_Game_ToggleFullscreen;
     private readonly InputAction m_Game_ExitGame;
-    private readonly InputAction m_Game_Join;
     private readonly InputAction m_Game_Leave;
     private readonly InputAction m_Game_SkipCutscene;
     public struct GameActions
@@ -1272,7 +1217,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_Game_Pause;
         public InputAction @ToggleFullscreen => m_Wrapper.m_Game_ToggleFullscreen;
         public InputAction @ExitGame => m_Wrapper.m_Game_ExitGame;
-        public InputAction @Join => m_Wrapper.m_Game_Join;
         public InputAction @Leave => m_Wrapper.m_Game_Leave;
         public InputAction @SkipCutscene => m_Wrapper.m_Game_SkipCutscene;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
@@ -1293,9 +1237,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @ExitGame.started += instance.OnExitGame;
             @ExitGame.performed += instance.OnExitGame;
             @ExitGame.canceled += instance.OnExitGame;
-            @Join.started += instance.OnJoin;
-            @Join.performed += instance.OnJoin;
-            @Join.canceled += instance.OnJoin;
             @Leave.started += instance.OnLeave;
             @Leave.performed += instance.OnLeave;
             @Leave.canceled += instance.OnLeave;
@@ -1315,9 +1256,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @ExitGame.started -= instance.OnExitGame;
             @ExitGame.performed -= instance.OnExitGame;
             @ExitGame.canceled -= instance.OnExitGame;
-            @Join.started -= instance.OnJoin;
-            @Join.performed -= instance.OnJoin;
-            @Join.canceled -= instance.OnJoin;
             @Leave.started -= instance.OnLeave;
             @Leave.performed -= instance.OnLeave;
             @Leave.canceled -= instance.OnLeave;
@@ -1722,7 +1660,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnToggleFullscreen(InputAction.CallbackContext context);
         void OnExitGame(InputAction.CallbackContext context);
-        void OnJoin(InputAction.CallbackContext context);
         void OnLeave(InputAction.CallbackContext context);
         void OnSkipCutscene(InputAction.CallbackContext context);
     }
