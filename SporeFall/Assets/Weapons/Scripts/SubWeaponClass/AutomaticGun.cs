@@ -33,4 +33,12 @@ public class AutomaticGun : Weapon
             nextFireTime = Time.time + 1f / fireRate;
         }
     }
+
+    public void StartAutoFire() { 
+        InvokeRepeating(nameof(Fire), 0f, 1f / fireRate); // Start firing repeatedly at the specified fire rate
+    }
+    public void StopAutoFire() { 
+        CancelInvoke(nameof(Fire)); // Stop the repeated firing
+        isInBurst = false; // Reset burst state when stopping fire
+    }
 }

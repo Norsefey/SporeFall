@@ -61,7 +61,7 @@ public abstract class Weapon : MonoBehaviour
             bulletCount--;
             if (isHitScan)
             {
-                FireHitscan(player.pCamera.transform);
+                FireHitscan();
             }
             else
             {
@@ -139,12 +139,13 @@ public abstract class Weapon : MonoBehaviour
             StartReload();
         }
     }
-    protected void FireHitscan(Transform playerCamera)
+    protected void FireHitscan()
     {
         PlaySFX(fireSound, false);
         // Calculate shoot direction with spread
-        Vector3 shootDirection = GetSpreadDirection(playerCamera.forward);
-        // Rotate player if not aiming
+        Vector3 shootDirection = GetSpreadDirection(firePoint.forward);
+        
+       /* // Rotate player if not aiming
         if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             player.pController.RotateOnFire();
@@ -153,7 +154,8 @@ public abstract class Weapon : MonoBehaviour
         {
             // Ensure the weapon is aligned with the shoot direction
             transform.forward = shootDirection;
-        }
+        }*/
+
         VFXPoolingBehavior vfx = null;
         if (PoolManager.Instance != null)
         {
@@ -174,7 +176,7 @@ public abstract class Weapon : MonoBehaviour
         }
      
 
-        Ray ray = new(playerCamera.position, shootDirection);
+        Ray ray = new(firePoint.position, shootDirection);
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
             //Debug.Log("Hit" + hit.transform.gameObject.name);

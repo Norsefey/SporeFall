@@ -14,7 +14,7 @@ public abstract class RangedAttack : Attack
 
         if (target.TryGetComponent<Rigidbody>(out var targetRb))
         {
-            return target.position + targetRb.velocity * predictionTime;
+            return target.position + targetRb.linearVelocity * predictionTime;
         }
 
         return target.position;

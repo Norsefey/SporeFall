@@ -56,7 +56,7 @@ public class ProjectileMovement : MonoBehaviour
         {
             rb.isKinematic = false;
             rb.useGravity = data.UseGravity;
-            rb.velocity = data.Direction * data.Speed;
+            rb.linearVelocity = data.Direction * data.Speed;
         }
     }
     private void Update()
@@ -130,7 +130,7 @@ public class ProjectileMovement : MonoBehaviour
 
                 // Use the direction we calculated near the end of the arc
                 // This captures both horizontal and vertical components
-                rb.velocity = data.Direction * data.Speed;
+                rb.linearVelocity = data.Direction * data.Speed;
 
                 //Debug.Log("Arc Complete - Switching to physics with actual trajectory: " + rb.velocity);
             }
@@ -156,8 +156,8 @@ public class ProjectileMovement : MonoBehaviour
         else if (rb != null && !rb.isKinematic)
         {
             // Handle physics-based bouncing
-            Vector3 reflection = Vector3.Reflect(rb.velocity, surface.transform.up);
-            rb.velocity = reflection;
+            Vector3 reflection = Vector3.Reflect(rb.linearVelocity, surface.transform.up);
+            rb.linearVelocity = reflection;
         }
     }
     public Vector3 GetPreviousPosition()
