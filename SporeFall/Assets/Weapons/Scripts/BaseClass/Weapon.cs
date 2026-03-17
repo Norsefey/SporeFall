@@ -65,21 +65,21 @@ public abstract class Weapon : MonoBehaviour
             }
             else
             {
-                FireProjectile(firePoint, player.pCamera.myCamera);
+                FireProjectile();
             }
         }
     }
-    protected void FireProjectile(Transform firePoint, Camera playerCamera)
+    protected void FireProjectile()
     {
         PlaySFX(fireSound, false);
         // Apply bullet spread
-        Vector3 shootDirection = GetSpreadDirection(playerCamera.transform.forward);
+        Vector3 shootDirection = GetSpreadDirection(firePoint.forward);
         // Rotate player first before shooting
-        if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
+        /*if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {// don't rotate player if aiming, rotation is handled in playerMovement script
             player.pController.RotateOnFire();
         }
-        transform.forward = playerCamera.transform.forward;
+        transform.forward = firePoint.forward;*/
         BaseProjectile projectile;
         if (PoolManager.Instance != null)
         {
@@ -230,7 +230,8 @@ public abstract class Weapon : MonoBehaviour
     {
         Debug.Log("Starting Reload");
         isReloading = true;
-        if (player.pUI != null)
+        
+        if (player != null && player.pUI != null)
             player.pUI.AmmoDisplay(this);
 
         if (limitedAmmo)
@@ -263,7 +264,7 @@ public abstract class Weapon : MonoBehaviour
         }
 
         isReloading = false;
-        if (player.pUI != null)
+        if (player != null && player.pUI != null)
             player.pUI.AmmoDisplay(this);
     }
     public void CancelReload()
@@ -281,7 +282,7 @@ public abstract class Weapon : MonoBehaviour
         // Ensure player and player.pController are not null
         if (player == null || player.pController == null)
         {
-            Debug.LogWarning("Player or Player Controller is null!");
+            //Debug.LogWarning("Player or Player Controller is null!");
             return;
         }
 
@@ -290,7 +291,7 @@ public abstract class Weapon : MonoBehaviour
 
         if (parentTransform == null)
         {
-            Debug.LogWarning("Player Controller has no parent!");
+            //Debug.LogWarning("Player Controller has no parent!");
             return;
         }
 
@@ -299,7 +300,7 @@ public abstract class Weapon : MonoBehaviour
 
         if (parentAudioSource == null)
         {
-            Debug.LogWarning("No AudioSource found on Player Controller's parent!");
+            //Debug.LogWarning("No AudioSource found on Player Controller's parent!");
             return;
         }
 

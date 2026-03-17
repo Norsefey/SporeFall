@@ -58,7 +58,7 @@ public class BurstGun : Weapon
                 }
                 else
                 {
-                    FireProjectile(firePoint, player.pCamera.myCamera);
+                    FireProjectile();
                 }
             }
         }

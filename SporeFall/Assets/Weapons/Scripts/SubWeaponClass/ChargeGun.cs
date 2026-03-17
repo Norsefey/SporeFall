@@ -20,6 +20,8 @@ public class ChargeGun : Weapon
     public AudioClip chargeSound; // Charging sound clip
     [Range(0f, 1f)] public float chargeSoundVolume = 0.5f; // Volume for charging sound
 
+    Coroutine chargeCoroutine;
+
     // Called while holding down the fire button to accumulate charge
     public void Charge()
     {
@@ -38,16 +40,36 @@ public class ChargeGun : Weapon
             chargeAmount = 0f; // Reset charge
 
             // Play the charging sound
-            if (chargeSound != null && !player.pController.audioSource.isPlaying)
+            if (chargeSound != null)
             {
                 PlaySFX(chargeSound, true);
             }
-        }
 
-        // Accumulate charge based on how long the fire button is held
-        chargeAmount += Time.deltaTime / maxChargeTime;
-        chargeAmount = Mathf.Clamp01(chargeAmount); // Clamp charge to [0,1]
-        Debug.Log("Charging: " + (chargeAmount * 100).ToString("F0") + "%");
+            chargeCoroutine = StartCoroutine(ChargeUp());
+        }
+    }
+
+    private IEnumerator ChargeUp()
+    {
+        while (isCharging && chargeAmount < 1)
+        {
+            // Accumulate charge based on how long the fire button is held
+            chargeAmount += Time.deltaTime / maxChargeTime;
+            chargeAmount = Mathf.Clamp01(chargeAmount); // Clamp charge to [0,1]
+            Debug.Log("Charging: " + (chargeAmount * 100).ToString("F0") + "%");
+
+            yield return null;
+        }
+    }
+
+    public void CancelCharge()
+    {
+        if(chargeCoroutine != null)
+            StopCoroutine(chargeCoroutine);
+
+        isCharging = false;
+        chargeAmount = 0;
+        Debug.Log("Charge Canceled");
     }
 
     // Called when the fire button is released to fire the charged shot
@@ -58,7 +80,7 @@ public class ChargeGun : Weapon
         isCharging = false;
 
         // Stop the charging sound
-        if (player.pController.audioSource.isPlaying)
+        if (player != null && player.pController.audioSource.isPlaying)
         {
             player.pController.audioSource.Stop();
         }
@@ -81,19 +103,18 @@ public class ChargeGun : Weapon
 
         bulletCount--;
     }
-
     // Fire projectile with charge multiplier affecting its power (damage or speed)
     private void FireProjectile(float chargeMultiplier)
     {
         // Precise calculation of projectile count
         int currentProjectileCount = Mathf.Max(1, Mathf.RoundToInt(chargeAmount * (maxProjectileCount - 1) + 1));
 
-        Vector3 baseDirection = player.pCamera.myCamera.transform.forward;
+        Vector3 baseDirection = firePoint.forward;
 
-        if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
+   /*     if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             player.pController.RotateOnFire();
-        }
+        }*/
 
         ProjectilePool pool = null;
 
@@ -151,9 +172,9 @@ public class ChargeGun : Weapon
     {
         PlaySFX(fireSound, false);
         // Calculate shoot direction with spread
-        Vector3 shootDirection = GetSpreadDirection(player.pCamera.myCamera.transform.forward);
+        Vector3 shootDirection = GetSpreadDirection(firePoint.forward);
         // Rotate player if not aiming
-        if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
+       /* if (player.pController.currentState != PlayerMovement.PlayerState.Aiming)
         {
             player.pController.RotateOnFire();
         }
@@ -161,7 +182,7 @@ public class ChargeGun : Weapon
         {
             // Ensure the weapon is aligned with the shoot direction
             transform.forward = shootDirection;
-        }
+        }*/
         VFXPoolingBehavior vfx = null;
         if (PoolManager.Instance != null)
         {
@@ -184,7 +205,7 @@ public class ChargeGun : Weapon
         }
 
 
-        Ray ray = new(player.pCamera.myCamera.transform.position, shootDirection);
+        Ray ray = new(firePoint.position, shootDirection);
         if (Physics.Raycast(ray, out RaycastHit hit, hitScanDistance, hitLayers)) // Range of the hitscan weapon
         {
             //Debug.Log("Hit" + hit.transform.gameObject.name);

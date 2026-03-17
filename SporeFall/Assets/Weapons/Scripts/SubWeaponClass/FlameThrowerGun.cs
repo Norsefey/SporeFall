@@ -149,7 +149,7 @@ public class FlameThrowerGun : Weapon
             bulletCount -= fuelConsumed;
 
             // Update UI
-            if (player.pUI != null)
+            if (player != null && player.pUI != null)
                 player.pUI.AmmoDisplay(this);
 
             // Check if we need to stop or reload
@@ -175,7 +175,7 @@ public class FlameThrowerGun : Weapon
         currentTargets.Clear();
 
         // Get the direction with spread
-        Vector3 flameDirection = GetSpreadDirection(player.pCamera.transform.forward);
+        Vector3 flameDirection = GetSpreadDirection(firePoint.forward);
 
         // Perform an overlap sphere or capsule cast to find targets in flame area
         RaycastHit[] hits = Physics.SphereCastAll(
