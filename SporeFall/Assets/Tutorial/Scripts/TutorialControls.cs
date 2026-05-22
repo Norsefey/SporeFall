@@ -141,7 +141,7 @@ public class TutorialControls : MonoBehaviour
         buildInput = "B";
         editInput = "Y";
         scrollInput = "left and right bumpers";
-        destroyInput = "X";
+        destroyInput = "B";
         pauseInput = "Options";
         skipInput = "down on the D-Pad";
     }
@@ -154,7 +154,7 @@ public class TutorialControls : MonoBehaviour
         shootInput2 = "Right trigger";
         editInput2 = "Y";
         scrollInput2 = "left and right bumpers";
-        destroyInput2 = "X";
+        destroyInput2 = "B";
     }
 
     #endregion

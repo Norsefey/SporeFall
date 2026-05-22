@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public class PlayerDeviceHandler : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class PlayerDeviceHandler : MonoBehaviour
     //private bool usingPlaystation = false;
 
     private bool tutorialNeeded = true;
+    private bool controllerTookOver = false;
+    private bool firstPlayerJoined = false;
 
 
     private void Awake()
@@ -31,10 +34,9 @@ public class PlayerDeviceHandler : MonoBehaviour
             if (device is Keyboard)
             {
                 keyboardDevice = device;
-                //usingKeyboard = true;
+                usingKeyboard = true;
                 //Debug.Log("Keyboard detected");
             }
-
             else if (device is Mouse)
             {
                 mouseDevice = device;
@@ -50,7 +52,6 @@ public class PlayerDeviceHandler : MonoBehaviour
 
         }
     }
-
     private void Update()
     {
         if (TutorialControls.Instance != null)
@@ -75,13 +76,13 @@ public class PlayerDeviceHandler : MonoBehaviour
             }
         }
     }
-
     private void OnEnable()
     {
         // Subscribe to player joined and player left events
         inputManager.onPlayerJoined += OnPlayerJoined;
         inputManager.onPlayerLeft += OnPlayerLeft;
         InputSystem.onDeviceChange += OnDeviceChange;
+        InputSystem.onEvent += OnInputEvent;
     }
 
     private void OnDisable()
@@ -90,6 +91,88 @@ public class PlayerDeviceHandler : MonoBehaviour
         inputManager.onPlayerJoined -= OnPlayerJoined;
         inputManager.onPlayerLeft -= OnPlayerLeft;
         InputSystem.onDeviceChange -= OnDeviceChange;
+        InputSystem.onEvent -= OnInputEvent;
+
+    }
+
+    private void OnInputEvent(InputEventPtr eventPtr, InputDevice device)
+    {
+        // Only process actual user input events (not device discovery etc)
+        if (!eventPtr.IsA<StateEvent>() && !eventPtr.IsA<DeltaStateEvent>())
+            return;
+
+        // === CASE 1: First player not joined yet ===
+        if (!firstPlayerJoined)
+        {
+            if (device is Gamepad gamepad)
+            {
+                inputManager.JoinPlayer(0, -1, "Gamepad", gamepad);
+                firstPlayerJoined = true;
+                Debug.Log("First player joined with Gamepad.");
+
+            }
+            else if (device is Keyboard || device is Mouse)
+            {
+                // Wait for both keyboard and mouse to be present
+                if (keyboardDevice == null || mouseDevice == null)
+                    return;
+
+                if (device is Mouse mouse)
+                {
+                    // Only join if left-click or right-click is pressed
+                    if (mouse.leftButton.wasPressedThisFrame || mouse.rightButton.wasPressedThisFrame)
+                    {
+                        InputDevice[] combo = new InputDevice[] { keyboardDevice, mouseDevice };
+                        inputManager.JoinPlayer(0, -1, "Keyboard&Mouse", combo);
+                        firstPlayerJoined = true;
+                        Debug.Log("First player joined with Mouse.");
+                        return;
+                    }
+                }
+            }
+        }
+        // === Allow Player 1 to switch back to keyboard ===
+        else if (device is (Keyboard or Mouse) && players.Count >= 1)
+        {
+            var player1 = players.FirstOrDefault(p => p.playerIndex == 0);
+
+            if (player1 != null && player1.currentControlScheme == "Gamepad")
+            {
+                InputDevice[] combo = new InputDevice[] { keyboardDevice, mouseDevice };
+                player1.SwitchCurrentControlScheme("Keyboard&Mouse", combo);
+                controllerTookOver = false;
+                UpdateSensitivity();
+                Debug.Log("Player 1 switched control scheme back to Keyboard & Mouse.");
+            }
+
+            // Block keyboard input for non-Player 1 (e.g., mouse jiggle or input routed to Player 2)
+            foreach (var player in players)
+            {
+                if (player.playerIndex != 0 && player.devices.Any(d => d is Keyboard || d is Mouse))
+                {
+                    Debug.Log($"Blocked keyboard input for Player {player.playerIndex}");
+                    return;
+                }
+            }
+        }
+        // === Prevent others from using keyboard ===
+        else if (players.Count > 1 && device is (Keyboard or Mouse))
+        {
+            Debug.Log("Blocked keyboard input for non-Player 1.");
+            return;
+        }
+
+        // === Gamepad input received — show join prompt if not already shown ===
+        else if (device is Gamepad gamepad && players.Count == 1)
+        {
+            // Check if this gamepad isn't already paired to Player 1
+            var player1 = players[0];
+            if (!player1.devices.Contains(gamepad))
+            {
+                Debug.Log("Second gamepad input detected — prompting for second player join.");
+                ShowDeviceConnectionPrompt(gamepad);
+            }
+        }
     }
 
     // Called when a new player joins
@@ -97,6 +180,22 @@ public class PlayerDeviceHandler : MonoBehaviour
     {
         //Debug.Log($"Player {playerInput.playerIndex} joined with device {playerInput.devices[0].displayName}");
         players.Add(playerInput);
+
+        if (playerInput.playerIndex != 0)
+        {
+            // Force-unpair keyboard & mouse for non-Player 1
+            var user = playerInput.user;
+            if (user != null)
+            {
+                foreach (var dev in user.pairedDevices.ToList())
+                {
+                    if (dev is Keyboard || dev is Mouse)
+                    {
+                        user.UnpairDevice(dev);
+                    }
+                }
+            }
+        }
 
         if (players.Count == 1)
         {
@@ -179,36 +278,81 @@ public class PlayerDeviceHandler : MonoBehaviour
     {
         if (device is Gamepad gamepad)
         {
-            /*if (device is XInputController)
+            bool alreadyInUse = players.Any(p => p.devices.Contains(gamepad));
+            if (alreadyInUse) return;
+
+            if (players.Count == 1)
             {
-                Debug.Log($"Single player switched to Xbox Controller: {gamepad.displayName}");
-
-            }
-            else if (device is DualShockGamepad)
-            {
-                Debug.Log($"Single player switched to PS Controller: {gamepad.displayName}");
-
-            }*/
-
-
-            if (singlePlayer && players.Count > 0)
-            {
-                // In single player, switch the existing player to the gamepad
-                players[0].SwitchCurrentControlScheme("Gamepad", gamepad);
-                UpdateSensitivity();
-               // Debug.Log($"Single player switched to gamepad: {gamepad.displayName}");
-                
-            }
-            else if (!singlePlayer && inputManager.joiningEnabled)
-            {
-                // In multiplayer, the PlayerInputManager will automatically handle creating 
-                // a new player with the gamepad through its join system
-               // Debug.Log($"Multiplayer: Ready for new player to join with gamepad: {gamepad.displayName}");
-
-
+                ShowDeviceConnectionPrompt(gamepad);
             }
         }
 
+        else if (device is Keyboard || device is Mouse)
+        {
+            if (controllerTookOver)
+            {
+                Debug.Log("Keyboard/Mouse prevented from joining: controller already took over.");
+                return;
+            }
+
+            if (players.Count == 0)
+            {
+                // Manually join player with keyboard+mouse
+                InputDevice[] keyboardMouseDevices = new InputDevice[] { keyboardDevice, mouseDevice };
+                inputManager.JoinPlayer(0, -1, "Keyboard&Mouse", keyboardMouseDevices);
+            }
+        }
+
+    }
+    private void ShowDeviceConnectionPrompt(Gamepad gamepad)
+    {
+        Debug.Log($"Device Connected: {gamepad.displayName}. Waiting for player decision...");
+
+        GameManager.Instance.players[0].pUI.ToggleConnectionPrompt(true);
+
+        StartCoroutine(WaitForDeviceDecision(gamepad));
+    }
+    private IEnumerator WaitForDeviceDecision(Gamepad gamepad)
+    {
+        bool decisionMade = false;
+        float timeout = 10f;
+
+        while (!decisionMade && timeout > 0)
+        {
+            if (gamepad.buttonNorth.wasPressedThisFrame) // A
+            {
+                // Controller takes over Player 1
+                players[0].SwitchCurrentControlScheme("Gamepad", gamepad);
+                UpdateSensitivity();
+                controllerTookOver = true;
+                decisionMade = true;
+            }
+            else if (gamepad.buttonSouth.wasPressedThisFrame) // B
+            {
+                bool alreadyInUse = players.Any(p => p.devices.Contains(gamepad));
+                if (!alreadyInUse)
+                {
+                    inputManager.JoinPlayer(players.Count, -1, "Gamepad", gamepad);
+                    decisionMade = true;
+                    Debug.Log("Player 2 joined with new Gamepad.");
+                }
+                else
+                {
+                    Debug.Log("Gamepad already in use — ignoring Player 2 join input.");
+                }
+            }
+
+            timeout -= Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+      /*  if (!decisionMade)
+        {
+            Debug.Log("No input detected. Defaulting to add second player.");
+            inputManager.JoinPlayer(players.Count, -1, "Gamepad", gamepad);
+        }
+*/
+        GameManager.Instance.players[0].pUI.ToggleConnectionPrompt(false);
     }
     private void UpdateSensitivity()
     {
@@ -218,23 +362,23 @@ public class PlayerDeviceHandler : MonoBehaviour
     {
         if (device is Gamepad)
         {
-            if (singlePlayer && players.Count > 0)
+            if (players.Count == 1)
             {
-                // In single player, switch back to keyboard/mouse
                 if (keyboardDevice != null && mouseDevice != null)
                 {
-                    // Create an array of both keyboard and mouse devices
                     InputDevice[] keyboardMouseDevices = new InputDevice[] { keyboardDevice, mouseDevice };
+
                     players[0].SwitchCurrentControlScheme("Keyboard&Mouse", keyboardMouseDevices);
-                    UpdateSensitivity();
-                    //Debug.Log("Single player switched to Keyboard&Mouse");
+                    UpdateSensitivity(); // keep your sensitivity switch logic
+                    controllerTookOver = false; // allow keyboard to take control again if needed
+                    Debug.Log("Controller disconnected — switched back to keyboard & mouse.");
                 }
                 else
                 {
-                    //Debug.LogWarning("Keyboard or mouse device not found!");
+                    Debug.LogWarning("Keyboard or Mouse device missing. Cannot switch control scheme.");
                 }
             }
-            else if (!singlePlayer)
+            else if (players.Count > 1)
             {
                 //Debug.Log("Not Singleplayer need to remove player");
                 // In multiplayer, find and remove the player using this device
