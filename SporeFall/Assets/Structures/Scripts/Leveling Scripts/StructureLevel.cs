@@ -7,7 +7,6 @@ using UnityEngine;
 [Serializable]
 public class StructureLevel
 {
-    public string name;
     [Header("Base Stats")]
     public float maxHealth;
     public float cost;

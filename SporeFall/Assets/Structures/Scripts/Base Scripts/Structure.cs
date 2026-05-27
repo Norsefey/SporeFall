@@ -210,7 +210,7 @@ public class Structure : MonoBehaviour
     public StructureLevels GetLevels() => structureStats;
     public StructureHP GetStructureHP() => healthComponent;
     public GameObject GetCurrentVisual() => levelVisuals[currentLevel];
-    public string GetStructureName() => structureStats.GetLevel(currentLevel).name;
+    public string GetStructureName() => structureStats.structureName;
     public string GetStructureDescription() => structureStats.description;
     public StructureType GetStructureType() => structureStats.type;
     public float SetMultiplier { get { return waveMultiplier; } set { waveMultiplier = value; } }
