@@ -6,12 +6,14 @@ using UnityEngine.UIElements;
 public class Turret : MonoBehaviour
 {
     // These public variables are set by TurretBehavior
-    [HideInInspector]
+    //[HideInInspector]
     public float 
         detectionRange, 
         rotationSpeed, 
         fireRate, 
-        fireRange 
+        fireRange,
+        ammoCapacity,
+        reloadTime
         ;
     //[HideInInspector]
     public ProjectileData bulletData;
@@ -24,6 +26,8 @@ public class Turret : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private LayerMask obstructionMask;
+    [SerializeField] private BillboardUIUpdater billboardUpdater;
+
 
     [Header("Audio")]
     [SerializeField] private AudioClip firingSound;
@@ -35,6 +39,9 @@ public class Turret : MonoBehaviour
     private AudioSource audioSource;
     private bool hasTarget;
     private float lastFireTime; // Track the last time we fired
+    private float currentAmmo;
+    private float reloadTimer;
+
 
     public bool showFireDebug = false;
 
@@ -51,6 +58,27 @@ public class Turret : MonoBehaviour
 
     void Update()
     {
+        if(currentAmmo <= 0)
+        {
+            if (billboardUpdater != null)
+            {
+                billboardUpdater.DisplayMessage("Reloading... ", reloadTime - 1.5f);
+            }
+
+            reloadTimer += Time.deltaTime;
+            if(reloadTimer >= reloadTime)
+            {
+                currentAmmo = ammoCapacity;
+                reloadTimer = 0f;
+
+                if (billboardUpdater != null)
+                {
+                    billboardUpdater.DisplayMessage("Done", .5f);
+                }
+            }
+            return; // Can't do anything else while reloading
+        }
+
         if (!hasTarget || !IsTargetValid())
         {
             FindTarget();
@@ -292,16 +320,15 @@ public class Turret : MonoBehaviour
 
         if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit, distanceToTarget))
         {
-            // Check if we hit the target or something else
-            if (hit.collider != targetCollider && !hit.transform.IsChildOf(targetEnemy.transform) &&
-                !targetEnemy.transform.IsChildOf(hit.transform))
+            // Check if we hit the target or something else, and its an enemy make it the new target
+            if(hit.transform != targetEnemy && !hit.transform.CompareTag("HeadShot") && hit.transform.GetComponentInParent<EnemyHPRelay>() != null)
             {
                 if (showFireDebug)
                 {
-                    Debug.Log($"Can't shoot: Hit something else ({hit.transform.name})");
-                    Debug.DrawLine(firePoint.position, hit.point, Color.red, 0.1f);
+                    Debug.Log($"Hit a different enemy ({hit.transform.name}), switching target");
+                    Debug.DrawLine(firePoint.position, hit.point, Color.yellow, 0.1f);
                 }
-                return;
+                targetEnemy = hit.transform;
             }
 
             // All checks passed, we can shoot
@@ -380,6 +407,7 @@ public class Turret : MonoBehaviour
                 Debug.Log($"Fired instantiated projectile in direction {aimDirection}");
         }
 
+        currentAmmo--;
     }
 
 }

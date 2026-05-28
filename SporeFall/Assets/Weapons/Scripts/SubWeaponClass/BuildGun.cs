@@ -564,7 +564,7 @@ public class BuildGun : Weapon
                 originalPosition = selectedStructure.transform.position;
                 originalRotation = selectedStructure.transform.rotation;
 
-                 player.pUI.EnablePrompt(selectedStructure.GetStructureName());
+                player.pUI.EnablePrompt(selectedStructure.GetStructureName());
 
                 selectedStructure.ToggleStructureBehavior(false);
                 selectedStructure.ShowRadius(showRadius);

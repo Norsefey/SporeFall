@@ -27,6 +27,8 @@ public class TurretStatUpdater : MonoBehaviour, IStructureStats
         turret.detectionRange = levelData.detectionRange;
         turret.fireRate = levelData.fireRate;
         turret.fireRange = levelData.fireRange;
+        turret.ammoCapacity = levelData.ammoCapacity;
+        turret.reloadTime = levelData.ammoCapacity;
         // Set up bullet data
         turret.bulletData = new ProjectileData 
         {

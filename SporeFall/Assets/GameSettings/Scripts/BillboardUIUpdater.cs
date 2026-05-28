@@ -29,7 +29,7 @@ public class BillboardUIUpdater : MonoBehaviour
         InitializeUI();
         hpManager.OnHPChange += HandleHPChange;
         if (hideUICoroutine != null)
-            hideUICoroutine = StartCoroutine(HideUI());
+            hideUICoroutine = StartCoroutine(HideUI(1.5f));
     }
     private void OnDisable()
     {
@@ -77,19 +77,32 @@ public class BillboardUIUpdater : MonoBehaviour
             
             groupAlpha.alpha = .5f;
             if(hideUI)
-                hideUICoroutine = StartCoroutine(HideUI());
+                hideUICoroutine = StartCoroutine(HideUI(1.5f));
         }
     }
     public void SetupTarget(Transform target)
     {
         lookAtTarget = target;
     }
-    IEnumerator HideUI()
+    public void DisplayMessage(string newText, float displayTime)
+    {
+        hpText.text = newText;
+        if (hideUI && groupAlpha != null)
+        {
+            if (hideUICoroutine != null)
+                StopCoroutine(hideUICoroutine);
+
+            groupAlpha.alpha = .5f;
+            if (hideUI)
+                hideUICoroutine = StartCoroutine(HideUI(displayTime));
+        }
+    }
+    IEnumerator HideUI(float delay)
     {
         if (groupAlpha == null)
             yield break;
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(delay);
 
         groupAlpha.alpha = 0;
 

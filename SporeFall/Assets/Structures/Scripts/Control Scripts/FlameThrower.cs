@@ -38,13 +38,16 @@ public class FlameThrower : MonoBehaviour
             tickTimer = 0f; // Reset timer
 
             // Play or stop the flame sound based on enemies being in range
-            if (enemiesInRange && !flameAudioSource.isPlaying && Time.timeScale ==1)
+            if (enemiesInRange && Time.timeScale ==1)
             {
-                flameAudioSource.Play();
+                if(!flameAudioSource.isPlaying)
+                    flameAudioSource.Play();
+                pp.PlayEffects();
             }
-            else if (!enemiesInRange && flameAudioSource.isPlaying)
+            else if (!enemiesInRange)
             {
                 flameAudioSource.Stop();
+                pp.StopEffects();
             }
         }
     }
@@ -59,10 +62,8 @@ public class FlameThrower : MonoBehaviour
         foreach (Collider enemy in enemiesInRange)
         {
             hasHitEnemies = true;
-
             // Assuming the enemy has a script with a method to take damage
             enemy.GetComponent<Damageable>()?.TakeDamage(damageAmount * damageTickRate);
-            pp.PlayEffects();
         }
 
         return hasHitEnemies;
