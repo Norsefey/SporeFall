@@ -11,7 +11,7 @@ public enum StructureType
     DefenseWall,
     StructureRepair,
     Platform,
-    Convertor,
+    Converter,
     Mortar
 }
 public class UpgradeManager : MonoBehaviour
