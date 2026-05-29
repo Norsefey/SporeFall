@@ -6,12 +6,12 @@ public enum StructureType
 {// Structures will be upgraded across the board based on their type
     Turret,
     Flamethrower,
-    ExplosiveDrone,
+    ExplosiveBot,
     HealStation,
     DefenseWall,
-    StructureRepair,
+    RepairBot,
     Platform,
-    Converter,
+    ConverterBot,
     Mortar
 }
 public class UpgradeManager : MonoBehaviour
