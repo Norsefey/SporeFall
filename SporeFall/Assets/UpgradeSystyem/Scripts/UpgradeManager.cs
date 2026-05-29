@@ -4,15 +4,15 @@ using UnityEngine;
 
 public enum StructureType
 {// Structures will be upgraded across the board based on their type
-    Terry,
-    Frankie,
-    Sherman,
-    Ricardo,
-    Walter,
-    Lily,
-    John,
-    Stanley,
-    Morty
+    Turret,
+    Flamethrower,
+    ExplosiveDrone,
+    HealStation,
+    DefenseWall,
+    StructureRepair,
+    Platform,
+    Convertor,
+    Mortar
 }
 public class UpgradeManager : MonoBehaviour
 {
