@@ -24,7 +24,7 @@ public class PulsarBulletCapacity : MonoBehaviour
 
     private void UpdateBullectCapacityUI()
     {
-        banner.upgradeName.text = "Pulsar Capacity";
+        banner.upgradeName.text = "Gun Capacity";
 
         currentBulletCapacity = banner.upgradeMenu.activePlayer.defaultWeapon.bulletCapacity;
         float newMaxCapacity = Mathf.RoundToInt(currentBulletCapacity + bulletCapacityIncrease);
@@ -53,9 +53,6 @@ public class PulsarBulletCapacity : MonoBehaviour
             pulsarPistol.bulletCapacity = newCapacity;
             pulsarPistol.StartReload();
         }
-
-
-         
 
         bulletCost = banner.Purchase(bulletCost, bulletCostIncreaseMultiplier);
         UpdateBullectCapacityUI();
