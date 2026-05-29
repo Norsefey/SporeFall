@@ -58,7 +58,7 @@ public class Turret : MonoBehaviour
 
     void Update()
     {
-        if(currentAmmo <= 0)
+        if(currentAmmo <= 0 || (!hasTarget && currentAmmo < ammoCapacity))
         {
             if (billboardUpdater != null)
             {

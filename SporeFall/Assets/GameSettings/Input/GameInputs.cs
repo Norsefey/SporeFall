@@ -95,7 +95,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""28d1eacf-5832-4482-8e95-3fea71963f18"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -710,7 +710,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""EditMode"",
                     ""type"": ""Button"",
                     ""id"": ""9cd2af1f-6ebd-4f03-8e32-9e329517cc57"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -719,7 +719,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""ToggleRadius"",
                     ""type"": ""Button"",
                     ""id"": ""e0f9954c-ef94-4de3-9e69-fb45b9d67476"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -824,7 +824,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""WideView"",
                     ""type"": ""Button"",
                     ""id"": ""6c86ae39-2a34-4b99-9643-8ae9bffef587"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1077,7 +1077,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Move"",
                     ""type"": ""Button"",
                     ""id"": ""3404f391-16cb-4d7f-aa8a-37f32aefbd10"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -1086,7 +1086,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Destroy"",
                     ""type"": ""Button"",
                     ""id"": ""d14f024a-a039-4def-bc88-3a74f3bf19d8"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=0.6)"",
                     ""initialStateCheck"": false
@@ -1107,7 +1107,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""edc5732a-80bb-4978-8824-590cf82c0adb"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
