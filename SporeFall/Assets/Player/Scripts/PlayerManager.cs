@@ -332,12 +332,18 @@ public class PlayerManager : MonoBehaviour
         currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         currentWeapon.gameObject.SetActive(true);
 
-        if(GameManager.Instance.endlessWaveManager != null)
-            currentWeapon.damageModifier = (Mathf.Sqrt(GameManager.Instance.endlessWaveManager.CurrentDifficulty));
-
         // set References
         currentWeapon.player = this;
         equippedWeapon = currentWeapon;
+
+        if(PlayerGunUpgrades.Instance != null)
+        {
+            PlayerGunUpgrades.Instance.SetActivePlayer(this);
+            PlayerGunUpgrades.Instance.ApplyUpgradesToPlayerWeapons();
+        }
+
+        currentWeapon.bulletCount = currentWeapon.bulletCapacity; ; // to initialize ammo counts and UI
+
         // update UI to display new ammo capacities
         pUI.AmmoDisplay(currentWeapon);
         // update weapon icon
@@ -356,6 +362,7 @@ public class PlayerManager : MonoBehaviour
         {
             holdingCorruption = true;
         }
+
         pUI.ToggleWeaponUI(true);
     }
     public void EquipDefaultGun()

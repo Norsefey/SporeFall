@@ -8,9 +8,6 @@ public class AutomaticGun : Weapon
     private float lastFireTime = -999f;  // Initialize to a negative value to handle first shot
     private bool isInBurst = false;      // Track if we have been firing to apply spread
     private const float burstResetTime = 0.5f;  // Time after which we consider firing to have reset
-    [Header("Automatic Variables")]
-    public float fireRate = 5; // how fast the bullets come out
-
     public override void Fire()
     {
         if (Time.time >= nextFireTime)

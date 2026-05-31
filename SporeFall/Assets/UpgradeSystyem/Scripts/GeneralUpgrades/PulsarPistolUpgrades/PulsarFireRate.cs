@@ -6,11 +6,12 @@ using UnityEngine;
 public class PulsarFireRate : MonoBehaviour
 {
     [SerializeField] private UpgradeBannerUIElements banner;
-
-    [Header("Fire Rate")]
-    public float fireRateIncreaseMultiplier = 1.25f;
-    public float fireRateCostIncreaseMultiplier = 1.50f;
-    [SerializeField] private float fireRateCost = 85;
+    /*
+        [Header("Fire Rate")]
+        public float fireRateIncreaseMultiplier = 1.25f;
+        public float fireRateCostIncreaseMultiplier = 1.50f;
+        [SerializeField] private float fireRateCost = 85;
+    */
     private float currentFireRate;
     private void Awake()
     {
@@ -23,16 +24,17 @@ public class PulsarFireRate : MonoBehaviour
     }
     public void UpdateFireRateUI()
     {
-        banner.upgradeName.text = "Pulsar Fire Rate";
+        banner.upgradeName.text = "Weapon Fire Rate";
+        if (banner.upgradeMenu.activePlayer == null)
+            return;
+        PlayerGunUpgrades.Instance.SetActivePlayer(banner.upgradeMenu.activePlayer);
 
-        AutomaticGun pulsarPistol = (AutomaticGun)banner.upgradeMenu.activePlayer.defaultWeapon;
-
-        currentFireRate = pulsarPistol.fireRate;
-        float newFR = Mathf.RoundToInt(currentFireRate * fireRateIncreaseMultiplier);
+        currentFireRate = banner.upgradeMenu.activePlayer.currentWeapon.fireRate;
+        float newFR = Mathf.RoundToInt(currentFireRate * (1 + PlayerGunUpgrades.Instance.fireRateIncreasePercentage));
         banner.descriptionText.text = $"Current Fire Rate {currentFireRate} -> New Fire Rate {newFR}";
 
 
-        banner.costText.text = $"Mycelia: {fireRateCost.ToString("F0")}";
+        banner.costText.text = $"Mycelia: {PlayerGunUpgrades.Instance.fireRateUpgradeCost.ToString("F0")}";
         banner.purchaseButton.interactable = true;
         banner.buttonText.color = Color.black;
         banner.buttonText.text = "Purchase";
@@ -42,20 +44,14 @@ public class PulsarFireRate : MonoBehaviour
 
     public void UpgradePulsarFireRate()
     {
-        if (GameManager.Instance.Mycelia < fireRateCost)
+        if (GameManager.Instance.Mycelia < PlayerGunUpgrades.Instance.fireRateUpgradeCost)
         {
             banner.buttonText.color = Color.red;
             return;
         }
-
-        float newFR = Mathf.RoundToInt(currentFireRate * fireRateIncreaseMultiplier);
-
-        foreach (PlayerManager player in GameManager.Instance.players)
-        {
-            AutomaticGun pulsarPistol = (AutomaticGun)player.defaultWeapon;
-            pulsarPistol.fireRate = newFR;
-        }
-        fireRateCost = banner.Purchase(fireRateCost, fireRateCostIncreaseMultiplier);
+        GameManager.Instance.DecreaseMycelia(PlayerGunUpgrades.Instance.fireRateUpgradeCost);
+        // new cost is added so needs to be after the cost is taken from the player
+        PlayerGunUpgrades.Instance.UpgradeFireRate();
         UpdateFireRateUI();
     }
 }

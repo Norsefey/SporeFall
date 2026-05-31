@@ -33,6 +33,7 @@ public abstract class Weapon : MonoBehaviour
     public float bulletSpreadAngle = 2f; // Angle in degrees for bullet spread
     public float reloadTime = 2f; // Time it takes to reload
     public float knockBackForce = 0;
+    public float fireRate = 5f; // Time between shots
     [Header("Ammo Variables")]
     public int bulletCount;
     public int bulletCapacity;

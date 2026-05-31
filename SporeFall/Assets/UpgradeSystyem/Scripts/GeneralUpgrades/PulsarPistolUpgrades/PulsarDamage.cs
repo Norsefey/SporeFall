@@ -5,11 +5,11 @@ using UnityEngine;
 public class PulsarDamage : MonoBehaviour
 {
     [SerializeField] private UpgradeBannerUIElements banner;
-
+/*
     [Header("Damage")]
     public float DamageIncreaseMultiplier = 1.25f;
     public float DamageCostIncreaseMultiplier = 1.50f;
-    [SerializeField] private float damageCost = 100;
+    [SerializeField] private float damageCost = 100;*/
     private float currentDamage;
     private void Awake()
     {
@@ -23,13 +23,18 @@ public class PulsarDamage : MonoBehaviour
 
     private void UpdateDamageUI()
     {
-        banner.upgradeName.text = "Pulsar Damage";
+        banner.upgradeName.text = "Weapon Damage";
 
-        currentDamage = banner.upgradeMenu.activePlayer.defaultWeapon.damage;
-        float newDamage = Mathf.RoundToInt(currentDamage * DamageIncreaseMultiplier);
-        banner.descriptionText.text = $"Current Damage {currentDamage} -> New Damage {newDamage}";
+        if (banner.upgradeMenu.activePlayer == null)
+            return;
 
-        banner.costText.text = $"Mycelia: {damageCost.ToString("F0")}";
+        PlayerGunUpgrades.Instance.SetActivePlayer(banner.upgradeMenu.activePlayer);
+
+        currentDamage = banner.upgradeMenu.activePlayer.currentWeapon.damage;
+        float newDamage = Mathf.RoundToInt(currentDamage * (1 + PlayerGunUpgrades.Instance.damageIncreasePercentage));
+        banner.descriptionText.text = $"Current Damage {currentDamage.ToString("F0")} -> New Damage {newDamage.ToString("F0")}";
+
+        banner.costText.text = $"Mycelia: {PlayerGunUpgrades.Instance.damageUpgradeCost.ToString("F0")}";
 
         banner.purchaseButton.interactable = true;
         banner.buttonText.color = Color.black;
@@ -39,23 +44,14 @@ public class PulsarDamage : MonoBehaviour
     }
     public void UpgradePulsarDamage()
     {
-        if (GameManager.Instance.Mycelia < damageCost)
+        if (GameManager.Instance.Mycelia < PlayerGunUpgrades.Instance.damageUpgradeCost)
         {
             banner.buttonText.color = Color.red;
             return;
         }
-        int newDamage = Mathf.RoundToInt(currentDamage * DamageIncreaseMultiplier);
-
-        foreach (PlayerManager player in GameManager.Instance.players)
-        {
-            Weapon pulsarPistol = player.defaultWeapon;
-            pulsarPistol.damage = newDamage;
-            pulsarPistol.StartReload();
-        }
-
-        
-
-        damageCost = banner.Purchase(damageCost, DamageCostIncreaseMultiplier);
+        GameManager.Instance.DecreaseMycelia(PlayerGunUpgrades.Instance.damageUpgradeCost);
+        // new cost is added so needs to be after the cost is taken from the player
+        PlayerGunUpgrades.Instance.UpgradeDamage();
         UpdateDamageUI();
     }
     

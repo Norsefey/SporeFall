@@ -5,10 +5,8 @@ using UnityEngine;
 public class ChargeGun : Weapon
 {
     [Space(6), Header("Charge Variables")]
-    public float maxChargeTime = 2f; // Max time to fully charge
     public float minChargeMultiplier = 1f; // Minimum power for a shot
     public float maxChargeMultiplier = 3f; // Maximum power for a fully charged shot
-    public float baseChargeSpeed = 10;
     [HideInInspector]
     public float chargeAmount = 0f;
     private bool isCharging = false;
@@ -45,7 +43,7 @@ public class ChargeGun : Weapon
         }
 
         // Accumulate charge based on how long the fire button is held
-        chargeAmount += Time.deltaTime / maxChargeTime;
+        chargeAmount += Time.deltaTime / fireRate;
         chargeAmount = Mathf.Clamp01(chargeAmount); // Clamp charge to [0,1]
         Debug.Log("Charging: " + (chargeAmount * 100).ToString("F0") + "%");
     }

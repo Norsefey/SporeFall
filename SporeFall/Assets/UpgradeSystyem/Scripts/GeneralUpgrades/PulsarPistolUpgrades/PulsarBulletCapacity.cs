@@ -7,10 +7,11 @@ public class PulsarBulletCapacity : MonoBehaviour
 {
     [SerializeField] private UpgradeBannerUIElements banner;
 
-    [Header("Bullet Capacity")]
-    public float bulletCapacityIncrease = 10;
-    public float bulletCostIncreaseMultiplier = 1.50f;
-    [SerializeField] private float bulletCost = 50;
+    /*    [Header("Bullet Capacity")]
+        public float bulletCapacityIncrease = 10;
+        public float bulletCostIncreaseMultiplier = 1.50f;
+        [SerializeField] private float bulletCost = 50;
+    */
     private float currentBulletCapacity;
     private void Awake()
     {
@@ -26,11 +27,16 @@ public class PulsarBulletCapacity : MonoBehaviour
     {
         banner.upgradeName.text = "Gun Capacity";
 
-        currentBulletCapacity = banner.upgradeMenu.activePlayer.defaultWeapon.bulletCapacity;
-        float newMaxCapacity = Mathf.RoundToInt(currentBulletCapacity + bulletCapacityIncrease);
+        if(banner.upgradeMenu.activePlayer == null)
+            return;
+
+        PlayerGunUpgrades.Instance.SetActivePlayer(banner.upgradeMenu.activePlayer);
+
+        currentBulletCapacity = banner.upgradeMenu.activePlayer.currentWeapon.bulletCapacity;
+        float newMaxCapacity = Mathf.RoundToInt(currentBulletCapacity * (1 + PlayerGunUpgrades.Instance.magazineSizeIncreasePercentage));
         banner.descriptionText.text = $"Current Bullet Capacity {currentBulletCapacity} -> New Bullet Capacity {newMaxCapacity}";
 
-        banner.costText.text = $"Mycelia: {bulletCost.ToString("F0")}";
+        banner.costText.text = $"Mycelia: {PlayerGunUpgrades.Instance.magazineSizeUpgradeCost.ToString("F0")}";
 
         banner.purchaseButton.interactable = true;
         banner.buttonText.color = Color.black;
@@ -40,21 +46,14 @@ public class PulsarBulletCapacity : MonoBehaviour
     }
     public void UpgradePulsarMaxCapacity()
     {
-        if (GameManager.Instance.Mycelia < bulletCost)
+        if (GameManager.Instance.Mycelia < PlayerGunUpgrades.Instance.magazineSizeUpgradeCost)
         {
             banner.buttonText.color = Color.red;
             return;
         }
-        int newCapacity = Mathf.RoundToInt(currentBulletCapacity + bulletCapacityIncrease);
-
-        foreach (PlayerManager player in GameManager.Instance.players)
-        {
-            Weapon pulsarPistol = player.defaultWeapon;
-            pulsarPistol.bulletCapacity = newCapacity;
-            pulsarPistol.StartReload();
-        }
-
-        bulletCost = banner.Purchase(bulletCost, bulletCostIncreaseMultiplier);
+        GameManager.Instance.DecreaseMycelia(PlayerGunUpgrades.Instance.magazineSizeUpgradeCost);
+        // new cost is added so needs to be after the cost is taken from the player
+        PlayerGunUpgrades.Instance.UpgradeMagazineSize();
         UpdateBullectCapacityUI();
     }
 }
