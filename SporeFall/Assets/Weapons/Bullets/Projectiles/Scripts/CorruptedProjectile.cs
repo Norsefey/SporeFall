@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CorruptedProjectile : BaseProjectile
 {
-    [Header("Corruption Settings")]
-    [SerializeField] private float corruptionAmount = 10f;
 
     protected override void HandleImpact(Collider collider)
     {
@@ -18,12 +16,12 @@ public class CorruptedProjectile : BaseProjectile
                 return;
 
             // Apply damage
-            ApplyDamage(damageable, currentDamage);
+            ApplyDamage(damageable, currentCorruption);
 
             // Apply corruption if target can hold it
             if (damageable.canHoldCorruption)
             {
-                damageable.IncreaseCorruption(corruptionAmount);
+                damageable.IncreaseCorruption(currentCorruption);
             }
         }
     }

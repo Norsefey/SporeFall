@@ -14,8 +14,9 @@ public class MyceliaPickup : DropsPoolBehavior
     public void Setup(float multiplier)
     {
         amountToGive = Mathf.RoundToInt(Random.Range(minMyceliaAmount, maxMyceliaAmount));
-        amountToGive *= multiplier;
-        if(despawn)
+        amountToGive += amountToGive * multiplier;
+        amountToGive = Mathf.RoundToInt(amountToGive);
+        if (despawn)
             Invoke(nameof(ReturnObject), despawnTime);
     }
     private void OnTriggerEnter(Collider other)

@@ -8,6 +8,7 @@ public abstract class Damageable : MonoBehaviour
     public bool canHoldCorruption;
     public bool canTakeDamage = true;
     [SerializeField] protected float maxHP;
+    private float HPVeriance = 10f; // Random variance for HP to add unpredictability
     protected float currentHP;
     // Variable to store original max health for difficulty scaling
     protected float originalMaxHealth;
@@ -21,7 +22,7 @@ public abstract class Damageable : MonoBehaviour
     protected abstract void Die();
     public virtual void IncreaseCorruption(float amount)
     {
-
+ 
     }
     private void Start()
     {
@@ -89,7 +90,7 @@ public abstract class Damageable : MonoBehaviour
     }
     public void SetMaxHealthWithMultiplier(float multiplier)
     {
-        float newMaxHealth = originalMaxHealth * multiplier;
+        float newMaxHealth = (originalMaxHealth + UnityEngine.Random.Range(-HPVeriance, HPVeriance)) * multiplier;
         SetMaxHP(newMaxHealth);
     }
     public void ResetToOriginalHealth()

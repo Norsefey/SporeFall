@@ -297,7 +297,7 @@ public class EndlessEnemy : BaseEnemy
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
 
-            StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier));
+            StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier, corruptionModifier));
             //Debug.Log(gameObject.name + " : Attacked For : " + bestAttack.Damage * damageModifier);
             return;
         }
@@ -443,7 +443,7 @@ public class EndlessEnemy : BaseEnemy
 
         if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
-            mycelia.Setup(damageModifier);
+            mycelia.Setup(myceliaModifier);
         }
     }
     private void TrySpawnWeaponDrop()

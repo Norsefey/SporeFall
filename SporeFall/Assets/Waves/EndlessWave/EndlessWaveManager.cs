@@ -28,15 +28,18 @@ public class EndlessWaveManager : MonoBehaviour
     [Range(0, 1)]
     [SerializeField] private float outsideSpawnChance = 0.45f;
     [SerializeField] private int maxEnemiesOnField = 300;
+
+    [Header("Difficulty Settings")]
     [SerializeField] private float baseDifficulty = 1.0f;
     [SerializeField] private float difficultyIncreasePerWave = 0.1f;
     [SerializeField] private float difficultyIncreaseOverTime = 0.05f;
     [SerializeField] private float difficultyTimeInterval = 60f; // Increase difficulty every minute
-    
+
     [Header("Wave Downtime Settings")]
     [SerializeField] private float waveDowntimeDuration = 10f; // Duration of downtime between waves in seconds
     [SerializeField] private bool enableWaveDowntime = true; // Toggle for enabling/disabling downtime
     public float DowntimeDuration => waveDowntimeDuration;
+    
     [Header("NavMesh Settings")]
     [SerializeField] private float navMeshSampleDistance = 5f; // Distance to sample when finding valid NavMesh positions
     [SerializeField] private LayerMask groundLayer; // Layer for the ground
@@ -48,6 +51,12 @@ public class EndlessWaveManager : MonoBehaviour
     [SerializeField] private float minSpawnInterval = 0.5f;
     [SerializeField] private int initialMaxEnemiesPerSpawn = 3;
     [SerializeField] private int maxEnemiesPerSpawn = 10;
+
+    [Header("Enemy Stat Settings")]
+    [SerializeField] private float healthMultiplierPerWave = 0.1f; // Additional health multiplier per wave
+    [SerializeField] private float damageMultiplierPerWave = 0.05f; // Additional damage multiplier per wave
+    [SerializeField] private float corruptionMultiplierPerWave = 0.1f; // Additional corruption multiplier per wave
+    [SerializeField] private float myceliaDropMultiplier = 0.1f; // Multiplier for mycelia drops from enemies
 
     [Header("Boss Settings")]
     [SerializeField] private float timeBetweenBossSpawns = 300f; // 5 minutes
@@ -64,7 +73,6 @@ public class EndlessWaveManager : MonoBehaviour
     private float currentDifficulty;
     public float CurrentDifficulty { get { return currentDifficulty; } }
 
-    private int currentWaveNumber = 0;
     private float enemySpawnInterval;
     private int maxEnemiesPerSpawnCurrent;
     private int totalSpawnCountForCurrentWave;
@@ -78,17 +86,22 @@ public class EndlessWaveManager : MonoBehaviour
     private float difficultyTimer = 0f;
     private float downtimeTimer = 0f;
 
-    // Track wave-specific enemies
+    // Wave Management
+    private int currentWaveNumber = 0;
     private int enemiesSpawnedThisWave = 0;
     private bool waveSpawningComplete = false;
+    
     // Object Pooling
     [SerializeField] private int initialPoolSize = 50;
     private Dictionary<GameObject, EnemyObjectPool> enemyPools;
     private Dictionary<GameObject, EnemyObjectPool> bossPools;
 
+    // active enemy tracking for cleanup and boss fight management
     private List<BaseEnemy> activeEnemies = new List<BaseEnemy>();
     private Coroutine spawnCoroutine;
     private Coroutine downtimeCoroutine;
+
+    public float GlobalTimer { get; private set; }
 
     public enum WaveState
     {
@@ -115,6 +128,8 @@ public class EndlessWaveManager : MonoBehaviour
     {
         if (currentState != WaveState.NotStarted)
         {
+            GlobalTimer += Time.deltaTime;
+
             // Update boss spawn timer
             if (!isBossActive && currentState != WaveState.Downtime)
             {
@@ -502,8 +517,10 @@ public class EndlessWaveManager : MonoBehaviour
         // Scale boss health based on number of bosses defeated
         float healthMultiplier = 1f + (bossHealthMultiplier * bossesDefeated);
         float damageMultiplier = 1f + (bossDamageMultiplier * bossesDefeated);
+        float corruptionMultiplier = 1f + (corruptionMultiplierPerWave * currentDifficulty);
         boss.SetHealthMultiplier(healthMultiplier);
         boss.SetDamageMultiplier(damageMultiplier);
+        boss.SetCorruptionMultiplier(corruptionMultiplier);
 
         activeBoss = boss;
         enemiesAlive++;
@@ -610,9 +627,7 @@ public class EndlessWaveManager : MonoBehaviour
         enemy.SetTarget(playerTransform);
         enemy.OnEnemyDeath += OnEnemyDeath;
 
-        // Scale enemy health based on difficulty
-        enemy.SetHealthMultiplier(Mathf.Sqrt(currentDifficulty));
-        enemy.SetDamageMultiplier(Mathf.Sqrt(currentDifficulty));
+        SetEnemyStats(enemy);
 
         // Play rise animation for enemies spawning outside
         if (spawningOutside)
@@ -624,6 +639,20 @@ public class EndlessWaveManager : MonoBehaviour
         enemiesAlive++;
         enemiesSpawned++;
     }
+
+    private void SetEnemyStats(BaseEnemy enemy)
+    {
+        float healthMultiplier = 1f + (healthMultiplierPerWave * currentDifficulty);
+        float damageMultiplier = 1f + (damageMultiplierPerWave * currentDifficulty);
+        float corruptionMultiplier = 1f + (corruptionMultiplierPerWave * currentDifficulty);
+        float myceliaMultiplier = 1f + (myceliaDropMultiplier * currentDifficulty); // Scale with difficulty
+
+        enemy.SetHealthMultiplier(healthMultiplier);
+        enemy.SetDamageMultiplier(damageMultiplier);
+        enemy.SetCorruptionMultiplier(corruptionMultiplier);
+        enemy.SetMyceliaMultiplier(myceliaMultiplier);
+    }
+
     private void OnEnemyDeath(BaseEnemy enemy)
     {
         enemiesAlive--;
@@ -700,7 +729,7 @@ public class EndlessWaveManager : MonoBehaviour
 
             // Check if point is on NavMesh with a larger sampling distance
             NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomPoint, out hit, navMeshSampleDistance, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(randomPoint, out hit, navMeshSampleDistance, 0))
             {
                 if (!Physics.CheckSphere(hit.position, 0.5f, LayerMask.GetMask("Obstacle")))
                 {

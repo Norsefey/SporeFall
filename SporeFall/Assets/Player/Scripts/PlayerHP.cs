@@ -108,7 +108,6 @@ public class PlayerHP : Damageable
         StartCoroutine(DeathEffectRoutine());
     }
     
-    
     private IEnumerator DeathEffectRoutine()
     {
      
@@ -205,6 +204,9 @@ public class PlayerHP : Damageable
     }
     public override void IncreaseCorruption(float amount)
     {
+        if (!canHoldCorruption)
+            return;
+
         pMan.pCorruption.IncreaseCorruption(amount);
     }
 }

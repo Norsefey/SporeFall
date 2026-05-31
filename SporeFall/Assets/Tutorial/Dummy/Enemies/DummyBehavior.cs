@@ -258,7 +258,7 @@ public class DummyBehavior : BaseEnemy
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
 
-            StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier));
+            StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier, corruptionModifier));
             return;
         }
         else

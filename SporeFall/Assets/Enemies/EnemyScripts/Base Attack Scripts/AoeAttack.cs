@@ -12,10 +12,11 @@ public class AoeAttack : Attack
     [SerializeField] private float dotDuration = 3f;
     [SerializeField] private float dotTickRate = 0.5f;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        float finalDamage = damage * damageModifier;
-        
+        float finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+        float finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
+
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
             enemy.Animator.SetTrigger(animationTrigger);

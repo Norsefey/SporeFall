@@ -38,7 +38,6 @@ public class EndlessWaveUI : MonoBehaviour
     private string waveCompleteMessage = "WAVE COMPLETE";
     private string nextWaveFormat = "NEXT WAVE: {0}";
 
-    private float timer = 0;
     private int totalDeadEnemies = 0;
     private int totalDeadBosses = 0;
     private int currentWaveNumber;
@@ -63,14 +62,13 @@ public class EndlessWaveUI : MonoBehaviour
             waveManager.onWaveDowntimeEnded.AddListener(OnWaveDowntimeEnded);
         }
     }
+
     private void Update()
     {
-        if(waveManager.currentState != EndlessWaveManager.WaveState.NotStarted)
+        if (waveManager.currentState != EndlessWaveManager.WaveState.NotStarted)
         {
-            timer += Time.deltaTime;
-
-            int minutes = Mathf.FloorToInt(timer / 60F);
-            int seconds = Mathf.FloorToInt(timer - minutes * 60);
+            int minutes = Mathf.FloorToInt(waveManager.GlobalTimer / 60F);
+            int seconds = Mathf.FloorToInt(waveManager.GlobalTimer - minutes * 60);
             survivalTimerText.text = "Survive \n" + string.Format("{0:0}:{1:00}", minutes, seconds);
         }
     }
@@ -87,8 +85,8 @@ public class EndlessWaveUI : MonoBehaviour
     }
     public void ShowGameOverPanel()
     {
-        int minutes = Mathf.FloorToInt(timer / 60F);
-        int seconds = Mathf.FloorToInt(timer - minutes * 60);
+        int minutes = Mathf.FloorToInt(waveManager.GlobalTimer / 60F);
+        int seconds = Mathf.FloorToInt(waveManager.GlobalTimer - minutes * 60);
         finalTimeText.text = $"Survival Time:  {string.Format("{0:0}:{1:00}", minutes, seconds)}";
         EnemiesDefeatedText.text = $"Enemies Defeated: {totalDeadEnemies} \n Bosses Defeated: {totalDeadBosses}";
         CalculateFinalScore();
@@ -111,7 +109,7 @@ public class EndlessWaveUI : MonoBehaviour
     {
         float finalBossScore = bossPoints * totalDeadBosses;
         float finalEnemyScore = mobPoints * totalDeadEnemies;
-        float finalTimeScore = Mathf.FloorToInt(timePoints * timer);
+        float finalTimeScore = Mathf.FloorToInt(timePoints * waveManager.GlobalTimer);
 
         finalScore = finalBossScore + finalEnemyScore + finalTimeScore;
 

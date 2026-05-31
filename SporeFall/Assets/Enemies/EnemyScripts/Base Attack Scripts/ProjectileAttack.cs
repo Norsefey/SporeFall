@@ -33,11 +33,13 @@ public class ProjectileAttack : RangedAttack
     [SerializeField] private float timeBetweenProjectiles = 0.1f; // Delay between each projectile
     [SerializeField] private float spreadAngle = 0f;
 
-    private float damageMod = 1;
+    private float finalDamage;
+    private float finalCorruption;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        damageMod = damageModifier;
+        finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+        finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
         enemy.SetIsAttacking(true);
 
         if (enemy.Animator != null)
@@ -135,7 +137,8 @@ public class ProjectileAttack : RangedAttack
         {
             Direction = direction,
             Speed = projectileSpeed,
-            Damage = damage * damageMod,
+            Damage = finalDamage,
+            Corruption = finalCorruption,
             Lifetime = projectileLifetime,
             UseArcTrajectory = trajectoryType == ProjectileTrajectoryType.Arc,
             UseGravity = useGravity,

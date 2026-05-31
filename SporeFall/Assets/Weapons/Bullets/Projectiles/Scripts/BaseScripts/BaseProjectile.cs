@@ -16,6 +16,7 @@ public abstract class BaseProjectile : MonoBehaviour
     protected ProjectilePool pool;
     protected float elapsedTime;
     protected float currentDamage;
+    protected float currentCorruption;
     protected int bounceCount;
     protected bool arcCompletedPhysicsStarted = false;
 
@@ -31,6 +32,7 @@ public abstract class BaseProjectile : MonoBehaviour
         data = projectileData;
         pool = projectilePool;
         currentDamage = data.Damage;
+        currentCorruption = data.Corruption;
         elapsedTime = 0f;
         bounceCount = 0;
         arcCompletedPhysicsStarted = false;

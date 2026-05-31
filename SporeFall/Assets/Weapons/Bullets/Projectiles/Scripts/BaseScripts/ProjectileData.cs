@@ -8,6 +8,7 @@ public struct ProjectileData
     public float Speed;
     public float Lifetime;
     public float Damage;
+    public float Corruption;
 
     [Header("Movement Properties")]
     public bool UseGravity;

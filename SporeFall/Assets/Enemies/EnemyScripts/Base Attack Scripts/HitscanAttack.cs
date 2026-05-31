@@ -21,11 +21,13 @@ public class HitscanAttack : RangedAttack
     [SerializeField] private GameObject beamVFXPrefab;
     [SerializeField] private float beamDuration = 0.1f;
 
-    private float damageMod = 1;
+    float finalDamage;
+    float finalCorruption;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        damageMod = damageModifier;
+        finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+        finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
 
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
@@ -85,7 +87,8 @@ public class HitscanAttack : RangedAttack
         {
             if (hit.collider.TryGetComponent<Damageable>(out var damageable))
             {
-                damageable.TakeDamage(damage * damageMod);
+                damageable.TakeDamage(finalDamage);
+                damageable.IncreaseCorruption(finalCorruption);
             }
 
             SpawnBeamEffect(origin, hit.point);
@@ -103,7 +106,7 @@ public class HitscanAttack : RangedAttack
             .ToArray();
 
         Vector3 lastHitPoint = origin;
-        float currentDamage = damage * damageMod;
+        float currentDamage = finalDamage;
         int penetrations = 0;
 
         foreach (RaycastHit hit in hits)
@@ -113,6 +116,7 @@ public class HitscanAttack : RangedAttack
             if (hit.collider.TryGetComponent<Damageable>(out var damageable))
             {
                 damageable.TakeDamage(currentDamage);
+                damageable.IncreaseCorruption(finalCorruption);
                 currentDamage *= penetrationDamageMultiplier;
                 penetrations++;
             }

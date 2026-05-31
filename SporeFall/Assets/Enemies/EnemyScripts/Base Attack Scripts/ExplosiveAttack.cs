@@ -11,9 +11,10 @@ public class ExplosiveAttack : Attack
     [Tooltip("Further away from center of explosion less damage")]
     [SerializeField] private AnimationCurve damageFalloff = AnimationCurve.Linear(0f, 1f, 1f, 0f);
     [SerializeField] private bool destroySelfOnExplode = true;
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        float finalDamage = damage * damageModifier;
+        float finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+        float finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
         // Start the attack cooldown
         StartCooldown();
 

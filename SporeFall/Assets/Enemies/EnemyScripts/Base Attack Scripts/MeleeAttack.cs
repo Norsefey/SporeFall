@@ -23,9 +23,10 @@ public class MeleeAttack : Attack
     private Quaternion lastAttackRotation;
     private float lastAttackTime;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        float finalDamage = damage * damageModifier;
+        float finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+        float finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
         // Begin attack sequence
         enemy.SetIsAttacking(true);
         if(enemy.Animator != null)
@@ -62,6 +63,7 @@ public class MeleeAttack : Attack
                 if (hit.TryGetComponent<Damageable>(out var damageable))
                 {
                     damageable.TakeDamage(finalDamage);
+                    damageable.IncreaseCorruption(finalCorruption);
                     SpawnVFX(hit.transform.position, enemy.transform.rotation);
                     hitPositions.Add(hit.transform.position);
 

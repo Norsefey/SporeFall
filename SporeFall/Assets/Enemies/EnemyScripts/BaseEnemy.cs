@@ -73,7 +73,6 @@ public abstract class BaseEnemy : MonoBehaviour
         }
     }
     [Header("Attack Stats")]
-    [SerializeField] protected float damageModifier = 1;
     private float originalDamageModifier;
     [SerializeField] protected float stoppingDistance = 20f;
     [SerializeField] protected float aggressionFactor = 0.6f; // Chance to choose aggressive actions
@@ -102,6 +101,11 @@ public abstract class BaseEnemy : MonoBehaviour
     protected bool isRising = false;
     [Header("Animations")]
     [SerializeField] protected float risingAnimationLength = 2;
+
+    [Header("Modifiers")]
+    [SerializeField] protected float damageModifier = 1;
+    [SerializeField] protected float corruptionModifier = 1;
+    [SerializeField] protected float myceliaModifier = 1;
 
     protected virtual void Awake()
     {
@@ -404,7 +408,7 @@ public abstract class BaseEnemy : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5 * Time.deltaTime);
 
-            attackCoroutine = StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier));
+            attackCoroutine = StartCoroutine(bestAttack.ExecuteAttack(this, currentTarget, damageModifier, corruptionModifier));
             return;
         }
         else
@@ -690,8 +694,14 @@ public abstract class BaseEnemy : MonoBehaviour
     }
     public virtual void SetDamageMultiplier(float multiplier)
     {
-        float newDamage = originalDamageModifier * multiplier;
-
-        damageModifier = newDamage;
+        damageModifier = multiplier;
+    }
+    public virtual void SetCorruptionMultiplier(float multiplier)
+    {
+        corruptionModifier = multiplier;
+    }
+    public virtual void SetMyceliaMultiplier(float multiplier)
+    {
+        myceliaModifier = multiplier;
     }
 }
