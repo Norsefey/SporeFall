@@ -31,7 +31,7 @@ public class UpgradeManager : MonoBehaviour
         StructureStats structureLevelData = GetStructureStatsForType(type);
         if (structureLevelData == null) return false;
 
-        if (availableMycelia >= structureLevelData.currentLevel.GetUpgradeCost())
+        if (availableMycelia >= structureLevelData.currentLevel.upgradeCost)
         {
             return true;
         }

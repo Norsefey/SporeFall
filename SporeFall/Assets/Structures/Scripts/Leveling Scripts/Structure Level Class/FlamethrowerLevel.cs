@@ -20,9 +20,10 @@ public class FlameThrowerLevel : StructureLevel
         {
             level = this.level + 1,
             maxHealth = this.maxHealth * upgradeHealthMultiplier,
-            cost = this.cost * upgradeCostMultiplier,
+            placementCost = this.placementCost * upgradePlacementCostMultiplier,
             energyCost = this.energyCost * upgradeEnergyCostMultiplier,
-           
+            upgradeCost = this.upgradeCost * upgradeUpgradeCostMultiplier,
+
             damage = this.damage * upgradeDamageMultiplier,
             range = this.range,
             damageTickRate = this.damageTickRate, // tick rate does not change with level
@@ -32,7 +33,7 @@ public class FlameThrowerLevel : StructureLevel
                                 $"Health: {nextLevel.maxHealth:F1}, " +
                                 $"Range: {nextLevel.range:F1}, \n" +
                                 $"Damage: {nextLevel.damage:F1}, \n" +
-                                $"Cost: {nextLevel.cost:F1}, " +
+                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
                                 $"Energy Cost: {nextLevel.energyCost:F1}";
         return nextLevel;
     }

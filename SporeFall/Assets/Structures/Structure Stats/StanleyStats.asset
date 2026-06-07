@@ -19,12 +19,14 @@ MonoBehaviour:
   baseLevel:
     level: 1
     maxHealth: 25
-    cost: 25
+    placementCost: 25
     energyCost: 5
+    upgradeCost: 50
     upgradeDescription: 
-    upgradeCostMultiplier: 1.5
     upgradeHealthMultiplier: 1.5
+    upgradePlacementCostMultiplier: 1.5
     upgradeEnergyCostMultiplier: 1.5
+    upgradeUpgradeCostMultiplier: 1.5
     myceliaGenerationTickRate: 7
     myceliaGenerationRate: 4
     moveSpeed: 5
@@ -32,49 +34,5 @@ MonoBehaviour:
     changeDirectionInterval: 4
     detectionRadius: 15
     randomMovementWeight: 1
-  levels:
-  - level: 1
-    maxHealth: 25
-    cost: 25
-    energyCost: 5
-    upgradeDescription: 
-    upgradeCostMultiplier: 1.5
-    upgradeHealthMultiplier: 1.5
-    upgradeEnergyCostMultiplier: 1.5
-    myceliaGenerationTickRate: 7
-    myceliaGenerationRate: 4
-    moveSpeed: 5
-    turnSpeed: 5
-    changeDirectionInterval: 4
-    detectionRadius: 15
-    randomMovementWeight: 1
-  - level: 1
-    maxHealth: 35
-    cost: 30
-    energyCost: 7
-    upgradeDescription: +2 mycelia generation, +2 energy cost
-    upgradeCostMultiplier: 1.5
-    upgradeHealthMultiplier: 1.5
-    upgradeEnergyCostMultiplier: 1.5
-    myceliaGenerationTickRate: 7
-    myceliaGenerationRate: 6
-    moveSpeed: 5
-    turnSpeed: 5
-    changeDirectionInterval: 4
-    detectionRadius: 15
-    randomMovementWeight: 1
-  - level: 1
-    maxHealth: 50
-    cost: 35
-    energyCost: 9
-    upgradeDescription: +2 mycelia generation, +2 energy cost
-    upgradeCostMultiplier: 1.5
-    upgradeHealthMultiplier: 1.5
-    upgradeEnergyCostMultiplier: 1.5
-    myceliaGenerationTickRate: 7
-    myceliaGenerationRate: 8
-    moveSpeed: 5
-    turnSpeed: 5
-    changeDirectionInterval: 4
-    detectionRadius: 15
-    randomMovementWeight: 1
+    upgradeMyceliaGenerationTickRateMultiplier: 1.1
+    upgradeMyceliaGenerationRateMultiplier: 1.1

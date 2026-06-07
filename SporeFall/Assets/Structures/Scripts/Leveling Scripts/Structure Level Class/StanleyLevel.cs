@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class StanleyLevel : StructureLevel
 {
-    [Header("Stanley Specific")]
+    [Header("Base Stanley States")]
     [Tooltip("How often to give mycelia")]
     public float myceliaGenerationTickRate;
     [Tooltip("How Much mycelia to give")]
@@ -18,8 +18,40 @@ public class StanleyLevel : StructureLevel
     public float detectionRadius = 10f;    // Detection radius for nearby Mycelia
     public float randomMovementWeight = 1f;    // Weight for random movement (higher = more random movement)
 
+    [Header("Stanley Leveling")]
+    public float upgradeMyceliaGenerationTickRateMultiplier = 1.1f;
+    public float upgradeMyceliaGenerationRateMultiplier = 1.1f;
+
+
     public override StructureLevel NextLevel()
     {
-        throw new NotImplementedException();
+        StanleyLevel nextLevel = new StanleyLevel
+        {
+            level = this.level + 1,
+            maxHealth = this.maxHealth * upgradeHealthMultiplier,
+            placementCost = this.placementCost * upgradePlacementCostMultiplier,
+            energyCost = this.energyCost * upgradeEnergyCostMultiplier,
+            upgradeCost = this.upgradeCost * upgradeUpgradeCostMultiplier,
+
+            moveSpeed = this.moveSpeed,
+            turnSpeed = this.turnSpeed,
+            changeDirectionInterval = this.changeDirectionInterval,
+            detectionRadius = this.detectionRadius,
+            randomMovementWeight = this.randomMovementWeight,
+
+            myceliaGenerationTickRate = this.myceliaGenerationTickRate * upgradeMyceliaGenerationTickRateMultiplier,
+            myceliaGenerationRate = this.myceliaGenerationRate * upgradeMyceliaGenerationRateMultiplier,
+
+        };
+
+        nextLevel.upgradeDescription =
+                                $"Max Health: {nextLevel.maxHealth:F1}, \n" +
+                                $"Mycelia Generation Tick Rate: {nextLevel.myceliaGenerationTickRate:F2} seconds, \n" +
+                                $"Mycelia Generation Rate: {nextLevel.myceliaGenerationRate:F1} mycelia/tick, \n" +
+                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
+                                $"Energy Cost: {nextLevel.energyCost:F1}, ";
+
+
+        return nextLevel;
     }
 }

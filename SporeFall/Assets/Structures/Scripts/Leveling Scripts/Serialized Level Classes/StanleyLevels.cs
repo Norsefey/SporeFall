@@ -11,6 +11,4 @@ public class StanleyLevels : StructureStats
     {
         currentLevel = baseLevel;
     }
-
-    //public StanleyLevel[] levels;
 }

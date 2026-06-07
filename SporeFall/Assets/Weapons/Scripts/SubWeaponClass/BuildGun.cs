@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class BuildGun : Weapon
 {
@@ -200,7 +201,10 @@ public class BuildGun : Weapon
                 selectedStructure.ShowRadius(showRadius);
                 StoreOriginalColors(selectedStructure.GetCurrentVisual());
                 //SetStructureToTransparent(selectedStructure.GetCurrentVisual());
-                player.pUI.EnablePrompt(selectedStructure.GetStructureName() + "\n Cost: " + selectedStructure.GetCurrentEnergyCost() + " Energy  " + selectedStructure.GetCurrentMyceliaCost() + " Mycelia" + "\n" + selectedStructure.GetStructureDescription());
+                player.pUI.EnablePrompt(selectedStructure.GetStructureName() + " Lv:" + selectedStructure.GetCurrentLevelInt().ToString() +
+                                        "\n Placement Cost: " + selectedStructure.GetPlacementCost() + " Mycelia" + 
+                                        "\n" + "Energy Cost: " + selectedStructure.GetCurrentEnergyCost() + " Energy \n" 
+                                        + selectedStructure.GetStructureDescription());
 
             }
             else if (selectedStructure != null)
@@ -259,9 +263,9 @@ public class BuildGun : Weapon
         // some test scenes do not have a train to reference off of, so check if a train is valid to do an energy check
         if (GameManager.Instance != null && selectedStructure != null)
         {
-            if (GameManager.Instance.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetCurrentMyceliaCost() <= GameManager.Instance.Mycelia)
+            if (GameManager.Instance.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetPlacementCost() <= GameManager.Instance.Mycelia)
             {
-                GameManager.Instance.DecreaseMycelia(selectedStructure.GetCurrentMyceliaCost());
+                GameManager.Instance.DecreaseMycelia(selectedStructure.GetPlacementCost());
                 selectedStructure.Initialize();
                 selectedStructure.ToggleStructureBehavior(true);
                 selectedStructure.ShowRadius(false);
@@ -295,7 +299,7 @@ public class BuildGun : Weapon
             else if(selectedStructure != null)
             {
                 // tell player why placement failed, either not enough money, or too many active structure
-                if (selectedStructure.GetCurrentMyceliaCost() > GameManager.Instance.Mycelia)
+                if (selectedStructure.GetPlacementCost() > GameManager.Instance.Mycelia)
                 {
                     player.pUI.EnablePrompt("<color=red>Need More Mycelia</color>");
                 }

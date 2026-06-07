@@ -10,17 +10,19 @@ public abstract class StructureLevel
     [Header("Base Stats")]
     public int level = 1;
     public float maxHealth;
-    public float cost;
+    public float placementCost;
     public float energyCost;
+    public float upgradeCost = 50f;
     public string upgradeDescription;
 
+
     [Header("Leveling")]
-    public float upgradeCostMultiplier = 1.5f;
     public float upgradeHealthMultiplier = 1.5f;
+    public float upgradePlacementCostMultiplier = 1.5f;
     public float upgradeEnergyCostMultiplier = 1.5f;
+    public float upgradeUpgradeCostMultiplier = 1.5f;
 
     public abstract StructureLevel NextLevel();
-    public float GetUpgradeCost() => cost * upgradeCostMultiplier;
 }
 
 

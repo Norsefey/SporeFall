@@ -35,7 +35,7 @@ public class UpgradeBanner : MonoBehaviour
 
         if (nextLevel != null)
         {
-            costText.text = $"Mycelia: {nextLevel.cost:F1}";
+            costText.text = $"Mycelia: {nextLevel.upgradeCost:F1}";
             upgradeButton.interactable = true;
             descriptionText.text = nextLevel.upgradeDescription;
         }
@@ -49,7 +49,7 @@ public class UpgradeBanner : MonoBehaviour
 
         if (upgradeManager.CanUpgrade(structureStats.type, currentMycelia))
         {
-            GameManager.Instance.DecreaseMycelia(nextLevel.cost);
+            GameManager.Instance.DecreaseMycelia(nextLevel.upgradeCost);
             upgradeUI.UpdateMyceliaAmount();
 
             structureStats.currentLevel = nextLevel;

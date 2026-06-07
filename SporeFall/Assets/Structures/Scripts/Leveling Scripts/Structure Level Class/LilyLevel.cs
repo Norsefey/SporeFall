@@ -24,8 +24,9 @@ public class LilyLevel : StructureLevel
         {
             level = this.level + 1,
             maxHealth = this.maxHealth * upgradeHealthMultiplier,
-            cost = this.cost * upgradeCostMultiplier,
+            placementCost = this.placementCost * upgradePlacementCostMultiplier,
             energyCost = this.energyCost * upgradeEnergyCostMultiplier,
+            upgradeCost = this.upgradeCost * upgradeUpgradeCostMultiplier,
 
             maxActiveLilies = (int)MathF.Min(this.maxActiveLilies + 1, upgradeMaxActiveLilies), // Increase max active lilies by 1 each level
             patrolRange = this.patrolRange * upgradePatrolRangeMultiplier, // Increase patrol range by multiplier
@@ -39,7 +40,7 @@ public class LilyLevel : StructureLevel
                                 $"Patrol Range: {nextLevel.patrolRange:F1}, " +
                                 $"Repair Rate: {nextLevel.repairRate:F1}, " +
                                 $"Move Speed: {nextLevel.moveSpeed:F1}, \n" +
-                                $"Cost: {nextLevel.cost:F1}, " +
+                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
                                 $"Energy Cost: {nextLevel.energyCost:F1}";
 
         return nextLevel;

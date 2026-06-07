@@ -25,8 +25,9 @@ public class MortyLevel : StructureLevel
         {
             level = this.level + 1,
             maxHealth = this.maxHealth * upgradeHealthMultiplier,
-            cost = this.cost * upgradeCostMultiplier,
+            placementCost = this.placementCost * upgradePlacementCostMultiplier,
             energyCost = this.energyCost * upgradeEnergyCostMultiplier,
+            upgradeCost = this.upgradeCost * upgradeUpgradeCostMultiplier,
 
             detectionRange = this.detectionRange * upgradeDetectionRangeMultiplier,
             projectileStats = new ProjectileData
@@ -42,7 +43,7 @@ public class MortyLevel : StructureLevel
                                 $"Range: {nextLevel.fireRange:F1}, \n" +
                                 $"Damage: {nextLevel.projectileStats.Damage:F1}, " +
                                 $"Fire Rate: {nextLevel.fireRate:F1}, \n" +
-                                $"Cost: {nextLevel.cost:F1}, " +
+                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
                                 $"Energy Cost: {nextLevel.energyCost:F1}";
 
         return nextLevel;

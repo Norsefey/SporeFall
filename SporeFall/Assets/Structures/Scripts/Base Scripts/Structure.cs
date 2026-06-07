@@ -74,7 +74,7 @@ public class Structure : MonoBehaviour
     }
     public bool CanUpgrade(float availableMycelia)
     {
-        return availableMycelia >= structureStats.currentLevel.GetUpgradeCost();
+        return availableMycelia >= structureStats.currentLevel.upgradeCost;
     }
     public void Upgrade()
     {
@@ -123,7 +123,7 @@ public class Structure : MonoBehaviour
         // Calculate refund percentage, scaled between minimumRefundPercent and 1
         float refundPercentage = Mathf.Lerp(minimumRefundPercent, 1f, healthPercentage);
         // Calculate final refund amount and round to nearest integer
-        int refundAmount = Mathf.RoundToInt(GetCurrentMyceliaCost() * refundPercentage);
+        int refundAmount = Mathf.RoundToInt(GetPlacementCost() * refundPercentage);
 
         return refundAmount;
     }
@@ -177,7 +177,7 @@ public class Structure : MonoBehaviour
         }
     }
     // Getter methods
-    public float GetCurrentMyceliaCost() => structureStats.currentLevel.cost;
+    public float GetPlacementCost() => structureStats.currentLevel.placementCost;
     public float GetCurrentEnergyCost() => structureStats.currentLevel.energyCost;
     public int GetCurrentLevelInt() => structureStats.currentLevel.level;
     public StructureLevel GetCurrentLevel() => structureStats.currentLevel;

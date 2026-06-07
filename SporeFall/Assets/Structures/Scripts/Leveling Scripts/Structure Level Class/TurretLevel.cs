@@ -38,8 +38,9 @@ public class TurretLevel : StructureLevel
         {
             level = this.level + 1,
             maxHealth = this.maxHealth * upgradeHealthMultiplier,
-            cost = this.cost * upgradeCostMultiplier,
-            
+            placementCost = this.placementCost * upgradePlacementCostMultiplier,
+            upgradeCost = this.upgradeCost * upgradeUpgradeCostMultiplier,
+
             energyCost = this.energyCost * upgradeEnergyCostMultiplier,
 
             rotationSpeed = this.rotationSpeed,
@@ -64,7 +65,7 @@ public class TurretLevel : StructureLevel
                                  $"Range: {nextLevel.range:F1}, \n" +
                                  $"Damage: {nextLevel.damage:F1}, " +
                                  $"Fire Rate: {nextLevel.fireRate:F1}, \n"+
-                                 $"Cost: {nextLevel.cost:F1}, " +
+                                 $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
                                  $"Energy Cost: {nextLevel.energyCost:F1}" ;
 
         return nextLevel;

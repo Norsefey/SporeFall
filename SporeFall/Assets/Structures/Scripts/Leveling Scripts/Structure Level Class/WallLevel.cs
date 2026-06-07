@@ -14,26 +14,29 @@ public class WallLevel : StructureLevel
     [Header("Wall Leveling")]
     public float upgradeProtectionRangeIncrease = 1f;
     public float upgradeDamageReductionIncrease = .05f; // 5% increase per level, capped at 50%
+    public float dmgReductionCap = .5f; // Cap damage reduction at 50%
+
 
     public override StructureLevel NextLevel()
     {
-        StructureLevel nextLevel = new WallLevel
+        WallLevel nextLevel = new WallLevel
         {
             level = this.level + 1,
             maxHealth = this.maxHealth * upgradeHealthMultiplier,
-            cost = this.cost * upgradeCostMultiplier,
+            placementCost = this.placementCost * upgradePlacementCostMultiplier,
             energyCost = this.energyCost * upgradeEnergyCostMultiplier,
-            
+            upgradeCost = this.upgradeCost * upgradeUpgradeCostMultiplier,
+
             protectionRange = this.protectionRange + upgradeProtectionRangeIncrease,
-            damageReduction = Mathf.Min(this.damageReduction + upgradeDamageReductionIncrease, .5f), // Cap at 50% reduction
-            
-            upgradeDescription = $"Upgrade to Level: {level} " +
-                                 $"Health: {maxHealth:F1}, " +
-                                 $"Cost: {cost:F1}, " +
-                                 $"Energy Cost: {energyCost:F1}, " +
-                                 $"Protection Range: {protectionRange:F1}, " +
-                                 $"Damage Reduction: {damageReduction:P0} (capped at 50%)"
+            damageReduction = Mathf.Min(this.damageReduction + upgradeDamageReductionIncrease, dmgReductionCap) // Cap at 50% reduction  
         };
+
+        nextLevel.upgradeDescription =
+                                 $"Health: {nextLevel.maxHealth:F1}, " +
+                                 $"Protection Range: {nextLevel.protectionRange:F1}, " +
+                                 $"Damage Reduction: {nextLevel.damageReduction:P0} (capped at {nextLevel.dmgReductionCap:P0})" +
+                                 $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
+                                 $"Energy Cost: {nextLevel.energyCost:F1}, ";
         return nextLevel;
     }
 }
