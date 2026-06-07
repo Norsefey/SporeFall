@@ -339,7 +339,8 @@ public class PlayerManager : MonoBehaviour
         if(PlayerGunUpgrades.Instance != null)
         {
             PlayerGunUpgrades.Instance.SetActivePlayer(this);
-            PlayerGunUpgrades.Instance.ApplyUpgradesToPlayerWeapons();
+
+            PlayerGunUpgrades.Instance.ApplyModifiersToNewWeapon(currentWeapon);
         }
 
         currentWeapon.bulletCount = currentWeapon.bulletCapacity; ; // to initialize ammo counts and UI

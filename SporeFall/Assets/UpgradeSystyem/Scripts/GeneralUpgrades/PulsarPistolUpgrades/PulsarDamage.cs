@@ -51,7 +51,12 @@ public class PulsarDamage : MonoBehaviour
         }
         GameManager.Instance.DecreaseMycelia(PlayerGunUpgrades.Instance.damageUpgradeCost);
         // new cost is added so needs to be after the cost is taken from the player
-        PlayerGunUpgrades.Instance.UpgradeDamage();
+        PlayerGunUpgrades.Instance.UpgradeDamage(banner.upgradeMenu.activePlayer.currentWeapon);
+
+        if (banner.upgradeMenu.activePlayer.currentWeapon != banner.upgradeMenu.activePlayer.defaultWeapon)
+        {
+            PlayerGunUpgrades.Instance.UpgradeDamage(banner.upgradeMenu.activePlayer.defaultWeapon);
+        }
         UpdateDamageUI();
     }
     

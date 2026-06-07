@@ -51,7 +51,13 @@ public class PulsarFireRate : MonoBehaviour
         }
         GameManager.Instance.DecreaseMycelia(PlayerGunUpgrades.Instance.fireRateUpgradeCost);
         // new cost is added so needs to be after the cost is taken from the player
-        PlayerGunUpgrades.Instance.UpgradeFireRate();
+        PlayerGunUpgrades.Instance.UpgradeFireRate(banner.upgradeMenu.activePlayer.currentWeapon);
+        
+        if (banner.upgradeMenu.activePlayer.currentWeapon != banner.upgradeMenu.activePlayer.defaultWeapon)
+        {
+            PlayerGunUpgrades.Instance.UpgradeFireRate(banner.upgradeMenu.activePlayer.defaultWeapon);
+        }
+
         UpdateFireRateUI();
     }
 }

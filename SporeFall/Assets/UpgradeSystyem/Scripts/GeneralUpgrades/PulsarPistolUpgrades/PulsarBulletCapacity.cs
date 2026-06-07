@@ -53,7 +53,13 @@ public class PulsarBulletCapacity : MonoBehaviour
         }
         GameManager.Instance.DecreaseMycelia(PlayerGunUpgrades.Instance.magazineSizeUpgradeCost);
         // new cost is added so needs to be after the cost is taken from the player
-        PlayerGunUpgrades.Instance.UpgradeMagazineSize();
+        PlayerGunUpgrades.Instance.UpgradeMagazineSize(banner.upgradeMenu.activePlayer.currentWeapon);
+
+        if (banner.upgradeMenu.activePlayer.currentWeapon != banner.upgradeMenu.activePlayer.defaultWeapon)
+        {
+            PlayerGunUpgrades.Instance.UpgradeMagazineSize(banner.upgradeMenu.activePlayer.defaultWeapon);
+        }
+
         UpdateBullectCapacityUI();
     }
 }

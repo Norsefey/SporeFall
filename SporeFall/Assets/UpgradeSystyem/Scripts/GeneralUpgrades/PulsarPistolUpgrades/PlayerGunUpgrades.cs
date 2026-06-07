@@ -24,10 +24,10 @@ public class PlayerGunUpgrades : MonoBehaviour
     public float reloadSpeedUpgradeCostIncrease = 0.50f;
     public float magazineSizeUpgradeCostIncrease = 0.50f;
 
-/*    private float damageIncreaseAmount;
+    private float damageIncreaseAmount;
     private float fireRateIncreaseAmount;
     private float magazineSizeIncreaseAmount;
-    private float reloadSpeedIncreaseAmount;*/
+    private float reloadSpeedIncreaseAmount;
 
     private PlayerManager activePlayer;
 
@@ -41,55 +41,54 @@ public class PlayerGunUpgrades : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        damageIncreaseAmount = 1;
+        fireRateIncreaseAmount = 1;
+        magazineSizeIncreaseAmount = 1;
+        reloadSpeedIncreaseAmount = 1;
     }
 
     public void SetActivePlayer(PlayerManager player)
     {
         activePlayer = player;
     }
-
-    public void ApplyUpgradesToPlayerWeapons()
+    public void ApplyModifiersToNewWeapon(Weapon weapon)
     {
-        ApplyModifiersToWeapon(activePlayer.defaultWeapon);
-        if (activePlayer.equippedWeapon != null)
-        {
-            ApplyModifiersToWeapon(activePlayer.equippedWeapon);
-        }
-
-        activePlayer.pUI.AmmoDisplay(activePlayer.currentWeapon);
+        weapon.damage = Mathf.RoundToInt(weapon.damage * damageIncreaseAmount);
+        weapon.fireRate = Mathf.RoundToInt(weapon.fireRate * fireRateIncreaseAmount);
+        weapon.bulletCapacity = Mathf.RoundToInt(weapon.bulletCapacity * magazineSizeIncreaseAmount);
+        weapon.reloadTime = Mathf.RoundToInt(weapon.reloadTime * reloadSpeedIncreaseAmount);
     }
-    public void ApplyModifiersToWeapon(Weapon weapon)
+    public void UpgradeDamage(Weapon weapon)
     {
-        weapon.damage = Mathf.RoundToInt(weapon.damage * (1 + damageIncreasePercentage));
-        weapon.fireRate = Mathf.RoundToInt(weapon.fireRate * (1 + fireRateIncreasePercentage));
-        weapon.bulletCapacity = Mathf.RoundToInt(weapon.bulletCapacity * (1 + magazineSizeIncreasePercentage));
-        weapon.reloadTime = Mathf.RoundToInt(weapon.reloadTime * (1 + reloadSpeedIncreasePercentage));
-    }
-    public void UpgradeDamage()
-    {
-        //damageIncreaseAmount += damageIncreasePercentage;
+        damageIncreaseAmount += damageIncreasePercentage;
         damageUpgradeCost = Mathf.RoundToInt(damageUpgradeCost * (1 + damageUpgradeCostIncrease));
-        ApplyUpgradesToPlayerWeapons();
+        weapon.damage = Mathf.RoundToInt(weapon.damage * (1 + damageIncreasePercentage));
+
+        //ApplyUpgradesToPlayerWeapons();
     }
-    public void UpgradeFireRate()
+    public void UpgradeFireRate(Weapon weapon)
     {
-        //fireRateIncreaseAmount += fireRateIncreasePercentage;
+        fireRateIncreaseAmount += fireRateIncreasePercentage;
         fireRateUpgradeCost = Mathf.RoundToInt(fireRateUpgradeCost * (1 + fireRateUpgradeCostIncrease));
-        ApplyUpgradesToPlayerWeapons();
+        weapon.fireRate = Mathf.RoundToInt(weapon.fireRate * (1 + fireRateIncreasePercentage));
+
+        //ApplyUpgradesToPlayerWeapons();
 
     }
-    public void UpgradeReloadSpeed()
+    public void UpgradeReloadSpeed(Weapon weapon)
     {
-        //reloadSpeedIncreaseAmount += reloadSpeedIncreasePercentage;
+        reloadSpeedIncreaseAmount += reloadSpeedIncreasePercentage;
         reloadSpeedUpgradeCost = Mathf.RoundToInt(reloadSpeedUpgradeCost * (1 + reloadSpeedUpgradeCostIncrease));
-
-        ApplyUpgradesToPlayerWeapons();
+        weapon.reloadTime = Mathf.RoundToInt(weapon.reloadTime * (1 + reloadSpeedIncreasePercentage));
+        //ApplyUpgradesToPlayerWeapons();
     }
-    public void UpgradeMagazineSize()   
+    public void UpgradeMagazineSize(Weapon weapon)
     {
-        //magazineSizeIncreaseAmount += magazineSizeIncreasePercentage;
+        magazineSizeIncreaseAmount += magazineSizeIncreasePercentage;
         magazineSizeUpgradeCost = Mathf.RoundToInt(magazineSizeUpgradeCost * (1 + magazineSizeUpgradeCostIncrease));
+        weapon.bulletCapacity = Mathf.RoundToInt(weapon.bulletCapacity * (1 + magazineSizeIncreasePercentage));
 
-        ApplyUpgradesToPlayerWeapons();
+        //ApplyUpgradesToPlayerWeapons();
     }
 }
