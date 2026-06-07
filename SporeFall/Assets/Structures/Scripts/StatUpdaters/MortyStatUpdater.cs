@@ -6,30 +6,29 @@ using static UnityEngine.GraphicsBuffer;
 public class MortyStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private MortyControlScript morty;
-
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    private MortyLevel currentLevel;
+    public void Initialize(StructureLevel level)
     {
-        if (levels is MortyLevels turretLevels)
+        if (level is MortyLevel mortyLevel)
         {
-            UpdateMortyStats(turretLevels, level, waveMultiplier);
+            UpdateMortyStats(mortyLevel);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
-        if (levels is MortyLevels turretLevels)
+        if (newLevel is MortyLevel mortyLevel)
         {
-            UpdateMortyStats(turretLevels, level, waveMultiplier);
+            UpdateMortyStats(mortyLevel);
         }
     }
-    private void UpdateMortyStats(MortyLevels levels, int level, float waveMultiplier)
+    private void UpdateMortyStats(MortyLevel levelData)
     {
-        var levelData = levels.levels[level];
+        currentLevel = levelData;
         morty.detectionRange = levelData.detectionRange;
         morty.fireRate = levelData.fireRate;
         morty.fireRange = levelData.fireRange;
         // Set up bullet data
         morty.bulletData = levelData.projectileStats;
-        morty.bulletData.Damage = levelData.projectileStats.Damage * waveMultiplier;
     }
 }

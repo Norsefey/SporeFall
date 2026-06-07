@@ -5,26 +5,28 @@ using UnityEngine;
 public class TurretStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private Turret turret;
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    private TurretLevel currentLevel;
+    public void Initialize(StructureLevel level)
     {
-        if (levels is TurretLevels turretLevels)
+        if (level is TurretLevel turretLevel)
         {
-            UpdateTurretStats(turretLevels, level, waveMultiplier);
+            UpdateTurretStats(turretLevel);
         }
     }
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
-        if (levels is TurretLevels turretLevels)
+        if (newLevel is TurretLevel turretLevel)
         {
-            UpdateTurretStats(turretLevels, level, waveMultiplier);
+            UpdateTurretStats(turretLevel);
         }
     }
 
-    private void UpdateTurretStats(TurretLevels levels, int level, float waveMultiplier)
+    private void UpdateTurretStats(TurretLevel levelData)
     {
-        var levelData = levels.levels[level];
+        currentLevel = levelData;
+
         turret.rotationSpeed = levelData.rotationSpeed;
-        turret.detectionRange = levelData.detectionRange;
+        turret.detectionRange = levelData.range;
         turret.fireRate = levelData.fireRate;
         turret.fireRange = levelData.fireRange;
         turret.ammoCapacity = levelData.ammoCapacity;
@@ -33,7 +35,7 @@ public class TurretStatUpdater : MonoBehaviour, IStructureStats
         turret.bulletData = new ProjectileData 
         {
             Speed = levelData.speed,
-            Damage = levelData.damage * waveMultiplier,
+            Damage = levelData.damage,
             Lifetime = levelData.lifetime,
             UseGravity = levelData.useGravity,
             ArcHeight = levelData.arcHeight,

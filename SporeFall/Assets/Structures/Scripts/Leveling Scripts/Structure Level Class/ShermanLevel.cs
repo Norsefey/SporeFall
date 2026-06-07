@@ -18,4 +18,9 @@ public class ShermanLevel : StructureLevel
     public float randomMovementWeight = 1f;    // Weight for random movement (higher = more random movement)
     public float explosionRadius = 10f;
     public AnimationCurve damageFalloff = AnimationCurve.Linear(0f, 1f, 0f, 0f);
+
+    public override StructureLevel NextLevel()
+    {
+        throw new NotImplementedException();
+    }
 }

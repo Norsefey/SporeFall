@@ -17,71 +17,47 @@ public class UpgradeBanner : MonoBehaviour
     public TMP_Text descriptionText;
     public Button upgradeButton;
 
-    private StructureType currentType;
-    private StructureLevel currentLevel;
+    private StructureStats structureStats;
+    private StructureLevel nextLevel;
     private UpgradeManager upgradeManager;
     public UpgradeUI upgradeUI;
-    public void SetupBanner(StructureType type, StructureLevel level, UpgradeManager manager)
+    public void SetupBanner(StructureStats stats, UpgradeManager manager)
     {
-        currentType = type;
-        currentLevel = level;
+        structureStats = stats;
+        nextLevel = stats.currentLevel.NextLevel();
         upgradeManager = manager;
-        UpdateBannerVisuals(type, level);
+        UpdateBannerVisuals(stats);
+        upgradeButton.onClick.AddListener(PerformUpgrade);
     }
-    private void UpdateBannerVisuals(StructureType type, StructureLevel level)
+    private void UpdateBannerVisuals(StructureStats stats)
     {
+        typeText.text = $"{stats.type.ToString()} : \n Lv {stats.currentLevel.level} TO-> {nextLevel.level}";
 
-        typeText.text = $"{type.ToString()} : \n Current Lv {upgradeManager.GetStructureLevel(type) + 1}";
-
-        bool isMaxLevel = upgradeManager.IsMaxLevel(type);
-
-        if (isMaxLevel)
+        if (nextLevel != null)
         {
-            costText.text = "Max Level";
-            //select The scroll bar
-            //upgradeButton.FindSelectableOnRight().Select();
-            upgradeButton.interactable = false;
-
-            if (TutorialControls.Instance != null && TutorialControls.Instance.gamepadActive)
-            {
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(GameManager.Instance.maxUpgradeButton);
-            }
-
-            textMove.canMove = false;
-            buttonText.color = DarkRed;
-            descriptionText.text = "This structure is fully upgraded.";
-        }
-        else if (level != null)
-        {
-            costText.text = $"Mycelia: {level.cost}";
+            costText.text = $"Mycelia: {nextLevel.cost:F1}";
             upgradeButton.interactable = true;
-            descriptionText.text = level.upgradeDescription;
+            descriptionText.text = nextLevel.upgradeDescription;
         }
 
         // Ensure button doesn't keep old listeners
-        upgradeButton.onClick.RemoveAllListeners();
-        if (!isMaxLevel)
-        {
-            upgradeButton.onClick.AddListener(PerformUpgrade);
-        }
+        //upgradeButton.onClick.RemoveAllListeners();
     }
     void PerformUpgrade()
     {        
         float currentMycelia = GameManager.Instance.Mycelia;
 
-        if (upgradeManager.CanUpgrade(currentType, currentMycelia))
+        if (upgradeManager.CanUpgrade(structureStats.type, currentMycelia))
         {
-            upgradeManager.UpgradeStructure(currentType);
-            
-            GameManager.Instance.ApplyUpgradeToStructures();
-            GameManager.Instance.DecreaseMycelia(currentLevel.cost);
-            
+            GameManager.Instance.DecreaseMycelia(nextLevel.cost);
             upgradeUI.UpdateMyceliaAmount();
 
-            currentLevel = upgradeManager.GetNextLevel(currentType);
+            structureStats.currentLevel = nextLevel;
+            nextLevel = nextLevel.NextLevel();
 
-            UpdateBannerVisuals(currentType, currentLevel);
+            GameManager.Instance.ApplyUpgradeToStructures();
+           
+            UpdateBannerVisuals(structureStats);
         }
     }
 }

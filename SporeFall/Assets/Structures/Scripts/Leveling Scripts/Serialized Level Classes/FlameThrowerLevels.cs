@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "FlameThrowerLevels", menuName = "Structures/FlameThrower Levels")]
-public class FlameThrowerLevels : StructureLevels
+public class FlameThrowerLevels : StructureStats
 {
-    public FlameThrowerLevel[] levels;
+    public FlameThrowerLevel baseStats;
 
-    public override int GetLevelCount() => levels.Length;
-    public override StructureLevel GetLevel(int level) => levels[level];
+    private void OnEnable()
+    {
+        currentLevel = baseStats;
+    }
+
+    //public FlameThrowerLevel[] levels;
 }

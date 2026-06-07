@@ -5,25 +5,28 @@ using UnityEngine;
 public class LilyStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private LilyRepairShop lilyShop;
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+
+    private LilyLevel currentLevel;
+
+    public void Initialize(StructureLevel level)
     {
-        if (levels is LilyLevels shermanLevels)
+        if (level is LilyLevel lilyLevel)
         {
-            UpdateLilyStats(shermanLevels, level, waveMultiplier);
+            UpdateLilyStats(lilyLevel);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
-        if (levels is LilyLevels shermanLevels)
+        if (newLevel is LilyLevel lilyLevel)
         {
-            UpdateLilyStats(shermanLevels, level, waveMultiplier);
+            UpdateLilyStats(lilyLevel);
         }
     }
 
-    private void UpdateLilyStats(LilyLevels LilyStats, int levelIndex, float waveMultiplier)
+    private void UpdateLilyStats(LilyLevel levelData)
     {
-        var levelData = LilyStats.levels[levelIndex];
+        currentLevel = levelData;
         lilyShop.ReturnAllBots();
         lilyShop.maxActiveLilies = levelData.maxActiveLilies;
 
@@ -31,7 +34,7 @@ public class LilyStatUpdater : MonoBehaviour, IStructureStats
         {
             lily.patrolRange = levelData.patrolRange;
             lily.moveSpeed = levelData.moveSpeed;
-            lily.repairRate = levelData.repairRate * waveMultiplier;
+            lily.repairRate = levelData.repairRate;
         }
 
         if(gameObject.activeSelf)

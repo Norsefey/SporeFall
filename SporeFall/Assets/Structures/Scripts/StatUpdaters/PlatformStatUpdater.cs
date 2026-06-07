@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PlatformStatUpdater : MonoBehaviour, IStructureStats
 {
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    private PlatformLevel currentLevel;
+    public void Initialize(StructureLevel level)
     {
     }
 
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
     }
 }

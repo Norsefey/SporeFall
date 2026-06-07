@@ -44,11 +44,9 @@ public class UpgradeUI : MonoBehaviour
             banner.upgradeUI = this;
             // Get structure levels and current upgrade level
             Structure structure = structureObj.GetComponent<Structure>();
-            StructureLevels structureLevels = upgradeManager.GetStructureLevelsForType(structure.GetStructureType());
-            int currentLevel = upgradeManager.GetStructureLevel(structure.GetStructureType());
-            StructureLevel nextLevel = upgradeManager.GetNextLevel(structure.GetStructureType());
+            
             // Always show the banner, even if it's at max level
-            banner.SetupBanner(structure.GetStructureType(), nextLevel ?? structureLevels.GetLevel(currentLevel), upgradeManager);
+            banner.SetupBanner(structure.GetStructureStats(), upgradeManager);
         }
 
         // For when it refreshes
@@ -89,7 +87,7 @@ public class UpgradeUI : MonoBehaviour
     public void UpdateMyceliaAmount()
     {
         myceliaText.color = GameManager.Instance.Mycelia > 0 ? DefaultColor : NoMyceliaColor;
-        myceliaText.text = $"Mycelia: {GameManager.Instance.Mycelia}";
+        myceliaText.text = $"Mycelia: {GameManager.Instance.Mycelia:F1}";
     }
     public void CloseUpgradeMenu()
     {

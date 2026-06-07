@@ -5,28 +5,28 @@ using UnityEngine;
 public class FlameThrowerStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private FlameThrower flamey;
-
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    private FlameThrowerLevel currentLevel;
+    public void Initialize(StructureLevel level)
     {
-        if (levels is FlameThrowerLevels flameThrowerLevels)
+        if (level is FlameThrowerLevel flameThrowerLevel)
         {
-            UpdateFlameyStats(flameThrowerLevels, level, waveMultiplier);
+            UpdateFlameyStats(flameThrowerLevel);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
-        if (levels is FlameThrowerLevels flameThrowerLevels)
+        if (newLevel is FlameThrowerLevel flameThrowerLevel)
         {
-            UpdateFlameyStats(flameThrowerLevels, level, waveMultiplier);
+            UpdateFlameyStats(flameThrowerLevel);
         }
     }
 
-    private void UpdateFlameyStats(FlameThrowerLevels levels, int level, float waveMultiplier)
+    private void UpdateFlameyStats(FlameThrowerLevel levelData)
     {
-        var levelData = levels.levels[level];
+        currentLevel = levelData;
 
-        flamey.damageAmount = levelData.damageAmount * (waveMultiplier / 2);
+        flamey.damageAmount = levelData.damage;
         flamey.range = levelData.range;
         flamey.damageTickRate = levelData.damageTickRate;
 

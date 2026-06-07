@@ -4,10 +4,13 @@ using UnityEngine;
 
 // Specific ScriptableObjects for each structure type
 [CreateAssetMenu(fileName = "TurretLevels", menuName = "Structures/Turret Levels")]
-public class TurretLevels : StructureLevels
+public class TurretLevels : StructureStats
 {
-    public TurretLevel[] levels;
+    public TurretLevel baseStats;
 
-    public override int GetLevelCount() => levels.Length;
-    public override StructureLevel GetLevel(int level) => levels[level];
+    private void OnEnable()
+    {
+        currentLevel = baseStats;
+    }
+    //public TurretLevel[] levels;
 }

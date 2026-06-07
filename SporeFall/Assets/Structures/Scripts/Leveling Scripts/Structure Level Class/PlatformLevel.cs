@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlatformLevel : StructureLevel
 {
-   
-
+    public override StructureLevel NextLevel()
+    {
+        throw new System.NotImplementedException();
+    }
 }

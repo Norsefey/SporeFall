@@ -5,34 +5,35 @@ using UnityEngine;
 public class ShermanStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private ShermanStructureControls ShermanStation;
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    private ShermanLevel currentLevel;
+    public void Initialize(StructureLevel level)
     {
-        if (levels is ShermanLevels shermanLevels)
+        if (level is ShermanLevel shermanLevel)
         {
-            UpdateShermanStats(shermanLevels, level, waveMultiplier);
+            UpdateShermanStats(shermanLevel);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
-        if(levels is ShermanLevels shermanLevels)
+        if(newLevel is ShermanLevel shermanLevel)
         {
-            UpdateShermanStats(shermanLevels, level, waveMultiplier);
+            UpdateShermanStats(shermanLevel);
         }
     }
 
-    private void UpdateShermanStats(ShermanLevels levels, int level, float waveMultiplier)
+    private void UpdateShermanStats(ShermanLevel levelData)
     {
-        var levelData = levels.levels[level];
+        currentLevel = levelData;
 
         ShermanStation.maxActiveShermans = levelData.maxActiveShermans;
         foreach(var sherman in ShermanStation.currentShermans)
         {
-            sherman.UpdateVisual(level);
+            sherman.UpdateVisual(levelData.level);
             sherman.moveSpeed = levelData.moveSpeed;
             sherman.turnSpeed = levelData.turnSpeed;
             sherman.changeDirectionInterval = levelData.changeDirectionInterval;
-            sherman.damage = levelData.damage * waveMultiplier;
+            sherman.damage = levelData.damage;
             sherman.detectionRadius = levelData.detectionRadius;
             sherman.randomMovementWeight = levelData.enemyInfluenceWeight;
             sherman.randomMovementWeight = levelData.randomMovementWeight;

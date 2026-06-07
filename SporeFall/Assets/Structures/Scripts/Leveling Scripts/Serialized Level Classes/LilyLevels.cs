@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LilyLevels", menuName = "Structures/Lily Levels")]
-public class LilyLevels : StructureLevels
+public class LilyLevels : StructureStats
 {
     public LilyLevel[] levels;
-    public override StructureLevel GetLevel(int level) => levels[level];
-    public override int GetLevelCount() => levels.Length;
 }

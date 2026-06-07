@@ -4,28 +4,28 @@ using UnityEngine;
 public class RepairStationStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private RepairController repairStation;
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    private RepairLevel currentLevel;
+    public void Initialize(StructureLevel level)
     {
-        if (levels is RepairLevels repairStation)
+        if (level is RepairLevel repairLevel)
         {
-            UpdateRepairStationStats(repairStation, level, waveMultiplier);
+            UpdateRepairStationStats(repairLevel);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
-        if (levels is RepairLevels repairStation)
+        if (newLevel is RepairLevel repairLevel)
         {
-            UpdateRepairStationStats(repairStation, level, waveMultiplier);
+            UpdateRepairStationStats(repairLevel);
         }
     }
 
-    private void UpdateRepairStationStats(RepairLevels levels, int level, float waveMultiplier)
+    private void UpdateRepairStationStats(RepairLevel levelData)
     {
-        // get the data of the correct level of the structure
-        var levelData = levels.levels[level];
+        currentLevel = levelData;
 
-        repairStation.healAmount = levelData.healAmount * (waveMultiplier * 2);
+        repairStation.healAmount = levelData.healAmount;
         repairStation.healRate = levelData.healRate;
         repairStation.healRadius = levelData.healRange;
 

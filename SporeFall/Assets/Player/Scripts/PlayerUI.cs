@@ -219,16 +219,16 @@ public class PlayerUI : MonoBehaviour
         {
             leftIndex = 0;
         }
-         rightStructureIcon.sprite = bGun.buildableStructures[leftIndex].GetComponent<Structure>().structureStats.icon;       
+         rightStructureIcon.sprite = bGun.buildableStructures[leftIndex].GetComponent<Structure>().GetStructureIcon();
 
         int rightIndex = bGun.currentBuildIndex - 1;
         if(rightIndex < 0)
         {
             rightIndex = bGun.buildableStructures.Count - 1; ;
         }
-        leftStructureIcon.sprite = bGun.buildableStructures[rightIndex].GetComponent<Structure>().structureStats.icon;
+        leftStructureIcon.sprite = bGun.buildableStructures[rightIndex].GetComponent<Structure>().GetStructureIcon();
 
-        selectedStructureIcon.sprite = bGun.buildableStructures[bGun.currentBuildIndex].GetComponent<Structure>().structureStats.icon;
+        selectedStructureIcon.sprite = bGun.buildableStructures[bGun.currentBuildIndex].GetComponent<Structure>().GetStructureIcon();
     }
     public void ToggleChargeGunSlider(bool enable)
     {

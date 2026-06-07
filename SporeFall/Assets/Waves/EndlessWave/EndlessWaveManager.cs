@@ -273,10 +273,10 @@ public class EndlessWaveManager : MonoBehaviour
             enemyType.SpawnedCount = 0;
         }
 
-        foreach(Structure structure in GameManager.Instance.activeStructures)
+/*        foreach (Structure structure in GameManager.Instance.activeStructures)
         {
             structure.UpdateEndlessStats();
-        }
+        }*/
 
         // Restart enemy spawning if we were in downtime
         if (currentState == WaveState.Downtime)

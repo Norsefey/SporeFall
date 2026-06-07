@@ -6,27 +6,30 @@ public class WallStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private StructureHP wallHP;
     public Wall wall;
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    
+    private WallLevel currentLevel;
+    public void Initialize(StructureLevel level)
     {
-        if (levels is WallLevels wallLevels)
+        if (level is WallLevel wallLevel)
         {
-            UpdateWallStats(wallLevels, level, waveMultiplier);
+            UpdateWallStats(wallLevel);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
-        if (levels is WallLevels wallLevels)
+        if (newLevel is WallLevel wallLevel)
         {
-            UpdateWallStats(wallLevels, level, waveMultiplier);
+            UpdateWallStats(wallLevel);
         }
     }
 
-    private void UpdateWallStats(WallLevels levels, int level, float waveMultiplier)
+    private void UpdateWallStats(WallLevel levelData)
     {
-        var levelData = levels.levels[level];
+        currentLevel = levelData;
 
-        wallHP.SetMaxHP(levelData.maxHealth * waveMultiplier);
+        wallHP.SetMaxHP(levelData.maxHealth);
+        
         if(wall != null)
         {
             wall.protectionRange = levelData.protectionRange;

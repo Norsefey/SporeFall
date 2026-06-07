@@ -5,34 +5,35 @@ using UnityEngine;
 public class StanleyStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private StanleyControlScript stanley;
+    private StanleyLevel currentLevel;
 
-    public void Initialize(StructureLevels levels, int level, float waveMultiplier)
+    public void Initialize(StructureLevel level)
     {
-        if(levels is StanleyLevels stanley)
+        if(level is StanleyLevel stanleyLevel)
         {
-            UpdateStanleyStats(stanley, level, waveMultiplier);
+            UpdateStanleyStats(stanleyLevel);
         }
     }
 
-    public void UpdateStats(StructureLevels levels, int level, float waveMultiplier)
+    public void UpdateStats(StructureLevel newLevel)
     {
-        if (levels is StanleyLevels stanley)
+        if (newLevel is StanleyLevel stanleyLevel)
         {
-            UpdateStanleyStats(stanley, level, waveMultiplier);
+            UpdateStanleyStats(stanleyLevel);
         }
     }
 
-    private void UpdateStanleyStats(StanleyLevels levels, int currentLevel, float waveMultiplier)
+    private void UpdateStanleyStats(StanleyLevel levelData)
     {
-        var levelData = levels.levels[currentLevel];
-        stanley.UpdateVisual(currentLevel);
+        currentLevel = levelData;
+        stanley.UpdateVisual(levelData.level);
 
         stanley.moveSpeed = levelData.moveSpeed;
         stanley.changeDirectionInterval = levelData.changeDirectionInterval;
         stanley.detectionRadius = levelData.detectionRadius;
         stanley.randomMovementWeight = levelData.randomMovementWeight;
 
-        stanley.myceliaGenerationRate = levelData.myceliaGenerationRate * (waveMultiplier /2);
+        stanley.myceliaGenerationRate = levelData.myceliaGenerationRate;
         stanley.myceliaGenerationTickRate = levelData.myceliaGenerationTickRate;
     }
 }

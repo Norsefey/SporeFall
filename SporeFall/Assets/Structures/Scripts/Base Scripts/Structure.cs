@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Structure : MonoBehaviour
 {
     [Space(5)]
     [SerializeField] private GameObject controlScriptObject;
     [Space(5)]
-    public StructureLevels structureStats;
+    [SerializeField] private StructureStats structureStats;
+
     [SerializeField] private GameObject[] levelVisuals;
     [SerializeField] private GameObject radiusIndicator;
     [SerializeField] private StructureHP healthComponent;
@@ -21,49 +21,30 @@ public class Structure : MonoBehaviour
     [HideInInspector]
     public StructurePoolBehavior poolBehavior;
     private IStructureStats structureBehavior;
-    private int currentLevel = 0;
     public bool onPlatform = false;
     public PlatformStructure myPlatform;
-
-    private float waveMultiplier = 1;
-
     private void Awake()
     {
         poolBehavior = GetComponent<StructurePoolBehavior>();
         structureBehavior = GetComponent<IStructureStats>();
-        UpdateRadiusVisual(structureStats.GetLevel(currentLevel));
+        UpdateRadiusVisual();
     }
     public void Initialize()
     {
-        if (structureStats == null || structureStats.GetLevelCount() == 0)
-        {
-            Debug.LogError($"No levels configured for structure: {gameObject.name}");
-            return;
-        }
-        if(GameManager.Instance.endlessWaveManager != null)
-        {
-            waveMultiplier = 1 * Mathf.Sqrt(GameManager.Instance.endlessWaveManager.CurrentDifficulty);
-            Debug.Log("Difficulty Modifier: " + waveMultiplier);
-        }
-        else
-        {
-            waveMultiplier = 1;
-        }
-
         UpdateVisuals();
         UpdateStats();
-        structureBehavior?.Initialize(structureStats, currentLevel, waveMultiplier);
+        structureBehavior?.Initialize(structureStats.currentLevel);
     }
-    public void UpdateRadiusVisual(StructureLevel level)
+    public void UpdateRadiusVisual()
     {
         // Update radius indicator
         if (radiusIndicator != null)
         {
             float scale = 0;
-            switch (level)
+            switch (structureStats.currentLevel)
             {
                 case TurretLevel turret:
-                    scale = turret.detectionRange * 2;
+                    scale = turret.range * 2;
                     break;
                 case FlameThrowerLevel flamey:
                     scale = flamey.range * 2;
@@ -93,46 +74,39 @@ public class Structure : MonoBehaviour
     }
     public bool CanUpgrade(float availableMycelia)
     {
-        if (currentLevel >= structureStats.GetLevelCount() - 1) return false;
-
-        var nextLevel = structureStats.GetLevel(currentLevel + 1);
-        return availableMycelia >= nextLevel.cost;
+        return availableMycelia >= structureStats.currentLevel.GetUpgradeCost();
     }
     public void Upgrade()
     {
-        if (currentLevel >= structureStats.GetLevelCount() - 1) return;
-
-        currentLevel = GameManager.Instance.upgradeManager.GetStructureLevel(structureStats.type);
         UpdateVisuals();
         UpdateStats();
     }
     private void UpdateVisuals()
     {
-        // Deactivate current visual if it exists
-        if(currentLevel - 1 >= 0)
+        if(structureStats.currentLevel == null || structureStats.currentLevel.level < 0 || structureStats.currentLevel.level >= levelVisuals.Length)
         {
-            levelVisuals[currentLevel - 1].SetActive(false);
+            //Debug.LogError($"Structure {structureStats.structureName} has no current level assigned.");
+            return;
+        }
+
+        // Deactivate current visual if it exists
+        if (structureStats.currentLevel.level - 1 >= 0)
+        {
+            levelVisuals[structureStats.currentLevel.level - 1].SetActive(false);
         }
         // Get and activate new visual
-        if (currentLevel < levelVisuals.Count() && levelVisuals[currentLevel] != null)
+        if (structureStats.currentLevel.level < levelVisuals.Length && levelVisuals[structureStats.currentLevel.level] != null)
         {
-            levelVisuals[currentLevel].SetActive(true);
+            levelVisuals[structureStats.currentLevel.level].SetActive(true);
         }
     }
     private void UpdateStats()
-    {
-        var levelData = structureStats.GetLevel(currentLevel);
-        
+    {        
         // Set the new HP value
-        healthComponent.SetMaxHP(levelData.maxHealth * waveMultiplier);
+        healthComponent.SetMaxHP(structureStats.currentLevel.maxHealth );
         
-        structureBehavior?.UpdateStats(structureStats, currentLevel, waveMultiplier);
-        UpdateRadiusVisual(levelData);
-    }
-    public void UpdateEndlessStats()
-    {
-        healthComponent.SetMaxHPNoReset(waveMultiplier);
-        structureBehavior?.UpdateStats(structureStats, currentLevel, waveMultiplier);
+        structureBehavior?.UpdateStats(structureStats.currentLevel);
+        UpdateRadiusVisual();
     }
     public void ToggleStructureBehavior(bool toggle)
     {
@@ -203,16 +177,19 @@ public class Structure : MonoBehaviour
         }
     }
     // Getter methods
-    public float GetCurrentMyceliaCost() => structureStats.GetLevel(currentLevel).cost;
-    public float GetCurrentEnergyCost() => structureStats.GetLevel(currentLevel).energyCost;
-    public int GetCurrentLevel() => currentLevel;
-    public bool IsMaxLevel() => currentLevel >= structureStats.GetLevelCount() - 1;
-    public StructureLevels GetLevels() => structureStats;
+    public float GetCurrentMyceliaCost() => structureStats.currentLevel.GetUpgradeCost();
+    public float GetCurrentEnergyCost() => structureStats.currentLevel.energyCost;
+    public int GetCurrentLevelInt() => structureStats.currentLevel.level;
+    public StructureLevel GetCurrentLevel() => structureStats.currentLevel;
     public StructureHP GetStructureHP() => healthComponent;
-    public GameObject GetCurrentVisual() => levelVisuals[currentLevel];
+    public GameObject GetCurrentVisual() 
+    { 
+        int index = Mathf.Min(structureStats.currentLevel.level, levelVisuals.Length - 1);
+        return levelVisuals[index];
+    }
     public string GetStructureName() => structureStats.structureName;
     public string GetStructureDescription() => structureStats.description;
     public StructureType GetStructureType() => structureStats.type;
-    public float SetMultiplier { get { return waveMultiplier; } set { waveMultiplier = value; } }
-
+    public Sprite GetStructureIcon() => structureStats.icon;
+    public StructureStats GetStructureStats() => structureStats;
 }

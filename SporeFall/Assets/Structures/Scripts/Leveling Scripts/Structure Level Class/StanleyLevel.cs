@@ -18,4 +18,8 @@ public class StanleyLevel : StructureLevel
     public float detectionRadius = 10f;    // Detection radius for nearby Mycelia
     public float randomMovementWeight = 1f;    // Weight for random movement (higher = more random movement)
 
+    public override StructureLevel NextLevel()
+    {
+        throw new NotImplementedException();
+    }
 }
