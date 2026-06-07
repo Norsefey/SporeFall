@@ -225,6 +225,12 @@ public class StanleyControlScript : MonoBehaviour
     }
     public void UpdateVisual(int index)
     {
+        if(index < 0 || index >= StanleyVisuals.Length)
+        {
+            //Debug.LogError($"Invalid visual index: {index}");
+            return;
+        }
+
         StanleyVisuals[index].SetActive(true);
         if (index > 0)
             StanleyVisuals[index - 1].SetActive(false);
