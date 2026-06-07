@@ -83,9 +83,26 @@ public class Structure : MonoBehaviour
     }
     private void UpdateVisuals()
     {
-        if(structureStats.currentLevel == null || structureStats.currentLevel.level < 0 || structureStats.currentLevel.level >= levelVisuals.Length)
+        if(structureStats.currentLevel == null || structureStats.currentLevel.level < 0)
         {
             //Debug.LogError($"Structure {structureStats.structureName} has no current level assigned.");
+            return;
+        }
+
+        if (structureStats.currentLevel.level >= levelVisuals.Length)
+        {
+            foreach (GameObject visual in levelVisuals)
+            {
+                if (visual != null)
+                    visual.SetActive(false);
+            }
+
+            int final = levelVisuals.Length - 1;
+
+            if (final >= 0 && levelVisuals[final] != null)
+            {
+                levelVisuals[final].SetActive(true);
+            }
             return;
         }
 

@@ -20,12 +20,12 @@ public class GameUIManager : MonoBehaviour
     public void DisplayMycelia(float value)
     {
         if (myceliaIndicator != null)
-            myceliaIndicator.text = value.ToString();
+            myceliaIndicator.text = value.ToString("F1");
     }
     public void DisplayEnergy(float value)
     {
         if (energyText != null)
-            energyText.text = value.ToString();
+            energyText.text = value.ToString("F1");
     }
     public void ToggleGameUI(bool toggle)
     {

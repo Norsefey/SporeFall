@@ -225,6 +225,12 @@ public class LilyRepairBot : MonoBehaviour
     }
     public void UpdateVisual(int index)
     {
+        if(index < 0 || index >= lilyVisuals.Length)
+        {
+            //Debug.LogError("Invalid visual index for LilyRepairBot: " + index);
+            return;
+        }
+
         lilyVisuals[index].SetActive(true);
         if (index > 0)
             lilyVisuals[index - 1].SetActive(false);
