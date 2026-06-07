@@ -8,7 +8,7 @@ using UnityEngine;
 public abstract class StructureLevel
 {
     [Header("Base Stats")]
-    public int level;
+    public int level = 1;
     public float maxHealth;
     public float cost;
     public float energyCost;

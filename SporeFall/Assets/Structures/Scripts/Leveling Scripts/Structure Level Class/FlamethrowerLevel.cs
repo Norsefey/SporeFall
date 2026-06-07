@@ -13,8 +13,6 @@ public class FlameThrowerLevel : StructureLevel
 
     [Header("Flamethrower Leveling")]
     public float upgradeDamageMultiplier = 1.5f;
-    public float upgradeRangeMultiplier = 1.1f;
-
 
     public override StructureLevel NextLevel()
     {
@@ -26,7 +24,7 @@ public class FlameThrowerLevel : StructureLevel
             energyCost = this.energyCost * upgradeEnergyCostMultiplier,
            
             damage = this.damage * upgradeDamageMultiplier,
-            range = this.range * upgradeRangeMultiplier,
+            range = this.range,
             damageTickRate = this.damageTickRate, // tick rate does not change with level
         };
 

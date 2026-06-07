@@ -5,5 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MortyLevels", menuName = "Structures/Morty Levels")]
 public class MortyLevels : StructureStats
 {
-    public MortyLevel[] levels;
+    public MortyLevel baseStats;
+
+    private void OnEnable()
+    {
+        currentLevel = baseStats;
+    }
+
+    //public MortyLevel[] levels;
 }

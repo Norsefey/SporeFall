@@ -14,8 +14,37 @@ public class MortyLevel : StructureLevel
     [Header("Projectile Stats")]
     public ProjectileData projectileStats;
 
+    [Header("Mortar Leveling")]
+    public float upgradeDetectionRangeMultiplier = 1.2f;
+    public float upgradeDamageMultiplier = 1.25f;
+
+
     public override StructureLevel NextLevel()
     {
-        throw new NotImplementedException();
+        MortyLevel nextLevel = new MortyLevel
+        {
+            level = this.level + 1,
+            maxHealth = this.maxHealth * upgradeHealthMultiplier,
+            cost = this.cost * upgradeCostMultiplier,
+            energyCost = this.energyCost * upgradeEnergyCostMultiplier,
+
+            detectionRange = this.detectionRange * upgradeDetectionRangeMultiplier,
+            projectileStats = new ProjectileData
+            {
+                Damage = this.projectileStats.Damage * upgradeDamageMultiplier,
+                Speed = this.projectileStats.Speed,
+                Lifetime = this.projectileStats.Lifetime
+            },
+        };
+
+        nextLevel.upgradeDescription =
+                                $"Health: {nextLevel.maxHealth:F1}, " +
+                                $"Range: {nextLevel.fireRange:F1}, \n" +
+                                $"Damage: {nextLevel.projectileStats.Damage:F1}, " +
+                                $"Fire Rate: {nextLevel.fireRate:F1}, \n" +
+                                $"Cost: {nextLevel.cost:F1}, " +
+                                $"Energy Cost: {nextLevel.energyCost:F1}";
+
+        return nextLevel;
     }
 }

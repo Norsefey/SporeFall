@@ -177,7 +177,7 @@ public class Structure : MonoBehaviour
         }
     }
     // Getter methods
-    public float GetCurrentMyceliaCost() => structureStats.currentLevel.GetUpgradeCost();
+    public float GetCurrentMyceliaCost() => structureStats.currentLevel.cost;
     public float GetCurrentEnergyCost() => structureStats.currentLevel.energyCost;
     public int GetCurrentLevelInt() => structureStats.currentLevel.level;
     public StructureLevel GetCurrentLevel() => structureStats.currentLevel;

@@ -5,5 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ShermanLevels", menuName = "Structures/Sherman Levels")]
 public class ShermanLevels : StructureStats
 {
-    public ShermanLevel[] levels;
+    public ShermanLevel baseLevel;
+
+    private void OnEnable()
+    {
+        currentLevel = baseLevel;
+    }
+
+    //public ShermanLevel[] levels;
 }

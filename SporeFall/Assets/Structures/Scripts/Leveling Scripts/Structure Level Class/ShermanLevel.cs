@@ -21,6 +21,10 @@ public class ShermanLevel : StructureLevel
 
     public override StructureLevel NextLevel()
     {
-        throw new NotImplementedException();
+        ShermanLevel nextLevel = new ShermanLevel
+        {
+        };
+
+        return nextLevel;
     }
 }

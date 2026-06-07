@@ -16,11 +16,15 @@ MonoBehaviour:
   structureName: Mortar
   description: A morter that provides far range explosive damage
   icon: {fileID: 21300000, guid: 1c95a8ec7a9a9694c8abc7169035cb1e, type: 3}
-  levels:
-  - maxHealth: 100
+  baseStats:
+    level: 1
+    maxHealth: 100
     cost: 25
     energyCost: 5
     upgradeDescription: 
+    upgradeCostMultiplier: 1.5
+    upgradeHealthMultiplier: 1.5
+    upgradeEnergyCostMultiplier: 1.5
     detectionRange: 50
     fireRate: 0.2
     fireRange: 50
@@ -28,6 +32,7 @@ MonoBehaviour:
       Speed: 8
       Lifetime: 10
       Damage: 10
+      Corruption: 0
       UseGravity: 0
       UseArcTrajectory: 1
       ArcHeight: 45
@@ -36,41 +41,5 @@ MonoBehaviour:
       BounceDamageMultiplier: 0
       Direction: {x: 0, y: 0, z: 0}
       TargetPosition: {x: 0, y: 0, z: 0}
-  - maxHealth: 125
-    cost: 30
-    energyCost: 5
-    upgradeDescription: +25 health, +10 damage
-    detectionRange: 50
-    fireRate: 0.2
-    fireRange: 50
-    projectileStats:
-      Speed: 8
-      Lifetime: 10
-      Damage: 20
-      UseGravity: 0
-      UseArcTrajectory: 1
-      ArcHeight: 45
-      CanBounce: 0
-      MaxBounces: 0
-      BounceDamageMultiplier: 0
-      Direction: {x: 0, y: 0, z: 0}
-      TargetPosition: {x: 0, y: 0, z: 0}
-  - maxHealth: 150
-    cost: 40
-    energyCost: 5
-    upgradeDescription: +25 health, +10 damage
-    detectionRange: 50
-    fireRate: 0.2
-    fireRange: 50
-    projectileStats:
-      Speed: 8
-      Lifetime: 10
-      Damage: 30
-      UseGravity: 0
-      UseArcTrajectory: 1
-      ArcHeight: 45
-      CanBounce: 0
-      MaxBounces: 0
-      BounceDamageMultiplier: 0
-      Direction: {x: 0, y: 0, z: 0}
-      TargetPosition: {x: 0, y: 0, z: 0}
+    upgradeDetectionRangeMultiplier: 1.2
+    upgradeDamageMultiplier: 1.25

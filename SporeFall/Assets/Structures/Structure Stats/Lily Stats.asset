@@ -16,28 +16,16 @@ MonoBehaviour:
   structureName: Repair Bot
   description: Repairs Nearby Structures
   icon: {fileID: 21300000, guid: ce10a714fa8079242a91ab2f3e6c45bf, type: 3}
-  levels:
-  - maxHealth: 100
+  baseStats:
+    level: 1
+    maxHealth: 100
     cost: 25
     energyCost: 5
     upgradeDescription: 
+    upgradeCostMultiplier: 1.5
+    upgradeHealthMultiplier: 1.5
+    upgradeEnergyCostMultiplier: 1.5
     maxActiveLilies: 1
     patrolRange: 15
     repairRate: 5
     moveSpeed: 5
-  - maxHealth: 100
-    cost: 30
-    energyCost: 7
-    upgradeDescription: +1 active Lilys, +5 repair per second, +2 energy cost
-    maxActiveLilies: 2
-    patrolRange: 15
-    repairRate: 10
-    moveSpeed: 5
-  - maxHealth: 100
-    cost: 35
-    energyCost: 9
-    upgradeDescription: +1 active Lilys, +5 range, +2 energy cost
-    maxActiveLilies: 3
-    patrolRange: 20
-    repairRate: 14
-    moveSpeed: 8
