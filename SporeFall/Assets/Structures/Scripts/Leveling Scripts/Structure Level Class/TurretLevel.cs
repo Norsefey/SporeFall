@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
 // Specific stat extensions for different structure types
-[Serializable]
+[System.Serializable]
 public class TurretLevel : StructureLevel
 {
     [Header("Base Turret Stats")]
@@ -30,7 +26,6 @@ public class TurretLevel : StructureLevel
     public float upgradeDamageMultiplier = 1.5f;
     public float upgradeFireRateMultiplier = 1.2f;
     public float upgradeDetectionRangeIncrease = 2f;
-
 
     public override StructureLevel NextLevel()
     {
@@ -65,8 +60,7 @@ public class TurretLevel : StructureLevel
                                  $"Range: {nextLevel.range:F1}, \n" +
                                  $"Damage: {nextLevel.damage:F1}, " +
                                  $"Fire Rate: {nextLevel.fireRate:F1}, \n"+
-                                 $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
-                                 $"Energy Cost: {nextLevel.energyCost:F1}" ;
+                                 $"Placement Cost: {nextLevel.placementCost:F1}" ;
 
         return nextLevel;
     }

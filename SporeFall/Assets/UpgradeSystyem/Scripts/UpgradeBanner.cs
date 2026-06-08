@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UpgradeBanner : MonoBehaviour
@@ -18,8 +14,7 @@ public class UpgradeBanner : MonoBehaviour
     public TMP_Text descriptionText;
     public Button upgradeButton;
 
-    private StructureLevel structureLevel;
-    private StructureLevel nextLevel;
+    public StructureLevel structureLevel;
     private UpgradeManager upgradeManager;
     public UpgradeUI upgradeUI;
     private StructureType myType;
@@ -30,42 +25,53 @@ public class UpgradeBanner : MonoBehaviour
         myType = type;
         
         structureLevel = manager.GetStructureLevelOfType(type);
-        
-        nextLevel = structureLevel.NextLevel();
         upgradeManager = manager;
         UpdateBannerVisuals(structureLevel);
         upgradeButton.onClick.AddListener(PerformUpgrade);
     }
     private void UpdateBannerVisuals(StructureLevel level)
     {
-        typeText.text = $"{myType.ToString()} : \n Lv {level.level} TO-> {nextLevel.level}";
+        typeText.text = $"{myType.ToString()} : \n Lv {level.level} TO-> {level.NextLevel().level}";
 
-        if (nextLevel != null)
-        {
-            costText.text = $"Mycelia: {level.upgradeCost:F1}";
-            upgradeButton.interactable = true;
-            descriptionText.text = nextLevel.upgradeDescription;
-        }
-
-        // Ensure button doesn't keep old listeners
-        //upgradeButton.onClick.RemoveAllListeners();
+        costText.text = $"Mycelia: {level.upgradeCost:F1}";
+        upgradeButton.interactable = true;
+        descriptionText.text = level.NextLevel().upgradeDescription;
     }
     void PerformUpgrade()
-    {        
+    {
         float currentMycelia = GameManager.Instance.Mycelia;
+        if(upgradeManager.CanUpgrade(myType, currentMycelia))
+        {
+            GameManager.Instance.DecreaseMycelia(structureLevel.upgradeCost);
+            upgradeUI.UpdateMyceliaAmount();
 
+            StructureLevel newLevel = structureLevel.NextLevel();
+            newLevel.upgradePlacementCostMultiplier = structureLevel.upgradePlacementCostMultiplier;
+            newLevel.upgradeHealthMultiplier = structureLevel.upgradeHealthMultiplier;
+            newLevel.upgradeEnergyCostMultiplier = structureLevel.upgradeEnergyCostMultiplier;
+            newLevel.upgradeUpgradeCostMultiplier = structureLevel.upgradeUpgradeCostMultiplier;
+
+            upgradeManager.UpgradeStructure(myType, newLevel);
+            GameManager.Instance.ApplyUpgradeToStructures(myType, newLevel);
+
+            UpdateBannerVisuals(newLevel);
+
+            structureLevel = newLevel;
+
+        }
+
+        /*float currentMycelia = GameManager.Instance.Mycelia;
         if (upgradeManager.CanUpgrade(myType, currentMycelia))
         {
             GameManager.Instance.DecreaseMycelia(structureLevel.upgradeCost);
             upgradeUI.UpdateMyceliaAmount();
 
-            structureLevel = nextLevel;
-            nextLevel = nextLevel.NextLevel();
+            structureLevel = structureLevel.NextLevel();
 
             upgradeManager.UpgradeStructure(myType, structureLevel);
             GameManager.Instance.ApplyUpgradeToStructures(myType, structureLevel);
            
             UpdateBannerVisuals(structureLevel);
-        }
+        }*/
     }
 }

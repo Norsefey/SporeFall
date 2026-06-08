@@ -6,6 +6,12 @@ public class TurretStatUpdater : MonoBehaviour, IStructureStats
 {
     [SerializeField] private Turret turret;
     private TurretLevel currentLevel;
+
+    private void Awake()
+    {
+        currentLevel = GetComponent<Structure>().structureStats.GetBaseLevel() as TurretLevel;
+    }
+
     public void Initialize(StructureLevel level)
     {
         if (level is TurretLevel turretLevel)

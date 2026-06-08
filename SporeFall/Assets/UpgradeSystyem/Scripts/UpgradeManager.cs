@@ -26,19 +26,11 @@ public class UpgradeManager : MonoBehaviour
 
             if (structure != null)
             {
-                StructureLevel currentLevel = structure.GetCurrentLevel();
-                
-                if(currentLevel == null)
-                {
-                    Debug.LogWarning($"Structure {structure.GetStructureName()} does not have a valid current level. Skipping.");
-                    continue;
-                }
+                StructureLevel currentLevel = structure.structureStats.GetBaseLevel();
 
-                Debug.Log($"Adding structure type {structure.GetStructureType()} with level {currentLevel.level} to stats dictionary.");
-                
+                Debug.Log($"{currentLevel.upgradePlacementCostMultiplier}");
+
                 structureStatsDict[structure.GetStructureType()] = currentLevel;
-
-                Debug.Log($"Current stats for {structure.GetStructureType()}: Health={currentLevel.maxHealth}, PlacementCost={currentLevel.placementCost}, EnergyCost={currentLevel.energyCost}, UpgradeCost={currentLevel.upgradeCost}");
             }
         }
     }
@@ -65,14 +57,6 @@ public class UpgradeManager : MonoBehaviour
     }
     public void UpgradeStructure(StructureType type, StructureLevel newLevel)
     {
-        if (structureStatsDict.TryGetValue(type, out StructureLevel currentLevel))
-        {
-            structureStatsDict[type] = newLevel;
-            Debug.Log($"Upgraded structure type {type} to level {structureStatsDict[type].level}. New stats: Health={structureStatsDict[type].maxHealth}, PlacementCost={structureStatsDict[type].placementCost}, EnergyCost={structureStatsDict[type].energyCost}, UpgradeCost={structureStatsDict[type].upgradeCost}");
-        }
-        else
-        {
-            Debug.LogWarning($"Cannot upgrade structure type {type} because it was not found in stats dictionary.");
-        }
+        structureStatsDict[type] = newLevel;
     }
 }
