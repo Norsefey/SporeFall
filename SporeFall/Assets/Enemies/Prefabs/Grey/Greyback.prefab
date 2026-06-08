@@ -667,7 +667,6 @@ MonoBehaviour:
   chasePriorityDistance: 25
   damagePriorityThreshold: 100
   damageTrackingDuration: 4
-  damageModifier: 1
   stoppingDistance: 5
   aggressionFactor: 0.9
   trackingSpeed: 5
@@ -684,10 +683,11 @@ MonoBehaviour:
     m_Bits: 10752
   targetSwitchThreshold: 100
   risingAnimationLength: 2
+  damageModifier: 1
+  corruptionModifier: 1
+  myceliaModifier: 1
   myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
     type: 3}
-  minMyceliaWorth: 5
-  maxMyceliaWorth: 10
   weaponDropPrefab:
   - {fileID: 7980376292701781228, guid: 91084f473834f5a42b7fb726c7dc2314, type: 3}
   dropChance: 12.5
@@ -2124,7 +2124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHoldCorruption: 0
   canTakeDamage: 1
-  maxHP: 150
+  maxHP: 175
   isDead: 0
   manager: {fileID: 9009785512476672233}
   flinchModifier: 0.4

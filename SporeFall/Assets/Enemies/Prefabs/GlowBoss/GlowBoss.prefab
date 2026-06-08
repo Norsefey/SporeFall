@@ -124,7 +124,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 2.87
-  m_Speed: 5.5
+  m_Speed: 6
   m_Acceleration: 8
   avoidancePriority: 33
   m_AngularSpeed: 120
@@ -164,7 +164,6 @@ MonoBehaviour:
   chasePriorityDistance: 40
   damagePriorityThreshold: 500
   damageTrackingDuration: 50
-  damageModifier: 1
   stoppingDistance: 15
   aggressionFactor: 0.95
   trackingSpeed: 5
@@ -179,6 +178,11 @@ MonoBehaviour:
     m_Bits: 10752
   targetSwitchThreshold: 0
   risingAnimationLength: 2
+  damageModifier: 1
+  corruptionModifier: 1
+  myceliaModifier: 1
+  myceliaDropPrefab: {fileID: 9111484024502604757, guid: 260844473a5ebed4389a921d28666b89,
+    type: 3}
   myceliaDropPrefab: {fileID: 9111484024502604757, guid: 260844473a5ebed4389a921d28666b89,
     type: 3}
   myceliaDropCount: 2
@@ -339,7 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHoldCorruption: 0
   canTakeDamage: 1
-  maxHP: 4000
+  maxHP: 5500
   isDead: 0
   manager: {fileID: 6396919194862041732}
   flinchModifier: 1

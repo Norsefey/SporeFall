@@ -70,7 +70,6 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageReduction: 0
   damageMultiplier: 1
   mainHP: {fileID: 731574464148815496}
 --- !u!1 &1657974298613798786
@@ -153,7 +152,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ea19eb70235ac024ebf370606d58b46d, type: 2}
   animator: {fileID: 7725938692442383174}
   health: {fileID: 731574464148815496}
-  agent: {fileID: 0}
   firePoint: {fileID: 8961610249997544806}
   strafeRadius: 5
   retreatDistance: 10
@@ -177,10 +175,11 @@ MonoBehaviour:
     m_Bits: 10752
   targetSwitchThreshold: 100
   risingAnimationLength: 2
+  damageModifier: 1
+  corruptionModifier: 1
+  myceliaModifier: 1
   myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
     type: 3}
-  minMyceliaWorth: 5
-  maxMyceliaWorth: 10
   weaponDropPrefab:
   - {fileID: 7980376292701781228, guid: d1265d45f28525a4dbe6c66028d75875, type: 3}
   dropChance: 12.5
@@ -363,7 +362,6 @@ MonoBehaviour:
   canTakeDamage: 1
   maxHP: 0
   isDead: 0
-  damageReduction: 0
   damageMultiplier: 2
   mainHP: {fileID: 731574464148815496}
 --- !u!1 &5550893619504050374
@@ -412,9 +410,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canHoldCorruption: 0
   canTakeDamage: 1
-  maxHP: 125
+  maxHP: 130
   isDead: 0
-  damageReduction: 0
   manager: {fileID: 9009785512476672233}
   flinchModifier: 0.4
   flinchable: 1
