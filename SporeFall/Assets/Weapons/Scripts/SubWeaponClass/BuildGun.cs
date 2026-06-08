@@ -190,11 +190,13 @@ public class BuildGun : Weapon
                     selectedStructure = pool.Get(hit.point, Quaternion.identity).GetComponent<Structure>();
                     selectedStructure.poolBehavior.Initialize(pool);
                     selectedStructure.DisableStructureControls();
+                    selectedStructure.UpdateStats(GameManager.Instance.upgradeManager.GetStructureLevelOfType(selectedStructure.GetStructureType()));
                 }
                 else
                 {
                     selectedStructure = Instantiate(buildableStructures[currentBuildIndex], hit.point, Quaternion.identity).GetComponent<Structure>();
                     selectedStructure.DisableStructureControls();
+                    selectedStructure.UpdateStats(GameManager.Instance.upgradeManager.GetStructureLevelOfType(selectedStructure.GetStructureType()));
                 }
 
 
@@ -266,7 +268,7 @@ public class BuildGun : Weapon
             if (GameManager.Instance.CheckEnergy(selectedStructure.GetCurrentEnergyCost()) && selectedStructure.GetPlacementCost() <= GameManager.Instance.Mycelia)
             {
                 GameManager.Instance.DecreaseMycelia(selectedStructure.GetPlacementCost());
-                selectedStructure.Initialize();
+                selectedStructure.Initialize(GameManager.Instance.upgradeManager.GetStructureLevelOfType(selectedStructure.GetStructureType()));
                 selectedStructure.ToggleStructureBehavior(true);
                 selectedStructure.ShowRadius(false);
 

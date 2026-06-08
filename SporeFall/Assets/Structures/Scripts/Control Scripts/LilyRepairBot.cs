@@ -185,9 +185,10 @@ public class LilyRepairBot : MonoBehaviour
 
         SetNewRandomTarget();
     }
-    public void ActivateBot(Transform startPos)
+    public void ActivateBot(Transform startPos, Transform shop)
     {
         SetupNavStats();
+        shopStructure = shop;
 
         transform.position = startPos.position;
         navAgent.Warp(startPos.position); // Ensure NavMeshAgent position is updated
@@ -219,16 +220,16 @@ public class LilyRepairBot : MonoBehaviour
         currentTarget = null;
         isRepairing = false;
     }
-    public void SetShopStructure(Transform shop)
-    {
-        shopStructure = shop;
-    }
     public void UpdateVisual(int index)
     {
-        if(index < 0 || index >= lilyVisuals.Length)
+        if(index < 0)
         {
-            //Debug.LogError("Invalid visual index for LilyRepairBot: " + index);
             return;
+        }
+
+        if(index >= lilyVisuals.Length)
+        {
+            index = lilyVisuals.Length - 1;
         }
 
         lilyVisuals[index].SetActive(true);

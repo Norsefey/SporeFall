@@ -32,9 +32,17 @@ public class MortyLevel : StructureLevel
             detectionRange = this.detectionRange * upgradeDetectionRangeMultiplier,
             projectileStats = new ProjectileData
             {
-                Damage = this.projectileStats.Damage * upgradeDamageMultiplier,
                 Speed = this.projectileStats.Speed,
-                Lifetime = this.projectileStats.Lifetime
+                Lifetime = this.projectileStats.Lifetime,
+                Corruption = this.projectileStats.Corruption,
+                UseGravity = this.projectileStats.UseGravity,
+                UseArcTrajectory = this.projectileStats.UseArcTrajectory,
+                ArcHeight = this.projectileStats.ArcHeight,
+                CanBounce = this.projectileStats.CanBounce,
+                MaxBounces = this.projectileStats.MaxBounces,
+                BounceDamageMultiplier = this.projectileStats.BounceDamageMultiplier,
+
+                Damage = this.projectileStats.Damage * upgradeDamageMultiplier,
             },
         };
 

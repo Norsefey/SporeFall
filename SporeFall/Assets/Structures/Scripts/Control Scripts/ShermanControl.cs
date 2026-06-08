@@ -207,6 +207,11 @@ public class ShermanControl : MonoBehaviour
     }
     public void UpdateVisual(int index)
     {
+        if (index >= shermanVisuals.Length)
+        {
+            index = shermanVisuals.Length - 1;
+        }
+
         shermanVisuals[index].SetActive(true);
         if(index > 0)
             shermanVisuals[index - 1].SetActive(false);

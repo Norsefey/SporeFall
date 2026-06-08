@@ -16,33 +16,63 @@ public enum StructureType
 }
 public class UpgradeManager : MonoBehaviour
 {
-    private List<StructureStats> structureStats = new List<StructureStats>();
+    public Dictionary<StructureType, StructureLevel> structureStatsDict = new Dictionary<StructureType, StructureLevel>();
 
     private void Start()
     {
         foreach (GameObject structureObj in GameManager.Instance.availableStructures)
         {
             Structure structure = structureObj.GetComponent<Structure>();
-            structureStats.Add(structure.GetStructureStats());
+
+            if (structure != null)
+            {
+                StructureLevel currentLevel = structure.GetCurrentLevel();
+                
+                if(currentLevel == null)
+                {
+                    Debug.LogWarning($"Structure {structure.GetStructureName()} does not have a valid current level. Skipping.");
+                    continue;
+                }
+
+                Debug.Log($"Adding structure type {structure.GetStructureType()} with level {currentLevel.level} to stats dictionary.");
+                
+                structureStatsDict[structure.GetStructureType()] = currentLevel;
+
+                Debug.Log($"Current stats for {structure.GetStructureType()}: Health={currentLevel.maxHealth}, PlacementCost={currentLevel.placementCost}, EnergyCost={currentLevel.energyCost}, UpgradeCost={currentLevel.upgradeCost}");
+            }
         }
     }
     public bool CanUpgrade(StructureType type, float availableMycelia)
     {
-        StructureStats structureLevelData = GetStructureStatsForType(type);
-        if (structureLevelData == null) return false;
-
-        if (availableMycelia >= structureLevelData.currentLevel.upgradeCost)
+        if (structureStatsDict.TryGetValue(type, out StructureLevel currentLevel))
         {
-            return true;
+            if (availableMycelia >= currentLevel.upgradeCost)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    public StructureLevel GetStructureLevelOfType(StructureType type)
+    {
+        if (structureStatsDict.TryGetValue(type, out StructureLevel stats))
+        {
+            return stats;
+        }
+        Debug.LogWarning($"Structure type {type} not found in stats dictionary.");
+        return null;
+    }
+    public void UpgradeStructure(StructureType type, StructureLevel newLevel)
+    {
+        if (structureStatsDict.TryGetValue(type, out StructureLevel currentLevel))
+        {
+            structureStatsDict[type] = newLevel;
+            Debug.Log($"Upgraded structure type {type} to level {structureStatsDict[type].level}. New stats: Health={structureStatsDict[type].maxHealth}, PlacementCost={structureStatsDict[type].placementCost}, EnergyCost={structureStatsDict[type].energyCost}, UpgradeCost={structureStatsDict[type].upgradeCost}");
         }
         else
         {
-            return false;
+            Debug.LogWarning($"Cannot upgrade structure type {type} because it was not found in stats dictionary.");
         }
-    }
-   
-    public StructureStats GetStructureStatsForType(StructureType type)
-    {
-        return structureStats.Find(s => s.type == type);
     }
 }

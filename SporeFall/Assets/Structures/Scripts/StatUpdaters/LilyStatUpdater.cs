@@ -28,16 +28,17 @@ public class LilyStatUpdater : MonoBehaviour, IStructureStats
     {
         currentLevel = levelData;
         lilyShop.ReturnAllBots();
-        lilyShop.maxActiveLilies = levelData.maxActiveLilies;
+       
+        lilyShop.SpawnLilyBot(levelData.maxActiveLilies);
 
-        foreach (var lily in lilyShop.lilyBots)
+        foreach (var lily in lilyShop.spawnedLilyBots)
         {
             lily.patrolRange = levelData.patrolRange;
             lily.moveSpeed = levelData.moveSpeed;
             lily.repairRate = levelData.repairRate;
         }
 
-        if(gameObject.activeSelf)
+        if (gameObject.activeSelf)
             StartCoroutine(lilyShop.ActivateLilyBots());
 
     }

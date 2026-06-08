@@ -5,9 +5,6 @@ using UnityEngine;
 public class MobEnemy : BaseEnemy
 {
     [Header("Drops")]
-    [SerializeField] GameObject myceliaDropPrefab;
-    [SerializeField] private float minMyceliaWorth = 5;
-    [SerializeField] private float maxMyceliaWorth = 10;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
     public override void Die()
@@ -19,26 +16,6 @@ public class MobEnemy : BaseEnemy
     {
         SpawnMyceliaDrop();
         TrySpawnWeaponDrop();
-    }
-    private void SpawnMyceliaDrop()
-    {
-        if (myceliaDropPrefab == null || PoolManager.Instance == null)
-            return;
-        // Get mycelia drop from pool
-        if (!PoolManager.Instance.dropsPool.TryGetValue(myceliaDropPrefab, out DropsPool myceliaPool))
-        {
-            Debug.LogError($"No pool found for mycelia prefab: {myceliaDropPrefab.name}");
-            return;
-        }
-
-        DropsPoolBehavior myceliaDrop = myceliaPool.Get(transform.position, transform.rotation);
-        myceliaDrop.Initialize(myceliaPool);
-
-        if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
-        {
-            float worth = Mathf.Round(Random.Range(minMyceliaWorth, maxMyceliaWorth));
-            mycelia.Setup(damageModifier);
-        }
     }
     private void TrySpawnWeaponDrop()
     {

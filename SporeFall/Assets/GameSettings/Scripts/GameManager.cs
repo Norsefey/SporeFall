@@ -343,11 +343,16 @@ public class GameManager : MonoBehaviour
     {
         return energyUsed + eCost <= maxEnergy;
     }
-    public void ApplyUpgradeToStructures()
+    public void ApplyUpgradeToStructures(StructureType type, StructureLevel newLevel)
     {
         foreach (Transform structure in structureHolder)
         {
-            structure.GetComponent<Structure>().Upgrade();
+            Structure structureComponent = structure.GetComponent<Structure>();
+            if (structureComponent.GetStructureType() == type)
+            {
+                structureComponent.UpdateStats(newLevel);
+            }
+            structureComponent.UpdateVisuals();
         }
 
         UpdateEnergyUsage();

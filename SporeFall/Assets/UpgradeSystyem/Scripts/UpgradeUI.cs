@@ -46,7 +46,7 @@ public class UpgradeUI : MonoBehaviour
             Structure structure = structureObj.GetComponent<Structure>();
             
             // Always show the banner, even if it's at max level
-            banner.SetupBanner(structure.GetStructureStats(), upgradeManager);
+            banner.SetupBanner(structure.GetStructureType(), upgradeManager);
         }
 
         // For when it refreshes

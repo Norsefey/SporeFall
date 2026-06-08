@@ -8,9 +8,8 @@ public class TurretLevels : StructureStats
 {
     public TurretLevel baseStats;
 
-    private void OnEnable()
+    public override StructureLevel GetBaseLevel()
     {
-        currentLevel = baseStats;
+        return baseStats;
     }
-    //public TurretLevel[] levels;
 }

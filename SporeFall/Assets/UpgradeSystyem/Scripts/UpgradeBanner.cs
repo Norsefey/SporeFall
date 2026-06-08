@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -17,25 +18,29 @@ public class UpgradeBanner : MonoBehaviour
     public TMP_Text descriptionText;
     public Button upgradeButton;
 
-    private StructureStats structureStats;
+    private StructureLevel structureLevel;
     private StructureLevel nextLevel;
     private UpgradeManager upgradeManager;
     public UpgradeUI upgradeUI;
-    public void SetupBanner(StructureStats stats, UpgradeManager manager)
+    private StructureType myType;
+
+
+    public void SetupBanner(StructureType type, UpgradeManager manager)
     {
-        structureStats = stats;
-        nextLevel = stats.currentLevel.NextLevel();
+        structureLevel = manager.GetStructureLevelOfType(type);
+        nextLevel = structureLevel.NextLevel();
         upgradeManager = manager;
-        UpdateBannerVisuals(stats);
+        UpdateBannerVisuals(structureLevel);
         upgradeButton.onClick.AddListener(PerformUpgrade);
+        myType = type;
     }
-    private void UpdateBannerVisuals(StructureStats stats)
+    private void UpdateBannerVisuals(StructureLevel level)
     {
-        typeText.text = $"{stats.type.ToString()} : \n Lv {stats.currentLevel.level} TO-> {nextLevel.level}";
+        typeText.text = $"{level.ToString()} : \n Lv {level.level} TO-> {nextLevel.level}";
 
         if (nextLevel != null)
         {
-            costText.text = $"Mycelia: {nextLevel.upgradeCost:F1}";
+            costText.text = $"Mycelia: {level.upgradeCost:F1}";
             upgradeButton.interactable = true;
             descriptionText.text = nextLevel.upgradeDescription;
         }
@@ -47,17 +52,18 @@ public class UpgradeBanner : MonoBehaviour
     {        
         float currentMycelia = GameManager.Instance.Mycelia;
 
-        if (upgradeManager.CanUpgrade(structureStats.type, currentMycelia))
+        if (upgradeManager.CanUpgrade(myType, currentMycelia))
         {
-            GameManager.Instance.DecreaseMycelia(nextLevel.upgradeCost);
+            GameManager.Instance.DecreaseMycelia(structureLevel.upgradeCost);
             upgradeUI.UpdateMyceliaAmount();
 
-            structureStats.currentLevel = nextLevel;
+            structureLevel = nextLevel;
             nextLevel = nextLevel.NextLevel();
 
-            GameManager.Instance.ApplyUpgradeToStructures();
+            upgradeManager.UpgradeStructure(myType, structureLevel);
+            GameManager.Instance.ApplyUpgradeToStructures(myType, structureLevel);
            
-            UpdateBannerVisuals(structureStats);
+            UpdateBannerVisuals(structureLevel);
         }
     }
 }

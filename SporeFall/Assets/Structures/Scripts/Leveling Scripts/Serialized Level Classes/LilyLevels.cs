@@ -7,10 +7,8 @@ public class LilyLevels : StructureStats
 {
     public LilyLevel baseStats;
 
-    private void OnEnable()
+    public override StructureLevel GetBaseLevel()
     {
-        currentLevel = baseStats;
+        return baseStats;
     }
-
-    //public LilyLevel[] levels;
 }

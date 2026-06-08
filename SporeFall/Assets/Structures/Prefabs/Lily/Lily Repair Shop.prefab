@@ -353,7 +353,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5646806583067014603}
   - {fileID: 6707454181630356720}
   - {fileID: 977936610910646908}
   m_Father: {fileID: 5025977053394795651}
@@ -387,12 +386,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c05449f31f7c4945b0926123d76e5ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shopStructure: {fileID: 7483255692263845571}
   spawnPoint: {fileID: 4682837431608207751}
-  lilyBots:
-  - {fileID: 8789552469736936511}
-  - {fileID: 0}
-  - {fileID: 0}
-  maxActiveLilies: 1
+  lilyBotPrefab: {fileID: 6656022471990794658, guid: dbb76dd6b48787c4c9eec2902e85e14c,
+    type: 3}
+  spawnedLilyBots: []
 --- !u!65 &4099261874481401669
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -678,97 +676,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 409410884300435699}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &2144149151034044790
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 6393445020907944793}
-    m_Modifications:
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6656022471990794658, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: m_Name
-      value: LilyRepairBot
-      objectReference: {fileID: 0}
-    - target: {fileID: 7222453478244033865, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-        type: 3}
-      propertyPath: shopStructure
-      value: 
-      objectReference: {fileID: 5025977053394795651}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: dbb76dd6b48787c4c9eec2902e85e14c, type: 3}
---- !u!4 &5646806583067014603 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6024955253892121789, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-    type: 3}
-  m_PrefabInstance: {fileID: 2144149151034044790}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8789552469736936511 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7222453478244033865, guid: dbb76dd6b48787c4c9eec2902e85e14c,
-    type: 3}
-  m_PrefabInstance: {fileID: 2144149151034044790}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 731313114f232b94eb5c3831a4dce39d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5439313559857556470
 PrefabInstance:
   m_ObjectHideFlags: 0

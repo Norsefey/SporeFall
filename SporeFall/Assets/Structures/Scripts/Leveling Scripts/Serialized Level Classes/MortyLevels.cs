@@ -7,10 +7,8 @@ public class MortyLevels : StructureStats
 {
     public MortyLevel baseStats;
 
-    private void OnEnable()
+    public override StructureLevel GetBaseLevel()
     {
-        currentLevel = baseStats;
+        return baseStats;
     }
-
-    //public MortyLevel[] levels;
 }

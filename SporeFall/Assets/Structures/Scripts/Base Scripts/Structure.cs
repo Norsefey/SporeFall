@@ -8,7 +8,8 @@ public class Structure : MonoBehaviour
     [Space(5)]
     [SerializeField] private GameObject controlScriptObject;
     [Space(5)]
-    [SerializeField] private StructureStats structureStats;
+    private StructureLevel structureLevel;
+    public StructureStats structureStats;
 
     [SerializeField] private GameObject[] levelVisuals;
     [SerializeField] private GameObject radiusIndicator;
@@ -23,17 +24,25 @@ public class Structure : MonoBehaviour
     private IStructureStats structureBehavior;
     public bool onPlatform = false;
     public PlatformStructure myPlatform;
+
+    public int currentLevel => structureLevel != null ? structureLevel.level : -1;
+
     private void Awake()
     {
+        structureLevel = structureStats.GetBaseLevel();
+        UpdateStats(structureLevel);
+        UpdateVisuals();
+
         poolBehavior = GetComponent<StructurePoolBehavior>();
         structureBehavior = GetComponent<IStructureStats>();
         UpdateRadiusVisual();
     }
-    public void Initialize()
+    public void Initialize(StructureLevel level)
     {
+        structureLevel = level;
+        UpdateStats(structureLevel);
         UpdateVisuals();
-        UpdateStats();
-        structureBehavior?.Initialize(structureStats.currentLevel);
+        structureBehavior?.Initialize(structureLevel);
     }
     public void UpdateRadiusVisual()
     {
@@ -41,7 +50,7 @@ public class Structure : MonoBehaviour
         if (radiusIndicator != null)
         {
             float scale = 0;
-            switch (structureStats.currentLevel)
+            switch (structureLevel)
             {
                 case TurretLevel turret:
                     scale = turret.range * 2;
@@ -74,22 +83,17 @@ public class Structure : MonoBehaviour
     }
     public bool CanUpgrade(float availableMycelia)
     {
-        return availableMycelia >= structureStats.currentLevel.upgradeCost;
+        return availableMycelia >= structureLevel.upgradeCost;
     }
-    public void Upgrade()
+    public void UpdateVisuals()
     {
-        UpdateVisuals();
-        UpdateStats();
-    }
-    private void UpdateVisuals()
-    {
-        if(structureStats.currentLevel == null || structureStats.currentLevel.level < 0)
+        if(structureLevel == null || structureLevel.level < 0)
         {
             //Debug.LogError($"Structure {structureStats.structureName} has no current level assigned.");
             return;
         }
 
-        if (structureStats.currentLevel.level >= levelVisuals.Length)
+        if (structureLevel.level >= levelVisuals.Length)
         {
             foreach (GameObject visual in levelVisuals)
             {
@@ -107,22 +111,21 @@ public class Structure : MonoBehaviour
         }
 
         // Deactivate current visual if it exists
-        if (structureStats.currentLevel.level - 1 >= 0)
+        if (structureLevel.level - 1 >= 0)
         {
-            levelVisuals[structureStats.currentLevel.level - 1].SetActive(false);
+            levelVisuals[structureLevel.level - 1].SetActive(false);
         }
         // Get and activate new visual
-        if (structureStats.currentLevel.level < levelVisuals.Length && levelVisuals[structureStats.currentLevel.level] != null)
+        if (structureLevel.level < levelVisuals.Length && levelVisuals[structureLevel.level] != null)
         {
-            levelVisuals[structureStats.currentLevel.level].SetActive(true);
+            levelVisuals[structureLevel.level].SetActive(true);
         }
     }
-    private void UpdateStats()
-    {        
-        // Set the new HP value
-        healthComponent.SetMaxHP(structureStats.currentLevel.maxHealth );
-        
-        structureBehavior?.UpdateStats(structureStats.currentLevel);
+    public void UpdateStats(StructureLevel newLevel)
+    {
+        structureLevel = newLevel;
+        healthComponent.SetMaxHP(structureLevel.maxHealth);
+        structureBehavior?.UpdateStats(structureLevel);
         UpdateRadiusVisual();
     }
     public void ToggleStructureBehavior(bool toggle)
@@ -194,14 +197,21 @@ public class Structure : MonoBehaviour
         }
     }
     // Getter methods
-    public float GetPlacementCost() => structureStats.currentLevel.placementCost;
-    public float GetCurrentEnergyCost() => structureStats.currentLevel.energyCost;
-    public int GetCurrentLevelInt() => structureStats.currentLevel.level;
-    public StructureLevel GetCurrentLevel() => structureStats.currentLevel;
+    public float GetPlacementCost() => structureLevel.placementCost;
+    public float GetCurrentEnergyCost() => structureLevel.energyCost;
+    public int GetCurrentLevelInt() => structureLevel.level;
+    public StructureLevel GetCurrentLevel() 
+    {
+        if(structureLevel == null)
+        {
+            structureLevel = structureStats.GetBaseLevel();
+        }
+        return structureLevel;
+    }
     public StructureHP GetStructureHP() => healthComponent;
     public GameObject GetCurrentVisual() 
     { 
-        int index = Mathf.Min(structureStats.currentLevel.level, levelVisuals.Length - 1);
+        int index = Mathf.Min(structureLevel.level, levelVisuals.Length - 1);
         return levelVisuals[index];
     }
     public string GetStructureName() => structureStats.structureName;

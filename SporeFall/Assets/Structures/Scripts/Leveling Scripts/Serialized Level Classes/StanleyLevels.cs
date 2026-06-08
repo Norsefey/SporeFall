@@ -7,8 +7,8 @@ public class StanleyLevels : StructureStats
 {
     public StanleyLevel baseLevel;
 
-    private void OnEnable()
+    public override StructureLevel GetBaseLevel()
     {
-        currentLevel = baseLevel;
+        return baseLevel;
     }
 }

@@ -16,7 +16,6 @@ public class CorruptedPlayer : BaseEnemy
     private Vector3 wanderTarget;
     private float wanderDestinationThreshold = 2f;
     [Header("Drops")]
-    [SerializeField] GameObject myceliaDropPrefab;
     [SerializeField] GameObject[] weaponDropPrefab;
     [SerializeField] private float dropChance = 20;
     protected override List<StateWeight> CalculateStateWeights()
@@ -429,25 +428,7 @@ public class CorruptedPlayer : BaseEnemy
         SpawnMyceliaDrop();
         TrySpawnWeaponDrop();
     }
-    private void SpawnMyceliaDrop()
-    {
-        if (myceliaDropPrefab == null || PoolManager.Instance == null)
-            return;
-        // Get mycelia drop from pool
-        if (!PoolManager.Instance.dropsPool.TryGetValue(myceliaDropPrefab, out DropsPool myceliaPool))
-        {
-            Debug.LogError($"No pool found for mycelia prefab: {myceliaDropPrefab.name}");
-            return;
-        }
 
-        DropsPoolBehavior myceliaDrop = myceliaPool.Get(transform.position, transform.rotation);
-        myceliaDrop.Initialize(myceliaPool);
-
-        if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
-        {
-            mycelia.Setup(damageModifier);
-        }
-    }
     private void TrySpawnWeaponDrop()
     {
         // Check if we have any weapons to drop and if we pass the random chance check

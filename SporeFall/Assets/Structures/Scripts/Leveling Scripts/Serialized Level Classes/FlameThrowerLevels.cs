@@ -5,10 +5,8 @@ public class FlameThrowerLevels : StructureStats
 {
     public FlameThrowerLevel baseStats;
 
-    private void OnEnable()
+    public override StructureLevel GetBaseLevel()
     {
-        currentLevel = baseStats;
+        return baseStats;
     }
-
-    //public FlameThrowerLevel[] levels;
 }

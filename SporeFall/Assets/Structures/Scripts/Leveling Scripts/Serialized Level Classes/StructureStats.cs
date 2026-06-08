@@ -9,5 +9,6 @@ public abstract class StructureStats : ScriptableObject
     public string structureName;
     public string description;
     public Sprite icon;
-    public StructureLevel currentLevel;
+
+    public abstract StructureLevel GetBaseLevel();
 }

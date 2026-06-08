@@ -106,6 +106,7 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected float damageModifier = 1;
     [SerializeField] protected float corruptionModifier = 1;
     [SerializeField] protected float myceliaModifier = 1;
+    [SerializeField] GameObject myceliaDropPrefab;
 
     protected virtual void Awake()
     {
@@ -703,5 +704,25 @@ public abstract class BaseEnemy : MonoBehaviour
     public virtual void SetMyceliaMultiplier(float multiplier)
     {
         myceliaModifier = multiplier;
+    }
+
+    public void SpawnMyceliaDrop()
+    {
+        if (myceliaDropPrefab == null || PoolManager.Instance == null)
+            return;
+        // Get mycelia drop from pool
+        if (!PoolManager.Instance.dropsPool.TryGetValue(myceliaDropPrefab, out DropsPool myceliaPool))
+        {
+            Debug.LogError($"No pool found for mycelia prefab: {myceliaDropPrefab.name}");
+            return;
+        }
+
+        DropsPoolBehavior myceliaDrop = myceliaPool.Get(transform.position, transform.rotation);
+        myceliaDrop.Initialize(myceliaPool);
+
+        if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
+        {
+            mycelia.Setup(myceliaModifier);
+        }
     }
 }

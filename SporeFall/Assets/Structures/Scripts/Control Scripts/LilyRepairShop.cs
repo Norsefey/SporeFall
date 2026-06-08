@@ -5,18 +5,12 @@ using UnityEngine.AI;
 
 public class LilyRepairShop : MonoBehaviour
 {
+    [SerializeField] private Structure shopStructure;
     [SerializeField] private Transform spawnPoint;
-    public List<LilyRepairBot> lilyBots = new List<LilyRepairBot>();
+    [SerializeField] private GameObject lilyBotPrefab;
 
-    public int maxActiveLilies = 1;
-    private void Awake()
-    {
-        // Initialize all bots with shop structure reference
-        foreach (var bot in lilyBots)
-        {
-            bot.SetShopStructure(transform);
-        }
-    }
+    public List<LilyRepairBot> spawnedLilyBots = new();
+
     private void OnEnable()
     {
         StartCoroutine(ActivateLilyBots());
@@ -25,9 +19,33 @@ public class LilyRepairShop : MonoBehaviour
     {
         ReturnAllBots();
     }
+    public void SpawnLilyBot(int spawnAmount)
+    {
+        for (int i = 0; i < spawnAmount; i++)
+        {
+            SpawnSingleBot();
+        }
+    }
+
+    private void SpawnSingleBot()
+    {
+        GameObject botObj = Instantiate(lilyBotPrefab, spawnPoint.position, Quaternion.identity);
+        LilyRepairBot bot = botObj.GetComponent<LilyRepairBot>();
+        if (bot != null)
+        {
+            bot.gameObject.SetActive(false);
+            bot.UpdateVisual(shopStructure.GetCurrentLevelInt());
+            spawnedLilyBots.Add(bot);
+        }
+        else
+        {
+            Debug.LogError("Spawned object does not have a LilyRepairBot component.");
+            Destroy(botObj);
+        }
+    }
     public void ReturnAllBots()
     {
-        foreach (var bot in lilyBots)
+        foreach (var bot in spawnedLilyBots)
         {
             if (bot.isActive)
             {
@@ -37,15 +55,19 @@ public class LilyRepairShop : MonoBehaviour
     }
     public IEnumerator ActivateLilyBots()
     {
-        // Ensure we don't try to activate more bots than available
-        int botsToActivate = Mathf.Min(maxActiveLilies, lilyBots.Count);
-
-        for (int i = 0; i < botsToActivate; i++)
+        if(spawnedLilyBots.Count == 0)
         {
-            lilyBots[i].gameObject.SetActive(true);
-            lilyBots[i].UpdateVisual(maxActiveLilies - 1);
-            lilyBots[i].ActivateBot(spawnPoint);
+
+            yield break;
+        }
+
+        foreach (var bot in spawnedLilyBots)
+        {
+            bot.gameObject.SetActive(true);
+            bot.ActivateBot(spawnPoint, transform);
+            bot.UpdateVisual(shopStructure.GetCurrentLevelInt());
             yield return new WaitForSeconds(2);
         }
+
     }
 }
