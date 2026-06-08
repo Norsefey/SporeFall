@@ -1,9 +1,6 @@
 // Ignore Spelling: buildable
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
-
 public class BuildGun : Weapon
 {
 

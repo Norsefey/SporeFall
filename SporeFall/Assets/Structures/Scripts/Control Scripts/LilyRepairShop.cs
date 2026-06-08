@@ -11,9 +11,10 @@ public class LilyRepairShop : MonoBehaviour
 
     public List<LilyRepairBot> spawnedLilyBots = new();
 
+
     private void OnEnable()
     {
-        StartCoroutine(ActivateLilyBots());
+        ActivateBots();
     }
     private void OnDisable()
     {
@@ -21,7 +22,7 @@ public class LilyRepairShop : MonoBehaviour
     }
     public void SpawnLilyBot(int spawnAmount)
     {
-        for (int i = 0; i < spawnAmount; i++)
+        while(spawnedLilyBots.Count < spawnAmount)
         {
             SpawnSingleBot();
         }
@@ -30,12 +31,13 @@ public class LilyRepairShop : MonoBehaviour
     private void SpawnSingleBot()
     {
         GameObject botObj = Instantiate(lilyBotPrefab, spawnPoint.position, Quaternion.identity);
+        botObj.transform.SetParent(transform);
         LilyRepairBot bot = botObj.GetComponent<LilyRepairBot>();
         if (bot != null)
         {
-            bot.gameObject.SetActive(false);
             bot.UpdateVisual(shopStructure.GetCurrentLevelInt());
             spawnedLilyBots.Add(bot);
+            botObj.SetActive(false);
         }
         else
         {
@@ -53,21 +55,16 @@ public class LilyRepairShop : MonoBehaviour
             }
         }
     }
-    public IEnumerator ActivateLilyBots()
+    public void ActivateBots()
     {
-        if(spawnedLilyBots.Count == 0)
-        {
-
-            yield break;
-        }
-
         foreach (var bot in spawnedLilyBots)
         {
-            bot.gameObject.SetActive(true);
-            bot.ActivateBot(spawnPoint, transform);
-            bot.UpdateVisual(shopStructure.GetCurrentLevelInt());
-            yield return new WaitForSeconds(2);
+            if (!bot.isActive)
+            {
+                bot.gameObject.SetActive(true);
+                bot.ActivateBot(spawnPoint, transform);
+                bot.UpdateVisual(shopStructure.GetCurrentLevelInt() - 1);
+            }
         }
-
     }
 }

@@ -38,9 +38,9 @@ public class TurretLevel : StructureLevel
         {
             level = this.level + 1,
             maxHealth = this.maxHealth * upgradeHealthMultiplier,
-            placementCost = this.placementCost * upgradePlacementCostMultiplier,
             upgradeCost = this.upgradeCost * upgradeUpgradeCostMultiplier,
 
+            placementCost = this.placementCost * upgradePlacementCostMultiplier,
             energyCost = this.energyCost * upgradeEnergyCostMultiplier,
 
             rotationSpeed = this.rotationSpeed,

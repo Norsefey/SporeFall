@@ -36,10 +36,11 @@ public class LilyStatUpdater : MonoBehaviour, IStructureStats
             lily.patrolRange = levelData.patrolRange;
             lily.moveSpeed = levelData.moveSpeed;
             lily.repairRate = levelData.repairRate;
+            
+            if (lilyShop.gameObject.activeSelf)
+                lilyShop.ActivateBots();
         }
 
-        if (gameObject.activeSelf)
-            StartCoroutine(lilyShop.ActivateLilyBots());
 
     }
 }
