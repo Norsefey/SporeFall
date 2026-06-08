@@ -17,10 +17,10 @@ public abstract class StructureLevel
 
 
     [Header("Leveling")]
-    public float upgradeHealthMultiplier = 1.5f;
-    public float upgradePlacementCostMultiplier = 1.5f;
-    public float upgradeEnergyCostMultiplier = 1.5f;
-    public float upgradeUpgradeCostMultiplier = 1.5f;
+    public float upgradeHealthMultiplier = 1;
+    public float upgradePlacementCostMultiplier = 1;
+    public float upgradeEnergyCostMultiplier = 1;
+    public float upgradeUpgradeCostMultiplier = 1;
 
     public abstract StructureLevel NextLevel();
 }

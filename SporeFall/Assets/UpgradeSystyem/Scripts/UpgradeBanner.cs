@@ -27,16 +27,16 @@ public class UpgradeBanner : MonoBehaviour
 
     public void SetupBanner(StructureType type, UpgradeManager manager)
     {
+        myType = type;
         structureLevel = manager.GetStructureLevelOfType(type);
         nextLevel = structureLevel.NextLevel();
         upgradeManager = manager;
         UpdateBannerVisuals(structureLevel);
         upgradeButton.onClick.AddListener(PerformUpgrade);
-        myType = type;
     }
     private void UpdateBannerVisuals(StructureLevel level)
     {
-        typeText.text = $"{level.ToString()} : \n Lv {level.level} TO-> {nextLevel.level}";
+        typeText.text = $"{myType.ToString()} : \n Lv {level.level} TO-> {nextLevel.level}";
 
         if (nextLevel != null)
         {
