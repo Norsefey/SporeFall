@@ -28,7 +28,9 @@ public class UpgradeBanner : MonoBehaviour
     public void SetupBanner(StructureType type, UpgradeManager manager)
     {
         myType = type;
+        
         structureLevel = manager.GetStructureLevelOfType(type);
+        
         nextLevel = structureLevel.NextLevel();
         upgradeManager = manager;
         UpdateBannerVisuals(structureLevel);

@@ -110,15 +110,17 @@ public class Structure : MonoBehaviour
             return;
         }
 
+        int index = structureLevel.level - 1;
+
         // Deactivate current visual if it exists
-        if (structureLevel.level - 1 >= 0)
+        if (index - 1 >= 0)
         {
-            levelVisuals[structureLevel.level - 1].SetActive(false);
+            levelVisuals[index - 1].SetActive(false);
         }
         // Get and activate new visual
-        if (structureLevel.level < levelVisuals.Length && levelVisuals[structureLevel.level] != null)
+        if (index < levelVisuals.Length && levelVisuals[index] != null)
         {
-            levelVisuals[structureLevel.level].SetActive(true);
+            levelVisuals[index].SetActive(true);
         }
     }
     public void UpdateStats(StructureLevel newLevel)
@@ -211,7 +213,7 @@ public class Structure : MonoBehaviour
     public StructureHP GetStructureHP() => healthComponent;
     public GameObject GetCurrentVisual() 
     { 
-        int index = Mathf.Min(structureLevel.level, levelVisuals.Length - 1);
+        int index = Mathf.Min(structureLevel.level - 1, levelVisuals.Length - 1);
         return levelVisuals[index];
     }
     public string GetStructureName() => structureStats.structureName;
