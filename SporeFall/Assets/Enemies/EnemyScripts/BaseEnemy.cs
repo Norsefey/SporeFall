@@ -106,7 +106,7 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField] protected float damageModifier = 1;
     [SerializeField] protected float corruptionModifier = 1;
     [SerializeField] protected float myceliaModifier = 1;
-    [SerializeField] GameObject myceliaDropPrefab;
+    [SerializeField] protected GameObject myceliaDropPrefab;
 
     protected virtual void Awake()
     {

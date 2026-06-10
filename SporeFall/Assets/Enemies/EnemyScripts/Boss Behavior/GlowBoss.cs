@@ -6,7 +6,6 @@ using UnityEngine;
 public class GlowBoss : BaseEnemy
 {
     [Header("Drops")]
-    [SerializeField] GameObject myceliaDropPrefab;
     [Tooltip("How Many balls to drop")]
     [SerializeField] private int myceliaDropCount = 0;
     [Tooltip("How much each ball is worth")]
