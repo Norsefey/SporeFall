@@ -15,6 +15,7 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] SettingsMenu settings;
     public AudioMixer audioMixer;
+    [SerializeField] bool tutorialPrompt;
 
     [Header("Menus")]
     [SerializeField] GameObject titleScreen;
@@ -62,6 +63,11 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        if (tutorialPrompt == false)
+        {
+            SavedSettings.firstTutorialQuestion = false;
+        }
+
         SavedSettings.currentLevel = "MainMenu";
         if (SavedSettings.firstOpenedGame)
         {
@@ -123,6 +129,7 @@ public class MainMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(savedFirstButton);
         }
+
     }
 
     private void OnDisable()
@@ -342,33 +349,23 @@ public class MainMenu : MonoBehaviour
     public void TutorialQuestion()
     {
 
-        tutorialQuestionScreen.SetActive(true);
-        mainScreen.SetActive(false);
-        if (isControllerConnected)
+        if (SavedSettings.firstTutorialQuestion == true)
         {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(firstTutorialButton);
+            tutorialQuestionScreen.SetActive(true);
+            mainScreen.SetActive(false);
+            if (isControllerConnected)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(firstTutorialButton);
+            }
+            savedFirstButton = firstTutorialButton;
+            SavedSettings.firstTutorialQuestion = false;
         }
-        savedFirstButton = firstTutorialButton;
 
-        //Removed check that makes training room question only show up once
-        //if (SavedSettings.firstTutorialQuestion)
-        //{
-        //    tutorialQuestionScreen.SetActive(true);
-        //    mainScreen.SetActive(false);
-        //    if (isControllerConnected)
-        //    {
-        //        EventSystem.current.SetSelectedGameObject(null);
-        //        EventSystem.current.SetSelectedGameObject(firstTutorialButton);
-        //    }
-        //    savedFirstButton = firstTutorialButton;
-        //    SavedSettings.firstTutorialQuestion = false;
-        //}
-
-        //else
-        //{
-        //    LevelSelect();
-        //}
+        else
+        {
+            LevelSelect();
+        }
 
     }
 
