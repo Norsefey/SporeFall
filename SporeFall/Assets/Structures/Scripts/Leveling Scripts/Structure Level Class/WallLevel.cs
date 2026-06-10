@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -32,11 +30,11 @@ public class WallLevel : StructureLevel
         };
 
         nextLevel.upgradeDescription =
-                                 $"Health: {nextLevel.maxHealth:F1}, " +
-                                 $"Protection Range: {nextLevel.protectionRange:F1}, " +
-                                 $"Damage Reduction: {nextLevel.damageReduction:P0} (capped at {nextLevel.dmgReductionCap:P0})" +
-                                 $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
-                                 $"Energy Cost: {nextLevel.energyCost:F1}, ";
+                                 $"Health:{maxHealth:F1} -> <color=yellow>{nextLevel.maxHealth:F1}</color>, " +
+                                 $"Protection Range: {protectionRange:F1} -> <color=yellow>{nextLevel.protectionRange:F1}</color>, " +
+                                 $"Damage Reduction: {damageReduction:P0} -> <color=yellow>{nextLevel.damageReduction:P0}</color> (capped at {nextLevel.dmgReductionCap:P0})" +
+                                 $"Placement Cost: {placementCost:F1} -> <color=yellow>{nextLevel.placementCost:F1}</color>," +
+                                 $"Energy Cost: {energyCost:F1} -> <color=yellow>{nextLevel.energyCost:F1}</color>, ";
         return nextLevel;
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -32,12 +30,12 @@ public class RepairLevel : StructureLevel
         };
 
         nextLevel.upgradeDescription =
-                                $"Health: {nextLevel.maxHealth:F1}, " +
-                                $"Range: {nextLevel.healRange:F1}, " +
-                                $"Heal Amount: {nextLevel.healAmount:F1}, " +
-                                $"Heal Rate: {nextLevel.healRate:F1}, " +
-                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
-                                $"Energy Cost: {nextLevel.energyCost:F1}";
+                                $"Health: {maxHealth:F1} -> <color=yellow>{nextLevel.maxHealth:F1}</color>, " +
+                                $"Range: {healRange:F1} -> <color=yellow>{nextLevel.healRange:F1}</color>, " +
+                                $"Heal Amount: {healAmount:F1} -> <color=yellow>{nextLevel.healAmount:F1}</color>, " +
+                                $"Heal Rate: {healRate:F1} -> <color=yellow>{nextLevel.healRate:F1}</color>, " +
+                                $"Placement Cost: {placementCost:F1} -> <color=yellow>{nextLevel.placementCost:F1}</color>," +
+                                $"Energy Cost: {energyCost:F1} -> <color=yellow>{nextLevel.energyCost:F1}</color>";
 
 
 

@@ -17,6 +17,23 @@ public class GameUIManager : MonoBehaviour
 
     public EndlessWaveUI endlessUI;
 
+    private void Update()
+    {
+     if(Input.GetKeyDown(KeyCode.P))
+        {
+            GameManager.Instance.players[0].pUI.gameObject.SetActive(false);
+            GameManager.Instance.gameUI.ToggleTutorialPrompts(true);
+            if (GameManager.Instance.trainHandler != null)
+                GameManager.Instance.trainHandler.UI.gameObject.SetActive(false);
+
+            if (GameManager.Instance.waveManager != null && SavedSettings.currentLevel != "Training")
+            {
+                GameManager.Instance.waveManager.wUI.gameObject.SetActive(false);
+            }
+            gameplayUI.SetActive(false);
+        }
+    }
+
     public void DisplayMycelia(float value)
     {
         if (myceliaIndicator != null)

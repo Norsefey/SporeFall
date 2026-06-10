@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -35,13 +33,13 @@ public class LilyLevel : StructureLevel
         };
 
         nextLevel.upgradeDescription =
-                                $"Health: {nextLevel.maxHealth:F1}, " +
-                                $"Max Active Lilies: {nextLevel.maxActiveLilies}, \n" +
-                                $"Patrol Range: {nextLevel.patrolRange:F1}, " +
-                                $"Repair Rate: {nextLevel.repairRate:F1}, " +
-                                $"Move Speed: {nextLevel.moveSpeed:F1}, \n" +
-                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
-                                $"Energy Cost: {nextLevel.energyCost:F1}";
+                                $"Health: {maxHealth:F1}  -> <color=yellow> {nextLevel.maxHealth:F1} </color>, " +
+                                $"Max Active Lilies: {maxActiveLilies} -> <color=yellow>{nextLevel.maxActiveLilies}</color>, \n" +
+                                $"Patrol Range: {patrolRange:F1} -> <color=yellow>{nextLevel.patrolRange:F1}</color>, " +
+                                $"Repair Rate: {repairRate:F1} -> <color=yellow>{nextLevel.repairRate:F1}</color>, " +
+                                $"Move Speed: {moveSpeed:F1} -> <color=yellow>{nextLevel.moveSpeed:F1}</color>, \n" +
+                                $"Placement Cost: {placementCost:F1} -> <color=yellow>{nextLevel.placementCost:F1}</color>," +
+                                $"Energy Cost: {energyCost:F1} -> <color=yellow>{nextLevel.energyCost:F1}</color>";
 
         return nextLevel;
     }

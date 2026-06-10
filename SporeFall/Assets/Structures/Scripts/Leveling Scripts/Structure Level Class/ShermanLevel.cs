@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -21,15 +19,6 @@ public class ShermanLevel : StructureLevel
 
     [Header("Sherman Leveling")]
     public int upgradeMaxActiveShermans = 99; // Max limit for active Shermans
-/*    public float upgradeMoveSpeedMultiplier = 1.1f; // 10% increase in move speed per level
-    public float upgradeTurnSpeedMultiplier = 1.1f; // 10% increase in turn speed per level
-    public float upgradeChangeDirectionIntervalMultiplier = 1.1f; // 10% increase in change direction interval per level
-    public float upgradeDamageMultiplier = 1.2f; // 20% increase in damage per level
-    public float upgradeDetectionRadiusMultiplier = 1.1f; // 10% increase in detection radius per level
-    public float upgradeEnemyInfluenceWeightMultiplier = 1.1f; // 10% increase in enemy influence weight per level
-    public float upgradeRandomMovementWeightMultiplier = 1.1f; // 10% increase in random movement weight per level
-    public float upgradeExplosionRadiusMultiplier = 1.1f; // 10% increase in explosion radius per level
-*/
     public override StructureLevel NextLevel()
     {
         ShermanLevel nextLevel = new ShermanLevel
@@ -54,10 +43,10 @@ public class ShermanLevel : StructureLevel
         };
 
         nextLevel.upgradeDescription =
-                                $"Health: {nextLevel.maxHealth:F1}, " +
-                                $"Max Active Shermans: {nextLevel.maxActiveShermans}, \n" +
-                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
-                                $"Energy Cost: {nextLevel.energyCost:F1}";
+                                $"Health: {maxHealth:F1} -> <color=yellow>{nextLevel.maxHealth:F1}</color>, " +
+                                $"Max Active Shermans: {maxActiveShermans} -> <color=yellow>{nextLevel.maxActiveShermans}</color>, \n" +
+                                $"Placement Cost: {placementCost:F1} -> <color=yellow>{nextLevel.placementCost:F1}</color>," +
+                                $"Energy Cost: {energyCost:F1} -> <color=yellow>{nextLevel.energyCost:F1}</color>";
 
         return nextLevel;
     }

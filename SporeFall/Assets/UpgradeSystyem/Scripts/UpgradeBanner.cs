@@ -4,10 +4,6 @@ using UnityEngine.UI;
 
 public class UpgradeBanner : MonoBehaviour
 {
-
-    [SerializeField] private ButtonTextMovement textMove;
-    Color DarkRed = new Color(0.3886792f, 0.1283374f, 0.1283374f);
-
     [SerializeField] private TMP_Text buttonText;
     public TMP_Text typeText;
     public TMP_Text costText;
@@ -31,19 +27,23 @@ public class UpgradeBanner : MonoBehaviour
     }
     private void UpdateBannerVisuals(StructureLevel level)
     {
-        typeText.text = $"{myType.ToString()} : \n Lv {level.level} TO-> {level.NextLevel().level}";
+        typeText.text = $"{myType.ToString()} : \n Lv {level.level} -> <color=yellow>{level.NextLevel().level}</color>";
 
-        costText.text = $"Mycelia: {level.upgradeCost:F1}";
-        upgradeButton.interactable = true;
+        if (upgradeManager.CanUpgrade(myType, GameManager.Instance.Mycelia))
+            costText.text = $"Mycelia: {level.upgradeCost:F1}";
+        else
+            costText.text = $"<color=red>Mycelia: {level.upgradeCost:F1}</color>";
+
+        upgradeButton.interactable = upgradeManager.CanUpgrade(myType, GameManager.Instance.Mycelia);
         descriptionText.text = level.NextLevel().upgradeDescription;
     }
     void PerformUpgrade()
     {
-        float currentMycelia = GameManager.Instance.Mycelia;
-        if(upgradeManager.CanUpgrade(myType, currentMycelia))
+        if(upgradeManager.CanUpgrade(myType, GameManager.Instance.Mycelia))
         {
             GameManager.Instance.DecreaseMycelia(structureLevel.upgradeCost);
-            upgradeUI.UpdateMyceliaAmount();
+            //upgradeUI.UpdateMyceliaAmount();
+            upgradeUI.ShowStructureUpgrades(); // Refresh the upgrade banners to update costs and interactability
 
             StructureLevel newLevel = structureLevel.NextLevel();
             newLevel.upgradePlacementCostMultiplier = structureLevel.upgradePlacementCostMultiplier;
@@ -57,21 +57,6 @@ public class UpgradeBanner : MonoBehaviour
             UpdateBannerVisuals(newLevel);
 
             structureLevel = newLevel;
-
         }
-
-        /*float currentMycelia = GameManager.Instance.Mycelia;
-        if (upgradeManager.CanUpgrade(myType, currentMycelia))
-        {
-            GameManager.Instance.DecreaseMycelia(structureLevel.upgradeCost);
-            upgradeUI.UpdateMyceliaAmount();
-
-            structureLevel = structureLevel.NextLevel();
-
-            upgradeManager.UpgradeStructure(myType, structureLevel);
-            GameManager.Instance.ApplyUpgradeToStructures(myType, structureLevel);
-           
-            UpdateBannerVisuals(structureLevel);
-        }*/
     }
 }

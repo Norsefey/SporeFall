@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -45,13 +43,11 @@ public class StanleyLevel : StructureLevel
         };
 
         nextLevel.upgradeDescription =
-                                $"Max Health: {nextLevel.maxHealth:F1}, \n" +
-                                $"Mycelia Generation Tick Rate: {nextLevel.myceliaGenerationTickRate:F2} seconds, \n" +
-                                $"Mycelia Generation Rate: {nextLevel.myceliaGenerationRate:F1} mycelia/tick, \n" +
-                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
-                                $"Energy Cost: {nextLevel.energyCost:F1}, ";
-
-
+                                $"Max Health: {maxHealth:F1} -> <color=yellow>{nextLevel.maxHealth:F1}</color>, \n" +
+                                $"Mycelia Generation Tick Rate: {myceliaGenerationTickRate:F2} -> <color=yellow>{nextLevel.myceliaGenerationTickRate:F2}</color> seconds, \n" +
+                                $"Mycelia Generation Rate: {myceliaGenerationRate:F1} -> <color=yellow>{nextLevel.myceliaGenerationRate:F1}</color> mycelia/tick, \n" +
+                                $"Placement Cost: {placementCost:F1} -> <color=yellow>{nextLevel.placementCost:F1}</color>," +
+                                $"Energy Cost: {energyCost:F1} -> <color=yellow>{nextLevel.energyCost:F1}</color>, ";
         return nextLevel;
     }
 }

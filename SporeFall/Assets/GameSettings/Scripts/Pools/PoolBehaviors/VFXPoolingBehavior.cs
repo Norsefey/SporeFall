@@ -11,6 +11,8 @@ public class VFXPoolingBehavior : MonoBehaviour
 
     [SerializeField] private GameObject hitEffect;
 
+    [SerializeField] private TrailRenderer trailRenderer;
+
     private void Update()
     {
         if (shouldMove)
@@ -58,6 +60,10 @@ public class VFXPoolingBehavior : MonoBehaviour
         targetPos = Vector3.zero;
         transform.localScale = Vector3.one;
         shouldMove = false;
+        
+        if(trailRenderer != null)
+            trailRenderer.Clear();
+        
         // return to pool if a pool is available
         if (pool != null)
             pool.Return(this);
@@ -66,7 +72,7 @@ public class VFXPoolingBehavior : MonoBehaviour
     }
     public void MoveForward()
     {
-        moveSpeed = 80;
+        moveSpeed = 100;
         shouldMove = true;
         Invoke(nameof(ReturnBullet), 1f);
     }

@@ -56,12 +56,11 @@ public class TurretLevel : StructureLevel
         };
 
         nextLevel.upgradeDescription =
-                                 $"Health: {nextLevel.maxHealth:F1}, " +
-                                 $"Range: {nextLevel.range:F1}, \n" +
-                                 $"Damage: {nextLevel.damage:F1}, " +
-                                 $"Fire Rate: {nextLevel.fireRate:F1}, \n"+
-                                 $"Placement Cost: {nextLevel.placementCost:F1}" ;
-
+                                 $"Health:{maxHealth:F1} -> <color=yellow>{nextLevel.maxHealth:F1}</color>, " +
+                                 $"Range: {range:F1} -> <color=yellow>{nextLevel.range:F1}</color>, \n" +
+                                 $"Damage: {damage:F1} -> <color=yellow>{nextLevel.damage:F1}</color>, " +
+                                 $"Fire Rate: {fireRate:F1} -> <color=yellow>{nextLevel.fireRate:F1}</color>, \n"+
+                                 $"Placement Cost: {placementCost:F1} -> <color=yellow>{nextLevel.placementCost:F1}</color>" ;
         return nextLevel;
     }
 }

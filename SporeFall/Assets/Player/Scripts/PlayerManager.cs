@@ -120,7 +120,8 @@ public class PlayerManager : MonoBehaviour
                     defaultWeapon.bulletCount = 15;
                     godMode = false;
                 }
-
+                pHealth.canTakeDamage = !pHealth.canTakeDamage;
+                pHealth.canHoldCorruption = !pHealth.canHoldCorruption;
             }
             if (Input.GetKeyDown(KeyCode.M))
             {
@@ -138,11 +139,7 @@ public class PlayerManager : MonoBehaviour
                         GameManager.Instance.trainHandler.trainHP.TakeDamage(0);
                 }
             }
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                pHealth.canTakeDamage = !pHealth.canTakeDamage;
-                pHealth.canHoldCorruption = !pHealth.canHoldCorruption;
-            }
+
             if (Input.GetKeyDown(KeyCode.H))
             {
                 pHealth.TakeDamage(10);

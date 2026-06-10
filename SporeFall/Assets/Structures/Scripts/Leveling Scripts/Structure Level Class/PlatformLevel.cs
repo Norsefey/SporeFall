@@ -20,9 +20,9 @@ public class PlatformLevel : StructureLevel
         };
 
         nextLevel.upgradeDescription =
-                                $"Health: {nextLevel.maxHealth:F1}, \n" +
-                                $"Placement Cost: {nextLevel.placementCost:F1}, ||" +
-                                $"Energy Cost: {nextLevel.energyCost:F1}";
+                                $"Health: {maxHealth:F1} -> <color=yellow>{nextLevel.maxHealth:F1}</color>, \n" +
+                                $"Placement Cost: {placementCost:F1} -> <color=yellow>{nextLevel.placementCost:F1}</color>," +
+                                $"Energy Cost: {energyCost:F1} -> <color=yellow>{nextLevel.energyCost:F1}</color>";
 
         return nextLevel;
     }
