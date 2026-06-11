@@ -177,7 +177,6 @@ public class ColorPickerUI : MonoBehaviour
         p1PC.isHueSelected = false;
     }
     #endregion
-
     #region Secondary Color Picker
     public void SelectColorPicker2P1()
     {
@@ -217,7 +216,13 @@ public class ColorPickerUI : MonoBehaviour
         p1SC.isHueSelected = false;
     }
     #endregion
+    public void RandomizeP1Colors()
+    {
+        p1PC.RandomizeColors();
+        p1SC.RandomizeColors();
+    }
     #endregion
+
     #region Player Two
     #region Primary Color Picker
     public void SelectColorPicker1P2()
@@ -260,7 +265,6 @@ public class ColorPickerUI : MonoBehaviour
         p2PC.isHueSelected = false;
     }
     #endregion
-
     #region Secondary Color Picker
     public void SelectColorPicker2P2()
     {
@@ -305,6 +309,11 @@ public class ColorPickerUI : MonoBehaviour
         p2SC.isHueSelected = false;
     }
     #endregion
+    public void RandomizeP2Colors()
+    {
+        p2PC.RandomizeColors();
+        p2SC.RandomizeColors();
+    }
     #endregion
 
     private void OnDeviceChange(InputDevice device, InputDeviceChange change)
