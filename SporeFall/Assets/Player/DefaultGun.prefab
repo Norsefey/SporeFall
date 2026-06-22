@@ -158,25 +158,31 @@ MonoBehaviour:
   holdType: 1
   secondHandHold: {fileID: 1314183641045398876}
   damage: 10
+  damageModifier: 1
   useSpread: 1
   bulletSpreadAngle: 2
   reloadTime: 1.5
   knockBackForce: 0
+  fireRate: 5
   bulletCount: 15
   bulletCapacity: 15
   totalAmmo: 0
   limitedAmmo: 0
   isHitScan: 1
   hitScanDistance: 80
-  projectileSpeed: 20
-  projectileLifetime: 5
-  useGravity: 0
-  targetedDirection: 0
-  projectileArcHeight: 0
-  canBounce: 0
-  maxBounces: 3
-  bounceDamageMultiplier: 0.7
-  fireRate: 5
+  projectileData:
+    Speed: 0
+    Lifetime: 0
+    Damage: 0
+    Corruption: 0
+    UseGravity: 0
+    UseArcTrajectory: 0
+    ArcHeight: 0
+    CanBounce: 0
+    MaxBounces: 0
+    BounceDamageMultiplier: 0
+    Direction: {x: 0, y: 0, z: 0}
+    TargetPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &1711278368596320546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -244,7 +250,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: f96fdd3a72db72b4f840f820036cc309, type: 2}
+      objectReference: {fileID: -1754306146357209115, guid: 785f75052af456143ab6c70f3d106f5e,
+        type: 3}
     - target: {fileID: 919132149155446097, guid: 8b707e03041b77d4588b19824d117c30,
         type: 3}
       propertyPath: m_Name

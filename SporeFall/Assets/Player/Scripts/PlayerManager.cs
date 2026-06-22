@@ -1,7 +1,6 @@
 // Ignore Spelling: mycelia Interactable
 
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerManager : MonoBehaviour
@@ -104,7 +103,8 @@ public class PlayerManager : MonoBehaviour
         }
 
         if (Input.GetKey(KeyCode.J))
-        { if (Input.GetKeyDown(KeyCode.P))
+        { 
+            if (Input.GetKeyDown(KeyCode.P))
             {
                 if (!godMode)
                 {
@@ -142,7 +142,7 @@ public class PlayerManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.H))
             {
-                pHealth.TakeDamage(10);
+                pVisual.SetActive(!pVisual.activeSelf);
             }
             if (Input.GetKeyDown(KeyCode.C))
             {
