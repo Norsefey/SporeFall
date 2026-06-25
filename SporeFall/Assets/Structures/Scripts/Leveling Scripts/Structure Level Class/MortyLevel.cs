@@ -6,7 +6,7 @@ public class MortyLevel : StructureLevel
 {
     [Header("Base Morty Stats")]
     public float detectionRange = 20f;
-    public float fireRate = 1f;         
+    public float fireRate = .02f;         
     public float fireRange = 100f;
 
     [Header("Projectile Stats")]
@@ -26,6 +26,9 @@ public class MortyLevel : StructureLevel
             placementCost = this.placementCost * upgradePlacementCostMultiplier,
             energyCost = this.energyCost * upgradeEnergyCostMultiplier,
             upgradeCost = this.upgradeCost * upgradeUpgradeCostMultiplier,
+            
+            fireRate = this.fireRate,
+            fireRange = this.fireRange,
 
             detectionRange = this.detectionRange * upgradeDetectionRangeMultiplier,
             projectileStats = new ProjectileData
