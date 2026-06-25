@@ -167,7 +167,7 @@ public class MortyControlScript : MonoBehaviour
         float currentTime = Time.unscaledTime;
         float timeSinceLastFire = currentTime - lastFireTime;
 
-        if (timeSinceLastFire < (1f / fireRate))
+        if (timeSinceLastFire < fireRate)
         {
             return;
         }
