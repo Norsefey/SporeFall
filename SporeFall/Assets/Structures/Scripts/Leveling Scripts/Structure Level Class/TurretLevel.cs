@@ -25,6 +25,7 @@ public class TurretLevel : StructureLevel
     [Header("Turret Leveling")]
     public float upgradeDamageMultiplier = 1.5f;
     public float upgradeFireRateMultiplier = 1.2f;
+    public float upgradeAmmoCapacityMultiplier = 10;
     public float upgradeDetectionRangeIncrease = 2f;
 
     public override StructureLevel NextLevel()
@@ -40,7 +41,7 @@ public class TurretLevel : StructureLevel
 
             rotationSpeed = this.rotationSpeed,
             fireRange = this.fireRange,
-            ammoCapacity = this.ammoCapacity,
+            ammoCapacity = Mathf.RoundToInt(this.ammoCapacity * upgradeAmmoCapacityMultiplier),
             reloadTime = this.reloadTime,
             speed = this.speed,
             lifetime = this.lifetime,

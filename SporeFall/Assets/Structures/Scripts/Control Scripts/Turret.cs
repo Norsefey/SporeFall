@@ -89,10 +89,6 @@ public class Turret : MonoBehaviour
             TrackTarget();
             TryShoot();
         }
-        else
-        {
-            //canShoot = false;
-        }
     }
 
     // Find the closest enemy within range
