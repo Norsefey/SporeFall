@@ -101,7 +101,7 @@ public class PlayerRevive : Interactables
     }
     private void StartRevive()
     {
-        if (!isReviving && downedPlayer != null && downedPlayer.pHealth.isDieing)
+        if (!isReviving && downedPlayer != null)
         {
             Debug.Log("We can save them");
 
@@ -179,7 +179,7 @@ public class PlayerRevive : Interactables
 
         // Reset health
         downedPlayer.pHealth.Revive();
-        downedPlayer.pHealth.RestoreHP(downedPlayer.pHealth.MaxHP / 2);
+        downedPlayer.pHealth.RestoreHealth(downedPlayer.pHealth.maxHealth / 2);
 
         downedPlayer.isRespawning = false;
 
@@ -191,7 +191,7 @@ public class PlayerRevive : Interactables
         if (downedPlayer == null)
             downedPlayer = GetComponentInParent<PlayerManager>();
 
-        while (downedPlayer.pHealth.isDieing)
+        while (downedPlayer.pHealth.isDead)
         {
             LookAtOtherPlayer();
             deathSliderUI.value = (downedPlayer.pHealth.deathTimeCounter / downedPlayer.pHealth.deathTime);

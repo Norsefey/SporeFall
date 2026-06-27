@@ -28,7 +28,7 @@ public class WallStatUpdater : MonoBehaviour, IStructureStats
     {
         currentLevel = levelData;
 
-        wallHP.SetMaxHP(levelData.maxHealth);
+        wallHP.maxHealth = levelData.maxHealth;
         
         if(wall != null)
         {

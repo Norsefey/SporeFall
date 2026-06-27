@@ -115,7 +115,7 @@ public class LilyRepairBot : MonoBehaviour
         for (int i = 0; i < numColliders; i++)
         {
             StructureHP structure = colliderResults[i].GetComponent<StructureHP>();
-            if (structure != null && structure.CurrentHP < structure.MaxHP)
+            if (structure != null && structure.CurrentHealth < structure.maxHealth)
             {
                 // Found damaged structure
                 currentTarget = structure;
@@ -135,7 +135,7 @@ public class LilyRepairBot : MonoBehaviour
         navAgent.isStopped = true;
 
         // Calculate max time based on structure's missing HP
-        float missingHP = currentTarget.MaxHP - currentTarget.CurrentHP;
+        float missingHP = currentTarget.maxHealth - currentTarget.CurrentHealth;
         maxHealTime = missingHP / repairRate;
         healTimer = 0f;
 
@@ -155,10 +155,10 @@ public class LilyRepairBot : MonoBehaviour
             // Repair structure
             if (currentTarget != null)
             {
-                currentTarget.RestoreHP(repairRate * Time.deltaTime);
+                currentTarget.RestoreHealth(repairRate * Time.deltaTime);
 
                 // Check if finished repairing
-                if (currentTarget.CurrentHP >= currentTarget.MaxHP || healTimer >= maxHealTime)
+                if (currentTarget.CurrentHealth >= currentTarget.maxHealth || healTimer >= maxHealTime)
                 {
                     FinishRepairing();
                     break;

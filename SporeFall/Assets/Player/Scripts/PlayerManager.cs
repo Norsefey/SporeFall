@@ -100,7 +100,7 @@ public class PlayerManager : MonoBehaviour
 
         if(inToxicWater)
         {
-            pHealth.TakeDamage(toxicDamageRate * Time.deltaTime);
+            pHealth.ReceiveDamage(toxicDamageRate * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.J))
@@ -120,8 +120,8 @@ public class PlayerManager : MonoBehaviour
                     defaultWeapon.bulletCount = 15;
                     godMode = false;
                 }
-                pHealth.canTakeDamage = !pHealth.canTakeDamage;
-                pHealth.canHoldCorruption = !pHealth.canHoldCorruption;
+                pHealth.ToggleDamage();
+                pHealth.ToggleCorruption();
             }
             if (Input.GetKeyDown(KeyCode.M))
             {
@@ -131,18 +131,18 @@ public class PlayerManager : MonoBehaviour
             {
                 if (GameManager.Instance.trainHandler != null)
                 {
-                    GameManager.Instance.trainHandler.trainHP.canTakeDamage = !GameManager.Instance.trainHandler.trainHP.canTakeDamage;
+                    GameManager.Instance.trainHandler.trainHP.ToggleDamage();
                     
                     if (!GameManager.Instance.trainHandler.trainHP.canTakeDamage)
                         GameManager.Instance.trainHandler.UI.ChangeHPDisplay("DOGMODE");
                     else
-                        GameManager.Instance.trainHandler.trainHP.TakeDamage(0);
+                        GameManager.Instance.trainHandler.trainHP.ReceiveDamage(0);
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.H))
             {
-                pHealth.TakeDamage(10);
+                pHealth.ReceiveDamage(10);
             }
             if (Input.GetKeyDown(KeyCode.C))
             {
@@ -580,7 +580,6 @@ public class PlayerManager : MonoBehaviour
     {
         pCamera.DisableAudioListener();
         changePlayerMaterials.ChangeMaterials();
-        pHealth.SetReducedLife();
     }
     public int GetPlayerIndex()
     {

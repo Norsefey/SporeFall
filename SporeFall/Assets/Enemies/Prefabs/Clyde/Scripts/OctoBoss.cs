@@ -96,7 +96,7 @@ public class OctoBoss : BaseEnemy
         // Can't chase since we're stationary, so just go to attack state if in range
         if (distanceToTarget <= stoppingDistance)
         {
-            SetState(EnemyState.Attack);
+            SetState(EnemyState.Attacking);
         }
         else
         {
@@ -116,12 +116,11 @@ public class OctoBoss : BaseEnemy
 
         // Stationary enemy prioritizes attacking if in range, otherwise idle
         float attackWeight = distanceToTarget <= stoppingDistance ? 5.0f : 0.1f;
-        weights.Add(new StateWeight(EnemyState.Attack, attackWeight));
+        weights.Add(new StateWeight(EnemyState.Attacking, attackWeight));
 
         // Lower priority for other states
         weights.Add(new StateWeight(EnemyState.Idle, 1.0f));
-        weights.Add(new StateWeight(EnemyState.Chase, 0)); // never chase
-        weights.Add(new StateWeight(EnemyState.Strafe, 0)); // never strafe
+        weights.Add(new StateWeight(EnemyState.Moving, 0)); // never chase
 
         return weights;
     }

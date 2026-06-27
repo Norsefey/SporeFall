@@ -62,7 +62,6 @@ public class ShootingRoomTutorial : MonoBehaviour
         tutorialText.text = "The Corruption Meter can be found at the bottom left, along with your current HP and remaining lives.";
         yield return new WaitForSeconds(nextPromptDelay);
         dummyTwoWall.SetActive(false);
-        dummyTwo.canTakeDamage = true;
         tutorialText.text = "This is a charge type weapon, hold down fire to charge up a more powerful shot." + "\n Try it out on the next target";
     }
 

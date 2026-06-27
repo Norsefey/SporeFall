@@ -413,7 +413,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnSkipDeathSave(InputAction.CallbackContext context)
     {
-        pMan.pHealth.isDieing = false;
+        pMan.pHealth.isDead = false;
     }
     private void OnCloseUpgradeMenu(InputAction.CallbackContext context)
     {

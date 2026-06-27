@@ -19,23 +19,39 @@ public class PayloadHP : Damageable
     private bool played25 = false;
     private bool played0 = false;
 
-    // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
-        currentHP = maxHP; // Initialize health
         audioSource = GetComponent<AudioSource>();
     }
+
     private void OnEnable()
     {
-        currentHP = maxHP; // Initialize health
+        targetType = TargetType.Structure;
+        _health = maxHealth;
+        EnemyTargetRegistry.Instance?.Register(this);
     }
-    public override void TakeDamage(float damage)
+
+    private void OnDisable()
     {
-        base.TakeDamage(damage);
-        
-        // moved it to only check when HP has changed
-        PlayHPAudioClip(currentHP / maxHP);
+        EnemyTargetRegistry.Instance?.Unregister(this);
     }
+
+    protected override float OnReceiveDamage(float amount)
+    {
+        _health -= amount;
+        PlayHPAudioClip(_health / maxHealth);
+        if (_health <= 0f) Die();
+        return amount;
+    }
+
+    /*   public override void TakeDamage(float damage)
+       {
+           base.TakeDamage(damage);
+
+           // moved it to only check when HP has changed
+           PlayHPAudioClip(_currentHP / maxHP);
+       }*/
+
     private void PlayHPAudioClip(float healthPercentage)
     {
         if (healthPercentage <= 0.75f && !played75)

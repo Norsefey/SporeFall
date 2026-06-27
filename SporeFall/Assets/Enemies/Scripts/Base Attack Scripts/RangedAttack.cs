@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class RangedAttack : Attack
@@ -7,6 +5,7 @@ public abstract class RangedAttack : Attack
     [Header("Ranged Attack Settings")]
     [SerializeField] protected bool predictTargetPosition = true;
     [SerializeField] protected float predictionTime = 0.5f;
+    [SerializeField] protected Vector3 fireOffset;
 
     protected Vector3 GetPredictedTargetPosition(Transform target, Vector3 attackOrigin)
     {

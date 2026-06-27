@@ -28,7 +28,7 @@ public class UpgradePlayerHP : MonoBehaviour
     {
         banner.upgradeName.text = "Aegis HP";
 
-        currentMaxHP = banner.upgradeMenu.activePlayer.pHealth.MaxHP;
+        currentMaxHP = banner.upgradeMenu.activePlayer.pHealth.maxHealth;
         float newMaxHP = Mathf.RoundToInt(currentMaxHP * HPIncreaseMultiplier);
         banner.descriptionText.text = $"Current Max HP {currentMaxHP} -> New Max HP {newMaxHP}";
 
@@ -60,7 +60,7 @@ public class UpgradePlayerHP : MonoBehaviour
         float newMaxHP = Mathf.RoundToInt(currentMaxHP * HPIncreaseMultiplier);
         foreach(PlayerManager player in GameManager.Instance.players)
         {
-            player.pHealth.SetMaxHP(newMaxHP);
+            player.pHealth.maxHealth = newMaxHP;
         }
        /* banner.upgradeMenu.activePlayer.pHealth.SetMaxHP(newMaxHP);*/
 

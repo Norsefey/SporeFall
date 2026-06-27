@@ -14,7 +14,7 @@ public class ExplosiveProjectile : BaseProjectile
         // do damage on direct impact
         if (hitCollider.TryGetComponent<Damageable>(out var damageable))
         {
-            ApplyDamage(damageable, currentDamage);
+            ApplyDamage(damageable, damage);
         }
         // Create explosion effect
         CreateExplosionEffect();
@@ -49,7 +49,7 @@ public class ExplosiveProjectile : BaseProjectile
 
             if (hit.TryGetComponent<Damageable>(out var damageable))
             {
-                ApplyDamage(damageable, currentDamage * damageMultiplier);
+                ApplyDamage(damageable, damage * damageMultiplier);
             }
         }
     }

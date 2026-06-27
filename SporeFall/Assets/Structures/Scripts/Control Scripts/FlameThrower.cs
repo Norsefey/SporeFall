@@ -63,7 +63,7 @@ public class FlameThrower : MonoBehaviour
         {
             hasHitEnemies = true;
             // Assuming the enemy has a script with a method to take damage
-            enemy.GetComponent<Damageable>()?.TakeDamage(damageAmount * damageTickRate);
+            enemy.GetComponent<Damageable>()?.ReceiveDamage(damageAmount * damageTickRate);
         }
 
         return hasHitEnemies;

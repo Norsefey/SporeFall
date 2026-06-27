@@ -6,17 +6,24 @@ using UnityEngine;
 public class TrainRelayHP : Damageable
 {
     public TrainHP mainHp;
-
     public event Action OnRelayHit;
-
-    public override void TakeDamage(float damage)
+    private void OnEnable()
     {
-        mainHp.TakeDamage(damage);
-        //Debug.Log($"Train Took: {damage} Damage");
-        OnRelayHit?.Invoke();
+        targetType = TargetType.TrainWall;
+        _health = maxHealth;
+        ResetHealth();
+        EnemyTargetRegistry.Instance?.Register(this);
     }
-
-    protected override void Die()
+    private void OnDisable()
     {
+        EnemyTargetRegistry.Instance?.Unregister(this);
+        Die();
+    }
+    protected override float OnReceiveDamage(float amount)
+    {
+        if (mainHp == null) return 0;
+        
+        OnRelayHit?.Invoke();
+        return mainHp.ReceiveDamage(amount);
     }
 }

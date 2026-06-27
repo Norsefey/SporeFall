@@ -25,23 +25,20 @@ public class DummyBehavior : BaseEnemy
 
             // Chase Priority
             float chaseWeight = CalculateChaseWeight(distanceToTarget);
-            weights.Add(new StateWeight(EnemyState.Chase, chaseWeight));
+            weights.Add(new StateWeight(EnemyState.Moving, chaseWeight));
 
             // Attack Priority
             float attackWeight = CalculateAttackWeight(distanceToTarget);
-            weights.Add(new StateWeight(EnemyState.Attack, attackWeight));
-
-            float strafeWeight = CalculateStrafeWeight(recentDamageSum, distanceToTarget);
-            weights.Add(new StateWeight(EnemyState.Strafe, strafeWeight));
+            weights.Add(new StateWeight(EnemyState.Attacking, attackWeight));
 
             // Add small chance to wander even with target
-            weights.Add(new StateWeight(EnemyState.Wander, 0.05f));
+            weights.Add(new StateWeight(EnemyState.Searching, 0.05f));
         }
         else
         {
             // No target - decide between idle and wandering
             weights.Add(new StateWeight(EnemyState.Idle, idleChance));
-            weights.Add(new StateWeight(EnemyState.Wander, 1 - idleChance));
+            weights.Add(new StateWeight(EnemyState.Searching, 1 - idleChance));
         }
 
         // Idle is lowest priority but always an option
@@ -61,21 +58,16 @@ public class DummyBehavior : BaseEnemy
                 agent.isStopped = true;
                 break;
 
-            case EnemyState.Strafe:
-                stateTimer = Random.Range(2f, 4f);
-                CalculateStrafePosition();
-                break;
-
-            case EnemyState.Attack:
+            case EnemyState.Attacking:
                 stateTimer = Random.Range(5f, 8f);
                 break;
 
-            case EnemyState.Chase:
+            case EnemyState.Moving:
                 DetectTargets();
                 stateTimer = Random.Range(1f, 4f);
                 break;
 
-            case EnemyState.Wander:
+            case EnemyState.Searching:
                 stateTimer = Random.Range(minWanderTime, maxWanderTime);
                 FindWanderDestination();
                 break;
@@ -102,11 +94,11 @@ public class DummyBehavior : BaseEnemy
                 UpdateIdleState();
                 break;
 
-            case EnemyState.Wander:
+            case EnemyState.Searching:
                 UpdateWanderState();
                 break;
 
-            case EnemyState.Chase:
+            case EnemyState.Moving:
                 if (currentTarget != null)
                 {
                     float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
@@ -118,11 +110,11 @@ public class DummyBehavior : BaseEnemy
                     if (Random.value < idleChance)
                         SetState(EnemyState.Idle);
                     else
-                        SetState(EnemyState.Wander);
+                        SetState(EnemyState.Searching);
                 }
                 break;
 
-            case EnemyState.Attack:
+            case EnemyState.Attacking:
                 if (currentTarget != null)
                 {
                     float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
@@ -134,12 +126,8 @@ public class DummyBehavior : BaseEnemy
                     if (Random.value < idleChance)
                         SetState(EnemyState.Idle);
                     else
-                        SetState(EnemyState.Wander);
+                        SetState(EnemyState.Searching);
                 }
-                break;
-
-            case EnemyState.Strafe:
-                UpdateStrafeState();
                 break;
         }
     }
@@ -191,7 +179,7 @@ public class DummyBehavior : BaseEnemy
         // Check if we found a target during wandering
         if (currentTarget != null && Random.value > 0.7f) // 30% chance per frame to notice the target
         {
-            SetState(EnemyState.Chase);
+            SetState(EnemyState.Moving);
         }
     }
     protected override void UpdateChaseState(float distanceToTarget)
@@ -228,7 +216,7 @@ public class DummyBehavior : BaseEnemy
         {
             // We're within attack range, transition to attack state
             agent.isStopped = true;
-            SetState(EnemyState.Attack);
+            SetState(EnemyState.Attacking);
         }
     }
     protected override void UpdateAttackState(float distanceToTarget)
@@ -287,7 +275,7 @@ public class DummyBehavior : BaseEnemy
             if (Random.value < idleChance)
                 SetState(EnemyState.Idle);
             else
-                SetState(EnemyState.Wander);
+                SetState(EnemyState.Searching);
         }
     }
     protected override void CalculateStrafePosition()
@@ -313,7 +301,7 @@ public class DummyBehavior : BaseEnemy
             if (Random.value < idleChance)
                 SetState(EnemyState.Idle);
             else
-                SetState(EnemyState.Wander);
+                SetState(EnemyState.Searching);
         }
     }
     protected override void UpdateStrafeState()
@@ -343,7 +331,7 @@ public class DummyBehavior : BaseEnemy
             if (Random.value < idleChance)
                 SetState(EnemyState.Idle);
             else
-                SetState(EnemyState.Wander);
+                SetState(EnemyState.Searching);
         }
     }
     public override void DetectTargets()

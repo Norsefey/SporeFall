@@ -122,7 +122,7 @@ public class MeleeWeapon : Weapon
                 // Apply damage if target is damageable
                 if (hit.TryGetComponent<Damageable>(out var damageable))
                 {
-                    damageable.TakeDamage(attack.damage);
+                    damageable.ReceiveDamage(attack.damage);
 
                     // Apply knockback if target has rigidbody
                     if (hit.TryGetComponent<Rigidbody>(out var rb))

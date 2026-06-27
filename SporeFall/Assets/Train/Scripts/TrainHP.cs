@@ -5,9 +5,20 @@ using UnityEngine;
 public class TrainHP : Damageable
 {
     public TrainHandler train;
-    private void Start()
+
+    private void OnEnable()
     {
-        currentHP = maxHP;
+        targetType = TargetType.None;
+        _health = maxHealth;
+    }
+    private void OnDisable()
+    {
+    }
+
+    public void SetMaxHP(float maxHP)
+    {
+        maxHealth = maxHP;
+        _health = maxHP;
     }
     protected override void Die()
     {

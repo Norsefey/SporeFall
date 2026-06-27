@@ -8,7 +8,7 @@ public class StandardProjectile : BaseProjectile
     {
         if (collider.TryGetComponent<Damageable>(out var damageable))
         {
-            ApplyDamage(damageable, currentDamage);
+            ApplyDamage(damageable, damage);
         }
     }
 }

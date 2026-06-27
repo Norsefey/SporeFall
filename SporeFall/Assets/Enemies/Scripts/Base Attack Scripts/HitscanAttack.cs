@@ -26,8 +26,8 @@ public class HitscanAttack : RangedAttack
 
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
-        finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
+        finalDamage = (baseDamage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+        finalCorruption = (baseCorruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
 
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
@@ -75,20 +75,24 @@ public class HitscanAttack : RangedAttack
         }
 
         PlaySFX(enemy.AudioSource);
-        StartCooldown();
-
         yield return new WaitForSeconds(recoveryTime);
         enemy.SetIsAttacking(false);
     }
     private void FireSingleRay(Vector3 origin, Vector3 direction, BaseEnemy boss)
     {
         // for a single target ray we only want the layer that target is on
-        if (Physics.Raycast(origin, direction, out RaycastHit hit, range, targetLayers))
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, attackRange, targetLayers))
         {
             if (hit.collider.TryGetComponent<Damageable>(out var damageable))
             {
-                damageable.TakeDamage(finalDamage);
-                damageable.IncreaseCorruption(finalCorruption);
+                damageable.ReceiveDamage(finalDamage);
+                
+                if(damageable is PlayerHP)
+                {
+                    PlayerHP playerHP = (PlayerHP)damageable;
+
+                    playerHP.IncreaseCorruption(finalCorruption);
+                }
             }
 
             SpawnBeamEffect(origin, hit.point);
@@ -96,12 +100,12 @@ public class HitscanAttack : RangedAttack
         else
         {
             Debug.Log("NO Hit Beam");
-            SpawnBeamEffect(origin, origin + direction * range);
+            SpawnBeamEffect(origin, origin + direction * attackRange);
         }
     }
     private void FirePenetratingRay(Vector3 origin, Vector3 direction, BaseEnemy boss)
     {
-        RaycastHit[] hits = Physics.RaycastAll(origin, direction, range, targetLayers)
+        RaycastHit[] hits = Physics.RaycastAll(origin, direction, attackRange, targetLayers)
             .OrderBy(h => h.distance)
             .ToArray();
 
@@ -115,8 +119,14 @@ public class HitscanAttack : RangedAttack
 
             if (hit.collider.TryGetComponent<Damageable>(out var damageable))
             {
-                damageable.TakeDamage(currentDamage);
-                damageable.IncreaseCorruption(finalCorruption);
+                damageable.ReceiveDamage(currentDamage);
+
+                if (damageable is PlayerHP)
+                {
+                    PlayerHP playerHP = (PlayerHP)damageable;
+
+                    playerHP.IncreaseCorruption(finalCorruption);
+                }
                 currentDamage *= penetrationDamageMultiplier;
                 penetrations++;
             }
@@ -153,5 +163,10 @@ public class HitscanAttack : RangedAttack
 
             yield return null;
         }
+    }
+
+    public override void Execute(AttackInstance instance, Damageable target)
+    {
+        throw new System.NotImplementedException();
     }
 }

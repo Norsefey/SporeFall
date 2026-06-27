@@ -192,7 +192,7 @@ public class ChargeGun : Weapon
             {
                 if (hit.transform.TryGetComponent<Damageable>(out var damageable))
                 {
-                    damageable.TakeDamage((damage * damageModifier) * chargeMultiplier);
+                    damageable.ReceiveDamage((damage * damageModifier) * chargeMultiplier);
                 }
             }
             vfx.MoveToLocation(hit.point, 50);

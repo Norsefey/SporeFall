@@ -237,13 +237,13 @@ public class EnemyControls : MonoBehaviour
             // Moved turret controls to be the first child
             if (isTargetingTrain)
             {
-                train.trainHP.TakeDamage(damageAmount);
+                train.trainHP.ReceiveDamage(damageAmount);
             }
             else 
             {
                 if (target.gameObject.TryGetComponent<Damageable>(out var hp))
                 {
-                    hp.TakeDamage(damageAmount);  // Apply 100 damage to the enemy
+                    hp.ReceiveDamage(damageAmount);  // Apply 100 damage to the enemy
                 }
             }
 

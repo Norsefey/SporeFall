@@ -8,8 +8,11 @@ public class MeleeAttack : Attack
 {
     [Header("Melee Attack Settings")]
     [SerializeField] private float attackArc = 90f;
-    [SerializeField] private float attackRange = 5;
     [SerializeField] private LayerMask targetLayers;
+    [Header("Melee Specific")]
+    [Tooltip("Arc in degrees for a cleave effect (0 = single target).")]
+    public float cleaveAngle = 0f;
+    public int cleaveMaxTargets = 1;
 
     [Header("Debug Visualization")]
     [SerializeField] private bool showDebugGizmos = true;
@@ -25,8 +28,8 @@ public class MeleeAttack : Attack
 
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        float finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
-        float finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
+        float finalDamage = (baseDamage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+        float finalCorruption = (baseCorruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
         // Begin attack sequence
         enemy.SetIsAttacking(true);
         if(enemy.Animator != null)
@@ -62,8 +65,13 @@ public class MeleeAttack : Attack
             {
                 if (hit.TryGetComponent<Damageable>(out var damageable))
                 {
-                    damageable.TakeDamage(finalDamage);
-                    damageable.IncreaseCorruption(finalCorruption);
+                    damageable.ReceiveDamage(finalDamage);
+                    if (damageable is PlayerHP)
+                    {
+                        PlayerHP playerHP = (PlayerHP)damageable;
+
+                        playerHP.IncreaseCorruption(finalCorruption);
+                    }
                     SpawnVFX(hit.transform.position, enemy.transform.rotation);
                     hitPositions.Add(hit.transform.position);
 
@@ -83,7 +91,7 @@ public class MeleeAttack : Attack
             //Debug.Log($"Melee Attack! Hit target: {hitTarget}, Hits: {hitPositions.Count}");
         }
 
-        StartCooldown();
+        //StartCooldown();
         // Recovery period
         yield return new WaitForSeconds(recoveryTime);
         enemy.SetIsAttacking(false);
@@ -105,7 +113,7 @@ public class MeleeAttack : Attack
         }
     }
 
-    public void DrawGizmosForEnemy(BaseEnemy enemy)
+/*    public void DrawGizmosForEnemy(BaseEnemy enemy)
     {
         if (!showDebugGizmos || enemy == null)
             return;
@@ -209,16 +217,55 @@ public class MeleeAttack : Attack
             nextPos = new Vector3(center.x, center.y + Mathf.Cos(nextAngle) * radius, center.z + Mathf.Sin(nextAngle) * radius);
             Debug.DrawLine(currPos, nextPos, color, duration);
         }
-    }
+    }*/
     // Override the SpawnVFX method to also visualize the attack
     protected override void SpawnVFX(Vector3 position, Quaternion rotation)
     {
         base.SpawnVFX(position, rotation);
+    }
 
-        // Add visualization of the attack
-        if (showDebugGizmos)
+   
+    
+    public override void Execute(AttackInstance instance, Damageable target)
+    {
+        if (cleaveAngle > 0f)
+            ExecuteCleave(instance, target);
+        else
+            DealDamage(instance, target);
+
+        PlaySFX(instance.Owner.AudioSource);
+
+    }
+    private void ExecuteCleave(AttackInstance instance, Damageable primaryTarget)
+    {
+        // Primary target always hit
+        DealDamage(instance, primaryTarget);
+
+        // Check nearby targets within cleave arc
+        float halfAngle = cleaveAngle * 0.5f;
+        Vector3 forward = (primaryTarget.transform.position - instance.Owner.transform.position).normalized;
+        int hits = 1;
+
+        // Use Physics.OverlapSphere to find potential cleave targets
+        Collider[] cols = Physics.OverlapSphere(instance.Owner.transform.position, instance.AttackRange);
+        foreach (var col in cols)
         {
-            VisualizeAttack(lastAttackOrigin, lastAttackRotation);
+            if (hits >= cleaveMaxTargets) break;
+            if (!col.TryGetComponent<Damageable>(out var d)) continue;
+            if (d == primaryTarget || !d.IsAlive) continue;
+
+            Vector3 toTarget = (d.transform.position - instance.Owner.transform.position).normalized;
+            if (Vector3.Angle(forward, toTarget) <= halfAngle)
+            {
+                DealDamage(instance, d);
+                SpawnVFX(d.transform.position, Quaternion.identity);
+                hits++;
+            }
         }
     }
+
+    private static void DealDamage(AttackInstance instance, Damageable target)
+        => target.ReceiveDamage(instance.ScaledDamage);
+
+
 }

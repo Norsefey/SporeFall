@@ -4,20 +4,14 @@ using UnityEngine;
 
 public class MyceliaPickup : DropsPoolBehavior
 {
-    public float minMyceliaAmount;
-    public float maxMyceliaAmount;
-    private float amountToGive;
-
     [SerializeField] private bool despawn = false;
     [SerializeField] private float despawnTime = 5;
 
-    public void Setup(float multiplier)
+    private float amountToGive = 0;
+
+    public void Setup(float dropAmount)
     {
-        amountToGive = Mathf.RoundToInt(Random.Range(minMyceliaAmount, maxMyceliaAmount));
-        
-        amountToGive = amountToGive * multiplier;
-        
-        amountToGive = Mathf.RoundToInt(amountToGive);
+        amountToGive = dropAmount;
         if (despawn)
             Invoke(nameof(ReturnObject), despawnTime);
     }

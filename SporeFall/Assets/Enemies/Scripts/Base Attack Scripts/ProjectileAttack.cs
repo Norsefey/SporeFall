@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public enum ProjectileTrajectoryType
 {
@@ -36,17 +36,17 @@ public class ProjectileAttack : RangedAttack
     private float finalDamage;
     private float finalCorruption;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
+    /*public override IEnumerator ExecuteAttack(AttackInstance instance, Transform target)
     {
-        finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
-        finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
-        enemy.SetIsAttacking(true);
+        *//*finalDamage = (instance.ScaledDamage) + Random.Range(-damageVariance, damageVariance);
+        finalCorruption = (baseCorruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
+        //enemy.SetIsAttacking(true);
 
-        if (enemy.Animator != null)
-            enemy.Animator.SetTrigger(animationTrigger);
+       *//* if (enemy.Animator != null)
+            enemy.Animator.SetTrigger(animationTrigger);*//*
 
-        Coroutine trackingCoroutine = enemy.StartCoroutine(TrackTarget(enemy, target));
-        yield return new WaitForSeconds(attackDelay);
+        //Coroutine trackingCoroutine = enemy.StartCoroutine(TrackTarget(enemy, target));
+        //yield return new WaitForSeconds(attackDelay);
 
         if (target != null)
             enemy.StartCoroutine(FireProjectiles(enemy, target));
@@ -61,8 +61,8 @@ public class ProjectileAttack : RangedAttack
         StartCooldown();
 
         yield return new WaitForSeconds(recoveryTime);
-        enemy.SetIsAttacking(false);
-    }
+        enemy.SetIsAttacking(false);*//*
+    }*/
     private IEnumerator FireProjectiles(BaseEnemy enemy, Transform target)
     {
 
@@ -127,7 +127,7 @@ public class ProjectileAttack : RangedAttack
         }
         else
         {
-            projectile = GameObject.Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<BaseProjectile>();
+            projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<BaseProjectile>();
             projectile?.Initialize(CreateProjectileData(direction, targetPosition, arcHeight), null);
         }
     }
@@ -161,6 +161,25 @@ public class ProjectileAttack : RangedAttack
 
             yield return null;
         }
+    }
+    public override void Execute(AttackInstance instance, Damageable target)
+    {
+        if (projectilePrefab == null) return;
+
+        Vector3 dir = (target.transform.position - instance.Owner.transform.position).normalized;
+
+        Vector3 firePoint = instance.Owner.transform.position + fireOffset;
+
+        SpawnProjectile(firePoint, dir, target.transform.position);
+
+
+        SpawnVFX(fireOffset, instance.Owner.transform.rotation);
+        PlaySFX(instance.Owner.AudioSource);
+    }
+
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
+    {
+        throw new System.NotImplementedException();
     }
 }
 

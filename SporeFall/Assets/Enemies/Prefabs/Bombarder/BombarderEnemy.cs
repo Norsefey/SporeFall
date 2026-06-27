@@ -140,7 +140,7 @@ public class BombarderEnemy : BaseEnemy
             float angle = Vector3.Angle(turretPivot != null ? turretPivot.forward : transform.forward, directionToTarget);
             if (angle < attackAngleThreshold)
             {
-                SetState(EnemyState.Attack);
+                SetState(EnemyState.Attacking);
             }
         }
         else
@@ -196,7 +196,7 @@ public class BombarderEnemy : BaseEnemy
     protected override void UpdateStrafeState()
     {
         // Stationary enemies don't strafe - they just focus on target rotation
-        SetState(EnemyState.Attack);
+        SetState(EnemyState.Attacking);
     }
     protected override List<StateWeight> CalculateStateWeights()
     {
@@ -228,19 +228,17 @@ public class BombarderEnemy : BaseEnemy
 
             if (angle < attackAngleThreshold)
             {
-                weights.Add(new StateWeight(EnemyState.Attack, 5.0f));
+                weights.Add(new StateWeight(EnemyState.Attacking, 5.0f));
             }
             else
             {
                 // Need to rotate to target
-                weights.Add(new StateWeight(EnemyState.Chase, 4.0f));
+                weights.Add(new StateWeight(EnemyState.Moving, 4.0f));
             }
         }
 
         // Idle state when nothing else to do
         weights.Add(new StateWeight(EnemyState.Idle, 0.5f));
-        weights.Add(new StateWeight(EnemyState.Strafe, 0.01f));
-
         return weights;
     }
     private void CheckForCombatSounds()
@@ -274,7 +272,7 @@ public class BombarderEnemy : BaseEnemy
                 DetectTargets();
                 if (currentTarget != null)
                 {
-                    SetState(EnemyState.Chase);
+                    SetState(EnemyState.Moving);
                 }
             }
         }

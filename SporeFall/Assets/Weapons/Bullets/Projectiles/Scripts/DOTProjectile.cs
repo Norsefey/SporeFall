@@ -17,7 +17,7 @@ public class DOTProjectile : BaseProjectile
         // Apply initial damage if needed
         if (collider.TryGetComponent<Damageable>(out var damageable))
         {
-            ApplyDamage(damageable, currentDamage);
+            ApplyDamage(damageable, damage);
         }
 
         // Create DOT zone

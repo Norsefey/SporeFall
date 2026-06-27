@@ -7,7 +7,6 @@ public class PlayerHP : Damageable
 {
     [SerializeField] private PlayerManager pMan;
     [SerializeField] private int defaultMaxLives = 3;
-    [SerializeField] private int coopMaxLives = 2;
     private int currentLives = 3;
     public int CurrentLives => currentLives;
     [SerializeField] GameObject deathVFX;
@@ -17,28 +16,63 @@ public class PlayerHP : Damageable
     
     public float deathTime = 10;
     public float deathTimeCounter = 0;
-    public bool isDieing = false;
+    public bool isDead = false;
 
-    // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         currentLives = defaultMaxLives;
-        currentHP = maxHP;
     }
-    public override void TakeDamage(float damage)
+    private void OnEnable()
     {
-        float previousHP = currentHP;
-        base.TakeDamage(damage);
+        targetType = TargetType.Player;
+        _health = maxHealth;
+        // Register with the target registry so enemies can find this player
+        EnemyTargetRegistry.Instance?.Register(this);
+    }
+    private void OnDisable()
+    {
+        EnemyTargetRegistry.Instance?.Unregister(this);
+    }
+    protected override float OnReceiveDamage(float amount)
+    {
+        float previousHP = _health;
+        float finalDamage = amount - (amount * dmgReduction);
+        _health -= finalDamage;
+        Debug.Log($"[Player] Took {finalDamage} damage. HP: {_health}/{maxHealth}");
 
         if (pMan != null && pMan.audioSource != null)
         {
-            float threshhold = 0.25f * maxHP;
-            if (previousHP > threshhold && currentHP <= threshhold)
+            float threshhold = 0.25f * maxHealth;
+            if (previousHP > threshhold && _health <= threshhold)
             {
                 pMan.audioSource.Stop(); // Stop previous audio before playing new one
                 pMan.audioSource.PlayOneShot(pMan.health25Sound, 1.5f);
             }
         }
+
+        if (_health <= 0f)
+            Die();
+
+        return finalDamage;
+    }
+    protected override void Die()
+    {
+        if (pMan.audioSource != null && CurrentLives > 1)
+        {
+            pMan.audioSource.Stop(); // Stop previous audio before playing new one
+            pMan.audioSource.PlayOneShot(pMan.deathSound, 1.5f);
+        }
+        // prevent more damage
+        canHoldCorruption = false;
+        canTakeDamage = false;
+        // Death effect
+        deathVFX.SetActive(true);
+        pMan.pInput.DisableAllInputs();
+        pMan.pAnime.ToggleIKAim(false);
+        pMan.pAnime.ToggleUnscaledUpdateMode(true);
+        pMan.pAnime.ToggleIsDead(true);
+
+        StartCoroutine(DeathEffectRoutine());
     }
     public void DepleteLife()
     {
@@ -48,7 +82,6 @@ public class PlayerHP : Damageable
         if (currentLives <= 0)
         {
             currentLives = 0;
-            isDead = true;
             GameManager.Instance.GameOver();
         }
     }
@@ -64,50 +97,10 @@ public class PlayerHP : Damageable
             pMan.pUI.UpdateLifeDisplay(currentLives);
         }
     }
-    public void SetReducedLife()
-    {
-        // When another player joins, i want each to have 2 lives instead of the default 3, but only if player hasn't already died once
-        if(currentLives > coopMaxLives)
-            currentLives = coopMaxLives;
-        else if(currentLives == coopMaxLives)// if player has lost a life, they do not regain a life
-            currentLives = coopMaxLives - 1;
-        // finally if player lives is below the coop max lives, we do not need to do anything
-       
-        // Update UI
-        pMan.pUI.UpdateLifeDisplay(coopMaxLives);
-    }
-    // when coop player leaves return lives to normal
-    public void SetDefaultLife()
-    {
-        // restore life lost with coop
-        if (currentLives < defaultMaxLives)
-            IncreaseLife();
-    }
     public void SetManager(PlayerManager player)
     {
         pMan = player;
     }
-    
-    protected override void Die()
-    {
-        if (pMan.audioSource != null && CurrentLives > 1)
-        {
-            pMan.audioSource.Stop(); // Stop previous audio before playing new one
-            pMan.audioSource.PlayOneShot(pMan.deathSound, 1.5f);
-        }
-        // prevent more damage
-        pMan.pHealth.canHoldCorruption = false;
-        pMan.pHealth.canTakeDamage = false;
-        // Death effect
-        deathVFX.SetActive(true);
-        pMan.pInput.DisableAllInputs();
-        pMan.pAnime.ToggleIKAim(false);
-        pMan.pAnime.ToggleUnscaledUpdateMode(true);
-        pMan.pAnime.ToggleIsDead(true);
-
-        StartCoroutine(DeathEffectRoutine());
-    }
-    
     private IEnumerator DeathEffectRoutine()
     {
      
@@ -128,9 +121,9 @@ public class PlayerHP : Damageable
         {
             if (pMan.GetPlayerIndex() == 0)
             {
-                if (GameManager.Instance.players[1].pHealth.isDead || GameManager.Instance.players[1].pHealth.isDieing)
+                if (GameManager.Instance.players[1].pHealth.isDead)
                 {
-                    isDieing = false;
+                    isDead = false;
                     pMan.pAnime.ToggleUnscaledUpdateMode(false);
                     deathVFX.SetActive(false);
                     DepleteLife();
@@ -140,9 +133,9 @@ public class PlayerHP : Damageable
             }
             else 
             {
-                if (GameManager.Instance.players[0].pHealth.isDead || GameManager.Instance.players[0].pHealth.isDieing)
+                if (GameManager.Instance.players[0].pHealth.isDead)
                 {
-                    isDieing = false;
+                    isDead = false;
                     pMan.pAnime.ToggleUnscaledUpdateMode(false);
                     deathVFX.SetActive(false);
                     DepleteLife();
@@ -152,12 +145,12 @@ public class PlayerHP : Damageable
             }
 
             // Set the dying state and activate revive zone
-            isDieing = true;
+            isDead = true;
             reviveZone.SetActive(true);
 
             // Wait for either revival or timeout
             deathTimeCounter = 0;
-            while (isDieing && deathTimeCounter < deathTime)
+            while (isDead && deathTimeCounter < deathTime)
             {
                 deathTimeCounter += Time.deltaTime;
                 yield return null;
@@ -167,16 +160,16 @@ public class PlayerHP : Damageable
             reviveZone.SetActive(false);
 
             // If player was not revived (still dying), deplete life and respawn
-            if (isDieing)
+            if (isDead)
             {
-                isDieing = false;
+                isDead = false;
                 pMan.pAnime.ToggleUnscaledUpdateMode(false);
                 deathVFX.SetActive(false);
                 DepleteLife();
                 pMan.StartRespawn(1, true);
             }
             // If player was revived, the revival process would have been handled by PlayerRevive
-            // The isDieing flag would have been set to false by PlayerRevive
+            // The isDead flag would have been set to false by PlayerRevive
         }
         else
         {
@@ -189,20 +182,13 @@ public class PlayerHP : Damageable
         }
 
     }
-    public override void ResetHealth()
-    {
-        base.ResetHealth();
-        pMan.pHealth.canHoldCorruption = true;
-        pMan.pHealth.canTakeDamage = true;
-    }
     public void Revive()
     {
-        isDieing = false;
         isDead = false;
         canHoldCorruption = true;
         canTakeDamage = true;
     }
-    public override void IncreaseCorruption(float amount)
+    public void IncreaseCorruption(float amount)
     {
         if (!canHoldCorruption)
             return;
