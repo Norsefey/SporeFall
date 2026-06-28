@@ -11,22 +11,14 @@ public class EnemyHPRelay : Damageable
     private void OnEnable()
     {
         targetType = TargetType.Enemy;
-        _health = maxHealth;
-    }
 
-    private void OnDisable()
-    {
-
+        MakeAlive();
     }
     protected override float OnReceiveDamage(float amount)
     {
         mainHP.ReceiveDamage(amount * damageMultiplier);
-        return amount;
-    }
 
-    protected override void Die()
-    {
-       
+        return amount;
     }
 
     public bool IsDead()

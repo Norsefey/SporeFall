@@ -48,12 +48,14 @@ public class EnemyController : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
         EnemyAnimator = GetComponent<EnemyAnimator>();
-
-        if (AutoInitialize)
-        {
-            Initialize(initialLevel);
-        }
     }
+
+    private void OnEnable()
+    {
+        // For testing Only
+        Initialize(initialLevel);
+    }
+
     public void Initialize(int level)
     {
         Stats.Apply(statData, level);
@@ -61,7 +63,7 @@ public class EnemyController : MonoBehaviour
         _agent.speed = Stats.MoveSpeed;
         health.maxHealth = Stats.MaxHealth;
         health.SetDamageReduction(Stats.Armor);
-        health.ResetHealth();
+        health.MakeAlive();
 
 
         _attacks.Clear();
@@ -84,8 +86,6 @@ public class EnemyController : MonoBehaviour
     public void ResetForPool()
     {
         StopAllCoroutines();
-
-        health.ResetHealth();
         ReleaseCurrentToken();
 
         Stats.Reset();
@@ -98,6 +98,8 @@ public class EnemyController : MonoBehaviour
         if(_agent.isActiveAndEnabled && _agent.isOnNavMesh)
         {
             _agent.ResetPath();
+            _agent.isStopped = false;
+            _agent.velocity = Vector3.zero;
         }
 
         _state = EnemyState.Idle;
@@ -182,11 +184,9 @@ public class EnemyController : MonoBehaviour
                 TransitionTo(EnemyState.AtTarget);
             }    
 
-            Debug.Log($"Current Distance To Target: {dist:F0}");
             if (HasAnyAttackInRange(dist))
             {
                 _agent.isStopped = true;
-                Debug.Log("Changing To Attacking");
                 TransitionTo(EnemyState.Attacking);
             }
         }

@@ -143,7 +143,7 @@ public abstract class BaseEnemy : MonoBehaviour
         // Reset health
         if (health != null)
         {
-            health.ResetHealth();
+            health.MakeAlive();
         }
 
         // Reset NavMeshAgent

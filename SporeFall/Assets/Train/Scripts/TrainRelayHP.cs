@@ -7,17 +7,21 @@ public class TrainRelayHP : Damageable
 {
     public TrainHP mainHp;
     public event Action OnRelayHit;
+
+    private void Start()
+    {
+        targetType = TargetType.TrainWall;
+        EnemyTargetRegistry.Instance?.Register(this);
+    }
+
     private void OnEnable()
     {
         targetType = TargetType.TrainWall;
-        _health = maxHealth;
-        ResetHealth();
         EnemyTargetRegistry.Instance?.Register(this);
     }
     private void OnDisable()
     {
         EnemyTargetRegistry.Instance?.Unregister(this);
-        Die();
     }
     protected override float OnReceiveDamage(float amount)
     {

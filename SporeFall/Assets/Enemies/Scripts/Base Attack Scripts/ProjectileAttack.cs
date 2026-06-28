@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public enum ProjectileTrajectoryType
 {
@@ -81,7 +80,7 @@ public class ProjectileAttack : RangedAttack
             float currentAngle = startAngle + (angleStep * i);
             Vector3 direction = CalculateDirection(baseDirection, currentAngle, spawnPosition, dynamicTargetPosition, out Vector3 adjustedTarget);
 
-            SpawnProjectile(spawnPosition, direction, adjustedTarget);
+            //SpawnProjectile(spawnPosition, direction, adjustedTarget);
 
             if (timeBetweenProjectiles > 0 && i < projectileCount - 1)
                 yield return new WaitForSeconds(timeBetweenProjectiles);
@@ -112,9 +111,9 @@ public class ProjectileAttack : RangedAttack
 
         return direction.normalized;
     }
-    private void SpawnProjectile(Vector3 spawnPosition, Vector3 direction, Vector3 targetPosition)
+   
+    private void SpawnProjectile(Vector3 spawnPosition, ProjectileData data)
     {
-        projectileArcHeight = Random.Range(minArchHeight, maxArchHeight);
 
         float arcHeight = trajectoryType == ProjectileTrajectoryType.Arc ? projectileArcHeight : 0f;
 
@@ -122,15 +121,16 @@ public class ProjectileAttack : RangedAttack
         if (PoolManager.Instance != null &&
             PoolManager.Instance.projectilePool.TryGetValue(projectilePrefab, out ProjectilePool pool))
         {
-            projectile = pool.Get(spawnPosition, Quaternion.LookRotation(direction));
-            projectile?.Initialize(CreateProjectileData(direction, targetPosition, arcHeight), pool);
+            projectile = pool.Get(spawnPosition, Quaternion.LookRotation(data.Direction));
+            projectile?.Initialize(data, pool);
         }
         else
         {
-            projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<BaseProjectile>();
-            projectile?.Initialize(CreateProjectileData(direction, targetPosition, arcHeight), null);
+            projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(data.Direction)).GetComponent<BaseProjectile>();
+            projectile?.Initialize(data, null);
         }
     }
+
     private ProjectileData CreateProjectileData(Vector3 direction, Vector3 target, float arcHeight)
     {
         return new ProjectileData
@@ -167,11 +167,25 @@ public class ProjectileAttack : RangedAttack
         if (projectilePrefab == null) return;
 
         Vector3 dir = (target.transform.position - instance.Owner.transform.position).normalized;
-
         Vector3 firePoint = instance.Owner.transform.position + fireOffset;
+        projectileArcHeight = Random.Range(minArchHeight, maxArchHeight);
 
-        SpawnProjectile(firePoint, dir, target.transform.position);
-
+        ProjectileData data = new ProjectileData
+        {
+            Direction = dir,
+            Speed = projectileSpeed,
+            Damage = instance.ScaledDamage,
+            Corruption = instance.ScaleCorruption,
+            Lifetime = projectileLifetime,
+            UseArcTrajectory = trajectoryType == ProjectileTrajectoryType.Arc,
+            UseGravity = useGravity,
+            ArcHeight = projectileArcHeight,
+            CanBounce = canBounce,
+            MaxBounces = maxBounces,
+            BounceDamageMultiplier = bounceDamageMultiplier,
+            TargetPosition = target.transform.position,
+        };
+        SpawnProjectile(firePoint, data);
 
         SpawnVFX(fireOffset, instance.Owner.transform.rotation);
         PlaySFX(instance.Owner.AudioSource);

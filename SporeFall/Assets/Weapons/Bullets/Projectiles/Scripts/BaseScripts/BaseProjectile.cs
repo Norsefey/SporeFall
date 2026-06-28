@@ -31,6 +31,7 @@ public abstract class BaseProjectile : MonoBehaviour
     {
         data = projectileData;
         pool = projectilePool;
+
         damage = data.Damage;
         corruptionDamage = data.Corruption;
         elapsedTime = 0f;
@@ -107,5 +108,7 @@ public abstract class BaseProjectile : MonoBehaviour
     {
         if (target != null)
             target.ReceiveDamage(damageAmount);
+
+        Debug.Log($"Delt {damageAmount} dmg To {target.gameObject.name}");
     }
 }

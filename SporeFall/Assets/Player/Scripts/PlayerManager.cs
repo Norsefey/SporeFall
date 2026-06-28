@@ -567,7 +567,7 @@ public class PlayerManager : MonoBehaviour
             if (resetStats)
             {
                 pCorruption.ResetCorruptionLevel();
-                pHealth.ResetHealth();
+                pHealth.MakeAlive();
             }
            
         }

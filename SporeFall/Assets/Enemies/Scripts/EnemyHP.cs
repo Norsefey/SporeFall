@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class EnemyHP : Damageable
@@ -21,18 +20,12 @@ public class EnemyHP : Damageable
         if(eController == null)
             eController = transform.parent.GetComponent<EnemyController>();
 
-        if (eController == null)
-            Debug.LogError(transform.parent.name + " Main HP has no Manager Reference");
         _health = maxHealth;
     }
     private void OnEnable()
     {
         targetType = TargetType.Enemy;
         _health = maxHealth;
-    }
-
-    private void OnDisable()
-    {
     }
     protected override float OnReceiveDamage(float amount)
     {
@@ -52,13 +45,14 @@ public class EnemyHP : Damageable
             }
         }
 
+        Debug.Log($"Took {amount} Damage: HP: {_health}");
+
         if (_health <= 0f) Die();
         return amount;
     }
     protected override void Die()
     {
-        if (eController.CurrentState == EnemyState.Dead) return;
-
+        Debug.Log("Dieing");
         base.Die();
 
         eController.TransitionTo(EnemyState.Dead);
@@ -66,9 +60,10 @@ public class EnemyHP : Damageable
         eController.ReleaseCurrentToken();
         SpawnDeathVFX(eController.transform.position, Quaternion.Euler(-90, 0, 0));
         SpawnMyceliaDrop();
-        gameObject.SetActive(false); // Deactivate instead of destroy
 
-        // Return to pool via WaveManager / EnemyPool
+        // for now disable, pool manager will handle pick up later
+        eController.gameObject.SetActive(false);
+
         eController.ResetForPool();
     }
     public IEnumerator Flinch()

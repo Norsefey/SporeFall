@@ -4,7 +4,7 @@ using UnityEngine;
 public class Damageable : MonoBehaviour
 {
     protected float _health;
-    [HideInInspector]public float maxHealth;
+    public float maxHealth;
 
     [Header("Token Settings")]
     [Tooltip("Max simultaneous attackers.")]
@@ -26,10 +26,11 @@ public class Damageable : MonoBehaviour
     public bool canTakeDamage = true;
     public bool canHoldCorruption = true;
 
-    public void ResetHealth()
+    public void MakeAlive()
     {
         _health = maxHealth;
         IsAlive = true;
+        OnHPChange?.Invoke(this, _health);
     }
     public void RestoreHealth(float amount)
     {
@@ -50,8 +51,6 @@ public class Damageable : MonoBehaviour
     {
         if (!IsAlive) return 0f;
 
-        // Subclasses / health components handle the real HP logic.
-        // We just fire the hook here so the owner can react.
         float dealt = OnReceiveDamage(amount);
         OnHPChange?.Invoke(this, amount);
         return dealt;
