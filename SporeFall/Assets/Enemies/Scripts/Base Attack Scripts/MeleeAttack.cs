@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Melee Attack", menuName = "Enemy/Attacks/Melee Attack")]
 public class MeleeAttack : Attack
 {
+    public override AttackType AttackType => AttackType.Melee;
     [Header("Melee Attack Settings")]
     [SerializeField] private float attackArc = 90f;
     [SerializeField] private LayerMask targetLayers;

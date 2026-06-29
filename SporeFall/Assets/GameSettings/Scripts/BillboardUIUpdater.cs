@@ -13,6 +13,7 @@ public class BillboardUIUpdater : MonoBehaviour
     private CanvasGroup groupAlpha;
     private Coroutine hideUICoroutine;
 
+    [SerializeField] private bool showHPText = false;
     public bool lockYAxisOnly = false;
 
     private void InitializeUI()
@@ -67,7 +68,9 @@ public class BillboardUIUpdater : MonoBehaviour
             hpDisplay.value = hpManager.CurrentHealth;
         }
 
-        hpText.text = damageable.CurrentHealth.ToString("F0") + "/" + damageable.maxHealth.ToString("F0");
+        if(showHPText)
+            hpText.text = damageable.CurrentHealth.ToString("F0") + "/" + damageable.maxHealth.ToString("F0");
+        
         hpDisplay.value = damageable.CurrentHealth;
         
         if(hideUI && groupAlpha != null)

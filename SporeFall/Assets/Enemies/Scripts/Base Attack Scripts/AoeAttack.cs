@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New AOE Attack", menuName = "Enemy/Attacks/AOE Attack")]
 public class AoeAttack : Attack
 {
+    public override AttackType AttackType => AttackType.AOE;
+
     [Header("AOE Attack Settings")]
     [SerializeField] private float aoeRadius = 5f;
     [SerializeField] private float damageMultiplierAtCenter = 1.5f;

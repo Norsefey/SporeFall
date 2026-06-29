@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Hitscan Attack", menuName = "Enemy/Attacks/Hitscan Attack")]
 public class HitscanAttack : RangedAttack
 {
-    
+    public override AttackType AttackType => AttackType.RangedHitScan;
     [Header("Hitscan Settings")]
     [SerializeField] private LayerMask targetLayers;
     [SerializeField] private bool penetratingShot = false;

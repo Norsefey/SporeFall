@@ -10,6 +10,8 @@ public enum ProjectileTrajectoryType
 [CreateAssetMenu(fileName = "New Projectile Attack", menuName = "Enemy/Attacks/Projectile Attack")]
 public class ProjectileAttack : RangedAttack
 {
+    public override AttackType AttackType => AttackType.RangedProjectile;
+
     [Header("Projectile Settings")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float projectileSpeed = 20f;

@@ -5,6 +5,7 @@ public class EnemyHP : Damageable
 {
     // Health properties
     [SerializeField] private EnemyController eController;
+    [SerializeField] private EnemyDefenseController defenseController;
 
     [Header("Flinching")]
     [SerializeField] private float flinchModifier = 1.0f;
@@ -29,7 +30,11 @@ public class EnemyHP : Damageable
     }
     protected override float OnReceiveDamage(float amount)
     {
-        _health -= amount;
+        float finalDamage = defenseController.ProcessIncomingHit(amount);
+
+        if (finalDamage <= 0f) return 0;  // dodged or fully blocked
+
+        _health -= finalDamage;
 
         if (flinchable)
         {

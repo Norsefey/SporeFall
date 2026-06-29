@@ -19,6 +19,9 @@ public abstract class Attack : ScriptableObject
     public string attackName;
     [Tooltip("How far attack travels")]
     public float attackRange = 1;
+    [Tooltip("Ideal firing distance. Enemy repositions toward this between attacks. " +
+                 "Leave at 0 to auto-derive as midpoint of min/max range.")]
+    public float preferredRange = 0f;
 
     [Tooltip("When to do Damage. Gives time for a wind up animation")]
     [SerializeField] public float attackDelay = 0.5f;
@@ -44,6 +47,8 @@ public abstract class Attack : ScriptableObject
     [SerializeField] protected GameObject attackVFXPrefab;
     [Tooltip("Sound effect to play when the attack is executed.")]
     [SerializeField] protected AudioClip attackSFX;
+
+    public abstract AttackType AttackType { get; }
     public abstract IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier);
     public abstract void Execute(AttackInstance instance, Damageable target);
     protected virtual void SpawnVFX(Vector3 position, Quaternion rotation)
@@ -70,6 +75,9 @@ public abstract class Attack : ScriptableObject
             audioSource.PlayOneShot(attackSFX);
         }
     }
+
+    public float GetPreferredRange()
+            => preferredRange > 0f ? preferredRange : (minSelectRange + attackRange) * 0.5f;
 }
 
 public enum AttackType
@@ -77,5 +85,6 @@ public enum AttackType
     Melee,
     RangedProjectile,
     RangedHitScan, 
-    AOE
+    AOE,
+    MovementAttack
 }

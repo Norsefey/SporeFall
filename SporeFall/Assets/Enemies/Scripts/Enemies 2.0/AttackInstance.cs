@@ -42,7 +42,7 @@ public class AttackInstance
     }
     public bool CanUse()
     {
-        if(LastUseTime < 0) return true;
+        if(LastUseTime <= 0) return true;
         if(Time.time > LastUseTime + Cooldown) return true;
 
         return false;

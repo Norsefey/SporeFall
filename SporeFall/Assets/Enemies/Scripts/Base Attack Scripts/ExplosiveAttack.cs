@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Explosion Attack", menuName = "Enemy/Attacks/Explosion Attack")]
 public class ExplosiveAttack : Attack
 {
+    public override AttackType AttackType => AttackType.AOE;
+
     [Header("Explosion Settings")]
     [Tooltip("How far the explosion can do damage")]
     [SerializeField] private float explosionRadius = 10f;
