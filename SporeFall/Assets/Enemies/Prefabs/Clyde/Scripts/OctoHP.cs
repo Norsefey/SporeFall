@@ -6,26 +6,28 @@ public class OctoHP : Damageable
 {
     [SerializeField] private OctoBoss mainBody;
 
-    public override void TakeDamage(float damage)
+    private void OnEnable()
     {
-        // Apply damage multiplier based on vulnerability
+        targetType = TargetType.Structure;
+        _health = maxHealth;
+        EnemyTargetRegistry.Instance?.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        EnemyTargetRegistry.Instance?.Unregister(this);
+    }
+
+    protected override float OnReceiveDamage(float amount)
+    {
         float damageMultiplier = mainBody.CalculateDamageMultiplier();
-        float modifiedDamage = damage * damageMultiplier;
+        float modifiedDamage = amount * damageMultiplier;
 
         mainBody.PlayHitSoundFX();
 
-        // Apply damage
-        base.TakeDamage(modifiedDamage);
-
-        // Log damage reduction if applicable
-        if (damageMultiplier < 1.0f)
-        {
-            Debug.Log($"Damage reduced: {damage} → {modifiedDamage} (Multiplier: {damageMultiplier})");
-        }
-        else if (damageMultiplier > 1.0f)
-        {
-            Debug.Log($"Damage increased: {damage} → {modifiedDamage} (Multiplier: {damageMultiplier})");
-        }
+        _health -= modifiedDamage;
+        if (_health <= 0f) Die();
+        return amount;
     }
 
     protected override void Die()

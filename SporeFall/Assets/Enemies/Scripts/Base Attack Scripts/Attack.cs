@@ -1,37 +1,46 @@
 // Ignore Spelling: cooldown
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Attack : ScriptableObject
 {
-    // Base ScriptableObject for all boss attacks
-    [Header("Base Attack Settings")]
-    [Tooltip("Priority of the attack. Higher values indicate higher priority.")]
-    public float priority = 1f;
-    [Tooltip("How close to target to do attack")]
-    [SerializeField] protected float range = 5f;
-    [Tooltip("How Long until Attack can be used again")]
-    [SerializeField] protected float cooldown = 2f;
+    // Base ScriptableObject for all attacks
+    [Header("Selection")]
+    [Tooltip("Relative weight for weighted-random attack selection. Higher = chosen more often.")]
+    [Min(0.01f)]
+    public float selectionWeight = 1f;
+    [Tooltip("Optional minimum range before this attack can be selected (e.g. ranged attacks need distance).")]
+    public float minSelectRange = 0f;
+    [Tooltip("Seconds the enemy waits after this attack before choosing the next one.")]
+    public float baseCooldown = 1.5f;
+
+    [Header("Attack Settings")]
+    public string attackName;
+    [Tooltip("How far attack travels")]
+    public float attackRange = 1;
+    [Tooltip("Ideal firing distance. Enemy repositions toward this between attacks. " +
+                 "Leave at 0 to auto-derive as midpoint of min/max range.")]
+    public float preferredRange = 0f;
+
     [Tooltip("When to do Damage. Gives time for a wind up animation")]
-    [SerializeField] protected float attackDelay = 0.5f;
+    [SerializeField] public float attackDelay = 0.5f;
     [Tooltip("Time to wait after attacking before moving again. ")]
-    [SerializeField] protected float recoveryTime = 0.5f;
+    [SerializeField] public float recoveryTime = 0.5f;
     [Tooltip("Name of trigger to activate correct animation")]
-    [SerializeField] protected string animationTrigger = "Attack";
+    [SerializeField] public string animationTrigger = "Attack";
     
     [Header("Damage Settings")]
     [Tooltip("Base damage of the attack.")]
-    [SerializeField] protected float damage = 10f;
+    [SerializeField] public float baseDamage = 10f;
     [Tooltip("Variance in damage. Allows for randomization within a range.")]
     [SerializeField] protected float damageVariance = 0f;
-
+    
     [Header("Corruption Settings")]
     [Tooltip("Base corruption applied by the attack.")]
-    [SerializeField] protected float corruption = 0f;
+    [SerializeField] public float baseCorruption = 0f;
     [Tooltip("Variance in corruption. Allows for randomization within a range.")]
-    [SerializeField] protected float corruptionVariance = 0f;
+    [SerializeField] public float corruptionVariance = 0f;
 
     [Header("Effects")]
     [Tooltip("Visual effect prefab to spawn when the attack is executed.")]
@@ -39,27 +48,9 @@ public abstract class Attack : ScriptableObject
     [Tooltip("Sound effect to play when the attack is executed.")]
     [SerializeField] protected AudioClip attackSFX;
 
-    public float Range => range;
-    public float Cooldown => cooldown;
-    public float Damage => damage;
-    public float AttackDelay => attackDelay;
-    public float RecoveryTime => recoveryTime;
-    private float lastUseTime = 0;
-    public bool CanUse(float distanceToTarget)
-    {
-        //Debug.Log("Last Use Time: " + lastUseTime + "Current Time: " + Time.time + (Time.time >= lastUseTime + cooldown));
-        //Debug.Log("In Range: " + (distanceToTarget <= range));
-        return distanceToTarget <= range && Time.time >= lastUseTime + cooldown;
-    }
+    public abstract AttackType AttackType { get; }
     public abstract IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier);
-    protected void StartCooldown()
-    {
-        lastUseTime = Time.time;
-    }
-    public void ResetCooldown()
-    {
-        lastUseTime = 0;
-    }
+    public abstract void Execute(AttackInstance instance, Damageable target);
     protected virtual void SpawnVFX(Vector3 position, Quaternion rotation)
     {
         if (attackVFXPrefab != null && PoolManager.Instance != null)
@@ -84,4 +75,16 @@ public abstract class Attack : ScriptableObject
             audioSource.PlayOneShot(attackSFX);
         }
     }
+
+    public float GetPreferredRange()
+            => preferredRange > 0f ? preferredRange : (minSelectRange + attackRange) * 0.5f;
+}
+
+public enum AttackType
+{
+    Melee,
+    RangedProjectile,
+    RangedHitScan, 
+    AOE,
+    MovementAttack
 }

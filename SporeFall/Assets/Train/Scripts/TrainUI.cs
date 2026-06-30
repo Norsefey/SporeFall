@@ -30,8 +30,8 @@ public class TrainUI : MonoBehaviour
     }
     public void UpdateHPDisplay(Damageable trainHP, float value)
     {
-        HPBar.value = trainHP.CurrentHP;
-        float hpPercantage = ((trainHP.CurrentHP / trainHP.MaxHP) * 100);
+        HPBar.value = trainHP.CurrentHealth;
+        float hpPercantage = ((trainHP.CurrentHealth / trainHP.maxHealth) * 100);
 
         if (hpPercantage > 0)
         {
@@ -45,14 +45,14 @@ public class TrainUI : MonoBehaviour
             //Debug.Log("Updating train HP bar");
         }
 
-        if (delayedHP < trainHP.CurrentHP)
+        if (delayedHP < trainHP.CurrentHealth)
         {
             //Debug.Log("DelayedHP is less than current HP");
-            delayedHP = trainHP.CurrentHP;
+            delayedHP = trainHP.CurrentHealth;
             HPDelayBar.value = delayedHP;
             //Debug.Log("Raising delayedHP to equal current HP");
         }
-        else if (delayedHP > trainHP.CurrentHP)
+        else if (delayedHP > trainHP.CurrentHealth)
         {
             //Debug.Log("DelayedHP is greater than current HP");
             StartCoroutine(HPDelayCooldown());
@@ -65,7 +65,7 @@ public class TrainUI : MonoBehaviour
     IEnumerator HPDelayCooldown()
     {
         yield return new WaitForSeconds(1f);
-        while (delayedHP > trainHP.CurrentHP)
+        while (delayedHP > trainHP.CurrentHealth)
         {
             //Debug.Log("Reducing delayedHP");
             delayedHP = delayedHP - .5f;
@@ -74,10 +74,10 @@ public class TrainUI : MonoBehaviour
             HPDelayBar.value = delayedHP;
             //Debug.Log("HPDelay Bar value is: " + HPDelayBar.value);
         }
-        if (delayedHP < trainHP.CurrentHP)
+        if (delayedHP < trainHP.CurrentHealth)
         {
             //Debug.Log("DelayedHP has been reduced lower than current HP, raising");
-            delayedHP = trainHP.CurrentHP;
+            delayedHP = trainHP.CurrentHealth;
             HPDelayBar.value = delayedHP;
         }
     }

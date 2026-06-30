@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
         foreach (var player in players)
         {
             // player still has lives or HP
-            if (player.pHealth.CurrentLives > 0 || !player.pHealth.isDead)
+            if (player.pHealth.CurrentLives > 0 || player.pHealth.IsAlive)
                 allPlayersDead = false;
         }
 

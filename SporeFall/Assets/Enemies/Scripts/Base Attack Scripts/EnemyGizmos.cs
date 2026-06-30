@@ -40,14 +40,14 @@ public class EnemyGizmos : MonoBehaviour
             if (attack is MeleeAttack meleeAttack)
             {
                 // Draw melee attack gizmos
-                meleeAttack.DrawGizmosForEnemy(enemy);
+               // meleeAttack.DrawGizmosForEnemy(enemy);
             }
             else if (selected)
             {
                 // Draw basic attack range for other attack types when selected
                 Gizmos.color = new Color(0, 0.8f, 1f, 0.3f);
                 Vector3 origin = enemy.firePoint != null ? enemy.firePoint.position : enemy.transform.position;
-                Gizmos.DrawWireSphere(origin, attack.Range);
+                Gizmos.DrawWireSphere(origin, attack.attackRange);
             }
         }
     }

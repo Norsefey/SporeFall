@@ -13,6 +13,7 @@ public class BillboardUIUpdater : MonoBehaviour
     private CanvasGroup groupAlpha;
     private Coroutine hideUICoroutine;
 
+    [SerializeField] private bool showHPText = false;
     public bool lockYAxisOnly = false;
 
     private void InitializeUI()
@@ -20,9 +21,9 @@ public class BillboardUIUpdater : MonoBehaviour
         if(groupAlpha == null)
             groupAlpha = GetComponent<CanvasGroup>();
         groupAlpha.alpha = 0.5f;
-        hpText.text = hpManager.CurrentHP.ToString("F0") + "/" + hpManager.MaxHP.ToString("F0");
-        hpDisplay.maxValue = hpManager.MaxHP;
-        hpDisplay.value = hpManager.MaxHP;
+        hpText.text = hpManager.CurrentHealth.ToString("F0") + "/" + hpManager.maxHealth.ToString("F0");
+        hpDisplay.maxValue = hpManager.maxHealth;
+        hpDisplay.value = hpManager.maxHealth;
     }
     private void OnEnable()
     {
@@ -58,17 +59,19 @@ public class BillboardUIUpdater : MonoBehaviour
             }
         }
     }
-    public void HandleHPChange(Damageable damagedEnemy, float damage)
+    public void HandleHPChange(Damageable damageable, float damage)
     {
         // make sure slider is accurate
-        if (hpDisplay.maxValue != damagedEnemy.MaxHP)
+        if (hpDisplay.maxValue != damageable.maxHealth)
         {
-            hpDisplay.maxValue = damagedEnemy.MaxHP;
-            hpDisplay.value = hpManager.CurrentHP;
+            hpDisplay.maxValue = damageable.maxHealth;
+            hpDisplay.value = hpManager.CurrentHealth;
         }
 
-        hpText.text = damagedEnemy.CurrentHP.ToString("F0") + "/" + damagedEnemy.MaxHP.ToString("F0");
-        hpDisplay.value = damagedEnemy.CurrentHP;
+        if(showHPText)
+            hpText.text = damageable.CurrentHealth.ToString("F0") + "/" + damageable.maxHealth.ToString("F0");
+        
+        hpDisplay.value = damageable.CurrentHealth;
         
         if(hideUI && groupAlpha != null)
         {

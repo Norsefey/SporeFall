@@ -7,17 +7,22 @@ public class EnemyHPRelay : Damageable
     [SerializeField] float damageMultiplier = 1;
     [SerializeField] Damageable mainHP;
 
-    public override void TakeDamage(float damage)
+
+    private void OnEnable()
     {
-        mainHP.TakeDamage(damage * damageMultiplier);
+        targetType = TargetType.Enemy;
+
+        MakeAlive();
     }
-    protected override void Die()
+    protected override float OnReceiveDamage(float amount)
     {
-       
+        mainHP.ReceiveDamage(amount * damageMultiplier);
+
+        return amount;
     }
 
     public bool IsDead()
     {
-        return mainHP.isDead;
+        return !mainHP.IsAlive;
     }
 }

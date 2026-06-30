@@ -5,15 +5,26 @@ public class TutorialEnemy : Damageable
     [Tooltip("Guaranteed weapon drop for next tutorial stage")]
     [SerializeField] private GameObject weaponPickUp;
     [SerializeField] private ShootingRoomTutorial shootingRoomTutorial;
-    private void Awake()
+
+    private void OnEnable()
     {
-        currentHP = maxHP;
+        targetType = TargetType.Structure;
+        _health = maxHealth;
+        EnemyTargetRegistry.Instance?.Register(this);
     }
-    public override void TakeDamage(float damage)
+
+    private void OnDisable()
     {
-        Debug.Log("Base took damage");
-        base.TakeDamage(damage);
+        EnemyTargetRegistry.Instance?.Unregister(this);
     }
+
+    protected override float OnReceiveDamage(float amount)
+    {
+        _health -= amount;
+        if (_health <= 0f) Die();
+        return amount;
+    }
+
     protected override void Die()
     {
         // what happens upon death
@@ -23,8 +34,6 @@ public class TutorialEnemy : Damageable
         }
 
         shootingRoomTutorial.TargetKilled();
-
-        Debug.Log("Dying Now");
         Destroy(transform.parent.gameObject);
     }
 

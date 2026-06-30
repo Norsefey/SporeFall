@@ -180,10 +180,6 @@ MonoBehaviour:
     Direction: {x: 0, y: 0, z: 0}
     TargetPosition: {x: 0, y: 0, z: 0}
   minimumFireRange: 1.5
-  turretGuns: {fileID: 7386922474431716262}
-  firePoint: {fileID: 8771439348193518876}
-  bulletPrefab: {fileID: 7441200720383325235, guid: 692fb5847d0f2d948959db249caa8d66,
-    type: 3}
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -193,6 +189,10 @@ MonoBehaviour:
   billboardUpdater: {fileID: 60285776059258508}
   firingSound: {fileID: 8300000, guid: c08e0d9bc42371f4caa07c85bd52e553, type: 3}
   flameVolume: 0.3
+  turretVisual: {fileID: 7386922474431716262}
+  firePoint: {fileID: 8771439348193518876}
+  bulletPrefab: {fileID: 7441200720383325235, guid: 692fb5847d0f2d948959db249caa8d66,
+    type: 3}
   showFireDebug: 1
 --- !u!82 &7767964235748362511
 AudioSource:
@@ -667,10 +667,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c48f82a081ac2ce449b1df499f21c905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 100
-  isDead: 0
+  canHoldCorruption: 0
   structure: {fileID: 5508907316869942239}
 --- !u!136 &3039057548810710203
 CapsuleCollider:

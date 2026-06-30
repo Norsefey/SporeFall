@@ -229,9 +229,6 @@ public class PlayerDeviceHandler : MonoBehaviour
         }
         else if(players.Count > 1)
         {
-            // reduce lives on first player
-            players[0].GetComponent<PlayerManager>().pHealth.SetReducedLife();
-
             // perform set up for player two
             if (players[1] != null)
             {
@@ -445,8 +442,7 @@ public class PlayerDeviceHandler : MonoBehaviour
             PlayerManager remainingPlayer = players[0].GetComponent<PlayerManager>();
             if (remainingPlayer != null)
             {
-                // Reset any other player-specific settings
-                remainingPlayer.pHealth.SetDefaultLife();
+
             }
         }
     }

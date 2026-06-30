@@ -126,7 +126,7 @@ public class Structure : MonoBehaviour
     public void UpdateStats(StructureLevel newLevel)
     {
         structureLevel = newLevel;
-        healthComponent.SetMaxHP(structureLevel.maxHealth);
+        healthComponent.maxHealth = structureLevel.maxHealth;
         structureBehavior?.UpdateStats(structureLevel);
         UpdateRadiusVisual();
     }
@@ -141,7 +141,7 @@ public class Structure : MonoBehaviour
         StructureHP structureHP = GetStructureHP();
 
         // Calculate HP percentage (clamped between 0 and 1)
-        float healthPercentage = Mathf.Clamp01(structureHP.CurrentHP / structureHP.MaxHP);
+        float healthPercentage = Mathf.Clamp01(structureHP.CurrentHealth / structureHP.maxHealth);
         // Calculate refund percentage, scaled between minimumRefundPercent and 1
         float refundPercentage = Mathf.Lerp(minimumRefundPercent, 1f, healthPercentage);
         // Calculate final refund amount and round to nearest integer

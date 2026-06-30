@@ -4,15 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum EnemyState
-{
-    Idle,
-    Chase,
-    Attack,
-    Strafe,
-    Wander
-}
-
 // Abstract base class for all Enemies
 public abstract class BaseEnemy : MonoBehaviour
 {
@@ -135,7 +126,7 @@ public abstract class BaseEnemy : MonoBehaviour
         foreach (var att in attacks)
         {
             //Debug.LogWarning("Reseting Attack: " + att);
-            att.ResetCooldown();
+            //att.ResetCooldown();
         }
 
         // Reset variables
@@ -152,7 +143,7 @@ public abstract class BaseEnemy : MonoBehaviour
         // Reset health
         if (health != null)
         {
-            health.ResetHealth();
+            health.MakeAlive();
         }
 
         // Reset NavMeshAgent
@@ -213,12 +204,12 @@ public abstract class BaseEnemy : MonoBehaviour
         float recentDamageSum = CalculateRecentDamage();
         // Chase Priority
         float chaseWeight = CalculateChaseWeight(distanceToTarget);
-        weights.Add(new StateWeight(EnemyState.Chase, chaseWeight));
+        weights.Add(new StateWeight(EnemyState.Moving, chaseWeight));
         // Attack Priority
         float attackWeight = CalculateAttackWeight(distanceToTarget);
-        weights.Add(new StateWeight(EnemyState.Attack, attackWeight));
-        float strafeWeight = CalculateStrafeWeight(recentDamageSum, distanceToTarget);
-        weights.Add(new StateWeight(EnemyState.Strafe, strafeWeight));
+        weights.Add(new StateWeight(EnemyState.Attacking, attackWeight));
+        //float strafeWeight = CalculateStrafeWeight(recentDamageSum, distanceToTarget);
+        //weights.Add(new StateWeight(EnemyState.Strafe, strafeWeight));
 
         // Idle is lowest priority
         weights.Add(new StateWeight(EnemyState.Idle, 0.01f));
@@ -274,18 +265,12 @@ public abstract class BaseEnemy : MonoBehaviour
                 if (animator != null)
                     animator.SetInteger("State", 0);
                 break;
-            case EnemyState.Strafe:
-                stateTimer = Random.Range(2f, 4f);
-                if (animator != null)
-                    animator.SetInteger("State", 1);
-                CalculateStrafePosition();
-                break;
-            case EnemyState.Attack:
+            case EnemyState.Attacking:
                 stateTimer = Random.Range(5f, 8f);
                 if (animator != null)
                     animator.SetInteger("State", 0);
                 break;
-            case EnemyState.Chase:
+            case EnemyState.Moving:
                 DetectTargets();
                 stateTimer = Random.Range(1f, 4f);
                 if (animator != null)
@@ -319,17 +304,13 @@ public abstract class BaseEnemy : MonoBehaviour
                 // Debug.Log("Idling");
                 UpdateIdleState();
                 break;
-            case EnemyState.Chase:
+            case EnemyState.Moving:
                 // Debug.Log("Chasing");
                 UpdateChaseState(distanceToTarget);
                 break;
-            case EnemyState.Attack:
+            case EnemyState.Attacking:
                 //Debug.Log("Attacking");
                 UpdateAttackState(distanceToTarget);
-                break;
-            case EnemyState.Strafe:
-                // Debug.Log("Strafing");
-                UpdateStrafeState();
                 break;
         }
     }
@@ -379,7 +360,7 @@ public abstract class BaseEnemy : MonoBehaviour
         {
             // We're within attack range, transition to attack state
             agent.isStopped = true;
-            SetState(EnemyState.Attack);
+            SetState(EnemyState.Attacking);
         }
     }
     protected virtual void UpdateAttackState(float distanceToTarget)
@@ -480,9 +461,9 @@ public abstract class BaseEnemy : MonoBehaviour
     protected virtual Attack ChooseBestAttack(float distanceToTarget)
     {
         Attack bestAttack = null;
-        float bestPriority = float.MinValue;
+        //float bestPriority = float.MinValue;
 
-        foreach (Attack attack in attacks)
+     /*   foreach (Attack attack in attacks)
         {
             if (attack.CanUse(distanceToTarget))
             {
@@ -493,7 +474,7 @@ public abstract class BaseEnemy : MonoBehaviour
                     bestAttack = attack;
                 }
             }
-        }
+        }*/
         return bestAttack;
     }
     public void StartDOTEffect(Damageable target, float totalDamage, float duration, float tickRate)
@@ -507,7 +488,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
         while (elapsedTime < duration)
         {
-            target.TakeDamage(damagePerTick);
+            target.ReceiveDamage(damagePerTick);
             yield return new WaitForSeconds(tickRate);
             elapsedTime += tickRate;
         }
@@ -683,14 +664,14 @@ public abstract class BaseEnemy : MonoBehaviour
         // Access the enemy's health component
         if (health != null)
         {
-            // Store original max health if not already stored
+/*            // Store original max health if not already stored
             if (!health.HasStoredOriginalHealth())
             {
                 health.StoreOriginalMaxHealth();
             }
 
             // Apply multiplier to max health
-            health.SetMaxHealthWithMultiplier(multiplier);
+            health.SetMaxHealthWithMultiplier(multiplier);*/
         }
     }
     public virtual void SetDamageMultiplier(float multiplier)

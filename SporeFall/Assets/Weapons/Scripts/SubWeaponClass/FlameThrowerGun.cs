@@ -120,7 +120,7 @@ public class FlameThrowerGun : Weapon
                 {
                     float appliedDamage = damage * damageModifier;
 
-                    target.TakeDamage(appliedDamage);
+                    target.ReceiveDamage(appliedDamage);
 
                     // Apply knockback if necessary
                     if (knockBackForce > 0 && target.TryGetComponent<Rigidbody>(out Rigidbody rb))

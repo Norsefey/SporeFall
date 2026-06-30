@@ -15,8 +15,8 @@ public abstract class BaseProjectile : MonoBehaviour
     protected ProjectileData data;
     protected ProjectilePool pool;
     protected float elapsedTime;
-    protected float currentDamage;
-    protected float currentCorruption;
+    protected float damage;
+    protected float corruptionDamage;
     protected int bounceCount;
     protected bool arcCompletedPhysicsStarted = false;
 
@@ -31,8 +31,9 @@ public abstract class BaseProjectile : MonoBehaviour
     {
         data = projectileData;
         pool = projectilePool;
-        currentDamage = data.Damage;
-        currentCorruption = data.Corruption;
+
+        damage = data.Damage;
+        corruptionDamage = data.Corruption;
         elapsedTime = 0f;
         bounceCount = 0;
         arcCompletedPhysicsStarted = false;
@@ -97,7 +98,7 @@ public abstract class BaseProjectile : MonoBehaviour
         if (movement != null)
             movement.Bounce(surface);
 
-        currentDamage *= data.BounceDamageMultiplier;
+        damage *= data.BounceDamageMultiplier;
         bounceCount++;
     }
     /// Apply damage based on projectile type
@@ -106,6 +107,8 @@ public abstract class BaseProjectile : MonoBehaviour
     protected void ApplyDamage(Damageable target, float damageAmount)
     {
         if (target != null)
-            target.TakeDamage(damageAmount);
+            target.ReceiveDamage(damageAmount);
+
+        Debug.Log($"Delt {damageAmount} dmg To {target.gameObject.name}");
     }
 }

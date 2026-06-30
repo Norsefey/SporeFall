@@ -1,30 +1,36 @@
-using UnityEngine;
-using TMPro;
 
 public class StructureHP : Damageable
 {
     public Structure structure;
-    void Start()
+
+    public bool destroyOnDeath = false;
+
+
+    private void OnEnable()
     {
-        ResetHealth();
-        StoreOriginalMaxHealth();
+        targetType = TargetType.Structure;
+        MakeAlive();
+        EnemyTargetRegistry.Instance?.Register(this);
+    }
+    private void OnDisable()
+    {
+        EnemyTargetRegistry.Instance?.Unregister(this);
     }
 
-    public override void TakeDamage(float damage)
+    protected override float OnReceiveDamage(float amount)
     {
-        base.TakeDamage(damage);
+        _health -= amount;
+        if (_health <= 0f) Die();
+        return amount;
     }
 
     // Handle death and destroy the parent object
     protected override void Die()
     {
-        //Debug.Log(gameObject.name + " has died.");
-        structure.ReturnToPool();
-    }
-    public void SetMaxHPNoReset(float multiplier)
-    {
-        float newMaxHealth = originalMaxHealth * multiplier;
-        maxHP = newMaxHealth;
-        TakeDamage(0);
+        base.Die();
+        if (destroyOnDeath)
+            structure.gameObject.SetActive(false);
+        else
+            structure.ReturnToPool();
     }
 }

@@ -21,70 +21,64 @@ public class Turret : MonoBehaviour
     [SerializeField] private float minimumFireRange = 1f; // Minimum distance to target
 
     [Header("References")]
-    [SerializeField] private Transform turretGuns;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private LayerMask obstructionMask;
     [SerializeField] private BillboardUIUpdater billboardUpdater;
-
 
     [Header("Audio")]
     [SerializeField] private AudioClip firingSound;
     [Range(0f, 1f)]
     [SerializeField] private float flameVolume = 0.5f;
-
-    // Private variables
-    private Transform targetEnemy;
     private AudioSource audioSource;
-    private bool hasTarget;
+
+    // Targeting
+    private EnemyHPRelay currentTarget;
+    private Collider targetCollider;
+
+    private Collider[] enemyColliders;
+    private const int maxColliders = 10;
+
+    [SerializeField] private Transform turretVisual;
+    // Firing
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private GameObject bulletPrefab;
     private float lastFireTime; // Track the last time we fired
     private float currentAmmo;
     private float reloadTimer;
-
-
     public bool showFireDebug = false;
 
-    void Start()
+    private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
         audioSource.clip = firingSound;
         audioSource.volume = flameVolume;
+
+        enemyColliders = new Collider[maxColliders];
+    }
+
+    private void OnEnable()
+    {
+        currentTarget = null;
+
+        currentAmmo = ammoCapacity;
+        reloadTimer = 0f;
     }
 
     void Update()
     {
-        if(currentAmmo <= 0 || (!hasTarget && currentAmmo < ammoCapacity))
+        if(currentAmmo <= 0 || (currentTarget == null && currentAmmo < ammoCapacity))
         {
-            if (billboardUpdater != null)
-            {
-                billboardUpdater.DisplayMessage("Reloading... ", reloadTime - 1.5f);
-            }
-
-            reloadTimer += Time.deltaTime;
-            if(reloadTimer >= reloadTime)
-            {
-                currentAmmo = ammoCapacity;
-                reloadTimer = 0f;
-
-                if (billboardUpdater != null)
-                {
-                    billboardUpdater.DisplayMessage("Done", .5f);
-                }
-            }
+            Reload();
             return; // Can't do anything else while reloading
         }
 
-        if (!hasTarget || !IsTargetValid())
+        if (currentTarget == null)
         {
             FindTarget();
+            return;
         }
 
-        if (hasTarget && Time.timeScale == 1)
+        if (IsTargetValid() && Time.timeScale == 1)
         {
             TrackTarget();
             TryShoot();
@@ -94,19 +88,28 @@ public class Turret : MonoBehaviour
     // Find the closest enemy within range
     private void FindTarget()
     {
-        Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, detectionRange, enemyLayerMask);
+        int enemiesInRange = Physics.OverlapSphereNonAlloc(transform.position, detectionRange, enemyColliders, enemyLayerMask);
+        if (enemiesInRange <= 0) return;
 
         float closestDistance = float.MaxValue;
-        Transform closestEnemy = null;
+        Collider closestEnemy = null;
 
-        foreach (Collider enemyCollider in enemiesInRange)
+        for (int i = 0; i < enemiesInRange; i++)
         {
             // Skip null or invalid colliders
-            if (enemyCollider == null || enemyCollider.transform == null || enemyCollider.CompareTag("HeadShot"))
+            if (enemyColliders[i] == null)
                 continue;
 
+            if (enemyColliders[i].TryGetComponent<EnemyHPRelay>(out EnemyHPRelay relay))
+            {
+                if (relay == null || relay.IsDead())
+                {
+                    continue;
+                }
+            }
+
             // Get the closest point on the enemy collider to the turret
-            Vector3 closestPoint = enemyCollider.ClosestPoint(transform.position);
+            Vector3 closestPoint = enemyColliders[i].ClosestPoint(transform.position);
             float distance = Vector3.Distance(transform.position, closestPoint);
 
             // Check if the enemy is within valid firing range
@@ -117,61 +120,57 @@ public class Turret : MonoBehaviour
                 if (!Physics.Raycast(transform.position, directionToTarget, distance, obstructionMask))
                 {
                     closestDistance = distance;
-                    closestEnemy = enemyCollider.transform;
-
+                    closestEnemy = enemyColliders[i];
                     if (showFireDebug)
                     {
                         Debug.DrawLine(transform.position, closestPoint, Color.green, 0.1f);
-                        Debug.Log($"Valid target: {enemyCollider.name}, Distance: {distance:F2}");
+                        Debug.Log($"Valid target: {enemyColliders[i].name}, Distance: {distance:F2}");
                     }
                 }
                 else if (showFireDebug)
                 {
                     Debug.DrawLine(transform.position, closestPoint, Color.yellow, 0.1f);
-                    Debug.Log($"Target obstructed: {enemyCollider.name}");
+                    Debug.Log($"Target obstructed: {enemyColliders[i].name}");
                 }
             }
             else if (showFireDebug)
             {
                 Debug.DrawLine(transform.position, closestPoint, Color.red, 0.1f);
-                Debug.Log($"Target out of range: {enemyCollider.name}, Distance: {distance:F2}");
+                Debug.Log($"Target out of range: {enemyColliders[i].name}, Distance: {distance:F2}");
             }
         }
 
-        targetEnemy = closestEnemy;
-        hasTarget = targetEnemy != null;
+        if (closestEnemy == null)
+        {
+            return;
+        }
 
-        if (hasTarget && showFireDebug)
-            Debug.Log($"New target acquired: {targetEnemy.name}");
+        currentTarget = closestEnemy.GetComponent<EnemyHPRelay>();
+        targetCollider = closestEnemy;
+
+        if (showFireDebug)
+            Debug.Log($"New target acquired: {currentTarget.name}");
+
     }
     // Check if the current enemy is still within detection range and valid
     private bool IsTargetValid()
     {
-        if (targetEnemy == null)
+        if (currentTarget == null)
         {
             if (showFireDebug)
                 Debug.Log("Target is null");
+            currentTarget = null;
+            targetCollider = null;
             return false;
         }
 
-        EnemyHPRelay hpRelay = targetEnemy.GetComponent<EnemyHPRelay>();
+        EnemyHPRelay hpRelay = currentTarget.GetComponent<EnemyHPRelay>();
         if (hpRelay == null || hpRelay.IsDead())
         {
             if (showFireDebug)
-                Debug.Log($"Target {targetEnemy.name} is no longer valid (missing HP relay or dead)");
+                Debug.Log($"Target {currentTarget.name} is no longer valid (missing HP relay or dead)");
+            currentTarget = null;
             return false;
-        }
-
-        // Get collider component from the target
-        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
-        {
-            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
-            if (targetCollider == null)
-            {
-                if (showFireDebug)
-                    Debug.Log($"Target {targetEnemy.name} has no collider");
-                return false;
-            }
         }
 
         // Get closest point on the collider to measure accurate distance
@@ -184,7 +183,7 @@ public class Turret : MonoBehaviour
         if (!isInRange)
         {
             if (showFireDebug)
-                Debug.Log($"Target {targetEnemy.name} out of range: {distance:F2}");
+                Debug.Log($"Target {currentTarget.name} out of range: {distance:F2}");
             return false;
         }
 
@@ -199,7 +198,7 @@ public class Turret : MonoBehaviour
             else
                 Debug.DrawLine(transform.position, closestPoint, Color.yellow, 0.1f);
 
-            Debug.Log($"Target {targetEnemy.name} visibility check: {(lineOfSight ? "Visible" : "Obstructed")}");
+            Debug.Log($"Target {currentTarget.name} visibility check: {(lineOfSight ? "Visible" : "Obstructed")}");
         }
 
         return isInRange && lineOfSight;
@@ -208,26 +207,17 @@ public class Turret : MonoBehaviour
     // Rotate the turret smoothly towards the nearest enemy (only on the y-axis)
     private void TrackTarget()
     {
-        if (targetEnemy == null || !targetEnemy.gameObject.activeSelf)
+        if (currentTarget == null || targetCollider == null)
         {
-            hasTarget = false;
+            Quaternion zeroRot = Quaternion.LookRotation(Vector3.zero);
+            turretVisual.rotation = Quaternion.Slerp(turretVisual.rotation, zeroRot, rotationSpeed * Time.deltaTime);
             return;
-        }
-
-        // Get the collider component from the target
-        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
-        {
-            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
-            if (targetCollider == null)
-            {
-                hasTarget = false;
-                return;
-            }
         }
 
         // Find the closest point on the target collider
         Vector3 closestPoint = targetCollider.ClosestPoint(transform.position);
         Vector3 targetDirection = closestPoint - transform.position;
+        targetDirection.y = Mathf.Max(targetDirection.y, -25);
 
         // Only rotate if we have a valid direction
         if (targetDirection.magnitude > 0.1f)
@@ -236,8 +226,8 @@ public class Turret : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
             // Smoothly rotate towards the target point
-            turretGuns.rotation = Quaternion.Slerp(
-                turretGuns.rotation,
+            turretVisual.rotation = Quaternion.Slerp(
+                turretVisual.rotation,
                 targetRotation,
                 rotationSpeed * Time.deltaTime
             );
@@ -254,7 +244,7 @@ public class Turret : MonoBehaviour
     private void TryShoot()
     {
         // Early return if no target
-        if (targetEnemy == null)
+        if (currentTarget == null)
         {
             return;
         }
@@ -268,9 +258,9 @@ public class Turret : MonoBehaviour
         }
 
         // Get the collider component from the target
-        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
+        if (!currentTarget.TryGetComponent<Collider>(out var targetCollider))
         {
-            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
+            targetCollider = currentTarget.GetComponentInChildren<Collider>();
             if (targetCollider == null)
             {
                 return;
@@ -295,19 +285,6 @@ public class Turret : MonoBehaviour
         // Calculate direction to the closest point
         Vector3 directionToTarget = (closestPoint - firePoint.position).normalized;
 
-/*        // Check alignment - don't shoot unless turret is facing the target
-        float aimAccuracy = Vector3.Dot(firePoint.forward, directionToTarget);
-        if (aimAccuracy < 0.50f) // About 18 degrees off-center
-        {
-            if (showFireDebug)
-            {
-                Debug.DrawRay(firePoint.position, firePoint.forward * distanceToTarget, Color.yellow, 0.1f);
-                Debug.DrawRay(firePoint.position, directionToTarget * distanceToTarget, Color.cyan, 0.1f);
-                Debug.Log($"Can't shoot: Turret not aligned with target (accuracy: {aimAccuracy:F2})");
-            }
-            return;
-        }*/
-
         // Perform final raycast to ensure nothing is blocking the shot
         if (showFireDebug)
         {
@@ -316,16 +293,16 @@ public class Turret : MonoBehaviour
 
         if (Physics.Raycast(firePoint.position, directionToTarget, out RaycastHit hit, distanceToTarget))
         {
-            // Check if we hit the target or something else, and its an enemy make it the new target
-            if(hit.transform != targetEnemy && !hit.transform.CompareTag("HeadShot") && hit.transform.GetComponentInParent<EnemyHPRelay>() != null)
+            /*// Check if we hit the target or something else, and its an enemy make it the new target
+            if(hit.transform != currentTarget && !hit.transform.CompareTag("HeadShot") && hit.transform.GetComponentInParent<EnemyHPRelay>() != null)
             {
                 if (showFireDebug)
                 {
                     Debug.Log($"Hit a different enemy ({hit.transform.name}), switching target");
                     Debug.DrawLine(firePoint.position, hit.point, Color.yellow, 0.1f);
                 }
-                targetEnemy = hit.transform;
-            }
+                currentTarget = hit.transform;
+            }*/
 
             // All checks passed, we can shoot
             Shoot();
@@ -333,7 +310,7 @@ public class Turret : MonoBehaviour
 
             if (showFireDebug)
             {
-                Debug.Log($"Shot fired at {targetEnemy.name}!");
+                Debug.Log($"Shot fired at {currentTarget.name}!");
                 Debug.DrawLine(firePoint.position, hit.point, Color.green, 0.2f);
             }
         }
@@ -346,12 +323,6 @@ public class Turret : MonoBehaviour
         if (audioSource != null && firingSound != null)
         {
             audioSource.PlayOneShot(firingSound);
-        }
-
-        // Get target's collider for aiming
-        if (!targetEnemy.TryGetComponent<Collider>(out var targetCollider))
-        {
-            targetCollider = targetEnemy.GetComponentInChildren<Collider>();
         }
 
         // Get aim direction - by default use firePoint's forward direction
@@ -406,4 +377,23 @@ public class Turret : MonoBehaviour
         currentAmmo--;
     }
 
+    private void Reload()
+    {
+        if (billboardUpdater != null)
+        {
+            billboardUpdater.DisplayMessage("Reloading... ", reloadTime - 1.5f);
+        }
+
+        reloadTimer += Time.deltaTime;
+        if (reloadTimer >= reloadTime)
+        {
+            currentAmmo = ammoCapacity;
+            reloadTimer = 0f;
+
+            if (billboardUpdater != null)
+            {
+                billboardUpdater.DisplayMessage("Done", .5f);
+            }
+        }
+    }
 }

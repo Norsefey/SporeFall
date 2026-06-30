@@ -12,20 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d946acd70ddf4646879bd435017a3d0, type: 3}
   m_Name: RC_Atk_Projectile
   m_EditorClassIdentifier: 
-  priority: 1
-  range: 25
-  cooldown: 5
+  selectionWeight: 1
+  minSelectRange: 2
+  baseCooldown: 2
+  attackName: Redcap Ball
+  attackRange: 15
+  preferredRange: 5
   attackDelay: 2
   recoveryTime: 1.5
   animationTrigger: RangedAttack
-  damage: 20
+  baseDamage: 10
   damageVariance: 5
-  corruption: 2
+  baseCorruption: 0
   corruptionVariance: 0
   attackVFXPrefab: {fileID: 0}
   attackSFX: {fileID: 8300000, guid: 4a9558accb615124c8442867c1ff4bd7, type: 3}
   predictTargetPosition: 1
   predictionTime: 0.5
+  fireOffset: {x: 0, y: 0, z: 0}
   projectilePrefab: {fileID: 7441200720383325235, guid: c68f72cd39628eb45b471b8f79246228,
     type: 3}
   projectileSpeed: 25

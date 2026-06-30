@@ -51,9 +51,9 @@ public class PlayerUI : MonoBehaviour
     private void Start()
     {
         corruptionBar.maxValue = pMan.pCorruption.MaxCorruption;
-        HPBar.maxValue = pMan.pHealth.MaxHP;
-        HPDelayBar.maxValue = pMan.pHealth.MaxHP;
-        delayedHP = pMan.pHealth.MaxHP;
+        HPBar.maxValue = pMan.pHealth.maxHealth;
+        HPDelayBar.maxValue = pMan.pHealth.maxHealth;
+        delayedHP = pMan.pHealth.maxHealth;
         corruptedVisionHolder.SetActive(false);
 
         pMan.pHealth.OnHPChange += UpdateHPDisplay;
@@ -157,33 +157,33 @@ public class PlayerUI : MonoBehaviour
     {
         if (HPBar != null)
         {
-            HPBar.value = hpScript.CurrentHP;
+            HPBar.value = hpScript.CurrentHealth;
 
-            if (HPBar.maxValue != hpScript.MaxHP)
+            if (HPBar.maxValue != hpScript.maxHealth)
             {
-                HPBar.maxValue = hpScript.MaxHP;
-                HPBar.value = hpScript.MaxHP;
-                HPDelayBar.maxValue = hpScript.MaxHP;
-                HPDelayBar.value = hpScript.MaxHP;
-                delayedHP = hpScript.MaxHP;
+                HPBar.maxValue = hpScript.  maxHealth;
+                HPBar.value = hpScript.maxHealth;
+                HPDelayBar.maxValue = hpScript.maxHealth;
+                HPDelayBar.value = hpScript.maxHealth;
+                delayedHP = hpScript.maxHealth;
 
             }
         }
         if (HPText != null)
         {
-            float currentHPInt = Mathf.CeilToInt(hpScript.CurrentHP);
+            float currentHPInt = Mathf.CeilToInt(hpScript.CurrentHealth);
 
-            HPText.text = $"{currentHPInt.ToString("F0")} / {hpScript.MaxHP.ToString("F0")}";
+            HPText.text = $"{currentHPInt.ToString("F0")} / {hpScript.maxHealth.ToString("F0")}";
         }
 
-        if (delayedHP < hpScript.CurrentHP)
+        if (delayedHP < hpScript.CurrentHealth)
         {
             //Debug.Log("DelayedHP is less than current HP");
-            delayedHP = hpScript.CurrentHP;
+            delayedHP = hpScript.CurrentHealth;
             HPDelayBar.value = delayedHP;
             //Debug.Log("Raising delayedHP to equal current HP");
         }
-        else if (delayedHP > hpScript.CurrentHP)
+        else if (delayedHP > hpScript.CurrentHealth)
         {
             //Debug.Log("DelayedHP is greater than current HP");
             if(isActiveAndEnabled)
@@ -292,16 +292,16 @@ public class PlayerUI : MonoBehaviour
     IEnumerator HPDelayCooldown()
     {
         yield return new WaitForSeconds(1f);
-        while (delayedHP > pMan.pHealth.CurrentHP)
+        while (delayedHP > pMan.pHealth.CurrentHealth)
         {
             //Debug.Log("Reducing delayedHP");
             delayedHP -= .5f;
             HPDelayBar.value = delayedHP;
         }
-        if (delayedHP < pMan.pHealth.CurrentHP)
+        if (delayedHP < pMan.pHealth.CurrentHealth)
         {
             //Debug.Log("DelayedHP has been reduced lower than current HP, raising");
-            delayedHP = pMan.pHealth.CurrentHP;
+            delayedHP = pMan.pHealth.CurrentHealth;
             HPDelayBar.value = delayedHP;
         }
     }

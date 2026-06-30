@@ -15,14 +15,13 @@ public class CorruptedProjectile : BaseProjectile
             if (damageable == null)
                 return;
 
-            // Apply damage
-            ApplyDamage(damageable, currentCorruption);
-
-            // Apply corruption if target can hold it
-            if (damageable.canHoldCorruption)
+            if(damageable is PlayerHP)
             {
-                damageable.IncreaseCorruption(currentCorruption);
+                PlayerHP playerHP = (PlayerHP)damageable;
+                playerHP.IncreaseCorruption(corruptionDamage);
             }
+            // Apply damage
+            ApplyDamage(damageable, damage);
         }
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New AOE Attack", menuName = "Enemy/Attacks/AOE Attack")]
 public class AoeAttack : Attack
 {
+    public override AttackType AttackType => AttackType.AOE;
+
     [Header("AOE Attack Settings")]
     [SerializeField] private float aoeRadius = 5f;
     [SerializeField] private float damageMultiplierAtCenter = 1.5f;
@@ -12,10 +14,15 @@ public class AoeAttack : Attack
     [SerializeField] private float dotDuration = 3f;
     [SerializeField] private float dotTickRate = 0.5f;
 
+    public override void Execute(AttackInstance instance, Damageable target)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        float finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
-        float finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
+        float finalDamage = (baseDamage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+        float finalCorruption = (baseCorruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
 
         enemy.SetIsAttacking(true);
         if (enemy.Animator != null)
@@ -39,14 +46,13 @@ public class AoeAttack : Attack
                 }
                 else
                 {
-                    damageable.TakeDamage(finalDamage * damageMultiplier);
+                    damageable.ReceiveDamage(finalDamage * damageMultiplier);
                 }
             }
         }
 
         SpawnVFX(aoeCenter, enemy.transform.rotation);
         PlaySFX(enemy.AudioSource);
-        StartCooldown();
 
         yield return new WaitForSeconds(recoveryTime);
         enemy.SetIsAttacking(false);
@@ -59,7 +65,7 @@ public class AoeAttack : Attack
 
         while (elapsedTime < dotDuration)
         {
-            target.TakeDamage(damagePerTick);
+            target.ReceiveDamage(damagePerTick);
             yield return new WaitForSeconds(dotTickRate);
             elapsedTime += dotTickRate;
         }

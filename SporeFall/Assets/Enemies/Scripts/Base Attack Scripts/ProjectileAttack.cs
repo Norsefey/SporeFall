@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum ProjectileTrajectoryType
@@ -11,6 +10,8 @@ public enum ProjectileTrajectoryType
 [CreateAssetMenu(fileName = "New Projectile Attack", menuName = "Enemy/Attacks/Projectile Attack")]
 public class ProjectileAttack : RangedAttack
 {
+    public override AttackType AttackType => AttackType.RangedProjectile;
+
     [Header("Projectile Settings")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float projectileSpeed = 20f;
@@ -36,17 +37,17 @@ public class ProjectileAttack : RangedAttack
     private float finalDamage;
     private float finalCorruption;
 
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
+    /*public override IEnumerator ExecuteAttack(AttackInstance instance, Transform target)
     {
-        finalDamage = (damage * damageModifier) + Random.Range(-damageVariance, damageVariance);
-        finalCorruption = (corruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
-        enemy.SetIsAttacking(true);
+        *//*finalDamage = (instance.ScaledDamage) + Random.Range(-damageVariance, damageVariance);
+        finalCorruption = (baseCorruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
+        //enemy.SetIsAttacking(true);
 
-        if (enemy.Animator != null)
-            enemy.Animator.SetTrigger(animationTrigger);
+       *//* if (enemy.Animator != null)
+            enemy.Animator.SetTrigger(animationTrigger);*//*
 
-        Coroutine trackingCoroutine = enemy.StartCoroutine(TrackTarget(enemy, target));
-        yield return new WaitForSeconds(attackDelay);
+        //Coroutine trackingCoroutine = enemy.StartCoroutine(TrackTarget(enemy, target));
+        //yield return new WaitForSeconds(attackDelay);
 
         if (target != null)
             enemy.StartCoroutine(FireProjectiles(enemy, target));
@@ -61,8 +62,8 @@ public class ProjectileAttack : RangedAttack
         StartCooldown();
 
         yield return new WaitForSeconds(recoveryTime);
-        enemy.SetIsAttacking(false);
-    }
+        enemy.SetIsAttacking(false);*//*
+    }*/
     private IEnumerator FireProjectiles(BaseEnemy enemy, Transform target)
     {
 
@@ -81,7 +82,7 @@ public class ProjectileAttack : RangedAttack
             float currentAngle = startAngle + (angleStep * i);
             Vector3 direction = CalculateDirection(baseDirection, currentAngle, spawnPosition, dynamicTargetPosition, out Vector3 adjustedTarget);
 
-            SpawnProjectile(spawnPosition, direction, adjustedTarget);
+            //SpawnProjectile(spawnPosition, direction, adjustedTarget);
 
             if (timeBetweenProjectiles > 0 && i < projectileCount - 1)
                 yield return new WaitForSeconds(timeBetweenProjectiles);
@@ -112,9 +113,9 @@ public class ProjectileAttack : RangedAttack
 
         return direction.normalized;
     }
-    private void SpawnProjectile(Vector3 spawnPosition, Vector3 direction, Vector3 targetPosition)
+   
+    private void SpawnProjectile(Vector3 spawnPosition, ProjectileData data)
     {
-        projectileArcHeight = Random.Range(minArchHeight, maxArchHeight);
 
         float arcHeight = trajectoryType == ProjectileTrajectoryType.Arc ? projectileArcHeight : 0f;
 
@@ -122,15 +123,16 @@ public class ProjectileAttack : RangedAttack
         if (PoolManager.Instance != null &&
             PoolManager.Instance.projectilePool.TryGetValue(projectilePrefab, out ProjectilePool pool))
         {
-            projectile = pool.Get(spawnPosition, Quaternion.LookRotation(direction));
-            projectile?.Initialize(CreateProjectileData(direction, targetPosition, arcHeight), pool);
+            projectile = pool.Get(spawnPosition, Quaternion.LookRotation(data.Direction));
+            projectile?.Initialize(data, pool);
         }
         else
         {
-            projectile = GameObject.Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(direction)).GetComponent<BaseProjectile>();
-            projectile?.Initialize(CreateProjectileData(direction, targetPosition, arcHeight), null);
+            projectile = Instantiate(projectilePrefab, spawnPosition, Quaternion.LookRotation(data.Direction)).GetComponent<BaseProjectile>();
+            projectile?.Initialize(data, null);
         }
     }
+
     private ProjectileData CreateProjectileData(Vector3 direction, Vector3 target, float arcHeight)
     {
         return new ProjectileData
@@ -161,6 +163,39 @@ public class ProjectileAttack : RangedAttack
 
             yield return null;
         }
+    }
+    public override void Execute(AttackInstance instance, Damageable target)
+    {
+        if (projectilePrefab == null || target == null) return;
+
+        Vector3 dir = (target.transform.position - instance.Owner.transform.position).normalized;
+        Vector3 firePoint = instance.Owner.transform.position + fireOffset;
+        projectileArcHeight = Random.Range(minArchHeight, maxArchHeight);
+
+        ProjectileData data = new ProjectileData
+        {
+            Direction = dir,
+            Speed = projectileSpeed,
+            Damage = instance.ScaledDamage,
+            Corruption = instance.ScaleCorruption,
+            Lifetime = projectileLifetime,
+            UseArcTrajectory = trajectoryType == ProjectileTrajectoryType.Arc,
+            UseGravity = useGravity,
+            ArcHeight = projectileArcHeight,
+            CanBounce = canBounce,
+            MaxBounces = maxBounces,
+            BounceDamageMultiplier = bounceDamageMultiplier,
+            TargetPosition = target.transform.position,
+        };
+        SpawnProjectile(firePoint, data);
+
+        SpawnVFX(fireOffset, instance.Owner.transform.rotation);
+        PlaySFX(instance.Owner.AudioSource);
+    }
+
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
+    {
+        throw new System.NotImplementedException();
     }
 }
 

@@ -185,7 +185,7 @@ public abstract class Weapon : MonoBehaviour
             {
                 if (hit.transform.TryGetComponent<Damageable>(out var damageable))
                 {
-                    damageable.TakeDamage(damage * damageModifier);
+                    damageable.ReceiveDamage(damage * damageModifier);
                 }
             }
             vfx.MoveToLocation(hit.point, 50);

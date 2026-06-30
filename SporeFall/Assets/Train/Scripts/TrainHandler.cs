@@ -51,7 +51,7 @@ public class TrainHandler : MonoBehaviour
         if (transform.GetChild(0).TryGetComponent<TrainHP>(out trainHP))
         {// get and assign train HP
             trainHP.train = this;
-            UI.SetMaxHP(trainHP.MaxHP);
+            UI.SetMaxHP(trainHP.maxHealth);
         }
     }
     public void SetParkedState()

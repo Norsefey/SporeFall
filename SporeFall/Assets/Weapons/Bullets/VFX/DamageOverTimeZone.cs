@@ -65,8 +65,13 @@ public class DamageOverTimeZone : MonoBehaviour
         {
             if (hitCollider.TryGetComponent<Damageable>(out var damageable))
             {
-                damageable.TakeDamage(damagePerTick);
-                damageable.IncreaseCorruption(corruptionPerTick);
+                damageable.ReceiveDamage(damagePerTick);
+                if (damageable is PlayerHP)
+                {
+                    PlayerHP playerHP = (PlayerHP)damageable;
+
+                    playerHP.IncreaseCorruption(damagePerTick);
+                }
             }
         }
     }

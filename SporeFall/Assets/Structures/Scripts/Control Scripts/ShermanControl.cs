@@ -172,7 +172,7 @@ public class ShermanControl : MonoBehaviour
                 // Apply damage if object has IDamageable interface
                 if (colliderResults[i].TryGetComponent<Damageable>(out var damageable))
                 {
-                    damageable.TakeDamage(damage * damageMultiplier);
+                    damageable.ReceiveDamage(damage * damageMultiplier);
                 }
             }
             StartCoroutine(parentStructure.ResetShermanBots());
