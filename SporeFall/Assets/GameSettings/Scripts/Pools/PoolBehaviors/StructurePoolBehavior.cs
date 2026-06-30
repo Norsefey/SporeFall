@@ -12,6 +12,7 @@ public class StructurePoolBehavior : MonoBehaviour
 
     public void ReturnObject()
     {
-        pool.Return(this);
+        if(pool != null)
+            pool.Return(this);
     }
 }

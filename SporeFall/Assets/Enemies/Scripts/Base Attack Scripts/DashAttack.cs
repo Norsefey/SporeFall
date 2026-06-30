@@ -55,7 +55,7 @@ public class DashAttack : MovementAttack
         }
 
         if (attackVFXPrefab != null)
-            Object.Instantiate(attackVFXPrefab, ctx.Target.transform.position, Quaternion.identity);
+           Instantiate(attackVFXPrefab, ctx.Target.transform.position, Quaternion.identity);
         if (attackSFX != null)
             AudioSource.PlayClipAtPoint(attackSFX, ctx.Instance.Owner.transform.position);
     }

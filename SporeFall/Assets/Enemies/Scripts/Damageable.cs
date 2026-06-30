@@ -4,7 +4,7 @@ using UnityEngine;
 public class Damageable : MonoBehaviour
 {
     protected float _health;
-    public float maxHealth;
+    [HideInInspector]public float maxHealth;
 
     [Header("Token Settings")]
     [Tooltip("Max simultaneous attackers.")]

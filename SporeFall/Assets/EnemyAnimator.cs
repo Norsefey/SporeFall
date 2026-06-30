@@ -40,11 +40,14 @@ public class EnemyAnimator : MonoBehaviour
             case EnemyState.Moving:
                 animator.SetInteger("State", 1);
                 break;
-            case EnemyState.AtTarget:
+            case EnemyState.WaitingToAttack:
                 animator.SetInteger("State", 0);
                 break;
             case EnemyState.Attacking:
                 animator.SetInteger("State", 0);
+                break;
+            case EnemyState.Repositioning:
+                animator.SetInteger("State", 1);
                 break;
 
             default:

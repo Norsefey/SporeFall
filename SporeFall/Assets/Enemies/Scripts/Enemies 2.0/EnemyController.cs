@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -37,7 +38,8 @@ public class EnemyController : MonoBehaviour
     private Damageable _target;
     private List<AttackInstance> _attacks = new();
     private AttackInstance _activeAttack;   // currently executing (null = on cooldown/idle)
-    private float _attackCooldown; // time remaining before next selection
+    
+    [SerializeField]private float globalAttackDelay; // time between attack selection
 
     private MovementAttackDriver _movDriver;    // optional, may be null
     private float _repoTargetDist;   // preferred range of the last attack fired
@@ -68,7 +70,6 @@ public class EnemyController : MonoBehaviour
         EnemyAnimator = GetComponent<EnemyAnimator>();
         _movDriver = GetComponent<MovementAttackDriver>();    // null until first movement attack
     }
-
     private void OnEnable()
     {
         // For testing Only
@@ -97,7 +98,7 @@ public class EnemyController : MonoBehaviour
         _rescanTimer = 0;
         _target = null;
         _activeAttack = null;
-        _attackCooldown = 0f;
+        globalAttackDelay = 0f;
         _repoTargetDist = 0f;
 
         // remove later
@@ -121,11 +122,11 @@ public class EnemyController : MonoBehaviour
             _agent.isStopped = false;
             _agent.velocity = Vector3.zero;
         }
-
+        _movDriver?.ForceComplete();
         _state = EnemyState.Idle;
         _target = null;
         _activeAttack = null;
-        _attackCooldown = 0f;
+        globalAttackDelay = 0f;
         _repoTargetDist = 0f;
 
     }
@@ -139,14 +140,14 @@ public class EnemyController : MonoBehaviour
             case EnemyState.Moving:
                 TickMoving();
                 break;
-            case EnemyState.AtTarget:
-                TryStartRepositioning();
-                break;
             case EnemyState.Attacking:
                 TickAttacking();
                 break;
             case EnemyState.Repositioning:
                 TickRepositioning();
+                break;
+            case EnemyState.WaitingToAttack:
+                TickWaitingToAttack();
                 break;
             case EnemyState.Defending:
                 break;
@@ -178,72 +179,117 @@ public class EnemyController : MonoBehaviour
     }
     private void TickMoving()
     {
-        if(_target == null || !_target.IsAlive)
-        {
-            ReleaseCurrentToken();
-            TransitionTo(EnemyState.Searching);
+        if (!ValidTarget())
             return;
-        }
 
         // Stop and attack as soon as ANY eligible attack can reach the target
         float dist = Vector3.Distance(transform.position, _target.transform.position);
-
-        if (dist <= _agent.stoppingDistance)
+        if (_activeAttack == null)
         {
-            TransitionTo(EnemyState.AtTarget);
+            _activeAttack = SelectAttack(dist);
+        }
+
+        if (dist <= _agent.stoppingDistance || _activeAttack != null)
+        {
+            TransitionTo(EnemyState.Attacking);
         }
 
         // look for better target 
-        _rescanTimer -= Time.deltaTime;
-        if(_rescanTimer <= 0f)
-        {
-            _rescanTimer = targetRescanRate;
-            Damageable better = EnemyTargetRegistry.Instance?.FindBestTarget(
+        UpdateTargetSearch();
             
-                    transform.position, detectionRange,
-                    gameObject.GetInstanceID(),
-                    statData.targetPriority, _target
-            );
+        UpdateNavDestination();
+    }
+    private void TickAttacking()
+    {
+        if (!ValidTarget())
+            return;
 
-            if(better != null && better != _target)
-                SetTarget(better);
+        // Check target hasn't moved out of attack range
+        float distToTarget = FaceTarget();
 
-            if (HasAnyAttackInRange(dist))
+        // wait for attack cooldown
+        if (globalAttackDelay > 0f)
+        {
+            globalAttackDelay -= Time.deltaTime;
+            return;   // waiting — do nothing this frame
+        }
+
+        if (_activeAttack == null)
+        {
+            TransitionTo(EnemyState.WaitingToAttack);
+            return;
+        }
+
+        if (_activeAttack != null && _activeAttack.MinSelectRange > distToTarget)
+        {
+            TryStartRepositioning();
+            return;
+        }
+
+        StartCoroutine(ExecuteAttack());
+    }
+    private void TickWaitingToAttack()
+    {
+        if (!ValidTarget())
+            return;
+
+        // Keep facing the target while idle
+        Vector3 dir = (_target.transform.position - transform.position);
+        dir.y = 0f;
+        if (dir != Vector3.zero)
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation, Quaternion.LookRotation(dir), 360f * Time.deltaTime);
+
+        // Count down any remaining cooldown
+        if (globalAttackDelay > 0f)
+            globalAttackDelay -= Time.deltaTime;
+
+        float distToTarget = dir.magnitude;
+
+        _rescanTimer -= Time.deltaTime;
+        if (_rescanTimer <= 0f)
+        {
+            if (_activeAttack == null)
+                _activeAttack = SelectAttack(distToTarget);
+            else
+                TryStartRepositioning();
+
+                _rescanTimer = targetRescanRate;
+            // If we've finished the cooldown but not yet reached range, just attack anyway
+            if (globalAttackDelay <= 0f && CanSelect(_activeAttack, distToTarget))
             {
                 _agent.isStopped = true;
                 TransitionTo(EnemyState.Attacking);
             }
         }
-
-        UpdateNavDestination();
     }
     private void TickRepositioning()
     {
-        if (_target == null || !_target.IsAlive)
-        {
-            ReleaseCurrentToken();
-            _agent.isStopped = false;
-            TransitionTo(EnemyState.Searching);
-            return;
-        }
+        ValidTarget();
 
         // Advance cooldown while repositioning
-        if (_attackCooldown > 0f)
-            _attackCooldown -= Time.deltaTime;
+        if (globalAttackDelay > 0f)
+            globalAttackDelay -= Time.deltaTime;
 
         float dist = Vector3.Distance(transform.position, _target.transform.position);
 
-        // Reached preferred range → stop and wait for cooldown or attack
-        if (Mathf.Abs(dist - _repoTargetDist) <= repositionTolerance)
+        if(_activeAttack == null)
         {
-            _agent.isStopped = true;
+            _activeAttack = SelectAttack(dist);
 
-            if (_attackCooldown <= 0f)
-                TransitionTo(EnemyState.Attacking);
-            // else stay here, cooldown finishes, next Update will re-evaluate
-            return;
+            if( _activeAttack == null )
+                TransitionTo(EnemyState.WaitingToAttack);
+
+            _repoTargetDist = _activeAttack.Data.preferredRange;
         }
 
+        // Reached preferred range → stop and wait for cooldown or attack
+        if (Mathf.Abs(dist - _repoTargetDist) <= _agent.stoppingDistance)
+        {
+            _agent.isStopped = true;
+            TransitionTo(globalAttackDelay <= 0f ? EnemyState.Attacking : EnemyState.WaitingToAttack);
+            return;
+        }
         // Set nav destination offset from target at preferred range
         Vector3 awayDir = (transform.position - _target.transform.position).normalized;
         Vector3 repoPos = _target.transform.position + awayDir * _repoTargetDist;
@@ -255,72 +301,12 @@ public class EnemyController : MonoBehaviour
         {
             _rescanTimer = targetRescanRate;
             // If we've finished the cooldown but not yet reached range, just attack anyway
-            if (_attackCooldown <= 0f && HasAnyAttackInRange(dist))
+            if (globalAttackDelay <= 0f && CanSelect(_activeAttack, dist))
             {
                 _agent.isStopped = true;
                 TransitionTo(EnemyState.Attacking);
             }
         }
-    }
-    private void TickAttacking()
-    {
-        if (_target == null || !_target.IsAlive)
-        {
-            _agent.isStopped = false;
-            ReleaseCurrentToken();
-            _activeAttack = null;
-            _attackCooldown = 0f;
-            TransitionTo(EnemyState.Searching);
-            return;
-        }
-
-        // Face target
-        Vector3 dir = (_target.transform.position - transform.position);
-        dir.y = 0f;
-        if (dir != Vector3.zero)
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation, Quaternion.LookRotation(dir), 360f * Time.deltaTime);
-
-        // Check target hasn't moved out of attack range
-        float distToTarget = dir.magnitude;
-
-        if (!HasAnyAttackInRange(distToTarget * (1f / attackRangeHysteresis)))
-        {
-            _agent.isStopped = false;
-            _activeAttack = null;
-            _attackCooldown = 0f;
-
-            TryStartRepositioning();
-            TransitionTo(EnemyState.Moving);
-            return;
-        }
-
-        // wait for attack cooldown
-        if (_attackCooldown > 0f)
-        {
-            _attackCooldown -= Time.deltaTime;
-            return;   // waiting — do nothing this frame
-        }
-
-        // Select an Attack
-
-        _activeAttack = SelectAttack(distToTarget);
-
-        if (_activeAttack == null)
-        {
-            _attackCooldown = 0.1f;
-            return;
-        }
-
-        if( _activeAttack != null && _activeAttack.MinSelectRange > distToTarget)
-        {
-            // fallback to execute attack
-            TransitionTo(EnemyState.Repositioning);
-            return;
-        }
-
-       StartCoroutine(ExecuteAttack());
-       
     }
     protected IEnumerator ExecuteAttack()
     {
@@ -338,33 +324,23 @@ public class EnemyController : MonoBehaviour
             _activeAttack.Execute(_target);
 
             // Cache driver reference if it was just added by Execute()
-            if (_movDriver == null)
-                _movDriver = GetComponent<MovementAttackDriver>();
-
-            /*if (_movDriver != null)
-                _movDriver.OnCompleted += OnMovementAttackCompleted;*/
+/*            if (_movDriver == null)
+                _movDriver = GetComponent<MovementAttackDriver>();*/
 
             TransitionTo(EnemyState.ExecutingMovementAttack);
 
             yield return new WaitForSeconds(_activeAttack.Data.recoveryTime);
 
-            OnMovementAttackCompleted();
+            FinishAttack();
         }
         else
         {
-            // execute Attack
+            // execute Attack Normal Attack
             _activeAttack.Execute(_target);
 
             yield return new WaitForSeconds(_activeAttack.Data.recoveryTime);
 
-            _activeAttack.SetLastUseTime(Time.time);
-            _repoTargetDist = _activeAttack.Data.preferredRange;
-
-            _attackCooldown = 1f;
-            _agent.isStopped = false;
-            _activeAttack = null;
-            TryStartRepositioning();
-            TransitionTo(EnemyState.Attacking);
+            FinishAttack();
         }
     }
     private AttackInstance SelectAttack(float distToTarget)
@@ -373,9 +349,11 @@ public class EnemyController : MonoBehaviour
         for (int i = 0; i < _attacks.Count; i++)
         {
             var a = _attacks[i];
-            if (distToTarget >= a.MinSelectRange && distToTarget <= a.AttackRange)
+            
+            if (CanSelect(a, distToTarget))
                 totalWeight += a.SelectionWeight;
         }
+
 
         if (totalWeight <= 0f) return null;
 
@@ -386,41 +364,33 @@ public class EnemyController : MonoBehaviour
         {
             var a = _attacks[i];
 
-            if (distToTarget > a.AttackRange || !a.CanUse()) continue;
+            if (!CanSelect(a, distToTarget)) continue;
             acc += a.SelectionWeight;
             if (roll <= acc) return a;
         }
 
         return null;  // shouldn't reach here, but safe fallback
     }
-    private bool HasAnyAttackInRange(float dist)
+    bool CanSelect(AttackInstance attack, float distance)
     {
-        Debug.Log("Searching Through Attacks");
-        for (int i = 0; i < _attacks.Count; i++)
-        {
-            var a = _attacks[i];
-            if (dist >= a.MinSelectRange && dist <= a.AttackRange && a.CanUse())
-                return true;
-        }
-        return false;
+        return attack != null && attack.CanUse()
+            && distance <= attack.AttackRange;
     }
-
-    private void OnMovementAttackCompleted()
+    private void FinishAttack()
     {
-        /*if (_movDriver != null)
-            _movDriver.OnCompleted -= OnMovementAttackCompleted;*/
-
-        _activeAttack.SetLastUseTime(Time.time);
-        _repoTargetDist = _activeAttack.Data.preferredRange;
-
-        _attackCooldown = 1f;
+        if (_activeAttack != null) 
+        {
+            _activeAttack.SetLastUseTime(Time.time);
+        }
+       
+        globalAttackDelay = 1;
         _agent.isStopped = false;
         _activeAttack = null;
 
         if (_state == EnemyState.Dead) return;
-        TryStartRepositioning();
         TransitionTo(EnemyState.Attacking);
     }
+
     #region Targeting and Tokens
     private void SetTarget(Damageable newTarget)
     {
@@ -445,6 +415,7 @@ public class EnemyController : MonoBehaviour
         _target?.ReleaseToken(gameObject.GetInstanceID());
     }
     #endregion
+    
     private Vector3 _lastNavTarget;
     private const float NAV_UPDATE_THRESHOLD_SQ = 1f; // 1m² before re-pathing
     private void UpdateNavDestination(bool force = false)
@@ -465,24 +436,97 @@ public class EnemyController : MonoBehaviour
         if (_agent.isActiveAndEnabled && _agent.isOnNavMesh)
             _agent.SetDestination(dest);
     }
-    public void TransitionTo(EnemyState next)
-    {
-        _state = next;
-        OnStateChange?.Invoke(next);
 
-        stateDisplay.text = _state.ToString();
-    }
     private void TryStartRepositioning()
     {
         // Skip repositioning if no preferred range, chance fails, or target is dead
-        if (_repoTargetDist <= 0f || _target == null || !_target.IsAlive) return;
+        if (_activeAttack == null || _target == null || !_target.IsAlive) return;
         if (UnityEngine.Random.value > repositionChance) return;
+
+        _repoTargetDist = _activeAttack.Data.preferredRange;
 
         float dist = Vector3.Distance(transform.position, _target.transform.position);
         if (Mathf.Abs(dist - _repoTargetDist) <= repositionTolerance) return; // already there
 
         _agent.isStopped = false;
         TransitionTo(EnemyState.Repositioning);
+    }
+    public void TransitionTo(EnemyState next)
+    {
+        if (_state == next)
+            return;
+
+        _state = next;
+        EnterState(next);
+        OnStateChange?.Invoke(next);
+
+        stateDisplay.text = next.ToString();
+    }
+    private float FaceTarget()
+    {
+        Vector3 dir = _target.transform.position - transform.position;
+        dir.y = 0;
+
+        if (dir != Vector3.zero)
+        {
+            transform.rotation =
+                Quaternion.RotateTowards(
+                    transform.rotation,
+                    Quaternion.LookRotation(dir),
+                    360 * Time.deltaTime);
+        }
+
+        return dir.magnitude;
+    }
+    private bool ValidTarget()
+    {
+        if (_target != null && _target.IsAlive)
+            return true;
+
+        ReleaseCurrentToken();
+
+        _target = null;
+        _activeAttack = null;
+        globalAttackDelay = 0;
+
+        TransitionTo(EnemyState.Searching);
+
+        return false;
+    }
+    private void EnterState(EnemyState state)
+    {
+        if (!_agent.isActiveAndEnabled) return;
+
+        switch (state)
+        {
+            case EnemyState.Moving:
+            case EnemyState.Repositioning:
+                _agent.isStopped = false;
+                break;
+
+            case EnemyState.Attacking:
+            case EnemyState.WaitingToAttack:
+            case EnemyState.ExecutingAttack:
+                _agent.isStopped = true;
+                break;
+        }
+    }
+    private void UpdateTargetSearch()
+    {
+        _rescanTimer -= Time.deltaTime;
+        if (_rescanTimer <= 0f)
+        {
+            _rescanTimer = targetRescanRate;
+            Damageable foundTarget = EnemyTargetRegistry.Instance?.FindBestTarget(
+
+                    transform.position, detectionRange,
+                    gameObject.GetInstanceID(),
+                    statData.targetPriority, _target
+            );
+
+            if (foundTarget != null && foundTarget != _target)
+                SetTarget(foundTarget);
+        }
     }
     public EnemyState CurrentState => _state;
 }
@@ -492,10 +536,10 @@ public enum EnemyState
    Idle,
    Searching,
    Moving,
-   AtTarget,
    Attacking,
    ExecutingAttack,
    Repositioning,
+   WaitingToAttack,
    ExecutingMovementAttack,
    Defending,
    Dead

@@ -209,12 +209,15 @@ public class Turret : MonoBehaviour
     {
         if (currentTarget == null || targetCollider == null)
         {
+            Quaternion zeroRot = Quaternion.LookRotation(Vector3.zero);
+            turretVisual.rotation = Quaternion.Slerp(turretVisual.rotation, zeroRot, rotationSpeed * Time.deltaTime);
             return;
         }
 
         // Find the closest point on the target collider
         Vector3 closestPoint = targetCollider.ClosestPoint(transform.position);
         Vector3 targetDirection = closestPoint - transform.position;
+        targetDirection.y = Mathf.Max(targetDirection.y, -25);
 
         // Only rotate if we have a valid direction
         if (targetDirection.magnitude > 0.1f)

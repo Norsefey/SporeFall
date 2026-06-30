@@ -166,7 +166,7 @@ public class ProjectileAttack : RangedAttack
     }
     public override void Execute(AttackInstance instance, Damageable target)
     {
-        if (projectilePrefab == null) return;
+        if (projectilePrefab == null || target == null) return;
 
         Vector3 dir = (target.transform.position - instance.Owner.transform.position).normalized;
         Vector3 firePoint = instance.Owner.transform.position + fireOffset;

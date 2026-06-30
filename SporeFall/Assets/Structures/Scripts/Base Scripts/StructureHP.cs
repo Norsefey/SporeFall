@@ -1,14 +1,15 @@
-using UnityEngine;
-using TMPro;
 
 public class StructureHP : Damageable
 {
     public Structure structure;
 
+    public bool destroyOnDeath = false;
+
+
     private void OnEnable()
     {
         targetType = TargetType.Structure;
-        _health = maxHealth;
+        MakeAlive();
         EnemyTargetRegistry.Instance?.Register(this);
     }
     private void OnDisable()
@@ -26,6 +27,10 @@ public class StructureHP : Damageable
     // Handle death and destroy the parent object
     protected override void Die()
     {
-        structure.ReturnToPool();
+        base.Die();
+        if (destroyOnDeath)
+            structure.gameObject.SetActive(false);
+        else
+            structure.ReturnToPool();
     }
 }
