@@ -10,6 +10,7 @@ public class PoolManager : MonoBehaviour
     public Dictionary<GameObject, VFXPool> vfxPool = new();
     public Dictionary<GameObject, DropsPool> dropsPool = new();
     public Dictionary<GameObject, StructurePool> structurePool = new();
+    public Dictionary<GameObject, EnemyObjectPool> enemyPool = new();
 
     [Header("Projectiles")]
     [SerializeField] private int projectileInitialSize;
@@ -29,8 +30,12 @@ public class PoolManager : MonoBehaviour
     public Transform myceliaDropsParent;
     [Header("Structures")]
     [SerializeField] private int structureInitialSize;
-    //[SerializeField] private List<GameObject> structures;
+    [SerializeField] private List<GameObject> structures;
     public Transform structuresParent;
+    [Header("Enemies")]
+    [SerializeField] private int enemyInitialSize;
+    [SerializeField] private List<GameObject> enemies;
+    public Transform enemiesParent;
 
 
     private void Awake()
@@ -74,11 +79,18 @@ public class PoolManager : MonoBehaviour
                 dropsPool.Add(mycelia, new DropsPool(mycelia, myceliaDropsParent, myceliaInitialSize));
             }
         }
-        foreach (var structure in GameManager.Instance.availableStructures)
+        foreach (var structure in structures)
         {
             if (!structurePool.ContainsKey(structure))
             {
                 structurePool.Add(structure, new StructurePool(structure, structuresParent, structureInitialSize));
+            }
+        }
+        foreach (var enemy in enemies)
+        {
+            if (!enemyPool.ContainsKey(enemy))
+            {
+                enemyPool.Add(enemy, new EnemyObjectPool(enemy, enemiesParent, enemyInitialSize));
             }
         }
     }

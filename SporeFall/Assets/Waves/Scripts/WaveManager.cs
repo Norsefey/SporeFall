@@ -59,18 +59,15 @@ public class WaveManager : MonoBehaviour
     
 
     [Header("Object Pooling")]
-    [SerializeField] private int initialPoolSize = 50;
-    private Dictionary<GameObject, EnemyObjectPool> enemyPools;
-    private EnemyObjectPool bossPool;
     public GameObject explosionPrefab;
 
     private Coroutine movingCoroutine;
 
-    private List<BaseEnemy> activeEnemies = new List<BaseEnemy>();
+    private List<EnemyController> activeEnemies = new List<EnemyController>();
 
     private bool skippingAnimation = false;
 
-    public BaseEnemy BossEnemy;
+    public EnemyController BossEnemy;
 
     private void Start()
     {
@@ -338,8 +335,9 @@ public class WaveManager : MonoBehaviour
         int enemyIndex = Random.Range(0, availableEnemies.Count);
         var selectedEnemy = availableEnemies[enemyIndex];
 
+        int enemyLevel = Random.Range(selectedEnemy.minLevel, selectedEnemy.maxLevel + 1);
 
-        
+
         Vector3 spawnPoint;
 
         if (selectedEnemy.spawnAsGroup)
@@ -379,7 +377,7 @@ public class WaveManager : MonoBehaviour
                 {
                     Vector3 spawnPointOffset = new Vector3(spawnPoint.x + (i * 2), spawnPoint.y, spawnPoint.z + Random.Range(-1, 1));
                     
-                    SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPointOffset, spawningOutside);
+                    SpawnEnemy(selectedEnemy.EnemyToSpawn, enemyLevel, spawnPointOffset, spawningOutside);
                     selectedEnemy.SpawnedCount++;
                 }
             }
@@ -389,7 +387,7 @@ public class WaveManager : MonoBehaviour
             if (selectedEnemy.mustSpawnOutside)
             {
                 spawnPoint = GetSpawnPointWithinZone();
-                SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint, true);
+                SpawnEnemy(selectedEnemy.EnemyToSpawn, enemyLevel, spawnPoint, true);
             }
             else
             {
@@ -407,7 +405,7 @@ public class WaveManager : MonoBehaviour
                         spawningOutside = true;
                     spawnPoint = spawnPoints[spawnPointIndex].position;
                 }
-                SpawnEnemy(selectedEnemy.EnemyToSpawn, spawnPoint, spawningOutside);
+                SpawnEnemy(selectedEnemy.EnemyToSpawn, enemyLevel, spawnPoint, spawningOutside);
             }
             // Spawn single enemy
             selectedEnemy.SpawnedCount++;
@@ -415,7 +413,7 @@ public class WaveManager : MonoBehaviour
     }
     private void InitializePools()
     {
-        enemyPools = new Dictionary<GameObject, EnemyObjectPool>();
+/*        enemyPools = new Dictionary<GameObject, EnemyObjectPool>();
         GameObject poolParent = new GameObject($"Pool_Enemies");
         poolParent.transform.SetParent(transform, false);
 
@@ -425,7 +423,7 @@ public class WaveManager : MonoBehaviour
             foreach (var spawnData in wave.enemySpawnData)
             {
 
-                foreach(var enemy in spawnData.enemyVariants)
+                foreach (var enemy in spawnData.enemyVariants)
                 {
                     if (!enemyPools.ContainsKey(enemy))
                     {
@@ -442,26 +440,28 @@ public class WaveManager : MonoBehaviour
         if (bossPrefab != null)
         {
             bossPool = new EnemyObjectPool(bossPrefab, poolParent.transform, 1); // Usually only need one boss
-        }
+        }*/
     }
-    public void SpawnEnemy(GameObject enemyPrefab, Vector3 spawnPoint, bool spawningOutside)
+    public void SpawnEnemy(GameObject enemyPrefab, int enemyLevel, Vector3 spawnPoint, bool spawningOutside)
     {
-        if (enemyPools == null)
-            return;
 
-        if (!enemyPools.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
+        if (!PoolManager.Instance.enemyPool.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
         {
             Debug.LogError($"No pool found for enemy prefab: {enemyPrefab.name}");
             return;
         }
         Quaternion rotation = Quaternion.LookRotation(-Vector3.forward); // face backwards from world forward
 
-        BaseEnemy enemy = pool.Get(spawnPoint, rotation);
-        enemy.AssignTrain(train);
-        enemy.OnEnemyDeath += OnEnemyDeath;
+        EnemyController enemy = pool.Get(spawnPoint, rotation);
+        
+        enemy.Initialize(enemyLevel);
+        enemy.OnDied += OnEnemyDeath;
+
+        Debug.Log($"Spawning enemy: {enemyPrefab.name} at {spawnPoint} with level {enemyLevel}. Spawning outside: {spawningOutside}");
+
         // enemy is spawning outside the pod, play rise from ground animation
-        if(spawningOutside)
-            enemy.TriggerRiseAnimation();
+        if (spawningOutside)
+            enemy.EnemyAnimator.TriggerRiseAnimation();
 
         activeEnemies.Add(enemy);
         enemiesAlive++;
@@ -501,12 +501,10 @@ public class WaveManager : MonoBehaviour
     {
         // Spawn the boss
         Transform spawnPoint = currentWave.presetSpawnPoints[0];
-        BaseEnemy boss = bossPool.Get(spawnPoint.position, spawnPoint.rotation);
+        EnemyController boss = Instantiate(bossPrefab, spawnPoint.position, spawnPoint.rotation).GetComponent<EnemyController>();
+        boss.Initialize(currentWave.finalWaveSettings.bossLevel);
         boss.transform.SetParent(transform);
-        boss.OnEnemyDeath += OnBossDeath;
-        boss.AssignTrain(train);
-
-        BossEnemy = boss;
+        boss.OnDied += OnBossDeath;
 
         enemiesAlive++;
         enemiesSpawned++;
@@ -538,7 +536,8 @@ public class WaveManager : MonoBehaviour
                     int randomSpawnPoint = Random.Range(0, 3);
                     squadSpawnPoint = currentWave.presetSpawnPoints[randomSpawnPoint].position;
                 }
-                SpawnEnemy(squadType.EnemyToSpawn, squadSpawnPoint, false);
+                int enemyLevel = Random.Range(squadType.minLevel, squadType.maxLevel + 1);
+                SpawnEnemy(squadType.EnemyToSpawn, enemyLevel, squadSpawnPoint, false);
 
                 yield return new WaitForSeconds(0.1f); // Prevent overlap
             }
@@ -564,6 +563,7 @@ public class WaveManager : MonoBehaviour
             Random.Range(0, finalSettings.hordeEnemyTypes.Count)];
 
             int randomSpawnPoint = Random.Range(0, currentWave.presetSpawnPoints.Length);
+            int enemyLevel = Random.Range(randomEnemyData.minLevel, randomEnemyData.maxLevel +1);
             bool spawnOutside = false;
             if(randomSpawnPoint > 3)
                 spawnOutside = true;
@@ -581,14 +581,14 @@ public class WaveManager : MonoBehaviour
                 {
                     if (randomEnemyData.SpawnedCount < randomEnemyData.totalToSpawn)
                     {
-                        SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint, spawnOutside);
+                        SpawnEnemy(randomEnemyData.EnemyToSpawn, enemyLevel, spawnPoint, spawnOutside);
                     }
                 }
             }
             else
             {
                 // Spawn single enemy
-                SpawnEnemy(randomEnemyData.EnemyToSpawn, spawnPoint, spawnOutside);
+                SpawnEnemy(randomEnemyData.EnemyToSpawn, enemyLevel, spawnPoint, spawnOutside);
             }
             // horde is endless
             //hordeSpawned++;
@@ -596,12 +596,12 @@ public class WaveManager : MonoBehaviour
             yield return new WaitForSeconds(spawnInterval);
         }
     }
-    private void OnBossDeath(BaseEnemy boss)
+    private void OnBossDeath(EnemyController boss)
     {
         enemiesAlive--;
         isBossDefeated = true;
 
-        bossPool.Return(boss);
+        //bossPool.Return(boss);
 
         // Spawn payload after boss death
         train.SpawnPayload(payloadPath);
@@ -610,7 +610,7 @@ public class WaveManager : MonoBehaviour
         wUI.DisplayBossFlag();
         StartCoroutine(SpawnPostBossHorde());
     }
-    private void OnEnemyDeath(BaseEnemy enemy)
+    private void OnEnemyDeath(EnemyController enemy)
     {
         enemiesAlive--;
         deadEnemies++;
@@ -620,7 +620,7 @@ public class WaveManager : MonoBehaviour
             wUI.DisplayWaveProgress(deadEnemies);
         }
 
-        if (enemyPools.TryGetValue(enemy.gameObject, out EnemyObjectPool pool))
+        if (PoolManager.Instance.enemyPool.TryGetValue(enemy.gameObject, out EnemyObjectPool pool))
         {
             pool.Return(enemy);
         }

@@ -53,6 +53,7 @@ public class Billboard : MonoBehaviour
         else
         {
             //Debug.Log("No Players to set Up");
+            uiContainerPlayerOne.SetupTarget(Camera.main.transform);
         }
     }
     public void RemovePlayer()

@@ -19,9 +19,9 @@ public class EnemyTargetRegistry : MonoBehaviour
     [Tooltip("Bonus score for targets that still have open token slots.")]
     public float tokenAvailableBonus = 2f;
 
-    private readonly List<Damageable> _players = new();
-    private readonly List<Damageable> _structures = new();
-    private readonly List<Damageable> _trainWalls = new();
+    public  List<Damageable> _players = new();
+    public  List<Damageable> _structures = new();
+    public  List<Damageable> _trainWalls = new();
     private void Awake()
     {
         if (Instance != null)

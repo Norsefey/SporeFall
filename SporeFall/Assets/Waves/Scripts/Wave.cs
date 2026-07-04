@@ -26,8 +26,9 @@ public class EnemySpawnData
         get { return spawnedCount; }
         set { spawnedCount = value; }
     }
-    // Additional properties for endless waves
-    public float minDifficultyToSpawn = 1.0f; // Minimum difficulty level required to spawn this enemy
+    
+    public int minLevel = 1; // Minimum level for this enemy type
+    public int maxLevel = 1; // Maximum level for this enemy type
     public float spawnWeight = 1.0f; // Base weight for spawn probability calculation
 }
 [System.Serializable]
@@ -76,4 +77,23 @@ public class Wave
             }
         }
     }
+}
+
+[System.Serializable]
+public class WaveDefinition
+{
+    public string label = "Wave";
+    public Transform[] presetSpawnPoints;
+    public BoxCollider outSideSpawnZone;
+    public List<SpawnGroup> groups = new();
+}
+
+[System.Serializable]
+public class SpawnGroup
+{
+    public EnemyController enemyPrefab;
+    public int count = 10;
+    public int level = 1;
+    public float spawnInterval = 0.3f;   // seconds between enemies in this group
+    public float delayAfterGroup = 2f;    // pause before the next group
 }

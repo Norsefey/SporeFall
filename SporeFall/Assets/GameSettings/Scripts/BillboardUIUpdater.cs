@@ -21,7 +21,7 @@ public class BillboardUIUpdater : MonoBehaviour
         if(groupAlpha == null)
             groupAlpha = GetComponent<CanvasGroup>();
         groupAlpha.alpha = 0.5f;
-        hpText.text = hpManager.CurrentHealth.ToString("F0") + "/" + hpManager.maxHealth.ToString("F0");
+        hpText.text = (hpManager.CurrentHealth / hpManager.maxHealth).ToString("P0") + "%";
         hpDisplay.maxValue = hpManager.maxHealth;
         hpDisplay.value = hpManager.maxHealth;
     }
@@ -69,8 +69,8 @@ public class BillboardUIUpdater : MonoBehaviour
         }
 
         if(showHPText)
-            hpText.text = damageable.CurrentHealth.ToString("F0") + "/" + damageable.maxHealth.ToString("F0");
-        
+            hpText.text = (damageable.CurrentHealth / damageable.maxHealth).ToString("P0") + "%";
+
         hpDisplay.value = damageable.CurrentHealth;
         
         if(hideUI && groupAlpha != null)

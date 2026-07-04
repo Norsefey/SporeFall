@@ -155,7 +155,7 @@ MonoBehaviour:
     m_Bits: 4224
   firingSound: {fileID: 8300000, guid: 809392533b4c9874fa3ac7256b1ae6e6, type: 3}
   flameVolume: 0.4
-  showFireDebug: 1
+  showFireDebug: 0
 --- !u!82 &6508539852512845265
 AudioSource:
   m_ObjectHideFlags: 0
@@ -982,11 +982,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c48f82a081ac2ce449b1df499f21c905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 100
-  isDead: 0
+  canHoldCorruption: 0
   structure: {fileID: 2329694626552322564}
+  destroyOnDeath: 0
 --- !u!136 &4529072165032656852
 CapsuleCollider:
   m_ObjectHideFlags: 0

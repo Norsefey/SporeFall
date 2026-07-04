@@ -7,6 +7,9 @@ public class EnemyStatBlock
     public float MoveSpeed { get; private set; }
     public float Armor {  get; private set; }
     public float MyceliaDropAmount { get; private set; }
+    public GameObject[] WeaponDropPrefabs { get; private set; }
+    public float WeaponDropChance { get; private set; }
+
 
     public void Apply(EnemyStatSO data, int level)
     {
@@ -15,10 +18,10 @@ public class EnemyStatBlock
         MaxHealth = data.baseMaxHealth * StatScaler.Multiplier(data.healthScale, level);
         MoveSpeed = data.baseMoveSpeed * StatScaler.Multiplier(data.moveSpeedScale, level);
         Armor = data.baseArmor * StatScaler.Multiplier(data.percentArmorScale, level);
-        MyceliaDropAmount = data.baseMyceliaDropAmount * StatScaler.Multiplier(data.myceliaScale, level);
 
-        Debug.Log($"{data.enemyName}- Lv: {level} \n" +
-                  $"MaxHealth: {MaxHealth} \n");
+        MyceliaDropAmount = data.baseMyceliaDropAmount * StatScaler.Multiplier(data.myceliaScale, level);
+        WeaponDropPrefabs = data.weaponDropPrefab;
+        WeaponDropChance = data.dropChance;
     }
 
     public void Reset()
@@ -28,6 +31,8 @@ public class EnemyStatBlock
         MoveSpeed = 0;
         Armor = 0;
         MyceliaDropAmount = 0;
+        WeaponDropPrefabs = null;
+        WeaponDropChance = 0;
     }
 }
 

@@ -43,7 +43,9 @@ public class VFXPoolingBehavior : MonoBehaviour
                     }
                     ReturnBullet();
                 }
-                transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed * Time.deltaTime);
+                
+                
+                transform.position = Vector3.Lerp(transform.position, targetPos, moveSpeed /2 * Time.deltaTime);
             }
         }
     }

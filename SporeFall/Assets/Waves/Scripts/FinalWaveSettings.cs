@@ -15,6 +15,7 @@ public class FinalWaveSettings
     [Tooltip("Enemy types that can appear in the post-boss horde")]
     public List<EnemySpawnData> hordeEnemyTypes = new();
 
+    public int bossLevel = 10; // Level of the boss
     public int GetTotalEnemies()
     {
         int squadTotal = 0;

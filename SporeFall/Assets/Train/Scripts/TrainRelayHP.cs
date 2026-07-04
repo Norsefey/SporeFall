@@ -12,12 +12,7 @@ public class TrainRelayHP : Damageable
     {
         targetType = TargetType.TrainWall;
         EnemyTargetRegistry.Instance?.Register(this);
-    }
 
-    private void OnEnable()
-    {
-        targetType = TargetType.TrainWall;
-        EnemyTargetRegistry.Instance?.Register(this);
     }
     private void OnDisable()
     {

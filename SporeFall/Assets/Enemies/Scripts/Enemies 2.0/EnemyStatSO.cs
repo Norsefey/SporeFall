@@ -27,6 +27,11 @@ public class EnemyStatSO : ScriptableObject
     public float myceliaScale = 0.12f;
     public float moveSpeedScale = 0;
     public float percentArmorScale = 0;
+
+    [Header("Weapon Drops")]
+    public GameObject[] weaponDropPrefab;
+    [Range(0f, 100f)]
+    public float dropChance = 50f;
 }
 
 public enum TargetPriority

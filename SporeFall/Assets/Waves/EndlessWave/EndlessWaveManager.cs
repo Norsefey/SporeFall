@@ -82,7 +82,7 @@ public class EndlessWaveManager : MonoBehaviour
     private int deadEnemies = 0;
     private int bossesDefeated = 0;
     private bool isBossActive = false;
-    private BaseEnemy activeBoss = null;
+    private EnemyController activeBoss = null;
     private float difficultyTimer = 0f;
     private float downtimeTimer = 0f;
 
@@ -97,7 +97,7 @@ public class EndlessWaveManager : MonoBehaviour
     private Dictionary<GameObject, EnemyObjectPool> bossPools;
 
     // active enemy tracking for cleanup and boss fight management
-    private List<BaseEnemy> activeEnemies = new List<BaseEnemy>();
+    private List<EnemyController> activeEnemies = new List<EnemyController>();
     private Coroutine spawnCoroutine;
     private Coroutine downtimeCoroutine;
 
@@ -418,14 +418,14 @@ public class EndlessWaveManager : MonoBehaviour
     {
         List<EnemySpawnData> available = new List<EnemySpawnData>();
 
-        foreach (var enemy in enemyTypes)
+   /*     foreach (var enemy in enemyTypes)
         {
             // Add enemies that are appropriate for current difficulty
             if (enemy.minDifficultyToSpawn <= currentDifficulty)
             {
                 available.Add(enemy);
             }
-        }
+        }*/
 
         return available;
     }
@@ -460,7 +460,7 @@ public class EndlessWaveManager : MonoBehaviour
     private float CalculateSpawnWeight(EnemySpawnData enemy)
     {
         // Higher difficulty enemies become more common as difficulty increases
-        float difficultyFactor = currentDifficulty - enemy.minDifficultyToSpawn + 1f;
+        float difficultyFactor = currentDifficulty + 1f;
         return enemy.spawnWeight * difficultyFactor;
     }
     private void SpawnBoss()
@@ -504,23 +504,23 @@ public class EndlessWaveManager : MonoBehaviour
         }
 
         // Get boss from object pool
-        BaseEnemy boss = bossPools[bossPrefab].Get(spawnPosition, Quaternion.identity);
+        EnemyController boss = bossPools[bossPrefab].Get(spawnPosition, Quaternion.identity);
         if (boss.GetComponent<NavMeshAgent>() != null)
         {
             boss.GetComponent<NavMeshAgent>().Warp(spawnPosition); // Ensure boss is properly placed on NavMesh
         }
 
         // Assign target - now using method that doesn't depend on TrainHandler
-        boss.SetTarget(playerTransform);
-        boss.OnEnemyDeath += OnBossDeath;
+       /* boss.SetTarget(playerTransform);
+        boss.OnEnemyDeath += OnBossDeath;*/
 
         // Scale boss health based on number of bosses defeated
-        float healthMultiplier = 1f + (bossHealthMultiplier * bossesDefeated);
+/*        float healthMultiplier = 1f + (bossHealthMultiplier * bossesDefeated);
         float damageMultiplier = 1f + (bossDamageMultiplier * bossesDefeated);
         float corruptionMultiplier = 1f + (corruptionMultiplierPerWave * currentDifficulty);
         boss.SetHealthMultiplier(healthMultiplier);
         boss.SetDamageMultiplier(damageMultiplier);
-        boss.SetCorruptionMultiplier(corruptionMultiplier);
+        boss.SetCorruptionMultiplier(corruptionMultiplier);*/
 
         activeBoss = boss;
         enemiesAlive++;
@@ -529,9 +529,9 @@ public class EndlessWaveManager : MonoBehaviour
         onBossSpawned?.Invoke();
 
         // Spawn boss squad
-        StartCoroutine(SpawnBossSquad());
+     /*   StartCoroutine(SpawnBossSquad());*/
     }
-    private IEnumerator SpawnBossSquad()
+/*    private IEnumerator SpawnBossSquad()
     {
         // Get stronger enemies for the boss squad
         List<EnemySpawnData> squadEnemies = enemyTypes
@@ -586,7 +586,7 @@ public class EndlessWaveManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
-    }
+    }*/
     public void SpawnEnemy(GameObject enemyPrefab, Vector3 spawnPoint, bool spawningOutside)
     {
         if (enemyPools == null) return;
@@ -604,7 +604,7 @@ public class EndlessWaveManager : MonoBehaviour
         if (lookDirection.sqrMagnitude < 0.001f) lookDirection = -Vector3.forward;
         Quaternion rotation = Quaternion.LookRotation(lookDirection);
 
-        BaseEnemy enemy = pool.Get(spawnPoint, rotation);
+        EnemyController enemy = pool.Get(spawnPoint, rotation);
 
         // Ensure NavMeshAgent is properly placed
         NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
@@ -624,15 +624,15 @@ public class EndlessWaveManager : MonoBehaviour
         }
 
         // Set target player instead of train
-        enemy.SetTarget(playerTransform);
-        enemy.OnEnemyDeath += OnEnemyDeath;
+        //enemy.SetTarget(playerTransform);
+        enemy.OnDied += OnEnemyDeath;
 
         SetEnemyStats(enemy);
 
         // Play rise animation for enemies spawning outside
         if (spawningOutside)
         {
-            enemy.TriggerRiseAnimation();
+            enemy.EnemyAnimator.TriggerRiseAnimation();
         }
 
         activeEnemies.Add(enemy);
@@ -640,9 +640,9 @@ public class EndlessWaveManager : MonoBehaviour
         enemiesSpawned++;
     }
 
-    private void SetEnemyStats(BaseEnemy enemy)
+    private void SetEnemyStats(EnemyController enemy)
     {
-        float healthMultiplier = 1f + (healthMultiplierPerWave * currentDifficulty);
+/*        float healthMultiplier = 1f + (healthMultiplierPerWave * currentDifficulty);
         float damageMultiplier = 1f + (damageMultiplierPerWave * currentDifficulty);
         float corruptionMultiplier = 1f + (corruptionMultiplierPerWave * currentDifficulty);
         float myceliaMultiplier = 1f + (myceliaDropMultiplier * currentDifficulty); // Scale with difficulty
@@ -650,10 +650,10 @@ public class EndlessWaveManager : MonoBehaviour
         enemy.SetHealthMultiplier(healthMultiplier);
         enemy.SetDamageMultiplier(damageMultiplier);
         enemy.SetCorruptionMultiplier(corruptionMultiplier);
-        enemy.SetMyceliaMultiplier(myceliaMultiplier);
+        enemy.SetMyceliaMultiplier(myceliaMultiplier);*/
     }
 
-    private void OnEnemyDeath(BaseEnemy enemy)
+    private void OnEnemyDeath(EnemyController enemy)
     {
         enemiesAlive--;
         deadEnemies++;
@@ -674,7 +674,7 @@ public class EndlessWaveManager : MonoBehaviour
             NextWave();
         }
     }
-    private void OnBossDeath(BaseEnemy boss)
+    private void OnBossDeath(EnemyController boss)
     {
         enemiesAlive--;
         bossesDefeated++;
@@ -828,9 +828,9 @@ public class EndlessWaveManager : MonoBehaviour
     public void KillAllEnemies()
     {
         // Kill all active enemies
-        foreach (BaseEnemy enemy in activeEnemies.ToList())
+        foreach (EnemyController enemy in activeEnemies.ToList())
         {
-            enemy.Die();
+            enemy.KillSelf();
         }
 
         // Clear active enemies
@@ -843,7 +843,7 @@ public class EndlessWaveManager : MonoBehaviour
         // If in boss fight, kill boss too
         if (isBossActive && activeBoss != null)
         {
-            activeBoss.Die();
+            activeBoss.KillSelf();
         }
     }
     // Method to adjust downtime duration at runtime

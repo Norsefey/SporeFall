@@ -57,19 +57,10 @@ public class EnemyHP : Damageable
     }
     protected override void Die()
     {
-        Debug.Log("Dieing");
-        base.Die();
-
-        eController.TransitionTo(EnemyState.Dead);
-
-        eController.ReleaseCurrentToken();
         SpawnDeathVFX(eController.transform.position, Quaternion.Euler(-90, 0, 0));
         SpawnMyceliaDrop();
-
-        // for now disable, pool manager will handle pick up later
-        eController.gameObject.SetActive(false);
-
-        eController.ResetForPool();
+        TrySpawnWeaponDrop();
+        base.Die();
     }
     public IEnumerator Flinch()
     {
@@ -123,7 +114,36 @@ public class EnemyHP : Damageable
 
         if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
+            Debug.Log($"Setting up mycelia drop with amount: {eController.Stats.MyceliaDropAmount}");   
+
             mycelia.Setup(eController.Stats.MyceliaDropAmount);
         }
+    }
+    private void TrySpawnWeaponDrop()
+    {
+        // Check if we have any weapons to drop and if we pass the random chance check
+        if (PoolManager.Instance == null || eController.Stats.WeaponDropPrefabs.Length == 0 || Random.Range(0f, 100f) > eController.Stats.WeaponDropChance)
+        {
+            return;
+        }
+
+        // Select a random weapon from the array
+        int dropIndex = Random.Range(0, eController.Stats.WeaponDropPrefabs.Length);
+        GameObject selectedWeaponPrefab = eController.Stats.WeaponDropPrefabs[dropIndex];
+
+        // Get the appropriate pool for this weapon
+        if (!PoolManager.Instance.dropsPool.TryGetValue(selectedWeaponPrefab, out DropsPool weaponPool))
+        {
+            Debug.LogError($"No pool found for weapon prefab: {selectedWeaponPrefab.name}");
+            return;
+        }
+
+        // Spawn the weapon drop slightly above the enemy position to prevent clipping
+        Vector3 dropPosition = transform.position;
+        dropPosition.y -= 1.5f;
+        DropsPoolBehavior weaponDrop = weaponPool.Get(dropPosition, transform.rotation);
+        weaponDrop.Initialize(weaponPool);  // Initialize with the correct weapon pool
+
+        Debug.Log($"{gameObject.name} spawned weapon: {selectedWeaponPrefab.name}");
     }
 }

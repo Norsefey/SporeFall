@@ -11,6 +11,8 @@ public class MyceliaPickup : DropsPoolBehavior
 
     public void Setup(float dropAmount)
     {
+        Debug.Log($"Mycelia Pickup Setup with amount: {dropAmount}");
+
         amountToGive = dropAmount;
         if (despawn)
             Invoke(nameof(ReturnObject), despawnTime);

@@ -17,15 +17,16 @@ public class PlayerHP : Damageable
     public float deathTime = 10;
     public float deathTimeCounter = 0;
     public bool isDead = false;
+    public float startingHP = 100f;
 
     private void Awake()
     {
         currentLives = defaultMaxLives;
-    }
-    private void OnEnable()
-    {
         targetType = TargetType.Player;
-        _health = maxHealth;
+        maxHealth = startingHP;
+        MakeAlive();
+
+
         // Register with the target registry so enemies can find this player
         EnemyTargetRegistry.Instance?.Register(this);
     }

@@ -34,6 +34,7 @@ Transform:
   - {fileID: 6283020722894286416}
   - {fileID: 7254711234041655557}
   - {fileID: 5705331931506501456}
+  - {fileID: 5297719890191730593}
   m_Father: {fileID: 3050353983465275147}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1267416152630186722
@@ -98,7 +99,11 @@ MonoBehaviour:
   - {fileID: 9111484024502604757, guid: 260844473a5ebed4389a921d28666b89, type: 3}
   myceliaDropsParent: {fileID: 6283020722894286416}
   structureInitialSize: 25
+  structures: []
   structuresParent: {fileID: 3106743885769070948}
+  enemyInitialSize: 0
+  enemies: []
+  enemiesParent: {fileID: 0}
 --- !u!1 &200922857393331575
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,9 +793,9 @@ RectTransform:
   - {fileID: 3450081434207532190}
   m_Father: {fileID: 8460683984152400176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -140.6}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 96, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4800379018280723716
@@ -1768,7 +1773,7 @@ RectTransform:
   m_Father: {fileID: 4926475783578131924}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1899,6 +1904,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1536798369243125773}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5222847251399683753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5297719890191730593}
+  m_Layer: 0
+  m_Name: EnemyHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5297719890191730593
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5222847251399683753}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1536798369243125773}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5992359379217686086
 GameObject:
   m_ObjectHideFlags: 0
@@ -1966,9 +2002,9 @@ RectTransform:
   - {fileID: 2298329109600612660}
   m_Father: {fileID: 8460683984152400176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -83.3}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 96, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1436403611859839675
@@ -2236,7 +2272,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.00008106232}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 55}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5351992972338342574
 MonoBehaviour:
@@ -3427,9 +3463,9 @@ RectTransform:
   - {fileID: 6515440366967711886}
   m_Father: {fileID: 8460683984152400176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 50, y: -26}
   m_SizeDelta: {x: 96, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8385907041965812226
@@ -4048,7 +4084,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.00006503211}
-  m_SizeDelta: {x: 0, y: 165.59999}
+  m_SizeDelta: {x: 0, y: 215.6}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7696576044736424158
 MonoBehaviour:
@@ -6886,6 +6922,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 4055112019122290292}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Down
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - eventID: 9
     callback:
       m_PersistentCalls:
@@ -6918,6 +6966,34 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4055112019122290292}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Up
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1519156160120755154 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3642201656304707918, guid: 1676757d6d1e5a84389c233777ebd160,
+    type: 3}
+  m_PrefabInstance: {fileID: 2854881260335643292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3287205720504801954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a49aa61f4fcff24698ba501fca1c3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2428720887534856282 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 444202314936324806, guid: 1676757d6d1e5a84389c233777ebd160,
@@ -6969,6 +7045,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 4421889238989240019}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Down
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - eventID: 9
     callback:
       m_PersistentCalls:
@@ -6992,6 +7080,22 @@ MonoBehaviour:
         - m_Target: {fileID: 4198147230106461978}
           m_TargetAssemblyTypeName: MenuSounds, Assembly-CSharp
           m_MethodName: PlayPressedSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4421889238989240019}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Up
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7052,6 +7156,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1519156160120755154}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Down
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - eventID: 9
     callback:
       m_PersistentCalls:
@@ -7075,6 +7191,22 @@ MonoBehaviour:
         - m_Target: {fileID: 4198147230106461978}
           m_TargetAssemblyTypeName: MenuSounds, Assembly-CSharp
           m_MethodName: PlayPressedSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1519156160120755154}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Up
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7167,6 +7299,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &3539310040200816123 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1621494721331142503, guid: 1676757d6d1e5a84389c233777ebd160,
+    type: 3}
+  m_PrefabInstance: {fileID: 2854881260335643292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6969764924461824433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a49aa61f4fcff24698ba501fca1c3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3542640883894014642 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1636898469996062766, guid: 1676757d6d1e5a84389c233777ebd160,
@@ -7218,6 +7362,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 4953222599868807548}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Down
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - eventID: 9
     callback:
       m_PersistentCalls:
@@ -7241,6 +7397,22 @@ MonoBehaviour:
         - m_Target: {fileID: 4198147230106461978}
           m_TargetAssemblyTypeName: MenuSounds, Assembly-CSharp
           m_MethodName: PlayPressedSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4953222599868807548}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Up
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7333,6 +7505,42 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &4055112019122290292 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2294642855056688360, guid: 1676757d6d1e5a84389c233777ebd160,
+    type: 3}
+  m_PrefabInstance: {fileID: 2854881260335643292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467543090033907675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a49aa61f4fcff24698ba501fca1c3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4421889238989240019 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1928428722850548815, guid: 1676757d6d1e5a84389c233777ebd160,
+    type: 3}
+  m_PrefabInstance: {fileID: 2854881260335643292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2428720887534856282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a49aa61f4fcff24698ba501fca1c3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4953222599868807548 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7143820441061442528, guid: 1676757d6d1e5a84389c233777ebd160,
+    type: 3}
+  m_PrefabInstance: {fileID: 2854881260335643292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3542640883894014642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a49aa61f4fcff24698ba501fca1c3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6969764924461824433 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5127074552467129133, guid: 1676757d6d1e5a84389c233777ebd160,
@@ -7384,6 +7592,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 3539310040200816123}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Down
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - eventID: 9
     callback:
       m_PersistentCalls:
@@ -7407,6 +7627,22 @@ MonoBehaviour:
         - m_Target: {fileID: 4198147230106461978}
           m_TargetAssemblyTypeName: MenuSounds, Assembly-CSharp
           m_MethodName: PlayPressedSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3539310040200816123}
+          m_TargetAssemblyTypeName: ButtonTextMovement, Assembly-CSharp
+          m_MethodName: Up
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7795,7 +8031,7 @@ PrefabInstance:
     - target: {fileID: 1469300841957138718, guid: 8291044f9ada3554a869a113987da833,
         type: 3}
       propertyPath: m_Size
-      value: 0.2
+      value: 0.221
       objectReference: {fileID: 0}
     - target: {fileID: 1850549324661921160, guid: 8291044f9ada3554a869a113987da833,
         type: 3}

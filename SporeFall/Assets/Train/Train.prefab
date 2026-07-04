@@ -151,10 +151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd614765fa502934388682736c8c6631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   mainHp: {fileID: 3218941690888952428}
 --- !u!114 &13538354191809458
 MonoBehaviour:
@@ -375,11 +376,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538ba844a6db498468a4cf9c8d6260dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 2
   canTakeDamage: 1
-  maxHP: 1000
-  isDead: 0
+  canHoldCorruption: 0
   train: {fileID: 3502856350249901660}
+  startingHealth: 1000
 --- !u!1 &572737725628533685
 GameObject:
   m_ObjectHideFlags: 0
@@ -2363,8 +2366,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.5568628, g: 0.020945532, b: 0, a: 1}
-      maxColor: {r: 0.9607843, g: 0.20906356, b: 0.14117643, a: 1}
+      minColor: {r: 0.5568628, g: 0, b: 0.19611035, a: 1}
+      maxColor: {r: 0.14117643, g: 0.51139075, b: 0.9607843, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -8138,10 +8141,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd614765fa502934388682736c8c6631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 2
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   mainHp: {fileID: 3218941690888952428}
 --- !u!114 &235724754483821196
 MonoBehaviour:
@@ -9234,10 +9238,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd614765fa502934388682736c8c6631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 2
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   mainHp: {fileID: 3218941690888952428}
 --- !u!114 &8729897923086237795
 MonoBehaviour:
@@ -10951,10 +10956,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd614765fa502934388682736c8c6631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 2
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   mainHp: {fileID: 3218941690888952428}
 --- !u!114 &8286844485104827293
 MonoBehaviour:
@@ -11371,10 +11377,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd614765fa502934388682736c8c6631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   mainHp: {fileID: 3218941690888952428}
 --- !u!114 &7579075913487046284
 MonoBehaviour:
@@ -12924,16 +12931,16 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.8784314, g: 0.3255103, b: 0.07843139, a: 0}
-        key1: {r: 1, g: 0.32458884, b: 0.26666665, a: 1}
+        key0: {r: 0.32551384, g: 0, b: 1, a: 1}
+        key1: {r: 1, g: 0.57462007, b: 0, a: 1}
         key2: {r: 0.26666665, g: 0.6940085, b: 1, a: 0}
         key3: {r: 1, g: 0.03424205, b: 0, a: 0.039215688}
         key4: {r: 1, g: 0.017601715, b: 0, a: 0.039215688}
         key5: {r: 1, g: 1, b: 1, a: 0.039215688}
         key6: {r: 1, g: 1, b: 1, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 9830
-        ctime1: 45875
+        ctime0: 0
+        ctime1: 65535
         ctime2: 47031
         ctime3: 65343
         ctime4: 45875
@@ -12941,7 +12948,7 @@ ParticleSystem:
         ctime6: 65535
         ctime7: 0
         atime0: 0
-        atime1: 32768
+        atime1: 65535
         atime2: 65535
         atime3: 65535
         atime4: 65535
@@ -12951,7 +12958,7 @@ ParticleSystem:
         m_Mode: 0
         m_ColorSpace: 0
         m_NumColorKeys: 2
-        m_NumAlphaKeys: 3
+        m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

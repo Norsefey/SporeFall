@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
     public List<Attack> attackSlots = new();
 
     [Header("Detection")]
-    [SerializeField] private float detectionRange = 15f;
+    private float detectionRange = 120f;
     [SerializeField] private float targetRescanRate = 1f;
     private float _rescanTimer;
     [Tooltip("Hysteresis multiplier: enemy re-enters Moving only when distance exceeds " +
@@ -37,13 +37,13 @@ public class EnemyController : MonoBehaviour
     private Damageable _target;
     private List<AttackInstance> _attacks = new();
     private AttackInstance _activeAttack;   // currently executing (null = on cooldown/idle)
-    
+    private Coroutine _attackCoroutine;
+
+
     [SerializeField]private float globalAttackDelay; // time between attack selection
 
     private MovementAttackDriver _movDriver;    // optional, may be null
     private float _repoTargetDist;   // preferred range of the last attack fired
-
-
 
     [Header("References")]
     [SerializeField] protected Damageable health;
@@ -52,8 +52,6 @@ public class EnemyController : MonoBehaviour
     // SFX
     protected AudioSource audioSource;
 
-
-
     // Testing Variables
     [Header("For Testing Purposes")]
     public bool AutoInitialize = false;
@@ -61,6 +59,7 @@ public class EnemyController : MonoBehaviour
     public TMP_Text testLvDisplay;
     public TMP_Text stateDisplay;
 
+    public event Action<EnemyController> OnDied;
 
     private void Awake()
     {
@@ -68,21 +67,24 @@ public class EnemyController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         EnemyAnimator = GetComponent<EnemyAnimator>();
         _movDriver = GetComponent<MovementAttackDriver>();    // null until first movement attack
+
+        health.OnDied += OnDeath;
     }
     private void OnEnable()
     {
         // For testing Only
-        Initialize(initialLevel);
+        //Initialize(initialLevel);
     }
     public void Initialize(int level)
     {
         Stats.Apply(statData, level);
+
+        Debug.Log($"Stats mycelia drop amount: {Stats.MyceliaDropAmount}");
         
         _agent.speed = Stats.MoveSpeed;
         health.maxHealth = Stats.MaxHealth;
         health.SetDamageReduction(Stats.Armor);
         health.MakeAlive();
-
 
         _attacks.Clear();
         foreach(var attackData in attackSlots)
@@ -102,9 +104,25 @@ public class EnemyController : MonoBehaviour
 
         // remove later
         testLvDisplay.text = "LV: " + level.ToString();
+        stateDisplay.text = _state.ToString();
+    }
+    private void OnDeath(Damageable hp)
+    {
+        if (_state == EnemyState.Dead) return;
+        _state = EnemyState.Dead;
+
+        ReleaseCurrentToken();
+        ResetForPool();
+        OnDied?.Invoke(this);
+        gameObject.SetActive(false); // Deactivate instead of destroy
     }
     public void ResetForPool()
     {
+        if (_attackCoroutine != null)
+        {
+            StopCoroutine(_attackCoroutine);
+            _attackCoroutine = null;
+        }
         StopAllCoroutines();
         ReleaseCurrentToken();
 
@@ -152,6 +170,8 @@ public class EnemyController : MonoBehaviour
                 break;
             case EnemyState.Dead:
                 break;
+            case EnemyState.ExecutingAttack:
+                    break;
 
             default:
                 break;
@@ -225,7 +245,7 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
-        StartCoroutine(ExecuteAttack());
+        _attackCoroutine = StartCoroutine(ExecuteAttack());
     }
     private void TickWaitingToAttack()
     {
@@ -316,6 +336,13 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(_activeAttack.Data.attackDelay);
 
         Debug.Log($"Executing Attack: {_activeAttack.Data.attackName}");
+       
+        if(_activeAttack == null)
+        {
+            Debug.LogWarning( $"{gameObject.name}: Active attack is null when executing attack. This should not happen. \n Alive: {health.IsAlive} Target: {_target?.name}");
+            TransitionTo(EnemyState.Attacking);
+            yield break;
+        }
 
         if (_activeAttack.Data.AttackType == AttackType.MovementAttack)
         {
@@ -323,8 +350,8 @@ public class EnemyController : MonoBehaviour
             _activeAttack.Execute(_target);
 
             // Cache driver reference if it was just added by Execute()
-/*            if (_movDriver == null)
-                _movDriver = GetComponent<MovementAttackDriver>();*/
+            if (_movDriver == null)
+                _movDriver = GetComponent<MovementAttackDriver>();
 
             TransitionTo(EnemyState.ExecutingMovementAttack);
 
@@ -382,7 +409,7 @@ public class EnemyController : MonoBehaviour
             _activeAttack.SetLastUseTime(Time.time);
         }
        
-        globalAttackDelay = 1;
+        globalAttackDelay = 2;
         _agent.isStopped = false;
         _activeAttack = null;
 
@@ -414,7 +441,6 @@ public class EnemyController : MonoBehaviour
         _target?.ReleaseToken(gameObject.GetInstanceID());
     }
     #endregion
-    
     private Vector3 _lastNavTarget;
     private const float NAV_UPDATE_THRESHOLD_SQ = 1f; // 1m² before re-pathing
     private void UpdateNavDestination(bool force = false)
@@ -435,7 +461,6 @@ public class EnemyController : MonoBehaviour
         if (_agent.isActiveAndEnabled && _agent.isOnNavMesh)
             _agent.SetDestination(dest);
     }
-
     private void TryStartRepositioning()
     {
         // Skip repositioning if no preferred range, chance fails, or target is dead
@@ -483,6 +508,12 @@ public class EnemyController : MonoBehaviour
             return true;
 
         ReleaseCurrentToken();
+        
+        if (_attackCoroutine != null)
+        {
+            StopCoroutine(_attackCoroutine);
+            _attackCoroutine = null;
+        }
 
         _target = null;
         _activeAttack = null;
@@ -528,6 +559,11 @@ public class EnemyController : MonoBehaviour
         }
     }
     public EnemyState CurrentState => _state;
+
+    public void KillSelf()
+    {
+        health.ReceiveDamage(health.maxHealth);
+    }
 }
 
 public enum EnemyState

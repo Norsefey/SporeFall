@@ -8,7 +8,7 @@ public class TentacleEnemy : BaseEnemy
     public override void Initialize()
     {
         Debug.Log("Tentacle Initialize");
-        mainBody = (OctoBoss)GameManager.Instance.waveManager.BossEnemy;
+        //mainBody = (OctoBoss)GameManager.Instance.waveManager.BossEnemy;
         mainBody.AddTentacle(this);
 
         base.Initialize();

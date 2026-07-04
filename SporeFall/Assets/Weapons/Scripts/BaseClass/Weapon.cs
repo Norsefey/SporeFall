@@ -188,7 +188,7 @@ public abstract class Weapon : MonoBehaviour
                     damageable.ReceiveDamage(damage * damageModifier);
                 }
             }
-            vfx.MoveToLocation(hit.point, 50);
+            vfx.MoveToLocation(hit.point, 30);
         }
         else
         {
