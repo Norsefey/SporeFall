@@ -19,14 +19,12 @@ public class PlayerHP : Damageable
     public bool isDead = false;
     public float startingHP = 100f;
 
-    private void Awake()
+    private void Start()
     {
         currentLives = defaultMaxLives;
         targetType = TargetType.Player;
         maxHealth = startingHP;
         MakeAlive();
-
-
         // Register with the target registry so enemies can find this player
         EnemyTargetRegistry.Instance?.Register(this);
     }

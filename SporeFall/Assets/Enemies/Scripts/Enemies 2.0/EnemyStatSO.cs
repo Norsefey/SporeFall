@@ -9,7 +9,7 @@ public class EnemyStatSO : ScriptableObject
     [Header("Base Stats (Level 1)")]
     public float baseMaxHealth = 100f;
     public float baseMoveSpeed = 5f;
-    [Tooltip("Percentage Damage Reduction")]
+    [Tooltip("Percentage Damage Reduction"), Range(0f, 1f)]
     public float baseArmor = 0f;
     public float baseMyceliaDropAmount = 10f;
 

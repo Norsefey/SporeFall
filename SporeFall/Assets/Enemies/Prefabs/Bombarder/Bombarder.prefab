@@ -97,10 +97,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 2
   mainHP: {fileID: 3385096694661518225}
 --- !u!1 &3402815863331268922
@@ -148,10 +149,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 3385096694661518225}
 --- !u!136 &5894028391559828656
@@ -195,7 +197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1345321642050182800
 Transform:
   m_ObjectHideFlags: 0
@@ -430,13 +432,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6edf8b238b198524fb1ecb35917fd7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 85
-  isDead: 0
-  manager: {fileID: 2846332542822177288}
+  canHoldCorruption: 0
+  eController: {fileID: 0}
+  defenseController: {fileID: 0}
   flinchModifier: 0.1
   flinchable: 1
+  deathVFXPrefab: {fileID: 0}
+  myceliaDropPrefab: {fileID: 0}
 --- !u!1001 &3897108826321814023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -609,12 +615,12 @@ PrefabInstance:
     - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

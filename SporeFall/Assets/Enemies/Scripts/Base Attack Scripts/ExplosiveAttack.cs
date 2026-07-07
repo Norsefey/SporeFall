@@ -16,7 +16,35 @@ public class ExplosiveAttack : Attack
 
     public override void Execute(AttackInstance instance, Damageable target)
     {
-        throw new System.NotImplementedException();
+        if (!string.IsNullOrEmpty(animationTrigger) && instance.Owner.EnemyAnimator != null)
+        {
+            instance.Owner.EnemyAnimator.Animator.SetTrigger(animationTrigger);
+        }
+        PlaySFX(instance.Owner.AudioSource);
+        SpawnVFX(instance.Owner.transform.position, Quaternion.identity);
+
+        Collider[] hitColliders = Physics.OverlapSphere(instance.Owner.transform.position, explosionRadius, damageableLayers);
+
+        foreach (Collider hit in hitColliders)
+        {
+            Debug.Log(hit.name + "");
+            // Calculate distance for damage falloff
+            float distance = Vector3.Distance(instance.Owner.transform.position, hit.transform.position);
+            float damageMultiplier = damageFalloff.Evaluate(distance / explosionRadius);
+
+            // Apply damage if object has IDamageable interface
+            Damageable damageable = hit.GetComponent<Damageable>();
+            if (damageable != null)
+            {
+                //Debug.Log("Eplosive Damage Amount: " + (instance.ScaledDamage * damageMultiplier));
+                damageable.ReceiveDamage(instance.ScaledDamage * damageMultiplier);
+            }
+        }
+
+        if (destroySelfOnExplode)
+        {
+            instance.Owner.KillSelf();
+        }
     }
 
     public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)

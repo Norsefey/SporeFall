@@ -31,11 +31,8 @@ public class ProjectileAttack : RangedAttack
 
     [Header("Multiple Projectile Settings")]
     [SerializeField] private int projectileCount = 1;
-    [SerializeField] private float timeBetweenProjectiles = 0.1f; // Delay between each projectile
     [SerializeField] private float spreadAngle = 0f;
 
-    private float finalDamage;
-    private float finalCorruption;
 
     /*public override IEnumerator ExecuteAttack(AttackInstance instance, Transform target)
     {
@@ -64,7 +61,7 @@ public class ProjectileAttack : RangedAttack
         yield return new WaitForSeconds(recoveryTime);
         enemy.SetIsAttacking(false);*//*
     }*/
-    private IEnumerator FireProjectiles(BaseEnemy enemy, Transform target)
+/*    private IEnumerator FireProjectiles(Vector3 firePoint, Transform target)
     {
 
         float startAngle = -spreadAngle * 0.5f;
@@ -73,7 +70,7 @@ public class ProjectileAttack : RangedAttack
         for (int i = 0; i < projectileCount; i++)
         {
             if (target == null) yield break;
-            Vector3 spawnPosition = enemy.firePoint.position + enemy.transform.forward;
+            Vector3 spawnPosition = firePoint.position + transform.forward;
 
             // Recalculate direction and position each time
             Vector3 dynamicTargetPosition = GetPredictedTargetPosition(target, spawnPosition);
@@ -87,7 +84,7 @@ public class ProjectileAttack : RangedAttack
             if (timeBetweenProjectiles > 0 && i < projectileCount - 1)
                 yield return new WaitForSeconds(timeBetweenProjectiles);
         }
-    }
+    }*/
     private Vector3 CalculateDirection(Vector3 baseDirection, float currentAngle, Vector3 spawnPosition, Vector3 targetPosition, out Vector3 adjustedTarget)
     {
         Vector3 direction = baseDirection;
@@ -133,7 +130,7 @@ public class ProjectileAttack : RangedAttack
         }
     }
 
-    private ProjectileData CreateProjectileData(Vector3 direction, Vector3 target, float arcHeight)
+/*    private ProjectileData CreateProjectileData(Vector3 direction, Vector3 target, float arcHeight)
     {
         return new ProjectileData
         {
@@ -150,9 +147,9 @@ public class ProjectileAttack : RangedAttack
             BounceDamageMultiplier = bounceDamageMultiplier,
             TargetPosition = target,
         };
-    }
+    }*/
     // track the target during attack charge-up
-    private IEnumerator TrackTarget(BaseEnemy enemy, Transform target)
+/*    private IEnumerator TrackTarget(BaseEnemy enemy, Transform target)
     {
         while (target != null)
         {
@@ -163,31 +160,53 @@ public class ProjectileAttack : RangedAttack
 
             yield return null;
         }
-    }
+    }*/
     public override void Execute(AttackInstance instance, Damageable target)
     {
         if (projectilePrefab == null || target == null) return;
 
-        Vector3 dir = (target.transform.position - instance.Owner.transform.position).normalized;
-        Vector3 firePoint = instance.Owner.transform.position + fireOffset;
-        projectileArcHeight = Random.Range(minArchHeight, maxArchHeight);
 
-        ProjectileData data = new ProjectileData
+        for (int i = 0; i < projectileCount; i++)
         {
-            Direction = dir,
-            Speed = projectileSpeed,
-            Damage = instance.ScaledDamage,
-            Corruption = instance.ScaleCorruption,
-            Lifetime = projectileLifetime,
-            UseArcTrajectory = trajectoryType == ProjectileTrajectoryType.Arc,
-            UseGravity = useGravity,
-            ArcHeight = projectileArcHeight,
-            CanBounce = canBounce,
-            MaxBounces = maxBounces,
-            BounceDamageMultiplier = bounceDamageMultiplier,
-            TargetPosition = target.transform.position,
-        };
-        SpawnProjectile(firePoint, data);
+            if (target == null) return;
+
+            float startAngle = -spreadAngle * 0.5f;
+            float angleStep = projectileCount > 1 ? spreadAngle / (projectileCount - 1) : 0;
+
+            // Smoothly rotate to face the target
+            Vector3 directionToTarget = (target.transform.position - instance.Owner.transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTarget.x, 0, directionToTarget.z));
+            instance.Owner.transform.rotation = Quaternion.Slerp(instance.Owner.transform.rotation, lookRotation, Time.deltaTime * 5f);
+
+            Vector3 spawnPosition = instance.Owner.transform.position + fireOffset;
+
+            // Recalculate direction and position each time
+            Vector3 dynamicTargetPosition = GetPredictedTargetPosition(target.transform, spawnPosition);
+            Vector3 baseDirection = (dynamicTargetPosition - spawnPosition).normalized;
+
+            float currentAngle = startAngle + (angleStep * i);
+            Vector3 direction = CalculateDirection(baseDirection, currentAngle, spawnPosition, dynamicTargetPosition, out Vector3 adjustedTarget);
+
+            projectileArcHeight = Random.Range(minArchHeight, maxArchHeight);
+
+            ProjectileData data = new ProjectileData
+            {
+                Direction = direction,
+                Speed = projectileSpeed,
+                Damage = instance.ScaledDamage,
+                Corruption = instance.ScaleCorruption,
+                Lifetime = projectileLifetime,
+                UseArcTrajectory = trajectoryType == ProjectileTrajectoryType.Arc,
+                UseGravity = useGravity,
+                ArcHeight = projectileArcHeight,
+                CanBounce = canBounce,
+                MaxBounces = maxBounces,
+                BounceDamageMultiplier = bounceDamageMultiplier,
+                TargetPosition = target.transform.position,
+            };
+          
+            SpawnProjectile(spawnPosition, data);
+        }
 
         SpawnVFX(fireOffset, instance.Owner.transform.rotation);
         PlaySFX(instance.Owner.AudioSource);

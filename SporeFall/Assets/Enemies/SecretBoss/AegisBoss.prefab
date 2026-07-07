@@ -1,5 +1,123 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2471569629032670859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4633304174934583068}
+  - component: {fileID: 1151802274925625307}
+  - component: {fileID: 3380966690063678988}
+  m_Layer: 0
+  m_Name: Spot Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4633304174934583068
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2471569629032670859}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.70277023, y: -0.003708383, z: -0.014645575, w: 0.71125656}
+  m_LocalPosition: {x: 0, y: 0.0033, z: -0.00042}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1064663171958003042}
+  m_LocalEulerAnglesHint: {x: -88.879, y: 51.448, z: -52.935}
+--- !u!108 &1151802274925625307
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2471569629032670859}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 0, g: 0.91193295, b: 1, a: 1}
+  m_Intensity: 10
+  m_Range: 1.51
+  m_SpotAngle: 47.088512
+  m_InnerSpotAngle: 31.158815
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!114 &3380966690063678988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2471569629032670859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &3114120471542177786
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,10 +163,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 2350138230913292835}
 --- !u!65 &5588923387547420507
@@ -116,13 +235,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6edf8b238b198524fb1ecb35917fd7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 1500
-  isDead: 0
-  manager: {fileID: 0}
+  canHoldCorruption: 0
+  eController: {fileID: 0}
+  defenseController: {fileID: 0}
   flinchModifier: 0
   flinchable: 0
+  deathVFXPrefab: {fileID: 0}
+  myceliaDropPrefab: {fileID: 0}
 --- !u!1 &6372146557657257802
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +417,6 @@ MonoBehaviour:
   chasePriorityDistance: 25
   damagePriorityThreshold: 20
   damageTrackingDuration: 3
-  damageModifier: 1
   stoppingDistance: 15
   aggressionFactor: 0.6
   trackingSpeed: 5
@@ -310,12 +432,15 @@ MonoBehaviour:
     m_Bits: 640
   targetSwitchThreshold: 100
   risingAnimationLength: 2
+  damageModifier: 1
+  corruptionModifier: 1
+  myceliaModifier: 1
+  myceliaDropPrefab: {fileID: 0}
   playerTarget: {fileID: 0}
   wanderRadius: 40
   minWanderTime: 15
   maxWanderTime: 25
   idleChance: 0.7
-  myceliaDropPrefab: {fileID: 0}
   weaponDropPrefab: []
   dropChance: 20
 --- !u!1 &8615060887115009783
@@ -384,10 +509,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 2
   mainHP: {fileID: 2350138230913292835}
 --- !u!1001 &577815707050681626
@@ -685,17 +811,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 487561ad0fc95eb45b9aaa92b80979af,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.0078915
+      value: 0.011588668
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 487561ad0fc95eb45b9aaa92b80979af,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.007891499
+      value: 0.0115886675
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 487561ad0fc95eb45b9aaa92b80979af,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.0078915
+      value: 0.011588668
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 487561ad0fc95eb45b9aaa92b80979af,
         type: 3}
@@ -838,7 +964,7 @@ SkinnedMeshRenderer:
   m_RootBone: {fileID: 0}
   m_AABB:
     m_Center: {x: 0, y: 0, z: -0.9999999}
-    m_Extent: {x: 0.6422998, y: 0, z: 0.9999999}
+    m_Extent: {x: 0.72, y: 0, z: 1.12}
   m_DirtyAABB: 0
 --- !u!183 &2692742049661726523
 Cloth:
@@ -1636,6 +1762,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: -89.98021
       objectReference: {fileID: 0}
+    - target: {fileID: -7658650973987075111, guid: 39b20e49a4bf7814bbbe1b3cca505efb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 18d2c912542275748a4c0dd89ba302ee, type: 2}
+    - target: {fileID: -7658650973987075111, guid: 39b20e49a4bf7814bbbe1b3cca505efb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd855282e22b065468d16a06ed27a16c, type: 2}
     - target: {fileID: -7636652888697503883, guid: 39b20e49a4bf7814bbbe1b3cca505efb,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2350,6 +2486,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 963571010009340193}
+    - targetCorrespondingSourceObject: {fileID: 2731055427614843176, guid: 39b20e49a4bf7814bbbe1b3cca505efb,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4633304174934583068}
     - targetCorrespondingSourceObject: {fileID: -6524933335510066739, guid: 39b20e49a4bf7814bbbe1b3cca505efb,
         type: 3}
       insertIndex: -1
@@ -2403,7 +2543,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385821848134743434}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 

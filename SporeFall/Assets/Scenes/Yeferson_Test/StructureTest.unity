@@ -280,6 +280,10 @@ MonoBehaviour:
   highestHPWeight: 1
   distancePenaltyScale: 0.05
   tokenAvailableBonus: 2
+  _players: []
+  _structures: []
+  _trainWalls:
+  - {fileID: 696242646}
 --- !u!4 &34246394
 Transform:
   m_ObjectHideFlags: 0
@@ -2710,7 +2714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &696242646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8378,13 +8382,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 57c900952df740a4c8571f61b136a711, type: 2}
   - {fileID: 11400000, guid: bd0f54f78ab21f047a1dbcf3c3307695, type: 2}
   - {fileID: 11400000, guid: 794e661972b135e4383af63ac7760262, type: 2}
-  detectionRange: 45
   targetRescanRate: 0.5
   attackRangeHysteresis: 1.15
   repositionTolerance: 0.4
   repositionChance: 0.6
   globalAttackDelay: 0
   health: {fileID: 1921948278}
+  AutoInitialize: 0
+  initialLevel: 0
+  testLvDisplay: {fileID: 0}
+  stateDisplay: {fileID: 0}
 --- !u!82 &978826795
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10209,13 +10216,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 57c900952df740a4c8571f61b136a711, type: 2}
   - {fileID: 11400000, guid: bd0f54f78ab21f047a1dbcf3c3307695, type: 2}
   - {fileID: 11400000, guid: 794e661972b135e4383af63ac7760262, type: 2}
-  detectionRange: 45
   targetRescanRate: 0.5
   attackRangeHysteresis: 1.15
   repositionTolerance: 0.4
   repositionChance: 0.6
   globalAttackDelay: 0
   health: {fileID: 1228787635}
+  AutoInitialize: 0
+  initialLevel: 0
+  testLvDisplay: {fileID: 0}
+  stateDisplay: {fileID: 0}
 --- !u!82 &1171152134
 AudioSource:
   m_ObjectHideFlags: 0
@@ -19657,6 +19667,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2537313962759322609, guid: 59c28fdc2f752b14086aca4dacc9fb37,
+        type: 3}
+      propertyPath: AutoInitialize
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4594229627810618683, guid: 59c28fdc2f752b14086aca4dacc9fb37,
         type: 3}

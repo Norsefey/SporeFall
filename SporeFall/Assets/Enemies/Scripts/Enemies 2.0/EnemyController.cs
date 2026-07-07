@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
     public List<Attack> attackSlots = new();
 
     [Header("Detection")]
-    private float detectionRange = 120f;
+    private float detectionRange = 800f;
     [SerializeField] private float targetRescanRate = 1f;
     private float _rescanTimer;
     [Tooltip("Hysteresis multiplier: enemy re-enters Moving only when distance exceeds " +
@@ -31,7 +31,7 @@ public class EnemyController : MonoBehaviour
              "0 = never reposition, 1 = always reposition.")]
     [Range(0f, 1f)]
     public float repositionChance = 0.6f;
-
+    Vector3 newDestination;
 
     // Attacking
     private Damageable _target;
@@ -70,11 +70,6 @@ public class EnemyController : MonoBehaviour
 
         health.OnDied += OnDeath;
     }
-    private void OnEnable()
-    {
-        // For testing Only
-        //Initialize(initialLevel);
-    }
     public void Initialize(int level)
     {
         Stats.Apply(statData, level);
@@ -105,6 +100,13 @@ public class EnemyController : MonoBehaviour
         // remove later
         testLvDisplay.text = "LV: " + level.ToString();
         stateDisplay.text = _state.ToString();
+    }
+    private void OnEnable()
+    {
+        if(AutoInitialize)
+        {
+            Initialize(initialLevel);
+        }
     }
     private void OnDeath(Damageable hp)
     {
@@ -191,7 +193,11 @@ public class EnemyController : MonoBehaviour
             statData.targetPriority, _target
             );
 
-        if (found == null || found.targetType == TargetType.Enemy) return;
+        if (found == null || found.targetType == TargetType.Enemy)
+        {
+            TickWandering();
+            return;
+        }
 
         SetTarget(found);
         TransitionTo(EnemyState.Moving);
@@ -201,6 +207,23 @@ public class EnemyController : MonoBehaviour
         if (!ValidTarget())
             return;
 
+        _rescanTimer -= Time.deltaTime;
+        if (_rescanTimer <= 0f)
+        {
+            _rescanTimer = targetRescanRate;
+            // check for better target
+            Damageable betterTarget = EnemyTargetRegistry.Instance?.FindBestTarget(
+                                transform.position, detectionRange,
+                                gameObject.GetInstanceID(),
+                                statData.targetPriority, _target
+                                );
+
+            if (betterTarget != null && betterTarget != _target)
+            {
+                SetTarget(betterTarget);
+            }
+        }
+  
         // Stop and attack as soon as ANY eligible attack can reach the target
         float dist = Vector3.Distance(transform.position, _target.transform.position);
         if (_activeAttack == null)
@@ -270,10 +293,22 @@ public class EnemyController : MonoBehaviour
         {
             if (_activeAttack == null)
                 _activeAttack = SelectAttack(distToTarget);
-            else
-                TryStartRepositioning();
+           
+            if(_activeAttack != null && _activeAttack.MinSelectRange > distToTarget) 
+            { 
+                TryStartRepositioning(); 
+                return; 
+            }
 
-                _rescanTimer = targetRescanRate;
+
+            if( _activeAttack == null)
+            {
+                // No eligible attack available, go back to moving
+                TransitionTo(EnemyState.Moving);
+                return;
+            }
+
+            _rescanTimer = targetRescanRate;
             // If we've finished the cooldown but not yet reached range, just attack anyway
             if (globalAttackDelay <= 0f && CanSelect(_activeAttack, distToTarget))
             {
@@ -327,6 +362,33 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+    private void TickWandering()
+    {
+        if(_agent.destination == null || _agent.remainingDistance < 0.5f)
+        {
+            if (TryGetRandomLocation(transform.position, 10, out newDestination))
+            {
+                SetNavDestinationDirect(newDestination, force: true);
+                _agent.isStopped = false;
+            }
+        }
+    }
+    bool TryGetRandomLocation(Vector3 center, float radius, out Vector3 result)
+    {
+        // 1. Generate a random point inside a radius around the agent
+        Vector3 randomPoint = center + UnityEngine.Random.insideUnitSphere * radius;
+
+        // 2. Map that random 3D point onto the nearest valid NavMesh position
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomPoint, out hit, radius, NavMesh.AllAreas))
+        {
+            result = hit.position;
+            return true;
+        }
+
+        result = Vector3.zero;
+        return false;
+    }
     protected IEnumerator ExecuteAttack()
     {
         TransitionTo(EnemyState.ExecutingAttack);
@@ -334,8 +396,6 @@ public class EnemyController : MonoBehaviour
         EnemyAnimator.Animator.SetTrigger(_activeAttack.Data.animationTrigger);
 
         yield return new WaitForSeconds(_activeAttack.Data.attackDelay);
-
-        Debug.Log($"Executing Attack: {_activeAttack.Data.attackName}");
        
         if(_activeAttack == null)
         {
