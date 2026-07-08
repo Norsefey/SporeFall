@@ -131,6 +131,9 @@ public class PlayerManager : MonoBehaviour
             {
                 if (GameManager.Instance.trainHandler != null)
                 {
+            
+                    pHealth.ToggleDamage();
+                    pHealth.ToggleCorruption();
                     GameManager.Instance.trainHandler.trainHP.ToggleDamage();
                     
                     if (!GameManager.Instance.trainHandler.trainHP.canTakeDamage)
@@ -139,14 +142,13 @@ public class PlayerManager : MonoBehaviour
                         GameManager.Instance.trainHandler.trainHP.ReceiveDamage(0);
                 }
             }
-
-            if (Input.GetKeyDown(KeyCode.H))
+            if(Input.GetKeyDown(KeyCode.H))
+            {
+                pVisual.SetActive(!pVisual.activeSelf);
+            }
+            if(Input.GetKeyDown(KeyCode.K))
             {
                 pHealth.ReceiveDamage(10);
-            }
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                pCorruption.IncreaseCorruption(10);
             }
         }
     }
@@ -371,6 +373,60 @@ public class PlayerManager : MonoBehaviour
         pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
         pUI.ToggleWeaponUI(true);
 
+    }
+    public void SetNewDefaultGun(GameObject newDefault)
+    {
+        // Avoid getting Stuck in reload
+        if (currentWeapon != null && currentWeapon.IsReloading)
+            currentWeapon.CancelReload();
+
+        if (defaultWeapon != null)
+        {
+            Destroy(defaultWeapon.gameObject);
+        }
+
+        if (equippedWeapon != null)
+        {
+            Destroy(currentWeapon.gameObject); // Drop the current weapon
+            equippedWeapon = null;
+        }
+
+        defaultWeapon = Instantiate(newDefault, weaponHolder).GetComponent<Weapon>();
+        defaultWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        defaultWeapon.gameObject.SetActive(true);
+        currentWeapon = defaultWeapon;
+        // set References
+        currentWeapon.player = this;
+
+        if (PlayerGunUpgrades.Instance != null)
+        {
+            PlayerGunUpgrades.Instance.SetActivePlayer(this);
+
+            PlayerGunUpgrades.Instance.ApplyModifiersToNewWeapon(currentWeapon);
+        }
+
+        currentWeapon.bulletCount = currentWeapon.bulletCapacity; ; // to initialize ammo counts and UI
+
+        // update UI to display new ammo capacities
+        pUI.AmmoDisplay(currentWeapon);
+        // update weapon icon
+        pUI.SwitchWeaponIcon();
+
+        // Charge Guns use an additional UI Element
+        if (currentWeapon is ChargeGun)
+        {
+            pUI.ToggleChargeGunSlider(true);
+        }
+        // Animation switch depending on weapon type
+        pAnime.SetWeaponHoldAnimation(currentWeapon.holdType);
+
+        // if weapon is corrupted start corruption increase
+        if (currentWeapon.isCorrupted)
+        {
+            holdingCorruption = true;
+        }
+
+        pUI.ToggleWeaponUI(true);
     }
     #region Toggle Switches
     public void ToggleBuildMode(bool toggle)

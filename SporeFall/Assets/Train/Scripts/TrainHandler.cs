@@ -53,6 +53,8 @@ public class TrainHandler : MonoBehaviour
             trainHP.train = this;
             UI.SetMaxHP(trainHP.maxHealth);
         }
+
+        GameManager.Instance?.gameUI.ToggleGameUI(false);
     }
     public void SetParkedState()
     {
@@ -62,12 +64,14 @@ public class TrainHandler : MonoBehaviour
             DisembarkTrain();
         }
         audioPlayer.Stop();
+        GameManager.Instance?.gameUI.ToggleGameUI(true);
     }
     public void SetFiringState()
     {
         trainState = TrainState.Firing;
         animations.FireCannon();
         GameManager.Instance.ReturnAllStructures();
+        GameManager.Instance?.gameUI.ToggleGameUI(false);
 
         trainCamera.SetActive(true);
         ClearDrops();

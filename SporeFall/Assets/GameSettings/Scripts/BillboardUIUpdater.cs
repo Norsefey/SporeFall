@@ -24,13 +24,29 @@ public class BillboardUIUpdater : MonoBehaviour
         hpText.text = (hpManager.CurrentHealth / hpManager.maxHealth).ToString("P0") + "%";
         hpDisplay.maxValue = hpManager.maxHealth;
         hpDisplay.value = hpManager.maxHealth;
+        if (hideUI && groupAlpha != null)
+        {
+            if (hideUICoroutine != null)
+                StopCoroutine(hideUICoroutine);
+
+            groupAlpha.alpha = .5f;
+            if (hideUI)
+                hideUICoroutine = StartCoroutine(HideUI(1.5f));
+        }
     }
     private void OnEnable()
     {
         InitializeUI();
         hpManager.OnHPChange += HandleHPChange;
-        if (hideUICoroutine != null)
-            hideUICoroutine = StartCoroutine(HideUI(1.5f));
+        if (hideUI && groupAlpha != null)
+        {
+            if (hideUICoroutine != null)
+                StopCoroutine(hideUICoroutine);
+
+            groupAlpha.alpha = .5f;
+            if (hideUI)
+                hideUICoroutine = StartCoroutine(HideUI(1.5f));
+        }
     }
     private void OnDisable()
     {

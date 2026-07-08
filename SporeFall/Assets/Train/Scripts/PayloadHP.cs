@@ -7,6 +7,8 @@ public class PayloadHP : Damageable
 {
     private Payload payload;
 
+    public float startMaxHp = 100f;
+
     [SerializeField] private AudioClip health75Clip;
     [SerializeField] private AudioClip health50Clip;
     [SerializeField] private AudioClip health25Clip;
@@ -27,6 +29,7 @@ public class PayloadHP : Damageable
     private void OnEnable()
     {
         targetType = TargetType.Structure;
+        maxHealth = startMaxHp;
         _health = maxHealth;
         EnemyTargetRegistry.Instance?.Register(this);
     }
@@ -43,15 +46,6 @@ public class PayloadHP : Damageable
         if (_health <= 0f) Die();
         return amount;
     }
-
-    /*   public override void TakeDamage(float damage)
-       {
-           base.TakeDamage(damage);
-
-           // moved it to only check when HP has changed
-           PlayHPAudioClip(_currentHP / maxHP);
-       }*/
-
     private void PlayHPAudioClip(float healthPercentage)
     {
         if (healthPercentage <= 0.75f && !played75)

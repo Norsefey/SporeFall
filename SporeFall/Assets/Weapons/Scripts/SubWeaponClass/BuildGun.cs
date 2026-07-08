@@ -415,6 +415,8 @@ public class BuildGun : Weapon
                 if (materialData.Material != null)
                 {
                     materialData.Material.SetColor("_BaseColor", materialData.OriginalColor);
+                    materialData.Material.SetColor("_EmissionColor", Color.black);
+
                 }
 
             }
@@ -438,6 +440,7 @@ public class BuildGun : Weapon
             foreach (var material in renderer.materials)
             {
                 material.SetColor("_BaseColor", previewColor);
+                material.SetColor("_EmissionColor", previewColor);
             }
         }
     }

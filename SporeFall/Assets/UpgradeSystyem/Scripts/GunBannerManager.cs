@@ -44,7 +44,7 @@ public class GunBannerManager : MonoBehaviour
 
         GameManager.Instance.DecreaseMycelia(cost);
         upgradeUI.UpdateMyceliaAmount();
-        upgradeUI.activePlayer.EquipNewGun(gunForSale);
+        upgradeUI.activePlayer.SetNewDefaultGun(gunForSale);
 
         purchaseButton.interactable = false;
         buttonText.color = Color.black;

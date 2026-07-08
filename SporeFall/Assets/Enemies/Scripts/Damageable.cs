@@ -36,7 +36,7 @@ public class Damageable : MonoBehaviour
     public void RestoreHealth(float amount)
     {
         _health += amount;
-        _health = Mathf.Max(_health, maxHealth);
+        _health = Mathf.Min(_health, maxHealth);
 
         OnHPChange?.Invoke(this, amount);
     }

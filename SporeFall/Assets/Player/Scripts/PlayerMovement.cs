@@ -151,6 +151,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void GravityHandler()
     {
+
         if (IsGrounded())
         {
             if(!pMan.pHealth.isDead)
