@@ -194,7 +194,7 @@ public class ProjectileAttack : RangedAttack
                 Direction = direction,
                 Speed = projectileSpeed,
                 Damage = instance.ScaledDamage,
-                Corruption = instance.ScaleCorruption,
+                Corruption = instance.ScaledCorruption,
                 Lifetime = projectileLifetime,
                 UseArcTrajectory = trajectoryType == ProjectileTrajectoryType.Arc,
                 UseGravity = useGravity,

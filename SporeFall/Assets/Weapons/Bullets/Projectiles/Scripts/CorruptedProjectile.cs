@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class CorruptedProjectile : BaseProjectile
 {
@@ -22,6 +23,13 @@ public class CorruptedProjectile : BaseProjectile
             }
             // Apply damage
             ApplyDamage(damageable, damage);
+
+            if (damageable is PlayerHP)
+            {
+                PlayerHP playerHP = (PlayerHP)damageable;
+
+                playerHP.IncreaseCorruption(corruptionDamage);
+            }
         }
     }
 }

@@ -28,6 +28,15 @@ public class UpgradePlayerCorruption : MonoBehaviour
         float newMaxCorruption = Mathf.RoundToInt(currentMaxCorruption * corruptionIncreaseMultiplier);
         banner.descriptionText.text = $"Current Max Corruption {currentMaxCorruption} -> New Max Corruption {newMaxCorruption}";
 
+        if (GameManager.Instance.Mycelia < cost)
+        {
+            banner.costText.color = Color.red;
+            banner.purchaseButton.interactable = false;
+        }else
+        {
+            banner.costText.color = Color.black;
+            banner.purchaseButton.interactable = true;
+        }
         banner.costText.text = $"Mycelia: {cost.ToString("F0")}";
 
         banner.purchaseButton.interactable = true;

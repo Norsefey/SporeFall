@@ -5,7 +5,7 @@ public class AttackInstance
     public Attack Data {  get; private set; }
     public EnemyController Owner { get; private set; }
     public float ScaledDamage { get; private set; }
-    public float ScaleCorruption { get; private set; }
+    public float ScaledCorruption { get; private set; }
     public float AttackRange { get; private set; }
 
     public float LastUseTime {  get; private set; }
@@ -18,7 +18,7 @@ public class AttackInstance
         Data = data;
         Owner = owner;
         ScaledDamage = Data.baseDamage * StatScaler.Multiplier(damageScaleRate, level);
-        ScaleCorruption = Data.baseCorruption * StatScaler.Multiplier(damageScaleRate, level);
+        ScaledCorruption = Data.baseCorruption * StatScaler.Multiplier(damageScaleRate, level);
         AttackRange = Data.attackRange;
         Cooldown = data.baseCooldown;
         LastUseTime = 0;
@@ -29,7 +29,7 @@ public class AttackInstance
         Data = null;
         Owner = null;
         ScaledDamage = 0;
-        ScaleCorruption = 0;
+        ScaledCorruption = 0;
         AttackRange = 0;
         Cooldown = 0;
         LastUseTime = 0;

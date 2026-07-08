@@ -229,19 +229,25 @@ public class MeleeAttack : Attack
     
     public override void Execute(AttackInstance instance, Damageable target)
     {
+        float currentDistance = Vector3.Distance(instance.Owner.transform.position, target.transform.position);
+
+        if(currentDistance > instance.AttackRange)
+        {
+            Debug.LogWarning($"Target is out of range for attack: {instance.Data.name}");
+            return;
+        }
+
         if (cleaveAngle > 0f)
             ExecuteCleave(instance, target);
         else
             DealDamage(instance, target);
 
         PlaySFX(instance.Owner.AudioSource);
+        SpawnVFX(target.transform.position, instance.Owner.transform.rotation);
 
     }
     private void ExecuteCleave(AttackInstance instance, Damageable primaryTarget)
     {
-        // Primary target always hit
-        DealDamage(instance, primaryTarget);
-
         // Check nearby targets within cleave arc
         float halfAngle = cleaveAngle * 0.5f;
         Vector3 forward = (primaryTarget.transform.position - instance.Owner.transform.position).normalized;
@@ -266,7 +272,15 @@ public class MeleeAttack : Attack
     }
 
     private static void DealDamage(AttackInstance instance, Damageable target)
-        => target.ReceiveDamage(instance.ScaledDamage);
+    {
+        target.ReceiveDamage(instance.ScaledDamage);
 
+        if (target is PlayerHP)
+        {
+            PlayerHP playerHP = (PlayerHP)target;
+
+            playerHP.IncreaseCorruption(instance.ScaledCorruption);
+        }
+    }
 
 }

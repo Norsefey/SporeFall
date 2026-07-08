@@ -42,8 +42,6 @@ public class UpgradeBanner : MonoBehaviour
         if(upgradeManager.CanUpgrade(myType, GameManager.Instance.Mycelia))
         {
             GameManager.Instance.DecreaseMycelia(structureLevel.upgradeCost);
-            //upgradeUI.UpdateMyceliaAmount();
-            upgradeUI.ShowStructureUpgrades(); // Refresh the upgrade banners to update costs and interactability
 
             StructureLevel newLevel = structureLevel.NextLevel();
             newLevel.upgradePlacementCostMultiplier = structureLevel.upgradePlacementCostMultiplier;
@@ -57,6 +55,8 @@ public class UpgradeBanner : MonoBehaviour
             UpdateBannerVisuals(newLevel);
 
             structureLevel = newLevel;
+
+            upgradeUI.ShowStructureUpgrades(); // Refresh the upgrade banners to update costs and interactability
         }
     }
 }

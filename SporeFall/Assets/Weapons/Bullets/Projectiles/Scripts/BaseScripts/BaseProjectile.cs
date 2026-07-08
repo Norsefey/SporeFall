@@ -109,6 +109,11 @@ public abstract class BaseProjectile : MonoBehaviour
         if (target != null)
             target.ReceiveDamage(damageAmount);
 
-        Debug.Log($"Delt {damageAmount} dmg To {target.gameObject.name}");
+        if (target is PlayerHP)
+        {
+            PlayerHP playerHP = (PlayerHP)target;
+
+            playerHP.IncreaseCorruption(corruptionDamage);
+        }
     }
 }
