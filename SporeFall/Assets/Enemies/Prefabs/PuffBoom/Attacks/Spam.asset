@@ -12,20 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d946acd70ddf4646879bd435017a3d0, type: 3}
   m_Name: Spam
   m_EditorClassIdentifier: 
-  priority: 1.5
-  range: 25
-  cooldown: 8
+  selectionWeight: 1
+  minSelectRange: 0
+  baseCooldown: 1.5
+  attackName: 
+  attackRange: 1
+  preferredRange: 0
   attackDelay: 1.8
   recoveryTime: 1
   animationTrigger: RangedAttack
-  damage: 18
+  baseDamage: 10
   damageVariance: 0
-  corruption: 0
+  baseCorruption: 2
   corruptionVariance: 0
   attackVFXPrefab: {fileID: 0}
   attackSFX: {fileID: 8300000, guid: 4a9558accb615124c8442867c1ff4bd7, type: 3}
   predictTargetPosition: 0
   predictionTime: 0.5
+  fireOffset: {x: 0, y: 0, z: 0}
   projectilePrefab: {fileID: 7441200720383325235, guid: 97c5ef2b74bf8b44f96b7effa39ecbb9,
     type: 3}
   projectileSpeed: 75
@@ -39,5 +43,4 @@ MonoBehaviour:
   maxBounces: 0
   bounceDamageMultiplier: 0
   projectileCount: 12
-  timeBetweenProjectiles: 0.2
   spreadAngle: 360

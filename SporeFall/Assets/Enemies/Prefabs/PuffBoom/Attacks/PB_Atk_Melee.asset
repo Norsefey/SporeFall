@@ -12,24 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccb4a023266005649b8f7bfde4daa4b8, type: 3}
   m_Name: PB_Atk_Melee
   m_EditorClassIdentifier: 
-  priority: 2
-  range: 9
-  cooldown: 4
+  selectionWeight: 1
+  minSelectRange: 0
+  baseCooldown: 1.5
+  attackName: 
+  attackRange: 8
+  preferredRange: 0
   attackDelay: 1.5
   recoveryTime: 2
   animationTrigger: MeleeAttack
-  damage: 25
+  baseDamage: 25
   damageVariance: 0
-  corruption: 0
+  baseCorruption: 3
   corruptionVariance: 0
   attackVFXPrefab: {fileID: 1570927096764274, guid: 643639841fb531e4ba8097fed4eb9ac7,
     type: 3}
   attackSFX: {fileID: 8300000, guid: 1b81fa151a12a5544b5c3c340b6d3297, type: 3}
   attackArc: 156.8
-  attackRange: 8
   targetLayers:
     serializedVersion: 2
     m_Bits: 10880
+  cleaveAngle: 0
+  cleaveMaxTargets: 1
   showDebugGizmos: 1
   rangeColor: {r: 1, g: 0, b: 0, a: 0.3}
   arcColor: {r: 1, g: 0.5, b: 0, a: 0.5}
