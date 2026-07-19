@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "New AOE Attack", menuName = "Enemy/Attacks/AOE Attack")]
 public class AoeAttack : Attack
@@ -16,23 +15,8 @@ public class AoeAttack : Attack
 
     public override void Execute(AttackInstance instance, Damageable target)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
-    {
-        float finalDamage = (baseDamage * damageModifier) + Random.Range(-damageVariance, damageVariance);
-        float finalCorruption = (baseCorruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
-
-        enemy.SetIsAttacking(true);
-        if (enemy.Animator != null)
-            enemy.Animator.SetTrigger(animationTrigger);
-
-        yield return new WaitForSeconds(attackDelay);
-
-        Vector3 aoeCenter = enemy.transform.position;
+        Vector3 aoeCenter = instance.Owner.transform.position;
         Collider[] hits = Physics.OverlapSphere(aoeCenter, aoeRadius, targetLayers);
-
         foreach (Collider hit in hits)
         {
             if (hit.TryGetComponent<Damageable>(out var damageable))
@@ -40,34 +24,52 @@ public class AoeAttack : Attack
                 float distanceFromCenter = Vector3.Distance(aoeCenter, hit.transform.position);
                 float damageMultiplier = Mathf.Lerp(damageMultiplierAtCenter, 1f, distanceFromCenter / aoeRadius);
 
-                if (damageOverTime)
-                {
-                    enemy.StartDOTEffect(damageable, finalDamage * damageMultiplier, dotDuration, dotTickRate);
-                }
-                else
-                {
-                    damageable.ReceiveDamage(finalDamage * damageMultiplier);
-                }
+                damageable.ReceiveDamage(instance.ScaledDamage);
             }
         }
 
-        SpawnVFX(aoeCenter, enemy.transform.rotation);
-        PlaySFX(enemy.AudioSource);
-
-        yield return new WaitForSeconds(recoveryTime);
-        enemy.SetIsAttacking(false);
+        SpawnVFX(instance.Owner.transform.position, instance.Owner.transform.rotation);
+        PlaySFX(instance.Owner.AudioSource);
     }
 
-    private IEnumerator ApplyDOTDamage(Damageable target, float totalDamage)
+    public override IEnumerator ExecuteAttack(BaseEnemy enemy, Transform target, float damageModifier, float corruptionModifier)
     {
-        float elapsedTime = 0f;
-        float damagePerTick = totalDamage * (dotTickRate / dotDuration);
+        throw new System.NotImplementedException();
 
-        while (elapsedTime < dotDuration)
-        {
-            target.ReceiveDamage(damagePerTick);
-            yield return new WaitForSeconds(dotTickRate);
-            elapsedTime += dotTickRate;
-        }
+        /*  float finalDamage = (baseDamage * damageModifier) + Random.Range(-damageVariance, damageVariance);
+          float finalCorruption = (baseCorruption * corruptionModifier) + Random.Range(-corruptionVariance, corruptionVariance);
+
+          enemy.SetIsAttacking(true);
+          if (enemy.Animator != null)
+              enemy.Animator.SetTrigger(animationTrigger);
+
+          yield return new WaitForSeconds(attackDelay);
+
+          Vector3 aoeCenter = enemy.transform.position;
+          Collider[] hits = Physics.OverlapSphere(aoeCenter, aoeRadius, targetLayers);
+
+          foreach (Collider hit in hits)
+          {
+              if (hit.TryGetComponent<Damageable>(out var damageable))
+              {
+                  float distanceFromCenter = Vector3.Distance(aoeCenter, hit.transform.position);
+                  float damageMultiplier = Mathf.Lerp(damageMultiplierAtCenter, 1f, distanceFromCenter / aoeRadius);
+
+                  if (damageOverTime)
+                  {
+                      enemy.StartDOTEffect(damageable, finalDamage * damageMultiplier, dotDuration, dotTickRate);
+                  }
+                  else
+                  {
+                      damageable.ReceiveDamage(finalDamage * damageMultiplier);
+                  }
+              }
+          }
+
+          SpawnVFX(aoeCenter, enemy.transform.rotation);
+          PlaySFX(enemy.AudioSource);
+
+          yield return new WaitForSeconds(recoveryTime);
+          enemy.SetIsAttacking(false);*/
     }
 }

@@ -7,8 +7,6 @@ public class DashAttack : MovementAttack
     public float dashSpeed = 18f;
     [Tooltip("How close the enemy must get to the target's position to register impact.")]
     public float impactRadius = 0.6f;
-    [Tooltip("Force applied to the target's Rigidbody on impact (0 = no knockback).")]
-    public float knockbackForce = 8f;
     [Tooltip("Extra damage multiplier if the enemy has built up a minimum dash distance.")]
     public float bonusDamageMultiplierAtFullRange = 1.5f;
     public float minRangeForBonus = 4f;
@@ -44,15 +42,8 @@ public class DashAttack : MovementAttack
         if (_dashDist >= minRangeForBonus)
             damage *= bonusDamageMultiplierAtFullRange;
 
-        ctx.Target.ReceiveDamage(damage);
-
-        // Optional knockback
-        if (knockbackForce > 0f && ctx.Target.TryGetComponent<Rigidbody>(out var rb))
-        {
-            Vector3 force = _dashDir * knockbackForce;
-            force.y = 0f;
-            rb.AddForce(force, ForceMode.Impulse);
-        }
+        if(Vector3.Distance(ctx.Instance.Owner.transform.position, ctx.Target.transform.position) <= impactRadius)
+            ctx.Target.ReceiveDamage(damage);
 
         if (attackVFXPrefab != null)
            Instantiate(attackVFXPrefab, ctx.Target.transform.position, Quaternion.identity);

@@ -34,13 +34,13 @@ public abstract class Attack : ScriptableObject
     [Tooltip("Base damage of the attack.")]
     [SerializeField] public float baseDamage = 10f;
     [Tooltip("Variance in damage. Allows for randomization within a range.")]
-    [SerializeField] protected float damageVariance = 0f;
+    [SerializeField] public float damageVariance = 0f;
     
     [Header("Corruption Settings")]
     [Tooltip("Base corruption applied by the attack.")]
-    [SerializeField] public float baseCorruption = 0f;
+    public float baseCorruption = 0f;
     [Tooltip("Variance in corruption. Allows for randomization within a range.")]
-    [SerializeField] public float corruptionVariance = 0f;
+     public float corruptionVariance = 0f;
 
     [Header("Effects")]
     [Tooltip("Visual effect prefab to spawn when the attack is executed.")]
