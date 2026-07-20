@@ -76,10 +76,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 8906374424419757216}
 --- !u!135 &3972616678562869860
@@ -122,7 +123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7179508891295378642
 Transform:
   m_ObjectHideFlags: 0
@@ -372,10 +373,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20376d694b00c624ea1b6243f1ae1bec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 8000
-  isDead: 0
+  canHoldCorruption: 0
   mainBody: {fileID: 5792989308604186183}
 --- !u!1 &7218886635357687565
 GameObject:
@@ -422,10 +424,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 2
   mainHP: {fileID: 8906374424419757216}
 --- !u!135 &8205445550812923167
@@ -560,12 +563,12 @@ PrefabInstance:
     - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8633493151623460929, guid: f2e00eab23348204dbbe56ee49356963,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

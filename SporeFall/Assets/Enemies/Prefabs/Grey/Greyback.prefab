@@ -251,7 +251,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ddcddec9821a26c4a8254ea25e7f71de, type: 2}
+  - {fileID: 2100000, guid: 48713a4c308fa5541a6e68358b31dbde, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -543,10 +543,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 731574464148815496}
 --- !u!1 &1601597508383466004
@@ -590,9 +591,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6723776635264665680}
   - component: {fileID: 6700846432238513998}
-  - component: {fileID: 9009785512476672233}
   - component: {fileID: -6706744063203563740}
-  - component: {fileID: 5473082876605746802}
+  - component: {fileID: 3298424283515384120}
+  - component: {fileID: 16107814170536019}
+  - component: {fileID: 5849141907539039538}
+  - component: {fileID: 6410031328802069935}
   m_Layer: 2
   m_Name: Greyback
   m_TagString: Untagged
@@ -641,56 +644,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &9009785512476672233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1657974298613798786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a729adb8c97a9a44eb55d8ed721012e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
-    type: 3}
-  attacks:
-  - {fileID: 11400000, guid: 82a1ed65f46f5354aa57446d065ef3f5, type: 2}
-  - {fileID: 11400000, guid: 7cfb7c9fb86a36b4488907773db86486, type: 2}
-  animator: {fileID: 2051803541698588982}
-  health: {fileID: 731574464148815496}
-  firePoint: {fileID: 8961610249997544806}
-  strafeRadius: 5
-  retreatDistance: 10
-  strafeSpeed: 5
-  chasePriorityDistance: 25
-  damagePriorityThreshold: 100
-  damageTrackingDuration: 4
-  stoppingDistance: 5
-  aggressionFactor: 0.9
-  trackingSpeed: 5
-  train: {fileID: 0}
-  priorityTags:
-  - Player
-  - Platform
-  - WallStructure
-  - Structure
-  - Train
-  detectionRange: 20
-  targetsLayerMask:
-    serializedVersion: 2
-    m_Bits: 10752
-  targetSwitchThreshold: 100
-  risingAnimationLength: 2
-  damageModifier: 1
-  corruptionModifier: 1
-  myceliaModifier: 1
-  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
-    type: 3}
-  weaponDropPrefab:
-  - {fileID: 7980376292701781228, guid: 91084f473834f5a42b7fb726c7dc2314, type: 3}
-  dropChance: 12.5
 --- !u!82 &-6706744063203563740
 AudioSource:
   m_ObjectHideFlags: 0
@@ -788,7 +741,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5473082876605746802
+--- !u!114 &3298424283515384120
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -797,7 +750,67 @@ MonoBehaviour:
   m_GameObject: {fileID: 1657974298613798786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69f50f4efd875a8499ded66bc5700e00, type: 3}
+  m_Script: {fileID: 11500000, guid: 41e97a5b2bd230647a4d2fd7703e0ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statData: {fileID: 11400000, guid: 97a15e343fa53864b9a09a0d502ce32c, type: 2}
+  attackSlots:
+  - {fileID: 11400000, guid: 7cfb7c9fb86a36b4488907773db86486, type: 2}
+  - {fileID: 11400000, guid: 82a1ed65f46f5354aa57446d065ef3f5, type: 2}
+  - {fileID: 11400000, guid: 794e661972b135e4383af63ac7760262, type: 2}
+  targetRescanRate: 1
+  attackRangeHysteresis: 1.15
+  repositionTolerance: 0.4
+  repositionChance: 0.6
+  globalAttackDelay: 2
+  health: {fileID: 731574464148815496}
+  AutoInitialize: 0
+  initialLevel: 0
+  testLvDisplay: {fileID: 0}
+  stateDisplay: {fileID: 0}
+--- !u!114 &16107814170536019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657974298613798786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdd30e817694f0e4293c803099bb8eb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2051803541698588982}
+  risingAnimationLength: 2
+  spawnInGround: 0
+--- !u!114 &5849141907539039538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657974298613798786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d38314c181470543ac7f4bdec9d2049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockChance: 0.3
+  blockDamageReduction: 0.8
+  blockDuration: 0.4
+  blockCooldown: 4
+  blockFXPrefab: {fileID: 0}
+  blockSound: {fileID: 0}
+--- !u!114 &6410031328802069935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657974298613798786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d406c9b4d23f164b923114fa33b261f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1669173467900636615
@@ -966,7 +979,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ddcddec9821a26c4a8254ea25e7f71de, type: 2}
+  - {fileID: 2100000, guid: 48713a4c308fa5541a6e68358b31dbde, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1211,7 +1224,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ddcddec9821a26c4a8254ea25e7f71de, type: 2}
+  - {fileID: 2100000, guid: 48713a4c308fa5541a6e68358b31dbde, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1439,10 +1452,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 2
   mainHP: {fileID: 731574464148815496}
 --- !u!1 &3115146360219098578
@@ -2122,13 +2136,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6edf8b238b198524fb1ecb35917fd7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 4
   canTakeDamage: 1
-  maxHP: 175
-  isDead: 0
-  manager: {fileID: 9009785512476672233}
+  canHoldCorruption: 0
+  eController: {fileID: 3298424283515384120}
+  defenseController: {fileID: 5849141907539039538}
   flinchModifier: 0.4
   flinchable: 1
+  deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
+    type: 3}
+  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
+    type: 3}
 --- !u!1 &5632337820744302255
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,7 +2580,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ddcddec9821a26c4a8254ea25e7f71de, type: 2}
+  - {fileID: 2100000, guid: 48713a4c308fa5541a6e68358b31dbde, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2736,10 +2756,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 731574464148815496}
 --- !u!65 &1278644282879143752
@@ -2847,7 +2868,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ddcddec9821a26c4a8254ea25e7f71de, type: 2}
+  - {fileID: 2100000, guid: 48713a4c308fa5541a6e68358b31dbde, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3348,10 +3369,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 731574464148815496}
 --- !u!65 &8941737033974505673

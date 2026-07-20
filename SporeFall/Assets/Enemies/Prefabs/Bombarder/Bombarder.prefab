@@ -190,7 +190,10 @@ GameObject:
   - component: {fileID: 1345321642050182800}
   - component: {fileID: 1376445130915674510}
   - component: {fileID: 7968623023994097618}
-  - component: {fileID: 2846332542822177288}
+  - component: {fileID: 2479029889250093698}
+  - component: {fileID: 8438738434058524882}
+  - component: {fileID: 8260159639937694354}
+  - component: {fileID: 1068420634412781420}
   m_Layer: 0
   m_Name: Bombarder
   m_TagString: Untagged
@@ -336,7 +339,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2846332542822177288
+--- !u!114 &2479029889250093698
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -345,49 +348,69 @@ MonoBehaviour:
   m_GameObject: {fileID: 6405916410464436546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a729adb8c97a9a44eb55d8ed721012e8, type: 3}
+  m_Script: {fileID: 11500000, guid: 41e97a5b2bd230647a4d2fd7703e0ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
-    type: 3}
-  attacks:
-  - {fileID: 11400000, guid: 8706ac24c539d2e40b58256fdd371981, type: 2}
+  statData: {fileID: 11400000, guid: a15604c3578f28346bbfecef1073ff72, type: 2}
+  attackSlots:
   - {fileID: 11400000, guid: 009c455cad8f5a6438624935a0ea2155, type: 2}
+  - {fileID: 11400000, guid: 8706ac24c539d2e40b58256fdd371981, type: 2}
   - {fileID: 11400000, guid: e5888b4d3b86c3b4d9d71f01b1a2fb40, type: 2}
-  - {fileID: 11400000, guid: 998ab3ef9fb41f743b01e6f2aa5dbf21, type: 2}
-  animator: {fileID: 2782290428919596528}
+  targetRescanRate: 1
+  attackRangeHysteresis: 1.15
+  repositionTolerance: 0.4
+  repositionChance: 0.6
+  globalAttackDelay: 0
   health: {fileID: 3385096694661518225}
-  firePoint: {fileID: 3727332137768336294}
-  strafeRadius: 0
-  retreatDistance: 0
-  strafeSpeed: 0
-  chasePriorityDistance: 0
-  damagePriorityThreshold: 20
-  damageTrackingDuration: 3
-  stoppingDistance: 50
-  aggressionFactor: 0.6
-  trackingSpeed: 5
-  train: {fileID: 0}
-  priorityTags:
-  - Player
-  - Platform
-  - WallStructure
-  - Structure
-  - Train
-  detectionRange: 50
-  targetsLayerMask:
-    serializedVersion: 2
-    m_Bits: 10752
-  targetSwitchThreshold: 100
+  AutoInitialize: 0
+  initialLevel: 0
+  testLvDisplay: {fileID: 0}
+  stateDisplay: {fileID: 0}
+--- !u!114 &8438738434058524882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6405916410464436546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d406c9b4d23f164b923114fa33b261f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8260159639937694354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6405916410464436546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d38314c181470543ac7f4bdec9d2049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockChance: 0.3
+  blockDamageReduction: 0.8
+  blockDuration: 0.4
+  blockCooldown: 4
+  blockFXPrefab: {fileID: 0}
+  blockSound: {fileID: 0}
+--- !u!114 &1068420634412781420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6405916410464436546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdd30e817694f0e4293c803099bb8eb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2782290428919596528}
   risingAnimationLength: 2
-  damageModifier: 1
-  corruptionModifier: 1
-  myceliaModifier: 1
-  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
-    type: 3}
-  weaponDropPrefab:
-  - {fileID: 8289144412344352815, guid: 16ca1849f0c26d942958f0c98d431644, type: 3}
-  dropChance: 0.2
+  spawnInGround: 1
 --- !u!1 &7510025435648269526
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,15 +457,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 0
   maxTokens: 4
-  targetType: 1
+  targetType: 3
   canTakeDamage: 1
   canHoldCorruption: 0
-  eController: {fileID: 0}
-  defenseController: {fileID: 0}
+  eController: {fileID: 2479029889250093698}
+  defenseController: {fileID: 8260159639937694354}
   flinchModifier: 0.1
   flinchable: 1
-  deathVFXPrefab: {fileID: 0}
-  myceliaDropPrefab: {fileID: 0}
+  deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
+    type: 3}
+  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
+    type: 3}
 --- !u!1001 &3897108826321814023
 PrefabInstance:
   m_ObjectHideFlags: 0

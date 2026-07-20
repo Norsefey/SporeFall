@@ -7,15 +7,15 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Glow Boss Purple Texture 1
+  m_Name: Fungal_Basic_Mat
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _EMISSION
   - _NORMALMAP
+  - _SPECULAR_SETUP
   m_InvalidKeywords: []
-  m_LightmapFlags: 1
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -28,7 +28,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _1st_ShadeMap:
-        m_Texture: {fileID: 2800000, guid: ed5e5c43e44314847beee0a16db5a448, type: 3}
+        m_Texture: {fileID: 2800000, guid: 079c25d50aaa4d44e98b8bdb7d63a69c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _2nd_ShadeMap:
@@ -52,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: ed5e5c43e44314847beee0a16db5a448, type: 3}
+        m_Texture: {fileID: 2800000, guid: 079c25d50aaa4d44e98b8bdb7d63a69c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -64,7 +64,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: e9ff8d6f8c0ff264189665f1f5d8f3b4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 28bce0cdacb89194bab314888659eef9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ClippingMask:
@@ -96,7 +96,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 389709c851f817340ad1ffcb47481ee5, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissiveColorMap:
@@ -104,7 +104,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emissive_Tex:
-        m_Texture: {fileID: 2800000, guid: 389709c851f817340ad1ffcb47481ee5, type: 3}
+        m_Texture: {fileID: 2800000, guid: c592532850118f440a5b297b4c3dba8b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
@@ -124,7 +124,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ed5e5c43e44314847beee0a16db5a448, type: 3}
+        m_Texture: {fileID: 2800000, guid: 079c25d50aaa4d44e98b8bdb7d63a69c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
@@ -140,7 +140,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: e9ff8d6f8c0ff264189665f1f5d8f3b4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 28bce0cdacb89194bab314888659eef9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapForMatCap:
@@ -152,7 +152,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normals:
-        m_Texture: {fileID: 2800000, guid: e9ff8d6f8c0ff264189665f1f5d8f3b4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 28bce0cdacb89194bab314888659eef9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -383,8 +383,8 @@ Material:
     - _Is_LightColor_RimLight: 1
     - _Is_NormalMapForMatCap: 0
     - _Is_NormalMapToBase: 1
-    - _Is_NormalMapToHighColor: 1
-    - _Is_NormalMapToRimLight: 1
+    - _Is_NormalMapToHighColor: 0
+    - _Is_NormalMapToRimLight: 0
     - _Is_Ortho: 0
     - _Is_OutlineTex: 0
     - _Is_PingPong_Base: 0
@@ -412,7 +412,7 @@ Material:
     - _Offset_Z: 0
     - _OutlineOverridden: 0
     - _OutlineVisible: 1
-    - _Outline_Width: 0.32
+    - _Outline_Width: 0.08
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
     - _PPDMinSamples: 5
@@ -442,7 +442,7 @@ Material:
     - _SecondShadeVisible: 1
     - _Set_SystemShadowsToBase: 1
     - _ShadeColor_Step: 0
-    - _Shades: 0.69
+    - _Shades: 0.65
     - _Smoothness: 0.5
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
@@ -504,9 +504,9 @@ Material:
     - _Unlit_Intensity: 0
     - _UseEmissiveIntensity: 0
     - _UseShadowThreshold: 0
-    - _Use_1stAs2nd: 0
+    - _Use_1stAs2nd: 1
     - _Use_BaseAs1st: 0
-    - _WorkflowMode: 1
+    - _WorkflowMode: 0
     - _ZOverDrawMode: 0
     - _ZTestDepthEqualForOpaque: 4
     - _ZTestGBuffer: 4
@@ -521,22 +521,22 @@ Material:
     - _utsVersionY: 11
     - _utsVersionZ: 0
     m_Colors:
-    - _1st_ShadeColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+    - _1st_ShadeColor: {r: 0.3207547, g: 0.31860465, b: 0.30713776, a: 1}
     - _2nd_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
     - _AngelRingMaskColor: {r: 0, g: 1, b: 0, a: 1}
     - _AngelRing_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BaseColor: {r: 0.6813835, g: 0.8666667, b: 0.2980392, a: 1}
+    - _BaseColor: {r: 0.9056604, g: 0.83303666, b: 0.83303666, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColorMaskColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.6813835, g: 0.8666667, b: 0.29803917, a: 1}
+    - _Color: {r: 0.9056604, g: 0.83303666, b: 0.83303666, a: 1}
     - _ColorShift: {r: 0, g: 0, b: 0, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
-    - _EmissionColor: {r: 1, g: 0.9844871, b: 0, a: 0}
+    - _EmissionColor: {r: 1, g: 0, b: 0.25138474, a: 0}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
-    - _Emissive_Color: {r: 0.18422616, g: 0.7075472, b: 0.18356179, a: 1}
+    - _Emissive_Color: {r: 1, g: 0.0047169924, b: 0.021762293, a: 1}
     - _FirstShadeMaskColor: {r: 0, g: 1, b: 1, a: 1}
     - _HighColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlightMaskColor: {r: 1, g: 1, b: 0, a: 1}
@@ -544,8 +544,8 @@ Material:
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineMaskColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Outline_Color: {r: 0, g: 0.78431374, b: 0.008151485, a: 1}
-    - _RimLightColor: {r: 1, g: 0.2788045, b: 0.0141509175, a: 1}
+    - _Outline_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _RimLightColor: {r: 0.6037736, g: 0, b: 0, a: 1}
     - _RimLightMaskColor: {r: 1, g: 0, b: 1, a: 1}
     - _SecondShadeMaskColor: {r: 0, g: 0, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

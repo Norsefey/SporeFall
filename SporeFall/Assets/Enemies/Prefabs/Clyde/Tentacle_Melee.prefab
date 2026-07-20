@@ -213,10 +213,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 2
   mainHP: {fileID: 4808124937279596169}
 --- !u!1 &6902185794384822119
@@ -285,10 +286,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 4808124937279596169}
 --- !u!1 &7465616748924245430
@@ -357,10 +359,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 4808124937279596169}
 --- !u!1 &7643337626722043490
@@ -407,13 +410,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6edf8b238b198524fb1ecb35917fd7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 1000
-  isDead: 0
-  manager: {fileID: 885063579003159101}
+  canHoldCorruption: 0
+  eController: {fileID: 0}
+  defenseController: {fileID: 0}
   flinchModifier: 1
   flinchable: 0
+  deathVFXPrefab: {fileID: 0}
+  myceliaDropPrefab: {fileID: 0}
 --- !u!1001 &721586829730755224
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -771,7 +778,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3323549184760776173}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
   m_Name: 
@@ -842,10 +849,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 4808124937279596169}
 --- !u!4 &7395661396530007982 stripped
