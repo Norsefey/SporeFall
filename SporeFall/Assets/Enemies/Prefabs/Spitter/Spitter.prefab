@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
-  damageReduction: 0
+  canHoldCorruption: 0
   damageMultiplier: 1
   mainHP: {fileID: 7713563695843053990}
 --- !u!136 &3484214783200674615
@@ -120,11 +120,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81be702cfff101845a397f8a6d6e6179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 0
-  isDead: 0
-  damageReduction: 0
+  canHoldCorruption: 0
   damageMultiplier: 2
   mainHP: {fileID: 7713563695843053990}
 --- !u!135 &2656800025089485648
@@ -176,7 +176,7 @@ Transform:
   m_GameObject: {fileID: 4874642025343749702}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.35, y: 14.766227, z: 110.07}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -324,7 +324,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 998ab3ef9fb41f743b01e6f2aa5dbf21, type: 2}
   animator: {fileID: 0}
   health: {fileID: 7713563695843053990}
-  agent: {fileID: 165643615645198796}
   firePoint: {fileID: 0}
   strafeRadius: 0
   retreatDistance: 0
@@ -348,9 +347,10 @@ MonoBehaviour:
     m_Bits: 10752
   targetSwitchThreshold: 100
   risingAnimationLength: 2
+  damageModifier: 1
+  corruptionModifier: 1
+  myceliaModifier: 1
   myceliaDropPrefab: {fileID: 0}
-  minMyceliaWorth: 5
-  maxMyceliaWorth: 10
   weaponDropPrefab: []
   dropChance: 20
 --- !u!1 &6474497514630106705
@@ -397,14 +397,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6edf8b238b198524fb1ecb35917fd7b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canHoldCorruption: 0
+  maxHealth: 0
+  maxTokens: 4
+  targetType: 1
   canTakeDamage: 1
-  maxHP: 85
-  isDead: 0
-  damageReduction: 0
-  manager: {fileID: 6285496102820613061}
+  canHoldCorruption: 0
+  eController: {fileID: 0}
+  defenseController: {fileID: 0}
   flinchModifier: 0.1
   flinchable: 1
+  deathVFXPrefab: {fileID: 0}
+  myceliaDropPrefab: {fileID: 0}
 --- !u!1 &6499551073654743468
 GameObject:
   m_ObjectHideFlags: 0
