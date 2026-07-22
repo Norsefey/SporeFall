@@ -52,13 +52,13 @@ public class EnemyController : MonoBehaviour
     // SFX
     protected AudioSource audioSource;
 
-    // Testing Variables
+/*    // Testing Variables
     [Header("For Testing Purposes")]
     public bool AutoInitialize = false;
     public int initialLevel = 0;
     public TMP_Text testLvDisplay;
     public TMP_Text stateDisplay;
-
+*/
     public event Action<EnemyController> OnDied;
 
     private void Awake()
@@ -98,16 +98,16 @@ public class EnemyController : MonoBehaviour
         _repoTargetDist = 0f;
 
         // remove later
-        testLvDisplay.text = "LV: " + level.ToString();
-        stateDisplay.text = _state.ToString();
+        //testLvDisplay.text = "LV: " + level.ToString();
+        //stateDisplay.text = _state.ToString();
     }
-    private void OnEnable()
+/*    private void OnEnable()
     {
         if(AutoInitialize)
         {
             Initialize(initialLevel);
         }
-    }
+    }*/
     private void OnDeath(Damageable hp)
     {
         if (_state == EnemyState.Dead) return;
@@ -544,7 +544,7 @@ public class EnemyController : MonoBehaviour
         EnterState(next);
         OnStateChange?.Invoke(next);
 
-        stateDisplay.text = next.ToString();
+        //stateDisplay.text = next.ToString();
     }
     private float FaceTarget()
     {
