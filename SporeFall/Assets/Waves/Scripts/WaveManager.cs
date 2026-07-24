@@ -442,13 +442,13 @@ public class WaveManager : MonoBehaviour
             bossPool = new EnemyObjectPool(bossPrefab, poolParent.transform, 1); // Usually only need one boss
         }*/
     }
-    public void SpawnEnemy(GameObject enemyPrefab, int enemyLevel, Vector3 spawnPoint, bool spawningOutside)
+    public EnemyController SpawnEnemy(GameObject enemyPrefab, int enemyLevel, Vector3 spawnPoint, bool spawningOutside)
     {
 
         if (!PoolManager.Instance.enemyPool.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
         {
             Debug.LogError($"No pool found for enemy prefab: {enemyPrefab.name}");
-            return;
+            return null;
         }
         Quaternion rotation = Quaternion.LookRotation(-Vector3.forward); // face backwards from world forward
 
@@ -466,8 +466,10 @@ public class WaveManager : MonoBehaviour
         activeEnemies.Add(enemy);
         enemiesAlive++;
         enemiesSpawned++;
+
+        return enemy;
     }
-    protected Vector3 GetSpawnPointWithinZone()
+    public Vector3 GetSpawnPointWithinZone()
     {
         Bounds zoneBounds = currentWave.outSideSpawnZone.bounds;
 

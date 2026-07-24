@@ -12,23 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccb4a023266005649b8f7bfde4daa4b8, type: 3}
   m_Name: TentacleSwipe
   m_EditorClassIdentifier: 
-  priority: 1
-  range: 25
-  cooldown: 2
+  selectionWeight: 1
+  minSelectRange: 0
+  baseCooldown: 1.5
+  attackName: 
+  attackRange: 15
+  preferredRange: 0
   attackDelay: 1.15
   recoveryTime: 1
   animationTrigger: MeleeAttack
-  damage: 45
+  baseDamage: 10
   damageVariance: 0
-  corruption: 0
+  baseCorruption: 0
   corruptionVariance: 0
   attackVFXPrefab: {fileID: 0}
   attackSFX: {fileID: 0}
   attackArc: 190.9
-  attackRange: 15
   targetLayers:
     serializedVersion: 2
     m_Bits: 2688
+  cleaveAngle: 0
+  cleaveMaxTargets: 1
   showDebugGizmos: 1
   rangeColor: {r: 1, g: 0, b: 0, a: 0.3}
   arcColor: {r: 1, g: 0.5, b: 0, a: 0.5}

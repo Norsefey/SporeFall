@@ -11,7 +11,7 @@ public class MyceliaPickup : DropsPoolBehavior
 
     public void Setup(float dropAmount)
     {
-        Debug.Log($"Mycelia Pickup Setup with amount: {dropAmount}");
+        //Debug.Log($"Mycelia Pickup Setup with amount: {dropAmount}");
 
         amountToGive = dropAmount;
         if (despawn)
@@ -26,7 +26,7 @@ public class MyceliaPickup : DropsPoolBehavior
                 PickupMycelia();
             }else
             {
-                Debug.LogWarning("No pool for Mycelia Pick up");
+                //Debug.LogWarning("No pool for Mycelia Pick up");
                 GameManager.Instance.IncreaseMycelia(amountToGive);
                 Destroy(gameObject);
             }

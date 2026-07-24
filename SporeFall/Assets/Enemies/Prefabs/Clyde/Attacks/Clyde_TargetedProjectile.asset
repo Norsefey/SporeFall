@@ -12,20 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d946acd70ddf4646879bd435017a3d0, type: 3}
   m_Name: Clyde_TargetedProjectile
   m_EditorClassIdentifier: 
-  priority: 2
-  range: 100
-  cooldown: 5
+  selectionWeight: 1
+  minSelectRange: 0
+  baseCooldown: 1.5
+  attackName: 
+  attackRange: 35
+  preferredRange: 0
   attackDelay: 2
   recoveryTime: 1.5
   animationTrigger: RangedAttack
-  damage: 20
+  baseDamage: 10
   damageVariance: 0
-  corruption: 0
+  baseCorruption: 0
   corruptionVariance: 0
   attackVFXPrefab: {fileID: 0}
   attackSFX: {fileID: 8300000, guid: 4a9558accb615124c8442867c1ff4bd7, type: 3}
   predictTargetPosition: 1
   predictionTime: 0.5
+  fireOffset: {x: 0, y: 0, z: 0}
   projectilePrefab: {fileID: 7441200720383325235, guid: e494b65960b98204aa186d88077d617d,
     type: 3}
   projectileSpeed: 20
@@ -39,5 +43,4 @@ MonoBehaviour:
   maxBounces: 3
   bounceDamageMultiplier: 0.7
   projectileCount: 5
-  timeBetweenProjectiles: 1
   spreadAngle: 25

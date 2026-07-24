@@ -51,14 +51,6 @@ public class EnemyController : MonoBehaviour
     public AudioSource AudioSource => audioSource;
     // SFX
     protected AudioSource audioSource;
-
-/*    // Testing Variables
-    [Header("For Testing Purposes")]
-    public bool AutoInitialize = false;
-    public int initialLevel = 0;
-    public TMP_Text testLvDisplay;
-    public TMP_Text stateDisplay;
-*/
     public event Action<EnemyController> OnDied;
 
     private void Awake()
@@ -73,8 +65,6 @@ public class EnemyController : MonoBehaviour
     public void Initialize(int level)
     {
         Stats.Apply(statData, level);
-
-        Debug.Log($"Stats mycelia drop amount: {Stats.MyceliaDropAmount}");
         
         _agent.speed = Stats.MoveSpeed;
         health.maxHealth = Stats.MaxHealth;
@@ -96,18 +86,7 @@ public class EnemyController : MonoBehaviour
         _activeAttack = null;
         globalAttackDelay = 0f;
         _repoTargetDist = 0f;
-
-        // remove later
-        //testLvDisplay.text = "LV: " + level.ToString();
-        //stateDisplay.text = _state.ToString();
     }
-/*    private void OnEnable()
-    {
-        if(AutoInitialize)
-        {
-            Initialize(initialLevel);
-        }
-    }*/
     private void OnDeath(Damageable hp)
     {
         if (_state == EnemyState.Dead) return;

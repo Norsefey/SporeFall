@@ -32,7 +32,7 @@ public class EnemyHP : Damageable
     {
         float finalDamage = defenseController.ProcessIncomingHit(amount);
 
-        if (finalDamage <= 0f) return 0;  // dodged or fully blocked
+        if (finalDamage <= 0f || !canTakeDamage) return 0;  // dodged or fully blocked
 
         _health -= finalDamage;
 

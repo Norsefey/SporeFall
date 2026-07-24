@@ -41,8 +41,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8963391599157954334}
   - component: {fileID: 4124431913451497255}
-  - component: {fileID: 885063579003159101}
-  - component: {fileID: 4533954065978669305}
+  - component: {fileID: -3593687575190514235}
+  - component: {fileID: 4290689357959592498}
+  - component: {fileID: 3376172947280161960}
   m_Layer: 0
   m_Name: Tentacle_Melee
   m_TagString: Untagged
@@ -79,7 +80,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1.3
-  m_Speed: 0
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -91,7 +92,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &885063579003159101
+--- !u!114 &-3593687575190514235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,42 +101,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1099197300540430708}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69748cd789336b14a94ccf2f9ca6de00, type: 3}
+  m_Script: {fileID: 11500000, guid: 41e97a5b2bd230647a4d2fd7703e0ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
-    type: 3}
-  attacks:
+  statData: {fileID: 11400000, guid: 22ce9f3093c4c7e4296cd71bfd931daa, type: 2}
+  attackSlots:
   - {fileID: 11400000, guid: 3dea2d9e1faf81c418ebb029d70b0eea, type: 2}
-  animator: {fileID: 2513806390267584499}
+  targetRescanRate: 1
+  attackRangeHysteresis: 1.15
+  repositionTolerance: 0.4
+  repositionChance: 0.6
+  globalAttackDelay: 1.5
   health: {fileID: 4808124937279596169}
-  firePoint: {fileID: 488016683593317704}
-  strafeRadius: 0
-  retreatDistance: 0
-  strafeSpeed: 0
-  chasePriorityDistance: 0
-  damagePriorityThreshold: 20
-  damageTrackingDuration: 10
-  stoppingDistance: 50
-  aggressionFactor: 0.6
-  trackingSpeed: 5
-  train: {fileID: 0}
-  priorityTags:
-  - Player
-  - Structure
-  - WallStructure
-  - Train
-  detectionRange: 100
-  targetsLayerMask:
-    serializedVersion: 2
-    m_Bits: 10752
-  targetSwitchThreshold: 25
-  risingAnimationLength: 2
-  damageModifier: 1
-  corruptionModifier: 1
-  myceliaModifier: 1
-  myceliaDropPrefab: {fileID: 0}
---- !u!114 &4533954065978669305
+--- !u!114 &4290689357959592498
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,9 +122,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1099197300540430708}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69f50f4efd875a8499ded66bc5700e00, type: 3}
+  m_Script: {fileID: 11500000, guid: bdd30e817694f0e4293c803099bb8eb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 2513806390267584499}
+  risingAnimationLength: 2
+  spawnInGround: 0
+--- !u!114 &3376172947280161960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099197300540430708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d38314c181470543ac7f4bdec9d2049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockChance: 0.3
+  blockDamageReduction: 0.8
+  blockDuration: 0.4
+  blockCooldown: 4
+  blockFXPrefab: {fileID: 0}
+  blockSound: {fileID: 0}
 --- !u!1 &1958176652913357558
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,15 +411,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 0
   maxTokens: 4
-  targetType: 1
+  targetType: 4
   canTakeDamage: 1
   canHoldCorruption: 0
-  eController: {fileID: 0}
-  defenseController: {fileID: 0}
+  eController: {fileID: -3593687575190514235}
+  defenseController: {fileID: 3376172947280161960}
   flinchModifier: 1
   flinchable: 0
-  deathVFXPrefab: {fileID: 0}
-  myceliaDropPrefab: {fileID: 0}
+  deathVFXPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c,
+    type: 3}
+  myceliaDropPrefab: {fileID: 9027582915965186786, guid: a888c269e2901304098333cc4083e40e,
+    type: 3}
 --- !u!1001 &721586829730755224
 PrefabInstance:
   m_ObjectHideFlags: 0

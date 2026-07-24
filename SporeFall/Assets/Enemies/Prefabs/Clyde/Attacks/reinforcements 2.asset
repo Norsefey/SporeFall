@@ -12,20 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d946acd70ddf4646879bd435017a3d0, type: 3}
   m_Name: reinforcements 2
   m_EditorClassIdentifier: 
-  priority: 1.5
-  range: 500
-  cooldown: 10
+  selectionWeight: 1
+  minSelectRange: 0
+  baseCooldown: 4
+  attackName: 
+  attackRange: 35
+  preferredRange: 0
   attackDelay: 0.5
   recoveryTime: 0.5
   animationTrigger: RangedAttack
-  damage: 15
+  baseDamage: 10
   damageVariance: 0
-  corruption: 0
+  baseCorruption: 0
   corruptionVariance: 0
   attackVFXPrefab: {fileID: 0}
   attackSFX: {fileID: 0}
   predictTargetPosition: 0
   predictionTime: 0.5
+  fireOffset: {x: 0, y: 0, z: 0}
   projectilePrefab: {fileID: 7441200720383325235, guid: 84a3e2c2dea65964b85ba0fcf4b4b867,
     type: 3}
   projectileSpeed: 69
@@ -38,6 +42,5 @@ MonoBehaviour:
   canBounce: 0
   maxBounces: 0
   bounceDamageMultiplier: 0
-  projectileCount: 8
-  timeBetweenProjectiles: 0.1
+  projectileCount: 4
   spreadAngle: 180

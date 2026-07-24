@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class OctoHP : Damageable
 {
-    [SerializeField] private OctoBoss mainBody;
-
     private void OnEnable()
     {
         targetType = TargetType.Structure;
@@ -20,26 +18,13 @@ public class OctoHP : Damageable
 
     protected override float OnReceiveDamage(float amount)
     {
-        float damageMultiplier = mainBody.CalculateDamageMultiplier();
-        float modifiedDamage = amount * damageMultiplier;
-
-        mainBody.PlayHitSoundFX();
-
-        _health -= modifiedDamage;
+        _health -= amount;
         if (_health <= 0f) Die();
         return amount;
     }
 
     protected override void Die()
     {
-        if (mainBody != null)
-        {
-            mainBody.Die();
-        }
-        else
-        {
-            Debug.LogError("Octo Body HP has no reference to TentacleEnemy!");
-            gameObject.SetActive(false);
-        }
+        
     }
 }
