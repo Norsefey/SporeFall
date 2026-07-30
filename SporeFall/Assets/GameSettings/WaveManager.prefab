@@ -1597,11 +1597,9 @@ MonoBehaviour:
       spawnAsGroup: 0
       totalToSpawn: 25
       groupSize: 3
-      enemyVariants:
-      - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
-      - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
-      - {fileID: 6566074402847298207, guid: 5d85f1f8220c04a48821c4565089ab3f, type: 3}
-      minDifficultyToSpawn: 1
+      enemyVariants: []
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     minIntervalTime: 5
     maxIntervalTime: 8
@@ -1611,6 +1609,7 @@ MonoBehaviour:
       bossSquadComposition: []
       postBossHordeSize: 30
       hordeEnemyTypes: []
+      bossLevel: 10
   - waveName: Second Wave
     isFinalWave: 0
     trainLocation: {fileID: 0}
@@ -1627,7 +1626,8 @@ MonoBehaviour:
       enemyVariants:
       - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
       - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
-      minDifficultyToSpawn: 1
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     - name: Fungals
       mustSpawnOutside: 0
@@ -1638,7 +1638,8 @@ MonoBehaviour:
       enemyVariants:
       - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
       - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
-      minDifficultyToSpawn: 1
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     minIntervalTime: 5
     maxIntervalTime: 8
@@ -1648,6 +1649,7 @@ MonoBehaviour:
       bossSquadComposition: []
       postBossHordeSize: 30
       hordeEnemyTypes: []
+      bossLevel: 10
   - waveName: Third Wave
     isFinalWave: 0
     trainLocation: {fileID: 0}
@@ -1664,7 +1666,8 @@ MonoBehaviour:
       enemyVariants:
       - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
       - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
-      minDifficultyToSpawn: 1
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     - name: Fungals
       mustSpawnOutside: 0
@@ -1675,7 +1678,8 @@ MonoBehaviour:
       enemyVariants:
       - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
       - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
-      minDifficultyToSpawn: 1
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     - name: Puffbooms
       mustSpawnOutside: 0
@@ -1686,7 +1690,8 @@ MonoBehaviour:
       enemyVariants:
       - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
       - {fileID: 4494384243789253112, guid: 5cd45932f7a7495408869adefadf383b, type: 3}
-      minDifficultyToSpawn: 1
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     minIntervalTime: 3
     maxIntervalTime: 8
@@ -1696,6 +1701,7 @@ MonoBehaviour:
       bossSquadComposition: []
       postBossHordeSize: 30
       hordeEnemyTypes: []
+      bossLevel: 10
   - waveName: Final Wave
     isFinalWave: 1
     trainLocation: {fileID: 0}
@@ -1712,7 +1718,8 @@ MonoBehaviour:
       enemyVariants:
       - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
       - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
-      minDifficultyToSpawn: 1
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     - name: 
       mustSpawnOutside: 0
@@ -1723,7 +1730,8 @@ MonoBehaviour:
       enemyVariants:
       - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
       - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
-      minDifficultyToSpawn: 1
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     - name: 
       mustSpawnOutside: 0
@@ -1735,7 +1743,8 @@ MonoBehaviour:
       - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
       - {fileID: 4494384243789253112, guid: 5cd45932f7a7495408869adefadf383b, type: 3}
       - {fileID: 4494384243789253112, guid: 492cafc948c617947bd6f6179d56d66a, type: 3}
-      minDifficultyToSpawn: 1
+      minLevel: 1
+      maxLevel: 1
       spawnWeight: 1
     minIntervalTime: 3
     maxIntervalTime: 8
@@ -1752,7 +1761,8 @@ MonoBehaviour:
         enemyVariants:
         - {fileID: 1657974298613798786, guid: 0bac2e1e74b577845ab0c70824a004cf, type: 3}
         - {fileID: 4494384243789253112, guid: 5cd45932f7a7495408869adefadf383b, type: 3}
-        minDifficultyToSpawn: 1
+        minLevel: 1
+        maxLevel: 1
         spawnWeight: 1
       - name: Redcaps
         mustSpawnOutside: 0
@@ -1763,7 +1773,8 @@ MonoBehaviour:
         enemyVariants:
         - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
         - {fileID: 6566074402847298207, guid: ad227b9509c57994e914d73d1a7b1287, type: 3}
-        minDifficultyToSpawn: 1
+        minLevel: 1
+        maxLevel: 1
         spawnWeight: 1
       - name: Fungals
         mustSpawnOutside: 0
@@ -1774,7 +1785,8 @@ MonoBehaviour:
         enemyVariants:
         - {fileID: 6405916410464436546, guid: 42eab30b4a853a341a478815fd59dafb, type: 3}
         - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
-        minDifficultyToSpawn: 1
+        minLevel: 1
+        maxLevel: 1
         spawnWeight: 1
       postBossHordeSize: 999
       hordeEnemyTypes:
@@ -1786,7 +1798,8 @@ MonoBehaviour:
         groupSize: 1
         enemyVariants:
         - {fileID: 4494384243789253112, guid: 492cafc948c617947bd6f6179d56d66a, type: 3}
-        minDifficultyToSpawn: 1
+        minLevel: 1
+        maxLevel: 1
         spawnWeight: 1
       - name: Redcaps
         mustSpawnOutside: 0
@@ -1796,7 +1809,8 @@ MonoBehaviour:
         groupSize: 4
         enemyVariants:
         - {fileID: 1657974298613798786, guid: 81b6ec032b4f3fe4d82910b8b6e9ef01, type: 3}
-        minDifficultyToSpawn: 1
+        minLevel: 1
+        maxLevel: 1
         spawnWeight: 1
       - name: Fungals
         mustSpawnOutside: 0
@@ -1806,9 +1820,10 @@ MonoBehaviour:
         groupSize: 3
         enemyVariants:
         - {fileID: 1657974298613798786, guid: b68b4356227b45241b4c91b5f9a7e1bd, type: 3}
-        minDifficultyToSpawn: 1
+        minLevel: 1
+        maxLevel: 1
         spawnWeight: 1
-  currentWaveIndex: 0
+      bossLevel: 10
   maxEnemiesOnField: 30
   isRobertSpawned: 0
   deadEnemies: 0
@@ -1816,7 +1831,6 @@ MonoBehaviour:
   trainDisembarkDelay: 16
   departTime: 10
   skipWindow: 0
-  initialPoolSize: 15
   explosionPrefab: {fileID: 4393267779352202006, guid: b0de2be7093171f439ca9cfa7964dbfe,
     type: 3}
   BossEnemy: {fileID: 0}
@@ -1836,6 +1850,7 @@ MonoBehaviour:
   gameSceneIndex: 1
   winSceneIndex: 2
   loseSceneIndex: 3
+  survivalGameOverSceneIndex: 0
 --- !u!1 &4161123812844258759
 GameObject:
   m_ObjectHideFlags: 0

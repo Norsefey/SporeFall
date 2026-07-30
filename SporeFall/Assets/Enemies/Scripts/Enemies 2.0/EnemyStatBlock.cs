@@ -10,7 +10,6 @@ public class EnemyStatBlock
     public GameObject[] WeaponDropPrefabs { get; private set; }
     public float WeaponDropChance { get; private set; }
 
-
     public void Apply(EnemyStatSO data, int level)
     {
         Level = level;

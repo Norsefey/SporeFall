@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     [Header("Data")]
-    [SerializeField] EnemyStatSO statData;
+    public EnemyStatSO statData;
     public List<Attack> attackSlots = new();
 
     [Header("Detection")]
@@ -35,7 +35,7 @@ public class EnemyController : MonoBehaviour
 
     // Attacking
     private Damageable _target;
-    private List<AttackInstance> _attacks = new();
+    public List<AttackInstance> _attacks = new();
     private AttackInstance _activeAttack;   // currently executing (null = on cooldown/idle)
     private Coroutine _attackCoroutine;
 
@@ -53,6 +53,8 @@ public class EnemyController : MonoBehaviour
     protected AudioSource audioSource;
     public event Action<EnemyController> OnDied;
 
+    [SerializeField] LayerMask obstacles;
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -66,7 +68,8 @@ public class EnemyController : MonoBehaviour
     {
         Stats.Apply(statData, level);
         
-        _agent.speed = Stats.MoveSpeed;
+        if(_agent != null)
+            _agent.speed = Stats.MoveSpeed;
         health.maxHealth = Stats.MaxHealth;
         health.SetDamageReduction(Stats.Armor);
         health.MakeAlive();
@@ -385,6 +388,18 @@ public class EnemyController : MonoBehaviour
 
         if (_activeAttack.Data.AttackType == AttackType.MovementAttack)
         {
+            // raycast to target to check for line of sight, if not in line of sight, reposition to get line of sight
+            Vector3 directionToTarget = (_target.transform.position - transform.position).normalized;
+            Physics.Raycast(transform.position + Vector3.up, directionToTarget, out RaycastHit hitInfo, _activeAttack.AttackRange, obstacles);
+
+            if(hitInfo.collider != null && hitInfo.collider.gameObject != _target.gameObject)
+            {
+                // target is not in line of sight, reposition to get line of sight
+                FinishAttack();
+                yield break;
+            }
+
+
             // Hand off to the movement attack driver
             _activeAttack.Execute(_target);
 

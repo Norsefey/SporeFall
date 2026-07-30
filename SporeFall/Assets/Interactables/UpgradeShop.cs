@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -55,6 +53,8 @@ public class UpgradeShop : Interactables
     // remove prompt and anything else
     public override void RemovePrompt()
     {
+        if (player == null)
+            return;
         player.pUI.DisablePrompt();
     }
 }

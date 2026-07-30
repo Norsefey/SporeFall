@@ -5,7 +5,8 @@ public class EnemyStatSO : ScriptableObject
 {
     [Header("Identity")]
     public string enemyName = "Fungal Fucker";
-
+    public EnemyAttribute attribute = EnemyAttribute.None;
+    public Sprite attributeIcon;
     [Header("Base Stats (Level 1)")]
     public float baseMaxHealth = 100f;
     public float baseMoveSpeed = 5f;
@@ -42,4 +43,19 @@ public enum TargetPriority
     Train,
     MostDamaged,
     HighestHP
+}
+
+public enum EnemyAttribute
+{
+    None,
+    Luminous,
+    Radioactive,
+/*    Explosive,
+    Cryogenic,
+    Corruption,
+    Plasma,
+    Poisonous,
+    Static,
+    Steel,
+    Thermal*/
 }

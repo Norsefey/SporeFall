@@ -7,8 +7,8 @@ public class TrainingLevelManager : MonoBehaviour
 {
     [SerializeField] private GameObject worldCamera;
 
-    [SerializeField] private DummyBehavior[] shootingRangeEnemies;
-    [SerializeField] private Transform[] srSpawnPoints;
+  /*  [SerializeField] private DummyBehavior[] shootingRangeEnemies;
+    [SerializeField] private Transform[] srSpawnPoints;*/
 
     [SerializeField] private MyceliaPickup myceliaToPickUp;
 
@@ -18,10 +18,10 @@ public class TrainingLevelManager : MonoBehaviour
         SavedSettings.currentLevel = "Training";
         GameManager.OnPlayerJoin += GetPlayerDevice;
         myceliaToPickUp.Setup(1);
-        foreach (DummyBehavior dummy in shootingRangeEnemies)
+/*        foreach (DummyBehavior dummy in shootingRangeEnemies)
         {
             dummy.OnEnemyDeath += RespawnEnemy;
-        }
+        }*/
     }
     private void GetPlayerDevice(int playerIndex)
     {
@@ -37,7 +37,7 @@ public class TrainingLevelManager : MonoBehaviour
         worldCamera.SetActive(false);
     }
 
-    private void RespawnEnemy(BaseEnemy enemy)
+/*    private void RespawnEnemy(BaseEnemy enemy)
     {
         StartCoroutine(SpawnEnemy(enemy));
     }
@@ -51,5 +51,5 @@ public class TrainingLevelManager : MonoBehaviour
         enemy.gameObject.SetActive(true);
         // Initialize all values
         enemy.Initialize();
-    }
+    }*/
 }

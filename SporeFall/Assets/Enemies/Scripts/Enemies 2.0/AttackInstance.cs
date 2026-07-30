@@ -18,11 +18,13 @@ public class AttackInstance
         Data = data;
         Owner = owner;
 
-        float scaledDMGVariance = data.damageVariance * StatScaler.Multiplier(damageScaleRate, level);
-        ScaledDamage = Data.baseDamage * StatScaler.Multiplier(damageScaleRate, level) + Random.Range(-scaledDMGVariance, scaledDMGVariance);
+        //float scaledDMGVariance = data.damageVariance * StatScaler.Multiplier(damageScaleRate, level);
         
-        float scaledCorruptionVariance = data.corruptionVariance * StatScaler.Multiplier(damageScaleRate, level);
-        ScaledCorruption = Data.baseCorruption * StatScaler.Multiplier(damageScaleRate, level) + Random.Range(-scaledCorruptionVariance, scaledCorruptionVariance);
+        ScaledDamage = Data.baseDamage * StatScaler.Multiplier(damageScaleRate, level); //+ Random.Range(-scaledDMGVariance, scaledDMGVariance)
+
+        //float scaledCorruptionVariance = data.corruptionVariance * StatScaler.Multiplier(damageScaleRate, level);
+        
+        ScaledCorruption = Data.baseCorruption * StatScaler.Multiplier(damageScaleRate, level); //+ Random.Range(-scaledCorruptionVariance, scaledCorruptionVariance)
         AttackRange = Data.attackRange;
         Cooldown = data.baseCooldown;
         LastUseTime = 0;
