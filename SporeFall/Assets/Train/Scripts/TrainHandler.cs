@@ -42,6 +42,8 @@ public class TrainHandler : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask obstructionLayer;
     [SerializeField] private Vector3 structureCheckSize = Vector3.one; // Size of the overlap check box
+
+    [SerializeField] private bool disableGameUIOnStart = true;
     private void Awake()
     {
         audioPlayer = GetComponent<AudioSource>();
@@ -54,7 +56,8 @@ public class TrainHandler : MonoBehaviour
             UI.SetMaxHP(trainHP.maxHealth);
         }
 
-        GameManager.Instance?.gameUI.ToggleGameUI(false);
+        if(disableGameUIOnStart)
+            GameManager.Instance?.gameUI.ToggleGameUI(false);
     }
     public void SetParkedState()
     {

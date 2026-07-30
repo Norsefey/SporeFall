@@ -8,7 +8,6 @@ public class MyceliaPickup : DropsPoolBehavior
     [SerializeField] private float despawnTime = 5;
 
     private float amountToGive = 0;
-
     public void Setup(float dropAmount)
     {
         //Debug.Log($"Mycelia Pickup Setup with amount: {dropAmount}");
@@ -19,7 +18,7 @@ public class MyceliaPickup : DropsPoolBehavior
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Stanley"))
+        if ((other.CompareTag("Player") || other.CompareTag("Stanley")) && despawn)
         {
             if (pool != null)
             {
@@ -31,6 +30,25 @@ public class MyceliaPickup : DropsPoolBehavior
                 Destroy(gameObject);
             }
         }
+        else
+        {
+            if (other.CompareTag("Player") || other.CompareTag("Stanley"))
+            {
+                GameManager.Instance.IncreaseMycelia(amountToGive);
+                StartCoroutine(HideObject());
+            }
+        }
+    }
+
+    IEnumerator HideObject()
+    {
+        GetComponent<Collider>().enabled = false;
+        transform.GetChild(0).gameObject.SetActive(false);
+       
+        yield return new WaitForSeconds(despawnTime);
+        
+        GetComponent<Collider>().enabled = true;
+        transform.GetChild(0).gameObject.SetActive(true);
     }
 
     public void PickupMycelia()
