@@ -11,18 +11,16 @@ public class SpawnMenu : MonoBehaviour
     private int totalQuantity = 0;
 
     [Header("Spawnable Enemies")]
-    [SerializeField] private GameObject[] spawnableEnemies;
+    [SerializeField] private EnemySelection[] spawnableEnemies;
+
     [SerializeField] private Transform[] spawnPoints;
     private List<GameObject> spawnedEnemies = new();
-
 
     [Header("SelectedEnemies")]
     private List<EnemySelection> selectedEnemies = new();
     [SerializeField] private SelectedPortrait[] selectedEnemyPortraits;
-    [SerializeField] private Sprite[] enemyPreviewSprites;
     [SerializeField] private Image enemyPreviewImage;
     [SerializeField] private TMP_Text enemyNameDisplay;
-    private GameObject selectedEnemyPrefab;
     private int selectedEnemyIndex = 0;
 
     [SerializeField]private TMP_Text enemyStatsText;
@@ -31,10 +29,6 @@ public class SpawnMenu : MonoBehaviour
     // Attribute of the selected Enemy
     //[SerializeField] private Sprite[] attributeIcons;
     [SerializeField] private Image attributeImage;
-
-/*    [SerializeField] private TMP_Text attributeDisplay;
-    private EnemyAttribute currentAttribute = EnemyAttribute.None;
-    private int totalElements = System.Enum.GetNames(typeof(EnemyAttribute)).Length;*/
 
     [Header("Enemy Strength")]
     // strength of the Selected Enemy
@@ -93,18 +87,18 @@ public class SpawnMenu : MonoBehaviour
 
         if (spawnableEnemies.Length > 0)
         {
-            GameObject selectedEnemyPrefab = spawnableEnemies[selectedEnemyIndex]; // For now, just select the first enemy prefab
-            EnemySelection newSelection = new EnemySelection(selectedEnemyPrefab, selectedStrength, selectedQuantity);
+            EnemySelection newSelection = new EnemySelection(spawnableEnemies[selectedEnemyIndex].enemyPrefab, spawnableEnemies[selectedEnemyIndex].portrait, selectedStrength, selectedQuantity);
+
             selectedEnemies.Add(newSelection);
 
             for(int i = totalQuantity; i < totalQuantity + selectedQuantity; i++)
             {
-                selectedEnemyPortraits[i].portrait.sprite = enemyPreviewSprites[selectedEnemyIndex];
+                selectedEnemyPortraits[i].portrait.sprite = spawnableEnemies[selectedEnemyIndex].portrait;
                 selectedEnemyPortraits[i].strength.text = "LV:" + selectedStrength.ToString();
             }
 
             totalQuantity += selectedQuantity;
-            Debug.Log($"Added {selectedQuantity} of {selectedEnemyPrefab.name} with strength {selectedStrength}. Total quantity: {totalQuantity}");
+            Debug.Log($"Added {selectedQuantity} of {spawnableEnemies[selectedEnemyIndex].enemyPrefab.name} with strength {selectedStrength}. Total quantity: {totalQuantity}");
         }
         else
         {
@@ -160,14 +154,13 @@ public class SpawnMenu : MonoBehaviour
 
         if (selectedEnemyIndex >= 0 && selectedEnemyIndex < spawnableEnemies.Length)
         {
-            selectedEnemyPrefab = spawnableEnemies[selectedEnemyIndex];
-            enemyPreviewImage.sprite = enemyPreviewSprites[selectedEnemyIndex];
+            enemyPreviewImage.sprite = spawnableEnemies[selectedEnemyIndex].portrait;
             
-            EnemyController enemy = selectedEnemyPrefab.GetComponent<EnemyController>();
+            EnemyController enemy = spawnableEnemies[selectedEnemyIndex].enemyPrefab.GetComponent<EnemyController>();
             attributeImage.sprite = enemy.statData.attributeIcon;
             enemyNameDisplay.text = enemy.statData.enemyName;
 
-            Debug.Log($"Selected enemy type: {selectedEnemyPrefab.name}");
+            Debug.Log($"Selected enemy type: {spawnableEnemies[selectedEnemyIndex].enemyPrefab.name}");
             UpdateStatDisplay();
         }
         else
@@ -254,7 +247,7 @@ public class SpawnMenu : MonoBehaviour
 
     private void UpdateStatDisplay()
     {
-        EnemyController enemy = selectedEnemyPrefab.GetComponent<EnemyController>();
+        EnemyController enemy = spawnableEnemies[selectedEnemyIndex].enemyPrefab.GetComponent<EnemyController>();
         enemy.Initialize(selectedStrength); // Initialize the enemy with the selected strength to get updated stats
         enemyStatsText.text =
                             $"Health: {enemy.Stats.MaxHealth.ToString("F0")}\n" +
@@ -265,27 +258,6 @@ public class SpawnMenu : MonoBehaviour
         {
             enemyStatsText.text += $"Attack: {attack.Data.attackName}, Damage: {attack.ScaledDamage.ToString("F0")}\n";
         }
-
-
-        /*EnemyStatSO enemyStat = selectedEnemyPrefab.GetComponent<EnemyController>().statData;
-
-        if (enemyStat != null)
-        {
-            enemyStatsText.text= $"Name: {enemyStat.enemyName}\n" +
-                                $"Attribute: {enemyStat.attribute}\n" +
-                                $"Health: {enemyStat.baseMaxHealth}\n" +
-                                $"Move Speed: {enemyStat.baseMoveSpeed}\n" +
-                                $"Armor: {enemyStat.baseArmor}\n" +
-                                $"Mycelia Drop Amount: {enemyStat.baseMyceliaDropAmount}\n" +
-                                $"Max Tokens: {enemyStat.maxTokens}\n" +
-                                $"Target Priority: {enemyStat.targetPriority}\n" +
-                                $"Health Scale: {enemyStat.healthScale}\n" +
-                                $"Damage Scale: {enemyStat.damageScale}\n" +
-                                $"Mycelia Scale: {enemyStat.myceliaScale}\n" +
-                                $"Move Speed Scale: {enemyStat.moveSpeedScale}\n" +
-                                $"Percent Armor Scale: {enemyStat.percentArmorScale}\n" +
-                                $"Drop Chance: {enemyStat.dropChance}";
-        }*/
     }
     public void CloseMenu()
     {
@@ -306,11 +278,14 @@ public struct EnemySelection
     public GameObject enemyPrefab;
     public int strength;
     public int quantity;
-    public EnemySelection(GameObject prefab, int str, int qty)
+    public Sprite portrait;
+    public EnemySelection(GameObject prefab, Sprite pic, int str, int qty)
     {
         enemyPrefab = prefab;
+        portrait = pic;
         strength = str;
         quantity = qty;
+
     }
 }
 [System.Serializable]

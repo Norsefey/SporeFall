@@ -52,18 +52,13 @@ public class EndlessWaveManager : MonoBehaviour
     [SerializeField] private int initialMaxEnemiesPerSpawn = 3;
     [SerializeField] private int maxEnemiesPerSpawn = 10;
 
-    [Header("Enemy Stat Settings")]
-    [SerializeField] private float healthMultiplierPerWave = 0.1f; // Additional health multiplier per wave
-    [SerializeField] private float damageMultiplierPerWave = 0.05f; // Additional damage multiplier per wave
-    [SerializeField] private float corruptionMultiplierPerWave = 0.1f; // Additional corruption multiplier per wave
-    [SerializeField] private float myceliaDropMultiplier = 0.1f; // Multiplier for mycelia drops from enemies
+    //[Header("Enemy Stat Settings")]
+    //[SerializeField] private float myceliaDropMultiplier = 0.1f; // Multiplier for mycelia drops from enemies
 
     [Header("Boss Settings")]
     [SerializeField] private float timeBetweenBossSpawns = 300f; // 5 minutes
     [SerializeField] private float minTimeBetweenBossSpawns = 180f; // 3 minutes
     [SerializeField] private float bossSpawnTimeReduction = 10f; // Reduce boss spawn time by 10 seconds per wave
-    [SerializeField] private float bossHealthMultiplier = 1.5f; // Boss health multiplier for each subsequent boss
-    [SerializeField] private float bossDamageMultiplier = 1.25f;
 
     [Header("Spawn Zones")]
     [SerializeField] private Transform[] presetSpawnPoints;
@@ -92,9 +87,8 @@ public class EndlessWaveManager : MonoBehaviour
     private bool waveSpawningComplete = false;
     
     // Object Pooling
-    [SerializeField] private int initialPoolSize = 50;
-    private Dictionary<GameObject, EnemyObjectPool> enemyPools;
-    private Dictionary<GameObject, EnemyObjectPool> bossPools;
+    [SerializeField] private int initialPoolSize = 5;
+    private Dictionary<GameObject, EnemyObjectPool> alphaEnemyPool;
 
     // active enemy tracking for cleanup and boss fight management
     private List<EnemyController> activeEnemies = new List<EnemyController>();
@@ -273,11 +267,6 @@ public class EndlessWaveManager : MonoBehaviour
             enemyType.SpawnedCount = 0;
         }
 
-/*        foreach (Structure structure in GameManager.Instance.activeStructures)
-        {
-            structure.UpdateEndlessStats();
-        }*/
-
         // Restart enemy spawning if we were in downtime
         if (currentState == WaveState.Downtime)
         {
@@ -361,7 +350,11 @@ public class EndlessWaveManager : MonoBehaviour
     {
         // Weight enemy selection based on difficulty
         List<EnemySpawnData> availableEnemies = GetAvailableEnemies();
-        if (availableEnemies.Count == 0) return;
+        if (availableEnemies.Count == 0)
+        { 
+            Debug.LogWarning("No available enemies to spawn for the current difficulty level.");
+            return;
+        }
 
         // Select enemy based on difficulty
         EnemySpawnData selectedEnemy = GetEnemyBasedOnDifficulty(availableEnemies);
@@ -418,14 +411,14 @@ public class EndlessWaveManager : MonoBehaviour
     {
         List<EnemySpawnData> available = new List<EnemySpawnData>();
 
-   /*     foreach (var enemy in enemyTypes)
+        foreach (var enemy in enemyTypes)
         {
             // Add enemies that are appropriate for current difficulty
-            if (enemy.minDifficultyToSpawn <= currentDifficulty)
+            if (enemy.minLevel <= currentDifficulty)
             {
                 available.Add(enemy);
             }
-        }*/
+        }
 
         return available;
     }
@@ -504,94 +497,26 @@ public class EndlessWaveManager : MonoBehaviour
         }
 
         // Get boss from object pool
-        EnemyController boss = bossPools[bossPrefab].Get(spawnPosition, Quaternion.identity);
+        EnemyController boss = alphaEnemyPool[bossPrefab].Get(spawnPosition, Quaternion.identity);
         if (boss.GetComponent<NavMeshAgent>() != null)
         {
             boss.GetComponent<NavMeshAgent>().Warp(spawnPosition); // Ensure boss is properly placed on NavMesh
         }
 
-        // Assign target - now using method that doesn't depend on TrainHandler
-       /* boss.SetTarget(playerTransform);
-        boss.OnEnemyDeath += OnBossDeath;*/
-
-        // Scale boss health based on number of bosses defeated
-/*        float healthMultiplier = 1f + (bossHealthMultiplier * bossesDefeated);
-        float damageMultiplier = 1f + (bossDamageMultiplier * bossesDefeated);
-        float corruptionMultiplier = 1f + (corruptionMultiplierPerWave * currentDifficulty);
-        boss.SetHealthMultiplier(healthMultiplier);
-        boss.SetDamageMultiplier(damageMultiplier);
-        boss.SetCorruptionMultiplier(corruptionMultiplier);*/
+        boss.Initialize(Mathf.RoundToInt(currentDifficulty * 2)); // Boss level scales with difficulty
+        boss.OnDied += OnBossDeath;
 
         activeBoss = boss;
         enemiesAlive++;
 
         // Notify listeners about boss spawn
         onBossSpawned?.Invoke();
-
-        // Spawn boss squad
-     /*   StartCoroutine(SpawnBossSquad());*/
     }
-/*    private IEnumerator SpawnBossSquad()
-    {
-        // Get stronger enemies for the boss squad
-        List<EnemySpawnData> squadEnemies = enemyTypes
-            .Where(e => e.minDifficultyToSpawn >= currentDifficulty * 0.75f)
-            .Take(3)
-            .ToList();
-
-        if (squadEnemies.Count == 0)
-        {
-            squadEnemies = enemyTypes.Take(3).ToList();
-        }
-
-        // Spawn squad members
-        int squadSize = Mathf.FloorToInt(5 + currentDifficulty);
-
-        for (int i = 0; i < squadSize; i++)
-        {
-            EnemySpawnData squadMember = squadEnemies[Random.Range(0, squadEnemies.Count)];
-            Vector3 spawnPoint;
-            bool spawningOutside = false;
-
-            // Determine spawn location
-            if (squadMember.mustSpawnOutside)
-            {
-                spawnPoint = GetSpawnPointWithinZone();
-                spawningOutside = true;
-            }
-            else if (squadMember.spawnPointIndex != -1)
-            {
-                spawnPoint = presetSpawnPoints[squadMember.spawnPointIndex].position;
-            }
-            else
-            {
-                if (Random.value < outsideSpawnChance)
-                {
-                    spawnPoint = GetSpawnPointWithinZone();
-                    spawningOutside = true;
-                }
-                else
-                {
-                    int spawnPointIndex = Random.Range(0, presetSpawnPoints.Length);
-                    if (spawnPointIndex > 3) spawningOutside = true;
-                    spawnPoint = presetSpawnPoints[spawnPointIndex].position;
-                }
-            }
-
-            SpawnEnemy(
-                squadMember.EnemyToSpawn,
-                spawnPoint,
-                spawningOutside
-            );
-
-            yield return new WaitForSeconds(0.2f);
-        }
-    }*/
     public void SpawnEnemy(GameObject enemyPrefab, Vector3 spawnPoint, bool spawningOutside)
     {
-        if (enemyPools == null) return;
+        if (PoolManager.Instance.enemyPool == null) return;
 
-        if (!enemyPools.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
+        if (!PoolManager.Instance.enemyPool.TryGetValue(enemyPrefab, out EnemyObjectPool pool))
         {
             Debug.LogError($"No pool found for enemy prefab: {enemyPrefab.name}");
             return;
@@ -623,11 +548,13 @@ public class EndlessWaveManager : MonoBehaviour
             }
         }
 
-        // Set target player instead of train
-        //enemy.SetTarget(playerTransform);
-        enemy.OnDied += OnEnemyDeath;
+        int enemyLevel = Mathf.RoundToInt(currentDifficulty + Random.Range(-1f, 1f));
 
-        SetEnemyStats(enemy);
+        enemyLevel = Mathf.Max(1, enemyLevel); // Ensure level is at least 1
+        enemyLevel = Mathf.Min(99, enemyLevel); // Cap level at 99 for balance
+
+        enemy.Initialize(enemyLevel);
+        enemy.OnDied += OnEnemyDeath;
 
         // Play rise animation for enemies spawning outside
         if (spawningOutside)
@@ -640,19 +567,6 @@ public class EndlessWaveManager : MonoBehaviour
         enemiesSpawned++;
     }
 
-    private void SetEnemyStats(EnemyController enemy)
-    {
-/*        float healthMultiplier = 1f + (healthMultiplierPerWave * currentDifficulty);
-        float damageMultiplier = 1f + (damageMultiplierPerWave * currentDifficulty);
-        float corruptionMultiplier = 1f + (corruptionMultiplierPerWave * currentDifficulty);
-        float myceliaMultiplier = 1f + (myceliaDropMultiplier * currentDifficulty); // Scale with difficulty
-
-        enemy.SetHealthMultiplier(healthMultiplier);
-        enemy.SetDamageMultiplier(damageMultiplier);
-        enemy.SetCorruptionMultiplier(corruptionMultiplier);
-        enemy.SetMyceliaMultiplier(myceliaMultiplier);*/
-    }
-
     private void OnEnemyDeath(EnemyController enemy)
     {
         enemiesAlive--;
@@ -663,7 +577,7 @@ public class EndlessWaveManager : MonoBehaviour
         // Notify listeners about enemy defeated
         onEnemyDefeated?.Invoke(deadEnemies);
 
-        if (enemyPools.TryGetValue(enemy.gameObject, out EnemyObjectPool pool))
+        if (PoolManager.Instance.enemyPool.TryGetValue(enemy.gameObject, out EnemyObjectPool pool))
         {
             pool.Return(enemy);
         }
@@ -680,9 +594,10 @@ public class EndlessWaveManager : MonoBehaviour
         bossesDefeated++;
         isBossActive = false;
         activeBoss = null;
+        boss.OnDied -= OnBossDeath;
 
         // Return boss to pool
-        if (bossPools.TryGetValue(boss.gameObject, out EnemyObjectPool pool))
+        if (alphaEnemyPool.TryGetValue(boss.gameObject, out EnemyObjectPool pool))
         {
             pool.Return(boss);
         }
@@ -776,31 +691,17 @@ public class EndlessWaveManager : MonoBehaviour
 
     private void InitializePools()
     {
-        enemyPools = new Dictionary<GameObject, EnemyObjectPool>();
-        bossPools = new Dictionary<GameObject, EnemyObjectPool>();
+        alphaEnemyPool = new Dictionary<GameObject, EnemyObjectPool>();
 
         GameObject poolParent = new GameObject("Pool_Enemies");
         poolParent.transform.SetParent(transform, false);
 
-        // Initialize enemy pools
-        foreach (var enemyType in enemyTypes)
-        {
-            GameObject enemyPrefab = enemyType.EnemyToSpawn;
-            if (!enemyPools.ContainsKey(enemyPrefab))
-            {
-                enemyPools.Add(
-                    enemyPrefab,
-                    new EnemyObjectPool(enemyPrefab, poolParent.transform, initialPoolSize)
-                );
-            }
-        }
-
         // Initialize boss pools
         foreach (var bossPrefab in bossPrefabs)
         {
-            if (!bossPools.ContainsKey(bossPrefab))
+            if (!alphaEnemyPool.ContainsKey(bossPrefab))
             {
-                bossPools.Add(
+                alphaEnemyPool.Add(
                     bossPrefab,
                     new EnemyObjectPool(bossPrefab, poolParent.transform, 2) // Usually only need a few bosses
                 );

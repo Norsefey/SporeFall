@@ -9,9 +9,9 @@ public class AoeAttack : Attack
     [SerializeField] private float aoeRadius = 5f;
     [SerializeField] private float damageMultiplierAtCenter = 1.5f;
     [SerializeField] private LayerMask targetLayers;
-    [SerializeField] private bool damageOverTime = false;
-    [SerializeField] private float dotDuration = 3f;
-    [SerializeField] private float dotTickRate = 0.5f;
+   // [SerializeField] private bool damageOverTime = false;
+    //[SerializeField] private float dotDuration = 3f;
+    //[SerializeField] private float dotTickRate = 0.5f;
 
     public override void Execute(AttackInstance instance, Damageable target)
     {

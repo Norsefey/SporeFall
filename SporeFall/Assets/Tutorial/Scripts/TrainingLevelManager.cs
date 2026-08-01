@@ -13,7 +13,7 @@ public class TrainingLevelManager : MonoBehaviour
     {
         SavedSettings.currentLevel = "Training";
         GameManager.OnPlayerJoin += GetPlayerDevice;
-        myceliaToPickUp.Setup(500);
+        myceliaToPickUp.Setup(500, false);
     }
     private void GetPlayerDevice(int playerIndex)
     {

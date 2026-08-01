@@ -434,12 +434,12 @@ PrefabInstance:
     - target: {fileID: 8676613349475730689, guid: 0206d376f1c04cb459a458ce8b872e81,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8676613349475730689, guid: 0206d376f1c04cb459a458ce8b872e81,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8676613349475730689, guid: 0206d376f1c04cb459a458ce8b872e81,
         type: 3}
@@ -454,7 +454,7 @@ PrefabInstance:
     - target: {fileID: 8983214131013415505, guid: 0206d376f1c04cb459a458ce8b872e81,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3874359856786588803, guid: 0206d376f1c04cb459a458ce8b872e81, type: 3}
@@ -528,7 +528,6 @@ MonoBehaviour:
   chasePriorityDistance: 25
   damagePriorityThreshold: 20
   damageTrackingDuration: 3
-  damageModifier: 1
   stoppingDistance: 8
   aggressionFactor: 0.9
   trackingSpeed: 5
@@ -544,13 +543,16 @@ MonoBehaviour:
     m_Bits: 10752
   targetSwitchThreshold: 100
   risingAnimationLength: 2
+  damageModifier: 1
+  corruptionModifier: 1
+  myceliaModifier: 1
+  myceliaDropPrefab: {fileID: 9111484024502604757, guid: 260844473a5ebed4389a921d28666b89,
+    type: 3}
   playerTarget: {fileID: 0}
   wanderRadius: 15
   minWanderTime: 5
   maxWanderTime: 10
   idleChance: 0.3
-  myceliaDropPrefab: {fileID: 9111484024502604757, guid: 260844473a5ebed4389a921d28666b89,
-    type: 3}
   weaponDropPrefab:
   - {fileID: 492230155546669779, guid: 7bb4c2101aa5fba4fb5cb71b5bf32ea7, type: 3}
   dropChance: 20

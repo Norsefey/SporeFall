@@ -53,7 +53,11 @@ public class EnemyController : MonoBehaviour
     protected AudioSource audioSource;
     public event Action<EnemyController> OnDied;
 
-    [SerializeField] LayerMask obstacles;
+    [SerializeField] private LayerMask obstacles;
+
+    [Header("For Testing")]
+    [SerializeField] private bool _debugMode = false;
+    [SerializeField] private TMP_Text lvDisplay;
 
     private void Awake()
     {
@@ -82,6 +86,13 @@ public class EnemyController : MonoBehaviour
             attack.Initialize(attackData, this, level, statData.damageScale);
             _attacks.Add(attack);
         }
+
+        if(_debugMode)
+        {
+            if(lvDisplay != null)
+                lvDisplay.text = $"Lv {level}";
+        }
+
 
         _state = EnemyState.Searching;
         _rescanTimer = 0;

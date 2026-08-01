@@ -116,7 +116,7 @@ public class EnemyHP : Damageable
         {
             Debug.Log($"Setting up mycelia drop with amount: {eController.Stats.MyceliaDropAmount}");   
 
-            mycelia.Setup(eController.Stats.MyceliaDropAmount);
+            mycelia.Setup(eController.Stats.MyceliaDropAmount, true);
         }
     }
     private void TrySpawnWeaponDrop()

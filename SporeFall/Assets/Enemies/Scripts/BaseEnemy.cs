@@ -703,7 +703,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
         if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
         {
-            mycelia.Setup(myceliaModifier);
+            mycelia.Setup(myceliaModifier, true);
         }
     }
 }

@@ -8,11 +8,13 @@ public class MyceliaPickup : DropsPoolBehavior
     [SerializeField] private float despawnTime = 5;
 
     private float amountToGive = 0;
-    public void Setup(float dropAmount)
+    public void Setup(float dropAmount, bool despawn)
     {
         //Debug.Log($"Mycelia Pickup Setup with amount: {dropAmount}");
 
         amountToGive = dropAmount;
+        this.despawn = despawn;
+
         if (despawn)
             Invoke(nameof(ReturnObject), despawnTime);
     }

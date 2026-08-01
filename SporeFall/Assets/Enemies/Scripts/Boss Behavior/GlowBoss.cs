@@ -25,7 +25,7 @@ public class GlowBoss : BaseEnemy
             mycelia.Setup(myceliaDropAmount);*/
             if (myceliaDrop.TryGetComponent<MyceliaPickup>(out var mycelia))
             {
-                mycelia.Setup(damageModifier);
+                mycelia.Setup(damageModifier, true);
             }
         }
         if (weaponDropPrefab.Length != 0)
