@@ -5,7 +5,7 @@ using UnityEngine;
 public class Billboard : MonoBehaviour
 {
     [SerializeField] private BillboardUIUpdater uiContainerPlayerOne;
-    [SerializeField] private BillboardUIUpdater uiContainerPlayerTwo;
+    //[SerializeField] private BillboardUIUpdater uiContainerPlayerTwo;
 
     private void Start()
     {
@@ -42,14 +42,14 @@ public class Billboard : MonoBehaviour
             uiContainerPlayerOne.SetupTarget(GameManager.Instance.players[0].pCamera.transform);
            
         }
-        else if (GameManager.Instance.players.Count == 2 && uiContainerPlayerTwo != null)
+        /*else if (GameManager.Instance.players.Count == 2 && uiContainerPlayerTwo != null)
         {
             //Debug.Log("Setting Up Player Two");
 
             uiContainerPlayerTwo.gameObject.SetActive(true);
             uiContainerPlayerOne.SetupTarget(GameManager.Instance.players[0].pCamera.transform);
             uiContainerPlayerTwo.SetupTarget(GameManager.Instance.players[1].pCamera.transform);
-        }
+        }*/
         else
         {
             //Debug.Log("No Players to set Up");
@@ -58,6 +58,6 @@ public class Billboard : MonoBehaviour
     }
     public void RemovePlayer()
     {
-        uiContainerPlayerTwo.gameObject.SetActive(false);
+       // uiContainerPlayerTwo.gameObject.SetActive(false);
     }
 }

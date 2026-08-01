@@ -50,6 +50,7 @@ public enum EnemyAttribute
     None,
     Luminous,
     Radioactive,
+    Crimson
 /*    Explosive,
     Cryogenic,
     Corruption,

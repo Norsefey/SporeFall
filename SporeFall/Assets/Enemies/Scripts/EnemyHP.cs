@@ -50,7 +50,7 @@ public class EnemyHP : Damageable
             }
         }
 
-        Debug.Log($"Took {amount} Damage: HP: {_health}");
+        //Debug.Log($"Took {amount} Damage: HP: {_health}");
 
         if (_health <= 0f) Die();
         return amount;
