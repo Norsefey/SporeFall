@@ -28,7 +28,7 @@ public class UpgradeManager : MonoBehaviour
             {
                 StructureLevel currentLevel = structure.structureStats.GetBaseLevel();
 
-                Debug.Log($"{currentLevel.upgradePlacementCostMultiplier}");
+                //Debug.Log($"{currentLevel.upgradePlacementCostMultiplier}");
 
                 structureStatsDict[structure.GetStructureType()] = currentLevel;
             }

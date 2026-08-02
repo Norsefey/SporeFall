@@ -570,7 +570,9 @@ public class PlayerManager : MonoBehaviour
         if (pHealth.CurrentLives <= 0)
         {
             Debug.Log("No lives remaining, respawn canceled");
-            // Handle game over or player death permanently
+            GameManager.Instance.GameOver();
+
+            yield break; // Exit the coroutine early since the player cannot respawn
         }
         else
         {

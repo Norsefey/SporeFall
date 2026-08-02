@@ -191,7 +191,7 @@ public class PlayerRevive : Interactables
         if (downedPlayer == null)
             downedPlayer = GetComponentInParent<PlayerManager>();
 
-        while (downedPlayer.pHealth.isDead)
+        while (!downedPlayer.pHealth.IsAlive)
         {
             LookAtOtherPlayer();
             deathSliderUI.value = (downedPlayer.pHealth.deathTimeCounter / downedPlayer.pHealth.deathTime);

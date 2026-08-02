@@ -15,6 +15,7 @@ public class EndlessWaveUI : MonoBehaviour
     [Header("During game UI")]
     [SerializeField] private GameObject survivalPrompt;
     [SerializeField] private TMP_Text survivalTimerText;
+    [SerializeField] private TMP_Text enemiesAliveText;
     
     [Header("Game Over Panel")]
     [SerializeField] private GameObject gameOverPanel;
@@ -70,6 +71,7 @@ public class EndlessWaveUI : MonoBehaviour
             int minutes = Mathf.FloorToInt(waveManager.GlobalTimer / 60F);
             int seconds = Mathf.FloorToInt(waveManager.GlobalTimer - minutes * 60);
             survivalTimerText.text = "Survive \n" + string.Format("{0:0}:{1:00}", minutes, seconds);
+            enemiesAliveText.text = "Enemies Alive: " + waveManager.activeEnemies.Count.ToString();
         }
     }
     private void OnDestroy()

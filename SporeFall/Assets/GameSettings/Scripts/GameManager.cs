@@ -150,6 +150,7 @@ public class GameManager : MonoBehaviour
 
         if (allPlayersDead)// if all dead load game over scene
         {
+            Debug.Log("All Players Dead");
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 

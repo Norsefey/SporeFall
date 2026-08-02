@@ -143,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (IsGrounded() || coyoteTimeCounter > 0f)
         {
-            if (!pMan.pHealth.isDead)
+            if (pMan.pHealth.IsAlive)
                 pMan.pAnime.ToggleFallingAnime(true);
             vertSpeed = JumpSpeed;
             coyoteTimeCounter = 0f; // Reset coyote time counter
@@ -154,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (IsGrounded())
         {
-            if(!pMan.pHealth.isDead)
+            if(pMan.pHealth.IsAlive)
                 pMan.pAnime.ToggleFallingAnime(false);
             vertSpeed = minFall;
             coyoteTimeCounter = coyoteTime; // Reset coyote time when grounded

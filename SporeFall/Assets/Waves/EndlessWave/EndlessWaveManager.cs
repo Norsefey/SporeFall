@@ -87,11 +87,10 @@ public class EndlessWaveManager : MonoBehaviour
     private bool waveSpawningComplete = false;
     
     // Object Pooling
-    [SerializeField] private int initialPoolSize = 5;
     private Dictionary<GameObject, EnemyObjectPool> alphaEnemyPool;
 
     // active enemy tracking for cleanup and boss fight management
-    private List<EnemyController> activeEnemies = new List<EnemyController>();
+    public List<EnemyController> activeEnemies = new List<EnemyController>();
     private Coroutine spawnCoroutine;
     private Coroutine downtimeCoroutine;
 
@@ -502,8 +501,12 @@ public class EndlessWaveManager : MonoBehaviour
         {
             boss.GetComponent<NavMeshAgent>().Warp(spawnPosition); // Ensure boss is properly placed on NavMesh
         }
+        int enemyLevel = Mathf.RoundToInt(currentDifficulty * Random.Range(1, 2));
 
-        boss.Initialize(Mathf.RoundToInt(currentDifficulty * 2)); // Boss level scales with difficulty
+        enemyLevel = Mathf.Max(1, enemyLevel); // Ensure level is at least 1
+        enemyLevel = Mathf.Min(99, enemyLevel); // Cap level at 99 for balance
+
+        boss.Initialize(enemyLevel); // Boss level scales with difficulty
         boss.OnDied += OnBossDeath;
 
         activeBoss = boss;
@@ -522,7 +525,6 @@ public class EndlessWaveManager : MonoBehaviour
             return;
         }
 
-        SetRandomPlayerTarget();
         // Look direction - point toward center/player if outside spawning
         Vector3 lookTarget = playerTransform != null ? playerTransform.position : Vector3.zero;
         Vector3 lookDirection = (lookTarget - spawnPoint).normalized;
@@ -548,7 +550,7 @@ public class EndlessWaveManager : MonoBehaviour
             }
         }
 
-        int enemyLevel = Mathf.RoundToInt(currentDifficulty + Random.Range(-1f, 1f));
+        int enemyLevel = Mathf.RoundToInt(currentDifficulty * Random.Range(1, 2));
 
         enemyLevel = Mathf.Max(1, enemyLevel); // Ensure level is at least 1
         enemyLevel = Mathf.Min(99, enemyLevel); // Cap level at 99 for balance
@@ -594,7 +596,6 @@ public class EndlessWaveManager : MonoBehaviour
         bossesDefeated++;
         isBossActive = false;
         activeBoss = null;
-        boss.OnDied -= OnBossDeath;
 
         // Return boss to pool
         if (alphaEnemyPool.TryGetValue(boss.gameObject, out EnemyObjectPool pool))
@@ -611,7 +612,6 @@ public class EndlessWaveManager : MonoBehaviour
         
         // Increase difficulty after boss is defeated
         currentDifficulty += difficultyIncreasePerWave * 2;
-
         // Check if all regular enemies are dead before advancing to next wave
         if (enemiesAlive == 0)
         {
@@ -678,12 +678,6 @@ public class EndlessWaveManager : MonoBehaviour
         // Absolute last resort - just return player position + offset
         Debug.LogWarning("EndlessWaveManager: Failed to find valid spawn point - using player position with offset");
         return (playerTransform != null ? playerTransform.position : transform.position) + new Vector3(5f, 0f, 5f);
-    }
-    private void SetRandomPlayerTarget()
-    {
-        int index = Random.Range(0, GameManager.Instance.players.Count);
-
-        playerTransform = GameManager.Instance.players[index].pController.transform;
     }
     #endregion
 

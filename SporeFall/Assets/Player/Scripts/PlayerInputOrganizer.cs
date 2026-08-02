@@ -452,7 +452,7 @@ public class PlayerInputOrganizer : MonoBehaviour
     }
     private void OnSkipDeathSave(InputAction.CallbackContext context)
     {
-        pMan.pHealth.isDead = false;
+        pMan.pHealth.MakeAlive();
     }
     private void OnCloseUpgradeMenu(InputAction.CallbackContext context)
     {

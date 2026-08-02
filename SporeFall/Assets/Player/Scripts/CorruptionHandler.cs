@@ -148,14 +148,13 @@ public class CorruptionHandler : MonoBehaviour
             pMan.audioSource.Stop();
             pMan.audioSource.PlayOneShot(pMan.corruption100Sound, 1.5f);
         }
-        // player loses life and respawns
-        pMan.pHealth.isDead = true;
-        pMan.pHealth.DepleteLife();
+        pMan.pAnime.ToggleIsCorrupted(true);
         pMan.TogglePControl(false);
         pMan.pAnime.ToggleIKAim(false);
-        
-        pMan.pAnime.ToggleIsCorrupted(true);
-        pMan.StartRespawn(3, true);
+
+        // player loses life and respawns
+       pMan.pHealth.MakeDead();
+       Invoke(nameof(StartPlayerRespawn), 2f);
 
         corruptionAmount = 0;
         pMan.pUI.UpdateCorruptionDisplay(corruptionAmount);
@@ -164,6 +163,11 @@ public class CorruptionHandler : MonoBehaviour
         // add a delay to corrupted robot spawning
         Invoke(nameof(SpawnCorruptedRobot), 2);
     }
+    private void StartPlayerRespawn()
+    {
+        pMan.StartRespawn(2, true);
+    }
+
     private void SpawnCorruptedRobot()
     {
         // Spawn a corrupted Player

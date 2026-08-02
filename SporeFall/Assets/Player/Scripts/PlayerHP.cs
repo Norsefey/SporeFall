@@ -16,7 +16,6 @@ public class PlayerHP : Damageable
     
     public float deathTime = 10;
     public float deathTimeCounter = 0;
-    public bool isDead = false;
     public float startingHP = 100f;
 
     private void Start()
@@ -56,6 +55,8 @@ public class PlayerHP : Damageable
     }
     protected override void Die()
     {
+        base.Die();
+
         if (pMan.audioSource != null && CurrentLives > 1)
         {
             pMan.audioSource.Stop(); // Stop previous audio before playing new one
@@ -76,17 +77,13 @@ public class PlayerHP : Damageable
     public void DepleteLife()
     {
         currentLives--;
+
         if (pMan != null)
             pMan.pUI.UpdateLifeDisplay(currentLives);
-        if (currentLives <= 0)
-        {
-            currentLives = 0;
-            GameManager.Instance.GameOver();
-        }
     }
     public void IncreaseLife()
     {
-        if (isDead)
+        if (!IsAlive)
         {
             pMan.StartRespawn(0, true);
         }
@@ -120,9 +117,8 @@ public class PlayerHP : Damageable
         {
             if (pMan.GetPlayerIndex() == 0)
             {
-                if (GameManager.Instance.players[1].pHealth.isDead)
+                if (!GameManager.Instance.players[1].pHealth.IsAlive)
                 {
-                    isDead = false;
                     pMan.pAnime.ToggleUnscaledUpdateMode(false);
                     deathVFX.SetActive(false);
                     DepleteLife();
@@ -132,9 +128,8 @@ public class PlayerHP : Damageable
             }
             else 
             {
-                if (GameManager.Instance.players[0].pHealth.isDead)
+                if (!GameManager.Instance.players[0].pHealth.IsAlive)
                 {
-                    isDead = false;
                     pMan.pAnime.ToggleUnscaledUpdateMode(false);
                     deathVFX.SetActive(false);
                     DepleteLife();
@@ -144,12 +139,11 @@ public class PlayerHP : Damageable
             }
 
             // Set the dying state and activate revive zone
-            isDead = true;
             reviveZone.SetActive(true);
 
             // Wait for either revival or timeout
             deathTimeCounter = 0;
-            while (isDead && deathTimeCounter < deathTime)
+            while (!IsAlive && deathTimeCounter < deathTime)
             {
                 deathTimeCounter += Time.deltaTime;
                 yield return null;
@@ -159,9 +153,8 @@ public class PlayerHP : Damageable
             reviveZone.SetActive(false);
 
             // If player was not revived (still dying), deplete life and respawn
-            if (isDead)
+            if (!IsAlive)
             {
-                isDead = false;
                 pMan.pAnime.ToggleUnscaledUpdateMode(false);
                 deathVFX.SetActive(false);
                 DepleteLife();
@@ -172,18 +165,18 @@ public class PlayerHP : Damageable
         }
         else
         {
-            Debug.Log("Single PLayer Respawn");
+            Debug.Log("Single Player Respawn");
             // Single player - proceed directly to life depletion and respawn
             deathVFX.SetActive(false);
             DepleteLife();
             pMan.pAnime.ToggleUnscaledUpdateMode(false);
-            pMan.StartRespawn(3, true);
+            pMan.StartRespawn(2.5f, true);
         }
 
     }
     public void Revive()
     {
-        isDead = false;
+        MakeAlive();
         canHoldCorruption = true;
         canTakeDamage = true;
     }
